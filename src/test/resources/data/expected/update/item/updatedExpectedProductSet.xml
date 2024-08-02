@@ -1,0 +1,4 @@
+<dataset>
+    <PRODUCT dateofcreate="101" name="testUpdated" />
+    <PRODUCT dateofcreate="200" name="test else" />
+</dataset>

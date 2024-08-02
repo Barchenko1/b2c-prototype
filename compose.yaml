@@ -1,0 +1,17 @@
+services:
+  postgres_client:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=client_db'
+      - 'POSTGRES_PASSWORD=secret'
+      - 'POSTGRES_USER=admin'
+    ports:
+      - '5432:5432'
+  postgres_test_client:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=test_client_db'
+      - 'POSTGRES_PASSWORD=secret'
+      - 'POSTGRES_USER=admin'
+    ports:
+      - '5433:5432'

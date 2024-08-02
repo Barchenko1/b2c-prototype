@@ -1,0 +1,17 @@
+management:
+  newrelic:
+    metrics:
+      export:
+        apiKey: "your-api-key"
+        accountId: "your-account-id"
+
+spring:
+  web:
+    locale: en
+  messages:
+    basename: ib18n
+enums:
+  brands: HP, APPLE, ANDROID
+  paymentMethods: CARD, CASH
+  itemStatuses:
+  itemTypes:

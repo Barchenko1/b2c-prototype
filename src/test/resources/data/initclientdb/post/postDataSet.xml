@@ -1,0 +1,4 @@
+<dataset>
+    <POST authorName="test" authorEmail="test@mail.com" dateofcreate="100"/>
+    <POST authorName="test else" authorEmail="test@mail.com" dateofcreate="100"/>
+</dataset>

@@ -1,0 +1,4 @@
+<dataset>
+    <ORDER_STATUS name="NEW" />
+    <ORDER_STATUS name="NEW else" />
+</dataset>

@@ -1,0 +1,5 @@
+<dataset>
+    <POST id="100" authorName="user1" authorEmail="user1@mail.com" dateofcreate="0" message="some string"/>
+    <POST id="101" authorName="user2" authorEmail="user2@mail.com" dateofcreate="0" message="some string"/>
+
+</dataset>

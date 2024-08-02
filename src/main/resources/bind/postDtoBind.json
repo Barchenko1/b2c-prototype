@@ -1,0 +1,9 @@
+{
+  "postId": "id",
+  "parentPostId": "Post.id",
+  "name": "authorName",
+  "email": "authorEmail",
+  "message": "message",
+  "dateOfCreate": "dateOfCreate",
+  "parentPost": "parent"
+}

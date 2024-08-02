@@ -1,0 +1,7 @@
+{
+  "password": "password",
+  "email": "email",
+  "userStreet" : "UserAddress.street",
+  "userApartment" : "UserAddress.apartmentNumber",
+  "userDetail": "userDetail"
+}

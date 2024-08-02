@@ -1,0 +1,4 @@
+<dataset>
+    <USER_DETAIL firstName="Some string updated" />
+    <USER_DETAIL firstName="test else" />
+</dataset>
