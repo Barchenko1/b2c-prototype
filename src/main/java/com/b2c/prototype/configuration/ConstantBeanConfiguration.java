@@ -2,15 +2,15 @@ package com.b2c.prototype.configuration;
 
 import com.b2c.prototype.dao.delivery.IDeliveryTypeDao;
 import com.b2c.prototype.dao.payment.IPaymentMethodDao;
-import com.b2c.prototype.modal.client.entity.delivery.DeliveryType;
-import com.b2c.prototype.modal.client.entity.payment.PaymentMethod;
-import com.b2c.prototype.modal.client.entity.option.OptionGroup;
-import com.b2c.prototype.modal.client.entity.order.OrderStatus;
-import com.b2c.prototype.modal.client.entity.item.Brand;
-import com.b2c.prototype.modal.client.entity.item.Category;
-import com.b2c.prototype.modal.client.entity.item.ItemStatus;
-import com.b2c.prototype.modal.client.entity.item.ItemType;
-import com.b2c.prototype.modal.client.entity.item.Rating;
+import com.b2c.prototype.modal.entity.delivery.DeliveryType;
+import com.b2c.prototype.modal.entity.payment.PaymentMethod;
+import com.b2c.prototype.modal.entity.option.OptionGroup;
+import com.b2c.prototype.modal.entity.order.OrderStatus;
+import com.b2c.prototype.modal.entity.item.Brand;
+import com.b2c.prototype.modal.entity.item.Category;
+import com.b2c.prototype.modal.entity.item.ItemStatus;
+import com.b2c.prototype.modal.entity.item.ItemType;
+import com.b2c.prototype.modal.entity.item.Rating;
 import com.b2c.prototype.dao.option.IOptionGroupDao;
 import com.b2c.prototype.dao.order.IOrderStatusDao;
 import com.b2c.prototype.dao.item.IBrandDao;
@@ -24,7 +24,6 @@ import org.springframework.context.annotation.DependsOn;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 

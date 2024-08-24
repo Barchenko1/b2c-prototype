@@ -9,26 +9,26 @@ import com.b2c.prototype.dao.option.IOptionGroupDao;
 import com.b2c.prototype.dao.order.IOrderStatusDao;
 import com.b2c.prototype.dao.payment.IPaymentMethodDao;
 import com.b2c.prototype.dao.rating.IRatingDao;
-import com.b2c.prototype.modal.client.entity.delivery.DeliveryType;
-import com.b2c.prototype.modal.client.entity.item.Brand;
-import com.b2c.prototype.modal.client.entity.item.Category;
-import com.b2c.prototype.modal.client.entity.item.ItemStatus;
-import com.b2c.prototype.modal.client.entity.item.ItemType;
-import com.b2c.prototype.modal.client.entity.item.Rating;
-import com.b2c.prototype.modal.client.entity.option.OptionGroup;
-import com.b2c.prototype.modal.client.entity.order.OrderStatus;
-import com.b2c.prototype.modal.client.entity.payment.PaymentMethod;
-import com.b2c.prototype.processor.IEntityIntegerMapWrapper;
-import com.b2c.prototype.processor.IEntityStringMapWrapper;
-import com.b2c.prototype.processor.base.BrandEntityStringMapWrapper;
-import com.b2c.prototype.processor.base.CategoryEntityStringMapWrapper;
-import com.b2c.prototype.processor.base.DeliveryTypeEntityStringMapWrapper;
-import com.b2c.prototype.processor.base.ItemStatusEntityStringMapWrapper;
-import com.b2c.prototype.processor.base.ItemTypeEntityStringMapWrapper;
-import com.b2c.prototype.processor.base.OptionGroupEntityStringMapWrapper;
-import com.b2c.prototype.processor.base.OrderStatusEntityStringMapWrapper;
-import com.b2c.prototype.processor.base.PaymentMethodEntityStringMapWrapper;
-import com.b2c.prototype.processor.base.RatingEntityIntegerMapWrapper;
+import com.b2c.prototype.modal.entity.delivery.DeliveryType;
+import com.b2c.prototype.modal.entity.item.Brand;
+import com.b2c.prototype.modal.entity.item.Category;
+import com.b2c.prototype.modal.entity.item.ItemStatus;
+import com.b2c.prototype.modal.entity.item.ItemType;
+import com.b2c.prototype.modal.entity.item.Rating;
+import com.b2c.prototype.modal.entity.option.OptionGroup;
+import com.b2c.prototype.modal.entity.order.OrderStatus;
+import com.b2c.prototype.modal.entity.payment.PaymentMethod;
+import com.b2c.prototype.dao.wrapper.IEntityIntegerMapWrapper;
+import com.b2c.prototype.dao.wrapper.IEntityStringMapWrapper;
+import com.b2c.prototype.dao.wrapper.base.BrandMapWrapper;
+import com.b2c.prototype.dao.wrapper.base.CategoryMapWrapper;
+import com.b2c.prototype.dao.wrapper.base.DeliveryTypeMapWrapper;
+import com.b2c.prototype.dao.wrapper.base.ItemMapWrapper;
+import com.b2c.prototype.dao.wrapper.base.ItemTypeMapWrapper;
+import com.b2c.prototype.dao.wrapper.base.OptionGroupMapWrapper;
+import com.b2c.prototype.dao.wrapper.base.OrderStatusMapWrapper;
+import com.b2c.prototype.dao.wrapper.base.PaymentMethodMapWrapper;
+import com.b2c.prototype.dao.wrapper.base.RatingEntityWrapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -88,8 +88,8 @@ public class EntityMapWrapperConfiguration {
     }
 
     @Bean
-    public IEntityStringMapWrapper<DeliveryType> deliveryTypeEntityMapWrapper() {
-        return new DeliveryTypeEntityStringMapWrapper(
+    public IEntityStringMapWrapper<DeliveryType> deliveryTypeMapWrapper() {
+        return new DeliveryTypeMapWrapper(
                 deliveryTypeDao,
                 deliveryTypeMap,
                 SELECT_DELIVERY_TYPE_BY_NAME
@@ -97,8 +97,8 @@ public class EntityMapWrapperConfiguration {
     }
 
     @Bean
-    public IEntityStringMapWrapper<PaymentMethod> paymentMethodEntityMapWrapper() {
-        return new PaymentMethodEntityStringMapWrapper(
+    public IEntityStringMapWrapper<PaymentMethod> paymentMethodMapWrapper() {
+        return new PaymentMethodMapWrapper(
                 paymentMethodDao,
                 paymentMethodMap,
                 SELECT_PAYMENT_METHOD_BY_NAME
@@ -106,8 +106,8 @@ public class EntityMapWrapperConfiguration {
     }
 
     @Bean
-    public IEntityStringMapWrapper<OrderStatus> orderStatusEntityMapWrapper() {
-        return new OrderStatusEntityStringMapWrapper(
+    public IEntityStringMapWrapper<OrderStatus> orderStatusMapWrapper() {
+        return new OrderStatusMapWrapper(
                 orderStatusDao,
                 orderStatusMap,
                 SELECT_ORDER_STATUS_BY_NAME
@@ -115,8 +115,8 @@ public class EntityMapWrapperConfiguration {
     }
 
     @Bean
-    public IEntityStringMapWrapper<Category> categoryEntityMapWrapper() {
-        return new CategoryEntityStringMapWrapper(
+    public IEntityStringMapWrapper<Category> categoryMapWrapper() {
+        return new CategoryMapWrapper(
                 categoryDao,
                 categoryMap,
                 SELECT_CATEGORY_BY_NAME
@@ -124,8 +124,8 @@ public class EntityMapWrapperConfiguration {
     }
 
     @Bean
-    public IEntityStringMapWrapper<ItemType> itemTypeEntityMapWrapper() {
-        return new ItemTypeEntityStringMapWrapper(
+    public IEntityStringMapWrapper<ItemType> itemTypeMapWrapper() {
+        return new ItemTypeMapWrapper(
                 itemTypeDao,
                 itemTypeMap,
                 SELECT_ITEM_STATUS_BY_NAME
@@ -133,8 +133,8 @@ public class EntityMapWrapperConfiguration {
     }
 
     @Bean
-    public IEntityStringMapWrapper<Brand> brandEntityMapWrapper() {
-        return new BrandEntityStringMapWrapper(
+    public IEntityStringMapWrapper<Brand> brandMapWrapper() {
+        return new BrandMapWrapper(
                 brandDao,
                 brandMap,
                 SELECT_BRAND_BY_NAME
@@ -142,8 +142,8 @@ public class EntityMapWrapperConfiguration {
     }
 
     @Bean
-    public IEntityStringMapWrapper<ItemStatus> itemStatusEntityMapWrapper() {
-        return new ItemStatusEntityStringMapWrapper(
+    public IEntityStringMapWrapper<ItemStatus> itemStatusMapWrapper() {
+        return new ItemMapWrapper(
                 itemStatusDao,
                 itemStatusMap,
                 SELECT_ITEM_STATUS_BY_NAME
@@ -151,8 +151,8 @@ public class EntityMapWrapperConfiguration {
     }
 
     @Bean
-    public IEntityStringMapWrapper<OptionGroup> optionGroupEntityMapWrapper() {
-        return new OptionGroupEntityStringMapWrapper(
+    public IEntityStringMapWrapper<OptionGroup> optionGroupMapWrapper() {
+        return new OptionGroupMapWrapper(
                 optionGroupDao,
                 optionGroupMap,
                 SELECT_OPTION_GROUP_BY_NAME
@@ -160,8 +160,8 @@ public class EntityMapWrapperConfiguration {
     }
 
     @Bean
-    public IEntityIntegerMapWrapper<Rating> ratingEntityMapWrapper() {
-        return new RatingEntityIntegerMapWrapper(
+    public IEntityIntegerMapWrapper<Rating> ratingMapWrapper() {
+        return new RatingEntityWrapper(
                 ratingDao,
                 ratingMap,
                 ""

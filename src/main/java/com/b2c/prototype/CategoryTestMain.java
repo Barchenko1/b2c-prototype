@@ -1,14 +1,14 @@
 package com.b2c.prototype;
 
-import com.b2c.prototype.dao.basic.BasicCategoryDao;
+import com.b2c.prototype.dao.item.base.BasicCategoryDao;
 import com.b2c.prototype.dao.item.ICategoryDao;
-import com.b2c.prototype.modal.client.dto.request.RequestCategoryDto;
-import com.b2c.prototype.modal.client.dto.update.RequestCategoryDtoUpdate;
-import com.b2c.prototype.modal.client.entity.item.Category;
-import com.b2c.prototype.processor.IEntityStringMapWrapper;
-import com.b2c.prototype.processor.base.CategoryEntityStringMapWrapper;
-import com.b2c.prototype.service.client.item.base.CategoryService;
-import com.b2c.prototype.service.client.item.ICategoryService;
+import com.b2c.prototype.modal.dto.request.RequestCategoryDto;
+import com.b2c.prototype.modal.dto.update.RequestCategoryDtoUpdate;
+import com.b2c.prototype.modal.entity.item.Category;
+import com.b2c.prototype.dao.wrapper.IEntityStringMapWrapper;
+import com.b2c.prototype.dao.wrapper.base.CategoryMapWrapper;
+import com.b2c.prototype.service.item.base.CategoryService;
+import com.b2c.prototype.service.item.ICategoryService;
 import com.tm.core.configuration.ConfigDbType;
 import com.tm.core.configuration.factory.ConfigurationSessionFactory;
 import com.tm.core.configuration.factory.IConfigurationSessionFactory;
@@ -32,7 +32,7 @@ public class CategoryTestMain {
 
         Map<String, Category> categoryMap = new HashMap<>();
         IEntityStringMapWrapper<Category> categoryEntityMapWrapper =
-                new CategoryEntityStringMapWrapper(categoryDao, categoryMap, SELECT_CATEGORY_BY_NAME);
+                new CategoryMapWrapper(categoryDao, categoryMap, SELECT_CATEGORY_BY_NAME);
         ICategoryService categoryService = new CategoryService(categoryDao, categoryEntityMapWrapper);
 
         RequestCategoryDto requestCategoryDto1 = getCategory1();

@@ -1,38 +1,40 @@
 package com.b2c.prototype.configuration;
 
-import com.b2c.prototype.dao.basic.BasicUserInfoDao;
-import com.b2c.prototype.dao.basic.BasicCategoryDao;
-import com.b2c.prototype.dao.basic.BasicAddressDao;
-import com.b2c.prototype.dao.basic.BasicDeliveryDao;
-import com.b2c.prototype.dao.basic.BasicDeliveryTypeDao;
-import com.b2c.prototype.dao.basic.BasicPaymentMethodDao;
-import com.b2c.prototype.dao.userinfo.IUserInfoDao;
+import com.b2c.prototype.dao.user.base.BasicUserInfoDao;
+import com.b2c.prototype.dao.item.base.BasicCategoryDao;
+import com.b2c.prototype.dao.delivery.base.BasicAddressDao;
+import com.b2c.prototype.dao.delivery.base.BasicDeliveryDao;
+import com.b2c.prototype.dao.delivery.base.BasicDeliveryTypeDao;
+import com.b2c.prototype.dao.payment.base.BasicPaymentMethodDao;
+import com.b2c.prototype.dao.user.IUserInfoDao;
 import com.b2c.prototype.dao.delivery.IAddressDao;
 import com.b2c.prototype.dao.delivery.IDeliveryDao;
 import com.b2c.prototype.dao.delivery.IDeliveryTypeDao;
 import com.b2c.prototype.dao.payment.IPaymentMethodDao;
 import com.b2c.prototype.dao.item.ICategoryDao;
+import com.b2c.prototype.processor.AsyncProcessor;
+import com.b2c.prototype.processor.IAsyncProcessor;
 import com.tm.core.configuration.ConfigDbType;
 import com.tm.core.configuration.factory.ConfigurationSessionFactory;
 import com.tm.core.configuration.factory.IConfigurationSessionFactory;
-import com.b2c.prototype.dao.basic.BasicAppUserDao;
-import com.b2c.prototype.dao.basic.BasicBrandDao;
-import com.b2c.prototype.dao.basic.BasicBucketDao;
-import com.b2c.prototype.dao.basic.BasicCardDao;
-import com.b2c.prototype.dao.basic.BasicDiscountDao;
-import com.b2c.prototype.dao.basic.BasicOptionItemDao;
-import com.b2c.prototype.dao.basic.BasicOptionGroupDao;
-import com.b2c.prototype.dao.basic.BasicOrderHistoryDao;
-import com.b2c.prototype.dao.basic.BasicOrderItemDao;
-import com.b2c.prototype.dao.basic.BasicOrderStatusDao;
-import com.b2c.prototype.dao.basic.BasicPaymentDao;
-import com.b2c.prototype.dao.basic.BasicPostDao;
-import com.b2c.prototype.dao.basic.BasicItemDao;
-import com.b2c.prototype.dao.basic.BasicItemStatusDao;
-import com.b2c.prototype.dao.basic.BasicItemTypeDao;
-import com.b2c.prototype.dao.basic.BasicRatingDao;
-import com.b2c.prototype.dao.basic.BasicReviewDao;
-import com.b2c.prototype.dao.basic.BasicWishListDao;
+import com.b2c.prototype.dao.user.base.BasicAppUserDao;
+import com.b2c.prototype.dao.item.base.BasicBrandDao;
+import com.b2c.prototype.dao.bucket.base.BasicBucketDao;
+import com.b2c.prototype.dao.payment.base.BasicCardDao;
+import com.b2c.prototype.dao.item.base.BasicDiscountDao;
+import com.b2c.prototype.dao.option.base.BasicOptionItemDao;
+import com.b2c.prototype.dao.option.base.BasicOptionGroupDao;
+import com.b2c.prototype.dao.order.base.BasicOrderHistoryDao;
+import com.b2c.prototype.dao.order.base.BasicOrderItemDao;
+import com.b2c.prototype.dao.order.base.BasicOrderStatusDao;
+import com.b2c.prototype.dao.payment.base.BasicPaymentDao;
+import com.b2c.prototype.dao.post.base.BasicPostDao;
+import com.b2c.prototype.dao.item.base.BasicItemDao;
+import com.b2c.prototype.dao.item.base.BasicItemStatusDao;
+import com.b2c.prototype.dao.item.base.BasicItemTypeDao;
+import com.b2c.prototype.dao.rating.base.BasicRatingDao;
+import com.b2c.prototype.dao.review.base.BasicReviewDao;
+import com.b2c.prototype.dao.wishlist.base.BasicWishListDao;
 import com.b2c.prototype.dao.bucket.IBucketDao;
 import com.b2c.prototype.dao.option.IOptionItemDao;
 import com.b2c.prototype.dao.option.IOptionGroupDao;
@@ -52,16 +54,16 @@ import com.b2c.prototype.dao.review.IReviewDao;
 import com.b2c.prototype.dao.user.IAppUserDao;
 import com.b2c.prototype.dao.wishlist.IWishListDao;
 import com.tm.core.processor.ThreadLocalSessionManager;
-import com.tm.core.transaction.BasicTransactionManager;
-import com.tm.core.transaction.ITransactionManager;
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 
 @Configuration
 public class BeanConfiguration {
+
+    @Value("${thread.pool.size}")
+    private int threadCount;
 
     @Bean
     public SessionFactory sessionFactory() {
@@ -71,26 +73,14 @@ public class BeanConfiguration {
         return configurationSessionFactory.getSessionFactory();
     }
 
-//    @Bean
-//    public SessionFactory tenantSessionFactory() {
-//        IConfigurationSessionFactory configurationSessionFactory = new ConfigurationSessionFactory(
-//                ConfigDbType.XML
-//        );
-//        return configurationSessionFactory.getSessionFactory();
-//    }
+    @Bean
+    public IAsyncProcessor asyncProcessor() {
+        return new AsyncProcessor(threadCount);
+    }
 
     @Bean
     public ThreadLocalSessionManager sessionManager() {
         return new ThreadLocalSessionManager(sessionFactory());
-    }
-
-    @Bean
-    @Primary
-    @Qualifier("clientTransactionManager")
-    public ITransactionManager clientTransactionManager(SessionFactory sessionFactory) {
-        return new BasicTransactionManager(
-                sessionFactory
-        );
     }
 
     @Bean

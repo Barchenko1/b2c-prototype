@@ -1,8 +1,9 @@
 package com.b2c.prototype.configuration;
 
 import com.b2c.prototype.dao.item.IItemDao;
+import com.b2c.prototype.dao.order.IOrderItemDao;
 import com.b2c.prototype.dao.payment.IPaymentMethodDao;
-import com.b2c.prototype.dao.userinfo.IUserInfoDao;
+import com.b2c.prototype.dao.user.IUserInfoDao;
 import com.b2c.prototype.dao.bucket.IBucketDao;
 import com.b2c.prototype.dao.delivery.IAddressDao;
 import com.b2c.prototype.dao.delivery.IDeliveryDao;
@@ -11,46 +12,46 @@ import com.b2c.prototype.dao.payment.IPaymentDao;
 import com.b2c.prototype.dao.item.ICategoryDao;
 import com.b2c.prototype.dao.item.IDiscountDao;
 import com.b2c.prototype.dao.wishlist.IWishListDao;
-import com.b2c.prototype.modal.client.entity.delivery.DeliveryType;
-import com.b2c.prototype.modal.client.entity.item.Brand;
-import com.b2c.prototype.modal.client.entity.item.ItemStatus;
-import com.b2c.prototype.modal.client.entity.item.ItemType;
-import com.b2c.prototype.modal.client.entity.payment.PaymentMethod;
-import com.b2c.prototype.modal.client.entity.item.Category;
-import com.b2c.prototype.processor.IEntityStringMapWrapper;
-import com.b2c.prototype.service.client.address.AddressService;
-import com.b2c.prototype.service.client.address.IAddressService;
-import com.b2c.prototype.service.client.appuser.AppUserService;
-import com.b2c.prototype.service.client.appuser.IAppUserService;
-import com.b2c.prototype.service.client.payment.IPaymentMethodService;
-import com.b2c.prototype.service.client.payment.base.PaymentMethodService;
-import com.b2c.prototype.service.client.userinfo.UserInfoService;
-import com.b2c.prototype.service.client.userinfo.IUserInfoService;
-import com.b2c.prototype.service.client.bucket.BucketService;
-import com.b2c.prototype.service.client.bucket.IBucketService;
-import com.b2c.prototype.service.client.card.CardService;
-import com.b2c.prototype.service.client.card.ICardService;
-import com.b2c.prototype.service.client.item.base.CategoryService;
-import com.b2c.prototype.service.client.item.ICategoryService;
-import com.b2c.prototype.service.client.delivery.base.DeliveryService;
-import com.b2c.prototype.service.client.delivery.IDeliveryService;
-import com.b2c.prototype.service.client.payment.IPaymentService;
-import com.b2c.prototype.service.client.payment.base.PaymentService;
-import com.b2c.prototype.service.client.post.IPostService;
-import com.b2c.prototype.service.client.post.PostService;
-import com.b2c.prototype.service.client.item.IItemService;
-import com.b2c.prototype.service.client.item.base.ItemService;
+import com.b2c.prototype.modal.entity.delivery.DeliveryType;
+import com.b2c.prototype.modal.entity.item.Brand;
+import com.b2c.prototype.modal.entity.item.ItemStatus;
+import com.b2c.prototype.modal.entity.item.ItemType;
+import com.b2c.prototype.modal.entity.option.OptionGroup;
+import com.b2c.prototype.modal.entity.payment.PaymentMethod;
+import com.b2c.prototype.modal.entity.item.Category;
+import com.b2c.prototype.dao.wrapper.IEntityStringMapWrapper;
+import com.b2c.prototype.processor.IAsyncProcessor;
+import com.b2c.prototype.service.address.AddressService;
+import com.b2c.prototype.service.address.IAddressService;
+import com.b2c.prototype.service.appuser.AppUserService;
+import com.b2c.prototype.service.appuser.IAppUserService;
+import com.b2c.prototype.service.payment.IPaymentMethodService;
+import com.b2c.prototype.service.payment.base.PaymentMethodService;
+import com.b2c.prototype.service.userinfo.UserInfoService;
+import com.b2c.prototype.service.userinfo.IUserInfoService;
+import com.b2c.prototype.service.bucket.BucketService;
+import com.b2c.prototype.service.bucket.IBucketService;
+import com.b2c.prototype.service.card.CardService;
+import com.b2c.prototype.service.card.ICardService;
+import com.b2c.prototype.service.item.base.CategoryService;
+import com.b2c.prototype.service.item.ICategoryService;
+import com.b2c.prototype.service.delivery.base.DeliveryService;
+import com.b2c.prototype.service.delivery.IDeliveryService;
+import com.b2c.prototype.service.payment.IPaymentService;
+import com.b2c.prototype.service.payment.base.PaymentService;
+import com.b2c.prototype.service.post.IPostService;
+import com.b2c.prototype.service.post.PostService;
+import com.b2c.prototype.service.item.IItemService;
+import com.b2c.prototype.service.item.base.ItemService;
 import com.b2c.prototype.dao.post.IPostDao;
 import com.b2c.prototype.dao.user.IAppUserDao;
-import com.b2c.prototype.service.client.wishlist.IWishListService;
-import com.b2c.prototype.service.client.wishlist.WishListService;
-import com.b2c.prototype.service.gateway.IRestClient;
-import com.b2c.prototype.service.gateway.RestClient;
+import com.b2c.prototype.service.wishlist.IWishListService;
+import com.b2c.prototype.service.wishlist.WishListService;
+import com.b2c.prototype.gateway.IRestClient;
+import com.b2c.prototype.gateway.RestClient;
 import com.tm.core.processor.ThreadLocalSessionManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.Map;
 
 @Configuration
 public class ServiceBeanConfiguration {
@@ -79,18 +80,22 @@ public class ServiceBeanConfiguration {
 
     @Bean
     public IItemService itemService(ThreadLocalSessionManager sessionManager,
-                                    IEntityStringMapWrapper<Brand> brandIEntityStringMapWrapper,
-                                    IEntityStringMapWrapper<ItemStatus> itemStatusIEntityStringMapWrapper,
-                                    IEntityStringMapWrapper<ItemType> itemTypeIEntityStringMapWrapper,
-                                    IEntityStringMapWrapper<Category> categoryIEntityStringMapWrapper,
+                                    IAsyncProcessor asyncProcessor,
+                                    IEntityStringMapWrapper<Brand> brandMapWrapper,
+                                    IEntityStringMapWrapper<ItemStatus> itemStatusMapWrapper,
+                                    IEntityStringMapWrapper<ItemType> itemTypeMapWrapper,
+                                    IEntityStringMapWrapper<Category> categoryMapWrapper,
+                                    IEntityStringMapWrapper<OptionGroup> optionGroupMapWrapper,
                                     IItemDao itemDao,
                                     IDiscountDao discountDao) {
         return new ItemService(
                 sessionManager,
-                brandIEntityStringMapWrapper,
-                itemStatusIEntityStringMapWrapper,
-                itemTypeIEntityStringMapWrapper,
-                categoryIEntityStringMapWrapper,
+                asyncProcessor,
+                brandMapWrapper,
+                itemStatusMapWrapper,
+                itemTypeMapWrapper,
+                categoryMapWrapper,
+                optionGroupMapWrapper,
                 itemDao,
                 discountDao
         );
@@ -103,12 +108,14 @@ public class ServiceBeanConfiguration {
 
     @Bean
     public IPaymentService paymentService(ThreadLocalSessionManager sessionManager,
+                                          IAsyncProcessor asyncProcessor,
                                           IPaymentDao paymentDao,
                                           ICardDao cardDao,
                                           IDiscountDao discountDao,
                                           IEntityStringMapWrapper<PaymentMethod> paymentMethodEntityMapWrapper) {
         return new PaymentService(
                 sessionManager,
+                asyncProcessor,
                 paymentDao,
                 cardDao,
                 discountDao,
@@ -128,10 +135,11 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public IDeliveryService deliveryService(IDeliveryDao deliveryDao,
-                                            IAddressDao addressDao,
-                                            Map<String, DeliveryType> deliveryTypeMap) {
-        return new DeliveryService(deliveryDao, addressDao, deliveryTypeMap);
+    public IDeliveryService deliveryService(ThreadLocalSessionManager sessionManager,
+                                            IAsyncProcessor asyncProcessor,
+                                            IDeliveryDao deliveryDao,
+                                            IEntityStringMapWrapper<DeliveryType> deliveryTypeEntityMapWrapper) {
+        return new DeliveryService(sessionManager, asyncProcessor, deliveryDao, deliveryTypeEntityMapWrapper);
     }
 
     @Bean

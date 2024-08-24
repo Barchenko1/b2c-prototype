@@ -1,10 +1,10 @@
 package com.b2c.prototype.test.service;
 
 import com.b2c.prototype.dao.item.IDiscountDao;
-import com.b2c.prototype.modal.client.dto.request.RequestDiscountDto;
-import com.b2c.prototype.modal.client.entity.item.Discount;
-import com.b2c.prototype.service.client.discont.DiscountService;
-import com.b2c.prototype.service.client.discont.IDiscountService;
+import com.b2c.prototype.modal.dto.request.RequestDiscountDto;
+import com.b2c.prototype.modal.entity.item.Discount;
+import com.b2c.prototype.service.discont.DiscountService;
+import com.b2c.prototype.service.discont.IDiscountService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

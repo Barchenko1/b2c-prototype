@@ -51,32 +51,37 @@ public interface Query {
             FROM address a
             JOIN app_user au ON au.address_id = a.id
             WHERE au.username = ?;""";
-    String UPDATE_ADDRESS_BY_DELIVERY_ID = """
-            UPDATE address a
-            SET a.country = ?,
-                a.street = ?,
-                a.building = ?,
-                a.flor = ?,
-                a.apartmentNumber = ?
-            FROM address a
-            JOIN delivery d ON d.address_id = a.id
-            WHERE d.delivery_id = ?;""";
+    String UPDATE_ADDRESS_BY_ORDER_ID = "UPDATE address a " +
+            "SET " +
+            "a.country = ?, " +
+            "a.street = ?, " +
+            "a.building = ?, " +
+            "a.flor = ?, " +
+            "a.apartment_number = ? " +
+            "FROM address a" +
+            "JOIN delivery d ON d.address_id = a.id " +
+            "JOIN order_item oi ON oi.delivery_id = d.id " +
+            "WHERE oi.order_id = ?;";
     String DELETE_ADDRESS_BY_USERNAME = "DELETE a " +
             "FROM address a " +
             "JOIN app_user u ON a.id = u.address_id " +
             "WHERE u.username = ?";
-    String DELETE_ADDRESS_BY_DELIVERY_ID = "DELETE a " +
+    String DELETE_ADDRESS_BY_ORDER_ID = "DELETE a " +
             "FROM address a " +
-            "JOIN delivery d ON a.id = d.address_id " +
-            "WHERE d.delivery_id = ?";
+            "JOIN delivery d ON d.address_id = a.id " +
+            "JOIN order_item oi ON oi.delivery_id = d.id " +
+            "WHERE oi.order_id = ?;";
 
     // delivery
-    String DELETE_DELIVERY_BY_DELIVERY_ADDRESS = "DELETE FROM delivery d WHERE delivery_address_id IN " +
-            "(SELECT id FROM delivery_address " +
-            "WHERE street = ? " +
-            "AND building = ? " +
-            "AND flor = ? " +
-            "AND apartment_number = ?)";
+    String SELECT_DELIVERY_BY_ORDER_ID = "SELECT d " +
+            "FROM delivery d" +
+            "JOIN order_item oi ON oi.delivery_id = d.id" +
+            "WHERE oi.order_id = ?;";
+    String DELETE_DELIVERY_BY_ORDER_ID = "DELETE d " +
+            "FROM delivery d " +
+            "JOIN order_item oi ON oi.delivery_id = d.id " +
+            "WHERE oi.order_id = ?;";
+
 
     // discount
     String SELECT_DISCOUNT_BY_AMOUNT_AND_IS_CURRENCY = "SELECT FROM discount d " +
@@ -116,7 +121,8 @@ public interface Query {
 
     // payment
     String SELECT_ALL_PAYMENTS = "SELECT * FROM payment p";
-    String SELECT_PAYMENT_BY_PAYMENT_ID = "SELECT p FROM payment p WHERE p.payment_id = ?";
+    String SELECT_PAYMENT_BY_ORDER_ID = "SELECT * FROM payment WHERE id = " +
+            "(SELECT payment_id FROM order_item WHERE order_id = ?";
     String DELETE_PAYMENT_BY_ORDER_ID = "DELETE FROM payment WHERE id = " +
             "(SELECT payment_id FROM order_item WHERE order_id = ?";
     String DELETE_PAYMENT_HAVE_NOT_ORDER = "DELETE FROM payment WHERE id NOT IN " +
@@ -189,5 +195,10 @@ public interface Query {
     String SELECT_OPTION_GROUP_BY_NAME = "SELECT * FROM option_group o WHERE o.name = ?";
     String UPDATE_OPTION_GROUP_BY_NAME = "UPDATE option_group o SET o.name = ?";
     String DELETE_OPTION_GROUP_BY_NAME = "DELETE FROM option_group o WHERE o.name = ?";
+
+    // order
+    String SELECT_ALL_ORDER = "SELECT * FROM order";
+    String SELECT_ORDER_BY_ORDER_ID = "SELECT * FROM order o WHERE o.order_id = ?";
+    String DELETE_ORDER_BY_ORDER_ID = "DELETE FROM order o WHERE o.order_id = ?";
 
 }

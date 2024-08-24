@@ -1,12 +1,12 @@
 package com.b2c.prototype;
 
-import com.b2c.prototype.dao.basic.BasicPostDao;
+import com.b2c.prototype.dao.post.base.BasicPostDao;
 import com.b2c.prototype.dao.post.IPostDao;
-import com.b2c.prototype.modal.client.dto.request.RequestPostDto;
-import com.b2c.prototype.modal.client.dto.update.RequestPostDtoUpdate;
-import com.b2c.prototype.modal.client.entity.post.Post;
-import com.b2c.prototype.service.client.post.IPostService;
-import com.b2c.prototype.service.client.post.PostService;
+import com.b2c.prototype.modal.dto.request.RequestPostDto;
+import com.b2c.prototype.modal.dto.update.RequestPostDtoUpdate;
+import com.b2c.prototype.modal.entity.post.Post;
+import com.b2c.prototype.service.post.IPostService;
+import com.b2c.prototype.service.post.PostService;
 import com.tm.core.configuration.ConfigDbType;
 import com.tm.core.configuration.factory.ConfigurationSessionFactory;
 import com.tm.core.configuration.factory.IConfigurationSessionFactory;

@@ -1,11 +1,11 @@
 package com.b2c.prototype.test.service;
 
 import com.b2c.prototype.dao.payment.ICardDao;
-import com.b2c.prototype.modal.client.dto.request.RequestCardDto;
-import com.b2c.prototype.modal.client.dto.response.ResponseCardDto;
-import com.b2c.prototype.modal.client.entity.payment.Card;
-import com.b2c.prototype.service.client.card.CardService;
-import com.b2c.prototype.service.client.card.ICardService;
+import com.b2c.prototype.modal.dto.request.RequestCardDto;
+import com.b2c.prototype.modal.dto.response.ResponseCardDto;
+import com.b2c.prototype.modal.entity.payment.Card;
+import com.b2c.prototype.service.card.CardService;
+import com.b2c.prototype.service.card.ICardService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -14,7 +14,6 @@ import org.mockito.MockitoAnnotations;
 import java.util.Optional;
 
 import static com.b2c.prototype.util.Query.DELETE_CARD_BY_CARD_NUMBER;
-import static com.b2c.prototype.util.Query.INSERT_INTO_CARD;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;

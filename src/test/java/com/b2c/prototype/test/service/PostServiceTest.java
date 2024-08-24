@@ -1,10 +1,10 @@
 package com.b2c.prototype.test.service;
 
 import com.b2c.prototype.dao.post.IPostDao;
-import com.b2c.prototype.modal.client.dto.request.RequestPostDto;
-import com.b2c.prototype.modal.client.dto.update.RequestPostDtoUpdate;
-import com.b2c.prototype.modal.client.entity.post.Post;
-import com.b2c.prototype.service.client.post.PostService;
+import com.b2c.prototype.modal.dto.request.RequestPostDto;
+import com.b2c.prototype.modal.dto.update.RequestPostDtoUpdate;
+import com.b2c.prototype.modal.entity.post.Post;
+import com.b2c.prototype.service.post.PostService;
 import com.tm.core.modal.TransitiveSelfEntity;
 import com.tm.core.util.TransitiveSelfEnum;
 import org.junit.jupiter.api.BeforeEach;

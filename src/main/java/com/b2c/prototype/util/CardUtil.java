@@ -12,7 +12,7 @@ public final class CardUtil {
     public static boolean isCardActive(String monthYear) {
         Date expireDate = transformMonthYearToDate(monthYear);
         if (expireDate.before(new Date())) {
-            log.error("Card expired");
+            log.error("error card is expired");
             throw new RuntimeException("Card expired");
         }
         return true;
@@ -24,6 +24,7 @@ public final class CardUtil {
         try {
             return dateFormat.parse(monthYear);
         } catch (ParseException e) {
+            log.error("error transformation Month/Year to Date");
             throw new RuntimeException(e);
         }
     }

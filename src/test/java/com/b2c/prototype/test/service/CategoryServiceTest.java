@@ -1,13 +1,13 @@
 package com.b2c.prototype.test.service;
 
 import com.b2c.prototype.dao.item.ICategoryDao;
-import com.b2c.prototype.modal.client.dto.request.RequestCategoryDto;
-import com.b2c.prototype.modal.client.dto.update.RequestCategoryDtoUpdate;
-import com.b2c.prototype.modal.client.entity.item.Category;
-import com.b2c.prototype.processor.IEntityStringMapWrapper;
-import com.b2c.prototype.service.client.item.ICategoryService;
-import com.b2c.prototype.service.client.item.base.CategoryService;
-import com.tm.core.modal.EntityFinder;
+import com.b2c.prototype.modal.dto.request.RequestCategoryDto;
+import com.b2c.prototype.modal.dto.update.RequestCategoryDtoUpdate;
+import com.b2c.prototype.modal.entity.item.Category;
+import com.b2c.prototype.dao.wrapper.IEntityStringMapWrapper;
+import com.b2c.prototype.service.item.ICategoryService;
+import com.b2c.prototype.service.item.base.CategoryService;
+import com.tm.core.processor.EntityFinder;
 import com.tm.core.modal.TransitiveSelfEntity;
 import com.tm.core.util.TransitiveSelfEnum;
 import org.junit.jupiter.api.BeforeEach;

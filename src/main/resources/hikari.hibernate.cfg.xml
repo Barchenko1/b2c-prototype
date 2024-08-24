@@ -25,41 +25,41 @@
         <property name="hibernate.connection.provider_class">org.hibernate.hikaricp.internal.HikariCPConnectionProvider</property>
         <property name="hibernate.connection.isolation">2</property>
         <!-- add annotated resources here -->
-        <mapping class="com.b2c.prototype.modal.client.entity.order.OrderItem" />
-        <mapping class="com.b2c.prototype.modal.client.entity.order.OrderStatus" />
-        <mapping class="com.b2c.prototype.modal.client.entity.order.OrderHistory" />
+        <mapping class="com.b2c.prototype.modal.entity.order.OrderItem" />
+        <mapping class="com.b2c.prototype.modal.entity.order.OrderStatus" />
+        <mapping class="com.b2c.prototype.modal.entity.order.OrderHistory" />
 
-        <mapping class="com.b2c.prototype.modal.client.entity.payment.PaymentMethod" />
-        <mapping class="com.b2c.prototype.modal.client.entity.payment.Payment" />
+        <mapping class="com.b2c.prototype.modal.entity.payment.PaymentMethod" />
+        <mapping class="com.b2c.prototype.modal.entity.payment.Payment" />
 
-        <mapping class="com.b2c.prototype.modal.client.entity.user.UserInfo" />
-        <mapping class="com.b2c.prototype.modal.client.entity.address.Address" />
-        <mapping class="com.b2c.prototype.modal.client.entity.delivery.DeliveryType" />
-        <mapping class="com.b2c.prototype.modal.client.entity.delivery.Delivery" />
+        <mapping class="com.b2c.prototype.modal.entity.user.UserInfo" />
+        <mapping class="com.b2c.prototype.modal.entity.address.Address" />
+        <mapping class="com.b2c.prototype.modal.entity.delivery.DeliveryType" />
+        <mapping class="com.b2c.prototype.modal.entity.delivery.Delivery" />
 
-        <mapping class="com.b2c.prototype.modal.client.entity.payment.Payment" />
-        <mapping class="com.b2c.prototype.modal.client.entity.payment.Card" />
+        <mapping class="com.b2c.prototype.modal.entity.payment.Payment" />
+        <mapping class="com.b2c.prototype.modal.entity.payment.Card" />
 
-        <mapping class="com.b2c.prototype.modal.client.entity.item.ItemType" />
-        <mapping class="com.b2c.prototype.modal.client.entity.item.Discount" />
-        <mapping class="com.b2c.prototype.modal.client.entity.item.Brand" />
-        <mapping class="com.b2c.prototype.modal.client.entity.item.Category" />
-        <mapping class="com.b2c.prototype.modal.client.entity.item.ItemStatus" />
+        <mapping class="com.b2c.prototype.modal.entity.item.ItemType" />
+        <mapping class="com.b2c.prototype.modal.entity.item.Discount" />
+        <mapping class="com.b2c.prototype.modal.entity.item.Brand" />
+        <mapping class="com.b2c.prototype.modal.entity.item.Category" />
+        <mapping class="com.b2c.prototype.modal.entity.item.ItemStatus" />
 
-        <mapping class="com.b2c.prototype.modal.client.entity.post.Post" />
+        <mapping class="com.b2c.prototype.modal.entity.post.Post" />
 
-        <mapping class="com.b2c.prototype.modal.client.entity.option.OptionGroup" />
-        <mapping class="com.b2c.prototype.modal.client.entity.option.OptionItem" />
+        <mapping class="com.b2c.prototype.modal.entity.option.OptionGroup" />
+        <mapping class="com.b2c.prototype.modal.entity.option.OptionItem" />
 
-        <mapping class="com.b2c.prototype.modal.client.entity.bucket.Bucket" />
-        <mapping class="com.b2c.prototype.modal.client.entity.wishlist.Wishlist" />
+        <mapping class="com.b2c.prototype.modal.entity.bucket.Bucket" />
+        <mapping class="com.b2c.prototype.modal.entity.wishlist.Wishlist" />
 
-        <mapping class="com.b2c.prototype.modal.client.entity.item.Item" />
+        <mapping class="com.b2c.prototype.modal.entity.item.Item" />
 
-        <mapping class="com.b2c.prototype.modal.client.entity.user.AppUser" />
+        <mapping class="com.b2c.prototype.modal.entity.user.AppUser" />
 
-        <mapping class="com.b2c.prototype.modal.client.entity.review.Review" />
-        <mapping class="com.b2c.prototype.modal.client.entity.item.Rating" />
+        <mapping class="com.b2c.prototype.modal.entity.review.Review" />
+        <mapping class="com.b2c.prototype.modal.entity.item.Rating" />
 
     </session-factory>
 </hibernate-configuration>
