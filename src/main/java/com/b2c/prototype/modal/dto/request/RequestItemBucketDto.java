@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class RequestItemBucketDto {
-    private String itemName;
+    private String userId;
+    private String articularId;
     private int count;
 }

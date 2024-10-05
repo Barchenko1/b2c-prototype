@@ -1,4 +1,0 @@
-<dataset>
-    <APP_USER username="test" password="password" email="test@mail.com" />
-    <APP_USER username="test else" password="password" email="test@mail.com" />
-</dataset>

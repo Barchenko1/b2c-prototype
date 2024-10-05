@@ -40,6 +40,11 @@ public class Category extends TransitiveSelfEntity {
     private List<Category> childNodeList;
 
     @Override
+    public String getRootField() {
+        return name;
+    }
+
+    @Override
     public String toString() {
         return "Category{" +
                 "id=" + id +
@@ -47,10 +52,5 @@ public class Category extends TransitiveSelfEntity {
                 ", parentId=" + (parent != null ? parent.getId() : "null") +
                 ", childNodeCount=" + (childNodeList != null ? childNodeList.size() : "null") +
                 '}';
-    }
-
-    @Override
-    public String getRootField() {
-        return name;
     }
 }

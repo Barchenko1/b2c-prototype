@@ -6,7 +6,7 @@ import lombok.Data;
 public class RequestCardDto {
     private String cartNumber;
     private String dateOfExpire;
-    private String cvv;
+    private int cvv;
     private String ownerName;
     private String ownerSecondName;
 }

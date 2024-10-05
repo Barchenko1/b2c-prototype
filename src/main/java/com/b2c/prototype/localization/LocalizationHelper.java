@@ -1,6 +1,7 @@
 package com.b2c.prototype.localization;
 
 import com.b2c.prototype.configuration.LocalizationInterpreter;
+import com.b2c.prototype.dao.cashed.IEntityCachedMap;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
@@ -31,6 +32,8 @@ public class LocalizationHelper {
     private final Map<Integer, Rating> ratingMap;
     private final Map<String, OptionGroup> optionGroupMap;
 
+    private final IEntityCachedMap entityCachedMap;
+
     public LocalizationHelper(LocalizationInterpreter localizationInterpreter,
                               Map<String, DeliveryType> deliveryTypeMap,
                               Map<String, PaymentMethod> paymenMethodMap,
@@ -39,7 +42,9 @@ public class LocalizationHelper {
                               Map<String, ItemStatus> itemStatusMap,
                               Map<String, ItemType> itemTypeMap,
                               Map<String, Category> categoryMap,
-                              Map<Integer, Rating> ratingMap, Map<String, OptionGroup> optionGroupMap) {
+                              Map<Integer, Rating> ratingMap,
+                              Map<String, OptionGroup> optionGroupMap,
+                              IEntityCachedMap entityCachedMap) {
         this.localizationInterpreter = localizationInterpreter;
         this.deliveryTypeMap = deliveryTypeMap;
         this.paymenMethodMap = paymenMethodMap;
@@ -50,10 +55,14 @@ public class LocalizationHelper {
         this.categoryMap = categoryMap;
         this.ratingMap = ratingMap;
         this.optionGroupMap = optionGroupMap;
+
+        this.entityCachedMap = entityCachedMap;
     }
 
     public String getLocalizeDeliveryTypeName(String deliveryTypeConfigName, Locale locale) {
-        DeliveryType deliveryType = deliveryTypeMap.get(deliveryTypeConfigName);
+        Map<Object, Object> deliveryTypeMap = entityCachedMap.getEntityMap(DeliveryType.class);
+        DeliveryType deliveryType = (DeliveryType) deliveryTypeMap.get(deliveryTypeConfigName);
+//        DeliveryType deliveryType = deliveryTypeMap.get(deliveryTypeConfigName);
         return localizationInterpreter.interpret("delivery.type", deliveryType.getName(), locale);
     }
 

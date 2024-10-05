@@ -10,13 +10,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
 @Table(name = "option_item")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class OptionItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

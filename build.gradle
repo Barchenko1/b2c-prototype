@@ -49,7 +49,6 @@ dependencies {
 
 	// Additional Dependencies
 	implementation 'com.tm.core:tm-sdk:1.0-SNAPSHOT'
-//	implementation 'com.core.im:integration-modal:1.0-SNAPSHOT'
 
 	// Micrometer and PostgreSQL
 	runtimeOnly 'io.micrometer:micrometer-registry-new-relic'

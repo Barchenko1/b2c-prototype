@@ -23,14 +23,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import static com.b2c.prototype.util.Query.SELECT_ALL_BRANDS;
-import static com.b2c.prototype.util.Query.SELECT_ALL_DELIVERY_TYPE;
-import static com.b2c.prototype.util.Query.SELECT_ALL_ITEM_STATUS;
-import static com.b2c.prototype.util.Query.SELECT_ALL_ITEM_TYPE;
-import static com.b2c.prototype.util.Query.SELECT_ALL_OPTION_GROUP;
-import static com.b2c.prototype.util.Query.SELECT_ALL_ORDER_STATUS;
-import static com.b2c.prototype.util.Query.SELECT_ALL_PAYMENT_METHOD;
-
 @Configuration
 public class InitializeConstantDbConfiguration {
 
@@ -96,7 +88,7 @@ public class InitializeConstantDbConfiguration {
 
     private void setupDeliveryTypeEntities(Locale defaultLocale) {
         List<String> deliveryTypeList = enumConfiguration.getDeliveryTypes();
-        List<DeliveryType> existingDeliveryType = deliveryTypeDao.getEntityListBySQLQuery(SELECT_ALL_DELIVERY_TYPE);
+        List<DeliveryType> existingDeliveryType = deliveryTypeDao.getEntityList();
 
         if (deliveryTypeList != null) {
             deliveryTypeList.stream()
@@ -113,7 +105,7 @@ public class InitializeConstantDbConfiguration {
 
     private void setupPaymentMethodEntities(Locale defaultLocale) {
         List<String> paymentMethodList = enumConfiguration.getPaymentMethods();
-        List<PaymentMethod> existingPaymentMethod = paymentMethodDao.getEntityListBySQLQuery(SELECT_ALL_PAYMENT_METHOD);
+        List<PaymentMethod> existingPaymentMethod = paymentMethodDao.getEntityList();
 
         if (paymentMethodList != null) {
             paymentMethodList.stream()
@@ -129,7 +121,7 @@ public class InitializeConstantDbConfiguration {
 
     private void setupOrderStatusEntities(Locale defaultLocale) {
         List<String> orderStatusList = enumConfiguration.getOrderStatuses();
-        List<OrderStatus> existingOrderStatus = orderStatusDao.getEntityListBySQLQuery(SELECT_ALL_ORDER_STATUS);
+        List<OrderStatus> existingOrderStatus = orderStatusDao.getEntityList();
 
         if (orderStatusList != null) {
             orderStatusList.stream()
@@ -146,7 +138,7 @@ public class InitializeConstantDbConfiguration {
 
     private void setupBrandEntities(Locale defaultLocale) {
         List<String> brandList = enumConfiguration.getBrands();
-        List<Brand> existingBrands = brandDao.getEntityListBySQLQuery(SELECT_ALL_BRANDS);
+        List<Brand> existingBrands = brandDao.getEntityList();
 
         if (brandList != null) {
             brandList.stream()
@@ -163,7 +155,7 @@ public class InitializeConstantDbConfiguration {
 
     private void setupItemStatusEntities(Locale defaultLocale) {
         List<String> itemStatusList = enumConfiguration.getItemStatuses();
-        List<ItemStatus> existItemStatus = itemStatusDao.getEntityListBySQLQuery(SELECT_ALL_ITEM_STATUS);
+        List<ItemStatus> existItemStatus = itemStatusDao.getEntityList();
 
         if (itemStatusList != null) {
             itemStatusList.stream()
@@ -180,7 +172,7 @@ public class InitializeConstantDbConfiguration {
 
     private void setupItemTypesEntities(Locale defaultLocale) {
         List<String> itemTypeList = enumConfiguration.getItemTypes();
-        List<ItemType> existItemTypes = itemTypeDao.getEntityListBySQLQuery(SELECT_ALL_ITEM_TYPE);
+        List<ItemType> existItemTypes = itemTypeDao.getEntityList();
 
         if (itemTypeList != null) {
             itemTypeList.stream()
@@ -197,7 +189,7 @@ public class InitializeConstantDbConfiguration {
 
     private void setupOptionGroupEntities(Locale defaultLocale) {
         List<String> optionGroupList = enumConfiguration.getItemTypes();
-        List<ItemType> existOptionGroup = optionGroupDao.getEntityListBySQLQuery(SELECT_ALL_OPTION_GROUP);
+        List<ItemType> existOptionGroup = optionGroupDao.getEntityList();
 
         if (optionGroupList != null) {
             optionGroupList.stream()

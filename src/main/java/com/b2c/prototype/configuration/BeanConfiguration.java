@@ -1,22 +1,21 @@
 package com.b2c.prototype.configuration;
 
+import com.b2c.prototype.dao.address.ICountryDao;
+import com.b2c.prototype.dao.address.base.BasicCountryDao;
+import com.b2c.prototype.dao.user.ICountryPhoneCodeDao;
+import com.b2c.prototype.dao.user.base.BasicCountryPhoneCodeDao;
 import com.b2c.prototype.dao.user.base.BasicUserInfoDao;
 import com.b2c.prototype.dao.item.base.BasicCategoryDao;
-import com.b2c.prototype.dao.delivery.base.BasicAddressDao;
+import com.b2c.prototype.dao.address.base.BasicAddressDao;
 import com.b2c.prototype.dao.delivery.base.BasicDeliveryDao;
 import com.b2c.prototype.dao.delivery.base.BasicDeliveryTypeDao;
 import com.b2c.prototype.dao.payment.base.BasicPaymentMethodDao;
 import com.b2c.prototype.dao.user.IUserInfoDao;
-import com.b2c.prototype.dao.delivery.IAddressDao;
+import com.b2c.prototype.dao.address.IAddressDao;
 import com.b2c.prototype.dao.delivery.IDeliveryDao;
 import com.b2c.prototype.dao.delivery.IDeliveryTypeDao;
 import com.b2c.prototype.dao.payment.IPaymentMethodDao;
 import com.b2c.prototype.dao.item.ICategoryDao;
-import com.b2c.prototype.processor.AsyncProcessor;
-import com.b2c.prototype.processor.IAsyncProcessor;
-import com.tm.core.configuration.ConfigDbType;
-import com.tm.core.configuration.factory.ConfigurationSessionFactory;
-import com.tm.core.configuration.factory.IConfigurationSessionFactory;
 import com.b2c.prototype.dao.user.base.BasicAppUserDao;
 import com.b2c.prototype.dao.item.base.BasicBrandDao;
 import com.b2c.prototype.dao.bucket.base.BasicBucketDao;
@@ -53,155 +52,152 @@ import com.b2c.prototype.dao.rating.IRatingDao;
 import com.b2c.prototype.dao.review.IReviewDao;
 import com.b2c.prototype.dao.user.IAppUserDao;
 import com.b2c.prototype.dao.wishlist.IWishListDao;
-import com.tm.core.processor.ThreadLocalSessionManager;
+import com.tm.core.configuration.manager.DatabaseType;
+import com.tm.core.configuration.manager.ISessionFactoryManager;
+import com.tm.core.configuration.manager.SessionFactoryManager;
+import com.tm.core.dao.identifier.IEntityIdentifierDao;
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class BeanConfiguration {
 
-    @Value("${thread.pool.size}")
-    private int threadCount;
-
     @Bean
     public SessionFactory sessionFactory() {
-        IConfigurationSessionFactory configurationSessionFactory = new ConfigurationSessionFactory(
-                ConfigDbType.XML
-        );
-        return configurationSessionFactory.getSessionFactory();
+        ISessionFactoryManager sessionFactoryManager =
+                SessionFactoryManager.getInstance("hikari.hibernate.cfg.xml");
+        return sessionFactoryManager.getSessionFactorySupplier(DatabaseType.WRITE).get();
     }
 
     @Bean
-    public IAsyncProcessor asyncProcessor() {
-        return new AsyncProcessor(threadCount);
+    public IAppUserDao appUserDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicAppUserDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
-    public ThreadLocalSessionManager sessionManager() {
-        return new ThreadLocalSessionManager(sessionFactory());
+    public IPaymentDao paymentDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicPaymentDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
-    public IAppUserDao appUserDao(SessionFactory sessionFactory) {
-        return new BasicAppUserDao(sessionFactory);
+    public IPaymentMethodDao paymentMethodDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicPaymentMethodDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
-    public IPaymentDao paymentDao(SessionFactory sessionFactory) {
-        return new BasicPaymentDao(sessionFactory);
+    public ICardDao cardDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicCardDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
-    public IPaymentMethodDao paymentMethodDao(SessionFactory sessionFactory) {
-        return new BasicPaymentMethodDao(sessionFactory);
+    public IOrderItemDao orderItemDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicOrderItemDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
-    public ICardDao cardDao(SessionFactory sessionFactory) {
-        return new BasicCardDao(sessionFactory);
+    public IOrderStatusDao orderStatusDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicOrderStatusDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
-    public IOrderItemDao orderItemDao(SessionFactory sessionFactory) {
-        return new BasicOrderItemDao(sessionFactory);
+    public IOrderHistoryDao orderHistoryDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicOrderHistoryDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
-    public IOrderStatusDao orderStatusDao(SessionFactory sessionFactory) {
-        return new BasicOrderStatusDao(sessionFactory);
+    public IItemTypeDao itemTypeDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicItemTypeDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
-    public IOrderHistoryDao orderHistoryDao(SessionFactory sessionFactory) {
-        return new BasicOrderHistoryDao(sessionFactory);
+    public IDiscountDao discountDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicDiscountDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
-    public IItemTypeDao itemTypeDao(SessionFactory sessionFactory) {
-        return new BasicItemTypeDao(sessionFactory);
+    public IBrandDao brandDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicBrandDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
-    public IDiscountDao discountDao(SessionFactory sessionFactory) {
-        return new BasicDiscountDao(sessionFactory);
+    public ICategoryDao categoryDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicCategoryDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
-    public IBrandDao brandDao(SessionFactory sessionFactory) {
-        return new BasicBrandDao(sessionFactory);
+    public IItemStatusDao itemStatusDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicItemStatusDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
-    public ICategoryDao categoryDao(SessionFactory sessionFactory) {
-        return new BasicCategoryDao(sessionFactory);
+    public IPostDao postDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicPostDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
-    public IItemStatusDao itemStatusDao(SessionFactory sessionFactory) {
-        return new BasicItemStatusDao(sessionFactory);
+    public IOptionGroupDao optionGroupDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicOptionGroupDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
-    public IPostDao postDao(SessionFactory sessionFactory) {
-        return new BasicPostDao(sessionFactory);
+    public IOptionItemDao optionDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicOptionItemDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
-    public IOptionGroupDao optionGroupDao(SessionFactory sessionFactory) {
-        return new BasicOptionGroupDao(sessionFactory);
+    public IBucketDao bucketDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicBucketDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
-    public IOptionItemDao optionDao(SessionFactory sessionFactory) {
-        return new BasicOptionItemDao(sessionFactory);
+    public IWishListDao wishListDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicWishListDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
-    public IBucketDao bucketDao(SessionFactory sessionFactory) {
-        return new BasicBucketDao(sessionFactory);
+    public IItemDao itemDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicItemDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
-    public IWishListDao wishListDao(SessionFactory sessionFactory) {
-        return new BasicWishListDao(sessionFactory);
+    public IReviewDao reviewDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicReviewDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
-    public IItemDao itemDao(SessionFactory sessionFactory) {
-        return new BasicItemDao(sessionFactory);
+    public IRatingDao ratingDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicRatingDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
-    public IReviewDao reviewDao(SessionFactory sessionFactory) {
-        return new BasicReviewDao(sessionFactory);
+    public IDeliveryDao deliveryDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicDeliveryDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
-    public IRatingDao ratingDao(SessionFactory sessionFactory) {
-        return new BasicRatingDao(sessionFactory);
+    public IAddressDao addressDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicAddressDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
-    public IDeliveryDao deliveryDao(SessionFactory sessionFactory) {
-        return new BasicDeliveryDao(sessionFactory);
+    public ICountryDao countryDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicCountryDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
-    public IAddressDao addressDao(SessionFactory sessionFactory) {
-        return new BasicAddressDao(sessionFactory);
+    public IDeliveryTypeDao deliveryTypeDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicDeliveryTypeDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
-    public IDeliveryTypeDao deliveryTypeDao(SessionFactory sessionFactory) {
-        return new BasicDeliveryTypeDao(sessionFactory);
+    public IUserInfoDao userInfoDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicUserInfoDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
-    public IUserInfoDao userInfoDao(SessionFactory sessionFactory) {
-        return new BasicUserInfoDao(sessionFactory);
+    public ICountryPhoneCodeDao countryPhoneCodeDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicCountryPhoneCodeDao(sessionFactory, entityIdentifierDao);
     }
-
 
 }

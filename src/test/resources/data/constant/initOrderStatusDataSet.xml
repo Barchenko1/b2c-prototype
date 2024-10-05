@@ -1,6 +1,0 @@
-<dataset>
-    <ORDER_STATUS NAME="NEW" />
-    <ORDER_STATUS NAME="IN_PROGRESS" />
-    <ORDER_STATUS NAME="COMPLETE" />
-    <ORDER_STATUS NAME="TERMINATED" />
-</dataset>

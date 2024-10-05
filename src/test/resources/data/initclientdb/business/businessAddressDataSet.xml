@@ -1,4 +1,0 @@
-<dataset>
-    <business_address apartmentnumber="1" building="1" flor="1" street="Some string"/>
-    <business_address apartmentnumber="1" building="1" flor="1" street="Some string else"/>
-</dataset>

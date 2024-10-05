@@ -7,6 +7,9 @@ management:
 thread:
   pool:
     size: 3
+entity:
+  package:
+    path: com.b2c.prototype.modal.entity
 spring:
   web:
     locale: en

@@ -1,0 +1,74 @@
+package com.b2c.prototype.dao.address.base;
+
+import com.b2c.prototype.dao.AbstractSingleEntityDaoTest;
+import com.b2c.prototype.dao.EntityDataSet;
+import com.b2c.prototype.modal.entity.address.Address;
+import com.b2c.prototype.modal.entity.address.Country;
+import org.junit.jupiter.api.BeforeAll;
+
+class BasicAddressDaoTest extends AbstractSingleEntityDaoTest {
+
+    @BeforeAll
+    public static void setup() {
+        dao = new BasicAddressDao(sessionFactory, entityIdentifierDao);
+    }
+
+    @Override
+    protected String getEmptyDataSetPath() {
+        return "/datasets/address/address/emptyAddressDataSet.yml";
+    }
+
+    @Override
+    protected EntityDataSet<?> getTestDataSet() {
+        Country country = Country.builder()
+                .id(1L)
+                .name("USA")
+                .build();
+        Address address = Address.builder()
+                .id(1L)
+                .country(country)
+                .street("street")
+                .buildingNumber(1)
+                .apartmentNumber(101)
+                .flor(9)
+                .zipCode("90000")
+                .build();
+        return new EntityDataSet<>(address, "/datasets/address/address/testAddressDataSet.yml");
+    }
+
+    @Override
+    protected EntityDataSet<?> getSaveDataSet() {
+        Country country = Country.builder()
+                .id(1L)
+                .name("USA")
+                .build();
+        Address address = Address.builder()
+                .country(country)
+                .street("street")
+                .buildingNumber(1)
+                .apartmentNumber(101)
+                .flor(9)
+                .zipCode("90000")
+                .build();
+        return new EntityDataSet<>(address, "/datasets/address/address/saveAddressDataSet.yml");
+    }
+
+    @Override
+    protected EntityDataSet<?> getUpdateDataSet() {
+        Country country = Country.builder()
+                .id(1L)
+                .name("USA")
+                .build();
+        Address address = Address.builder()
+                .id(1L)
+                .country(country)
+                .street("Update street")
+                .buildingNumber(1)
+                .apartmentNumber(102)
+                .flor(9)
+                .zipCode("90001")
+                .build();
+        return new EntityDataSet<>(address, "/datasets/address/address/updateAddressDataSet.yml");
+    }
+
+}

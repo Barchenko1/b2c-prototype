@@ -1,4 +1,0 @@
-<dataset>
-    <ORDER_ADDRESS STREET="Some string" BUILDING="1" FLOR="1" APARTMENTNUMBER="1"/>
-    <ORDER_ADDRESS STREET="Some string else" BUILDING="1" FLOR="1" APARTMENTNUMBER="1"/>
-</dataset>

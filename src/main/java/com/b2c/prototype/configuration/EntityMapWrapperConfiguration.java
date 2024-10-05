@@ -9,6 +9,8 @@ import com.b2c.prototype.dao.option.IOptionGroupDao;
 import com.b2c.prototype.dao.order.IOrderStatusDao;
 import com.b2c.prototype.dao.payment.IPaymentMethodDao;
 import com.b2c.prototype.dao.rating.IRatingDao;
+import com.b2c.prototype.dao.cashed.EntityCachedMap;
+import com.b2c.prototype.dao.cashed.IEntityCachedMap;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
@@ -18,30 +20,23 @@ import com.b2c.prototype.modal.entity.item.Rating;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.order.OrderStatus;
 import com.b2c.prototype.modal.entity.payment.PaymentMethod;
-import com.b2c.prototype.dao.wrapper.IEntityIntegerMapWrapper;
-import com.b2c.prototype.dao.wrapper.IEntityStringMapWrapper;
-import com.b2c.prototype.dao.wrapper.base.BrandMapWrapper;
-import com.b2c.prototype.dao.wrapper.base.CategoryMapWrapper;
-import com.b2c.prototype.dao.wrapper.base.DeliveryTypeMapWrapper;
-import com.b2c.prototype.dao.wrapper.base.ItemMapWrapper;
-import com.b2c.prototype.dao.wrapper.base.ItemTypeMapWrapper;
-import com.b2c.prototype.dao.wrapper.base.OptionGroupMapWrapper;
-import com.b2c.prototype.dao.wrapper.base.OrderStatusMapWrapper;
-import com.b2c.prototype.dao.wrapper.base.PaymentMethodMapWrapper;
-import com.b2c.prototype.dao.wrapper.base.RatingEntityWrapper;
+import com.b2c.prototype.dao.cashed.IEntityIntegerMapWrapper;
+import com.b2c.prototype.dao.cashed.IEntityStringMapWrapper;
+import com.b2c.prototype.dao.cashed.base.BrandMapWrapper;
+import com.b2c.prototype.dao.cashed.base.CategoryMapWrapper;
+import com.b2c.prototype.dao.cashed.base.DeliveryTypeMapWrapper;
+import com.b2c.prototype.dao.cashed.base.ItemMapWrapper;
+import com.b2c.prototype.dao.cashed.base.ItemTypeMapWrapper;
+import com.b2c.prototype.dao.cashed.base.OptionGroupMapWrapper;
+import com.b2c.prototype.dao.cashed.base.OrderStatusMapWrapper;
+import com.b2c.prototype.dao.cashed.base.PaymentMethodMapWrapper;
+import com.b2c.prototype.dao.cashed.base.RatingEntityWrapper;
+import com.tm.core.dao.identifier.IEntityIdentifierDao;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 
 import java.util.Map;
-
-import static com.b2c.prototype.util.Query.SELECT_BRAND_BY_NAME;
-import static com.b2c.prototype.util.Query.SELECT_CATEGORY_BY_NAME;
-import static com.b2c.prototype.util.Query.SELECT_DELIVERY_TYPE_BY_NAME;
-import static com.b2c.prototype.util.Query.SELECT_ITEM_STATUS_BY_NAME;
-import static com.b2c.prototype.util.Query.SELECT_OPTION_GROUP_BY_NAME;
-import static com.b2c.prototype.util.Query.SELECT_ORDER_STATUS_BY_NAME;
-import static com.b2c.prototype.util.Query.SELECT_PAYMENT_METHOD_BY_NAME;
 
 @Configuration
 @DependsOn({"constantBeanConfiguration"})
@@ -91,8 +86,7 @@ public class EntityMapWrapperConfiguration {
     public IEntityStringMapWrapper<DeliveryType> deliveryTypeMapWrapper() {
         return new DeliveryTypeMapWrapper(
                 deliveryTypeDao,
-                deliveryTypeMap,
-                SELECT_DELIVERY_TYPE_BY_NAME
+                deliveryTypeMap
         );
     }
 
@@ -100,8 +94,7 @@ public class EntityMapWrapperConfiguration {
     public IEntityStringMapWrapper<PaymentMethod> paymentMethodMapWrapper() {
         return new PaymentMethodMapWrapper(
                 paymentMethodDao,
-                paymentMethodMap,
-                SELECT_PAYMENT_METHOD_BY_NAME
+                paymentMethodMap
         );
     }
 
@@ -109,8 +102,7 @@ public class EntityMapWrapperConfiguration {
     public IEntityStringMapWrapper<OrderStatus> orderStatusMapWrapper() {
         return new OrderStatusMapWrapper(
                 orderStatusDao,
-                orderStatusMap,
-                SELECT_ORDER_STATUS_BY_NAME
+                orderStatusMap
         );
     }
 
@@ -118,8 +110,7 @@ public class EntityMapWrapperConfiguration {
     public IEntityStringMapWrapper<Category> categoryMapWrapper() {
         return new CategoryMapWrapper(
                 categoryDao,
-                categoryMap,
-                SELECT_CATEGORY_BY_NAME
+                categoryMap
         );
     }
 
@@ -127,8 +118,7 @@ public class EntityMapWrapperConfiguration {
     public IEntityStringMapWrapper<ItemType> itemTypeMapWrapper() {
         return new ItemTypeMapWrapper(
                 itemTypeDao,
-                itemTypeMap,
-                SELECT_ITEM_STATUS_BY_NAME
+                itemTypeMap
         );
     }
 
@@ -136,8 +126,7 @@ public class EntityMapWrapperConfiguration {
     public IEntityStringMapWrapper<Brand> brandMapWrapper() {
         return new BrandMapWrapper(
                 brandDao,
-                brandMap,
-                SELECT_BRAND_BY_NAME
+                brandMap
         );
     }
 
@@ -145,8 +134,7 @@ public class EntityMapWrapperConfiguration {
     public IEntityStringMapWrapper<ItemStatus> itemStatusMapWrapper() {
         return new ItemMapWrapper(
                 itemStatusDao,
-                itemStatusMap,
-                SELECT_ITEM_STATUS_BY_NAME
+                itemStatusMap
         );
     }
 
@@ -154,8 +142,7 @@ public class EntityMapWrapperConfiguration {
     public IEntityStringMapWrapper<OptionGroup> optionGroupMapWrapper() {
         return new OptionGroupMapWrapper(
                 optionGroupDao,
-                optionGroupMap,
-                SELECT_OPTION_GROUP_BY_NAME
+                optionGroupMap
         );
     }
 
@@ -163,8 +150,13 @@ public class EntityMapWrapperConfiguration {
     public IEntityIntegerMapWrapper<Rating> ratingMapWrapper() {
         return new RatingEntityWrapper(
                 ratingDao,
-                ratingMap,
-                ""
+                ratingMap
         );
+    }
+
+    @Bean
+    public IEntityCachedMap entityCachedMap(Map<Class<?>, Map<?, ?>> classEntityMap,
+                                            IEntityIdentifierDao entityIdentifierDao) {
+        return new EntityCachedMap(classEntityMap ,entityIdentifierDao);
     }
 }

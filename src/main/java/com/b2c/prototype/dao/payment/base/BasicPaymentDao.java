@@ -1,12 +1,13 @@
 package com.b2c.prototype.dao.payment.base;
 
 import com.b2c.prototype.modal.entity.payment.Payment;
-import com.tm.core.dao.single.AbstractSingleEntityDao;
+import com.tm.core.dao.general.AbstractGeneralEntityDao;
 import com.b2c.prototype.dao.payment.IPaymentDao;
+import com.tm.core.dao.identifier.IEntityIdentifierDao;
 import org.hibernate.SessionFactory;
 
-public class BasicPaymentDao extends AbstractSingleEntityDao implements IPaymentDao {
-    public BasicPaymentDao(SessionFactory sessionFactory) {
-        super(sessionFactory, Payment.class);
+public class BasicPaymentDao extends AbstractGeneralEntityDao implements IPaymentDao {
+    public BasicPaymentDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        super(sessionFactory, entityIdentifierDao, Payment.class);
     }
 }

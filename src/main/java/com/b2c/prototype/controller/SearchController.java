@@ -1,9 +1,15 @@
 package com.b2c.prototype.controller;
 
+import com.b2c.prototype.service.base.item.IItemService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/search")
+@RequestMapping("/api/v1")
 public class SearchController {
+    private final IItemService itemService;
+
+    public SearchController(IItemService itemService) {
+        this.itemService = itemService;
+    }
 }

@@ -179,10 +179,10 @@ public interface Query {
     String DELETE_BRAND_BY_NAME = "DELETE FROM brand b WHERE b.name = ?";
 
     // itemStatus
-    String SELECT_ALL_ITEM_STATUS = "SELECT * FROM item_status";
-    String SELECT_ITEM_STATUS_BY_NAME = "SELECT * FROM item_status i WHERE i.name = ?";
-    String UPDATE_ITEM_STATUS_BY_NAME = "UPDATE item_status SET status = ? WHERE name = ?";
-    String DELETE_ITEM_STATUS_BY_NAME = "DELETE FROM item_status i WHERE i.name = ?";
+    String SELECT_ALL_ITEM_STATUS = "SELECT * FROM order_status";
+    String SELECT_ITEM_STATUS_BY_NAME = "SELECT * FROM order_status i WHERE i.name = ?";
+    String UPDATE_ITEM_STATUS_BY_NAME = "UPDATE order_status SET status = ? WHERE name = ?";
+    String DELETE_ITEM_STATUS_BY_NAME = "DELETE FROM order_status i WHERE i.name = ?";
 
     // itemType
     String SELECT_ALL_ITEM_TYPE = "SELECT * FROM item_type";
