@@ -1,0 +1,23 @@
+card:
+  - id: 1
+    cardNumber: "4444-1111-2222-3333"
+    dateOfExpire: "06/28"
+    cvv: 818
+    ownerName: "name"
+    ownerSecondName: "secondName"
+    isActive: true
+payment_method:
+  - id: 1
+    method: "Card"
+  - id: 2
+    method: "Blik"
+currency:
+  - id: 1
+    name: "USD"
+currency_discount:
+  - id: 1
+    amount: 5
+    charSequenceCode: "abc"
+    currency_id: 1
+price: []
+payment: []

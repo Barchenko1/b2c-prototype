@@ -3,16 +3,19 @@ package com.b2c.prototype.dao.item.base;
 import com.b2c.prototype.dao.AbstractSingleEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
 import com.b2c.prototype.modal.entity.item.Brand;
+import com.tm.core.dao.identifier.EntityIdentifierDao;
+import com.tm.core.processor.finder.manager.EntityMappingManager;
+import com.tm.core.processor.finder.manager.IEntityMappingManager;
+import com.tm.core.processor.finder.table.EntityTable;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.TestInstance;
-import org.springframework.boot.test.context.SpringBootTest;
 
-//@SpringBootTest // Loads the full Spring application context
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class BasicBrandDaoTest extends AbstractSingleEntityDaoTest {
 
     @BeforeAll
     public static void setup() {
+        IEntityMappingManager entityMappingManager = new EntityMappingManager();
+        entityMappingManager.addEntityTable(new EntityTable(Brand.class, "brand"));
+        entityIdentifierDao = new EntityIdentifierDao(sessionManager, entityMappingManager);
         dao = new BasicBrandDao(sessionFactory, entityIdentifierDao);
     }
 

@@ -1,0 +1,3 @@
+percent_discount:
+  - amount: 10
+    charSequenceCode: "abc"

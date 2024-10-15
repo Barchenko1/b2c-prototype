@@ -1,0 +1,4 @@
+currency:
+  - id: 1
+    name: "USD"
+currency_discount: []

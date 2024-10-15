@@ -1,0 +1,9 @@
+category:
+  - id: 1
+    name: "parent"
+  - id: 2
+    category_id: 1
+    name: "Update root"
+  - id: 3
+    category_id: 2
+    name: "child"

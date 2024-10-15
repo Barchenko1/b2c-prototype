@@ -1,6 +1,8 @@
 package com.b2c.prototype.modal.entity.payment;
 
-import com.b2c.prototype.modal.entity.item.Discount;
+import com.b2c.prototype.modal.entity.item.CurrencyDiscount;
+import com.b2c.prototype.modal.entity.price.Price;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -25,11 +27,13 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
-    @ManyToOne(fetch = FetchType.LAZY)
+    private String paymentId;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private PaymentMethod paymentMethod;
-    private double amount;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private Card card;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    private Price price;
     @ManyToOne(fetch = FetchType.LAZY)
-    private Discount discount;
+    private CurrencyDiscount currencyDiscount;
 }

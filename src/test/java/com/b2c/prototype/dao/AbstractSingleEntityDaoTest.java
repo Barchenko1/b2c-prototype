@@ -6,32 +6,33 @@ import com.github.database.rider.core.configuration.DataSetConfig;
 import com.github.database.rider.core.api.dataset.DataSetExecutor;
 import com.tm.core.dao.single.AbstractSingleEntityDao;
 import com.tm.core.processor.finder.parameter.Parameter;
-import jakarta.persistence.NoResultException;
+import com.tm.core.processor.thread.IThreadLocalSessionManager;
+import com.tm.core.processor.thread.ThreadLocalSessionManager;
 import org.dbunit.database.DatabaseConnection;
 import com.github.database.rider.core.dataset.DataSetExecutorImpl;
-import com.github.database.rider.core.dsl.RiderDSL;
 import com.github.database.rider.junit5.api.DBRider;
 import com.tm.core.dao.identifier.IEntityIdentifierDao;
 import com.tm.core.dao.single.ISingleEntityDao;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.database.QueryDataSet;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.operation.DatabaseOperation;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.sql.DataSource;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,28 +42,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-//import org.junit.runner.RunWith;
 
-//@RunWith(SpringRunner.class)
-//@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 @DBRider
 public abstract class AbstractSingleEntityDaoTest {
 
+    protected static IThreadLocalSessionManager sessionManager;
     protected static SessionFactory sessionFactory;
-    protected static SessionFactory mockSessionFactory;
-    protected static Session session;
-    protected static Transaction transaction;
 
-    @Mock
     protected static IEntityIdentifierDao entityIdentifierDao;
-
     private static ConnectionHolder connectionHolder;
     private static DataSetExecutor executor;
 
@@ -79,44 +72,35 @@ public abstract class AbstractSingleEntityDaoTest {
         this.updateEntityDataSet = getUpdateDataSet();
     }
 
-    public static void setupCommon() {
-        mockSessionFactory = mock(SessionFactory.class);
-        session = mock(Session.class);
-        transaction = mock(Transaction.class);
-
-        when(mockSessionFactory.openSession()).thenReturn(session);
-        when(session.beginTransaction()).thenReturn(transaction);
-    }
-
     @BeforeAll
     public static void setUpAll() {
         DataSource dataSource = getHikariDataSource();
         connectionHolder = dataSource::getConnection;
         executor = DataSetExecutorImpl.instance("executor-name", connectionHolder);
 
-        try {
-            RiderDSL.withConnection(connectionHolder.getConnection());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
         sessionFactory = getSessionFactory();
+        sessionManager = new ThreadLocalSessionManager(sessionFactory);
     }
 
     @BeforeEach
     public void setUp() {
         try {
-            Field entityIdentifierDaoField = AbstractSingleEntityDao.class.getDeclaredField("entityIdentifierDao");
-            entityIdentifierDaoField.setAccessible(true);
-            entityIdentifierDaoField.set(dao, entityIdentifierDao);
-
             Field sessionFactoryField = AbstractSingleEntityDao.class.getDeclaredField("sessionFactory");
             sessionFactoryField.setAccessible(true);
             sessionFactoryField.set(dao, sessionFactory);
+
+            Field sessionManagerField = AbstractSingleEntityDao.class.getDeclaredField("sessionManager");
+            sessionManagerField.setAccessible(true);
+            sessionManagerField.set(dao, sessionManager);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
+//    @AfterEach
+//    public void tearDown() {
+//        cleanDatabase();
+//    }
 
     protected abstract String getEmptyDataSetPath();
     protected abstract EntityDataSet<?> getTestDataSet();
@@ -150,36 +134,31 @@ public abstract class AbstractSingleEntityDaoTest {
 
     @Test
     void getEntityList_success() {
-        loadDataSet(testEntityDataSet.getDataSetPath());
+        loadDataSet(testEntityDataSet.getDataSetPath()[0]);
         Parameter parameter = new Parameter("id", 1L);
 
-        Class<?> clazz = testEntityDataSet.getEntity().getClass();
-        when(entityIdentifierDao.getEntityList(eq(clazz), eq(parameter))).thenReturn(List.of(testEntityDataSet.getEntity()));
         List<Object> result = dao.getEntityList(parameter);
 
         assertEquals(1, result.size());
-        verifyExpectedData(testEntityDataSet.getDataSetPath());
+        verifyExpectedData(testEntityDataSet.getDataSetPath()[0]);
     }
 
     @Test
     void getEntityListWithClass_success() {
-        loadDataSet(testEntityDataSet.getDataSetPath());
+        loadDataSet(testEntityDataSet.getDataSetPath()[0]);
         Parameter parameter = new Parameter("id", 1L);
 
         Class<?> clazz = testEntityDataSet.getEntity().getClass();
-        when(entityIdentifierDao.getEntityList(eq(clazz), eq(parameter))).thenReturn(List.of(testEntityDataSet.getEntity()));
         List<Object> result = dao.getEntityList(clazz, parameter);
 
         assertEquals(1, result.size());
-        verifyExpectedData(testEntityDataSet.getDataSetPath());
+        verifyExpectedData(testEntityDataSet.getDataSetPath()[0]);
     }
 
     @Test
     void getEntityList_Failure() {
-        Parameter parameter = new Parameter("id", 1L);
+        Parameter parameter = new Parameter("id1", 1L);
 
-        Class<?> clazz = testEntityDataSet.getEntity().getClass();
-        doThrow(new RuntimeException()).when(entityIdentifierDao).getEntityList(clazz, parameter);
         assertThrows(RuntimeException.class, () -> {
             dao.getEntityList(parameter);
         });
@@ -187,15 +166,12 @@ public abstract class AbstractSingleEntityDaoTest {
 
     @Test
     void getEntityListWithClass_Failure() {
-        Parameter[] parameters = new Parameter[]{
-                new Parameter("id", 1L)
-        };
+        Parameter parameter = new Parameter("id1", 1L);
 
         Class<?> clazz = testEntityDataSet.getEntity().getClass();
 
-        doThrow(new RuntimeException()).when(entityIdentifierDao).getEntityList(clazz, parameters);
         assertThrows(RuntimeException.class, () -> {
-            dao.getEntityList(clazz, parameters);
+            dao.getEntityList(clazz, parameter);
         });
     }
 
@@ -203,16 +179,21 @@ public abstract class AbstractSingleEntityDaoTest {
     public void saveEntity_success() {
         loadDataSet(emptyDataSet);
         dao.saveEntity(saveEntityDataSet.getEntity());
-        verifyExpectedData(saveEntityDataSet.getDataSetPath());
+        verifyExpectedData(saveEntityDataSet.getDataSetPath()[0]);
     }
 
     @Test
     public void saveEntity_transactionFailure() {
-        setupCommon();
+        SessionFactory sessionFactory = mock(SessionFactory.class);
+        Session session = mock(Session.class);
+        Transaction transaction = mock(Transaction.class);
+
+        when(sessionFactory.openSession()).thenReturn(session);
+        when(session.beginTransaction()).thenReturn(transaction);
         try {
             Field sessionManagerField = AbstractSingleEntityDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
-            sessionManagerField.set(dao, mockSessionFactory);
+            sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -229,18 +210,23 @@ public abstract class AbstractSingleEntityDaoTest {
 
     @Test
     public void updateEntity_success() {
-        loadDataSet(testEntityDataSet.getDataSetPath());
+        loadDataSet(testEntityDataSet.getDataSetPath()[0]);
         dao.updateEntity(updateEntityDataSet.getEntity());
-        verifyExpectedData(updateEntityDataSet.getDataSetPath());
+        verifyExpectedData(updateEntityDataSet.getDataSetPath()[0]);
     }
 
     @Test
     public void updateEntity_transactionFailure() {
-        setupCommon();
+        SessionFactory sessionFactory = mock(SessionFactory.class);
+        Session session = mock(Session.class);
+        Transaction transaction = mock(Transaction.class);
+
+        when(sessionFactory.openSession()).thenReturn(session);
+        when(session.beginTransaction()).thenReturn(transaction);
         try {
             Field sessionManagerField = AbstractSingleEntityDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
-            sessionManagerField.set(dao, mockSessionFactory);
+            sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -258,18 +244,23 @@ public abstract class AbstractSingleEntityDaoTest {
 
     @Test
     public void deleteEntity_success() {
-        loadDataSet(testEntityDataSet.getDataSetPath());
+        loadDataSet(testEntityDataSet.getDataSetPath()[0]);
         dao.deleteEntity(testEntityDataSet.getEntity());
         verifyExpectedData(emptyDataSet);
     }
 
     @Test
     public void deleteEntity_transactionFailure() {
-        setupCommon();
+        SessionFactory sessionFactory = mock(SessionFactory.class);
+        Session session = mock(Session.class);
+        Transaction transaction = mock(Transaction.class);
+
+        when(sessionFactory.openSession()).thenReturn(session);
+        when(session.beginTransaction()).thenReturn(transaction);
         try {
             Field sessionManagerField = AbstractSingleEntityDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
-            sessionManagerField.set(dao, mockSessionFactory);
+            sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -287,37 +278,51 @@ public abstract class AbstractSingleEntityDaoTest {
 
     @Test
     void findEntityAndUpdate_success() {
-        loadDataSet(testEntityDataSet.getDataSetPath());
-        Parameter parameter = new Parameter("id", 100L);
-        Class<?> clazz = testEntityDataSet.getEntity().getClass();
-        when(entityIdentifierDao.getEntity(eq(clazz), eq(parameter))).thenReturn(testEntityDataSet.getEntity());
+        loadDataSet(testEntityDataSet.getDataSetPath()[0]);
+        Parameter parameter = new Parameter("id", 1L);
 
         dao.findEntityAndUpdate(updateEntityDataSet.getEntity(), parameter);
-        verifyExpectedData(updateEntityDataSet.getDataSetPath());
+        verifyExpectedData(updateEntityDataSet.getDataSetPath()[0]);
     }
 
     @Test
     void findEntityAndUpdate_transactionFailure() {
-        loadDataSet(emptyDataSet);
-        Parameter parameter = new Parameter("id", 100L);
+        loadDataSet(testEntityDataSet.getDataSetPath()[0]);
+        IThreadLocalSessionManager mockSessionManager = mock(IThreadLocalSessionManager.class);
+
+        SessionFactory sessionFactory = mock(SessionFactory.class);
+        Session session = mock(Session.class);
+        Transaction transaction = mock(Transaction.class);
+
+        when(mockSessionManager.getSession()).thenReturn(session);
+        when(session.beginTransaction()).thenReturn(transaction);
+        try {
+            Field sessionManagerField = AbstractSingleEntityDao.class.getDeclaredField("sessionManager");
+            sessionManagerField.setAccessible(true);
+            sessionManagerField.set(dao, mockSessionManager);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        when(mockSessionManager.getSession()).thenReturn(session);
+        doThrow(new RuntimeException()).when(session).merge(testEntityDataSet.getEntity());
+
+        Parameter parameter = new Parameter("id", 1L);
 
         assertThrows(RuntimeException.class, () -> {
             dao.findEntityAndUpdate(updateEntityDataSet.getEntity(), parameter);
         });
-        verifyExpectedData(emptyDataSet);
+
+        verifyExpectedData(testEntityDataSet.getDataSetPath()[0]);
 
         verify(transaction).rollback();
         verify(transaction, never()).commit();
-        verify(session).close();
+        verify(mockSessionManager).closeSession();
     }
 
     @Test
     void findEntityAndDelete_success() {
-        loadDataSet(testEntityDataSet.getDataSetPath());
+        loadDataSet(testEntityDataSet.getDataSetPath()[0]);
         Parameter parameter = new Parameter("id", 1L);
-
-        Class<?> clazz = testEntityDataSet.getEntity().getClass();
-        when(entityIdentifierDao.getEntity(eq(clazz), eq(parameter))).thenReturn(testEntityDataSet.getEntity());
 
         dao.findEntityAndDelete(parameter);
         verifyExpectedData(emptyDataSet);
@@ -325,41 +330,53 @@ public abstract class AbstractSingleEntityDaoTest {
 
     @Test
     void findEntityAndDelete_transactionFailure() {
-        loadDataSet(testEntityDataSet.getDataSetPath());
-        Parameter parameter = new Parameter("id", 100L);
+        loadDataSet(testEntityDataSet.getDataSetPath()[0]);
+        IThreadLocalSessionManager mockSessionManager = mock(IThreadLocalSessionManager.class);
+
+        SessionFactory sessionFactory = mock(SessionFactory.class);
+        Session session = mock(Session.class);
+        Transaction transaction = mock(Transaction.class);
+
+        when(mockSessionManager.getSession()).thenReturn(session);
+        when(session.beginTransaction()).thenReturn(transaction);
+        try {
+            Field sessionManagerField = AbstractSingleEntityDao.class.getDeclaredField("sessionManager");
+            sessionManagerField.setAccessible(true);
+            sessionManagerField.set(dao, mockSessionManager);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        when(mockSessionManager.getSession()).thenReturn(session);
+        doThrow(new RuntimeException()).when(session).remove(testEntityDataSet.getEntity());
+
+        Parameter parameter = new Parameter("id", 1L);
 
         assertThrows(RuntimeException.class, () -> {
             dao.findEntityAndDelete(parameter);
         });
-        verifyExpectedData(testEntityDataSet.getDataSetPath());
+        verifyExpectedData(testEntityDataSet.getDataSetPath()[0]);
 
         verify(transaction).rollback();
         verify(transaction, never()).commit();
-        verify(session).close();
+        verify(mockSessionManager).closeSession();
     }
 
     @Test
     void getOptionalEntity_success() {
-        loadDataSet(testEntityDataSet.getDataSetPath());
+        loadDataSet(testEntityDataSet.getDataSetPath()[0]);
         Parameter parameter = new Parameter("id", 1L);
-
-        Class<?> clazz = testEntityDataSet.getEntity().getClass();
-        when(entityIdentifierDao.getOptionalEntity(eq(clazz), eq(parameter))).thenReturn(Optional.of(testEntityDataSet.getEntity()));
 
         Optional<Object> result = dao.getOptionalEntity(parameter);
 
         assertTrue(result.isPresent());
         Object resultEntity = result.get();
         assertNotNull(resultEntity);
-        verifyExpectedData(testEntityDataSet.getDataSetPath());
+        verifyExpectedData(testEntityDataSet.getDataSetPath()[0]);
     }
 
     @Test
     void getOptionalEntity_Failure() {
-        Parameter parameter = new Parameter("id", 1L);
-
-        Class<?> clazz = testEntityDataSet.getEntity().getClass();
-        doThrow(new RuntimeException()).when(entityIdentifierDao).getOptionalEntity(clazz, parameter);
+        Parameter parameter = new Parameter("id1", 1L);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             dao.getOptionalEntity(parameter);
@@ -373,9 +390,6 @@ public abstract class AbstractSingleEntityDaoTest {
         loadDataSet(emptyDataSet);
         Parameter parameter = new Parameter("id", 100L);
 
-        Class<?> clazz = testEntityDataSet.getEntity().getClass();
-        doThrow(new NoResultException()).when(entityIdentifierDao).getOptionalEntity(eq(clazz), eq(parameter));
-
         Optional<Object> result = dao.getOptionalEntity(parameter);
 
         assertTrue(result.isEmpty());
@@ -384,24 +398,17 @@ public abstract class AbstractSingleEntityDaoTest {
 
     @Test
     void getEntity_success() {
-        loadDataSet(testEntityDataSet.getDataSetPath());
+        loadDataSet(testEntityDataSet.getDataSetPath()[0]);
         Parameter parameter = new Parameter("id", 1L);
-
-        Class<?> clazz = testEntityDataSet.getEntity().getClass();
-        when(entityIdentifierDao.getEntity(eq(clazz), eq(parameter))).thenReturn(testEntityDataSet.getEntity());
-
         Object result = dao.getEntity(parameter);
 
         assertNotNull(result);
-        verifyExpectedData(testEntityDataSet.getDataSetPath());
+        verifyExpectedData(testEntityDataSet.getDataSetPath()[0]);
     }
 
     @Test
     void getEntity_Failure() {
         Parameter parameter = new Parameter("id", 100L);
-        Class<?> clazz = testEntityDataSet.getEntity().getClass();
-        doThrow(new RuntimeException()).when(entityIdentifierDao).getEntity(eq(clazz), eq(parameter));
-
         assertThrows(RuntimeException.class, () -> {
             dao.getEntity(parameter);
         });
@@ -410,26 +417,24 @@ public abstract class AbstractSingleEntityDaoTest {
 
     @Test
     void getOptionalEntityWithClass_success() {
-        loadDataSet(testEntityDataSet.getDataSetPath());
+        loadDataSet(testEntityDataSet.getDataSetPath()[0]);
         Parameter parameter = new Parameter("id", 1L);
 
         Class<?> clazz = testEntityDataSet.getEntity().getClass();
-        when(entityIdentifierDao.getOptionalEntity(eq(clazz), eq(parameter))).thenReturn(Optional.of(testEntityDataSet.getEntity()));
 
         Optional<Object> result = dao.getOptionalEntity(clazz, parameter);
 
         assertTrue(result.isPresent());
         Object resultEntity = result.get();
         assertNotNull(resultEntity);
-        verifyExpectedData(testEntityDataSet.getDataSetPath());
+        verifyExpectedData(testEntityDataSet.getDataSetPath()[0]);
     }
 
     @Test
     void getOptionalEntityWithClass_Failure() {
-        Parameter parameter = new Parameter("id", 1L);
+        Parameter parameter = new Parameter("id1", 100L);
 
         Class<?> clazz = testEntityDataSet.getEntity().getClass();
-        doThrow(new RuntimeException()).when(entityIdentifierDao).getOptionalEntity(clazz, parameter);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             dao.getOptionalEntity(clazz, parameter);
@@ -443,7 +448,6 @@ public abstract class AbstractSingleEntityDaoTest {
         Parameter parameter = new Parameter("id", 100L);
 
         Class<?> clazz = testEntityDataSet.getEntity().getClass();
-        doThrow(new NoResultException()).when(entityIdentifierDao).getOptionalEntity(eq(clazz), eq(parameter));
 
         Optional<Object> result = dao.getOptionalEntity(clazz, parameter);
 
@@ -452,23 +456,21 @@ public abstract class AbstractSingleEntityDaoTest {
 
     @Test
     void getEntityWithClass_success() {
-        loadDataSet(testEntityDataSet.getDataSetPath());
+        loadDataSet(testEntityDataSet.getDataSetPath()[0]);
         Parameter parameter = new Parameter("id", 1L);
 
         Class<?> clazz = testEntityDataSet.getEntity().getClass();
-        when(entityIdentifierDao.getEntity(eq(clazz), eq(parameter))).thenReturn(testEntityDataSet.getEntity());
 
         Object result = dao.getEntity(clazz, parameter);
 
         assertNotNull(result);
-        verifyExpectedData(testEntityDataSet.getDataSetPath());
+        verifyExpectedData(testEntityDataSet.getDataSetPath()[0]);
     }
 
     @Test
     void getEntityWithClass_Failure() {
         Parameter parameter = new Parameter("id", 100L);
         Class<?> clazz = testEntityDataSet.getEntity().getClass();
-        doThrow(new RuntimeException()).when(entityIdentifierDao).getEntity(eq(clazz), eq(parameter));
 
         assertThrows(RuntimeException.class, () -> {
             dao.getEntity(clazz, parameter);

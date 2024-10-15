@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "post")
 @Data
@@ -40,11 +40,31 @@ public class Post extends TransitiveSelfEntity {
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post parent;
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
     private List<Post> childNodeList;
+
+    @Override
+    public void setParent(TransitiveSelfEntity transitiveSelfEntity) {
+        this.parent = (Post) transitiveSelfEntity;
+    }
 
     @Override
     public String getRootField() {
         return uniquePostId;
+    }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id=" + id +
+                ", authorUserName='" + authorUserName + '\'' +
+                ", authorEmail='" + authorEmail + '\'' +
+                ", title='" + title + '\'' +
+                ", message='" + message + '\'' +
+                ", uniquePostId='" + uniquePostId + '\'' +
+                ", dateOfCreate=" + dateOfCreate +
+                ", parentId=" + (parent != null ? parent.getId() : "null") +
+                ", childNodeCount=" + (childNodeList != null ? childNodeList.size() : "null") +
+                '}';
     }
 }

@@ -29,6 +29,6 @@ public class Rating {
     private long id;
     @Column(name = "value", nullable = false)
     private int value;
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "ratings")
-    private List<Review> reviews;
+//    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "ratings")
+//    private List<Review> reviews;
 }

@@ -2,9 +2,9 @@ package com.b2c.prototype.dao;
 
 public class EntityDataSet<E> {
     private final E entity;
-    private final String dataSetPath;
+    private final String[] dataSetPath;
 
-    public EntityDataSet(E entity, String dataSetPath) {
+    public EntityDataSet(E entity, String... dataSetPath) {
         this.entity = entity;
         this.dataSetPath = dataSetPath;
     }
@@ -13,7 +13,7 @@ public class EntityDataSet<E> {
         return entity;
     }
 
-    public String getDataSetPath() {
+    public String[] getDataSetPath() {
         return dataSetPath;
     }
 }

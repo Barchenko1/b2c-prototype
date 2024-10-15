@@ -50,7 +50,7 @@
     )
  
     
-    create table discount (
+    create table currencyDiscount (
        id bigserial not null,
         primary key (id)
     )
@@ -450,7 +450,7 @@
     alter table if exists item
        add constraint FKps2e0q9jpd0i9kj83je4rsmf1 
        foreign key (discount_id) 
-       references discount
+       references currencyDiscount
  
     
     alter table if exists item

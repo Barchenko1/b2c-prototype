@@ -1,6 +1,7 @@
 package com.b2c.prototype.dao.cashed;
 
 import com.tm.core.dao.identifier.IEntityIdentifierDao;
+import com.tm.core.dao.query.ISearchWrapper;
 import com.tm.core.processor.finder.factory.IParameterFactory;
 import com.tm.core.processor.finder.factory.ParameterFactory;
 import com.tm.core.processor.finder.parameter.Parameter;
@@ -13,17 +14,17 @@ import java.util.function.BiFunction;
 
 public class EntityCachedMap implements IEntityCachedMap {
 
-    protected final Map<Class<?>, Map<Object, Object>> classEntityMap;
-    protected final IEntityIdentifierDao entityIdentifierDao;
-    protected final IParameterFactory parameterFactory;
+    private final Map<Class<?>, Map<Object, Object>> classEntityMap;
+    private final ISearchWrapper searchWrapper;
+    private final IParameterFactory parameterFactory;
     private final Map<Class<?>, BiFunction<String, Object, Parameter>> typeMap;
 
     public EntityCachedMap(Map<Class<?>, Map<?, ?>> entityMap,
-                           IEntityIdentifierDao entityIdentifierDao) {
+                           ISearchWrapper searchWrapper) {
         this.classEntityMap = castMap(entityMap);
-        this.entityIdentifierDao = entityIdentifierDao;
+        this.searchWrapper = searchWrapper;
         this.parameterFactory = new ParameterFactory();
-        typeMap = new HashMap<>(){{
+        this.typeMap = new HashMap<>(){{
             put(Integer.class, (key, value) -> parameterFactory.createIntegerParameter(key, (Integer) value));
             put(Long.class, (key, value) -> parameterFactory.createLongParameter(key, (Long) value));
             put(Double.class, (key, value) -> parameterFactory.createDoubleParameter(key, (Double) value));
@@ -57,22 +58,13 @@ public class EntityCachedMap implements IEntityCachedMap {
 
     @Override
     public <E> void putEntity(Class<?> clazz, String key, E entity) {
-//        Map<Object, Object> entityMap = (Map<Object, Object>) classEntityMap.get(clazz);
-//        if (entityMap != null) {
-//            entityMap.put(key, entity);
-//        }
-        Optional.ofNullable((Map<Object, Object>) classEntityMap.get(clazz))
+        Optional.ofNullable(classEntityMap.get(clazz))
                 .ifPresent(entityMap -> entityMap.put(key, entity));
     }
 
     @Override
     public <E> void updateEntity(Class<?> clazz, String oldKey, String key, E entity) {
-//        Map<Object, Object> entityMap = (Map<Object, Object>) classEntityMap.get(clazz);
-//        if (entityMap != null) {
-//            entityMap.remove(oldKey);
-//            entityMap.put(key, entity);
-//        }
-        Optional.ofNullable((Map<Object, Object>) classEntityMap.get(clazz))
+        Optional.ofNullable(classEntityMap.get(clazz))
                 .ifPresent(entityMap -> {
                     entityMap.remove(oldKey);
                     entityMap.put(key, entity);
@@ -89,7 +81,7 @@ public class EntityCachedMap implements IEntityCachedMap {
         Map<Object, Object> entityMap = classEntityMap.get(clazz);
         return Optional.ofNullable((E) entityMap.get(value))
                 .orElseGet(() -> {
-                    E entityFromDb = (E) entityIdentifierDao.getOptionalEntity(clazz, createParameter(key, value))
+                    E entityFromDb = (E) searchWrapper.getOptionalEntitySupplier(clazz, createParameter(key, value)).get()
                             .orElseThrow(() -> new RuntimeException("Entity not found in cache or DB"));
 
                     Optional.of(entityMap).ifPresent(map -> map.put(value, entityFromDb));

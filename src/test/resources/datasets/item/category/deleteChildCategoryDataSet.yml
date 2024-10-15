@@ -1,0 +1,6 @@
+category:
+  - id: 1
+    name: "parent"
+  - id: 2
+    category_id: 1
+    name: "root"

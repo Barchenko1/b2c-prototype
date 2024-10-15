@@ -1,0 +1,18 @@
+delivery_type:
+  - id: 1
+    name: "Post"
+country:
+  - id: 1
+    name: "USA"
+address:
+  - id: 1
+    street: "Update street"
+    buildingNumber: 1
+    flor: 9
+    apartmentNumber: 101
+    zipCode: 90001
+    country_id: 1
+delivery:
+  - id: 1
+    address_id: 1
+    deliverytype_id: 1

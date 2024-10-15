@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "category")
 @Data
@@ -36,8 +36,13 @@ public class Category extends TransitiveSelfEntity {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category parent;
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
     private List<Category> childNodeList;
+
+    @Override
+    public void setParent(TransitiveSelfEntity transitiveSelfEntity) {
+        this.parent = (Category) transitiveSelfEntity;
+    }
 
     @Override
     public String getRootField() {

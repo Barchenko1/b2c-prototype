@@ -1,18 +1,18 @@
 package com.b2c.prototype.service.base.discont;
 
-import com.b2c.prototype.dao.item.IDiscountDao;
+import com.b2c.prototype.dao.item.ICurrencyDiscountDao;
 import com.b2c.prototype.modal.dto.request.RequestDiscountDto;
 import com.b2c.prototype.modal.dto.update.RequestDiscountDtoUpdate;
-import com.b2c.prototype.modal.entity.item.Discount;
+import com.b2c.prototype.modal.entity.item.CurrencyDiscount;
 import com.b2c.prototype.service.single.AbstractSingleEntityService;
 import com.tm.core.dao.single.ISingleEntityDao;
 import com.tm.core.processor.finder.parameter.Parameter;
 
 public class DiscountService extends AbstractSingleEntityService implements IDiscountService {
 
-    private final IDiscountDao discountDao;
+    private final ICurrencyDiscountDao discountDao;
 
-    public DiscountService(IDiscountDao discountDao) {
+    public DiscountService(ICurrencyDiscountDao discountDao) {
         this.discountDao = discountDao;
     }
 
@@ -23,13 +23,12 @@ public class DiscountService extends AbstractSingleEntityService implements IDis
 
     @Override
     public void saveDiscount(RequestDiscountDto requestDiscountDto) {
-        Discount discount = Discount.builder()
+        CurrencyDiscount currencyDiscount = CurrencyDiscount.builder()
                 .amount(requestDiscountDto.getAmount())
-                .isPercents(requestDiscountDto.isPercents())
-                .isCurrency(requestDiscountDto.isCurrency())
+//                .currency(requestDiscountDto.isCurrency())
                 .build();
 
-        super.saveEntity(discount);
+        super.saveEntity(currencyDiscount);
     }
 
     @Override
@@ -37,17 +36,17 @@ public class DiscountService extends AbstractSingleEntityService implements IDis
         RequestDiscountDto requestNewDiscountDto = requestDiscountDtoUpdate.getNewEntityDto();
         RequestDiscountDto requestOldDiscountDto = requestDiscountDtoUpdate.getOldEntityDto();
 
-        Discount newDiscount = Discount.builder()
+        CurrencyDiscount newCurrencyDiscount = CurrencyDiscount.builder()
                 .amount(requestNewDiscountDto.getAmount())
-                .isPercents(requestNewDiscountDto.isPercents())
-                .isCurrency(requestNewDiscountDto.isCurrency())
+//                .isPercents(requestNewDiscountDto.isPercents())
+//                .isCurrency(requestNewDiscountDto.isCurrency())
                 .build();
 
         Parameter[] parameters = parameterFactory.createParameterArray(
                 parameterFactory.createIntegerParameter("amount", requestOldDiscountDto.getAmount()),
                 parameterFactory.createBooleanParameter("isCurrency", requestOldDiscountDto.isCurrency())
         );
-        super.updateEntity(newDiscount, parameters);
+        super.updateEntity(newCurrencyDiscount, parameters);
     }
 
     @Override
@@ -55,17 +54,17 @@ public class DiscountService extends AbstractSingleEntityService implements IDis
         RequestDiscountDto requestNewDiscountDto = requestDiscountDtoUpdate.getNewEntityDto();
         RequestDiscountDto requestOldDiscountDto = requestDiscountDtoUpdate.getOldEntityDto();
 
-        Discount newDiscount = Discount.builder()
+        CurrencyDiscount newCurrencyDiscount = CurrencyDiscount.builder()
                 .amount(requestNewDiscountDto.getAmount())
-                .isPercents(requestNewDiscountDto.isPercents())
-                .isCurrency(requestNewDiscountDto.isCurrency())
+//                .isPercents(requestNewDiscountDto.isPercents())
+//                .isCurrency(requestNewDiscountDto.isCurrency())
                 .build();
 
         Parameter[] parameters = parameterFactory.createParameterArray(
                 parameterFactory.createIntegerParameter("amount", requestOldDiscountDto.getAmount()),
                 parameterFactory.createBooleanParameter("IsPercents", requestOldDiscountDto.isPercents())
         );
-        super.updateEntity(newDiscount, parameters);
+        super.updateEntity(newCurrencyDiscount, parameters);
     }
 
     @Override

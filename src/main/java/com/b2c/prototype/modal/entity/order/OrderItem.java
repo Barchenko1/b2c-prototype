@@ -1,6 +1,7 @@
 package com.b2c.prototype.modal.entity.order;
 
 import com.b2c.prototype.modal.entity.delivery.Delivery;
+import com.b2c.prototype.modal.entity.item.ItemQuantity;
 import com.b2c.prototype.modal.entity.payment.Payment;
 import com.b2c.prototype.modal.entity.item.Item;
 import com.b2c.prototype.modal.entity.user.AppUser;
@@ -43,13 +44,20 @@ public class OrderItem {
     //todo
     @ManyToOne(fetch = FetchType.LAZY)
     private AppUser user;
-    @ManyToMany
+//    @ManyToMany
+//    @JoinTable(
+//            name = "order_middle_item",
+//            joinColumns = { @JoinColumn(name = "order_item_id") },
+//            inverseJoinColumns = { @JoinColumn(name = "item_id") }
+//    )
+//    private List<Item> itemList;
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "order_middle_item",
-            joinColumns = { @JoinColumn(name = "order_item_id") },
-            inverseJoinColumns = { @JoinColumn(name = "item_id") }
+            name = "order_quantity_item",
+            joinColumns = {@JoinColumn(name = "order_item_id")},
+            inverseJoinColumns = {@JoinColumn(name = "item_quantity_id")}
     )
-    private List<Item> itemList;
+    private List<ItemQuantity> itemQuantityList;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
     private Delivery delivery;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)

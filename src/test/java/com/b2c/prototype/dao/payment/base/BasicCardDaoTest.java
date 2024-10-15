@@ -4,12 +4,22 @@ import com.b2c.prototype.dao.AbstractSingleEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
 import com.b2c.prototype.modal.entity.payment.Card;
 import com.b2c.prototype.util.CardUtil;
+import com.tm.core.dao.identifier.EntityIdentifierDao;
+import com.tm.core.processor.finder.manager.EntityMappingManager;
+import com.tm.core.processor.finder.manager.IEntityMappingManager;
+import com.tm.core.processor.finder.table.EntityTable;
+import com.tm.core.processor.thread.IThreadLocalSessionManager;
+import com.tm.core.processor.thread.ThreadLocalSessionManager;
 import org.junit.jupiter.api.BeforeAll;
 
 class BasicCardDaoTest extends AbstractSingleEntityDaoTest {
 
     @BeforeAll
     public static void setup() {
+        IThreadLocalSessionManager sessionManager = new ThreadLocalSessionManager(sessionFactory);
+        IEntityMappingManager entityMappingManager = new EntityMappingManager();
+        entityMappingManager.addEntityTable(new EntityTable(Card.class, "card"));
+        entityIdentifierDao = new EntityIdentifierDao(sessionManager, entityMappingManager);
         dao = new BasicCardDao(sessionFactory, entityIdentifierDao);
     }
 
@@ -20,7 +30,7 @@ class BasicCardDaoTest extends AbstractSingleEntityDaoTest {
 
     @Override
     protected EntityDataSet<?> getTestDataSet() {
-        Card card =Card.builder()
+        Card card = Card.builder()
                 .id(1L)
                 .cardNumber("4444-1111-2222-3333")
                 .dateOfExpire("06/28")
@@ -34,7 +44,7 @@ class BasicCardDaoTest extends AbstractSingleEntityDaoTest {
 
     @Override
     protected EntityDataSet<?> getSaveDataSet() {
-        Card card =Card.builder()
+        Card card = Card.builder()
                 .cardNumber("4444-1111-2222-3333")
                 .dateOfExpire("06/28")
                 .ownerName("name")
@@ -47,7 +57,7 @@ class BasicCardDaoTest extends AbstractSingleEntityDaoTest {
 
     @Override
     protected EntityDataSet<?> getUpdateDataSet() {
-        Card card =Card.builder()
+        Card card = Card.builder()
                 .id(1L)
                 .cardNumber("4444-1111-2222-3333")
                 .dateOfExpire("06/28")

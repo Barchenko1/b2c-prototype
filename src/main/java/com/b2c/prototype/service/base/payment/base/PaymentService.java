@@ -2,15 +2,15 @@ package com.b2c.prototype.service.base.payment.base;
 
 import com.b2c.prototype.dao.payment.ICardDao;
 import com.b2c.prototype.dao.payment.IPaymentDao;
-import com.b2c.prototype.dao.item.IDiscountDao;
+import com.b2c.prototype.dao.item.ICurrencyDiscountDao;
 import com.b2c.prototype.modal.dto.request.RequestCardDto;
 import com.b2c.prototype.modal.dto.request.RequestDiscountDto;
 import com.b2c.prototype.modal.dto.request.RequestPaymentDto;
 import com.b2c.prototype.modal.dto.update.RequestPaymentDtoUpdate;
+import com.b2c.prototype.modal.entity.item.CurrencyDiscount;
 import com.b2c.prototype.modal.entity.payment.Card;
 import com.b2c.prototype.modal.entity.payment.Payment;
 import com.b2c.prototype.modal.entity.payment.PaymentMethod;
-import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.constant.PaymentMethodEnum;
 import com.b2c.prototype.dao.cashed.IEntityStringMapWrapper;
 import com.b2c.prototype.processor.IAsyncProcessor;
@@ -21,7 +21,6 @@ import com.b2c.prototype.util.CardUtil;
 import com.tm.core.dao.general.IGeneralEntityDao;
 import com.tm.core.modal.GeneralEntity;
 import com.tm.core.processor.finder.parameter.Parameter;
-import com.tm.core.processor.thread.ThreadLocalSessionManager;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 
@@ -31,20 +30,17 @@ import java.util.function.Consumer;
 @Slf4j
 public class PaymentService extends AbstractGeneralEntityService implements IPaymentService {
 
-    private final ThreadLocalSessionManager sessionManager;
     private final IAsyncProcessor asyncProcessor;
     private final IPaymentDao paymentDao;
     private final ICardDao cardDao;
-    private final IDiscountDao discountDao;
+    private final ICurrencyDiscountDao discountDao;
     private final IEntityStringMapWrapper<PaymentMethod> paymentMethodEntityMapWrapper;
 
-    public PaymentService(ThreadLocalSessionManager sessionManager,
-                          IAsyncProcessor asyncProcessor,
+    public PaymentService(IAsyncProcessor asyncProcessor,
                           IPaymentDao paymentDao,
                           ICardDao cardDao,
-                          IDiscountDao discountDao,
+                          ICurrencyDiscountDao discountDao,
                           IEntityStringMapWrapper<PaymentMethod> paymentMethodEntityMapWrapper) {
-        this.sessionManager = sessionManager;
         this.asyncProcessor = asyncProcessor;
         this.paymentDao = paymentDao;
         this.cardDao = cardDao;
@@ -65,9 +61,9 @@ public class PaymentService extends AbstractGeneralEntityService implements IPay
         }
         Map<Class<?>, Object> processResultMap = executeAsyncProcess(requestPaymentDto);
         Payment payment = Payment.builder()
-                .amount(requestPaymentDto.getAmount())
+//                .amount(requestPaymentDto.getAmount())
                 .card(card)
-                .discount((Discount) processResultMap.get(Discount.class))
+                .currencyDiscount((CurrencyDiscount) processResultMap.get(CurrencyDiscount.class))
                 .paymentMethod((PaymentMethod) processResultMap.get(PaymentMethod.class))
                 .build();
 
@@ -90,9 +86,9 @@ public class PaymentService extends AbstractGeneralEntityService implements IPay
         }
         Map<Class<?>, Object> processResultMap = executeAsyncProcess(requestPaymentDto);
         Payment payment = Payment.builder()
-                .amount(requestPaymentDto.getAmount())
+//                .amount(requestPaymentDto.getAmount())
                 .card(card)
-                .discount((Discount) processResultMap.get(Discount.class))
+                .currencyDiscount((CurrencyDiscount) processResultMap.get(CurrencyDiscount.class))
                 .paymentMethod((PaymentMethod) processResultMap.get(PaymentMethod.class))
                 .build();
 
@@ -135,17 +131,17 @@ public class PaymentService extends AbstractGeneralEntityService implements IPay
                 .orElseThrow(RuntimeException::new);
     }
 
-    private Discount getDiscount(RequestDiscountDto requestDiscountDto) {
+    private CurrencyDiscount getDiscount(RequestDiscountDto requestDiscountDto) {
         if (requestDiscountDto != null) {
             if (requestDiscountDto.isCurrency()) {
                 Parameter parameter1 = new Parameter("currency", true);
                 Parameter parameter2 = new Parameter("amount", requestDiscountDto.getAmount());
-                return (Discount) discountDao.getOptionalEntity(parameter1, parameter2).orElse(null);
+                return (CurrencyDiscount) discountDao.getOptionalEntity(parameter1, parameter2).orElse(null);
             }
             if (requestDiscountDto.isPercents()) {
                 Parameter parameter1 = new Parameter("percents", true);
                 Parameter parameter2 = new Parameter("amount", requestDiscountDto.getAmount());
-                return (Discount) discountDao.getOptionalEntity(parameter1, parameter2).orElse(null);
+                return (CurrencyDiscount) discountDao.getOptionalEntity(parameter1, parameter2).orElse(null);
             }
         }
         return null;
@@ -158,7 +154,7 @@ public class PaymentService extends AbstractGeneralEntityService implements IPay
         );
         Task discountTask = new Task(
                 () -> getDiscount(requestPaymentDto.getDiscount()),
-                Discount.class
+                CurrencyDiscount.class
         );
         return asyncProcessor.process(paymentMethodTask, discountTask);
     }
@@ -172,7 +168,7 @@ public class PaymentService extends AbstractGeneralEntityService implements IPay
         );
         Task discountTask = new Task(
                 () -> getDiscount(requestPaymentDto.getDiscount()),
-                Discount.class
+                CurrencyDiscount.class
         );
         Task paymentTask = new Task(
                 () -> {

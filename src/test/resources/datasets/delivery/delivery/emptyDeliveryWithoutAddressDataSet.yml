@@ -1,0 +1,5 @@
+country:
+  - id: 1
+    name: "USA"
+address: []
+delivery: []

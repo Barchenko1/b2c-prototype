@@ -1,18 +1,19 @@
 package com.b2c.prototype.util;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@Slf4j
 public final class CardUtil {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CardUtil.class);
 
     public static boolean isCardActive(String monthYear) {
         Date expireDate = transformMonthYearToDate(monthYear);
         if (expireDate.before(new Date())) {
-            log.error("error card is expired");
+            LOGGER.error("error card is expired");
             throw new RuntimeException("Card expired");
         }
         return true;
@@ -24,10 +25,8 @@ public final class CardUtil {
         try {
             return dateFormat.parse(monthYear);
         } catch (ParseException e) {
-            log.error("error transformation Month/Year to Date");
+            LOGGER.error("error transformation Month/Year to Date");
             throw new RuntimeException(e);
         }
     }
-
-
 }

@@ -1,0 +1,19 @@
+card: []
+payment_method:
+  - id: 1
+    method: "Card"
+  - id: 2
+    method: "Blik"
+currency:
+  - id: 1
+    name: "USD"
+price:
+  - currency_id: 1
+    amount: 10
+currency_discount:
+  - id: 1
+    amount: 5
+    charSequenceCode: "abc"
+    currency_id: 1
+payment:
+  - paymentId: "1"

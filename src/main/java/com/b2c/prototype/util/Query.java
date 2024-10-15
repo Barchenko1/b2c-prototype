@@ -43,7 +43,7 @@ public interface Query {
             "JOIN Delivery d ON a.id = d.address_id WHERE d.delivery_id = ?";
     String UPDATE_ADDRESS_BY_USERNAME = """
             UPDATE address a \
-            SET a.country = ?, \
+            SET a.category = ?, \
                 a.street = ?, \
                 a.building = ?, \
                 a.flor = ?, \
@@ -53,7 +53,7 @@ public interface Query {
             WHERE au.username = ?;""";
     String UPDATE_ADDRESS_BY_ORDER_ID = "UPDATE address a " +
             "SET " +
-            "a.country = ?, " +
+            "a.category = ?, " +
             "a.street = ?, " +
             "a.building = ?, " +
             "a.flor = ?, " +
@@ -83,20 +83,20 @@ public interface Query {
             "WHERE oi.order_id = ?;";
 
 
-    // discount
-    String SELECT_DISCOUNT_BY_AMOUNT_AND_IS_CURRENCY = "SELECT FROM discount d " +
+    // currency_discount
+    String SELECT_DISCOUNT_BY_AMOUNT_AND_IS_CURRENCY = "SELECT FROM currency_discount d " +
             "WHERE d.amount = ? AND d.is_currency = ?";
-    String UPDATE_DISCOUNT_BY_AMOUNT_AND_IS_CURRENCY = "UPDATE discount d " +
+    String UPDATE_DISCOUNT_BY_AMOUNT_AND_IS_CURRENCY = "UPDATE currency_discount d " +
             "SET d.amount = ?, d.is_currency = ? " +
             "WHERE d.amount = ? AND d.is_currency = ?";
-    String DELETE_DISCOUNT_BY_AMOUNT_AND_IS_CURRENCY = "DELETE FROM discount d " +
+    String DELETE_DISCOUNT_BY_AMOUNT_AND_IS_CURRENCY = "DELETE FROM currency_discount d " +
             "WHERE d.amount = ? AND d.is_currency = ?";
-    String SELECT_DISCOUNT_BY_AMOUNT_AND_IS_PERCENTS = "SELECT FROM discount d " +
+    String SELECT_DISCOUNT_BY_AMOUNT_AND_IS_PERCENTS = "SELECT FROM currency_discount d " +
             "WHERE d.amount = ? AND d.is_percents = ?";
-    String UPDATE_DISCOUNT_BY_AMOUNT_AND_IS_PERCENTS = "UPDATE discount d" +
+    String UPDATE_DISCOUNT_BY_AMOUNT_AND_IS_PERCENTS = "UPDATE currency_discount d" +
             "SET d.amount = ?, d.is_percents = ? " +
             "WHERE d.amount = ? AND d.is_percents = ?";
-    String DELETE_DISCOUNT_BY_AMOUNT_AND_IS_PERCENTS = "DELETE FROM discount d " +
+    String DELETE_DISCOUNT_BY_AMOUNT_AND_IS_PERCENTS = "DELETE FROM currency_discount d " +
             "WHERE d.amount = ? AND d.is_percents = ?";
 
     // card

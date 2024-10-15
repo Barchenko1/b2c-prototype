@@ -1,0 +1,4 @@
+percent_discount:
+  - id: 1
+    amount: 10
+    charSequenceCode: "abc"

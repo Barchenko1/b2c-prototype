@@ -15,8 +15,7 @@ import com.b2c.prototype.modal.dto.update.RequestOrderItemDtoUpdate;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
-import com.b2c.prototype.modal.entity.item.Discount;
-import com.b2c.prototype.modal.entity.item.Item;
+import com.b2c.prototype.modal.entity.item.CurrencyDiscount;
 import com.b2c.prototype.modal.entity.order.OrderItem;
 import com.b2c.prototype.modal.entity.order.OrderStatus;
 import com.b2c.prototype.modal.entity.payment.Payment;
@@ -41,7 +40,7 @@ import static com.b2c.prototype.util.UniqueIdUtil.getUUID;
 @Slf4j
 public class OrderItemService extends AbstractGeneralEntityService implements IOrderItemService {
 
-    private final ThreadLocalSessionManager sessionManager;
+    private ThreadLocalSessionManager sessionManager;
     private final IAsyncProcessor asyncProcessor;
     private final IOrderItemDao orderItemDao;
     private final IItemDao itemDao;
@@ -51,15 +50,13 @@ public class OrderItemService extends AbstractGeneralEntityService implements IO
     private final IEntityStringMapWrapper<OrderStatus> orderStatusEntityMapWrapper;
 
 
-    public OrderItemService(ThreadLocalSessionManager sessionManager,
-                            IAsyncProcessor asyncProcessor,
+    public OrderItemService(IAsyncProcessor asyncProcessor,
                             IOrderItemDao orderItemDao,
                             IItemDao itemDao,
                             IUserInfoDao userInfoDao,
                             IEntityStringMapWrapper<DeliveryType> deliveryTypeMapWrapper,
                             IEntityStringMapWrapper<PaymentMethod> paymentMethodMapWrapper,
                             IEntityStringMapWrapper<OrderStatus> orderStatusEntityMapWrapper) {
-        this.sessionManager = sessionManager;
         this.asyncProcessor = asyncProcessor;
         this.orderItemDao = orderItemDao;
         this.itemDao = itemDao;
@@ -86,7 +83,7 @@ public class OrderItemService extends AbstractGeneralEntityService implements IO
             OrderItem orderItem = OrderItem.builder()
                     .orderId(getUUID())
                     .dateOfCreate(System.currentTimeMillis())
-                    .itemList((List<Item>) processResultMap.get(List.class))
+//                    .itemList((List<Item>) processResultMap.get(List.class))
                     .delivery((Delivery) processResultMap.get(Delivery.class))
                     .userInfoList((List<UserInfo>) processResultMap.get(List.class))
                     .orderStatus((OrderStatus) processResultMap.get(OrderStatus.class))
@@ -150,7 +147,7 @@ public class OrderItemService extends AbstractGeneralEntityService implements IO
                     DeliveryType deliveryType =
                             deliveryTypeMapWrapper.getEntity(requestDeliveryDto.getDeliveryType());
                     Address address = Address.builder()
-//                            .country(requestAddressDto.getCountry())
+//                            .category(requestAddressDto.getCountry())
                             .street(requestAddressDto.getStreet())
                             .buildingNumber(requestAddressDto.getBuildingNumber())
                             .apartmentNumber(requestAddressDto.getApartmentNumber())
@@ -171,13 +168,13 @@ public class OrderItemService extends AbstractGeneralEntityService implements IO
                     RequestPaymentDto requestPaymentDto = requestOrderItemDto.getRequestPaymentDto();
                     PaymentMethod paymentMethod =
                             paymentMethodMapWrapper.getEntity(requestPaymentDto.getPaymentMethod());
-                    Discount discount = Discount.builder()
+                    CurrencyDiscount currencyDiscount = CurrencyDiscount.builder()
                             .build();
 
                     Payment payment = Payment.builder()
                             .paymentMethod(paymentMethod)
-                            .amount(requestPaymentDto.getAmount())
-                            .discount(discount)
+//                            .amount(requestPaymentDto.getAmount())
+                            .currencyDiscount(currencyDiscount)
                             .build();
                     return payment;
                 },

@@ -20,7 +20,7 @@ import com.b2c.prototype.dao.user.base.BasicAppUserDao;
 import com.b2c.prototype.dao.item.base.BasicBrandDao;
 import com.b2c.prototype.dao.bucket.base.BasicBucketDao;
 import com.b2c.prototype.dao.payment.base.BasicCardDao;
-import com.b2c.prototype.dao.item.base.BasicDiscountDao;
+import com.b2c.prototype.dao.item.base.BasicCurrencyDiscountDao;
 import com.b2c.prototype.dao.option.base.BasicOptionItemDao;
 import com.b2c.prototype.dao.option.base.BasicOptionGroupDao;
 import com.b2c.prototype.dao.order.base.BasicOrderHistoryDao;
@@ -44,7 +44,7 @@ import com.b2c.prototype.dao.payment.ICardDao;
 import com.b2c.prototype.dao.payment.IPaymentDao;
 import com.b2c.prototype.dao.post.IPostDao;
 import com.b2c.prototype.dao.item.IBrandDao;
-import com.b2c.prototype.dao.item.IDiscountDao;
+import com.b2c.prototype.dao.item.ICurrencyDiscountDao;
 import com.b2c.prototype.dao.item.IItemDao;
 import com.b2c.prototype.dao.item.IItemStatusDao;
 import com.b2c.prototype.dao.item.IItemTypeDao;
@@ -55,19 +55,60 @@ import com.b2c.prototype.dao.wishlist.IWishListDao;
 import com.tm.core.configuration.manager.DatabaseType;
 import com.tm.core.configuration.manager.ISessionFactoryManager;
 import com.tm.core.configuration.manager.SessionFactoryManager;
+import com.tm.core.dao.identifier.EntityIdentifierDao;
 import com.tm.core.dao.identifier.IEntityIdentifierDao;
+import com.tm.core.dao.query.ISearchWrapper;
+import com.tm.core.dao.query.SearchWrapper;
+import com.tm.core.processor.finder.manager.EntityMappingManager;
+import com.tm.core.processor.finder.manager.IEntityMappingManager;
+import com.tm.core.processor.finder.scanner.EntityScanner;
+import com.tm.core.processor.finder.scanner.IEntityScanner;
+import com.tm.core.processor.thread.IThreadLocalSessionManager;
+import com.tm.core.processor.thread.ThreadLocalSessionManager;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 
 @Configuration
 public class BeanConfiguration {
+
+    @Value("${entity.package.path}")
+    private String entityPackagePath;
 
     @Bean
     public SessionFactory sessionFactory() {
         ISessionFactoryManager sessionFactoryManager =
                 SessionFactoryManager.getInstance("hikari.hibernate.cfg.xml");
         return sessionFactoryManager.getSessionFactorySupplier(DatabaseType.WRITE).get();
+    }
+
+    @Bean
+    public IThreadLocalSessionManager sessionManager(SessionFactory sessionFactory) {
+        return new ThreadLocalSessionManager(sessionFactory);
+    }
+
+    @Bean
+    public IEntityMappingManager entityMappingManager() {
+        return new EntityMappingManager();
+    }
+
+    @Bean
+    @DependsOn({"entityMappingManager"})
+    public IEntityScanner entityScanner() {
+        return new EntityScanner(entityMappingManager(), entityPackagePath);
+    }
+
+    @Bean
+    @DependsOn({"entityScanner"})
+    public IEntityIdentifierDao entityIdentifierDao(SessionFactory sessionFactory) {
+        return new EntityIdentifierDao(sessionManager(sessionFactory), entityMappingManager());
+    }
+
+    @Bean
+    public ISearchWrapper searchWrapper() {
+        return new SearchWrapper(sessionManager(sessionFactory()), entityIdentifierDao(sessionFactory()));
     }
 
     @Bean
@@ -111,8 +152,8 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public IDiscountDao discountDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
-        return new BasicDiscountDao(sessionFactory, entityIdentifierDao);
+    public ICurrencyDiscountDao discountDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicCurrencyDiscountDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
@@ -141,7 +182,7 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public IOptionItemDao optionDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+    public IOptionItemDao optionItemDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
         return new BasicOptionItemDao(sessionFactory, entityIdentifierDao);
     }
 

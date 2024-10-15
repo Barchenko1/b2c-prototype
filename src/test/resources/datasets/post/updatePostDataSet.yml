@@ -1,0 +1,9 @@
+post:
+  - id: 1
+    title: "parent"
+  - id: 2
+    post_id: 1
+    title: "Update root"
+  - id: 3
+    post_id: 2
+    title: "child"

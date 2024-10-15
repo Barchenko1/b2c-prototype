@@ -10,7 +10,7 @@ import com.b2c.prototype.dao.delivery.IDeliveryDao;
 import com.b2c.prototype.dao.payment.ICardDao;
 import com.b2c.prototype.dao.payment.IPaymentDao;
 import com.b2c.prototype.dao.item.ICategoryDao;
-import com.b2c.prototype.dao.item.IDiscountDao;
+import com.b2c.prototype.dao.item.ICurrencyDiscountDao;
 import com.b2c.prototype.dao.wishlist.IWishListDao;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
 import com.b2c.prototype.modal.entity.item.Brand;
@@ -53,29 +53,18 @@ import com.b2c.prototype.service.base.wishlist.IWishListService;
 import com.b2c.prototype.service.base.wishlist.WishListService;
 import com.b2c.prototype.gateway.IRestClient;
 import com.b2c.prototype.gateway.RestClient;
-import com.tm.core.dao.identifier.EntityIdentifierDao;
 import com.tm.core.dao.identifier.IEntityIdentifierDao;
 import com.tm.core.processor.finder.factory.IParameterFactory;
 import com.tm.core.processor.finder.factory.ParameterFactory;
-import com.tm.core.processor.finder.scanner.EntityScanner;
-import com.tm.core.processor.finder.scanner.IEntityScanner;
-import com.tm.core.processor.finder.manager.EntityMappingManager;
-import com.tm.core.processor.finder.manager.IEntityMappingManager;
-import com.tm.core.processor.thread.ThreadLocalSessionManager;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
 
 @Configuration
 public class ServiceBeanConfiguration {
 
     @Value("${thread.pool.size}")
     private int threadCount;
-
-    @Value("${entity.package.path}")
-    private String entityPackagePath;
 
     // support service
     @Bean
@@ -89,30 +78,8 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public ThreadLocalSessionManager sessionManager(SessionFactory sessionFactory) {
-        return new ThreadLocalSessionManager(sessionFactory);
-    }
-
-    @Bean
     public IParameterFactory parameterFactory() {
         return new ParameterFactory();
-    }
-
-    @Bean
-    public IEntityMappingManager entityMappingManager() {
-        return new EntityMappingManager();
-    }
-
-    @Bean
-    @DependsOn({"entityMappingManager"})
-    public IEntityScanner entityScanner() {
-        return new EntityScanner(entityMappingManager(), entityPackagePath);
-    }
-
-    @Bean
-    @DependsOn({"entityScanner"})
-    public IEntityIdentifierDao entityIdentifierDao(SessionFactory sessionFactory) {
-        return new EntityIdentifierDao(sessionManager(sessionFactory), entityMappingManager());
     }
 
     // app service
@@ -135,17 +102,15 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public IItemService itemService(ThreadLocalSessionManager sessionManager,
-                                    IAsyncProcessor asyncProcessor,
+    public IItemService itemService(IAsyncProcessor asyncProcessor,
                                     IEntityStringMapWrapper<Brand> brandMapWrapper,
                                     IEntityStringMapWrapper<ItemStatus> itemStatusMapWrapper,
                                     IEntityStringMapWrapper<ItemType> itemTypeMapWrapper,
                                     IEntityStringMapWrapper<Category> categoryMapWrapper,
                                     IEntityStringMapWrapper<OptionGroup> optionGroupMapWrapper,
                                     IItemDao itemDao,
-                                    IDiscountDao discountDao) {
+                                    ICurrencyDiscountDao discountDao) {
         return new ItemService(
-                sessionManager,
                 asyncProcessor,
                 brandMapWrapper,
                 itemStatusMapWrapper,
@@ -163,14 +128,12 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public IPaymentService paymentService(ThreadLocalSessionManager sessionManager,
-                                          IAsyncProcessor asyncProcessor,
+    public IPaymentService paymentService(IAsyncProcessor asyncProcessor,
                                           IPaymentDao paymentDao,
                                           ICardDao cardDao,
-                                          IDiscountDao discountDao,
+                                          ICurrencyDiscountDao discountDao,
                                           IEntityStringMapWrapper<PaymentMethod> paymentMethodEntityMapWrapper) {
         return new PaymentService(
-                sessionManager,
                 asyncProcessor,
                 paymentDao,
                 cardDao,
@@ -191,19 +154,18 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public IDeliveryService deliveryService(ThreadLocalSessionManager sessionManager,
-                                            IAsyncProcessor asyncProcessor,
+    public IDeliveryService deliveryService(IAsyncProcessor asyncProcessor,
                                             IDeliveryDao deliveryDao,
                                             IEntityStringMapWrapper<DeliveryType> deliveryTypeEntityMapWrapper) {
-        return new DeliveryService(sessionManager,
+        return new DeliveryService(
                 asyncProcessor,
                 deliveryDao,
-                deliveryTypeEntityMapWrapper);
+                deliveryTypeEntityMapWrapper
+        );
     }
 
     @Bean
-    public IOrderItemService orderItemService(ThreadLocalSessionManager sessionManager,
-                                              IAsyncProcessor asyncProcessor,
+    public IOrderItemService orderItemService(IAsyncProcessor asyncProcessor,
                                               IOrderItemDao orderItemDao,
                                               IItemDao itemDao,
                                               IUserInfoDao userInfoDao,
@@ -211,7 +173,6 @@ public class ServiceBeanConfiguration {
                                               IEntityStringMapWrapper<PaymentMethod> paymentMethodMapWrapper,
                                               IEntityStringMapWrapper<OrderStatus> orderStatusMapWrapper) {
         return new OrderItemService(
-                sessionManager,
                 asyncProcessor,
                 orderItemDao,
                 itemDao,

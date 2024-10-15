@@ -27,7 +27,7 @@ public class AddressService extends AbstractSingleEntityService implements IAddr
     @Override
     public void saveAddress(RequestAddressDto addressDto) {
         Address address = Address.builder()
-//                .country(addressDto.getCountry())
+//                .category(addressDto.getCountry())
                 .apartmentNumber(addressDto.getApartmentNumber())
                 .flor(addressDto.getFlor())
                 .street(addressDto.getStreet())
@@ -73,7 +73,7 @@ public class AddressService extends AbstractSingleEntityService implements IAddr
 
     private Address buildAddress(RequestAddressDto requestAddressDto) {
         return Address.builder()
-//                .country(requestAddressDto.getCountry())
+//                .category(requestAddressDto.getCountry())
                 .street(requestAddressDto.getStreet())
                 .buildingNumber(requestAddressDto.getBuildingNumber())
                 .flor(requestAddressDto.getFlor())

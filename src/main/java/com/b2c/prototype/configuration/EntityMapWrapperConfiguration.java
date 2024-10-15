@@ -32,6 +32,7 @@ import com.b2c.prototype.dao.cashed.base.OrderStatusMapWrapper;
 import com.b2c.prototype.dao.cashed.base.PaymentMethodMapWrapper;
 import com.b2c.prototype.dao.cashed.base.RatingEntityWrapper;
 import com.tm.core.dao.identifier.IEntityIdentifierDao;
+import com.tm.core.dao.query.ISearchWrapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -156,7 +157,7 @@ public class EntityMapWrapperConfiguration {
 
     @Bean
     public IEntityCachedMap entityCachedMap(Map<Class<?>, Map<?, ?>> classEntityMap,
-                                            IEntityIdentifierDao entityIdentifierDao) {
-        return new EntityCachedMap(classEntityMap ,entityIdentifierDao);
+                                            ISearchWrapper searchWrapper) {
+        return new EntityCachedMap(classEntityMap , searchWrapper);
     }
 }

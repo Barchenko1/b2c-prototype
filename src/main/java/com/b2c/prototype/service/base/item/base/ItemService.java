@@ -1,6 +1,6 @@
 package com.b2c.prototype.service.base.item.base;
 
-import com.b2c.prototype.dao.item.IDiscountDao;
+import com.b2c.prototype.dao.item.ICurrencyDiscountDao;
 import com.b2c.prototype.dao.item.IItemDao;
 import com.b2c.prototype.modal.dto.common.RequestOneFieldEntityDto;
 import com.b2c.prototype.modal.dto.request.RequestItemDto;
@@ -34,7 +34,7 @@ import static com.b2c.prototype.util.UniqueIdUtil.getUUID;
 @Slf4j
 public class ItemService extends AbstractGeneralEntityService implements IItemService {
 
-    private final ThreadLocalSessionManager sessionManager;
+    private ThreadLocalSessionManager sessionManager;
     private final IAsyncProcessor asyncProcessor;
     private final IEntityStringMapWrapper<Brand> brandMapWrapper;
     private final IEntityStringMapWrapper<ItemStatus> itemStatusMapWrapper;
@@ -42,18 +42,16 @@ public class ItemService extends AbstractGeneralEntityService implements IItemSe
     private final IEntityStringMapWrapper<Category> categoryMapWrapper;
     private final IEntityStringMapWrapper<OptionGroup> optionGroupMapWrapper;
     private final IItemDao iItemDao;
-    private final IDiscountDao discountDao;
+    private final ICurrencyDiscountDao discountDao;
 
-    public ItemService(ThreadLocalSessionManager sessionManager,
-                       IAsyncProcessor asyncProcessor,
+    public ItemService(IAsyncProcessor asyncProcessor,
                        IEntityStringMapWrapper<Brand> brandMapWrapper,
                        IEntityStringMapWrapper<ItemStatus> itemStatusMapWrapper,
                        IEntityStringMapWrapper<ItemType> itemTypeMapWrapper,
                        IEntityStringMapWrapper<Category> categoryMapWrapper,
                        IEntityStringMapWrapper<OptionGroup> optionGroupMapWrapper,
                        IItemDao iItemDao,
-                       IDiscountDao discountDao) {
-        this.sessionManager = sessionManager;
+                       ICurrencyDiscountDao discountDao) {
         this.asyncProcessor = asyncProcessor;
         this.brandMapWrapper = brandMapWrapper;
         this.itemStatusMapWrapper = itemStatusMapWrapper;

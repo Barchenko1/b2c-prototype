@@ -40,7 +40,7 @@
         <mapping class="com.b2c.prototype.modal.entity.payment.Card" />
 
         <mapping class="com.b2c.prototype.modal.entity.item.ItemType" />
-        <mapping class="com.b2c.prototype.modal.entity.item.Discount" />
+        <mapping class="com.b2c.prototype.modal.entity.item.CurrencyDiscount" />
         <mapping class="com.b2c.prototype.modal.entity.item.Brand" />
         <mapping class="com.b2c.prototype.modal.entity.item.Category" />
         <mapping class="com.b2c.prototype.modal.entity.item.ItemStatus" />

@@ -1,0 +1,24 @@
+post:
+  - id: 1
+    title: "parent"
+    message: "parent"
+    authorUserName: "parent"
+    authorEmail: "parent@email.com"
+    uniquePostId: "1"
+    dateOfCreate: 100000
+  - id: 2
+    post_id: 1
+    title: "root"
+    message: "root"
+    authorUserName: "root"
+    authorEmail: "root@email.com"
+    uniquePostId: "2"
+    dateOfCreate: 100000
+  - id: 3
+    post_id: 2
+    title: "child"
+    message: "child"
+    authorUserName: "child"
+    authorEmail: "child@email.com"
+    uniquePostId: "3"
+    dateOfCreate: 100000

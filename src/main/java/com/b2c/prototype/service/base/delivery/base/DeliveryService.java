@@ -26,16 +26,14 @@ import java.util.Optional;
 @Slf4j
 public class DeliveryService extends AbstractGeneralEntityService implements IDeliveryService {
 
-    private final ThreadLocalSessionManager sessionManager;
+    private ThreadLocalSessionManager sessionManager;
     private final IAsyncProcessor asyncProcessor;
     private final IDeliveryDao deliveryDao;
     private final IEntityStringMapWrapper<DeliveryType> deliveryTypeEntityMapWrapper;
 
-    public DeliveryService(ThreadLocalSessionManager sessionManager,
-                           IAsyncProcessor asyncProcessor,
+    public DeliveryService(IAsyncProcessor asyncProcessor,
                            IDeliveryDao deliveryDao,
                            IEntityStringMapWrapper<DeliveryType> deliveryTypeEntityMapWrapper) {
-        this.sessionManager = sessionManager;
         this.asyncProcessor = asyncProcessor;
         this.deliveryDao = deliveryDao;
         this.deliveryTypeEntityMapWrapper = deliveryTypeEntityMapWrapper;
@@ -52,7 +50,7 @@ public class DeliveryService extends AbstractGeneralEntityService implements IDe
         Map<Class<?>, Object> resultProcessMap = executeAsyncProcess(requestDeliveryDto);
 
         Address address = Address.builder()
-//                .country(requestAddressDto.getCountry())
+//                .category(requestAddressDto.getCountry())
                 .flor(requestAddressDto.getFlor())
                 .apartmentNumber(requestAddressDto.getApartmentNumber())
                 .buildingNumber(requestAddressDto.getBuildingNumber())
@@ -104,7 +102,7 @@ public class DeliveryService extends AbstractGeneralEntityService implements IDe
             Address address = null;
             if (optionalAddressDto.isPresent()) {
                 address = Address.builder()
-//                        .country(requestAddressDto.getCountry())
+//                        .category(requestAddressDto.getCountry())
                         .flor(requestAddressDto.getFlor())
                         .apartmentNumber(requestAddressDto.getApartmentNumber())
                         .buildingNumber(requestAddressDto.getBuildingNumber())

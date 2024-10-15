@@ -2,6 +2,7 @@ package com.b2c.prototype.modal.entity.item;
 
 import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.modal.entity.post.Post;
+import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.modal.entity.review.Review;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -46,7 +47,9 @@ public class Item {
     @ManyToOne(fetch = FetchType.LAZY)
     private ItemStatus status;
     @ManyToOne(fetch = FetchType.LAZY)
-    private Discount discount;
+    private Price price;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private CurrencyDiscount currencyDiscount;
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "item_option",
@@ -54,16 +57,13 @@ public class Item {
             inverseJoinColumns = {@JoinColumn(name = "option_item_id")}
     )
     private List<OptionItem> optionItems;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinTable(
             name = "item_review",
             joinColumns = {@JoinColumn(name = "item_id")},
             inverseJoinColumns = {@JoinColumn(name = "review_id")}
     )
     private List<Review> reviews;
-    @OneToMany(
-            cascade = CascadeType.PERSIST,
-            orphanRemoval = true
-    )
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private List<Post> posts;
 }

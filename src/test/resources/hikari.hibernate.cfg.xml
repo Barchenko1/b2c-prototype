@@ -17,7 +17,7 @@
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
         <property name="hibernate.connection.autocommit">false</property>
 
-        <property name="hibernate.hikari.connectionTimeout">1000</property>
+        <property name="hibernate.hikari.connectionTimeout">30000</property>
         <property name="hibernate.hikari.minimumIdle">5</property>
         <property name="hibernate.hikari.maximumPoolSize">20</property>
         <property name="hibernate.hikari.idleTimeout">100000</property>
@@ -37,11 +37,15 @@
         <mapping class="com.b2c.prototype.modal.entity.delivery.DeliveryType" />
         <mapping class="com.b2c.prototype.modal.entity.delivery.Delivery" />
 
-        <mapping class="com.b2c.prototype.modal.entity.payment.Payment" />
+        <mapping class="com.b2c.prototype.modal.entity.price.Currency" />
+        <mapping class="com.b2c.prototype.modal.entity.price.Price" />
         <mapping class="com.b2c.prototype.modal.entity.payment.Card" />
+        <mapping class="com.b2c.prototype.modal.entity.payment.Payment" />
 
         <mapping class="com.b2c.prototype.modal.entity.item.ItemType" />
-        <mapping class="com.b2c.prototype.modal.entity.item.Discount" />
+        <mapping class="com.b2c.prototype.modal.entity.item.CurrencyDiscount" />
+        <mapping class="com.b2c.prototype.modal.entity.item.PercentDiscount" />
+
         <mapping class="com.b2c.prototype.modal.entity.item.Brand" />
         <mapping class="com.b2c.prototype.modal.entity.item.Category" />
         <mapping class="com.b2c.prototype.modal.entity.item.ItemStatus" />
@@ -55,6 +59,7 @@
         <mapping class="com.b2c.prototype.modal.entity.wishlist.Wishlist" />
 
         <mapping class="com.b2c.prototype.modal.entity.item.Item" />
+        <mapping class="com.b2c.prototype.modal.entity.item.ItemQuantity" />
 
         <mapping class="com.b2c.prototype.modal.entity.user.AppUser" />
         <mapping class="com.b2c.prototype.modal.entity.user.UserInfo" />

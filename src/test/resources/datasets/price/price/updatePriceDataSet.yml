@@ -1,0 +1,6 @@
+currency:
+  - id: 1
+    name: "USD"
+price:
+  - id: 1
+    amount: 20
