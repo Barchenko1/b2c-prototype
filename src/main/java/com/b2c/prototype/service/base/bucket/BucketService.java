@@ -28,7 +28,7 @@ public class BucketService extends AbstractGeneralEntityService implements IBuck
     @Override
     public void addItemToBucket(RequestItemBucketDto itemBucketDto) {
         Bucket bucket = Bucket.builder()
-                .dateOfAdded(System.currentTimeMillis())
+//                .dateOfAdded(System.currentTimeMillis())
 //                .item(null)
                 .user(null)
                 .build();

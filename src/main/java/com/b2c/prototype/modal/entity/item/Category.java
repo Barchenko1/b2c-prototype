@@ -16,7 +16,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
@@ -35,9 +37,13 @@ public class Category extends TransitiveSelfEntity {
     private String name;
     @ManyToOne
     @JoinColumn(name = "category_id")
+    @ToString.Exclude
     private Category parent;
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
-    private List<Category> childNodeList;
+    @Builder.Default
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private List<Category> childNodeList = new ArrayList<>();
 
     @Override
     public void setParent(TransitiveSelfEntity transitiveSelfEntity) {
@@ -50,12 +56,8 @@ public class Category extends TransitiveSelfEntity {
     }
 
     @Override
-    public String toString() {
-        return "Category{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", parentId=" + (parent != null ? parent.getId() : "null") +
-                ", childNodeCount=" + (childNodeList != null ? childNodeList.size() : "null") +
-                '}';
+    public <E extends TransitiveSelfEntity> void setChildNodeList(List<E> childNodeList) {
+        this.childNodeList = (List<Category>) childNodeList;
     }
+
 }

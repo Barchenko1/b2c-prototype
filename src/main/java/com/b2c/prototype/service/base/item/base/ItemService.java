@@ -28,6 +28,7 @@ import org.hibernate.Transaction;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import static com.b2c.prototype.util.UniqueIdUtil.getUUID;
 
@@ -98,7 +99,7 @@ public class ItemService extends AbstractGeneralEntityService implements IItemSe
                     .itemType((ItemType) processResultMap.get(ItemType.class))
                     .category((Category) processResultMap.get(Category.class))
                     .status((ItemStatus) processResultMap.get(ItemStatus.class))
-                    .optionItems((List<OptionItem>) processResultMap.get(OptionItem.class))
+                    .optionItems((Set<OptionItem>) processResultMap.get(OptionItem.class))
                     .build();
 
             session.persist(item);
@@ -126,19 +127,19 @@ public class ItemService extends AbstractGeneralEntityService implements IItemSe
             Item oldItem = (Item) processResultMap.get(Item.class);
 
             if (oldItem != null) {
-                Item item = Item.builder()
-                        .id(oldItem.getId())
-                        .name(requestItemDto.getName())
-                        .articularId(searchField)
-                        .dateOfCreate(System.currentTimeMillis())
-                        .brand((Brand) processResultMap.get(Brand.class))
-                        .itemType((ItemType) processResultMap.get(ItemType.class))
-                        .category((Category) processResultMap.get(Category.class))
-                        .status((ItemStatus) processResultMap.get(ItemStatus.class))
-                        .optionItems((List<OptionItem>) processResultMap.get(OptionItem.class))
-                        .build();
+//                Item item = Item.builder()
+//                        .id(oldItem.getId())
+//                        .name(requestItemDto.getName())
+//                        .articularId(searchField)
+//                        .dateOfCreate(System.currentTimeMillis())
+//                        .brand((Brand) processResultMap.get(Brand.class))
+//                        .itemType((ItemType) processResultMap.get(ItemType.class))
+//                        .category((Category) processResultMap.get(Category.class))
+//                        .status((ItemStatus) processResultMap.get(ItemStatus.class))
+//                        .optionItems((List<OptionItem>) processResultMap.get(OptionItem.class))
+//                        .build();
 
-                session.merge(item);
+//                session.merge(item);
             }
 
             transaction.commit();

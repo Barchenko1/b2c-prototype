@@ -8,11 +8,7 @@ import com.tm.core.modal.TransitiveSelfEntity;
 import com.tm.core.processor.finder.manager.EntityMappingManager;
 import com.tm.core.processor.finder.manager.IEntityMappingManager;
 import com.tm.core.processor.finder.table.EntityTable;
-import com.tm.core.processor.thread.IThreadLocalSessionManager;
-import com.tm.core.processor.thread.ThreadLocalSessionManager;
 import org.junit.jupiter.api.BeforeAll;
-
-import java.util.List;
 
 class BasicPostDaoTest extends AbstractTransitiveSelfEntityDaoTest {
 
@@ -59,10 +55,8 @@ class BasicPostDaoTest extends AbstractTransitiveSelfEntityDaoTest {
                 .dateOfCreate(100000)
                 .build();
 
-        parent.setChildNodeList(List.of(root));
-        root.setParent(parent);
-        root.setChildNodeList(List.of(child));
-        child.setParent(root);
+        parent.addChildPost(root);
+        root.addChildPost(child);
         return new EntityDataSet<>(root, "/datasets/post/testPostDataSet.yml");
     }
 
@@ -93,10 +87,8 @@ class BasicPostDaoTest extends AbstractTransitiveSelfEntityDaoTest {
                 .dateOfCreate(100000)
                 .build();
 
-        parent.setChildNodeList(List.of(root));
-        root.setParent(parent);
-        root.setChildNodeList(List.of(child));
-        child.setParent(root);
+        parent.addChildPost(root);
+        root.addChildPost(child);
         return new EntityDataSet<>(root, "/datasets/post/savePostDataSet.yml");
     }
 
@@ -127,10 +119,8 @@ class BasicPostDaoTest extends AbstractTransitiveSelfEntityDaoTest {
                 .dateOfCreate(100000)
                 .build();
 
-        parent.setChildNodeList(List.of(root));
-        root.setParent(parent);
-        root.setChildNodeList(List.of(child));
-        child.setParent(root);
+        parent.addChildPost(root);
+        root.addChildPost(child);
         return new EntityDataSet<>(root, "/datasets/post/updatePostDataSet.yml");
     }
 
@@ -161,10 +151,8 @@ class BasicPostDaoTest extends AbstractTransitiveSelfEntityDaoTest {
                 .dateOfCreate(100000)
                 .build();
 
-        parent.setChildNodeList(List.of(root));
-        root.setParent(parent);
-        root.setChildNodeList(List.of(child));
-        child.setParent(root);
+        parent.addChildPost(root);
+        root.addChildPost(child);
         return new EntityDataSet<>(root,
                 "/datasets/post/deletePostDataSet.yml",
                             "/datasets/post/deleteChildPostDataSet.yml");

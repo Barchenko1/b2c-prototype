@@ -49,7 +49,7 @@ public class PostService extends AbstractTransitiveSelfEntityService implements 
         Parameter parameter = parameterFactory.createStringParameter(
                 "uniquePostId",
                 requestUpdatePostDto.getOldEntityDto().getUniquePostId());
-        super.updateEntityTree(newPost, parameter);
+        super.updateEntityTreeOldMain(newPost, parameter);
     }
 
     @Override

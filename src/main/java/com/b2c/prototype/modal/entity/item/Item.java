@@ -15,14 +15,16 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "item")
@@ -38,32 +40,79 @@ public class Item {
     private String name;
     private String articularId;
     private long dateOfCreate;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "category_id")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Category category;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private ItemType itemType;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private Brand brand;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private ItemStatus status;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private Price price;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private CurrencyDiscount currencyDiscount;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    private PercentDiscount percentDiscount;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinTable(
             name = "item_option",
             joinColumns = {@JoinColumn(name = "item_id")},
             inverseJoinColumns = {@JoinColumn(name = "option_item_id")}
     )
-    private List<OptionItem> optionItems;
+    @Builder.Default
+    @EqualsAndHashCode.Exclude
+    private Set<OptionItem> optionItems = new HashSet<>();
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinTable(
             name = "item_review",
             joinColumns = {@JoinColumn(name = "item_id")},
             inverseJoinColumns = {@JoinColumn(name = "review_id")}
     )
-    private List<Review> reviews;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    private List<Post> posts;
+    @Builder.Default
+    @EqualsAndHashCode.Exclude
+    private Set<Review> reviews = new HashSet<>();
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinTable(
+            name = "item_post",
+            joinColumns = {@JoinColumn(name = "item_id")},
+            inverseJoinColumns = {@JoinColumn(name = "post_id")}
+    )
+    @Builder.Default
+    @EqualsAndHashCode.Exclude
+    private Set<Post> posts = new HashSet<>();
+
+    public void addOptionItem(OptionItem optionItem) {
+        this.optionItems.add(optionItem);
+        optionItem.getItems().add(this);
+    }
+
+    public void removeOptionItem(OptionItem optionItem) {
+        this.optionItems.remove(optionItem);
+        optionItem.getItems().remove(this);
+    }
+
+    public void addReview(Review review) {
+        this.reviews.add(review);
+        review.getItems().add(this);
+    }
+
+    public void removeReview(Review review) {
+        this.reviews.remove(review);
+        review.getItems().remove(this);
+    }
+
+    public void addPost(Post post) {
+        this.posts.add(post);
+        post.getItems().add(this);
+    }
+
+    public void removePost(Post post) {
+        this.posts.remove(post);
+        post.getItems().add(this);
+    }
+
 }

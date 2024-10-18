@@ -174,6 +174,28 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
                 .build();
     }
 
+    private void checkPayment(Payment expectedPayment, Payment actualPayment) {
+        assertEquals(expectedPayment.getId(), actualPayment.getId());
+        assertEquals(expectedPayment.getPaymentId(), actualPayment.getPaymentId());
+        assertEquals(expectedPayment.getCard().getId(), actualPayment.getCard().getId());
+        assertEquals(expectedPayment.getCard().getCardNumber(), actualPayment.getCard().getCardNumber());
+        assertEquals(expectedPayment.getCard().getDateOfExpire(), actualPayment.getCard().getDateOfExpire());
+        assertEquals(expectedPayment.getCard().getOwnerName(), actualPayment.getCard().getOwnerName());
+        assertEquals(expectedPayment.getCard().getOwnerSecondName(), actualPayment.getCard().getOwnerSecondName());
+        assertEquals(expectedPayment.getCard().isActive(), actualPayment.getCard().isActive());
+        assertEquals(expectedPayment.getCard().getCvv(), actualPayment.getCard().getCvv());
+
+        assertEquals(expectedPayment.getPaymentMethod().getId(), actualPayment.getPaymentMethod().getId());
+        assertEquals(expectedPayment.getPaymentMethod().getMethod(), actualPayment.getPaymentMethod().getMethod());
+
+        assertEquals(expectedPayment.getPrice().getId(), actualPayment.getPrice().getId());
+        assertEquals(expectedPayment.getPrice().getAmount(), actualPayment.getPrice().getAmount());
+
+        Currency currency = dao.initializeEntity(Currency.class, actualPayment.getPrice().getCurrency().getId());
+        assertEquals(expectedPayment.getPrice().getCurrency().getId(), currency.getId());
+        assertEquals(expectedPayment.getPrice().getCurrency().getName(), currency.getName());
+    }
+
     @Test
     void getEntityList_success() {
         loadDataSet("/datasets/payment/payment/testPaymentDataSet.yml");
@@ -182,30 +204,8 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
         List<Payment> resultList =
                 dao.getGeneralEntityList(parameter);
 
-        resultList.forEach(result -> {
-            assertEquals(payment.getId(), result.getId());
-            assertEquals(payment.getPaymentId(), result.getPaymentId());
-            assertEquals(payment.getCard().getId(), result.getCard().getId());
-            assertEquals(payment.getCard().getCardNumber(), result.getCard().getCardNumber());
-            assertEquals(payment.getCard().getDateOfExpire(), result.getCard().getDateOfExpire());
-            assertEquals(payment.getCard().getOwnerName(), result.getCard().getOwnerName());
-            assertEquals(payment.getCard().getOwnerSecondName(), result.getCard().getOwnerSecondName());
-            assertEquals(payment.getCard().isActive(), result.getCard().isActive());
-            assertEquals(payment.getCard().getCvv(), result.getCard().getCvv());
-
-            assertEquals(payment.getPaymentMethod().getId(), result.getPaymentMethod().getId());
-            assertEquals(payment.getPaymentMethod().getMethod(), result.getPaymentMethod().getMethod());
-
-            assertEquals(payment.getPrice().getId(), result.getPrice().getId());
-            assertEquals(payment.getPrice().getAmount(), result.getPrice().getAmount());
-            Payment payment2;
-            try (Session session = sessionFactory.openSession()){
-                payment2 = session.get(Payment.class, payment.getId());
-                Hibernate.initialize(payment2.getPrice().getCurrency());
-            }
-            assertEquals(payment.getPrice().getCurrency().getId(), payment2.getPrice().getCurrency().getId());
-            assertEquals(payment.getPrice().getCurrency().getName(), payment2.getPrice().getCurrency().getName());
-        });
+        assertEquals(1, resultList.size());
+        resultList.forEach(result -> checkPayment(payment, result));
     }
 
     @Test
@@ -216,28 +216,8 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
         List<Payment> resultList =
                 dao.getGeneralEntityList(Payment.class, parameter);
 
-        resultList.forEach(result -> {
-            assertEquals(payment.getId(), result.getId());
-            assertEquals(payment.getPaymentId(), result.getPaymentId());
-            assertEquals(payment.getCard().getId(), result.getCard().getId());
-            assertEquals(payment.getCard().getCardNumber(), result.getCard().getCardNumber());
-            assertEquals(payment.getCard().getDateOfExpire(), result.getCard().getDateOfExpire());
-            assertEquals(payment.getCard().getOwnerName(), result.getCard().getOwnerName());
-            assertEquals(payment.getCard().getOwnerSecondName(), result.getCard().getOwnerSecondName());
-            assertEquals(payment.getCard().isActive(), result.getCard().isActive());
-            assertEquals(payment.getCard().getCvv(), result.getCard().getCvv());
-
-            assertEquals(payment.getPaymentMethod().getId(), result.getPaymentMethod().getId());
-            assertEquals(payment.getPaymentMethod().getMethod(), result.getPaymentMethod().getMethod());
-
-            assertEquals(payment.getPrice().getId(), result.getPrice().getId());
-            assertEquals(payment.getPrice().getAmount(), result.getPrice().getAmount());
-
-            Currency currency = dao.initializeEntity(Currency.class, result.getPrice().getCurrency().getId());
-
-            assertEquals(payment.getPrice().getCurrency().getId(), currency.getId());
-            assertEquals(payment.getPrice().getCurrency().getName(), currency.getName());
-        });
+        assertEquals(1, resultList.size());
+        resultList.forEach(result -> checkPayment(payment, result));
     }
 
     @Test
@@ -328,7 +308,6 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
             Payment payment = prepareToSavePayment();
             s.persist(payment.getCard());
             s.persist(payment.getPrice());
-//            s.persist(payment.getDiscount());
             s.persist(payment);
         };
 
@@ -354,19 +333,7 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
     @Test
     void updateEntity_success() {
         loadDataSet("/datasets/payment/payment/testPaymentDataSet.yml");
-        Supplier<Payment> paymentSupplier = () -> {
-            Payment oldPayment = prepareTestPayment();
-            Payment paymentToUpdate = prepareToUpdatePayment();
-            paymentToUpdate.setId(oldPayment.getId());
-            paymentToUpdate.getCard()
-                    .setId(oldPayment.getId());
-            paymentToUpdate.getPrice()
-                    .setId(oldPayment.getId());
-            paymentToUpdate.getPaymentMethod()
-                    .setId(oldPayment.getId());
-
-            return paymentToUpdate;
-        };
+        Supplier<Payment> paymentSupplier = this::prepareToUpdatePayment;
         dao.updateGeneralEntity(paymentSupplier);
         verifyExpectedData("/datasets/payment/payment/updatePaymentDataSet.yml");
     }
@@ -594,26 +561,7 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
 
         assertTrue(resultOptional.isPresent());
         Payment result = resultOptional.get();
-        assertEquals(payment.getId(), result.getId());
-        assertEquals(payment.getPaymentId(), result.getPaymentId());
-        assertEquals(payment.getCard().getId(), result.getCard().getId());
-        assertEquals(payment.getCard().getCardNumber(), result.getCard().getCardNumber());
-        assertEquals(payment.getCard().getDateOfExpire(), result.getCard().getDateOfExpire());
-        assertEquals(payment.getCard().getOwnerName(), result.getCard().getOwnerName());
-        assertEquals(payment.getCard().getOwnerSecondName(), result.getCard().getOwnerSecondName());
-        assertEquals(payment.getCard().isActive(), result.getCard().isActive());
-        assertEquals(payment.getCard().getCvv(), result.getCard().getCvv());
-
-        assertEquals(payment.getPaymentMethod().getId(), result.getPaymentMethod().getId());
-        assertEquals(payment.getPaymentMethod().getMethod(), result.getPaymentMethod().getMethod());
-
-        assertEquals(payment.getPrice().getId(), result.getPrice().getId());
-        assertEquals(payment.getPrice().getAmount(), result.getPrice().getAmount());
-
-        Currency currency = dao.initializeEntity(Currency.class, result.getPrice().getCurrency().getId());
-
-        assertEquals(payment.getPrice().getCurrency().getId(), currency.getId());
-        assertEquals(payment.getPrice().getCurrency().getName(), currency.getName());
+        checkPayment(payment, result);
 
     }
 
@@ -640,26 +588,7 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
         assertTrue(resultOptional.isPresent());
         Payment result = resultOptional.get();
 
-        assertEquals(payment.getId(), result.getId());
-        assertEquals(payment.getPaymentId(), result.getPaymentId());
-        assertEquals(payment.getCard().getId(), result.getCard().getId());
-        assertEquals(payment.getCard().getCardNumber(), result.getCard().getCardNumber());
-        assertEquals(payment.getCard().getDateOfExpire(), result.getCard().getDateOfExpire());
-        assertEquals(payment.getCard().getOwnerName(), result.getCard().getOwnerName());
-        assertEquals(payment.getCard().getOwnerSecondName(), result.getCard().getOwnerSecondName());
-        assertEquals(payment.getCard().isActive(), result.getCard().isActive());
-        assertEquals(payment.getCard().getCvv(), result.getCard().getCvv());
-
-        assertEquals(payment.getPaymentMethod().getId(), result.getPaymentMethod().getId());
-        assertEquals(payment.getPaymentMethod().getMethod(), result.getPaymentMethod().getMethod());
-
-        assertEquals(payment.getPrice().getId(), result.getPrice().getId());
-        assertEquals(payment.getPrice().getAmount(), result.getPrice().getAmount());
-
-        Currency currency = dao.initializeEntity(Currency.class, result.getPrice().getCurrency().getId());
-
-        assertEquals(payment.getPrice().getCurrency().getId(), currency.getId());
-        assertEquals(payment.getPrice().getCurrency().getName(), currency.getName());
+        checkPayment(payment, result);
     }
 
     @Test
@@ -691,25 +620,7 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
 
         Payment result = dao.getGeneralEntity(parameter);
 
-        assertEquals(payment.getId(), result.getId());
-        assertEquals(payment.getPaymentId(), result.getPaymentId());
-        assertEquals(payment.getCard().getId(), result.getCard().getId());
-        assertEquals(payment.getCard().getCardNumber(), result.getCard().getCardNumber());
-        assertEquals(payment.getCard().getDateOfExpire(), result.getCard().getDateOfExpire());
-        assertEquals(payment.getCard().getOwnerName(), result.getCard().getOwnerName());
-        assertEquals(payment.getCard().getOwnerSecondName(), result.getCard().getOwnerSecondName());
-        assertEquals(payment.getCard().isActive(), result.getCard().isActive());
-        assertEquals(payment.getCard().getCvv(), result.getCard().getCvv());
-
-        assertEquals(payment.getPaymentMethod().getId(), result.getPaymentMethod().getId());
-        assertEquals(payment.getPaymentMethod().getMethod(), result.getPaymentMethod().getMethod());
-
-        assertEquals(payment.getPrice().getId(), result.getPrice().getId());
-        assertEquals(payment.getPrice().getAmount(), result.getPrice().getAmount());
-
-        Currency currency = dao.initializeEntity(Currency.class, result.getPrice().getCurrency().getId());
-        assertEquals(payment.getPrice().getCurrency().getId(), currency.getId());
-        assertEquals(payment.getPrice().getCurrency().getName(), currency.getName());
+        checkPayment(payment, result);
     }
 
     @Test
@@ -729,29 +640,9 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
 
         Payment payment = prepareTestPayment();
 
-        Payment result =
-                dao.getGeneralEntity(Payment.class, parameter);
+        Payment result = dao.getGeneralEntity(Payment.class, parameter);
 
-        assertEquals(payment.getId(), result.getId());
-        assertEquals(payment.getPaymentId(), result.getPaymentId());
-        assertEquals(payment.getCard().getId(), result.getCard().getId());
-        assertEquals(payment.getCard().getCardNumber(), result.getCard().getCardNumber());
-        assertEquals(payment.getCard().getDateOfExpire(), result.getCard().getDateOfExpire());
-        assertEquals(payment.getCard().getOwnerName(), result.getCard().getOwnerName());
-        assertEquals(payment.getCard().getOwnerSecondName(), result.getCard().getOwnerSecondName());
-        assertEquals(payment.getCard().isActive(), result.getCard().isActive());
-        assertEquals(payment.getCard().getCvv(), result.getCard().getCvv());
-
-        assertEquals(payment.getPaymentMethod().getId(), result.getPaymentMethod().getId());
-        assertEquals(payment.getPaymentMethod().getMethod(), result.getPaymentMethod().getMethod());
-
-        assertEquals(payment.getPrice().getId(), result.getPrice().getId());
-        assertEquals(payment.getPrice().getAmount(), result.getPrice().getAmount());
-
-        Currency currency = dao.initializeEntity(Currency.class, result.getPrice().getCurrency().getId());
-
-        assertEquals(payment.getPrice().getCurrency().getId(), currency.getId());
-        assertEquals(payment.getPrice().getCurrency().getName(), currency.getName());
+        checkPayment(payment, result);
     }
 
     @Test

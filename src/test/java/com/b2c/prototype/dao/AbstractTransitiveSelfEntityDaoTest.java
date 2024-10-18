@@ -32,7 +32,6 @@ import javax.sql.DataSource;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.sql.Connection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -89,6 +88,10 @@ public abstract class AbstractTransitiveSelfEntityDaoTest {
     @BeforeEach
     public void setUp() {
         try {
+            Field entityIdentifierDaoField = AbstractTransitiveSelfEntityDao.class.getDeclaredField("entityIdentifierDao");
+            entityIdentifierDaoField.setAccessible(true);
+            entityIdentifierDaoField.set(dao, entityIdentifierDao);
+
             Field sessionFactoryField = AbstractTransitiveSelfEntityDao.class.getDeclaredField("sessionFactory");
             sessionFactoryField.setAccessible(true);
             sessionFactoryField.set(dao, sessionFactory);
@@ -214,22 +217,27 @@ public abstract class AbstractTransitiveSelfEntityDaoTest {
     }
 
     @Test
-    void updateEntityTree_success() {
+    void updateEntityTreeOldMain_success() {
         loadDataSet(testEntityDataSet.getDataSetPath()[0]);
 
         Parameter parameter = new Parameter("id", 2L);
 
-        dao.updateEntityTree(updateEntityDataSet.getEntity(), parameter);
+        dao.updateEntityTreeOldMain(updateEntityDataSet.getEntity(), parameter);
         verifyExpectedData(updateEntityDataSet.getDataSetPath()[0]);
     }
 
     @Test
-    void updateEntityTree_transactionFailure() {
+    void updateEntityTreeOldMain_transactionFailure() {
         IThreadLocalSessionManager sessionManager = mock(IThreadLocalSessionManager.class);
         Session session = mock(Session.class);
         Transaction transaction = mock(Transaction.class);
+        IEntityIdentifierDao entityIdentifierDao = mock(IEntityIdentifierDao.class);
 
         try {
+            Field entityIdentifierDaoField = AbstractTransitiveSelfEntityDao.class.getDeclaredField("entityIdentifierDao");
+            entityIdentifierDaoField.setAccessible(true);
+            entityIdentifierDaoField.set(dao, entityIdentifierDao);
+
             Field sessionManagerField = AbstractTransitiveSelfEntityDao.class.getDeclaredField("sessionManager");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionManager);
@@ -237,14 +245,15 @@ public abstract class AbstractTransitiveSelfEntityDaoTest {
             throw new RuntimeException(e);
         }
 
-        Parameter parameter = new Parameter("id", 1L);
+        Parameter parameter = new Parameter("id", 2L);
 
         when(sessionManager.getSession()).thenReturn(session);
         when(session.beginTransaction()).thenReturn(transaction);
+        when(entityIdentifierDao.getEntity(TransitiveSelfEntity.class, parameter)).thenReturn(testEntityDataSet.getEntity());
         doThrow(new RuntimeException()).when(session).persist(updateEntityDataSet.getEntity());
 
         assertThrows(RuntimeException.class, () -> {
-            dao.updateEntityTree(updateEntityDataSet.getEntity(), parameter);
+            dao.updateEntityTreeOldMain(updateEntityDataSet.getEntity(), parameter);
         });
         verify(transaction).rollback();
         verify(transaction, never()).commit();

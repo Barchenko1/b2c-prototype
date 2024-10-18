@@ -1,0 +1,8 @@
+item: []
+option_group:
+  - id: 1
+    name: "Color"
+option_item:
+  - id: 1
+    optionName: "Red"
+    optiongroup_id: 1

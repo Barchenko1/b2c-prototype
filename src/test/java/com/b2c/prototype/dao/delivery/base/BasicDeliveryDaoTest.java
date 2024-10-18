@@ -5,7 +5,6 @@ import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
-import com.b2c.prototype.modal.entity.price.Currency;
 import com.tm.core.dao.general.AbstractGeneralEntityDao;
 import com.tm.core.dao.identifier.EntityIdentifierDao;
 import com.tm.core.modal.GeneralEntity;
@@ -15,7 +14,6 @@ import com.tm.core.processor.finder.parameter.Parameter;
 import com.tm.core.processor.finder.table.EntityTable;
 import com.tm.core.processor.thread.IThreadLocalSessionManager;
 import com.tm.core.processor.thread.ThreadLocalSessionManager;
-import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -133,6 +131,24 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
                 .build();
     }
 
+    private void checkDelivery(Delivery expectedDelivery, Delivery actualDelivery) {
+        assertEquals(expectedDelivery.getId(), actualDelivery.getId());
+        assertEquals(expectedDelivery.getAddress().getId(), actualDelivery.getAddress().getId());
+        assertEquals(expectedDelivery.getAddress().getStreet(), actualDelivery.getAddress().getStreet());
+        assertEquals(expectedDelivery.getAddress().getFlor(), actualDelivery.getAddress().getFlor());
+        assertEquals(expectedDelivery.getAddress().getBuildingNumber(), actualDelivery.getAddress().getBuildingNumber());
+        assertEquals(expectedDelivery.getAddress().getApartmentNumber(), actualDelivery.getAddress().getApartmentNumber());
+        assertEquals(expectedDelivery.getAddress().getZipCode(), actualDelivery.getAddress().getZipCode());
+
+        assertEquals(expectedDelivery.getDeliveryType().getId(), actualDelivery.getDeliveryType().getId());
+        assertEquals(expectedDelivery.getDeliveryType().getName(), actualDelivery.getDeliveryType().getName());
+
+        Country country = dao.initializeEntity(Country.class, actualDelivery.getAddress().getCountry().getId());
+
+        assertEquals(expectedDelivery.getAddress().getCountry().getId(), country.getId());
+        assertEquals(expectedDelivery.getAddress().getCountry().getName(), country.getName());
+    }
+
     @Test
     void getEntityList_success() {
         loadDataSet("/datasets/delivery/delivery/testDeliveryDataSet.yml");
@@ -142,22 +158,9 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
         List<Delivery> resultList =
                 dao.getGeneralEntityList(parameter);
 
+        assertEquals(1, resultList.size());
         resultList.forEach(result -> {
-            assertEquals(delivery.getId(), result.getId());
-            assertEquals(delivery.getAddress().getId(), result.getAddress().getId());
-            assertEquals(delivery.getAddress().getStreet(), result.getAddress().getStreet());
-            assertEquals(delivery.getAddress().getFlor(), result.getAddress().getFlor());
-            assertEquals(delivery.getAddress().getBuildingNumber(), result.getAddress().getBuildingNumber());
-            assertEquals(delivery.getAddress().getApartmentNumber(), result.getAddress().getApartmentNumber());
-            assertEquals(delivery.getAddress().getZipCode(), result.getAddress().getZipCode());
-
-            assertEquals(delivery.getDeliveryType().getId(), result.getDeliveryType().getId());
-            assertEquals(delivery.getDeliveryType().getName(), result.getDeliveryType().getName());
-
-            Country country = dao.initializeEntity(Country.class, result.getAddress().getCountry().getId());
-
-            assertEquals(delivery.getAddress().getCountry().getId(), country.getId());
-            assertEquals(delivery.getAddress().getCountry().getName(), country.getName());
+            checkDelivery(delivery, result);
         });
     }
 
@@ -170,22 +173,9 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
         List<Delivery> resultList =
                 dao.getGeneralEntityList(Delivery.class, parameter);
 
+        assertEquals(1, resultList.size());
         resultList.forEach(result -> {
-            assertEquals(delivery.getId(), result.getId());
-            assertEquals(delivery.getAddress().getId(), result.getAddress().getId());
-            assertEquals(delivery.getAddress().getStreet(), result.getAddress().getStreet());
-            assertEquals(delivery.getAddress().getFlor(), result.getAddress().getFlor());
-            assertEquals(delivery.getAddress().getBuildingNumber(), result.getAddress().getBuildingNumber());
-            assertEquals(delivery.getAddress().getApartmentNumber(), result.getAddress().getApartmentNumber());
-            assertEquals(delivery.getAddress().getZipCode(), result.getAddress().getZipCode());
-
-            assertEquals(delivery.getDeliveryType().getId(), result.getDeliveryType().getId());
-            assertEquals(delivery.getDeliveryType().getName(), result.getDeliveryType().getName());
-
-            Country country = dao.initializeEntity(Country.class, result.getAddress().getCountry().getId());
-
-            assertEquals(delivery.getAddress().getCountry().getId(), country.getId());
-            assertEquals(delivery.getAddress().getCountry().getName(), country.getName());
+            checkDelivery(delivery, result);
         });
     }
 
@@ -449,7 +439,6 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
     @Test
     void deleteRelationshipEntity_transactionFailure() {
         Delivery delivery = new Delivery();
-//        payment.setPaymentId("1");
 
         Parameter parameter = new Parameter("id", 1L);
 
@@ -483,7 +472,6 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
     void deleteRelationshipEntityWithClass_transactionFailure() {
         loadDataSet("/datasets/delivery/delivery/testDeliveryDataSet.yml");
         Delivery delivery = new Delivery();
-//        delivery.setPaymentId("1");
 
         Parameter parameter = new Parameter("id", 1L);
 
@@ -523,21 +511,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
         assertTrue(resultOptional.isPresent());
         Delivery result = resultOptional.get();
 
-        assertEquals(delivery.getId(), result.getId());
-        assertEquals(delivery.getAddress().getId(), result.getAddress().getId());
-        assertEquals(delivery.getAddress().getStreet(), result.getAddress().getStreet());
-        assertEquals(delivery.getAddress().getFlor(), result.getAddress().getFlor());
-        assertEquals(delivery.getAddress().getBuildingNumber(), result.getAddress().getBuildingNumber());
-        assertEquals(delivery.getAddress().getApartmentNumber(), result.getAddress().getApartmentNumber());
-        assertEquals(delivery.getAddress().getZipCode(), result.getAddress().getZipCode());
-
-        assertEquals(delivery.getDeliveryType().getId(), result.getDeliveryType().getId());
-        assertEquals(delivery.getDeliveryType().getName(), result.getDeliveryType().getName());
-
-        Country country = dao.initializeEntity(Country.class, result.getAddress().getCountry().getId());
-
-        assertEquals(delivery.getAddress().getCountry().getId(), country.getId());
-        assertEquals(delivery.getAddress().getCountry().getName(), country.getName());
+        checkDelivery(delivery, result);
     }
 
     @Test
@@ -563,21 +537,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
         assertTrue(resultOptional.isPresent());
         Delivery result = resultOptional.get();
 
-        assertEquals(delivery.getId(), result.getId());
-        assertEquals(delivery.getAddress().getId(), result.getAddress().getId());
-        assertEquals(delivery.getAddress().getStreet(), result.getAddress().getStreet());
-        assertEquals(delivery.getAddress().getFlor(), result.getAddress().getFlor());
-        assertEquals(delivery.getAddress().getBuildingNumber(), result.getAddress().getBuildingNumber());
-        assertEquals(delivery.getAddress().getApartmentNumber(), result.getAddress().getApartmentNumber());
-        assertEquals(delivery.getAddress().getZipCode(), result.getAddress().getZipCode());
-
-        assertEquals(delivery.getDeliveryType().getId(), result.getDeliveryType().getId());
-        assertEquals(delivery.getDeliveryType().getName(), result.getDeliveryType().getName());
-
-        Country country = dao.initializeEntity(Country.class, result.getAddress().getCountry().getId());
-
-        assertEquals(delivery.getAddress().getCountry().getId(), country.getId());
-        assertEquals(delivery.getAddress().getCountry().getName(), country.getName());
+        checkDelivery(delivery, result);
     }
 
     @Test
@@ -608,21 +568,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
         Delivery delivery = prepareTestDelivery();
         Delivery result = dao.getGeneralEntity(parameter);
 
-        assertEquals(delivery.getId(), result.getId());
-        assertEquals(delivery.getAddress().getId(), result.getAddress().getId());
-        assertEquals(delivery.getAddress().getStreet(), result.getAddress().getStreet());
-        assertEquals(delivery.getAddress().getFlor(), result.getAddress().getFlor());
-        assertEquals(delivery.getAddress().getBuildingNumber(), result.getAddress().getBuildingNumber());
-        assertEquals(delivery.getAddress().getApartmentNumber(), result.getAddress().getApartmentNumber());
-        assertEquals(delivery.getAddress().getZipCode(), result.getAddress().getZipCode());
-
-        assertEquals(delivery.getDeliveryType().getId(), result.getDeliveryType().getId());
-        assertEquals(delivery.getDeliveryType().getName(), result.getDeliveryType().getName());
-
-        Country country = dao.initializeEntity(Country.class, result.getAddress().getCountry().getId());
-
-        assertEquals(delivery.getAddress().getCountry().getId(), country.getId());
-        assertEquals(delivery.getAddress().getCountry().getName(), country.getName());
+        checkDelivery(delivery, result);
     }
 
     @Test
@@ -644,21 +590,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
 
         Delivery result = dao.getGeneralEntity(Delivery.class, parameter);
 
-        assertEquals(delivery.getId(), result.getId());
-        assertEquals(delivery.getAddress().getId(), result.getAddress().getId());
-        assertEquals(delivery.getAddress().getStreet(), result.getAddress().getStreet());
-        assertEquals(delivery.getAddress().getFlor(), result.getAddress().getFlor());
-        assertEquals(delivery.getAddress().getBuildingNumber(), result.getAddress().getBuildingNumber());
-        assertEquals(delivery.getAddress().getApartmentNumber(), result.getAddress().getApartmentNumber());
-        assertEquals(delivery.getAddress().getZipCode(), result.getAddress().getZipCode());
-
-        assertEquals(delivery.getDeliveryType().getId(), result.getDeliveryType().getId());
-        assertEquals(delivery.getDeliveryType().getName(), result.getDeliveryType().getName());
-
-        Country country = dao.initializeEntity(Country.class, result.getAddress().getCountry().getId());
-
-        assertEquals(delivery.getAddress().getCountry().getId(), country.getId());
-        assertEquals(delivery.getAddress().getCountry().getName(), country.getName());
+        checkDelivery(delivery, result);
     }
 
     @Test

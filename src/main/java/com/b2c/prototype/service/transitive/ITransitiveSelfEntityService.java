@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface ITransitiveSelfEntityService {
 
     <E extends TransitiveSelfEntity> void saveEntityTree(E entity);
-    <E extends TransitiveSelfEntity> void updateEntityTree(E entity, Parameter... parameters);
+    <E extends TransitiveSelfEntity> void updateEntityTreeOldMain(E entity, Parameter... parameters);
     <E extends TransitiveSelfEntity> void deleteEntityTree(Parameter... parameters);
 
     <E extends TransitiveSelfEntity> List<E> getTransitiveSelfEntityList(Parameter... parameters);

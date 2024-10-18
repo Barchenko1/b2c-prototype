@@ -30,9 +30,9 @@ public abstract class AbstractTransitiveSelfEntityService implements ITransitive
     }
 
     @Override
-    public <E extends TransitiveSelfEntity> void updateEntityTree(E entity, Parameter... parameters) {
+    public <E extends TransitiveSelfEntity> void updateEntityTreeOldMain(E entity, Parameter... parameters) {
         log.info("Updating entity: {}", entity);
-        getEntityDao().updateEntityTree(entity, parameters);
+        getEntityDao().updateEntityTreeOldMain(entity, parameters);
     }
 
     @Override

@@ -2,6 +2,7 @@
 //
 //import com.b2c.prototype.dao.AbstractSingleEntityDaoTest;
 //import com.b2c.prototype.dao.EntityDataSet;
+//import com.b2c.prototype.modal.entity.item.Item;
 //import com.b2c.prototype.modal.entity.item.ItemQuantity;
 //import com.tm.core.dao.identifier.EntityIdentifierDao;
 //import com.tm.core.processor.finder.manager.EntityMappingManager;
@@ -14,6 +15,7 @@
 //    @BeforeAll
 //    public static void setup() {
 //        IEntityMappingManager entityMappingManager = new EntityMappingManager();
+//        entityMappingManager.addEntityTable(new EntityTable(Item.class, "item"));
 //        entityMappingManager.addEntityTable(new EntityTable(ItemQuantity.class, "item_quantity"));
 //        entityIdentifierDao = new EntityIdentifierDao(sessionManager, entityMappingManager);
 //        dao = new BasicItemQuantityDao(sessionFactory, entityIdentifierDao);
@@ -48,7 +50,7 @@
 //        ItemQuantity itemQuantity = ItemQuantity.builder()
 //                .id(1L)
 ////                .itemList()
-//                .quantity(1)
+//                .quantity(2)
 //                .build();
 //        return new EntityDataSet<>(itemQuantity, "/datasets/item/item_quantity/updateItemQuantityDataSet.yml");
 //    }

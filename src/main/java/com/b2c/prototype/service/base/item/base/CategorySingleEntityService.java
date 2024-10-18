@@ -51,8 +51,8 @@ public class CategorySingleEntityService extends AbstractTransitiveSelfEntitySer
         RequestCategoryDto oldRequestCategoryDto = requestCategoryDtoUpdate.getOldEntityDto();
         Parameter parameter =
                 parameterFactory.createStringParameter("name", oldRequestCategoryDto.getName());
-        categoryDao.updateEntityTree(newCategory, parameter);
-        updateEntityTreeMap(categoryEntityMapWrapper, oldCategory, newCategory);
+        categoryDao.updateEntityTreeOldMain(newCategory, parameter);
+        updateEntityTreeOldMainMap(categoryEntityMapWrapper, oldCategory, newCategory);
     }
 
     @Override
@@ -136,7 +136,7 @@ public class CategorySingleEntityService extends AbstractTransitiveSelfEntitySer
         }
     }
 
-    private <E extends TransitiveSelfEntity> void updateEntityTreeMap(IEntityStringMapWrapper<E> entityMapWrapper, E oldEntity, E newEntity) {
+    private <E extends TransitiveSelfEntity> void updateEntityTreeOldMainMap(IEntityStringMapWrapper<E> entityMapWrapper, E oldEntity, E newEntity) {
         if (oldEntity.getParent() != null) {
             entityMapWrapper.updateEntity(
                     oldEntity.getParent().getRootField(),

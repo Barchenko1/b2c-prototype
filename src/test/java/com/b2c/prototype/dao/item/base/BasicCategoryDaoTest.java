@@ -10,8 +10,6 @@ import com.tm.core.processor.finder.manager.IEntityMappingManager;
 import com.tm.core.processor.finder.table.EntityTable;
 import org.junit.jupiter.api.BeforeAll;
 
-import java.util.List;
-
 class BasicCategoryDaoTest extends AbstractTransitiveSelfEntityDaoTest {
 
     @BeforeAll
@@ -42,10 +40,9 @@ class BasicCategoryDaoTest extends AbstractTransitiveSelfEntityDaoTest {
                 .id(3L)
                 .name("child")
                 .build();
-        parent.setChildNodeList(List.of(root));
-        root.setParent(parent);
-        root.setChildNodeList(List.of(child));
-        child.setParent(root);
+
+        parent.addChildTransitiveEntity(root);
+        root.addChildTransitiveEntity(child);
         return new EntityDataSet<>(root, "/datasets/item/category/testCategoryDataSet.yml");
     }
 
@@ -62,10 +59,8 @@ class BasicCategoryDaoTest extends AbstractTransitiveSelfEntityDaoTest {
                 .name("child")
                 .build();
 
-        parent.setChildNodeList(List.of(root));
-        root.setParent(parent);
-        root.setChildNodeList(List.of(child));
-        child.setParent(root);
+        parent.addChildTransitiveEntity(root);
+        root.addChildTransitiveEntity(child);
         return new EntityDataSet<>(root, "/datasets/item/category/saveCategoryDataSet.yml");
     }
 
@@ -82,10 +77,8 @@ class BasicCategoryDaoTest extends AbstractTransitiveSelfEntityDaoTest {
                 .name("child")
                 .build();
 
-        parent.setChildNodeList(List.of(root));
-        root.setParent(parent);
-        root.setChildNodeList(List.of(child));
-        child.setParent(root);
+        parent.addChildTransitiveEntity(root);
+        root.addChildTransitiveEntity(child);
         return new EntityDataSet<>(root, "/datasets/item/category/updateCategoryDataSet.yml");
     }
 

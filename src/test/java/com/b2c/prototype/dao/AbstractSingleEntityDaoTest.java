@@ -15,14 +15,12 @@ import com.tm.core.dao.identifier.IEntityIdentifierDao;
 import com.tm.core.dao.single.ISingleEntityDao;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.IDatabaseConnection;
-import org.dbunit.database.QueryDataSet;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.operation.DatabaseOperation;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,6 +36,7 @@ import java.util.Optional;
 
 import static com.b2c.prototype.dao.ConfigureSessionFactoryTest.getSessionFactory;
 import static com.b2c.prototype.dao.DataSourcePool.getHikariDataSource;
+import static com.b2c.prototype.dao.DatabaseQueries.cleanDatabase;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -97,10 +96,10 @@ public abstract class AbstractSingleEntityDaoTest {
         }
     }
 
-//    @AfterEach
-//    public void tearDown() {
-//        cleanDatabase();
-//    }
+    @AfterAll
+    public static void tearDown() {
+        cleanDatabase(connectionHolder);
+    }
 
     protected abstract String getEmptyDataSetPath();
     protected abstract EntityDataSet<?> getTestDataSet();

@@ -58,9 +58,9 @@ public class OrderItem {
             inverseJoinColumns = {@JoinColumn(name = "item_quantity_id")}
     )
     private List<ItemQuantity> itemQuantityList;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private Delivery delivery;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private List<UserInfo> userInfoList;
     @ManyToOne(fetch = FetchType.LAZY)
     private OrderStatus orderStatus;

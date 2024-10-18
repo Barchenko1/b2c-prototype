@@ -33,6 +33,7 @@ import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 
 import static com.b2c.prototype.dao.ConfigureSessionFactoryTest.getSessionFactory;
 import static com.b2c.prototype.dao.DataSourcePool.getHikariDataSource;
@@ -47,7 +48,7 @@ public abstract class AbstractGeneralEntityDaoTest {
 
     protected static IEntityIdentifierDao entityIdentifierDao;
 
-    private static ConnectionHolder connectionHolder;
+    protected static ConnectionHolder connectionHolder;
     private static DataSetExecutor executor;
 
     protected static IGeneralEntityDao dao;
@@ -80,20 +81,26 @@ public abstract class AbstractGeneralEntityDaoTest {
         }
     }
 
-    @AfterEach
-    public void tearDown() {
+    @AfterAll
+    public static void tearDown() {
         cleanDatabase(connectionHolder);
     }
 
     protected void loadDataSet(String dataSetPath) {
         try (Connection connection = connectionHolder.getConnection()) {
+            connection.setAutoCommit(false);
             IDatabaseConnection dbConnection = new DatabaseConnection(connection);
             InputStream inputStream = this.getClass().getResourceAsStream(dataSetPath);
             if (inputStream == null) {
                 throw new RuntimeException("Dataset file not found: " + dataSetPath);
             }
             IDataSet dataSet = new YamlDataSet(inputStream);
+            System.out.println("Loading dataset from: " + dataSetPath);
+            System.out.println("Dataset contents: " + Arrays.toString(dataSet.getTableNames()));
+
+//            DatabaseOperation.REFRESH.execute(dbConnection, dataSet);
             DatabaseOperation.CLEAN_INSERT.execute(dbConnection, dataSet);
+            connection.commit();
         } catch (Exception e) {
             throw new RuntimeException("Failed to load dataset: " + dataSetPath, e);
         }

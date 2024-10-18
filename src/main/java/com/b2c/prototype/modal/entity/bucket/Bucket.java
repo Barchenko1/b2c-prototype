@@ -32,7 +32,8 @@ public class Bucket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
-    private long dateOfAdded;
+    private long dateOfUpdate;
+    private String sessionId;
     @ManyToOne(fetch = FetchType.LAZY)
     private AppUser user;
     @ManyToMany(fetch = FetchType.LAZY)
