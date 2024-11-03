@@ -13,7 +13,7 @@ public final class CardUtil {
     public static boolean isCardActive(String monthYear) {
         Date expireDate = transformMonthYearToDate(monthYear);
         if (expireDate.before(new Date())) {
-            LOGGER.error("error card is expired");
+            LOGGER.error("error credit_card is expired");
             throw new RuntimeException("Card expired");
         }
         return true;

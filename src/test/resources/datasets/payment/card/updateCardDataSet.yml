@@ -1,9 +1,0 @@
-card:
-  - id: 1
-    cardNumber: "4444-1111-2222-3333"
-    dateOfExpire: "06/28"
-    cvv: 818
-    ownerName: "Update Name"
-    ownerSecondName: "secondName"
-    isActive: true
-

@@ -12,4 +12,4 @@ address:
     zipCode: 90000
     country_id: 1
 delivery:
-  - deliverytype_id: 1
+  - delivery_type_id: 1

@@ -22,6 +22,7 @@ import org.dbunit.operation.DatabaseOperation;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,7 +38,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.b2c.prototype.dao.ConfigureSessionFactoryTest.getSessionFactory;
-import static com.b2c.prototype.dao.DataSourcePool.getHikariDataSource;
+import static com.b2c.prototype.dao.DataSourcePool.getPostgresDataSource;
+import static com.b2c.prototype.dao.DatabaseQueries.cleanDatabase;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -77,7 +79,7 @@ public abstract class AbstractTransitiveSelfEntityDaoTest {
 
     @BeforeAll
     public static void setUpAll() {
-        DataSource dataSource = getHikariDataSource();
+        DataSource dataSource = getPostgresDataSource();
         connectionHolder = dataSource::getConnection;
         executor = DataSetExecutorImpl.instance("executor-name", connectionHolder);
 
@@ -102,6 +104,11 @@ public abstract class AbstractTransitiveSelfEntityDaoTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @AfterAll
+    public static void tearDown() {
+        cleanDatabase(connectionHolder);
     }
 
     protected abstract String getEmptyDataSetPath();

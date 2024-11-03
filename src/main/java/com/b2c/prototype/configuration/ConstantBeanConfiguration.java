@@ -154,23 +154,4 @@ public class ConstantBeanConfiguration {
         }};
     }
 
-//    @Bean
-//    public Map<Class<?>, Map<String, Object>> classParameterMap(IParameterFactory parameterFactory) {
-//        parameterFactory.createStringParameter("name", "someString");
-//        List<DeliveryType> userRoleList = deliveryTypeDao.getEntityList();
-//        Map<String, Object> map = userRoleList.stream()
-//                .collect(Collectors.toMap(DeliveryType::getName, Function.identity(), (existing, replacement) -> existing));
-//        return new HashMap<>(){{
-//            put(DeliveryType.class, deliveryTypeMap(deliveryTypeDao));
-//            put(PaymentMethod.class, paymentMethodMap(paymentMethodDao));
-//            put(OrderStatus.class, orderStatusMap(orderStatusDao));
-//            put(Category.class, categoryMap(categoryDao));
-//            put(ItemType.class, itemTypeMap(itemTypeDao));
-//            put(Brand.class, brandMap(brandDao));
-//            put(Rating.class, ratingMap(ratingDao));
-//            put(ItemStatus.class, itemStatusMap(itemStatusDao));
-//            put(OptionGroup.class, optionGroupMap(optionGroupDao));
-//        }};
-//    }
-
 }

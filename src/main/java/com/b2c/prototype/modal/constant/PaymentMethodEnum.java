@@ -1,7 +1,7 @@
 package com.b2c.prototype.modal.constant;
 
 public enum PaymentMethodEnum {
-    CARD("card"),
+    CARD("credit_card"),
     CASH("cash"),
     BLIK("blik system"),
     GOOGLE_PAY("google_pay"),

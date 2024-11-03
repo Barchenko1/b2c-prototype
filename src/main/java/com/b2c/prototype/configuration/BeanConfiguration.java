@@ -4,26 +4,25 @@ import com.b2c.prototype.dao.address.ICountryDao;
 import com.b2c.prototype.dao.address.base.BasicCountryDao;
 import com.b2c.prototype.dao.user.ICountryPhoneCodeDao;
 import com.b2c.prototype.dao.user.base.BasicCountryPhoneCodeDao;
-import com.b2c.prototype.dao.user.base.BasicUserInfoDao;
+import com.b2c.prototype.dao.user.base.BasicContactInfoDao;
 import com.b2c.prototype.dao.item.base.BasicCategoryDao;
 import com.b2c.prototype.dao.address.base.BasicAddressDao;
 import com.b2c.prototype.dao.delivery.base.BasicDeliveryDao;
 import com.b2c.prototype.dao.delivery.base.BasicDeliveryTypeDao;
 import com.b2c.prototype.dao.payment.base.BasicPaymentMethodDao;
-import com.b2c.prototype.dao.user.IUserInfoDao;
+import com.b2c.prototype.dao.user.IContactInfoDao;
 import com.b2c.prototype.dao.address.IAddressDao;
 import com.b2c.prototype.dao.delivery.IDeliveryDao;
 import com.b2c.prototype.dao.delivery.IDeliveryTypeDao;
 import com.b2c.prototype.dao.payment.IPaymentMethodDao;
 import com.b2c.prototype.dao.item.ICategoryDao;
-import com.b2c.prototype.dao.user.base.BasicAppUserDao;
+import com.b2c.prototype.dao.user.base.BasicUserProfileDao;
 import com.b2c.prototype.dao.item.base.BasicBrandDao;
-import com.b2c.prototype.dao.bucket.base.BasicBucketDao;
-import com.b2c.prototype.dao.payment.base.BasicCardDao;
+import com.b2c.prototype.dao.embedded.base.BasicBucketDao;
+import com.b2c.prototype.dao.payment.base.BasicCreditCardDao;
 import com.b2c.prototype.dao.item.base.BasicCurrencyDiscountDao;
 import com.b2c.prototype.dao.option.base.BasicOptionItemDao;
 import com.b2c.prototype.dao.option.base.BasicOptionGroupDao;
-import com.b2c.prototype.dao.order.base.BasicOrderHistoryDao;
 import com.b2c.prototype.dao.order.base.BasicOrderItemDao;
 import com.b2c.prototype.dao.order.base.BasicOrderStatusDao;
 import com.b2c.prototype.dao.payment.base.BasicPaymentDao;
@@ -33,14 +32,13 @@ import com.b2c.prototype.dao.item.base.BasicItemStatusDao;
 import com.b2c.prototype.dao.item.base.BasicItemTypeDao;
 import com.b2c.prototype.dao.rating.base.BasicRatingDao;
 import com.b2c.prototype.dao.review.base.BasicReviewDao;
-import com.b2c.prototype.dao.wishlist.base.BasicWishListDao;
-import com.b2c.prototype.dao.bucket.IBucketDao;
+import com.b2c.prototype.dao.embedded.base.BasicWishListDao;
+import com.b2c.prototype.dao.embedded.IBucketDao;
 import com.b2c.prototype.dao.option.IOptionItemDao;
 import com.b2c.prototype.dao.option.IOptionGroupDao;
-import com.b2c.prototype.dao.order.IOrderHistoryDao;
 import com.b2c.prototype.dao.order.IOrderItemDao;
 import com.b2c.prototype.dao.order.IOrderStatusDao;
-import com.b2c.prototype.dao.payment.ICardDao;
+import com.b2c.prototype.dao.payment.ICreditCardDao;
 import com.b2c.prototype.dao.payment.IPaymentDao;
 import com.b2c.prototype.dao.post.IPostDao;
 import com.b2c.prototype.dao.item.IBrandDao;
@@ -50,9 +48,11 @@ import com.b2c.prototype.dao.item.IItemStatusDao;
 import com.b2c.prototype.dao.item.IItemTypeDao;
 import com.b2c.prototype.dao.rating.IRatingDao;
 import com.b2c.prototype.dao.review.IReviewDao;
-import com.b2c.prototype.dao.user.IAppUserDao;
-import com.b2c.prototype.dao.wishlist.IWishListDao;
+import com.b2c.prototype.dao.user.IUserProfileDao;
+import com.b2c.prototype.dao.embedded.IWishListDao;
+import com.tm.core.configuration.manager.DatabaseConfigurationAnnotationClass;
 import com.tm.core.configuration.manager.DatabaseType;
+import com.tm.core.configuration.manager.DatabaseTypeConfiguration;
 import com.tm.core.configuration.manager.ISessionFactoryManager;
 import com.tm.core.configuration.manager.SessionFactoryManager;
 import com.tm.core.dao.identifier.EntityIdentifierDao;
@@ -71,17 +71,44 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Configuration
 public class BeanConfiguration {
 
     @Value("${entity.package.path}")
     private String entityPackagePath;
+    private static final String MAIN_WRITE_DATABASE_CONFIG = "hikari.hibernate.cfg.xml";
+    private static final String CACHE_DATABASE_CONFIG = "embedded.hibernate.cfg.xml";
+    private static final String MAIN_READ_DATABASE_CONFIG = "";
+
+    public DatabaseTypeConfiguration getDatabaseTypeConfiguration() {
+        DatabaseConfigurationAnnotationClass[] databaseConfigurationAnnotationClass =
+                new DatabaseConfigurationAnnotationClass[] {
+                        new DatabaseConfigurationAnnotationClass("hikari.hibernate.cfg.xml"),
+                        new DatabaseConfigurationAnnotationClass("embedded.hibernate.cfg.xml")
+                };
+
+        return new DatabaseTypeConfiguration(DatabaseType.WRITE, databaseConfigurationAnnotationClass);
+    }
 
     @Bean
     public SessionFactory sessionFactory() {
-        ISessionFactoryManager sessionFactoryManager =
-                SessionFactoryManager.getInstance("hikari.hibernate.cfg.xml");
-        return sessionFactoryManager.getSessionFactorySupplier(DatabaseType.WRITE).get();
+        ISessionFactoryManager sessionFactoryManager = SessionFactoryManager.getInstance(getDatabaseTypeConfiguration());
+        return sessionFactoryManager.getSessionFactorySupplier(DatabaseType.WRITE, MAIN_WRITE_DATABASE_CONFIG).get();
+    }
+
+    @Bean
+    public SessionFactory readSessionFactory() {
+        ISessionFactoryManager sessionFactoryManager = SessionFactoryManager.getInstance(getDatabaseTypeConfiguration());
+        return sessionFactoryManager.getSessionFactorySupplier(DatabaseType.READ, "").get();
+    }
+
+    @Bean
+    public SessionFactory embededSessionFactory() {
+        ISessionFactoryManager sessionFactoryManager = SessionFactoryManager.getInstance(getDatabaseTypeConfiguration());
+        return sessionFactoryManager.getSessionFactorySupplier(DatabaseType.WRITE, CACHE_DATABASE_CONFIG).get();
     }
 
     @Bean
@@ -112,8 +139,8 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public IAppUserDao appUserDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
-        return new BasicAppUserDao(sessionFactory, entityIdentifierDao);
+    public IUserProfileDao appUserDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicUserProfileDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
@@ -127,8 +154,8 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public ICardDao cardDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
-        return new BasicCardDao(sessionFactory, entityIdentifierDao);
+    public ICreditCardDao cardDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicCreditCardDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
@@ -139,11 +166,6 @@ public class BeanConfiguration {
     @Bean
     public IOrderStatusDao orderStatusDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
         return new BasicOrderStatusDao(sessionFactory, entityIdentifierDao);
-    }
-
-    @Bean
-    public IOrderHistoryDao orderHistoryDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
-        return new BasicOrderHistoryDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
@@ -232,8 +254,8 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public IUserInfoDao userInfoDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
-        return new BasicUserInfoDao(sessionFactory, entityIdentifierDao);
+    public IContactInfoDao contactInfoDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicContactInfoDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean

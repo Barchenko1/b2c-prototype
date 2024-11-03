@@ -1,0 +1,7 @@
+message_status:
+  - id: 1
+    name: "New"
+message_type:
+  - id: 1
+    name: "InMail"
+message: []

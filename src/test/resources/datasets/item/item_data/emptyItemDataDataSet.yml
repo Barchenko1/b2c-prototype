@@ -1,0 +1,45 @@
+brand:
+  - id: 1
+    name: "Hermes"
+item_status:
+  - id: 1
+    name: "NEW"
+item_type:
+  - id: 1
+    name: "Clothes"
+currency:
+  - id: 1
+    name: "USD"
+price:
+  - id: 1
+    amount: 100
+    currency_id: 1
+currency_discount:
+  - id: 1
+    amount: 5
+    charSequenceCode: "abc"
+    currency_id: 1
+percent_discount:
+  - id: 1
+    amount: 5
+    charSequenceCode: "abc"
+option_group:
+  - id: 1
+    name: "Size"
+option_item:
+  - id: 1
+    optionName: "L"
+    optiongroup_id: 1
+  - id: 2
+    optionName: "M"
+    optiongroup_id: 1
+category:
+  - id: 1
+    name: "parent"
+  - id: 2
+    category_id: 1
+    name: "root"
+  - id: 3
+    category_id: 2
+    name: "child"
+item_data: []

@@ -1,9 +1,0 @@
-country_phone_code:
-  - id: 1
-    code: "+11"
-user_info:
-  - id: 1
-    name: "Wolter"
-    secondName: "White"
-    phoneNumber: "111-111-111"
-    countryphonecode_id: 1

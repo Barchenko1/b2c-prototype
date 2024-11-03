@@ -1,6 +1,6 @@
 package com.b2c.prototype.service.base.payment.base;
 
-import com.b2c.prototype.dao.payment.ICardDao;
+import com.b2c.prototype.dao.payment.ICreditCardDao;
 import com.b2c.prototype.dao.payment.IPaymentDao;
 import com.b2c.prototype.dao.item.ICurrencyDiscountDao;
 import com.b2c.prototype.modal.dto.request.RequestCardDto;
@@ -8,7 +8,8 @@ import com.b2c.prototype.modal.dto.request.RequestDiscountDto;
 import com.b2c.prototype.modal.dto.request.RequestPaymentDto;
 import com.b2c.prototype.modal.dto.update.RequestPaymentDtoUpdate;
 import com.b2c.prototype.modal.entity.item.CurrencyDiscount;
-import com.b2c.prototype.modal.entity.payment.Card;
+import com.b2c.prototype.modal.entity.payment.AbstractCreditCard;
+import com.b2c.prototype.modal.entity.payment.CreditCard;
 import com.b2c.prototype.modal.entity.payment.Payment;
 import com.b2c.prototype.modal.entity.payment.PaymentMethod;
 import com.b2c.prototype.modal.constant.PaymentMethodEnum;
@@ -32,13 +33,13 @@ public class PaymentService extends AbstractGeneralEntityService implements IPay
 
     private final IAsyncProcessor asyncProcessor;
     private final IPaymentDao paymentDao;
-    private final ICardDao cardDao;
+    private final ICreditCardDao cardDao;
     private final ICurrencyDiscountDao discountDao;
     private final IEntityStringMapWrapper<PaymentMethod> paymentMethodEntityMapWrapper;
 
     public PaymentService(IAsyncProcessor asyncProcessor,
                           IPaymentDao paymentDao,
-                          ICardDao cardDao,
+                          ICreditCardDao cardDao,
                           ICurrencyDiscountDao discountDao,
                           IEntityStringMapWrapper<PaymentMethod> paymentMethodEntityMapWrapper) {
         this.asyncProcessor = asyncProcessor;
@@ -55,20 +56,20 @@ public class PaymentService extends AbstractGeneralEntityService implements IPay
 
     @Override
     public void savePayment(RequestPaymentDto requestPaymentDto) {
-        Card card = null;
+        CreditCard creditCard = null;
         if (PaymentMethodEnum.CARD.name().equalsIgnoreCase(requestPaymentDto.getPaymentMethod())) {
-            card = getCard(requestPaymentDto.getCard());
+            creditCard = getCard(requestPaymentDto.getCard());
         }
         Map<Class<?>, Object> processResultMap = executeAsyncProcess(requestPaymentDto);
         Payment payment = Payment.builder()
 //                .amount(requestPaymentDto.getAmount())
-                .card(card)
+                .creditCard(creditCard)
                 .currencyDiscount((CurrencyDiscount) processResultMap.get(CurrencyDiscount.class))
                 .paymentMethod((PaymentMethod) processResultMap.get(PaymentMethod.class))
                 .build();
 
         GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(1, card);
+        generalEntity.addEntityPriority(1, creditCard);
         generalEntity.addEntityPriority(2, payment);
         super.saveEntity(generalEntity);
     }
@@ -78,26 +79,26 @@ public class PaymentService extends AbstractGeneralEntityService implements IPay
         RequestPaymentDto requestPaymentDto = requestPaymentDtoUpdate.getNewEntityDto();
         String searchField = requestPaymentDtoUpdate.getSearchField();
 
-        Card card;
+        CreditCard creditCard;
         if (PaymentMethodEnum.CARD.name().equalsIgnoreCase(requestPaymentDto.getPaymentMethod())) {
-            card = getCard(requestPaymentDto.getCard());
+            creditCard = getCard(requestPaymentDto.getCard());
         } else {
-            card = null;
+            creditCard = null;
         }
         Map<Class<?>, Object> processResultMap = executeAsyncProcess(requestPaymentDto);
         Payment payment = Payment.builder()
 //                .amount(requestPaymentDto.getAmount())
-                .card(card)
+                .creditCard(creditCard)
                 .currencyDiscount((CurrencyDiscount) processResultMap.get(CurrencyDiscount.class))
                 .paymentMethod((PaymentMethod) processResultMap.get(PaymentMethod.class))
                 .build();
 
         GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(1, card);
+        generalEntity.addEntityPriority(1, creditCard);
         generalEntity.addEntityPriority(2, payment);
 
         Consumer<Session> consumer = session -> {
-            session.merge(card);
+            session.merge(creditCard);
             session.merge(payment);
         };
 
@@ -115,9 +116,9 @@ public class PaymentService extends AbstractGeneralEntityService implements IPay
 //        paymentDao.deleteRelationshipEntity();
     }
 
-    private Card getCard(RequestCardDto requestCardDto) {
+    private CreditCard getCard(RequestCardDto requestCardDto) {
         if (requestCardDto != null) {
-            return Card.builder()
+            return CreditCard.builder()
                     .cardNumber(requestCardDto.getCartNumber())
                     .dateOfExpire(requestCardDto.getDateOfExpire())
                     .cvv(requestCardDto.getCvv())
@@ -127,7 +128,7 @@ public class PaymentService extends AbstractGeneralEntityService implements IPay
                     .build();
         }
         Parameter parameter = new Parameter("username", "");
-        return (Card) cardDao.getOptionalEntity(parameter)
+        return (CreditCard) cardDao.getOptionalEntity(parameter)
                 .orElseThrow(RuntimeException::new);
     }
 

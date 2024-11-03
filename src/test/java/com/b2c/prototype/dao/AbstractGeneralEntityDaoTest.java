@@ -14,14 +14,10 @@ import com.tm.core.processor.thread.ThreadLocalSessionManager;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
-import org.dbunit.database.QueryDataSet;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.operation.DatabaseOperation;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,12 +27,10 @@ import javax.sql.DataSource;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Arrays;
 
 import static com.b2c.prototype.dao.ConfigureSessionFactoryTest.getSessionFactory;
-import static com.b2c.prototype.dao.DataSourcePool.getHikariDataSource;
+import static com.b2c.prototype.dao.DataSourcePool.getPostgresDataSource;
 import static com.b2c.prototype.dao.DatabaseQueries.cleanDatabase;
 
 @ExtendWith(MockitoExtension.class)
@@ -58,7 +52,7 @@ public abstract class AbstractGeneralEntityDaoTest {
 
     @BeforeAll
     public static void setUpAll() {
-        DataSource dataSource = getHikariDataSource();
+        DataSource dataSource = getPostgresDataSource();
         connectionHolder = dataSource::getConnection;
         executor = DataSetExecutorImpl.instance("executor-name", connectionHolder);
 
@@ -98,7 +92,6 @@ public abstract class AbstractGeneralEntityDaoTest {
             System.out.println("Loading dataset from: " + dataSetPath);
             System.out.println("Dataset contents: " + Arrays.toString(dataSet.getTableNames()));
 
-//            DatabaseOperation.REFRESH.execute(dbConnection, dataSet);
             DatabaseOperation.CLEAN_INSERT.execute(dbConnection, dataSet);
             connection.commit();
         } catch (Exception e) {

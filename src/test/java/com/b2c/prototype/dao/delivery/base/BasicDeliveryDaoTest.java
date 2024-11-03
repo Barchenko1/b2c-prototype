@@ -100,6 +100,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
                 .build();
 
         return Delivery.builder()
+                .id(1L)
                 .address(address)
                 .deliveryType(deliveryType)
                 .build();
@@ -133,18 +134,20 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
 
     private void checkDelivery(Delivery expectedDelivery, Delivery actualDelivery) {
         assertEquals(expectedDelivery.getId(), actualDelivery.getId());
-        assertEquals(expectedDelivery.getAddress().getId(), actualDelivery.getAddress().getId());
-        assertEquals(expectedDelivery.getAddress().getStreet(), actualDelivery.getAddress().getStreet());
-        assertEquals(expectedDelivery.getAddress().getFlor(), actualDelivery.getAddress().getFlor());
-        assertEquals(expectedDelivery.getAddress().getBuildingNumber(), actualDelivery.getAddress().getBuildingNumber());
-        assertEquals(expectedDelivery.getAddress().getApartmentNumber(), actualDelivery.getAddress().getApartmentNumber());
-        assertEquals(expectedDelivery.getAddress().getZipCode(), actualDelivery.getAddress().getZipCode());
 
-        assertEquals(expectedDelivery.getDeliveryType().getId(), actualDelivery.getDeliveryType().getId());
-        assertEquals(expectedDelivery.getDeliveryType().getName(), actualDelivery.getDeliveryType().getName());
+        Address address = dao.initializeEntity(Address.class, actualDelivery.getAddress().getId());
+        assertEquals(expectedDelivery.getAddress().getId(), address.getId());
+        assertEquals(expectedDelivery.getAddress().getStreet(), address.getStreet());
+        assertEquals(expectedDelivery.getAddress().getFlor(), address.getFlor());
+        assertEquals(expectedDelivery.getAddress().getBuildingNumber(), address.getBuildingNumber());
+        assertEquals(expectedDelivery.getAddress().getApartmentNumber(), address.getApartmentNumber());
+        assertEquals(expectedDelivery.getAddress().getZipCode(), address.getZipCode());
 
-        Country country = dao.initializeEntity(Country.class, actualDelivery.getAddress().getCountry().getId());
+        DeliveryType deliveryType = dao.initializeEntity(DeliveryType.class, actualDelivery.getDeliveryType().getId());
+        assertEquals(expectedDelivery.getDeliveryType().getId(), deliveryType.getId());
+        assertEquals(expectedDelivery.getDeliveryType().getName(), deliveryType.getName());
 
+        Country country = dao.initializeEntity(Country.class, address.getCountry().getId());
         assertEquals(expectedDelivery.getAddress().getCountry().getId(), country.getId());
         assertEquals(expectedDelivery.getAddress().getCountry().getName(), country.getName());
     }
@@ -198,7 +201,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
     }
 
     @Test
-    void saveRelationshipEntity_success() {
+    void saveEntity_success() {
         loadDataSet("/datasets/delivery/delivery/emptyDeliveryWithoutAddressDataSet.yml");
         Delivery delivery = prepareToSaveDelivery();
 
@@ -222,7 +225,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
     }
 
     @Test
-    void saveRelationshipEntity_transactionFailure() {
+    void saveEntity_transactionFailure() {
         Delivery delivery = new Delivery();
         delivery.setId(1L);
 
@@ -253,7 +256,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
     }
 
     @Test
-    void saveRelationshipEntityConsumer_success() {
+    void saveEntityConsumer_success() {
         loadDataSet("/datasets/delivery/delivery/emptyDeliveryWithoutAddressDataSet.yml");
         Consumer<Session> consumer = (Session s) -> {
             Delivery delivery = prepareToSaveDelivery();
@@ -266,7 +269,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
     }
 
     @Test
-    void saveRelationshipEntityConsumer_transactionFailure() {
+    void saveEntityConsumer_transactionFailure() {
         loadDataSet("/datasets/delivery/delivery/emptyDeliveryWithoutAddressDataSet.yml");
         Consumer<Session> consumer = (Session s) -> {
             throw new RuntimeException();
@@ -281,34 +284,21 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
     }
 
     @Test
-    void updateRelationshipEntity_success() {
+    void updateEntity_success() {
         loadDataSet("/datasets/delivery/delivery/testDeliveryDataSet.yml");
-        Supplier<Delivery> relationshipEntitySupplier = () -> {
-            Delivery oldDelivery = prepareTestDelivery();
-            Delivery deliveryToUpdate = prepareToUpdateDelivery();
-            deliveryToUpdate.setId(oldDelivery.getId());
-            deliveryToUpdate.getAddress()
-                    .setId(oldDelivery.getAddress().getId());
-            deliveryToUpdate.getDeliveryType()
-                    .setId(oldDelivery.getDeliveryType().getId());
-
-            return deliveryToUpdate;
-        };
-        dao.updateGeneralEntity(relationshipEntitySupplier);
+        Supplier<Delivery> supplier = this::prepareToUpdateDelivery;
+        dao.updateGeneralEntity(supplier);
         verifyExpectedData("/datasets/delivery/delivery/updateDeliveryDataSet.yml");
     }
 
     @Test
-    void updateRelationshipEntity_transactionFailure() {
-        Delivery delivery = prepareToSaveDelivery();
-        delivery.setId(1L);
-
-        Supplier<Delivery> relationshipRootTestEntitySupplier = () -> {
+    void updateEntity_transactionFailure() {
+        Supplier<Delivery> supplier = () -> {
             throw new RuntimeException();
         };
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            dao.updateGeneralEntity(relationshipRootTestEntitySupplier);
+            dao.updateGeneralEntity(supplier);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -318,13 +308,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
     void updateEntityConsumer_success() {
         loadDataSet("/datasets/delivery/delivery/testDeliveryDataSet.yml");
         Consumer<Session> consumer = (Session s) -> {
-            Delivery oldDelivery = prepareTestDelivery();
             Delivery deliveryToUpdate = prepareToUpdateDelivery();
-            deliveryToUpdate.setId(oldDelivery.getId());
-            deliveryToUpdate.getAddress()
-                    .setId(oldDelivery.getAddress().getId());
-
-            s.merge(deliveryToUpdate.getAddress());
             s.merge(deliveryToUpdate);
         };
         dao.updateGeneralEntity(consumer);
@@ -332,23 +316,23 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
     }
 
     @Test
-    void updateRelationshipEntityConsumer_transactionFailure() {
+    void updateEntityConsumer_transactionFailure() {
         loadDataSet("/datasets/delivery/delivery/testDeliveryDataSet.yml");
-        Consumer<Session> relationshipRootTestEntitySupplier = (Session s) -> {
-            Delivery delivery = prepareToSaveDelivery();
-            delivery.setId(1L);
+        Consumer<Session> RootTestEntitySupplier = (Session s) -> {
+            Delivery delivery = prepareToUpdateDelivery();
             s.merge(delivery);
+            throw new RuntimeException();
         };
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.updateGeneralEntity(relationshipRootTestEntitySupplier);
+            dao.updateGeneralEntity(RootTestEntitySupplier);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
     }
 
     @Test
-    void deleteRelationshipEntity_success() {
+    void deleteEntity_success() {
         loadDataSet("/datasets/delivery/delivery/testDeliveryDataSet.yml");
         Parameter parameter = new Parameter("id", 1);
 
@@ -357,7 +341,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
     }
 
     @Test
-    void deleteRelationshipEntityByConsumer_success() {
+    void deleteEntityByConsumer_success() {
         loadDataSet("/datasets/delivery/delivery/testDeliveryDataSet.yml");
         Consumer<Session> consumer = (Session s) -> {
             Delivery delivery = prepareTestDelivery();
@@ -370,7 +354,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
     }
 
     @Test
-    void deleteRelationshipEntityByConsumer_transactionFailure() {
+    void deleteEntityByConsumer_transactionFailure() {
         loadDataSet("/datasets/delivery/delivery/testDeliveryDataSet.yml");
         Consumer<Session> consumer = (Session s) -> {
             throw new RuntimeException();
@@ -384,7 +368,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
     }
 
     @Test
-    void deleteRelationshipEntityByGeneralEntity_success() {
+    void deleteEntityByGeneralEntity_success() {
         loadDataSet("/datasets/delivery/delivery/testDeliveryDataSet.yml");
         Delivery delivery = prepareTestDelivery();
 
@@ -397,7 +381,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
     }
 
     @Test
-    void deleteRelationshipEntityByGeneralEntity_transactionFailure() {
+    void deleteEntityByGeneralEntity_transactionFailure() {
         loadDataSet("/datasets/delivery/delivery/testDeliveryDataSet.yml");
         SessionFactory sessionFactory = mock(SessionFactory.class);
         Session session = mock(Session.class);
@@ -428,7 +412,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
     }
 
     @Test
-    void deleteRelationshipEntityWithClass_success() {
+    void deleteEntityWithClass_success() {
         loadDataSet("/datasets/delivery/delivery/testDeliveryDataSet.yml");
         Parameter parameter = new Parameter("id", 1);
 
@@ -437,7 +421,8 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
     }
 
     @Test
-    void deleteRelationshipEntity_transactionFailure() {
+    void deleteEntity_transactionFailure() {
+        loadDataSet("/datasets/delivery/delivery/testDeliveryDataSet.yml");
         Delivery delivery = new Delivery();
 
         Parameter parameter = new Parameter("id", 1L);
@@ -469,7 +454,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
     }
 
     @Test
-    void deleteRelationshipEntityWithClass_transactionFailure() {
+    void deleteEntityWithClass_transactionFailure() {
         loadDataSet("/datasets/delivery/delivery/testDeliveryDataSet.yml");
         Delivery delivery = new Delivery();
 

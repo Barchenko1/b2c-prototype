@@ -1,0 +1,14 @@
+country_phone_code:
+  - id: 1
+    code: "+11"
+  - id: 2
+    code: "+22"
+contact_phone:
+  - id: 1
+    phoneNumber: "222-222-222"
+    country_phone_code_id: 2
+contact_info:
+  - id: 1
+    name: "Update Wolter"
+    secondName: "Update White"
+    contact_phone_id: 1

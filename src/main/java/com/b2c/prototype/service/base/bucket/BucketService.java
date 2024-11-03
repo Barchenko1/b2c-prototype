@@ -1,10 +1,10 @@
 package com.b2c.prototype.service.base.bucket;
 
 import com.b2c.prototype.modal.dto.request.RequestItemBucketDto;
-import com.b2c.prototype.dao.bucket.IBucketDao;
-import com.b2c.prototype.modal.entity.bucket.Bucket;
-import com.b2c.prototype.service.general.AbstractGeneralEntityService;
-import com.tm.core.dao.general.IGeneralEntityDao;
+import com.b2c.prototype.dao.embedded.IBucketDao;
+import com.b2c.prototype.modal.embedded.bucket.Bucket;
+import com.b2c.prototype.service.single.AbstractSingleEntityService;
+import com.tm.core.dao.single.ISingleEntityDao;
 import com.tm.core.modal.GeneralEntity;
 import com.tm.core.processor.finder.parameter.Parameter;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.function.Supplier;
 
 @Slf4j
-public class BucketService extends AbstractGeneralEntityService implements IBucketService {
+public class BucketService extends AbstractSingleEntityService implements IBucketService {
 
     private final IBucketDao bucketDao;
 
@@ -21,7 +21,7 @@ public class BucketService extends AbstractGeneralEntityService implements IBuck
     }
 
     @Override
-    protected IGeneralEntityDao getEntityDao() {
+    protected ISingleEntityDao getEntityDao() {
         return this.bucketDao;
     }
 
@@ -30,7 +30,7 @@ public class BucketService extends AbstractGeneralEntityService implements IBuck
         Bucket bucket = Bucket.builder()
 //                .dateOfAdded(System.currentTimeMillis())
 //                .item(null)
-                .user(null)
+//                .userProfile(null)
                 .build();
 
         GeneralEntity generalEntity = new GeneralEntity();
@@ -46,7 +46,7 @@ public class BucketService extends AbstractGeneralEntityService implements IBuck
                     parameterFactory.createStringParameter("articularId", itemBucketDto.getArticularId())
             );
 
-            return getEntityDao().getGeneralEntity(parameters);
+            return getEntityDao().getEntity(parameters);
         };
         super.updateEntity(bucketSupplier);
     }

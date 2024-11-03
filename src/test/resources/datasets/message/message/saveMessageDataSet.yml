@@ -1,0 +1,18 @@
+message_status:
+  - id: 1
+    name: "New"
+message_type:
+  - id: 1
+    name: "InMail"
+message:
+  - dateOfSend: 100
+    title: "title"
+    message: "message"
+    sender: "sender@email.com"
+    subscribe: "system"
+    sendSystem: "system"
+    status_id: 1
+    type_id: 1
+message_receivers:
+  - receiver_email: "receiver1@email.com"
+  - receiver_email: "receiver2@email.com"

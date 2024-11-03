@@ -15,4 +15,4 @@ address:
 delivery:
   - id: 1
     address_id: 1
-    deliverytype_id: 1
+    delivery_type_id: 1

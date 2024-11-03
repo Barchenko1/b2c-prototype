@@ -14,4 +14,4 @@ address:
     country_id: 1
 delivery:
   - address_id: 1
-    deliverytype_id: 1
+    delivery_type_id: 1

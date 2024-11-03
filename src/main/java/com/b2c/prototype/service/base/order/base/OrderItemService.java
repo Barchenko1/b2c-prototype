@@ -2,7 +2,7 @@ package com.b2c.prototype.service.base.order.base;
 
 import com.b2c.prototype.dao.item.IItemDao;
 import com.b2c.prototype.dao.order.IOrderItemDao;
-import com.b2c.prototype.dao.user.IUserInfoDao;
+import com.b2c.prototype.dao.user.IContactInfoDao;
 import com.b2c.prototype.dao.cashed.IEntityStringMapWrapper;
 import com.b2c.prototype.modal.constant.OrderStatusEnum;
 import com.b2c.prototype.modal.dto.request.RequestAddressDto;
@@ -10,7 +10,7 @@ import com.b2c.prototype.modal.dto.request.RequestDeliveryDto;
 import com.b2c.prototype.modal.dto.request.RequestItemDto;
 import com.b2c.prototype.modal.dto.request.RequestOrderItemDto;
 import com.b2c.prototype.modal.dto.request.RequestPaymentDto;
-import com.b2c.prototype.modal.dto.request.RequestUserInfoDto;
+import com.b2c.prototype.modal.dto.request.RequestContactInfoDto;
 import com.b2c.prototype.modal.dto.update.RequestOrderItemDtoUpdate;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
@@ -20,7 +20,6 @@ import com.b2c.prototype.modal.entity.order.OrderItem;
 import com.b2c.prototype.modal.entity.order.OrderStatus;
 import com.b2c.prototype.modal.entity.payment.Payment;
 import com.b2c.prototype.modal.entity.payment.PaymentMethod;
-import com.b2c.prototype.modal.entity.user.UserInfo;
 import com.b2c.prototype.processor.IAsyncProcessor;
 import com.b2c.prototype.processor.Task;
 import com.b2c.prototype.service.base.order.IOrderItemService;
@@ -44,7 +43,7 @@ public class OrderItemService extends AbstractGeneralEntityService implements IO
     private final IAsyncProcessor asyncProcessor;
     private final IOrderItemDao orderItemDao;
     private final IItemDao itemDao;
-    private final IUserInfoDao userInfoDao;
+    private final IContactInfoDao contactInfoDao;
     private final IEntityStringMapWrapper<DeliveryType> deliveryTypeMapWrapper;
     private final IEntityStringMapWrapper<PaymentMethod> paymentMethodMapWrapper;
     private final IEntityStringMapWrapper<OrderStatus> orderStatusEntityMapWrapper;
@@ -53,14 +52,14 @@ public class OrderItemService extends AbstractGeneralEntityService implements IO
     public OrderItemService(IAsyncProcessor asyncProcessor,
                             IOrderItemDao orderItemDao,
                             IItemDao itemDao,
-                            IUserInfoDao userInfoDao,
+                            IContactInfoDao contactInfoDao,
                             IEntityStringMapWrapper<DeliveryType> deliveryTypeMapWrapper,
                             IEntityStringMapWrapper<PaymentMethod> paymentMethodMapWrapper,
                             IEntityStringMapWrapper<OrderStatus> orderStatusEntityMapWrapper) {
         this.asyncProcessor = asyncProcessor;
         this.orderItemDao = orderItemDao;
         this.itemDao = itemDao;
-        this.userInfoDao = userInfoDao;
+        this.contactInfoDao = contactInfoDao;
         this.deliveryTypeMapWrapper = deliveryTypeMapWrapper;
         this.paymentMethodMapWrapper = paymentMethodMapWrapper;
         this.orderStatusEntityMapWrapper = orderStatusEntityMapWrapper;
@@ -85,7 +84,7 @@ public class OrderItemService extends AbstractGeneralEntityService implements IO
                     .dateOfCreate(System.currentTimeMillis())
 //                    .itemList((List<Item>) processResultMap.get(List.class))
                     .delivery((Delivery) processResultMap.get(Delivery.class))
-                    .userInfoList((List<UserInfo>) processResultMap.get(List.class))
+//                    .userInfoList((List<ContactInfo>) processResultMap.get(List.class))
                     .orderStatus((OrderStatus) processResultMap.get(OrderStatus.class))
                     .payment((Payment) processResultMap.get(Payment.class))
                     .note(requestOrderItemDto.getNote())
@@ -171,12 +170,11 @@ public class OrderItemService extends AbstractGeneralEntityService implements IO
                     CurrencyDiscount currencyDiscount = CurrencyDiscount.builder()
                             .build();
 
-                    Payment payment = Payment.builder()
+                    return Payment.builder()
                             .paymentMethod(paymentMethod)
 //                            .amount(requestPaymentDto.getAmount())
                             .currencyDiscount(currencyDiscount)
                             .build();
-                    return payment;
                 },
                 Payment.class
         );
@@ -193,9 +191,9 @@ public class OrderItemService extends AbstractGeneralEntityService implements IO
                 List.class
         );
 
-        Task userInfoTask = new Task(
+        Task contactInfoTask = new Task(
                 () -> {
-                    List<RequestUserInfoDto> requestItemDtoList = requestOrderItemDto.getRequestUserInfoDtoList();
+                    List<RequestContactInfoDto> requestItemDtoList = requestOrderItemDto.getRequestContactInfoDtoList();
                     Parameter[] parameters = requestItemDtoList.stream()
                             .map(requestItemDto -> new Parameter("name", requestItemDto.getName()))
                             .toArray(Parameter[]::new);
@@ -204,7 +202,7 @@ public class OrderItemService extends AbstractGeneralEntityService implements IO
                 List.class
         );
 
-        return asyncProcessor.process(orderItemStatusTask, deliveryTask, paymentTask, itemTask, userInfoTask);
+        return asyncProcessor.process(orderItemStatusTask, deliveryTask, paymentTask, itemTask, contactInfoTask);
     }
 
 }

@@ -4,7 +4,6 @@ import com.b2c.prototype.dao.AbstractGeneralEntityDaoTest;
 import com.b2c.prototype.modal.entity.item.Item;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
-import com.b2c.prototype.modal.entity.price.Currency;
 import com.tm.core.dao.general.AbstractGeneralEntityDao;
 import com.tm.core.dao.identifier.EntityIdentifierDao;
 import com.tm.core.modal.GeneralEntity;
@@ -63,7 +62,6 @@ class BasicOptionItemDaoTest extends AbstractGeneralEntityDaoTest {
         return OptionItem.builder()
                 .optionGroup(optionGroup)
                 .optionName("L")
-                .items(null)
                 .build();
     }
 
@@ -77,7 +75,6 @@ class BasicOptionItemDaoTest extends AbstractGeneralEntityDaoTest {
                 .id(1L)
                 .optionGroup(optionGroup)
                 .optionName("L")
-                .items(null)
                 .build();
     }
 
@@ -91,7 +88,6 @@ class BasicOptionItemDaoTest extends AbstractGeneralEntityDaoTest {
                 .id(1L)
                 .optionGroup(optionGroup)
                 .optionName("Red")
-                .items(null)
                 .build();
     }
 

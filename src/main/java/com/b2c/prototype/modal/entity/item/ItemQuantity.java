@@ -10,14 +10,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "item_quantity")
@@ -30,12 +32,14 @@ public class ItemQuantity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinTable(
-            name = "item_quantity_item",
+            name = "item_quantity_item_data",
             joinColumns = {@JoinColumn(name = "item_quantity_id")},
-            inverseJoinColumns = {@JoinColumn(name = "item_id")}
+            inverseJoinColumns = {@JoinColumn(name = "item_data_id")}
     )
-    private List<Item> itemList;
+    @Builder.Default
+    @EqualsAndHashCode.Exclude
+    private Set<ItemData> itemDataSet = new HashSet<>();
     private int quantity;
 }

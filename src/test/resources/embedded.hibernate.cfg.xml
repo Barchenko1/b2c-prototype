@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+
+        <!-- Database connection properties for SQLite -->
+        <property name="hibernate.connection.driver_class">org.sqlite.JDBC</property>
+        <property name="hibernate.connection.url">jdbc:sqlite:data/cachetestdb.sqlite</property>
+        <property name="hibernate.dialect">org.hibernate.community.dialect.SQLiteDialect</property>
+        <property name="hibernate.physical_naming_strategy">org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl</property>
+
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
+        <property name="hibernate.hbm2ddl.auto">create-drop</property>
+
+        <property name="hibernate.connection.autocommit">false</property>
+
+        <property name="hibernate.connection.isolation">2</property>
+        <!-- add annotated resources here -->
+
+<!--        <mapping class="com.b2c.prototype.modal.embedded.payment.TempCreditCard" />-->
+        <mapping class="com.b2c.prototype.modal.entity.user.CountryPhoneCode" />
+        <mapping class="com.b2c.prototype.modal.entity.user.ContactPhone" />
+        <mapping class="com.b2c.prototype.modal.entity.user.ContactInfo" />
+<!--        <mapping class="com.b2c.prototype.modal.embedded.user.TempContactInfo" />-->
+        <mapping class="com.b2c.prototype.modal.entity.price.Currency" />
+        <mapping class="com.b2c.prototype.modal.entity.price.Price" />
+        <mapping class="com.b2c.prototype.modal.entity.item.CurrencyDiscount" />
+        <mapping class="com.b2c.prototype.modal.entity.payment.CreditCard" />
+        <mapping class="com.b2c.prototype.modal.entity.payment.PaymentMethod" />
+        <mapping class="com.b2c.prototype.modal.entity.payment.Payment" />
+<!--        <mapping class="com.b2c.prototype.modal.embedded.payment.TempPayment" />-->
+        <mapping class="com.b2c.prototype.modal.entity.delivery.DeliveryType" />
+        <mapping class="com.b2c.prototype.modal.entity.address.Country" />
+        <mapping class="com.b2c.prototype.modal.entity.address.Address" />
+        <mapping class="com.b2c.prototype.modal.entity.delivery.Delivery" />
+<!--        <mapping class="com.b2c.prototype.modal.embedded.delivery.TempDelivery" />-->
+        <mapping class="com.b2c.prototype.modal.entity.order.OrderStatus" />
+        <mapping class="com.b2c.prototype.modal.embedded.order.TempOrderItem" />
+        <mapping class="com.b2c.prototype.modal.embedded.user.TempUserProfile" />
+        <mapping class="com.b2c.prototype.modal.embedded.item.TempItemDataQuantity" />
+        <mapping class="com.b2c.prototype.modal.embedded.item.TempItemData" />
+        <mapping class="com.b2c.prototype.modal.embedded.bucket.Bucket" />
+        <mapping class="com.b2c.prototype.modal.embedded.history.ViewHistory" />
+        <mapping class="com.b2c.prototype.modal.embedded.wishlist.Wishlist" />
+    </session-factory>
+</hibernate-configuration>

@@ -1,0 +1,6 @@
+country_phone_code:
+  - id: 1
+    code: "+11"
+  - id: 2
+    code: "+22"
+contact_phone: []

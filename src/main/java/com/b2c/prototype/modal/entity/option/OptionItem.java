@@ -1,6 +1,6 @@
 package com.b2c.prototype.modal.entity.option;
 
-import com.b2c.prototype.modal.entity.item.Item;
+import com.b2c.prototype.modal.entity.item.ItemData;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,29 +32,21 @@ public class OptionItem {
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
     private String optionName;
-    @ManyToMany(mappedBy = "optionItems", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToMany(mappedBy = "optionItemSet", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @Builder.Default
     @ToString.Exclude
-    private Set<Item> items = new HashSet<>();
+    private Set<ItemData> itemDataSet = new HashSet<>();
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private OptionGroup optionGroup;
 
-    public void addItem(Item item) {
-        this.items.add(item);
-        item.getOptionItems().add(this);
+    public void addItem(ItemData itemData) {
+        this.itemDataSet.add(itemData);
+        itemData.getOptionItemSet().add(this);
     }
 
-    public void removeItem(Item item) {
-        this.items.remove(item);
-        item.getOptionItems().remove(this);
+    public void removeItem(ItemData itemData) {
+        this.itemDataSet.remove(itemData);
+        itemData.getOptionItemSet().remove(this);
     }
 
-//    @PreRemove
-//    private void preRemove() {
-//        if (items != null && !items.isEmpty()) {
-//            for (Item item : items) {
-//                item.getOptionItems().remove(this);
-//            }
-//        }
-//    }
 }

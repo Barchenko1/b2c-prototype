@@ -13,7 +13,6 @@ import com.b2c.prototype.modal.entity.item.ItemType;
 import com.b2c.prototype.modal.constant.ItemStatusEnum;
 import com.b2c.prototype.dao.cashed.IEntityStringMapWrapper;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
-import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.processor.IAsyncProcessor;
 import com.b2c.prototype.processor.Task;
 import com.b2c.prototype.service.base.item.IItemService;
@@ -28,9 +27,6 @@ import org.hibernate.Transaction;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-
-import static com.b2c.prototype.util.UniqueIdUtil.getUUID;
 
 @Slf4j
 public class ItemService extends AbstractGeneralEntityService implements IItemService {
@@ -92,14 +88,14 @@ public class ItemService extends AbstractGeneralEntityService implements IItemSe
             Map<Class<?>, Object> processResultMap = executeAsyncProcess(requestItemDto);
 
             Item item = Item.builder()
-                    .name(requestItemDto.getName())
-                    .articularId(getUUID())
-                    .dateOfCreate(System.currentTimeMillis())
-                    .brand((Brand) processResultMap.get(Brand.class))
-                    .itemType((ItemType) processResultMap.get(ItemType.class))
-                    .category((Category) processResultMap.get(Category.class))
-                    .status((ItemStatus) processResultMap.get(ItemStatus.class))
-                    .optionItems((Set<OptionItem>) processResultMap.get(OptionItem.class))
+//                    .name(requestItemDto.getName())
+//                    .articularId(getUUID())
+//                    .dateOfCreate(System.currentTimeMillis())
+//                    .brand((Brand) processResultMap.get(Brand.class))
+//                    .itemType((ItemType) processResultMap.get(ItemType.class))
+//                    .category((Category) processResultMap.get(Category.class))
+//                    .status((ItemStatus) processResultMap.get(ItemStatus.class))
+//                    .optionItems((Set<OptionItem>) processResultMap.get(OptionItem.class))
                     .build();
 
             session.persist(item);

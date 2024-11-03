@@ -3,15 +3,15 @@ package com.b2c.prototype.configuration;
 import com.b2c.prototype.dao.item.IItemDao;
 import com.b2c.prototype.dao.order.IOrderItemDao;
 import com.b2c.prototype.dao.payment.IPaymentMethodDao;
-import com.b2c.prototype.dao.user.IUserInfoDao;
-import com.b2c.prototype.dao.bucket.IBucketDao;
+import com.b2c.prototype.dao.user.IContactInfoDao;
+import com.b2c.prototype.dao.embedded.IBucketDao;
 import com.b2c.prototype.dao.address.IAddressDao;
 import com.b2c.prototype.dao.delivery.IDeliveryDao;
-import com.b2c.prototype.dao.payment.ICardDao;
+import com.b2c.prototype.dao.payment.ICreditCardDao;
 import com.b2c.prototype.dao.payment.IPaymentDao;
 import com.b2c.prototype.dao.item.ICategoryDao;
 import com.b2c.prototype.dao.item.ICurrencyDiscountDao;
-import com.b2c.prototype.dao.wishlist.IWishListDao;
+import com.b2c.prototype.dao.embedded.IWishListDao;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.ItemStatus;
@@ -25,14 +25,12 @@ import com.b2c.prototype.processor.AsyncProcessor;
 import com.b2c.prototype.processor.IAsyncProcessor;
 import com.b2c.prototype.service.base.address.AddressService;
 import com.b2c.prototype.service.base.address.IAddressService;
-import com.b2c.prototype.service.base.appuser.AppUserService;
-import com.b2c.prototype.service.base.appuser.IAppUserService;
 import com.b2c.prototype.service.base.order.IOrderItemService;
 import com.b2c.prototype.service.base.order.base.OrderItemService;
 import com.b2c.prototype.service.base.payment.IPaymentMethodService;
 import com.b2c.prototype.service.base.payment.base.PaymentMethodService;
 import com.b2c.prototype.service.base.post.PostService;
-import com.b2c.prototype.service.base.userinfo.IUserInfoService;
+import com.b2c.prototype.service.base.contactinfo.IContactInfoService;
 import com.b2c.prototype.service.base.bucket.BucketService;
 import com.b2c.prototype.service.base.bucket.IBucketService;
 import com.b2c.prototype.service.base.card.CreditCardService;
@@ -47,8 +45,10 @@ import com.b2c.prototype.service.base.post.IPostService;
 import com.b2c.prototype.service.base.item.IItemService;
 import com.b2c.prototype.service.base.item.base.ItemService;
 import com.b2c.prototype.dao.post.IPostDao;
-import com.b2c.prototype.dao.user.IAppUserDao;
-import com.b2c.prototype.service.base.userinfo.UserInfoService;
+import com.b2c.prototype.dao.user.IUserProfileDao;
+import com.b2c.prototype.service.base.contactinfo.ContactInfoService;
+import com.b2c.prototype.service.base.userprofile.IUserProfileService;
+import com.b2c.prototype.service.base.userprofile.UserProfileService;
 import com.b2c.prototype.service.base.wishlist.IWishListService;
 import com.b2c.prototype.service.base.wishlist.WishListService;
 import com.b2c.prototype.gateway.IRestClient;
@@ -85,10 +85,10 @@ public class ServiceBeanConfiguration {
     // app service
 
     @Bean
-    public IAppUserService appUserService(IRestClient restClient,
-                                          IAppUserDao appUserDao,
-                                          IEntityIdentifierDao entityIdentifierDao) {
-        return new AppUserService(restClient, appUserDao, entityIdentifierDao);
+    public IUserProfileService appUserService(IRestClient restClient,
+                                              IUserProfileDao appUserDao,
+                                              IEntityIdentifierDao entityIdentifierDao) {
+        return new UserProfileService(restClient, appUserDao, entityIdentifierDao);
     }
 
     @Bean
@@ -97,8 +97,8 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public IUserInfoService userInfoService(IUserInfoDao userInfoDao) {
-        return new UserInfoService(userInfoDao);
+    public IContactInfoService contactInfoService(IContactInfoDao contactInfoDao) {
+        return new ContactInfoService(contactInfoDao);
     }
 
     @Bean
@@ -123,14 +123,14 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public ICardService cardService(ICardDao cardDao) {
+    public ICardService cardService(ICreditCardDao cardDao) {
         return new CreditCardService(cardDao);
     }
 
     @Bean
     public IPaymentService paymentService(IAsyncProcessor asyncProcessor,
                                           IPaymentDao paymentDao,
-                                          ICardDao cardDao,
+                                          ICreditCardDao cardDao,
                                           ICurrencyDiscountDao discountDao,
                                           IEntityStringMapWrapper<PaymentMethod> paymentMethodEntityMapWrapper) {
         return new PaymentService(
@@ -168,7 +168,7 @@ public class ServiceBeanConfiguration {
     public IOrderItemService orderItemService(IAsyncProcessor asyncProcessor,
                                               IOrderItemDao orderItemDao,
                                               IItemDao itemDao,
-                                              IUserInfoDao userInfoDao,
+                                              IContactInfoDao contactInfoDao,
                                               IEntityStringMapWrapper<DeliveryType> deliveryTypeMapWrapper,
                                               IEntityStringMapWrapper<PaymentMethod> paymentMethodMapWrapper,
                                               IEntityStringMapWrapper<OrderStatus> orderStatusMapWrapper) {
@@ -176,7 +176,7 @@ public class ServiceBeanConfiguration {
                 asyncProcessor,
                 orderItemDao,
                 itemDao,
-                userInfoDao,
+                contactInfoDao,
                 deliveryTypeMapWrapper,
                 paymentMethodMapWrapper,
                 orderStatusMapWrapper

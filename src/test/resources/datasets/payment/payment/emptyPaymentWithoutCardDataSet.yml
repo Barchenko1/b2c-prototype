@@ -1,4 +1,4 @@
-card: []
+credit_card: []
 payment_method:
   - id: 1
     method: "Card"

@@ -1,33 +1,33 @@
 package com.b2c.prototype.service.base.wishlist;
 
-import com.b2c.prototype.dao.wishlist.IWishListDao;
+import com.b2c.prototype.dao.embedded.IWishListDao;
 import com.b2c.prototype.modal.dto.request.RequestWishListDto;
-import com.b2c.prototype.modal.entity.wishlist.Wishlist;
-import com.b2c.prototype.service.general.AbstractGeneralEntityService;
-import com.tm.core.dao.general.IGeneralEntityDao;
+import com.b2c.prototype.modal.embedded.wishlist.Wishlist;
+import com.b2c.prototype.service.single.AbstractSingleEntityService;
+import com.tm.core.dao.single.ISingleEntityDao;
 import com.tm.core.modal.GeneralEntity;
 import com.tm.core.processor.finder.parameter.Parameter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class WishListService extends AbstractGeneralEntityService implements IWishListService {
-    private final IWishListDao wishListDao;
+public class WishListService extends AbstractSingleEntityService implements IWishListService {
+    private final ISingleEntityDao wishListDao;
 
     public WishListService(IWishListDao wishListDao) {
         this.wishListDao = wishListDao;
     }
 
     @Override
-    protected IGeneralEntityDao getEntityDao() {
+    protected ISingleEntityDao getEntityDao() {
         return this.wishListDao;
     }
 
     @Override
     public void addToWishList(RequestWishListDto requestItemBucketDto) {
         Wishlist wishlist = Wishlist.builder()
-                .dateOfCreate(System.currentTimeMillis())
-                .user(null)
-                .item(null)
+                .dateOfUpdate(System.currentTimeMillis())
+//                .userProfile(null)
+//                .item(null)
                 .build();
         GeneralEntity generalEntity = new GeneralEntity();
         generalEntity.addEntityPriority(1, wishlist);

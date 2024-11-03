@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.b2c.prototype.dao.ConfigureSessionFactoryTest.getSessionFactory;
-import static com.b2c.prototype.dao.DataSourcePool.getHikariDataSource;
+import static com.b2c.prototype.dao.DataSourcePool.getPostgresDataSource;
 import static com.b2c.prototype.dao.DatabaseQueries.cleanDatabase;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -55,7 +55,7 @@ public abstract class AbstractSingleEntityDaoTest {
     protected static SessionFactory sessionFactory;
 
     protected static IEntityIdentifierDao entityIdentifierDao;
-    private static ConnectionHolder connectionHolder;
+    protected static ConnectionHolder connectionHolder;
     private static DataSetExecutor executor;
 
     protected static ISingleEntityDao dao;
@@ -73,7 +73,7 @@ public abstract class AbstractSingleEntityDaoTest {
 
     @BeforeAll
     public static void setUpAll() {
-        DataSource dataSource = getHikariDataSource();
+        DataSource dataSource = getPostgresDataSource();
         connectionHolder = dataSource::getConnection;
         executor = DataSetExecutorImpl.instance("executor-name", connectionHolder);
 

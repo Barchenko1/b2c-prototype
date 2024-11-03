@@ -1,0 +1,5 @@
+temp_user_profile:
+  - id: 1
+    sessionId: "bbb"
+    email: "bbb@mail.com"
+    username: "bbb"

@@ -1,4 +1,4 @@
-card:
+credit_card:
   - cardNumber: "4444-1111-2222-3333"
     dateOfExpire: "06/28"
     cvv: 818
@@ -23,5 +23,5 @@ currency_discount:
     currency_id: 1
 payment:
   - paymentId: "1"
-    paymentmethod_id: 1
+    payment_method_id: 1
     currencydiscount_id: 1

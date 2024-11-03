@@ -66,8 +66,26 @@ post:
     authorEmail: "child@email.com"
     uniquePostId: "3"
     dateOfCreate: 100000
-item:
-  - name: "name"
+rating:
+  - id: 1
+    value: 1
+  - id: 2
+    value: 2
+  - id: 3
+    value: 3
+  - id: 4
+    value: 4
+  - id: 5
+    value: 5
+review:
+  - id: 1
+    title: "title"
+    message: "message"
+    dateOfCreate: 100
+    rating_id: 5
+item_data:
+  - id: 1
+    name: "name"
     articularId: "100"
     dateOfCreate: "100"
     brand_id: 1
@@ -76,9 +94,11 @@ item:
     itemtype_id: 1
     status_id: 1
     price_id: 1
-item_option:
-  - option_item_id: 1
-  - option_item_id: 2
+item:
+  - itemdata_id: 1
+item_data_option:
+  - optionitem_id: 1
+  - optionitem_id: 2
 item_post:
   - post_id: 1
   - post_id: 2

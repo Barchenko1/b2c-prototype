@@ -25,7 +25,6 @@ public class DiscountService extends AbstractSingleEntityService implements IDis
     public void saveDiscount(RequestDiscountDto requestDiscountDto) {
         CurrencyDiscount currencyDiscount = CurrencyDiscount.builder()
                 .amount(requestDiscountDto.getAmount())
-//                .currency(requestDiscountDto.isCurrency())
                 .build();
 
         super.saveEntity(currencyDiscount);
@@ -38,8 +37,6 @@ public class DiscountService extends AbstractSingleEntityService implements IDis
 
         CurrencyDiscount newCurrencyDiscount = CurrencyDiscount.builder()
                 .amount(requestNewDiscountDto.getAmount())
-//                .isPercents(requestNewDiscountDto.isPercents())
-//                .isCurrency(requestNewDiscountDto.isCurrency())
                 .build();
 
         Parameter[] parameters = parameterFactory.createParameterArray(

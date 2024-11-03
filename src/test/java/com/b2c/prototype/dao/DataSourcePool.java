@@ -15,35 +15,51 @@ public final class DataSourcePool {
     private static final long IDLE_TIMEOUT = 600000; // 10 minutes
     private static final long MAX_LIFETIME = 1800000; // 30 minutes
 
-    private static HikariDataSource dataSource;
+    private static final String SQLITE_DRIVER = "org.sqlite.JDBC";
+    private static final String SQLITE_DB_URL = "jdbc:sqlite:data/cachetestdb.sqlite";
+
+    private static HikariDataSource postgresDataSource;
+    private static HikariDataSource sqliteDataSource;
 
     private DataSourcePool() {}
 
-    public static HikariDataSource getHikariDataSource() {
+    public static HikariDataSource getPostgresDataSource() {
         synchronized (DataSourcePool.class) {
-            if (dataSource == null) {
-                dataSource = new HikariDataSource();
-                dataSource.setJdbcUrl(POSTGRES_DB_URL);
-                dataSource.setUsername(POSTGRES_USERNAME);
-                dataSource.setPassword(POSTGRES_PASSWORD);
-                dataSource.setDriverClassName(POSTGRES_DRIVER);
+            if (postgresDataSource == null) {
+                postgresDataSource = new HikariDataSource();
+                postgresDataSource.setJdbcUrl(POSTGRES_DB_URL);
+                postgresDataSource.setUsername(POSTGRES_USERNAME);
+                postgresDataSource.setPassword(POSTGRES_PASSWORD);
+                postgresDataSource.setDriverClassName(POSTGRES_DRIVER);
 
-                dataSource.setMaximumPoolSize(MAX_POOL_SIZE);
-                dataSource.setMinimumIdle(MIN_IDLE);
-                dataSource.setConnectionTimeout(CONNECTION_TIMEOUT);
-                dataSource.setIdleTimeout(IDLE_TIMEOUT);
-                dataSource.setMaxLifetime(MAX_LIFETIME);
+                postgresDataSource.setMaximumPoolSize(MAX_POOL_SIZE);
+                postgresDataSource.setMinimumIdle(MIN_IDLE);
+                postgresDataSource.setConnectionTimeout(CONNECTION_TIMEOUT);
+                postgresDataSource.setIdleTimeout(IDLE_TIMEOUT);
+                postgresDataSource.setMaxLifetime(MAX_LIFETIME);
             }
 
-            return dataSource;
+            return postgresDataSource;
         }
     }
 
-    public static synchronized void closeDataSource() {
-        if (dataSource != null) {
-            dataSource.close();
-            dataSource = null; // Reset the instance for garbage collection
+    public static HikariDataSource getSqliteDataSource() {
+        synchronized (DataSourcePool.class) {
+            if (sqliteDataSource == null) {
+                sqliteDataSource = new HikariDataSource();
+                sqliteDataSource.setJdbcUrl(SQLITE_DB_URL);
+                sqliteDataSource.setDriverClassName(SQLITE_DRIVER);
+
+                sqliteDataSource.setMaximumPoolSize(MAX_POOL_SIZE);
+                sqliteDataSource.setMinimumIdle(MIN_IDLE);
+                sqliteDataSource.setConnectionTimeout(CONNECTION_TIMEOUT);
+                sqliteDataSource.setIdleTimeout(IDLE_TIMEOUT);
+                sqliteDataSource.setMaxLifetime(MAX_LIFETIME);
+            }
+
+            return sqliteDataSource;
         }
     }
+
 
 }
