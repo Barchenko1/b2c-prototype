@@ -8,7 +8,6 @@ import lombok.Data;
 public class ResponseCardDto {
     private String cartNumber;
     private String dateOfExpire;
-    private int cvv;
     private boolean isActive;
     private String ownerName;
     private String ownerSecondName;

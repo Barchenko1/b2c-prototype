@@ -28,7 +28,7 @@ class BasicItemStatusDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getTestDataSet() {
         ItemStatus itemStatus = ItemStatus.builder()
                 .id(1L)
-                .name("Test")
+                .value("Test")
                 .build();
         return new EntityDataSet<>(itemStatus, "/datasets/item/item_status/testItemStatusDataSet.yml");
     }
@@ -36,7 +36,7 @@ class BasicItemStatusDaoTest extends AbstractSingleEntityDaoTest {
     @Override
     protected EntityDataSet<?> getSaveDataSet() {
         ItemStatus itemStatus = ItemStatus.builder()
-                .name("New")
+                .value("New")
                 .build();
         return new EntityDataSet<>(itemStatus, "/datasets/item/item_status/saveItemStatusDataSet.yml");
     }
@@ -45,7 +45,7 @@ class BasicItemStatusDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getUpdateDataSet() {
         ItemStatus itemStatus = ItemStatus.builder()
                 .id(1L)
-                .name("Update Test")
+                .value("Update Test")
                 .build();
         return new EntityDataSet<>(itemStatus, "/datasets/item/item_status/updateItemStatusDataSet.yml");
     }

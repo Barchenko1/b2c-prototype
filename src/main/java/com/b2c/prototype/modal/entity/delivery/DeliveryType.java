@@ -1,27 +1,14 @@
 package com.b2c.prototype.modal.entity.delivery;
 
-import jakarta.persistence.Column;
+import com.b2c.prototype.modal.base.AbstractOneColumnEntity;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "delivery_type")
-@Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor
-public class DeliveryType {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private long id;
-    @Column(name = "name", nullable = false)
-    private String name;
+public class DeliveryType extends AbstractOneColumnEntity {
 }

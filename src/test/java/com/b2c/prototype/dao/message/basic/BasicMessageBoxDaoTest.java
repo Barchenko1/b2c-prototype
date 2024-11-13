@@ -86,7 +86,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
                 .build();
         Country country = Country.builder()
                 .id(1L)
-                .name("USA")
+                .value("USA")
                 .build();
         Address address = Address.builder()
                 .id(1L)
@@ -132,11 +132,11 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
     private MessageBox prepareTestMessageBox() {
         MessageStatus messageStatus = MessageStatus.builder()
                 .id(1L)
-                .name("New")
+                .value("New")
                 .build();
         MessageType messageType = MessageType.builder()
                 .id(1L)
-                .name("InMail")
+                .value("InMail")
                 .build();
         Message message = Message.builder()
                 .id(1L)
@@ -163,11 +163,11 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
     private MessageBox prepareSaveMessageBox() {
         MessageStatus messageStatus = MessageStatus.builder()
                 .id(1L)
-                .name("New")
+                .value("New")
                 .build();
         MessageType messageType = MessageType.builder()
                 .id(1L)
-                .name("InMail")
+                .value("InMail")
                 .build();
         Message message = Message.builder()
                 .id(1L)
@@ -193,11 +193,11 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
     private MessageBox prepareUpdateMessageBox() {
         MessageStatus messageStatus = MessageStatus.builder()
                 .id(1L)
-                .name("New")
+                .value("New")
                 .build();
         MessageType messageType = MessageType.builder()
                 .id(1L)
-                .name("InMail")
+                .value("InMail")
                 .build();
         Message message1 = Message.builder()
                 .id(1L)
@@ -236,11 +236,11 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
     private Message prepareNewMessage() {
         MessageStatus messageStatus = MessageStatus.builder()
                 .id(1L)
-                .name("New")
+                .value("New")
                 .build();
         MessageType messageType = MessageType.builder()
                 .id(1L)
-                .name("InMail")
+                .value("InMail")
                 .build();
         return Message.builder()
                 .title("title")

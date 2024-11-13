@@ -1,7 +1,6 @@
 package com.b2c.prototype.controller;
 
-import com.b2c.prototype.service.base.bucket.BucketService;
-import com.b2c.prototype.service.base.bucket.IBucketService;
+import com.b2c.prototype.service.embedded.bucket.IBucketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

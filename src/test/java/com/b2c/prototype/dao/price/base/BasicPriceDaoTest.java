@@ -29,7 +29,7 @@ class BasicPriceDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getTestDataSet() {
         Currency currency = Currency.builder()
                 .id(1L)
-                .name("USD")
+                .value("USD")
                 .build();
 
         Price price = Price.builder()
@@ -44,7 +44,7 @@ class BasicPriceDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getSaveDataSet() {
         Currency currency = Currency.builder()
                 .id(1L)
-                .name("USD")
+                .value("USD")
                 .build();
 
         Price price = Price.builder()
@@ -58,7 +58,7 @@ class BasicPriceDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getUpdateDataSet() {
         Currency currency = Currency.builder()
                 .id(1L)
-                .name("USD")
+                .value("USD")
                 .build();
 
         Price price = Price.builder()

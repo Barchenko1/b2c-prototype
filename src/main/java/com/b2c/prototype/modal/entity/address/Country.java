@@ -23,5 +23,5 @@ public class Country {
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
     private String flagImagePath;
-    private String name;
+    private String value;
 }

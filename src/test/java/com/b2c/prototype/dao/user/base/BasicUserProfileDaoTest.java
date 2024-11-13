@@ -96,7 +96,7 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
                 .build();
         Country country = Country.builder()
                 .id(1L)
-                .name("USA")
+                .value("USA")
                 .build();
         Address address = Address.builder()
                 .id(1L)
@@ -157,7 +157,7 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
                 .build();
         Country country = Country.builder()
                 .id(1L)
-                .name("USA")
+                .value("USA")
                 .build();
         Address address = Address.builder()
                 .id(1L)
@@ -217,7 +217,7 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
                 .build();
         Country country = Country.builder()
                 .id(1L)
-                .name("USA")
+                .value("USA")
                 .build();
         Address address = Address.builder()
                 .id(1L)

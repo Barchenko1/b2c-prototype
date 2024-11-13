@@ -47,11 +47,11 @@ class BasicMessageDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getTestDataSet() {
         MessageStatus messageStatus = MessageStatus.builder()
                 .id(1L)
-                .name("New")
+                .value("New")
                 .build();
         MessageType messageType = MessageType.builder()
                 .id(1L)
-                .name("InMail")
+                .value("InMail")
                 .build();
         Message message = Message.builder()
                 .id(1L)
@@ -72,11 +72,11 @@ class BasicMessageDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getSaveDataSet() {
         MessageStatus messageStatus = MessageStatus.builder()
                 .id(1L)
-                .name("New")
+                .value("New")
                 .build();
         MessageType messageType = MessageType.builder()
                 .id(1L)
-                .name("InMail")
+                .value("InMail")
                 .build();
         Message message = Message.builder()
                 .title("title")
@@ -96,11 +96,11 @@ class BasicMessageDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getUpdateDataSet() {
         MessageStatus messageStatus = MessageStatus.builder()
                 .id(1L)
-                .name("New")
+                .value("New")
                 .build();
         MessageType messageType = MessageType.builder()
                 .id(1L)
-                .name("InMail")
+                .value("InMail")
                 .build();
         Message message = Message.builder()
                 .id(1L)

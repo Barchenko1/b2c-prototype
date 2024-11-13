@@ -1,6 +1,6 @@
 country:
   - id: 1
-    name: "USA"
+    value: "USA"
 address:
   - street: "street"
     buildingNumber: 1

@@ -1,3 +1,3 @@
 message_type:
   - id: 1
-    name: "Update InMail"
+    value: "Update InMail"

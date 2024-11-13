@@ -1,27 +1,14 @@
 package com.b2c.prototype.modal.entity.price;
 
-import jakarta.persistence.Column;
+import com.b2c.prototype.modal.base.AbstractOneColumnEntity;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "currency")
-@Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor
-public class Currency {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false, nullable = false)
-    private long id;
-    @Column(name = "name", nullable = false)
-    private String name;
+public class Currency extends AbstractOneColumnEntity {
 }

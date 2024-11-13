@@ -1,7 +1,6 @@
 package com.b2c.prototype.modal.dto.request;
 
-import com.b2c.prototype.modal.dto.common.RequestOneFieldEntityDto;
-import com.b2c.prototype.modal.entity.option.OptionGroup;
+import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import lombok.Data;
 
 import java.util.List;
@@ -14,6 +13,6 @@ public class RequestItemDto {
     private String category;
     private String brand;
     private String itemType;
-    private List<RequestOneFieldEntityDto> optionGroupList;
+    private List<OneFieldEntityDto> optionGroupList;
 
 }

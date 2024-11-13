@@ -40,88 +40,77 @@ public class ConstantBeanConfiguration {
 
     @Bean
     public Map<String, DeliveryType> deliveryTypeMap(IDeliveryTypeDao deliveryTypeDao) {
-        List<DeliveryType> userRoleList =
-                deliveryTypeDao.getEntityList();
+        List<DeliveryType> userRoleList = deliveryTypeDao.getEntityList();
         return userRoleList.stream()
-                .collect(Collectors.toMap(DeliveryType::getName, Function.identity(), (existing, replacement) -> existing));
+                .collect(Collectors.toMap(DeliveryType::getValue, Function.identity(), (existing, replacement) -> existing));
     }
 
     @Bean
     public Map<String, PaymentMethod> paymentMethodMap(IPaymentMethodDao paymentMethodDao) {
-        List<PaymentMethod> paymentMethodList =
-                paymentMethodDao.getEntityList();
+        List<PaymentMethod> paymentMethodList = paymentMethodDao.getEntityList();
         return paymentMethodList.stream()
                 .collect(Collectors.toMap(PaymentMethod::getMethod, Function.identity(), (existing, replacement) -> existing));
     }
 
     @Bean
     public Map<String, OrderStatus> orderStatusMap(IOrderStatusDao orderStatusDao) {
-        List<OrderStatus> orderStatusList =
-                orderStatusDao.getEntityList();
+        List<OrderStatus> orderStatusList = orderStatusDao.getEntityList();
         return orderStatusList.stream()
-                .collect(Collectors.toMap(OrderStatus::getName, Function.identity(), (existing, replacement) -> existing));
+                .collect(Collectors.toMap(OrderStatus::getValue, Function.identity(), (existing, replacement) -> existing));
     }
 
     @Bean
     public Map<String, Category> categoryMap(ICategoryDao categoryDao) {
-        List<Category> categoryList =
-                categoryDao.getTransitiveSelfEntityList();
+        List<Category> categoryList = categoryDao.getTransitiveSelfEntityList();
         return categoryList.stream()
                 .collect(Collectors.toMap(Category::getName, category -> category, (existing, replacement) -> existing));
     }
 
     @Bean
     public Map<String, ItemType> itemTypeMap(IItemTypeDao itemTypeDao) {
-        List<ItemType> itemTypeList =
-                itemTypeDao.getEntityList();
+        List<ItemType> itemTypeList = itemTypeDao.getEntityList();
         return itemTypeList.stream()
-                .collect(Collectors.toMap(ItemType::getName, itemType -> itemType, (existing, replacement) -> existing));
+                .collect(Collectors.toMap(ItemType::getValue, itemType -> itemType, (existing, replacement) -> existing));
     }
 
     @Bean
     public Map<String, Brand> brandMap(IBrandDao brandDao) {
-        List<Brand> brandList =
-                brandDao.getEntityList();
+        List<Brand> brandList = brandDao.getEntityList();
         return brandList.stream()
-                .collect(Collectors.toMap(Brand::getName, brand -> brand, (existing, replacement) -> existing));
+                .collect(Collectors.toMap(Brand::getValue, brand -> brand, (existing, replacement) -> existing));
     }
 
     @Bean
     public Map<Integer, Rating> ratingMap(IRatingDao ratingDao) {
-        List<Rating> ratingList =
-                ratingDao.getEntityList();
+        List<Rating> ratingList = ratingDao.getEntityList();
         return ratingList.stream()
                 .collect(Collectors.toMap(Rating::getValue, value -> value, (existing, replacement) -> existing));
     }
 
     @Bean
     public Map<String, ItemStatus> itemStatusMap(IItemStatusDao itemStatusDao) {
-        List<ItemStatus> itemStatusList =
-                itemStatusDao.getEntityList();
+        List<ItemStatus> itemStatusList = itemStatusDao.getEntityList();
         return itemStatusList.stream()
-                .collect(Collectors.toMap(ItemStatus::getName, itemStatus -> itemStatus, (existing, replacement) -> existing));
+                .collect(Collectors.toMap(ItemStatus::getValue, itemStatus -> itemStatus, (existing, replacement) -> existing));
     }
 
     @Bean
     public Map<String, OptionGroup> optionGroupMap(IOptionGroupDao optionGroupDao) {
-        List<OptionGroup> optionGroupList =
-                optionGroupDao.getEntityList();
+        List<OptionGroup> optionGroupList = optionGroupDao.getEntityList();
         return optionGroupList.stream()
-                .collect(Collectors.toMap(OptionGroup::getName, optionGroup -> optionGroup, (existing, replacement) -> existing));
+                .collect(Collectors.toMap(OptionGroup::getValue, optionGroup -> optionGroup, (existing, replacement) -> existing));
     }
 
     @Bean
     public Map<String, Country> countryMap(ICountryDao countryDao) {
-        List<Country> countryList =
-                countryDao.getEntityList();
+        List<Country> countryList = countryDao.getEntityList();
         return countryList.stream()
-                .collect(Collectors.toMap(Country::getName, country -> country, (existing, replacement) -> existing));
+                .collect(Collectors.toMap(Country::getValue, country -> country, (existing, replacement) -> existing));
     }
 
     @Bean
     public Map<String, CountryPhoneCode> countryPhoneCodeMap(ICountryPhoneCodeDao countryPhoneCodeDao) {
-        List<CountryPhoneCode> optionGroupList =
-                countryPhoneCodeDao.getEntityList();
+        List<CountryPhoneCode> optionGroupList = countryPhoneCodeDao.getEntityList();
         return optionGroupList.stream()
                 .collect(Collectors.toMap(CountryPhoneCode::getCode, countryPhoneCode -> countryPhoneCode, (existing, replacement) -> existing));
     }

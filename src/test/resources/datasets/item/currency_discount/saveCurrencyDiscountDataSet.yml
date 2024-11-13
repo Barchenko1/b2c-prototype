@@ -1,6 +1,6 @@
 currency:
   - id: 1
-    name: "USD"
+    value: "USD"
 currency_discount:
   - amount: 10
     charSequenceCode: "abc"

@@ -8,7 +8,7 @@ import java.util.List;
 public class RequestOrderItemDto {
     private List<RequestItemDto> requestItemDtoList;
     private RequestDeliveryDto requestDeliveryDto;
-    private List<RequestContactInfoDto> requestContactInfoDtoList;
+    private List<ContactInfoDto> contactInfoDtoList;
     private RequestPaymentDto requestPaymentDto;
     private String note;
 }

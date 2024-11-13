@@ -2,7 +2,17 @@ package com.b2c.prototype.configuration;
 
 import com.b2c.prototype.dao.address.ICountryDao;
 import com.b2c.prototype.dao.address.base.BasicCountryDao;
+import com.b2c.prototype.dao.message.IMessageStatusDao;
+import com.b2c.prototype.dao.message.IMessageTypeDao;
+import com.b2c.prototype.dao.message.basic.BasicMessageStatusDao;
+import com.b2c.prototype.dao.message.basic.BasicMessageTypeDao;
+import com.b2c.prototype.dao.price.ICurrencyDao;
+import com.b2c.prototype.dao.price.base.BasicCurrencyDao;
+import com.b2c.prototype.dao.store.ICountTypeDao;
+import com.b2c.prototype.dao.store.base.BasicCountTypeDao;
+import com.b2c.prototype.dao.user.IContactPhoneDao;
 import com.b2c.prototype.dao.user.ICountryPhoneCodeDao;
+import com.b2c.prototype.dao.user.base.BasicContactPhoneDao;
 import com.b2c.prototype.dao.user.base.BasicCountryPhoneCodeDao;
 import com.b2c.prototype.dao.user.base.BasicContactInfoDao;
 import com.b2c.prototype.dao.item.base.BasicCategoryDao;
@@ -59,6 +69,8 @@ import com.tm.core.dao.identifier.EntityIdentifierDao;
 import com.tm.core.dao.identifier.IEntityIdentifierDao;
 import com.tm.core.dao.query.ISearchWrapper;
 import com.tm.core.dao.query.SearchWrapper;
+import com.tm.core.dao.transaction.ITransactionWrapper;
+import com.tm.core.dao.transaction.TransactionWrapper;
 import com.tm.core.processor.finder.manager.EntityMappingManager;
 import com.tm.core.processor.finder.manager.IEntityMappingManager;
 import com.tm.core.processor.finder.scanner.EntityScanner;
@@ -70,9 +82,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
 public class BeanConfiguration {
@@ -134,8 +143,33 @@ public class BeanConfiguration {
     }
 
     @Bean
+    public ITransactionWrapper transactionWrapper() {
+        return new TransactionWrapper(sessionFactory());
+    }
+
+    @Bean
     public ISearchWrapper searchWrapper() {
         return new SearchWrapper(sessionManager(sessionFactory()), entityIdentifierDao(sessionFactory()));
+    }
+
+    @Bean
+    public ICountTypeDao countTypeDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicCountTypeDao(sessionFactory, entityIdentifierDao);
+    }
+
+    @Bean
+    public ICurrencyDao currencyDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicCurrencyDao(sessionFactory, entityIdentifierDao);
+    }
+
+    @Bean
+    public IMessageTypeDao messageTypeDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicMessageTypeDao(sessionFactory, entityIdentifierDao);
+    }
+
+    @Bean
+    public IMessageStatusDao messageStatusDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicMessageStatusDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
@@ -151,6 +185,11 @@ public class BeanConfiguration {
     @Bean
     public IPaymentMethodDao paymentMethodDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
         return new BasicPaymentMethodDao(sessionFactory, entityIdentifierDao);
+    }
+
+    @Bean
+    public IContactPhoneDao contactPhoneDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicContactPhoneDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean

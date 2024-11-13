@@ -28,7 +28,7 @@ class BasicDeliveryTypeDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getTestDataSet() {
         DeliveryType deliveryType = DeliveryType.builder()
                 .id(1L)
-                .name("Post")
+                .value("Post")
                 .build();
         return new EntityDataSet<>(deliveryType, "/datasets/delivery/delivery_type/testDeliveryTypeDataSet.yml");
     }
@@ -36,7 +36,7 @@ class BasicDeliveryTypeDaoTest extends AbstractSingleEntityDaoTest {
     @Override
     protected EntityDataSet<?> getSaveDataSet() {
         DeliveryType deliveryType = DeliveryType.builder()
-                .name("Post")
+                .value("Post")
                 .build();
         return new EntityDataSet<>(deliveryType, "/datasets/delivery/delivery_type/saveDeliveryTypeDataSet.yml");
     }
@@ -45,7 +45,7 @@ class BasicDeliveryTypeDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getUpdateDataSet() {
         DeliveryType deliveryType = DeliveryType.builder()
                 .id(1L)
-                .name("Update Post")
+                .value("Update Post")
                 .build();
         return new EntityDataSet<>(deliveryType, "/datasets/delivery/delivery_type/updateDeliveryTypeDataSet.yml");
     }

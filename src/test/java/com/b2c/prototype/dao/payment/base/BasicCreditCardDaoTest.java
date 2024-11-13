@@ -2,7 +2,6 @@ package com.b2c.prototype.dao.payment.base;
 
 import com.b2c.prototype.dao.AbstractSingleEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
-import com.b2c.prototype.modal.entity.payment.AbstractCreditCard;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
 import com.b2c.prototype.util.CardUtil;
 import com.tm.core.dao.identifier.EntityIdentifierDao;

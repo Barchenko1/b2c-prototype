@@ -12,7 +12,7 @@ contact_info:
     contact_phone_id: 1
 country:
   - id: 1
-    name: "USA"
+    value: "USA"
 address:
   - id: 1
     street: "Update street"

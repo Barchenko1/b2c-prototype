@@ -28,7 +28,7 @@ class BasicCurrencyDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getTestDataSet() {
         Currency currency = Currency.builder()
                 .id(1L)
-                .name("USD")
+                .value("USD")
                 .build();
         return new EntityDataSet<>(currency, "/datasets/price/currency/testCurrencyDataSet.yml");
     }
@@ -36,7 +36,7 @@ class BasicCurrencyDaoTest extends AbstractSingleEntityDaoTest {
     @Override
     protected EntityDataSet<?> getSaveDataSet() {
         Currency currency = Currency.builder()
-                .name("USD")
+                .value("USD")
                 .build();
         return new EntityDataSet<>(currency, "/datasets/price/currency/saveCurrencyDataSet.yml");
     }
@@ -45,7 +45,7 @@ class BasicCurrencyDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getUpdateDataSet() {
         Currency currency = Currency.builder()
                 .id(1L)
-                .name("Update USD")
+                .value("Update USD")
                 .build();
         return new EntityDataSet<>(currency, "/datasets/price/currency/updateCurrencyDataSet.yml");
     }

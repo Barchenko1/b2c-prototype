@@ -6,7 +6,7 @@ payment_method:
     method: "Blik"
 currency:
   - id: 1
-    name: "USD"
+    value: "USD"
 currency_discount:
   - id: 1
     amount: 5

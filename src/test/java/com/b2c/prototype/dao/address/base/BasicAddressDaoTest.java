@@ -32,7 +32,7 @@ class BasicAddressDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getTestDataSet() {
         Country country = Country.builder()
                 .id(1L)
-                .name("USA")
+                .value("USA")
                 .build();
         Address address = Address.builder()
                 .id(1L)
@@ -50,7 +50,7 @@ class BasicAddressDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getSaveDataSet() {
         Country country = Country.builder()
                 .id(1L)
-                .name("USA")
+                .value("USA")
                 .build();
         Address address = Address.builder()
                 .country(country)
@@ -67,7 +67,7 @@ class BasicAddressDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getUpdateDataSet() {
         Country country = Country.builder()
                 .id(1L)
-                .name("USA")
+                .value("USA")
                 .build();
         Address address = Address.builder()
                 .id(1L)

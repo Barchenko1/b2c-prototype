@@ -31,7 +31,7 @@ public class BasicCountryDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getTestDataSet() {
         Country country = Country.builder()
                 .id(1L)
-                .name("USA")
+                .value("USA")
                 .build();
         return new EntityDataSet<>(country, "/datasets/address/country/testCountryDataSet.yml");
     }
@@ -39,7 +39,7 @@ public class BasicCountryDaoTest extends AbstractSingleEntityDaoTest {
     @Override
     protected EntityDataSet<?> getSaveDataSet() {
         Country country = Country.builder()
-                .name("USA")
+                .value("USA")
                 .build();
         return new EntityDataSet<>(country, "/datasets/address/country/saveCountryDataSet.yml");
     }
@@ -48,7 +48,7 @@ public class BasicCountryDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getUpdateDataSet() {
         Country country = Country.builder()
                 .id(1L)
-                .name("Update USA")
+                .value("Update USA")
                 .build();
         return new EntityDataSet<>(country, "/datasets/address/country/updateCountryDataSet.yml");
     }

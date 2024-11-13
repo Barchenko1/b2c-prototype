@@ -62,8 +62,17 @@ public class EntityCachedMap implements IEntityCachedMap {
                 .ifPresent(entityMap -> entityMap.put(key, entity));
     }
 
+//    @Override
+//    public <E> void updateEntity(Class<?> clazz, String oldKey, String key, E entity) {
+//        Optional.ofNullable(classEntityMap.get(clazz))
+//                .ifPresent(entityMap -> {
+//                    entityMap.remove(oldKey);
+//                    entityMap.put(key, entity);
+//                });
+//    }
+
     @Override
-    public <E> void updateEntity(Class<?> clazz, String oldKey, String key, E entity) {
+    public <E> void updateEntity(Class<?> clazz, Object oldKey, Object key, E entity) {
         Optional.ofNullable(classEntityMap.get(clazz))
                 .ifPresent(entityMap -> {
                     entityMap.remove(oldKey);
@@ -72,7 +81,7 @@ public class EntityCachedMap implements IEntityCachedMap {
     }
 
     @Override
-    public void removeEntity(Class<?> clazz, String value) {
+    public void removeEntity(Class<?> clazz, Object value) {
         Optional.ofNullable(classEntityMap.get(clazz)).ifPresent(map -> map.remove(value));
     }
 

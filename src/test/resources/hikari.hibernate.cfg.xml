@@ -70,5 +70,8 @@
 
         <mapping class="com.b2c.prototype.modal.entity.review.Review" />
         <mapping class="com.b2c.prototype.modal.entity.item.Rating" />
+
+        <mapping class="com.b2c.prototype.modal.entity.store.CountType" />
+        <mapping class="com.b2c.prototype.modal.entity.store.Store" />
     </session-factory>
 </hibernate-configuration>

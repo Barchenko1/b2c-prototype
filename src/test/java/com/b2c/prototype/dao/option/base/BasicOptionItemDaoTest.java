@@ -56,7 +56,7 @@ class BasicOptionItemDaoTest extends AbstractGeneralEntityDaoTest {
 
     public OptionItem prepareToSaveOptionItem() {
         OptionGroup optionGroup = OptionGroup.builder()
-                .name("Size")
+                .value("Size")
                 .build();
 
         return OptionItem.builder()
@@ -68,7 +68,7 @@ class BasicOptionItemDaoTest extends AbstractGeneralEntityDaoTest {
     public OptionItem prepareTestOptionItem() {
         OptionGroup optionGroup = OptionGroup.builder()
                 .id(1L)
-                .name("Size")
+                .value("Size")
                 .build();
 
         return OptionItem.builder()
@@ -81,7 +81,7 @@ class BasicOptionItemDaoTest extends AbstractGeneralEntityDaoTest {
     public OptionItem prepareToUpdateOptionItem() {
         OptionGroup optionGroup = OptionGroup.builder()
                 .id(1L)
-                .name("Color")
+                .value("Color")
                 .build();
 
         return OptionItem.builder()
@@ -96,7 +96,7 @@ class BasicOptionItemDaoTest extends AbstractGeneralEntityDaoTest {
         assertEquals(expectedOptionItem.getOptionName(), actualOptionItem.getOptionName());
 
         assertEquals(expectedOptionItem.getOptionGroup().getId(), actualOptionItem.getOptionGroup().getId());
-        assertEquals(expectedOptionItem.getOptionGroup().getName(), actualOptionItem.getOptionGroup().getName());
+        assertEquals(expectedOptionItem.getOptionGroup().getValue(), actualOptionItem.getOptionGroup().getValue());
     }
 
     @Test
@@ -471,7 +471,7 @@ class BasicOptionItemDaoTest extends AbstractGeneralEntityDaoTest {
         assertEquals(optionItem.getOptionName(), result.getOptionName());
 
         assertEquals(optionItem.getOptionGroup().getId(), result.getOptionGroup().getId());
-        assertEquals(optionItem.getOptionGroup().getName(), result.getOptionGroup().getName());
+        assertEquals(optionItem.getOptionGroup().getValue(), result.getOptionGroup().getValue());
     }
 
     @Test

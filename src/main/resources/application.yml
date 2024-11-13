@@ -17,6 +17,23 @@ spring:
     basename: ib18n
 enums:
   brands: HP, APPLE, ANDROID
-  paymentMethods: CARD, CASH
-  itemStatuses:
-  itemTypes:
+  countTypes: LIMITED, UNLIMITED
+  countryPhoneCodes: +48
+  countries: POLAND
+  currencies: USD, PLN, EUR
+  deliveryTypes: IN_POST, COURIER
+  itemStatuses: NEW, EXIST, COMING_SOON, OUT_OF_STOCK
+  itemTypes: TECHNIQUE
+  messageStatuses: UNREAD, READIED, DELETED
+  messageTypes: SYSTEM
+  optionGroups: TECHNIQUE
+  orderStatuses: NEW, PENDING, COMPLETE, TERMINATED
+  paymentMethods: CARD, CASH, BLIK
+  ratings: 1, 2, 3, 4, 5
+  categories:
+    - name: "Electronics"
+      sub:
+        - name: "Computers"
+          sub:
+            - name: "Laptops"
+            - name: "Desktops"

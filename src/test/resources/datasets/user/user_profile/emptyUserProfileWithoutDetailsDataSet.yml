@@ -3,5 +3,5 @@ country_phone_code:
     code: "+11"
 country:
   - id: 1
-    name: "USA"
+    value: "USA"
 user_profile: []

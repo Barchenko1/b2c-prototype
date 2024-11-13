@@ -28,7 +28,7 @@ class BasicBrandDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getTestDataSet() {
         Brand brand = Brand.builder()
                 .id(1L)
-                .name("Apple")
+                .value("Apple")
                 .build();
         return new EntityDataSet<>(brand, "/datasets/item/brand/testBrandDataSet.yml");
     }
@@ -36,7 +36,7 @@ class BasicBrandDaoTest extends AbstractSingleEntityDaoTest {
     @Override
     protected EntityDataSet<?> getSaveDataSet() {
         Brand brand = Brand.builder()
-                .name("Apple")
+                .value("Apple")
                 .build();
         return new EntityDataSet<>(brand, "/datasets/item/brand/saveBrandDataSet.yml");
     }
@@ -45,7 +45,7 @@ class BasicBrandDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getUpdateDataSet() {
         Brand brand = Brand.builder()
                 .id(1L)
-                .name("Update Apple")
+                .value("Update Apple")
                 .build();
         return new EntityDataSet<>(brand, "/datasets/item/brand/updateBrandDataSet.yml");
     }

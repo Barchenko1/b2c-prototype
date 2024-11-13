@@ -114,7 +114,7 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
     private Address createAddress() {
         Country country = Country.builder()
                 .id(1L)
-                .name("USA")
+                .value("USA")
                 .build();
         return Address.builder()
                 .id(1L)
@@ -130,7 +130,7 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
     private Delivery prepareTestDelivery() {
         DeliveryType deliveryType = DeliveryType.builder()
                 .id(1L)
-                .name("Post")
+                .value("Post")
                 .build();
 
         return Delivery.builder()
@@ -203,12 +203,12 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
     private ItemData prepareTestOrderItemData() {
         Brand brand = Brand.builder()
                 .id(1L)
-                .name("Hermes")
+                .value("Hermes")
                 .build();
         Category category = prepareCategories();
         Currency currency = Currency.builder()
                 .id(1L)
-                .name("USD")
+                .value("USD")
                 .build();
         CurrencyDiscount currencyDiscount = CurrencyDiscount.builder()
                 .id(1L)
@@ -218,15 +218,15 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
                 .build();
         ItemStatus itemStatus = ItemStatus.builder()
                 .id(1L)
-                .name("NEW")
+                .value("NEW")
                 .build();
         ItemType itemType = ItemType.builder()
                 .id(1L)
-                .name("Clothes")
+                .value("Clothes")
                 .build();
         OptionGroup optionGroup = OptionGroup.builder()
                 .id(1L)
-                .name("Size")
+                .value("Size")
                 .build();
         OptionItem OptionItem1 = OptionItem.builder()
                 .id(1L)
@@ -275,7 +275,7 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
     private OrderStatus prepareTestOrderStatus() {
         return OrderStatus.builder()
                 .id(1L)
-                .name("Pending")
+                .value("Pending")
                 .build();
     }
 
@@ -295,7 +295,7 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
                 .build();
         Currency currency = Currency.builder()
                 .id(1L)
-                .name("USD")
+                .value("USD")
                 .build();
         CurrencyDiscount currencyDiscount = CurrencyDiscount.builder()
                 .id(1L)

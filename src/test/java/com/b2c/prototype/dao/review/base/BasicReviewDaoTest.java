@@ -156,12 +156,12 @@ class BasicReviewDaoTest extends AbstractSingleEntityDaoTest {
     private Item preparItem() {
         Brand brand = Brand.builder()
                 .id(1L)
-                .name("Hermes")
+                .value("Hermes")
                 .build();
         Category category = prepareCategories();
         Currency currency = Currency.builder()
                 .id(1L)
-                .name("USD")
+                .value("USD")
                 .build();
         CurrencyDiscount currencyDiscount = CurrencyDiscount.builder()
                 .id(1L)
@@ -171,15 +171,15 @@ class BasicReviewDaoTest extends AbstractSingleEntityDaoTest {
                 .build();
         ItemStatus itemStatus = ItemStatus.builder()
                 .id(1L)
-                .name("NEW")
+                .value("NEW")
                 .build();
         ItemType itemType = ItemType.builder()
                 .id(1L)
-                .name("Clothes")
+                .value("Clothes")
                 .build();
         OptionGroup optionGroup = OptionGroup.builder()
                 .id(1L)
-                .name("Size")
+                .value("Size")
                 .build();
         OptionItem optionItem1 = OptionItem.builder()
                 .id(1L)

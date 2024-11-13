@@ -75,7 +75,7 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
                 .build();
         Currency currency = Currency.builder()
                 .id(1L)
-                .name("USD")
+                .value("USD")
                 .build();
         Price price = Price.builder()
                 .amount(10)
@@ -111,7 +111,7 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
                 .build();
         Currency currency = Currency.builder()
                 .id(1L)
-                .name("USD")
+                .value("USD")
                 .build();
         CurrencyDiscount currencyDiscount = CurrencyDiscount.builder()
                 .id(1L)
@@ -150,7 +150,7 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
                 .build();
         Currency currency = Currency.builder()
                 .id(1L)
-                .name("USD")
+                .value("USD")
                 .build();
         CurrencyDiscount currencyDiscount = CurrencyDiscount.builder()
                 .id(1L)

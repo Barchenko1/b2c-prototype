@@ -1,9 +1,9 @@
 delivery_type:
   - id: 1
-    name: "Post"
+    value: "Post"
 country:
   - id: 1
-    name: "USA"
+    value: "USA"
 address:
   - id: 1
     street: "Update street"

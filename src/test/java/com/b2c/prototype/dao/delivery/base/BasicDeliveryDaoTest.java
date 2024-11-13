@@ -58,7 +58,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
     private Delivery prepareToSaveDelivery() {
         Country country = Country.builder()
                 .id(1L)
-                .name("USA")
+                .value("USA")
                 .build();
         Address address = Address.builder()
                 .country(country)
@@ -70,7 +70,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
                 .build();
         DeliveryType deliveryType = DeliveryType.builder()
                 .id(1L)
-                .name("Post")
+                .value("Post")
                 .build();
 
 
@@ -83,7 +83,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
     private Delivery prepareToUpdateDelivery() {
         Country country = Country.builder()
                 .id(1L)
-                .name("USA")
+                .value("USA")
                 .build();
         Address address = Address.builder()
                 .id(1L)
@@ -96,7 +96,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
                 .build();
         DeliveryType deliveryType = DeliveryType.builder()
                 .id(1L)
-                .name("Post")
+                .value("Post")
                 .build();
 
         return Delivery.builder()
@@ -109,7 +109,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
     private Delivery prepareTestDelivery() {
         Country country = Country.builder()
                 .id(1L)
-                .name("USA")
+                .value("USA")
                 .build();
         Address address = Address.builder()
                 .id(1L)
@@ -122,7 +122,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
                 .build();
         DeliveryType deliveryType = DeliveryType.builder()
                 .id(1L)
-                .name("Post")
+                .value("Post")
                 .build();
 
         return Delivery.builder()
@@ -145,11 +145,11 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
 
         DeliveryType deliveryType = dao.initializeEntity(DeliveryType.class, actualDelivery.getDeliveryType().getId());
         assertEquals(expectedDelivery.getDeliveryType().getId(), deliveryType.getId());
-        assertEquals(expectedDelivery.getDeliveryType().getName(), deliveryType.getName());
+        assertEquals(expectedDelivery.getDeliveryType().getValue(), deliveryType.getValue());
 
         Country country = dao.initializeEntity(Country.class, address.getCountry().getId());
         assertEquals(expectedDelivery.getAddress().getCountry().getId(), country.getId());
-        assertEquals(expectedDelivery.getAddress().getCountry().getName(), country.getName());
+        assertEquals(expectedDelivery.getAddress().getCountry().getValue(), country.getValue());
     }
 
     @Test

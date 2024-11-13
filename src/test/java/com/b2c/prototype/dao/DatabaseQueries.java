@@ -23,6 +23,7 @@ public final class DatabaseQueries {
             statement.execute("DELETE FROM item_post");
             statement.execute("DELETE FROM item_data_option");
             statement.execute("DELETE FROM item");
+            statement.execute("DELETE FROM store");
             statement.execute("DELETE FROM item_data");
             statement.execute("DELETE FROM option_item");
             statement.execute("DELETE FROM option_group");

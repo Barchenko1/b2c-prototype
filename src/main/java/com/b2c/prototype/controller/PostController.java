@@ -1,7 +1,7 @@
 package com.b2c.prototype.controller;
 
 import com.b2c.prototype.modal.dto.request.RequestPostDto;
-import com.b2c.prototype.service.base.post.IPostService;
+import com.b2c.prototype.service.processor.post.IPostService;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

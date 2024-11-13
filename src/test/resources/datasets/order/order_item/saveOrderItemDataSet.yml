@@ -1,15 +1,15 @@
 brand:
   - id: 1
-    name: "Hermes"
+    value: "Hermes"
 item_status:
   - id: 1
-    name: "NEW"
+    value: "NEW"
 item_type:
   - id: 1
-    name: "Clothes"
+    value: "Clothes"
 currency:
   - id: 1
-    name: "USD"
+    value: "USD"
 price:
   - id: 1
     amount: 100
@@ -25,7 +25,7 @@ percent_discount:
     charSequenceCode: "abc"
 option_group:
   - id: 1
-    name: "Size"
+    value: "Size"
 option_item:
   - id: 1
     optionName: "L"
@@ -66,10 +66,10 @@ item_quantity_item_data:
     item_quantity_id: 1
 delivery_type:
   - id: 1
-    name: "Post"
+    value: "Post"
 country:
   - id: 1
-    name: "USA"
+    value: "USA"
 address:
   - id: 1
     street: "street"
@@ -84,7 +84,7 @@ delivery:
       delivery_type_id: 1
 order_status:
   - id: 1
-    name: "Pending"
+    value: "Pending"
 credit_card:
   - id: 1
     cardNumber: "4444-1111-2222-3333"

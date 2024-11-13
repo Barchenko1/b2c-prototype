@@ -28,7 +28,7 @@ class BasicOptionGroupDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getTestDataSet() {
         OptionGroup optionGroup = OptionGroup.builder()
                 .id(1L)
-                .name("Color")
+                .value("Color")
                 .build();
         return new EntityDataSet<>(optionGroup, "/datasets/option/option_group/testOptionGroupDataSet.yml");
     }
@@ -36,7 +36,7 @@ class BasicOptionGroupDaoTest extends AbstractSingleEntityDaoTest {
     @Override
     protected EntityDataSet<?> getSaveDataSet() {
         OptionGroup optionGroup = OptionGroup.builder()
-                .name("Color")
+                .value("Color")
                 .build();
         return new EntityDataSet<>(optionGroup, "/datasets/option/option_group/saveOptionGroupDataSet.yml");
     }
@@ -45,7 +45,7 @@ class BasicOptionGroupDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getUpdateDataSet() {
         OptionGroup optionGroup = OptionGroup.builder()
                 .id(1L)
-                .name("Update Color")
+                .value("Update Color")
                 .build();
         return new EntityDataSet<>(optionGroup, "/datasets/option/option_group/updateOptionGroupDataSet.yml");
     }

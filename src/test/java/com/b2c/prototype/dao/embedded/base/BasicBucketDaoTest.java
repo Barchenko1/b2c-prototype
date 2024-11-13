@@ -1,4 +1,4 @@
-//package com.b2c.prototype.dao.embedded.base;
+//package com.b2c.prototype.dao.embedded.processor;
 //
 //import com.b2c.prototype.dao.AbstractSingleEntityDaoTest;
 //import com.b2c.prototype.dao.EntityDataSet;
@@ -60,7 +60,7 @@
 //        Category category = prepareCategories();
 //        Currency currency = Currency.builder()
 //                .id(1L)
-//                .name("USD")
+//                .value("USD")
 //                .build();
 //        CurrencyDiscount currencyDiscount = CurrencyDiscount.builder()
 //                .id(1L)

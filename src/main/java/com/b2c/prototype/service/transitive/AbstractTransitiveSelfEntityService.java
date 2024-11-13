@@ -36,7 +36,7 @@ public abstract class AbstractTransitiveSelfEntityService implements ITransitive
     }
 
     @Override
-    public <E extends TransitiveSelfEntity> void deleteEntityTree(Parameter... parameters) {
+    public void deleteEntityTree(Parameter... parameters) {
         StringBuilder sb = new StringBuilder();
         sb.append("Deleting entity: ");
         for (Parameter parameter : parameters) {
