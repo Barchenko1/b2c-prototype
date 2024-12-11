@@ -9,127 +9,166 @@ import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.order.OrderItem;
 import com.b2c.prototype.modal.entity.user.UserProfile;
+import com.b2c.prototype.service.common.IEntityOperationDao;
 import com.b2c.prototype.service.processor.address.IAddressService;
-import com.tm.core.dao.query.ISearchWrapper;
-import com.tm.core.dao.transaction.ITransactionWrapper;
+import com.b2c.prototype.service.processor.query.IQueryService;
+import com.b2c.prototype.service.common.EntityOperationDao;
 import com.tm.core.processor.finder.factory.IParameterFactory;
 import com.tm.core.processor.finder.parameter.Parameter;
-import org.hibernate.Session;
 
-import java.util.function.Consumer;
+import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class AddressService implements IAddressService {
 
     private final IParameterFactory parameterFactory;
-    private final ITransactionWrapper transactionWrapper;
-    private final ISearchWrapper searchWrapper;
-    private final IAddressDao addressDao;
+    private final IEntityOperationDao entityOperationDao;
+    private final IQueryService queryService;
     private final IEntityCachedMap entityCachedMap;
 
     public AddressService(IParameterFactory parameterFactory,
-                          ITransactionWrapper transactionWrapper,
-                          ISearchWrapper searchWrapper,
-                          IAddressDao addressDao, IEntityCachedMap entityCachedMap) {
+                          IAddressDao addressDao,
+                          IQueryService queryService,
+                          IEntityCachedMap entityCachedMap) {
         this.parameterFactory = parameterFactory;
-        this.transactionWrapper = transactionWrapper;
-        this.searchWrapper = searchWrapper;
-        this.addressDao = addressDao;
+        this.entityOperationDao = new EntityOperationDao(addressDao);
+        this.queryService = queryService;
         this.entityCachedMap = entityCachedMap;
     }
 
     @Override
     public void saveAddress(AddressDto addressDto) {
-        Address address = buildAddress(addressDto);
-        addressDao.saveEntity(address);
+        entityOperationDao.saveEntity(addressSupplier(addressDto));
     }
 
     @Override
-    public void updateAppUserAddress(AddressDtoUpdate AddressDtoUpdate) {
-        AddressDto newAddressDto = AddressDtoUpdate.getNewEntityDto();
-        Address newAddress = buildAddress(newAddressDto);
-
-        Parameter parameter = parameterFactory.createStringParameter("username",
-                AddressDtoUpdate.getSearchField());
-        Consumer<Session> consumer = session -> {
-            UserProfile userProfile = (UserProfile) searchWrapper.getEntitySupplier(UserProfile.class, parameter).get();
-            userProfile.setAddress(newAddress);
-            session.persist(newAddress);
-            session.merge(userProfile);
-        };
-        transactionWrapper.updateEntity(consumer);
+    public void updateAppUserAddress(AddressDtoUpdate addressDtoUpdate) {
+        entityOperationDao.updateEntity(session -> {
+            UserProfile userProfile = queryService.getEntity(
+                    UserProfile.class,
+                    emailParameterSupplier(addressDtoUpdate.getSearchField()));
+            Address newAddress = mapToEntityFunction().apply(addressDtoUpdate.getNewEntityDto());
+            newAddress.setId(userProfile.getAddress().getId());
+            session.merge(newAddress);
+        });
     }
 
     @Override
     public void updateDeliveryAddress(AddressDtoUpdate addressDtoUpdate) {
-        AddressDto newAddressDto = addressDtoUpdate.getNewEntityDto();
-        Address newAddress = buildAddress(newAddressDto);
-
-        Parameter parameter = parameterFactory.createStringParameter("order_id",
-                addressDtoUpdate.getSearchField());
-        Consumer<Session> consumer = session -> {
-            UserProfile userProfile = (UserProfile) searchWrapper.getEntitySupplier(OrderItem.class, parameter).get();
-            userProfile.setAddress(newAddress);
-            session.persist(newAddress);
-            session.merge(userProfile);
-        };
-        transactionWrapper.updateEntity(consumer);
+        entityOperationDao.updateEntity(session -> {
+            OrderItem orderItem = queryService.getEntity(
+                    OrderItem.class,
+                    orderIdParameterSupplier(addressDtoUpdate.getSearchField()));
+            Address newAddress = mapToEntityFunction().apply(addressDtoUpdate.getNewEntityDto());
+            newAddress.setId(orderItem.getDelivery().getAddress().getId());
+            session.merge(newAddress);
+        });
     }
 
     @Override
     public void deleteAppUserAddress(OneFieldEntityDto oneFieldEntityDto) {
-        Parameter parameter = parameterFactory.createStringParameter("username",
-                oneFieldEntityDto.getValue());
-        addressDao.findEntityAndDelete(parameter);
+        entityOperationDao.deleteEntityByParameter(
+                emailParameterSupplier(oneFieldEntityDto.getValue()));
     }
 
     @Override
     public void deleteDeliveryAddress(OneFieldEntityDto oneFieldEntityDto) {
-        Parameter parameter = parameterFactory.createStringParameter("order_id",
-                oneFieldEntityDto.getValue());
-        addressDao.findEntityAndDelete(parameter);
+        entityOperationDao.deleteEntityByParameter(
+                orderIdParameterSupplier(oneFieldEntityDto.getValue()));
     }
 
     @Override
-    public AddressDto getAddressByEmail(String email) {
-        Parameter parameter = parameterFactory.createStringParameter("email", email);
-        UserProfile userProfile = (UserProfile) searchWrapper.getEntitySupplier(UserProfile.class, parameter).get();
-        return buildAddressDto(userProfile.getAddress());
+    public AddressDto getAddressByEmail(OneFieldEntityDto oneFieldEntityDto) {
+        return queryService.getEntityDto(
+                UserProfile.class,
+                emailParameterSupplier(oneFieldEntityDto.getValue()),
+                userProfileMapToDtoFunction());
     }
 
     @Override
-    public AddressDto getAddressByUsername(String username) {
-        Parameter parameter = parameterFactory.createStringParameter("username", username);
-        UserProfile userProfile = (UserProfile) searchWrapper.getEntitySupplier(UserProfile.class, parameter).get();
-        return buildAddressDto(userProfile.getAddress());
+    public AddressDto getAddressByUsername(OneFieldEntityDto oneFieldEntityDto) {
+        return queryService.getEntityDto(
+                UserProfile.class,
+                usernameParameterSupplier(oneFieldEntityDto.getValue()),
+                userProfileMapToDtoFunction());
     }
 
     @Override
-    public AddressDto getAddressByOrderId(String orderId) {
-        Parameter parameter = parameterFactory.createStringParameter("orderId", orderId);
-        OrderItem orderItem = (OrderItem) searchWrapper.getEntitySupplier(OrderItem.class, parameter).get();
-        return buildAddressDto(orderItem.getDelivery().getAddress());
+    public AddressDto getAddressByOrderId(OneFieldEntityDto oneFieldEntityDto) {
+        return queryService.getEntityDto(
+                OrderItem.class,
+                orderIdParameterSupplier(oneFieldEntityDto.getValue()),
+                orderItemMapToDtoFunction());
     }
 
-    private Address buildAddress(AddressDto addressDto) {
-        Country country = entityCachedMap.getEntity(Country.class, "value", addressDto.getCountry());
-        return Address.builder()
-                .country(country)
+    @Override
+    public List<AddressDto> getAddresses() {
+        return entityOperationDao.getEntityDtoList(mapToDtoFunction());
+    }
+
+    private Function<AddressDto, Address> mapToEntityFunction() {
+        return (addressDto) -> Address.builder()
+                .country(entityCachedMap.getEntity(
+                        Country.class,
+                        "value",
+                        addressDto.getCountry()))
+                .city(addressDto.getCity())
                 .street(addressDto.getStreet())
                 .street2(addressDto.getStreet2())
                 .buildingNumber(addressDto.getBuildingNumber())
-                .flor(addressDto.getFlor())
+                .florNumber(addressDto.getFlorNumber())
                 .apartmentNumber(addressDto.getApartmentNumber())
+                .zipCode(addressDto.getZipCode())
                 .build();
     }
 
-    private AddressDto buildAddressDto(Address address) {
-        return AddressDto.builder()
+    private Function<Address, AddressDto> mapToDtoFunction() {
+        return (address) -> AddressDto.builder()
                 .country(address.getCountry().getValue())
+                .city(address.getCity())
                 .street(address.getStreet())
                 .street2(address.getStreet2())
                 .buildingNumber(address.getBuildingNumber())
-                .flor(address.getFlor())
+                .florNumber(address.getFlorNumber())
                 .apartmentNumber(address.getApartmentNumber())
+                .zipCode(address.getZipCode())
                 .build();
+    }
+
+    private Function<UserProfile, AddressDto> userProfileMapToDtoFunction() {
+        return (userProfile) -> {
+            Address address = userProfile.getAddress();
+            return mapToDtoFunction().apply(address);
+        };
+    }
+
+    private Function<OrderItem, AddressDto> orderItemMapToDtoFunction() {
+        return (orderItem) -> {
+            Address address = orderItem.getDelivery().getAddress();
+            return mapToDtoFunction().apply(address);
+        };
+    }
+
+    private Supplier<Address> addressSupplier(AddressDto dto) {
+        return () -> mapToEntityFunction().apply(dto);
+    }
+
+    private Supplier<Parameter> usernameParameterSupplier(String value) {
+        return () -> parameterFactory.createStringParameter(
+                "username", value
+        );
+    }
+
+    private Supplier<Parameter> orderIdParameterSupplier(String value) {
+        return () -> parameterFactory.createStringParameter(
+                "order_id", value
+        );
+    }
+
+    private Supplier<Parameter> emailParameterSupplier(String value) {
+        return () -> parameterFactory.createStringParameter(
+                "email", value
+        );
     }
 }

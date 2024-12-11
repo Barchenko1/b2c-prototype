@@ -4,9 +4,8 @@ import com.b2c.prototype.dao.AbstractGeneralEntityDaoTest;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
-import com.tm.core.dao.general.AbstractGeneralEntityDao;
+import com.tm.core.dao.common.AbstractEntityDao;
 import com.tm.core.dao.identifier.EntityIdentifierDao;
-import com.tm.core.modal.GeneralEntity;
 import com.tm.core.processor.finder.manager.EntityMappingManager;
 import com.tm.core.processor.finder.manager.IEntityMappingManager;
 import com.tm.core.processor.finder.parameter.Parameter;
@@ -121,19 +120,7 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
         Parameter parameter = new Parameter("id", 1L);
         ContactInfo contactInfo = prepareTestContactInfo();
         List<ContactInfo> resultList =
-                dao.getGeneralEntityList(parameter);
-
-        assertEquals(1, resultList.size());
-        resultList.forEach(result -> checkContactInfo(contactInfo, result));
-    }
-
-    @Test
-    void getEntityListWithClass_success() {
-        loadDataSet("/datasets/user/contact_info/testContactInfoDataSet.yml");
-        Parameter parameter = new Parameter("id", 1L);
-        ContactInfo contactInfo = prepareTestContactInfo();
-        List<ContactInfo> resultList =
-                dao.getGeneralEntityList(ContactInfo.class, parameter);
+                dao.getEntityList(parameter);
 
         assertEquals(1, resultList.size());
         resultList.forEach(result -> checkContactInfo(contactInfo, result));
@@ -143,17 +130,8 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
     void getEntityList_Failure() {
         Parameter parameter = new Parameter("id1", 1L);
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.getGeneralEntityList(parameter);
-        });
-    }
-
-    @Test
-    void getEntityListWithClass_Failure() {
-        Parameter parameter = new Parameter("id1", 1L);
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.getGeneralEntityList(Object.class, parameter);
+        assertThrows(RuntimeException.class, () -> {
+            dao.getEntityList(parameter);
         });
     }
 
@@ -162,11 +140,7 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
         loadDataSet("/datasets/user/contact_info/emptyContactInfoDataSet.yml");
         ContactInfo contactInfo = prepareToSaveContactInfo();
 
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(1, List.of(contactInfo.getContactPhone()));
-        generalEntity.addEntityPriority(2, contactInfo);
-
-        dao.saveGeneralEntity(generalEntity);
+        dao.persistEntity(contactInfo);
         verifyExpectedData("/datasets/user/contact_info/saveContactInfoDataSet.yml");
     }
 
@@ -174,10 +148,7 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
     void saveEntityWithDependencies_success() {
         loadDataSet("/datasets/user/contact_info/emptyContactInfoDataSet.yml");
         ContactInfo contactInfo = prepareToSaveContactInfo();
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(1, List.of(contactInfo.getContactPhone()));
-        generalEntity.addEntityPriority(2, contactInfo);
-        dao.saveGeneralEntity(generalEntity);
+        dao.persistEntity(contactInfo);
         verifyExpectedData("/datasets/user/contact_info/saveContactInfoDataSet.yml");
     }
 
@@ -186,15 +157,12 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
         ContactInfo contactInfo = new ContactInfo();
         contactInfo.setId(1L);
 
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(2, contactInfo);
-
         SessionFactory sessionFactory = mock(SessionFactory.class);
         Session session = mock(Session.class);
         Transaction transaction = mock(Transaction.class);
 
         try {
-            Field sessionManagerField = AbstractGeneralEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
@@ -206,7 +174,7 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
         doThrow(new RuntimeException()).when(session).persist(contactInfo);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.saveGeneralEntity(generalEntity);
+            dao.persistEntity(contactInfo);
         });
 
         assertEquals(RuntimeException.class, exception.getClass());
@@ -221,7 +189,7 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
             s.persist(contactInfo);
         };
 
-        dao.saveGeneralEntity(consumer);
+        dao.saveEntity(consumer);
         verifyExpectedData("/datasets/user/contact_info/saveContactInfoDataSet.yml");
     }
 
@@ -233,7 +201,7 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.saveGeneralEntity(consumer);
+            dao.saveEntity(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -244,7 +212,7 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
     void updateEntity_success() {
         loadDataSet("/datasets/user/contact_info/testContactInfoDataSet.yml");
         Supplier<ContactInfo> supplier = this::prepareToUpdateContactInfo;
-        dao.updateGeneralEntity(supplier);
+        dao.updateEntity(supplier);
         verifyExpectedData("/datasets/user/contact_info/updateContactInfoDataSet.yml");
     }
 
@@ -258,7 +226,7 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            dao.updateGeneralEntity(supplier);
+            dao.updateEntity(supplier);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -272,7 +240,7 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
             s.merge(contactInfo.getContactPhone());
             s.merge(contactInfo);
         };
-        dao.updateGeneralEntity(consumer);
+        dao.updateEntity(consumer);
         verifyExpectedData("/datasets/user/contact_info/updateContactInfoDataSet.yml");
     }
 
@@ -286,7 +254,7 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.updateGeneralEntity(consumer);
+            dao.updateEntity(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -297,7 +265,7 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
         loadDataSet("/datasets/user/contact_info/testContactInfoDataSet.yml");
         Parameter parameter = new Parameter("id", 1);
 
-        dao.deleteGeneralEntity(parameter);
+        dao.findEntityAndDelete(parameter);
         verifyExpectedData("/datasets/user/contact_info/emptyContactInfoDataSet.yml");
     }
 
@@ -310,7 +278,7 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
             s.remove(contactInfo.getContactPhone());
         };
 
-        dao.deleteGeneralEntity(consumer);
+        dao.deleteEntity(consumer);
         verifyExpectedData("/datasets/user/contact_info/emptyContactInfoDataSet.yml");
     }
 
@@ -322,7 +290,7 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            dao.deleteGeneralEntity(consumer);
+            dao.deleteEntity(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -333,11 +301,7 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
         loadDataSet("/datasets/user/contact_info/testContactInfoDataSet.yml");
         ContactInfo contactInfo = prepareTestContactInfo();
 
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(1, contactInfo.getContactPhone());
-        generalEntity.addEntityPriority(2, contactInfo);
-
-        dao.deleteGeneralEntity(generalEntity);
+        dao.deleteEntity(contactInfo);
         verifyExpectedData("/datasets/user/contact_info/emptyContactInfoDataSet.yml");
     }
 
@@ -349,7 +313,7 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
         Transaction transaction = mock(Transaction.class);
 
         try {
-            Field sessionManagerField = AbstractGeneralEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
@@ -362,27 +326,16 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
 
         ContactInfo contactInfo = prepareTestContactInfo();
 
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(2, contactInfo);
-
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            dao.deleteGeneralEntity(generalEntity);
+            dao.deleteEntity(contactInfo);
         });
 
         assertEquals(RuntimeException.class, exception.getClass());
     }
 
     @Test
-    void deleteEntityWithClass_success() {
-        loadDataSet("/datasets/user/contact_info/testContactInfoDataSet.yml");
-        Parameter parameter = new Parameter("id", 1);
-
-        dao.deleteGeneralEntity(ContactInfo.class, parameter);
-        verifyExpectedData("/datasets/user/contact_info/emptyContactInfoDataSet.yml");
-    }
-
-    @Test
     void deleteEntity_transactionFailure() {
+        loadDataSet("/datasets/user/contact_info/testContactInfoDataSet.yml");
         ContactInfo contactInfo = new ContactInfo();
 
         Parameter parameter = new Parameter("id", 1L);
@@ -392,7 +345,7 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
         Transaction transaction = mock(Transaction.class);
 
         try {
-            Field sessionManagerField = AbstractGeneralEntityDao.class.getDeclaredField("sessionManager");
+            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionManager");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionManager);
         } catch (Exception e) {
@@ -403,44 +356,8 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
         when(session.beginTransaction()).thenReturn(transaction);
         doThrow(new RuntimeException()).when(transaction).commit();
 
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(2, contactInfo);
-
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.deleteGeneralEntity(parameter);
-        });
-
-        assertEquals(RuntimeException.class, exception.getClass());
-    }
-
-    @Test
-    void deleteEntityWithClass_transactionFailure() {
-        loadDataSet("/datasets/user/contact_info/testContactInfoDataSet.yml");
-        ContactInfo contactInfo = new ContactInfo();
-
-        Parameter parameter = new Parameter("id", 1L);
-
-        IThreadLocalSessionManager sessionManager = mock(IThreadLocalSessionManager.class);
-        Session session = mock(Session.class);
-        Transaction transaction = mock(Transaction.class);
-
-        try {
-            Field sessionManagerField = AbstractGeneralEntityDao.class.getDeclaredField("sessionManager");
-            sessionManagerField.setAccessible(true);
-            sessionManagerField.set(dao, sessionManager);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        when(sessionManager.getSession()).thenReturn(session);
-        when(session.beginTransaction()).thenReturn(transaction);
-        doThrow(new RuntimeException()).when(session).remove(any(Object.class));
-
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(2, contactInfo);
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.deleteGeneralEntity(ContactInfo.class, parameter);
+            dao.findEntityAndDelete(parameter);
         });
 
         assertEquals(RuntimeException.class, exception.getClass());
@@ -452,7 +369,7 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
         Parameter parameter = new Parameter("id", 1L);
         ContactInfo contactInfo = prepareTestContactInfo();
         Optional<ContactInfo> resultOptional =
-                dao.getOptionalGeneralEntity(parameter);
+                dao.getOptionalEntity(parameter);
 
         assertTrue(resultOptional.isPresent());
         ContactInfo result = resultOptional.get();
@@ -465,45 +382,9 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
         Parameter parameter = new Parameter("id1", 1L);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.getOptionalGeneralEntity(parameter);
+            dao.getOptionalEntity(parameter);
         });
 
-    }
-
-    @Test
-    void getOptionalEntityWithDependenciesWithClass_success() {
-        loadDataSet("/datasets/user/contact_info/testContactInfoDataSet.yml");
-        Parameter parameter = new Parameter("id", 1L);
-
-        ContactInfo contactInfo = prepareTestContactInfo();
-
-        Optional<ContactInfo> resultOptional =
-                dao.getOptionalGeneralEntity(ContactInfo.class, parameter);
-
-        assertTrue(resultOptional.isPresent());
-        ContactInfo result = resultOptional.get();
-
-        checkContactInfo(contactInfo, result);
-    }
-
-    @Test
-    void getOptionalEntityWithDependenciesWithClass_Failure() {
-        loadDataSet("/datasets/user/contact_info/testContactInfoDataSet.yml");
-        Parameter parameter = new Parameter("id1", 1L);
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.getOptionalGeneralEntity(ContactInfo.class, parameter);
-        });
-    }
-
-    @Test
-    void getOptionalEntityWithDependencies_OptionEmpty() {
-        Parameter parameter = new Parameter("id", 100L);
-
-        Optional<ContactInfo> result =
-                dao.getOptionalGeneralEntity(ContactInfo.class, parameter);
-
-        assertTrue(result.isEmpty());
     }
 
     @Test
@@ -513,7 +394,7 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
 
         ContactInfo contactInfo = prepareTestContactInfo();
 
-        ContactInfo result = dao.getGeneralEntity(parameter);
+        ContactInfo result = dao.getEntity(parameter);
 
         checkContactInfo(contactInfo, result);
     }
@@ -523,91 +404,7 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
         Parameter parameter = new Parameter("id1", 1L);
 
         assertThrows(RuntimeException.class, () -> {
-            dao.getGeneralEntity(parameter);
+            dao.getEntity(parameter);
         });
     }
-
-
-    @Test
-    void getEntityWithDependenciesWithClass_success() {
-        loadDataSet("/datasets/user/contact_info/testContactInfoDataSet.yml");
-        Parameter parameter = new Parameter("id", 1L);
-
-        ContactInfo contactInfo = prepareTestContactInfo();
-
-        ContactInfo result = dao.getGeneralEntity(ContactInfo.class, parameter);
-
-        checkContactInfo(contactInfo, result);
-    }
-
-    @Test
-    void getEntityWithDependenciesWithClass_Failure() {
-        Parameter parameter = new Parameter("id1", 1L);
-
-        assertThrows(RuntimeException.class, () -> {
-            dao.getGeneralEntity(ContactInfo.class, parameter);
-        });
-    }
-//
-//    @Override
-//    protected String getEmptyDataSetPath() {
-//        return "/datasets/user/contact_info/emptyContactPhoneDataSet.yml";
-//    }
-//
-//    @Override
-//    protected EntityDataSet<?> getTestDataSet() {
-//        CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
-//                .id(1L)
-//                .code("+11")
-//                .build();
-//        ContactPhone contactPhone = ContactPhone.builder()
-//                .phoneNumber("111-111-111")
-//                .countryPhoneCode(countryPhoneCode)
-//                .build();
-//        ContactInfo contactInfo = ContactInfo.builder()
-//                .id(1L)
-//                .name("Wolter")
-//                .secondName("White")
-//                .contactPhone(contactPhone)
-//                .build();
-//        return new EntityDataSet<>(contactInfo, "/datasets/user/contact_info/testContactPhoneDataSet.yml");
-//    }
-//
-//    @Override
-//    protected EntityDataSet<?> getSaveDataSet() {
-//        CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
-//                .id(1L)
-//                .code("+11")
-//                .build();
-//        ContactPhone contactPhone = ContactPhone.builder()
-//                .phoneNumber("111-111-111")
-//                .countryPhoneCode(countryPhoneCode)
-//                .build();
-//        ContactInfo contactInfo = ContactInfo.builder()
-//                .id(1L)
-//                .name("Wolter")
-//                .secondName("White")
-//                .contactPhone(contactPhone)
-//                .build();
-//        return new EntityDataSet<>(contactInfo, "/datasets/user/contact_info/saveContactPhoneDataSet.yml");
-//    }
-//
-//    @Override
-//    protected EntityDataSet<?> getUpdateDataSet() {
-//        CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
-//                .id(1L)
-//                .code("+11")
-//                .build();
-//        ContactPhone contactPhone = ContactPhone.builder()
-//                .phoneNumber("111-111-111")
-//                .countryPhoneCode(countryPhoneCode)
-//                .build();
-//        ContactInfo contactInfo = ContactInfo.builder()
-//                .id(1L)
-//                .name("Wolter")
-//                .secondName("White")
-//                .contactPhone(contactPhone)
-//                .build();
-//        return new EntityDataSet<>(contactInfo, "/datasets/user/contact_info/updateContactPhoneDataSet.yml");
-//    }
 }

@@ -5,14 +5,14 @@ import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.entity.store.CountType;
 import com.b2c.prototype.service.processor.AbstractOneFieldEntityService;
 import com.b2c.prototype.service.processor.store.ICountTypeService;
-import com.tm.core.dao.single.ISingleEntityDao;
+import com.tm.core.dao.common.IEntityDao;
 import com.tm.core.processor.finder.factory.IParameterFactory;
 
 import java.util.function.Function;
 
 public class CountTypeService extends AbstractOneFieldEntityService<CountType> implements ICountTypeService {
 
-    public CountTypeService(IParameterFactory parameterFactory, ISingleEntityDao dao, IEntityCachedMap entityCachedMap) {
+    public CountTypeService(IParameterFactory parameterFactory, IEntityDao dao, IEntityCachedMap entityCachedMap) {
         super(parameterFactory, dao, entityCachedMap);
     }
 

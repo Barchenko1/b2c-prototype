@@ -1,5 +1,6 @@
 package com.b2c.prototype.configuration;
 
+import com.b2c.prototype.configuration.modal.TransitiveSelfYaml;
 import com.b2c.prototype.dao.address.ICountryDao;
 import com.b2c.prototype.dao.delivery.IDeliveryTypeDao;
 import com.b2c.prototype.dao.item.IBrandDao;
@@ -32,23 +33,16 @@ import com.b2c.prototype.modal.entity.store.CountType;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.util.CategoryUtil;
 import com.tm.core.dao.transaction.ITransactionWrapper;
-import com.tm.core.modal.TransitiveSelfEntity;
-import com.tm.core.util.TransitiveSelfEnum;
 import jakarta.annotation.PostConstruct;
 import org.hibernate.Session;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
-import static com.b2c.prototype.util.CategoryUtil.buildCategory;
 import static com.b2c.prototype.util.CategoryUtil.extractTransitiveSelfYaml;
 import static com.b2c.prototype.util.CategoryUtil.findNonExistingCategories;
 import static com.b2c.prototype.util.CategoryUtil.findNonExistingCategoriesMap;
@@ -156,7 +150,7 @@ public class InitializeConstantDbConfiguration {
                 .map(countType -> CountType.builder()
                         .value(countType)
                         .build())
-                .forEach(countTypeDao::saveEntity);
+                .forEach(countTypeDao::persistEntity);
     }
 
     private void initializeCountryPhoneCode(Locale defaultLocale) {
@@ -170,7 +164,7 @@ public class InitializeConstantDbConfiguration {
                 .map(countryPhoneCodeName -> CountryPhoneCode.builder()
                         .code(countryPhoneCodeName)
                         .build())
-                .forEach(countryPhoneCodeDao::saveEntity);
+                .forEach(countryPhoneCodeDao::persistEntity);
     }
 
     private void initializeCountries(Locale defaultLocale) {
@@ -184,7 +178,7 @@ public class InitializeConstantDbConfiguration {
                 .map(countryName -> Country.builder()
                         .value(countryName)
                         .build())
-                .forEach(countryDao::saveEntity);
+                .forEach(countryDao::persistEntity);
     }
 
     private void initializeCurrencies(Locale defaultLocale) {
@@ -198,7 +192,7 @@ public class InitializeConstantDbConfiguration {
                 .map(currency -> Currency.builder()
                         .value(currency)
                         .build())
-                .forEach(currencyDao::saveEntity);
+                .forEach(currencyDao::persistEntity);
     }
 
     private void initializeDeliveryTypeEntities(Locale defaultLocale) {
@@ -214,7 +208,7 @@ public class InitializeConstantDbConfiguration {
                     .map(deliveryTypeName -> DeliveryType.builder()
                             .value(deliveryTypeName)
                             .build())
-                    .forEach(deliveryTypeDao::saveEntity);
+                    .forEach(deliveryTypeDao::persistEntity);
         }
     }
 
@@ -230,7 +224,7 @@ public class InitializeConstantDbConfiguration {
                     .map(paymentMethodName -> PaymentMethod.builder()
                             .method(paymentMethodName)
                             .build())
-                    .forEach(paymentMethodDao::saveEntity);
+                    .forEach(paymentMethodDao::persistEntity);
         }
     }
 
@@ -247,7 +241,7 @@ public class InitializeConstantDbConfiguration {
                     .map(orderStatusName -> OrderStatus.builder()
                             .value(orderStatusName)
                             .build())
-                    .forEach(orderStatusDao::saveEntity);
+                    .forEach(orderStatusDao::persistEntity);
         }
     }
 
@@ -264,7 +258,7 @@ public class InitializeConstantDbConfiguration {
                     .map(brandName -> Brand.builder()
                             .value(brandName)
                             .build())
-                    .forEach(brandDao::saveEntity);
+                    .forEach(brandDao::persistEntity);
         }
     }
 
@@ -281,7 +275,7 @@ public class InitializeConstantDbConfiguration {
                     .map(itemStatusName -> ItemStatus.builder()
                             .value(itemStatusName)
                             .build())
-                    .forEach(itemStatusDao::saveEntity);
+                    .forEach(itemStatusDao::persistEntity);
         }
     }
 
@@ -298,7 +292,7 @@ public class InitializeConstantDbConfiguration {
                     .map(itemTypeName -> ItemType.builder()
                             .value(itemTypeName)
                             .build())
-                    .forEach(itemTypeDao::saveEntity);
+                    .forEach(itemTypeDao::persistEntity);
         }
     }
 
@@ -313,7 +307,7 @@ public class InitializeConstantDbConfiguration {
                 .map(messageStatusValue -> MessageStatus.builder()
                         .value(messageStatusValue)
                         .build())
-                .forEach(messageStatusDao::saveEntity);
+                .forEach(messageStatusDao::persistEntity);
     }
 
     private void initializeMessageTypes(Locale locale) {
@@ -327,7 +321,7 @@ public class InitializeConstantDbConfiguration {
                 .map(messageTypeValue -> MessageType.builder()
                         .value(messageTypeValue)
                         .build())
-                .forEach(messageTypeDao::saveEntity);
+                .forEach(messageTypeDao::persistEntity);
     }
 
     private void initializeOptionGroupEntities(Locale defaultLocale) {
@@ -343,7 +337,7 @@ public class InitializeConstantDbConfiguration {
                     .map(optionGroupName -> OptionGroup.builder()
                             .value(optionGroupName)
                             .build())
-                    .forEach(optionGroupDao::saveEntity);
+                    .forEach(optionGroupDao::persistEntity);
         }
     }
 
@@ -359,7 +353,7 @@ public class InitializeConstantDbConfiguration {
                     .map(rating -> Rating.builder()
                             .value(rating)
                             .build())
-                    .forEach(ratingDao::saveEntity);
+                    .forEach(ratingDao::persistEntity);
         }
     }
 

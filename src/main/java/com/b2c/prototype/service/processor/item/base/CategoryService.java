@@ -2,8 +2,8 @@ package com.b2c.prototype.service.processor.item.base;
 
 import com.b2c.prototype.dao.cashed.IEntityCachedMap;
 import com.b2c.prototype.dao.item.ICategoryDao;
-import com.b2c.prototype.modal.dto.request.RequestCategoryDto;
-import com.b2c.prototype.modal.dto.update.RequestCategoryDtoUpdate;
+import com.b2c.prototype.modal.dto.request.CategoryDto;
+import com.b2c.prototype.modal.dto.update.CategoryDtoUpdate;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.service.transitive.AbstractTransitiveSelfEntityService;
 import com.b2c.prototype.service.processor.item.ICategoryService;
@@ -36,31 +36,31 @@ public class CategoryService extends AbstractTransitiveSelfEntityService impleme
     }
 
     @Override
-    public void createCategory(RequestCategoryDto requestCategoryDto) {
-        Category newCategory = buildCategory(requestCategoryDto);
+    public void createCategory(CategoryDto categoryDto) {
+        Category newCategory = buildCategory(categoryDto);
 
         super.saveEntityTree(newCategory);
         addNewEntityTreeToMap(entityCachedMap, newCategory);
     }
 
     @Override
-    public void updateCategory(RequestCategoryDtoUpdate requestCategoryDtoUpdate) {
-        Category oldCategory = buildCategory(requestCategoryDtoUpdate.getOldEntityDto());
-        Category newCategory = buildCategory(requestCategoryDtoUpdate.getNewEntityDto());
+    public void updateCategory(CategoryDtoUpdate categoryDtoUpdate) {
+        Category oldCategory = buildCategory(categoryDtoUpdate.getOldEntityDto());
+        Category newCategory = buildCategory(categoryDtoUpdate.getNewEntityDto());
 
-        RequestCategoryDto oldRequestCategoryDto = requestCategoryDtoUpdate.getOldEntityDto();
+        CategoryDto oldCategoryDto = categoryDtoUpdate.getOldEntityDto();
         Parameter parameter =
-                parameterFactory.createStringParameter("name", oldRequestCategoryDto.getName());
+                parameterFactory.createStringParameter("name", oldCategoryDto.getName());
         categoryDao.updateEntityTreeOldMain(newCategory, parameter);
         updateEntityTreeOldMainMap(entityCachedMap, oldCategory, newCategory);
     }
 
     @Override
-    public void deleteCategory(RequestCategoryDto requestCategoryDto) {
-        Category oldCategory = buildCategory(requestCategoryDto);
+    public void deleteCategory(CategoryDto categoryDto) {
+        Category oldCategory = buildCategory(categoryDto);
 
         Parameter parameter =
-                parameterFactory.createStringParameter("name", requestCategoryDto.getName());
+                parameterFactory.createStringParameter("name", categoryDto.getName());
         categoryDao.deleteEntityTree(parameter);
         deleteEntityFromMap(entityCachedMap, oldCategory);
     }
@@ -88,23 +88,23 @@ public class CategoryService extends AbstractTransitiveSelfEntityService impleme
         return categoryDao.getTransitiveSelfEntitiesTree();
     }
 
-    private Category buildCategory(RequestCategoryDto requestCategoryDto) {
+    private Category buildCategory(CategoryDto categoryDto) {
         Category parentCategory = null;
-        if (requestCategoryDto.getParent() != null) {
+        if (categoryDto.getParent() != null) {
             parentCategory = Category.builder()
-                    .name(requestCategoryDto.getParent().getName())
+                    .name(categoryDto.getParent().getName())
                     .parent(null)
                     .build();
         }
 
         Category category = Category.builder()
-                .name(requestCategoryDto.getName())
+                .name(categoryDto.getName())
                 .parent(parentCategory)
                 .build();
 
-        if (requestCategoryDto.getChildNodeList() != null) {
+        if (categoryDto.getChildNodeList() != null) {
             List<Category> childCategory = new ArrayList<>();
-            for (RequestCategoryDto childRequest : requestCategoryDto.getChildNodeList()) {
+            for (CategoryDto childRequest : categoryDto.getChildNodeList()) {
                 Category childCategoryEntity = Category.builder()
                         .name(childRequest.getName())
                         .parent(category)

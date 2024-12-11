@@ -1,562 +1,881 @@
+alter table if exists category
+drop constraint if exists FKap0cnk1255oj4bwam7in1hxxv
 
-    create table app_user (
-       id bigserial not null,
-        email varchar(255),
-        password varchar(255),
-        username varchar(255),
-        bucket_id bigint,
-        role_id bigint,
-        userAddress_id bigint,
-        userDetails_id bigint,
-        userPayment_id bigint,
-        primary key (id)
-    )
- 
-    
-    create table brand (
-       id bigserial not null,
-        brand smallint,
-        primary key (id)
-    )
- 
-    
-    create table bucket (
-       id bigserial not null,
-        user_id bigint,
-        primary key (id)
-    )
- 
-    
-    create table bucket_has_product (
-       bucket_id bigint not null,
-        product_id bigint not null
-    )
- 
-    
-    create table category (
-       id bigserial not null,
-        category smallint,
-        primary key (id)
-    )
- 
-    
-    create table comment (
-       id bigserial not null,
-        authorEmail varchar(255),
-        authorName varchar(255),
-        message varchar(255),
-        post_id bigint,
-        primary key (id)
-    )
- 
-    
-    create table currencyDiscount (
-       id bigserial not null,
-        primary key (id)
-    )
- 
-    
-    create table wishlist (
-       id bigserial not null,
-        product_id bigint,
-        user_id bigint,
-        primary key (id)
-    )
- 
-    
-    create table option_group (
-       id bigserial not null,
-        optionsGroup smallint,
-        primary key (id)
-    )
- 
-    
-    create table option_item (
-       id bigserial not null,
-        optionGroup_id bigint,
-        primary key (id)
-    )
- 
-    
-    create table option_item_product (
-       Option_id bigint not null,
-        products_id bigint not null
-    )
- 
-    
-    create table order_address (
-       id bigserial not null,
-        apartmentNumber integer not null,
-        building integer not null,
-        flor integer not null,
-        street varchar(255),
-        primary key (id)
-    )
- 
-    
-    create table order_details (
-       id bigserial not null,
-        primary key (id)
-    )
- 
-    
-    create table order_history (
-       id bigserial not null,
-        dataOfOrder timestamp(6),
-        order_id bigint,
-        user_id bigint,
-        primary key (id)
-    )
- 
-    
-    create table order_item (
-       id bigserial not null,
-        orderAddress_id bigint,
-        orderDetails_id bigint,
-        orderStatus_id bigint,
-        product_id bigint,
-        user_id bigint,
-        primary key (id)
-    )
- 
-    
-    create table order_status (
-       id bigserial not null,
-        orderStatus smallint,
-        primary key (id)
-    )
- 
-    
-    create table post (
-       id bigserial not null,
-        authorEmail varchar(255),
-        authorName varchar(255),
-        message varchar(255),
-        primary key (id)
-    )
- 
-    
-    create table post_comment (
-       Post_id bigint not null,
-        comments_id bigint not null
-    )
- 
-    
-    create table item (
-       id bigserial not null,
-        productName varchar(255),
-        brand_id bigint,
-        category_id bigint,
-        discount_id bigint,
-        productType_id bigint,
-        primary key (id)
-    )
- 
-    
-    create table product_option (
-       product_id bigint not null,
-        option_item_id bigint not null
-    )
- 
-    
-    create table product_post (
-       Product_id bigint not null,
-        posts_id bigint not null
-    )
- 
-    
-    create table product_review (
-       product_id bigint not null,
-        review_id bigint not null
-    )
- 
-    
-    create table product_type (
-       id bigserial not null,
-        itemType smallint,
-        primary key (id)
-    )
- 
-    
-    create table rating (
-       id bigserial not null,
-        rating smallint,
-        primary key (id)
-    )
- 
-    
-    create table review (
-       id bigserial not null,
-        advantage varchar(255),
-        flaw varchar(255),
-        postComment_id bigint,
-        primary key (id)
-    )
- 
-    
-    create table review_rating (
-       review_id bigint not null,
-        rating_id bigint not null
-    )
- 
-    
-    create table shop (
-       id bigserial not null,
-        shopAddress_id bigint,
-        primary key (id)
-    )
- 
-    
-    create table shop_address (
-       id bigserial not null,
-        apartmentNumber integer not null,
-        building integer not null,
-        flor integer not null,
-        street varchar(255),
-        primary key (id)
-    )
- 
-    
-    create table shop_product (
-       shop_id bigint not null,
-        product_id bigint not null
-    )
- 
-    
-    create table store (
-       id bigserial not null,
-        storeAddress_id bigint,
-        primary key (id)
-    )
- 
-    
-    create table store_address (
-       id bigserial not null,
-        apartmentNumber integer not null,
-        building integer not null,
-        flor integer not null,
-        street varchar(255),
-        primary key (id)
-    )
- 
-    
-    create table store_product (
-       store_id bigint not null,
-        product_id bigint not null
-    )
- 
-    
-    create table store_shop (
-       store_id bigint not null,
-        shop_id bigint not null
-    )
- 
-    
-    create table user_address (
-       id bigserial not null,
-        apartmentNumber integer not null,
-        building integer not null,
-        flor integer not null,
-        street varchar(255),
-        primary key (id)
-    )
- 
-    
-    create table user_details (
-       id bigserial not null,
-        primary key (id)
-    )
- 
-    
-    create table user_payment (
-       id bigserial not null,
-        primary key (id)
-    )
- 
-    
-    create table user_role (
-       id bigserial not null,
-        name smallint,
-        primary key (id)
-    )
- 
-    
-    alter table if exists post_comment 
-       drop constraint if exists UK_se9l149iyyao6va95afioxsrl
- 
-    
-    alter table if exists post_comment 
-       add constraint UK_se9l149iyyao6va95afioxsrl unique (comments_id)
- 
-    
-    alter table if exists product_post 
-       drop constraint if exists UK_g7k13n5ppl87341qwxltt5mmg
- 
-    
-    alter table if exists product_post 
-       add constraint UK_g7k13n5ppl87341qwxltt5mmg unique (posts_id)
- 
-    
-    alter table if exists app_user 
-       add constraint FKjehcai3yacqcjtivt4c790xsh 
-       foreign key (bucket_id) 
-       references bucket
- 
-    
-    alter table if exists app_user 
-       add constraint FKjsrnof3jy28c9eno19i04dxd5 
-       foreign key (role_id) 
-       references user_role
- 
-    
-    alter table if exists app_user 
-       add constraint FKqmgtpbsha7mnfwhnt292kn10b 
-       foreign key (userAddress_id) 
-       references user_address
- 
-    
-    alter table if exists app_user 
-       add constraint FKe0hdd0vdaii0ddb4e8e5of5xi 
-       foreign key (userDetails_id) 
-       references user_details
- 
-    
-    alter table if exists app_user 
-       add constraint FK4cu3q31b3qginbrbw6tihpdp7 
-       foreign key (userPayment_id) 
-       references user_payment
- 
-    
-    alter table if exists bucket 
-       add constraint FKni9q3au75tm8kke6xiwn03oed 
-       foreign key (user_id) 
-       references app_user
- 
-    
-    alter table if exists bucket_has_product 
-       add constraint FKl4ibxcosh8uxp4q6tvownb0pi 
-       foreign key (product_id) 
-       references item
- 
-    
-    alter table if exists bucket_has_product 
-       add constraint FKjnr92kq55cq1i3tcxkeypcd85 
-       foreign key (bucket_id) 
-       references bucket
- 
-    
-    alter table if exists comment 
-       add constraint FKs1slvnkuemjsq2kj4h3vhx7i1 
-       foreign key (post_id) 
-       references post
- 
-    
-    alter table if exists wishlist
-       add constraint FK4ufc24y6gaa606e994oytt868 
-       foreign key (product_id) 
-       references item
- 
-    
-    alter table if exists wishlist
-       add constraint FKmmxj3qvngcm3anmmpu3aktevo 
-       foreign key (user_id) 
-       references app_user
- 
-    
-    alter table if exists option_item 
-       add constraint FKi8a7hi02dpehhjq7c2qwh5sai 
-       foreign key (optionGroup_id) 
-       references option_group
- 
-    
-    alter table if exists option_item_product 
-       add constraint FKi50w9lx80mdq85qvm0r5nrakj 
-       foreign key (products_id) 
-       references item
- 
-    
-    alter table if exists option_item_product 
-       add constraint FK8iquwtarvhr1w8bib6wloe699 
-       foreign key (Option_id) 
-       references option_item
- 
-    
-    alter table if exists order_history 
-       add constraint FKpnw8e9962yho1tmyd9e5dr0x6 
-       foreign key (order_id) 
-       references order_item
- 
-    
-    alter table if exists order_history 
-       add constraint FK4ximere3hjjqduwoj7l8pbtuw 
-       foreign key (user_id) 
-       references app_user
- 
-    
-    alter table if exists order_item 
-       add constraint FK4nrd5793tvanb3yqg9gv28yde 
-       foreign key (orderAddress_id) 
-       references order_address
- 
-    
-    alter table if exists order_item 
-       add constraint FKs0ipkmy5qp5j4gklwimx4kb8u 
-       foreign key (orderDetails_id) 
-       references order_details
- 
-    
-    alter table if exists order_item 
-       add constraint FKdaf9qb7qp4puef6sglu8us441 
-       foreign key (orderStatus_id) 
-       references order_status
- 
-    
-    alter table if exists order_item 
-       add constraint FK551losx9j75ss5d6bfsqvijna 
-       foreign key (product_id) 
-       references item
- 
-    
-    alter table if exists order_item 
-       add constraint FKcgs0relfw84njsvcj5rbp94n3 
-       foreign key (user_id) 
-       references app_user
- 
-    
-    alter table if exists post_comment 
-       add constraint FKagqftk08s8sjuc6bbr9v99vbe 
-       foreign key (comments_id) 
-       references comment
- 
-    
-    alter table if exists post_comment 
-       add constraint FKnm3lpb10fjje1itg5x6c7w7w4 
-       foreign key (Post_id) 
-       references post
- 
-    
-    alter table if exists item
-       add constraint FKs6cydsualtsrprvlf2bb3lcam 
-       foreign key (brand_id) 
-       references brand
- 
-    
-    alter table if exists item
-       add constraint FK1mtsbur82frn64de7balymq9s 
-       foreign key (category_id) 
-       references category
- 
-    
-    alter table if exists item
-       add constraint FKps2e0q9jpd0i9kj83je4rsmf1 
-       foreign key (discount_id) 
-       references currencyDiscount
- 
-    
-    alter table if exists item
-       add constraint FKr85c7p8l1mscmgmpek6ur5nql 
-       foreign key (productType_id) 
-       references product_type
- 
-    
-    alter table if exists product_option 
-       add constraint FKpuybkmydotfrlb904t6fevwmo 
-       foreign key (option_item_id) 
-       references option_item
- 
-    
-    alter table if exists product_option 
-       add constraint FKn4hmm6ex1vgn60c6uiqte400f 
-       foreign key (product_id) 
-       references item
- 
-    
-    alter table if exists product_post 
-       add constraint FKo7tiqdd9c7kk70x22i4gfquec 
-       foreign key (posts_id) 
-       references post
- 
-    
-    alter table if exists product_post 
-       add constraint FKc1gc0qyxtd5mv44qb9ohmxhmj 
-       foreign key (Product_id) 
-       references item
- 
-    
-    alter table if exists product_review 
-       add constraint FKedgxhnvlh3k85mq80smlpwdej 
-       foreign key (review_id) 
-       references review
- 
-    
-    alter table if exists product_review 
-       add constraint FKkaqmhakwt05p3n0px81b9pdya 
-       foreign key (product_id) 
-       references item
- 
-    
-    alter table if exists review 
-       add constraint FKlt2geq3kgswh80db4q6rxw6je 
-       foreign key (postComment_id) 
-       references comment
- 
-    
-    alter table if exists review_rating 
-       add constraint FKfj1ya3a5vfomf4q2ggujvkbpb 
-       foreign key (rating_id) 
-       references rating
- 
-    
-    alter table if exists review_rating 
-       add constraint FKh37ipkn319mk4u2v5w193jx81 
-       foreign key (review_id) 
-       references review
- 
-    
-    alter table if exists shop 
-       add constraint FKpuckw89heucgdrk03r60hhira 
-       foreign key (shopAddress_id) 
-       references shop_address
- 
-    
-    alter table if exists shop_product 
-       add constraint FKagx9ubmm4qiq1whqrf5f7wdc6 
-       foreign key (product_id) 
-       references item
- 
-    
-    alter table if exists shop_product 
-       add constraint FK9n6cn7s1s7sdysss12k52v8sa 
-       foreign key (shop_id) 
-       references shop
- 
-    
-    alter table if exists store 
-       add constraint FKaxmox3jfaoo9tosgh5eh2bvkp 
-       foreign key (storeAddress_id) 
-       references store_address
- 
-    
-    alter table if exists store_product 
-       add constraint FKd91qk8cbmboomritdwn351tak 
-       foreign key (product_id) 
-       references item
- 
-    
-    alter table if exists store_product 
-       add constraint FKdncsr7lgl9pdsq71314etuwrp 
-       foreign key (store_id) 
-       references store
- 
-    
-    alter table if exists store_shop 
-       add constraint FKphg6q3idmg7752twftyi4mf26 
-       foreign key (shop_id) 
-       references shop
- 
-    
-    alter table if exists store_shop 
-       add constraint FKhsx2ivwxjwyd13iuluortvmo0 
-       foreign key (store_id) 
-       references store
+alter table if exists contact_info
+drop constraint if exists FKbbcsefxe8ax16j1dndb9l7mms
 
+alter table if exists contact_phone
+drop constraint if exists FKbvstb62j7buq9fxiaefcfxfnd
+
+alter table if exists currency_discount
+drop constraint if exists FK4c47cfya2tgceha3msekcmc7d
+
+alter table if exists delivery
+drop constraint if exists FKlayueon76a86wr2gbsyannaf7
+
+alter table if exists delivery
+drop constraint if exists FKiu02keoyiv4xhc28rsi86mhll
+
+alter table if exists item
+drop constraint if exists FK5pc91oc43bq6tqaugwvc8f4or
+
+alter table if exists item_data
+drop constraint if exists FK7yqp32kg84bewf1nnq1lhirqa
+
+alter table if exists item_data
+drop constraint if exists FKnp91gprwy000sgedoo83oymji
+
+alter table if exists item_data
+drop constraint if exists FK1jvdlvc3rfvki7v5jus0m19s3
+
+alter table if exists item_data
+drop constraint if exists FKcipiyxs05i6ek9hiwhscny7c0
+
+alter table if exists item_data
+drop constraint if exists FKdiwrprwyudwa44upjvl8k87h9
+
+alter table if exists item_data
+drop constraint if exists FK810alvugy52y6s9no5oppb26j
+
+alter table if exists item_data
+drop constraint if exists FKiksl8lnvms0xfx27yoo9fj02p
+
+alter table if exists item_data
+drop constraint if exists FKimkmn00n05kk4ap3ektej3itd
+
+alter table if exists item_data_option
+drop constraint if exists FKahke2r2nw7hvi4q3426oju9xw
+
+alter table if exists item_data_option
+drop constraint if exists FKcvvtx9qekfpisvrgqj136tft1
+
+alter table if exists item_data_quantity_item_data
+drop constraint if exists FK5r4ejgb9q1cwdjt6af4eusa6i
+
+alter table if exists item_data_quantity_item_data
+drop constraint if exists FKmokvmesmv3cxly9a5l6rux7pa
+
+alter table if exists item_post
+drop constraint if exists FK1grghtm8o53yfmfixtu97em69
+
+alter table if exists item_post
+drop constraint if exists FKhld6fk2skal2v9mk7na8qv9uf
+
+alter table if exists item_review
+drop constraint if exists FKewycb8h8ogg4ssiwd5v64sbgm
+
+alter table if exists item_review
+drop constraint if exists FKdk8811562blj2cqlok7cknd70
+
+alter table if exists message
+drop constraint if exists FKc1vhu79usc0hfr9gp6fuu3ah5
+
+alter table if exists message
+drop constraint if exists FK3kx251aos03ltpyc1dxofsrck
+
+alter table if exists message_box
+drop constraint if exists FKl5lntrj6p83iu21a4eno38vy0
+
+alter table if exists message_box_message
+drop constraint if exists FK7n91muashe5nwvufuaxicvrux
+
+alter table if exists message_box_message
+drop constraint if exists FKss2bsrmbp3w9d2guos7y0amdh
+
+alter table if exists message_receivers
+drop constraint if exists FKsfmc2unubrcf9ivflgn3nrc83
+
+alter table if exists option_item
+drop constraint if exists FKi8a7hi02dpehhjq7c2qwh5sai
+
+alter table if exists order_item
+drop constraint if exists FKbx40hdv2o0kdjt1xcbefjcl2h
+
+alter table if exists order_item
+drop constraint if exists FKdaf9qb7qp4puef6sglu8us441
+
+alter table if exists order_item
+drop constraint if exists FK2vebnru38ddo0wk30i9ybhx8c
+
+alter table if exists order_item
+drop constraint if exists FKl4ignmwea39w75fo9e925v7yi
+
+alter table if exists order_item_contact_info
+drop constraint if exists FKdkqpewgye3ykp7ja6026sj8ch
+
+alter table if exists order_item_contact_info
+drop constraint if exists FKfpi19pjk52p9r2cammbfe9n98
+
+alter table if exists order_quantity_item
+drop constraint if exists FKpmf6b30yudoi52frolacv34ud
+
+alter table if exists order_quantity_item
+drop constraint if exists FK6odyl3q2hixxqk1md6c367rqt
+
+alter table if exists payment
+drop constraint if exists FKexl3xxffhku33dfeakcxb9oaq
+
+alter table if exists payment
+drop constraint if exists FKjii2n6db6cje3km5ybsbgo8cl
+
+alter table if exists payment
+drop constraint if exists FK6no43xuawlg1klytnke01u2pk
+
+alter table if exists payment
+drop constraint if exists FK41brulskee4m5ppls85o6go9r
+
+alter table if exists payment
+drop constraint if exists FKiay5v7ko98xmg8kmmbod9g5a8
+
+alter table if exists payment
+drop constraint if exists FKqgepwy3c7leg5lucaq5411msx
+
+alter table if exists post
+drop constraint if exists FKcujdyjmpscm8hpiv70fbafgdb
+
+alter table if exists price
+drop constraint if exists FKjufxmhfbykaua4p43u87udfqq
+
+alter table if exists review
+drop constraint if exists FKfoadt2illecegj32wlk5hau9p
+
+alter table if exists review
+drop constraint if exists FKonb8hnnh1sf9udkwu37e7olqq
+
+alter table if exists store
+drop constraint if exists FK11ufvbaca85vw4h3kak8tkm55
+
+alter table if exists store
+drop constraint if exists FKht5yqojt5c4yw21kiax7apcsd
+
+alter table if exists user_profile
+drop constraint if exists FKt7ck1erxe5phbhrdk1cn92h52
+
+alter table if exists user_profile
+drop constraint if exists FKbb0yxp4hid37u6wvl212sl9xq
+
+alter table if exists user_profile_credit_card
+drop constraint if exists FK9cdt2l66ilcafej5ave1gvkga
+
+alter table if exists user_profile_credit_card
+drop constraint if exists FK4ovk6akxkfli65wqegfx9t4ue
+
+alter table if exists user_profile_post
+drop constraint if exists FKhj7tl66aevwcx7n8i387plk9q
+
+alter table if exists user_profile_post
+drop constraint if exists FKfs87np3bixtnk9tggfenkfpjw
+
+drop table if exists address cascade
+    
+drop table if exists brand cascade
+    
+drop table if exists category cascade
+    
+drop table if exists contact_info cascade
+    
+drop table if exists contact_phone cascade
+    
+drop table if exists count_type cascade
+    
+drop table if exists country cascade
+    
+drop table if exists country_phone_code cascade
+    
+drop table if exists credit_card cascade
+    
+drop table if exists currency cascade
+    
+drop table if exists currency_discount cascade
+    
+drop table if exists delivery cascade
+    
+drop table if exists delivery_type cascade
+    
+drop table if exists item cascade
+    
+drop table if exists item_data cascade
+    
+drop table if exists item_data_option cascade
+    
+drop table if exists item_data_quantity cascade
+    
+drop table if exists item_data_quantity_item_data cascade
+    
+drop table if exists item_post cascade
+    
+drop table if exists item_review cascade
+    
+drop table if exists item_status cascade
+    
+drop table if exists item_type cascade
+    
+drop table if exists message cascade
+    
+drop table if exists message_box cascade
+    
+drop table if exists message_box_message cascade
+    
+drop table if exists message_receivers cascade
+    
+drop table if exists message_status cascade
+    
+drop table if exists message_type cascade
+    
+drop table if exists option_group cascade
+    
+drop table if exists option_item cascade
+    
+drop table if exists order_item cascade
+    
+drop table if exists order_item_contact_info cascade
+    
+drop table if exists order_quantity_item cascade
+    
+drop table if exists order_status cascade
+    
+drop table if exists payment cascade
+    
+drop table if exists payment_method cascade
+    
+drop table if exists percent_discount cascade
+    
+drop table if exists post cascade
+    
+drop table if exists price cascade
+    
+drop table if exists rating cascade
+    
+drop table if exists review cascade
+    
+drop table if exists store cascade
+    
+drop table if exists user_profile cascade
+    
+drop table if exists user_profile_credit_card cascade
+    
+drop table if exists user_profile_post cascade
+    
+create table address (
+                         apartmentNumber integer not null,
+                         buildingNumber integer not null,
+                         florNumber integer not null,
+                         country_id bigint,
+                         id bigserial not null,
+                         city varchar(255),
+                         street varchar(255),
+                         street2 varchar(255),
+                         zipCode varchar(255),
+                         primary key (id)
+)
+    14:40:06.499 [Test worker] INFO org.hibernate.orm.connections.access -- HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@19d13d04] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.
+
+create table brand (
+                       id bigserial not null,
+                       value varchar(255) not null,
+                       primary key (id)
+)
+    
+create table category (
+                          category_id bigint,
+                          id bigserial not null,
+                          name varchar(255) not null,
+                          primary key (id)
+)
+    
+create table contact_info (
+                              contact_phone_id bigint,
+                              id bigserial not null,
+                              name varchar(255),
+                              secondName varchar(255),
+                              uniqueContactInfoId varchar(255),
+                              primary key (id)
+)
+    
+create table contact_phone (
+                               country_phone_code_id bigint,
+                               id bigserial not null,
+                               phoneNumber varchar(255),
+                               primary key (id)
+)
+    
+create table count_type (
+                            id bigserial not null,
+                            value varchar(255) not null,
+                            primary key (id)
+)
+    
+create table country (
+                         id bigserial not null,
+                         flagImagePath varchar(255),
+                         value varchar(255),
+                         primary key (id)
+)
+    
+create table country_phone_code (
+                                    id bigserial not null,
+                                    code varchar(255),
+                                    primary key (id)
+)
+    
+create table credit_card (
+                             isActive boolean not null,
+                             id bigserial not null,
+                             cardNumber varchar(255),
+                             cvv varchar(255),
+                             dateOfExpire varchar(255),
+                             ownerName varchar(255),
+                             ownerSecondName varchar(255),
+                             primary key (id)
+)
+    
+create table currency (
+                          id bigserial not null,
+                          value varchar(255) not null,
+                          primary key (id)
+)
+    
+create table currency_discount (
+                                   amount float(53) not null,
+                                   currency_id bigint,
+                                   id bigserial not null,
+                                   charSequenceCode varchar(255) not null unique,
+                                   primary key (id)
+)
+    
+create table delivery (
+                          address_id bigint,
+                          delivery_type_id bigint,
+                          id bigserial not null,
+                          primary key (id)
+)
+    
+create table delivery_type (
+                               id bigserial not null,
+                               value varchar(255) not null,
+                               primary key (id)
+)
+    
+create table item (
+                      id bigserial not null,
+                      itemData_id bigint unique,
+                      primary key (id)
+)
+    
+create table item_data (
+                           brand_id bigint,
+                           category_id bigint,
+                           currencyDiscount_id bigint,
+                           dateOfCreate bigint not null,
+                           fullPrice_id bigint,
+                           id bigserial not null,
+                           itemType_id bigint,
+                           percentDiscount_id bigint,
+                           status_id bigint,
+                           totalPrice_id bigint,
+                           articularId varchar(255),
+                           name varchar(255),
+                           primary key (id)
+)
+    
+create table item_data_option (
+                                  itemdata_id bigint not null,
+                                  optionitem_id bigint not null,
+                                  primary key (itemdata_id, optionitem_id)
+)
+    
+create table item_data_quantity (
+                                    quantity integer not null,
+                                    id bigserial not null,
+                                    primary key (id)
+)
+    
+create table item_data_quantity_item_data (
+                                              item_data_id bigint not null,
+                                              item_data_quantity_id bigint not null,
+                                              primary key (item_data_id, item_data_quantity_id)
+)
+    
+create table item_post (
+                           item_id bigint not null,
+                           post_id bigint not null,
+                           primary key (item_id, post_id)
+)
+    
+create table item_review (
+                             item_id bigint not null,
+                             review_id bigint not null,
+                             primary key (item_id, review_id)
+)
+    
+create table item_status (
+                             id bigserial not null,
+                             value varchar(255) not null,
+                             primary key (id)
+)
+    
+create table item_type (
+                           id bigserial not null,
+                           value varchar(255) not null,
+                           primary key (id)
+)
+    
+create table message (
+                         dateOfSend bigint not null,
+                         id bigserial not null,
+                         status_id bigint,
+                         type_id bigint,
+                         message varchar(255),
+                         messageUniqNumber varchar(255) not null unique,
+                         sendSystem varchar(255),
+                         sender varchar(255),
+                         subscribe varchar(255),
+                         title varchar(255),
+                         primary key (id)
+)
+    
+create table message_box (
+                             id bigserial not null,
+                             userProfile_id bigint unique,
+                             primary key (id)
+)
+    
+create table message_box_message (
+                                     message_box_id bigint not null,
+                                     message_id bigint not null,
+                                     primary key (message_box_id, message_id)
+)
+    
+create table message_receivers (
+                                   message_id bigint not null,
+                                   receiver_email varchar(255) not null
+)
+    
+create table message_status (
+                                id bigserial not null,
+                                value varchar(255) not null,
+                                primary key (id)
+)
+    
+create table message_type (
+                              id bigserial not null,
+                              value varchar(255) not null,
+                              primary key (id)
+)
+    
+create table option_group (
+                              id bigserial not null,
+                              value varchar(255) not null,
+                              primary key (id)
+)
+    
+create table option_item (
+                             id bigserial not null,
+                             optionGroup_id bigint,
+                             optionName varchar(255),
+                             primary key (id)
+)
+    
+create table order_item (
+                            dateOfCreate bigint not null,
+                            delivery_id bigint,
+                            id bigserial not null,
+                            orderStatus_id bigint,
+                            payment_id bigint,
+                            userProfile_id bigint,
+                            note varchar(255),
+                            order_id varchar(255) not null unique,
+                            primary key (id)
+)
+    
+create table order_item_contact_info (
+                                         OrderItem_id bigint not null,
+                                         beneficiaries_id bigint not null unique
+)
+    
+create table order_quantity_item (
+                                     item_quantity_id bigint not null,
+                                     order_item_id bigint not null,
+                                     primary key (item_quantity_id, order_item_id)
+)
+    
+create table order_status (
+                              id bigserial not null,
+                              value varchar(255) not null,
+                              primary key (id)
+)
+    
+create table payment (
+                         credit_card_id bigint,
+                         currencyDiscount_id bigint,
+                         fullprice_id bigint,
+                         id bigserial not null,
+                         payment_method_id bigint,
+                         percentDiscount_id bigint,
+                         totalprice_id bigint,
+                         paymentId varchar(255),
+                         primary key (id)
+)
+    
+create table payment_method (
+                                id bigserial not null,
+                                method varchar(255),
+                                primary key (id)
+)
+    
+create table percent_discount (
+                                  amount float(53) not null,
+                                  isPercentage boolean not null,
+                                  id bigserial not null,
+                                  charSequenceCode varchar(255) not null unique,
+                                  primary key (id)
+)
+    
+create table post (
+                      dateOfCreate bigint not null,
+                      id bigserial not null,
+                      post_id bigint,
+                      authorEmail varchar(255),
+                      authorUserName varchar(255),
+                      message varchar(255),
+                      title varchar(255),
+                      uniquePostId varchar(255),
+                      primary key (id)
+)
+    
+create table price (
+                       amount float(53) not null,
+                       currency_id bigint,
+                       id bigserial not null,
+                       primary key (id)
+)
+    
+create table rating (
+                        value integer not null,
+                        id bigserial not null,
+                        primary key (id)
+)
+    
+create table review (
+                        dateOfCreate bigint not null,
+                        id bigserial not null,
+                        rating_id bigint,
+                        userProfile_id bigint unique,
+                        message varchar(255),
+                        title varchar(255),
+                        primary key (id)
+)
+    
+create table store (
+                       count integer not null,
+                       count_type bigint,
+                       id bigserial not null,
+                       option_item bigint unique,
+                       primary key (id)
+)
+    
+create table user_profile (
+                              isActive boolean not null,
+                              address_id bigint unique,
+                              contactInfo_id bigint unique,
+                              dateOfCreate bigint not null,
+                              id bigserial not null,
+                              email varchar(255),
+                              username varchar(255),
+                              primary key (id)
+)
+    
+create table user_profile_credit_card (
+                                          UserProfile_id bigint not null,
+                                          creditCardList_id bigint not null unique
+)
+    
+create table user_profile_post (
+                                   UserProfile_id bigint not null,
+                                   postList_id bigint not null unique
+)
+    
+alter table if exists address
+    add constraint FKe54x81nmccsk5569hsjg1a6ka
+    foreign key (country_id)
+    references country
+    
+alter table if exists category
+    add constraint FKap0cnk1255oj4bwam7in1hxxv
+    foreign key (category_id)
+    references category
+    
+alter table if exists contact_info
+    add constraint FKbbcsefxe8ax16j1dndb9l7mms
+    foreign key (contact_phone_id)
+    references contact_phone
+    
+alter table if exists contact_phone
+    add constraint FKbvstb62j7buq9fxiaefcfxfnd
+    foreign key (country_phone_code_id)
+    references country_phone_code
+    
+alter table if exists currency_discount
+    add constraint FK4c47cfya2tgceha3msekcmc7d
+    foreign key (currency_id)
+    references currency
+    
+alter table if exists delivery
+    add constraint FKlayueon76a86wr2gbsyannaf7
+    foreign key (address_id)
+    references address
+    
+alter table if exists delivery
+    add constraint FKiu02keoyiv4xhc28rsi86mhll
+    foreign key (delivery_type_id)
+    references delivery_type
+    
+alter table if exists item
+    add constraint FK5pc91oc43bq6tqaugwvc8f4or
+    foreign key (itemData_id)
+    references item_data
+    
+alter table if exists item_data
+    add constraint FK7yqp32kg84bewf1nnq1lhirqa
+    foreign key (brand_id)
+    references brand
+    
+alter table if exists item_data
+    add constraint FKnp91gprwy000sgedoo83oymji
+    foreign key (category_id)
+    references category
+    
+alter table if exists item_data
+    add constraint FK1jvdlvc3rfvki7v5jus0m19s3
+    foreign key (currencyDiscount_id)
+    references currency_discount
+    
+alter table if exists item_data
+    add constraint FKcipiyxs05i6ek9hiwhscny7c0
+    foreign key (fullPrice_id)
+    references price
+    
+alter table if exists item_data
+    add constraint FKdiwrprwyudwa44upjvl8k87h9
+    foreign key (itemType_id)
+    references item_type
+    
+alter table if exists item_data
+    add constraint FK810alvugy52y6s9no5oppb26j
+    foreign key (percentDiscount_id)
+    references percent_discount
+    
+alter table if exists item_data
+    add constraint FKiksl8lnvms0xfx27yoo9fj02p
+    foreign key (status_id)
+    references item_status
+    
+alter table if exists item_data
+    add constraint FKimkmn00n05kk4ap3ektej3itd
+    foreign key (totalPrice_id)
+    references price
+    
+alter table if exists item_data_option
+    add constraint FKahke2r2nw7hvi4q3426oju9xw
+    foreign key (optionitem_id)
+    references option_item
+    
+alter table if exists item_data_option
+    add constraint FKcvvtx9qekfpisvrgqj136tft1
+    foreign key (itemdata_id)
+    references item_data
+    
+alter table if exists item_data_quantity_item_data
+    add constraint FK5r4ejgb9q1cwdjt6af4eusa6i
+    foreign key (item_data_id)
+    references item_data
+    
+alter table if exists item_data_quantity_item_data
+    add constraint FKmokvmesmv3cxly9a5l6rux7pa
+    foreign key (item_data_quantity_id)
+    references item_data_quantity
+    
+alter table if exists item_post
+    add constraint FK1grghtm8o53yfmfixtu97em69
+    foreign key (post_id)
+    references post
+    
+alter table if exists item_post
+    add constraint FKhld6fk2skal2v9mk7na8qv9uf
+    foreign key (item_id)
+    references item
+    
+alter table if exists item_review
+    add constraint FKewycb8h8ogg4ssiwd5v64sbgm
+    foreign key (review_id)
+    references review
+    
+alter table if exists item_review
+    add constraint FKdk8811562blj2cqlok7cknd70
+    foreign key (item_id)
+    references item
+    
+alter table if exists message
+    add constraint FKc1vhu79usc0hfr9gp6fuu3ah5
+    foreign key (status_id)
+    references message_status
+    
+alter table if exists message
+    add constraint FK3kx251aos03ltpyc1dxofsrck
+    foreign key (type_id)
+    references message_type
+    
+alter table if exists message_box
+    add constraint FKl5lntrj6p83iu21a4eno38vy0
+    foreign key (userProfile_id)
+    references user_profile
+    
+alter table if exists message_box_message
+    add constraint FK7n91muashe5nwvufuaxicvrux
+    foreign key (message_id)
+    references message
+    
+alter table if exists message_box_message
+    add constraint FKss2bsrmbp3w9d2guos7y0amdh
+    foreign key (message_box_id)
+    references message_box
+    
+alter table if exists message_receivers
+    add constraint FKsfmc2unubrcf9ivflgn3nrc83
+    foreign key (message_id)
+    references message
+    
+alter table if exists option_item
+    add constraint FKi8a7hi02dpehhjq7c2qwh5sai
+    foreign key (optionGroup_id)
+    references option_group
+    
+alter table if exists order_item
+    add constraint FKbx40hdv2o0kdjt1xcbefjcl2h
+    foreign key (delivery_id)
+    references delivery
+    
+alter table if exists order_item
+    add constraint FKdaf9qb7qp4puef6sglu8us441
+    foreign key (orderStatus_id)
+    references order_status
+    
+alter table if exists order_item
+    add constraint FK2vebnru38ddo0wk30i9ybhx8c
+    foreign key (payment_id)
+    references payment
+    
+alter table if exists order_item
+    add constraint FKl4ignmwea39w75fo9e925v7yi
+    foreign key (userProfile_id)
+    references user_profile
+    
+alter table if exists order_item_contact_info
+    add constraint FKdkqpewgye3ykp7ja6026sj8ch
+    foreign key (beneficiaries_id)
+    references contact_info
+    
+alter table if exists order_item_contact_info
+    add constraint FKfpi19pjk52p9r2cammbfe9n98
+    foreign key (OrderItem_id)
+    references order_item
+    
+alter table if exists order_quantity_item
+    add constraint FKpmf6b30yudoi52frolacv34ud
+    foreign key (item_quantity_id)
+    references item_data_quantity
+    
+alter table if exists order_quantity_item
+    add constraint FK6odyl3q2hixxqk1md6c367rqt
+    foreign key (order_item_id)
+    references order_item
+    
+alter table if exists payment
+    add constraint FKexl3xxffhku33dfeakcxb9oaq
+    foreign key (fullprice_id)
+    references price
+    
+alter table if exists payment
+    add constraint FKjii2n6db6cje3km5ybsbgo8cl
+    foreign key (payment_method_id)
+    references payment_method
+    
+alter table if exists payment
+    add constraint FK6no43xuawlg1klytnke01u2pk
+    foreign key (totalprice_id)
+    references price
+    
+alter table if exists payment
+    add constraint FK41brulskee4m5ppls85o6go9r
+    foreign key (credit_card_id)
+    references credit_card
+    
+alter table if exists payment
+    add constraint FKiay5v7ko98xmg8kmmbod9g5a8
+    foreign key (currencyDiscount_id)
+    references currency_discount
+    
+alter table if exists payment
+    add constraint FKqgepwy3c7leg5lucaq5411msx
+    foreign key (percentDiscount_id)
+    references percent_discount
+    
+alter table if exists post
+    add constraint FKcujdyjmpscm8hpiv70fbafgdb
+    foreign key (post_id)
+    references post
+    
+alter table if exists price
+    add constraint FKjufxmhfbykaua4p43u87udfqq
+    foreign key (currency_id)
+    references currency
+    
+alter table if exists review
+    add constraint FKfoadt2illecegj32wlk5hau9p
+    foreign key (rating_id)
+    references rating
+    
+alter table if exists review
+    add constraint FKonb8hnnh1sf9udkwu37e7olqq
+    foreign key (userProfile_id)
+    references user_profile
+    
+alter table if exists store
+    add constraint FK11ufvbaca85vw4h3kak8tkm55
+    foreign key (count_type)
+    references count_type
+    
+alter table if exists store
+    add constraint FKht5yqojt5c4yw21kiax7apcsd
+    foreign key (option_item)
+    references option_item
+    
+alter table if exists user_profile
+    add constraint FKt7ck1erxe5phbhrdk1cn92h52
+    foreign key (address_id)
+    references address
+    
+alter table if exists user_profile
+    add constraint FKbb0yxp4hid37u6wvl212sl9xq
+    foreign key (contactInfo_id)
+    references contact_info
+    
+alter table if exists user_profile_credit_card
+    add constraint FK9cdt2l66ilcafej5ave1gvkga
+    foreign key (creditCardList_id)
+    references credit_card
+    
+alter table if exists user_profile_credit_card
+    add constraint FK4ovk6akxkfli65wqegfx9t4ue
+    foreign key (UserProfile_id)
+    references user_profile
+    
+alter table if exists user_profile_post
+    add constraint FKhj7tl66aevwcx7n8i387plk9q
+    foreign key (postList_id)
+    references post
+    
+alter table if exists user_profile_post
+    add constraint FKfs87np3bixtnk9tggfenkfpjw
+    foreign key (UserProfile_id)
+    references user_profile

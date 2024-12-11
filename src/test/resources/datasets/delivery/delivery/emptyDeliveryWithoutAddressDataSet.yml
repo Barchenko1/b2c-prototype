@@ -1,3 +1,6 @@
+delivery_type:
+  - id: 1
+    value: "Type"
 country:
   - id: 1
     value: "USA"

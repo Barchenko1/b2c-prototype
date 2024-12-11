@@ -8,6 +8,7 @@ message:
   - dateOfSend: 100
     title: "title"
     message: "message"
+    messageUniqNumber: "messageUniqNumber1"
     sender: "sender@email.com"
     subscribe: "system"
     sendSystem: "system"

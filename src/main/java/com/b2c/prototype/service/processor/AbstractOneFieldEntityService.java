@@ -3,7 +3,7 @@ package com.b2c.prototype.service.processor;
 import com.b2c.prototype.dao.cashed.IEntityCachedMap;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDtoUpdate;
-import com.tm.core.dao.single.ISingleEntityDao;
+import com.tm.core.dao.common.IEntityDao;
 import com.tm.core.processor.finder.factory.IParameterFactory;
 import com.tm.core.processor.finder.parameter.Parameter;
 
@@ -14,11 +14,11 @@ import java.util.function.Function;
 public abstract class AbstractOneFieldEntityService<E> implements IOneFieldEntityService<E> {
 
     private final IParameterFactory parameterFactory;
-    private final ISingleEntityDao dao;
+    private final IEntityDao dao;
     private final IEntityCachedMap entityCachedMap;
 
     public AbstractOneFieldEntityService(IParameterFactory parameterFactory,
-                                         ISingleEntityDao dao,
+                                         IEntityDao dao,
                                          IEntityCachedMap entityCachedMap) {
         this.parameterFactory = parameterFactory;
         this.dao = dao;
@@ -31,7 +31,7 @@ public abstract class AbstractOneFieldEntityService<E> implements IOneFieldEntit
     @Override
     public void saveEntity(OneFieldEntityDto oneFieldEntityDto) {
         E entity = getFunction().apply(oneFieldEntityDto);
-        dao.saveEntity(entity);
+        dao.persistEntity(entity);
         entityCachedMap.putEntity(entity.getClass(), getFieldName(), entity);
     }
 

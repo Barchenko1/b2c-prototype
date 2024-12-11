@@ -4,7 +4,8 @@ import com.github.database.rider.core.api.connection.ConnectionHolder;
 import com.github.database.rider.core.api.dataset.YamlDataSet;
 import com.github.database.rider.core.configuration.DataSetConfig;
 import com.github.database.rider.core.api.dataset.DataSetExecutor;
-import com.tm.core.dao.single.AbstractSingleEntityDao;
+import com.tm.core.dao.common.AbstractEntityDao;
+import com.tm.core.dao.common.IEntityDao;
 import com.tm.core.processor.finder.parameter.Parameter;
 import com.tm.core.processor.thread.IThreadLocalSessionManager;
 import com.tm.core.processor.thread.ThreadLocalSessionManager;
@@ -12,7 +13,6 @@ import org.dbunit.database.DatabaseConnection;
 import com.github.database.rider.core.dataset.DataSetExecutorImpl;
 import com.github.database.rider.junit5.api.DBRider;
 import com.tm.core.dao.identifier.IEntityIdentifierDao;
-import com.tm.core.dao.single.ISingleEntityDao;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
@@ -58,7 +58,7 @@ public abstract class AbstractSingleEntityDaoTest {
     protected static ConnectionHolder connectionHolder;
     private static DataSetExecutor executor;
 
-    protected static ISingleEntityDao dao;
+    protected static IEntityDao dao;
     protected String emptyDataSet;
     protected EntityDataSet<?> testEntityDataSet;
     protected EntityDataSet<?> saveEntityDataSet;
@@ -84,11 +84,11 @@ public abstract class AbstractSingleEntityDaoTest {
     @BeforeEach
     public void setUp() {
         try {
-            Field sessionFactoryField = AbstractSingleEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionFactoryField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
             sessionFactoryField.setAccessible(true);
             sessionFactoryField.set(dao, sessionFactory);
 
-            Field sessionManagerField = AbstractSingleEntityDao.class.getDeclaredField("sessionManager");
+            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionManager");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionManager);
         } catch (Exception e) {
@@ -143,18 +143,6 @@ public abstract class AbstractSingleEntityDaoTest {
     }
 
     @Test
-    void getEntityListWithClass_success() {
-        loadDataSet(testEntityDataSet.getDataSetPath()[0]);
-        Parameter parameter = new Parameter("id", 1L);
-
-        Class<?> clazz = testEntityDataSet.getEntity().getClass();
-        List<Object> result = dao.getEntityList(clazz, parameter);
-
-        assertEquals(1, result.size());
-        verifyExpectedData(testEntityDataSet.getDataSetPath()[0]);
-    }
-
-    @Test
     void getEntityList_Failure() {
         Parameter parameter = new Parameter("id1", 1L);
 
@@ -164,20 +152,9 @@ public abstract class AbstractSingleEntityDaoTest {
     }
 
     @Test
-    void getEntityListWithClass_Failure() {
-        Parameter parameter = new Parameter("id1", 1L);
-
-        Class<?> clazz = testEntityDataSet.getEntity().getClass();
-
-        assertThrows(RuntimeException.class, () -> {
-            dao.getEntityList(clazz, parameter);
-        });
-    }
-
-    @Test
     public void saveEntity_success() {
         loadDataSet(emptyDataSet);
-        dao.saveEntity(saveEntityDataSet.getEntity());
+        dao.persistEntity(saveEntityDataSet.getEntity());
         verifyExpectedData(saveEntityDataSet.getDataSetPath()[0]);
     }
 
@@ -190,7 +167,7 @@ public abstract class AbstractSingleEntityDaoTest {
         when(sessionFactory.openSession()).thenReturn(session);
         when(session.beginTransaction()).thenReturn(transaction);
         try {
-            Field sessionManagerField = AbstractSingleEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
@@ -199,7 +176,7 @@ public abstract class AbstractSingleEntityDaoTest {
         doThrow(new RuntimeException()).when(session).persist(saveEntityDataSet.getEntity());
 
         assertThrows(RuntimeException.class, () -> {
-            dao.saveEntity(saveEntityDataSet.getEntity());
+            dao.persistEntity(saveEntityDataSet.getEntity());
         });
 
         verify(transaction).rollback();
@@ -210,7 +187,7 @@ public abstract class AbstractSingleEntityDaoTest {
     @Test
     public void updateEntity_success() {
         loadDataSet(testEntityDataSet.getDataSetPath()[0]);
-        dao.updateEntity(updateEntityDataSet.getEntity());
+        dao.mergeEntity(updateEntityDataSet.getEntity());
         verifyExpectedData(updateEntityDataSet.getDataSetPath()[0]);
     }
 
@@ -223,7 +200,7 @@ public abstract class AbstractSingleEntityDaoTest {
         when(sessionFactory.openSession()).thenReturn(session);
         when(session.beginTransaction()).thenReturn(transaction);
         try {
-            Field sessionManagerField = AbstractSingleEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
@@ -233,7 +210,7 @@ public abstract class AbstractSingleEntityDaoTest {
         doThrow(new RuntimeException()).when(session).merge(updateEntityDataSet.getEntity());
 
         assertThrows(RuntimeException.class, () -> {
-            dao.updateEntity(updateEntityDataSet.getEntity());
+            dao.mergeEntity(updateEntityDataSet.getEntity());
         });
 
         verify(transaction).rollback();
@@ -257,7 +234,7 @@ public abstract class AbstractSingleEntityDaoTest {
         when(sessionFactory.openSession()).thenReturn(session);
         when(session.beginTransaction()).thenReturn(transaction);
         try {
-            Field sessionManagerField = AbstractSingleEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
@@ -296,7 +273,7 @@ public abstract class AbstractSingleEntityDaoTest {
         when(mockSessionManager.getSession()).thenReturn(session);
         when(session.beginTransaction()).thenReturn(transaction);
         try {
-            Field sessionManagerField = AbstractSingleEntityDao.class.getDeclaredField("sessionManager");
+            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionManager");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, mockSessionManager);
         } catch (Exception e) {
@@ -339,7 +316,7 @@ public abstract class AbstractSingleEntityDaoTest {
         when(mockSessionManager.getSession()).thenReturn(session);
         when(session.beginTransaction()).thenReturn(transaction);
         try {
-            Field sessionManagerField = AbstractSingleEntityDao.class.getDeclaredField("sessionManager");
+            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionManager");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, mockSessionManager);
         } catch (Exception e) {
@@ -381,7 +358,6 @@ public abstract class AbstractSingleEntityDaoTest {
             dao.getOptionalEntity(parameter);
         });
 
-        assertEquals(RuntimeException.class, exception.getClass());
     }
 
     @Test
@@ -410,69 +386,6 @@ public abstract class AbstractSingleEntityDaoTest {
         Parameter parameter = new Parameter("id", 100L);
         assertThrows(RuntimeException.class, () -> {
             dao.getEntity(parameter);
-        });
-
-    }
-
-    @Test
-    void getOptionalEntityWithClass_success() {
-        loadDataSet(testEntityDataSet.getDataSetPath()[0]);
-        Parameter parameter = new Parameter("id", 1L);
-
-        Class<?> clazz = testEntityDataSet.getEntity().getClass();
-
-        Optional<Object> result = dao.getOptionalEntity(clazz, parameter);
-
-        assertTrue(result.isPresent());
-        Object resultEntity = result.get();
-        assertNotNull(resultEntity);
-        verifyExpectedData(testEntityDataSet.getDataSetPath()[0]);
-    }
-
-    @Test
-    void getOptionalEntityWithClass_Failure() {
-        Parameter parameter = new Parameter("id1", 100L);
-
-        Class<?> clazz = testEntityDataSet.getEntity().getClass();
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.getOptionalEntity(clazz, parameter);
-        });
-
-        assertEquals(RuntimeException.class, exception.getClass());
-    }
-
-    @Test
-    void getOptionalEntityWithClass_NoResult() {
-        Parameter parameter = new Parameter("id", 100L);
-
-        Class<?> clazz = testEntityDataSet.getEntity().getClass();
-
-        Optional<Object> result = dao.getOptionalEntity(clazz, parameter);
-
-        assertTrue(result.isEmpty());
-    }
-
-    @Test
-    void getEntityWithClass_success() {
-        loadDataSet(testEntityDataSet.getDataSetPath()[0]);
-        Parameter parameter = new Parameter("id", 1L);
-
-        Class<?> clazz = testEntityDataSet.getEntity().getClass();
-
-        Object result = dao.getEntity(clazz, parameter);
-
-        assertNotNull(result);
-        verifyExpectedData(testEntityDataSet.getDataSetPath()[0]);
-    }
-
-    @Test
-    void getEntityWithClass_Failure() {
-        Parameter parameter = new Parameter("id", 100L);
-        Class<?> clazz = testEntityDataSet.getEntity().getClass();
-
-        assertThrows(RuntimeException.class, () -> {
-            dao.getEntity(clazz, parameter);
         });
 
     }

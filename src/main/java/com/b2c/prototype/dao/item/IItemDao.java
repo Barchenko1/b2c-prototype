@@ -1,7 +1,7 @@
 package com.b2c.prototype.dao.item;
 
-import com.tm.core.dao.general.IGeneralEntityDao;
+import com.tm.core.dao.common.IEntityDao;
 
-public interface IItemDao extends IGeneralEntityDao {
+public interface IItemDao extends IEntityDao {
 
 }

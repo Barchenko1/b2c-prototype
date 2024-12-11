@@ -52,18 +52,19 @@ item_data:
     currencydiscount_id: 1
     itemtype_id: 1
     status_id: 1
-    price_id: 1
+    fullprice_id: 1
+    totalprice_id: 1
 item_data_option:
   - itemdata_id: 1
     optionitem_id: 1
   - itemdata_id: 1
     optionitem_id: 2
-item_quantity:
+item_data_quantity:
   - id: 1
     quantity: 1
-item_quantity_item_data:
+item_data_quantity_item_data:
   - item_data_id: 1
-    item_quantity_id: 1
+    item_data_quantity_id: 1
 delivery_type:
   - id: 1
     value: "Post"
@@ -73,8 +74,9 @@ country:
 address:
   - id: 1
     street: "street"
+    street2: "street2"
     buildingNumber: 1
-    flor: 9
+    florNumber: 9
     apartmentNumber: 101
     zipCode: 90000
     country_id: 1
@@ -102,7 +104,8 @@ payment:
   - id: 1
     paymentId: "1"
     payment_method_id: 1
-    price_id: 1
+    fullprice_id: 1
+    totalprice_id: 1
     credit_card_id: 1
 country_phone_code:
   - id: 1

@@ -44,8 +44,18 @@ public class EntityCachedMap implements IEntityCachedMap {
     }
 
     @Override
+    public boolean isEntityExist(Class<?> clazz, String key, Object value) {
+        return getIsEntityExistFromMapOrFromDb(clazz, key, value);
+    }
+
+    @Override
     public <E> Optional<E> getOptionalEntity(Class<?> clazz, String key, Object value) {
         return Optional.of(getEntityFromMapOrFromDb(clazz, key, value));
+    }
+
+    @Override
+    public <E> List<E> getEntityList(Class<?> clazz, String key, Object value) {
+        return getEntityListFromMapOrFromDb(clazz, key, value);
     }
 
     @Override
@@ -61,15 +71,6 @@ public class EntityCachedMap implements IEntityCachedMap {
         Optional.ofNullable(classEntityMap.get(clazz))
                 .ifPresent(entityMap -> entityMap.put(key, entity));
     }
-
-//    @Override
-//    public <E> void updateEntity(Class<?> clazz, String oldKey, String key, E entity) {
-//        Optional.ofNullable(classEntityMap.get(clazz))
-//                .ifPresent(entityMap -> {
-//                    entityMap.remove(oldKey);
-//                    entityMap.put(key, entity);
-//                });
-//    }
 
     @Override
     public <E> void updateEntity(Class<?> clazz, Object oldKey, Object key, E entity) {
@@ -97,6 +98,26 @@ public class EntityCachedMap implements IEntityCachedMap {
 
                     return entityFromDb;
                 });
+    }
+
+    @SuppressWarnings("unchecked")
+    private <E> List<E> getEntityListFromMapOrFromDb(Class<?> clazz, String key, Object value) {
+        Map<Object, Object> entityMap = classEntityMap.get(clazz);
+        return (List<E>) Optional.ofNullable(entityMap.get(value))
+                .orElseGet(() -> {
+                    List<E> entityListFromDb = (List<E>) searchWrapper.getEntityListSupplier(clazz, createParameter(key, value)).get();
+                    entityListFromDb.forEach(entityFromDb -> {
+                        Optional.of(entityMap).ifPresent(map -> map.put(value, entityFromDb));
+                    });
+
+                    return entityListFromDb;
+                });
+    }
+
+    @SuppressWarnings("unchecked")
+    private boolean getIsEntityExistFromMapOrFromDb(Class<?> clazz, String key, Object value) {
+        return classEntityMap.getOrDefault(clazz, Map.of()).containsKey(value) ||
+                searchWrapper.getOptionalEntitySupplier(clazz, createParameter(key, value)).get().isPresent();
     }
 
     private Parameter createParameter(String key, Object value) {

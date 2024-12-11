@@ -9,7 +9,7 @@ import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.CurrencyDiscount;
 import com.b2c.prototype.modal.entity.item.ItemData;
-import com.b2c.prototype.modal.entity.item.ItemQuantity;
+import com.b2c.prototype.modal.entity.item.ItemDataQuantity;
 import com.b2c.prototype.modal.entity.item.ItemStatus;
 import com.b2c.prototype.modal.entity.item.ItemType;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
@@ -27,9 +27,8 @@ import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.modal.entity.user.UserProfile;
 import com.b2c.prototype.util.CardUtil;
-import com.tm.core.dao.general.AbstractGeneralEntityDao;
+import com.tm.core.dao.common.AbstractEntityDao;
 import com.tm.core.dao.identifier.EntityIdentifierDao;
-import com.tm.core.modal.GeneralEntity;
 import com.tm.core.processor.finder.manager.EntityMappingManager;
 import com.tm.core.processor.finder.manager.IEntityMappingManager;
 import com.tm.core.processor.finder.parameter.Parameter;
@@ -74,11 +73,11 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
         try (Connection connection = connectionHolder.getConnection()) {
             connection.setAutoCommit(false);
             Statement statement = connection.createStatement();
-            statement.execute("DELETE FROM item_quantity_item_data");
+            statement.execute("DELETE FROM item_data_quantity_item_data");
             statement.execute("DELETE FROM order_quantity_item");
             statement.execute("DELETE FROM order_item_contact_info");
             statement.execute("DELETE FROM order_item");
-            statement.execute("DELETE FROM item_quantity");
+            statement.execute("DELETE FROM item_data_quantity");
             statement.execute("DELETE FROM item_post");
             statement.execute("DELETE FROM item_review");
             statement.execute("DELETE FROM item_data_option");
@@ -120,9 +119,10 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
                 .id(1L)
                 .country(country)
                 .street("street")
+                .street2("street2")
                 .buildingNumber(1)
                 .apartmentNumber(101)
-                .flor(9)
+                .florNumber(9)
                 .zipCode("90000")
                 .build();
     }
@@ -171,7 +171,7 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
                 .ownerName("name")
                 .ownerSecondName("secondName")
                 .isActive(CardUtil.isCardActive("06/28"))
-                .cvv(818)
+                .cvv("818")
                 .build();
     }
 
@@ -254,7 +254,8 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
                 .currencyDiscount(currencyDiscount)
                 .status(itemStatus)
                 .itemType(itemType)
-                .price(price)
+                .totalPrice(price)
+                .fullPrice(price)
                 .build();
 
         itemData.addOptionItem(OptionItem1);
@@ -263,9 +264,9 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
         return itemData;
     }
 
-    private ItemQuantity prepareTestOrderItemQuantity() {
+    private ItemDataQuantity prepareTestOrderItemQuantity() {
         ItemData itemData = prepareTestOrderItemData();
-        return ItemQuantity.builder()
+        return ItemDataQuantity.builder()
                 .id(1L)
                 .itemDataSet(Set.of(itemData))
                 .quantity(1)
@@ -287,7 +288,7 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
                 .ownerName("name")
                 .ownerSecondName("secondName")
                 .isActive(CardUtil.isCardActive("06/28"))
-                .cvv(818)
+                .cvv("818")
                 .build();
         PaymentMethod paymentMethod = PaymentMethod.builder()
                 .id(1L)
@@ -300,6 +301,7 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
         CurrencyDiscount currencyDiscount = CurrencyDiscount.builder()
                 .id(1L)
                 .amount(5)
+                .charSequenceCode("abc")
                 .currency(currency)
                 .build();
         Price price = Price.builder()
@@ -315,6 +317,7 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
                 .paymentMethod(paymentMethod)
                 .creditCard(creditCard)
                 .fullPrice(price)
+                .totalPrice(price)
                 .build();
     }
 
@@ -326,7 +329,7 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
                 .beneficiaries(List.of(prepareContactInfo()))
                 .payment(prepareTestPayment())
                 .delivery(prepareTestDelivery())
-                .itemQuantitySet(Set.of(prepareTestOrderItemQuantity()))
+                .itemDataQuantitySet(Set.of(prepareTestOrderItemQuantity()))
                 .orderStatus(prepareTestOrderStatus())
                 .userProfile(prepareTestUserProfile())
                 .orderId("100")
@@ -341,7 +344,7 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
                 .beneficiaries(List.of(prepareContactInfo()))
                 .payment(prepareTestPayment())
                 .delivery(prepareTestDelivery())
-                .itemQuantitySet(Set.of(prepareTestOrderItemQuantity()))
+                .itemDataQuantitySet(Set.of(prepareTestOrderItemQuantity()))
                 .orderStatus(prepareTestOrderStatus())
                 .userProfile(prepareTestUserProfile())
                 .orderId("100")
@@ -350,20 +353,18 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
     }
 
     private OrderItem prepareUpdateOrderItem() {
-        OrderItem orderItem =  OrderItem.builder()
+        return OrderItem.builder()
                 .id(1L)
                 .dateOfCreate(100L)
                 .beneficiaries(List.of(prepareContactInfo()))
                 .payment(prepareTestPayment())
                 .delivery(prepareTestDelivery())
-                .itemQuantitySet(Set.of(prepareTestOrderItemQuantity()))
+                .itemDataQuantitySet(Set.of(prepareTestOrderItemQuantity()))
                 .orderStatus(prepareTestOrderStatus())
                 .userProfile(prepareTestUserProfile())
                 .orderId("100")
                 .note("note")
                 .build();
-
-        return orderItem;
     }
 
     private void checkOrderItem(OrderItem expectedOrderItem, OrderItem actualOrderItem) {
@@ -375,20 +376,7 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
         loadDataSet("/datasets/order/order_item/testOrderItemDataSet.yml");
         Parameter parameter = new Parameter("id", 1L);
         OrderItem orderItem = prepareTestOrderItem();
-        List<OrderItem> resultList = dao.getGeneralEntityList(parameter);
-
-        assertEquals(1, resultList.size());
-        resultList.forEach(result -> {
-            checkOrderItem(orderItem, result);
-        });
-    }
-
-    @Test
-    void getEntityListWithClass_success() {
-        loadDataSet("/datasets/order/order_item/testOrderItemDataSet.yml");
-        Parameter parameter = new Parameter("id", 1L);
-        OrderItem orderItem = prepareTestOrderItem();
-        List<OrderItem> resultList = dao.getGeneralEntityList(OrderItem.class, parameter);
+        List<OrderItem> resultList = dao.getEntityList(parameter);
 
         assertEquals(1, resultList.size());
         resultList.forEach(result -> {
@@ -401,16 +389,7 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
         Parameter parameter = new Parameter("id1", 1L);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.getGeneralEntityList(parameter);
-        });
-    }
-
-    @Test
-    void getEntityListWithClass_Failure() {
-        Parameter parameter = new Parameter("id1", 1L);
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.getGeneralEntityList(Object.class, parameter);
+            dao.getEntityList(parameter);
         });
     }
 
@@ -419,10 +398,7 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
         loadDataSet("/datasets/order/order_item/emptyOrderItemDataSet.yml");
         OrderItem orderItem = prepareSaveOrderItem();
 
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(1, orderItem);
-
-        dao.saveGeneralEntity(generalEntity);
+        dao.persistEntity(orderItem);
         verifyExpectedData("/datasets/order/order_item/saveOrderItemDataSet.yml");
     }
 
@@ -430,9 +406,7 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
     void saveEntityWithDependencies_success() {
         loadDataSet("/datasets/order/order_item/emptyOrderItemDataSet.yml");
         OrderItem orderItem = prepareSaveOrderItem();
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(2, orderItem);
-        dao.saveGeneralEntity(generalEntity);
+        dao.persistEntity(orderItem);
         verifyExpectedData("/datasets/order/order_item/saveOrderItemDataSet.yml");
     }
 
@@ -440,15 +414,12 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
     void saveEntity_transactionFailure() {
         OrderItem orderItem = prepareSaveOrderItem();
 
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(2, orderItem);
-
         SessionFactory sessionFactory = mock(SessionFactory.class);
         Session session = mock(Session.class);
         Transaction transaction = mock(Transaction.class);
 
         try {
-            Field sessionManagerField = AbstractGeneralEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
@@ -460,7 +431,7 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
         doThrow(new RuntimeException()).when(session).persist(orderItem);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.saveGeneralEntity(generalEntity);
+            dao.persistEntity(orderItem);
         });
 
         assertEquals(RuntimeException.class, exception.getClass());
@@ -474,7 +445,7 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
             s.persist(orderItem);
         };
 
-        dao.saveGeneralEntity(consumer);
+        dao.saveEntity(consumer);
         verifyExpectedData("/datasets/order/order_item/saveOrderItemDataSet.yml");
     }
 
@@ -486,7 +457,7 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.saveGeneralEntity(consumer);
+            dao.saveEntity(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -497,7 +468,7 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
 //    void updateEntity_success() {
 //        loadDataSet("/datasets/order/order_item/testOrderItemDataSet.yml");
 //        Supplier<OrderItem> supplier = this::prepareUpdateOrderItem;
-//        dao.updateGeneralEntity(supplier);
+//        dao.updateEntity(supplier);
 //        verifyExpectedData("/datasets/order/order_item/updateOrderItemDataSet.yml");
 //    }
 
@@ -508,7 +479,7 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            dao.updateGeneralEntity(supplier);
+            dao.updateEntity(supplier);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -536,7 +507,7 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
 
             s.merge(orderItem);
         };
-        dao.updateGeneralEntity(consumer);
+        dao.updateEntity(consumer);
         verifyExpectedData("/datasets/order/order_item/updateOrderItemDataSet.yml");
     }
 
@@ -548,7 +519,7 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.updateGeneralEntity(itemConsumer);
+            dao.updateEntity(itemConsumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -559,7 +530,7 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
         loadDataSet("/datasets/order/order_item/testOrderItemDataSet.yml");
         Parameter parameter = new Parameter("id", 1);
 
-        dao.deleteGeneralEntity(parameter);
+        dao.findEntityAndDelete(parameter);
         verifyExpectedData("/datasets/order/order_item/emptyOrderItemDataSet.yml");
     }
 
@@ -571,7 +542,7 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
             s.remove(orderItem);
         };
 
-        dao.deleteGeneralEntity(consumer);
+        dao.deleteEntity(consumer);
         verifyExpectedData("/datasets/order/order_item/emptyOrderItemDataSet.yml");
     }
 
@@ -583,7 +554,7 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            dao.deleteGeneralEntity(consumer);
+            dao.deleteEntity(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -594,10 +565,7 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
         loadDataSet("/datasets/order/order_item/testOrderItemDataSet.yml");
         OrderItem orderItem = prepareTestOrderItem();
 
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(1, orderItem);
-
-        dao.deleteGeneralEntity(generalEntity);
+        dao.deleteEntity(orderItem);
         verifyExpectedData("/datasets/order/order_item/emptyOrderItemDataSet.yml");
     }
 
@@ -609,7 +577,7 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
         Transaction transaction = mock(Transaction.class);
 
         try {
-            Field sessionManagerField = AbstractGeneralEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
@@ -622,27 +590,16 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
 
         OrderItem orderItem = prepareTestOrderItem();
 
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(1, orderItem);
-
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            dao.deleteGeneralEntity(generalEntity);
+            dao.deleteEntity(orderItem);
         });
 
         assertEquals(RuntimeException.class, exception.getClass());
     }
 
     @Test
-    void deleteEntityWithClass_success() {
-        loadDataSet("/datasets/order/order_item/testOrderItemDataSet.yml");
-        Parameter parameter = new Parameter("id", 1);
-
-        dao.deleteGeneralEntity(OrderItem.class, parameter);
-        verifyExpectedData("/datasets/order/order_item/emptyOrderItemDataSet.yml");
-    }
-
-    @Test
     void deleteEntity_transactionFailure() {
+        loadDataSet("/datasets/order/order_item/testOrderItemDataSet.yml");
         OrderItem orderItem = new OrderItem();
 
         Parameter parameter = new Parameter("id", 1L);
@@ -652,7 +609,7 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
         Transaction transaction = mock(Transaction.class);
 
         try {
-            Field sessionManagerField = AbstractGeneralEntityDao.class.getDeclaredField("sessionManager");
+            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionManager");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionManager);
         } catch (Exception e) {
@@ -663,44 +620,8 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
         when(session.beginTransaction()).thenReturn(transaction);
         doThrow(new RuntimeException()).when(transaction).commit();
 
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(1, orderItem);
-
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.deleteGeneralEntity(parameter);
-        });
-
-        assertEquals(RuntimeException.class, exception.getClass());
-    }
-
-    @Test
-    void deleteEntityWithClass_transactionFailure() {
-        loadDataSet("/datasets/order/order_item/testOrderItemDataSet.yml");
-        OrderItem orderItem = new OrderItem();
-
-        Parameter parameter = new Parameter("id", 1L);
-
-        IThreadLocalSessionManager sessionManager = mock(IThreadLocalSessionManager.class);
-        Session session = mock(Session.class);
-        Transaction transaction = mock(Transaction.class);
-
-        try {
-            Field sessionManagerField = AbstractGeneralEntityDao.class.getDeclaredField("sessionManager");
-            sessionManagerField.setAccessible(true);
-            sessionManagerField.set(dao, sessionManager);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        when(sessionManager.getSession()).thenReturn(session);
-        when(session.beginTransaction()).thenReturn(transaction);
-        doThrow(new RuntimeException()).when(session).remove(any(Object.class));
-
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(2, orderItem);
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.deleteGeneralEntity(OrderItem.class, parameter);
+            dao.findEntityAndDelete(parameter);
         });
 
         assertEquals(RuntimeException.class, exception.getClass());
@@ -712,7 +633,7 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
         Parameter parameter = new Parameter("id", 1L);
         OrderItem orderItem = prepareTestOrderItem();
         Optional<OrderItem> resultOptional =
-                dao.getOptionalGeneralEntity(parameter);
+                dao.getOptionalEntity(parameter);
 
         assertTrue(resultOptional.isPresent());
         OrderItem result = resultOptional.get();
@@ -724,45 +645,9 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
         Parameter parameter = new Parameter("id1", 1L);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.getOptionalGeneralEntity(parameter);
+            dao.getOptionalEntity(parameter);
         });
 
-    }
-
-    @Test
-    void getOptionalEntityWithDependenciesWithClass_success() {
-        loadDataSet("/datasets/order/order_item/testOrderItemDataSet.yml");
-        Parameter parameter = new Parameter("id", 1L);
-
-        OrderItem orderItem = prepareTestOrderItem();
-
-        Optional<OrderItem> resultOptional =
-                dao.getOptionalGeneralEntity(OrderItem.class, parameter);
-
-        assertTrue(resultOptional.isPresent());
-        OrderItem result = resultOptional.get();
-
-        checkOrderItem(orderItem, result);
-    }
-
-    @Test
-    void getOptionalEntityWithDependenciesWithClass_Failure() {
-        loadDataSet("/datasets/order/order_item/testOrderItemDataSet.yml");
-        Parameter parameter = new Parameter("id1", 1L);
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.getOptionalGeneralEntity(OrderItem.class, parameter);
-        });
-    }
-
-    @Test
-    void getOptionalEntityWithDependencies_OptionEmpty() {
-        Parameter parameter = new Parameter("id", 100L);
-
-        Optional<OrderItem> result =
-                dao.getOptionalGeneralEntity(OrderItem.class, parameter);
-
-        assertTrue(result.isEmpty());
     }
 
     @Test
@@ -771,7 +656,7 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
         Parameter parameter = new Parameter("id", 1L);
 
         OrderItem orderItem = prepareTestOrderItem();
-        OrderItem result = dao.getGeneralEntity(parameter);
+        OrderItem result = dao.getEntity(parameter);
 
         checkOrderItem(orderItem, result);
     }
@@ -781,28 +666,7 @@ class BasicOrderItemDaoTest extends AbstractGeneralEntityDaoTest {
         Parameter parameter = new Parameter("id1", 1L);
 
         assertThrows(RuntimeException.class, () -> {
-            dao.getGeneralEntity(parameter);
-        });
-    }
-
-
-    @Test
-    void getEntityWithDependenciesWithClass_success() {
-        loadDataSet("/datasets/order/order_item/testOrderItemDataSet.yml");
-        Parameter parameter = new Parameter("id", 1L);
-
-        OrderItem orderItem = prepareTestOrderItem();
-        OrderItem result = dao.getGeneralEntity(OrderItem.class, parameter);
-
-        checkOrderItem(orderItem, result);
-    }
-
-    @Test
-    void getEntityWithDependenciesWithClass_Failure() {
-        Parameter parameter = new Parameter("id1", 1L);
-
-        assertThrows(RuntimeException.class, () -> {
-            dao.getGeneralEntity(OrderItem.class, parameter);
+            dao.getEntity(parameter);
         });
     }
 

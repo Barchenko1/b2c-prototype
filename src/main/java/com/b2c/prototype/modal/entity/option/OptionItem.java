@@ -36,15 +36,15 @@ public class OptionItem {
     @Builder.Default
     @ToString.Exclude
     private Set<ItemData> itemDataSet = new HashSet<>();
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private OptionGroup optionGroup;
 
-    public void addItem(ItemData itemData) {
+    public void addItemData(ItemData itemData) {
         this.itemDataSet.add(itemData);
         itemData.getOptionItemSet().add(this);
     }
 
-    public void removeItem(ItemData itemData) {
+    public void removeItemData(ItemData itemData) {
         this.itemDataSet.remove(itemData);
         itemData.getOptionItemSet().remove(this);
     }

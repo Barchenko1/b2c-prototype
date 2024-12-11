@@ -5,7 +5,7 @@ address:
   - id: 1
     street: "Update street"
     buildingNumber: 1
-    flor: 9
+    florNumber: 9
     apartmentNumber: 102
     zipCode: 90001
     country_id: 1

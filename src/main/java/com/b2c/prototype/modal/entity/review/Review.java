@@ -2,6 +2,7 @@ package com.b2c.prototype.modal.entity.review;
 
 import com.b2c.prototype.modal.entity.item.Item;
 import com.b2c.prototype.modal.entity.item.Rating;
+import com.b2c.prototype.modal.entity.user.UserProfile;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,6 +38,8 @@ public class Review {
     private String title;
     private String message;
     private long dateOfCreate;
+    @OneToOne(fetch = FetchType.LAZY)
+    private UserProfile userProfile;
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Rating rating;
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "reviews")

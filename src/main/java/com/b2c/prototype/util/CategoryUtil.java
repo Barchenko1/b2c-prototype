@@ -1,6 +1,6 @@
 package com.b2c.prototype.util;
 
-import com.b2c.prototype.configuration.TransitiveSelfYaml;
+import com.b2c.prototype.configuration.modal.TransitiveSelfYaml;
 import com.b2c.prototype.modal.entity.item.Category;
 
 import java.util.ArrayList;

@@ -5,7 +5,7 @@ import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.entity.order.OrderStatus;
 import com.b2c.prototype.service.processor.AbstractOneFieldEntityService;
 import com.b2c.prototype.service.processor.order.IOrderStatusService;
-import com.tm.core.dao.single.ISingleEntityDao;
+import com.tm.core.dao.common.IEntityDao;
 import com.tm.core.processor.finder.factory.IParameterFactory;
 
 import java.util.function.Function;
@@ -13,7 +13,7 @@ import java.util.function.Function;
 public class OrderStatusService extends AbstractOneFieldEntityService<OrderStatus> implements IOrderStatusService {
 
     public OrderStatusService(IParameterFactory parameterFactory,
-                              ISingleEntityDao orderStatusDao,
+                              IEntityDao orderStatusDao,
                               IEntityCachedMap entityCachedMap) {
         super(parameterFactory, orderStatusDao, entityCachedMap);
     }

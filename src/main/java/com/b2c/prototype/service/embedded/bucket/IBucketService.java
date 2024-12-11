@@ -1,9 +1,9 @@
 package com.b2c.prototype.service.embedded.bucket;
 
-import com.b2c.prototype.modal.dto.request.RequestItemBucketDto;
+import com.b2c.prototype.modal.dto.request.ItemBucketDto;
 
 public interface IBucketService {
-    void addItemToBucket(RequestItemBucketDto itemBucketDto);
-    void updateItemCountInBucket(RequestItemBucketDto itemBucketDto);
-    void deleteItemFromBucket(RequestItemBucketDto itemBucketDto);
+    void addItemToBucket(ItemBucketDto itemBucketDto);
+    void updateItemCountInBucket(ItemBucketDto itemBucketDto);
+    void deleteItemFromBucket(ItemBucketDto itemBucketDto);
 }

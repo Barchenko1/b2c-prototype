@@ -1,7 +1,7 @@
 package com.b2c.prototype.modal.entity.order;
 
 import com.b2c.prototype.modal.entity.delivery.Delivery;
-import com.b2c.prototype.modal.entity.item.ItemQuantity;
+import com.b2c.prototype.modal.entity.item.ItemDataQuantity;
 import com.b2c.prototype.modal.entity.payment.Payment;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.UserProfile;
@@ -53,7 +53,7 @@ public class OrderItem {
     )
     @Builder.Default
     @EqualsAndHashCode.Exclude
-    private Set<ItemQuantity> itemQuantitySet = new HashSet<>();
+    private Set<ItemDataQuantity> itemDataQuantitySet = new HashSet<>();
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private Delivery delivery;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)

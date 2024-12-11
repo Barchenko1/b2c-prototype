@@ -1,6 +1,6 @@
 package com.b2c.prototype.dao.payment;
 
-import com.tm.core.dao.general.IGeneralEntityDao;
+import com.tm.core.dao.common.IEntityDao;
 
-public interface IPaymentDao extends IGeneralEntityDao {
+public interface IPaymentDao extends IEntityDao {
 }

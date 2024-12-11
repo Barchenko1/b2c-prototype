@@ -123,6 +123,35 @@ class EntityCachedMapTest {
     }
 
     @Test
+    void testIsEntityExist_shouldReturnTrueFromMap() {
+        Map<Object, Object> entityMap = new HashMap<>();
+        classEntityMap.put(Object.class, entityMap);
+        Object entity = new Object();
+
+        when(searchWrapper.getOptionalEntitySupplier(eq(Object.class), any(Parameter.class)))
+                .thenReturn(() -> Optional.of(entity));
+
+        boolean result = entityCachedMap.isEntityExist(Object.class, "key", "dbValue");
+
+        assertTrue(result);
+        verify(searchWrapper, times(1)).getOptionalEntitySupplier(eq(Object.class), any(Parameter.class));
+    }
+
+    @Test
+    void testIsEntityExistInDb_shouldReturnTrueFromDb() {
+        Map<Object, Object> entityMap = new HashMap<>();
+        classEntityMap.put(Object.class, entityMap);
+        Object entity = new Object();
+        when(searchWrapper.getOptionalEntitySupplier(eq(Object.class), any(Parameter.class)))
+                .thenReturn(() -> Optional.of(entity));
+
+        boolean result = entityCachedMap.isEntityExist(Object.class, "str", "str");
+
+        assertTrue(result);
+        verify(searchWrapper, times(1)).getOptionalEntitySupplier(eq(Object.class), any(Parameter.class));
+    }
+
+    @Test
     void testGetEntityFromDb_shouldReturnEntityFromDbLongValue() {
         Map<Object, Object> entityMap = new HashMap<>();
         classEntityMap.put(Object.class, entityMap);

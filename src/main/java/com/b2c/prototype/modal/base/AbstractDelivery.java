@@ -26,7 +26,7 @@ public class AbstractDelivery {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
     @JoinColumn(name = "address_id")
     private Address address;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)

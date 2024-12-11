@@ -9,6 +9,7 @@ message:
     dateOfSend: 100
     title: "title"
     message: "message"
+    messageUniqNumber: "messageUniqNumber1"
     sender: "sender@email.com"
     subscribe: "system"
     sendSystem: "system"
@@ -18,6 +19,7 @@ message:
     dateOfSend: 100
     title: "title"
     message: "message"
+    messageUniqNumber: "messageUniqNumber2"
     sender: "sender@email.com"
     subscribe: "system"
     sendSystem: "system"
@@ -50,8 +52,9 @@ country:
 address:
   - id: 1
     street: "street"
+    street2: "street2"
     buildingNumber: 1
-    flor: 9
+    florNumber: 9
     apartmentNumber: 101
     zipCode: 90000
     country_id: 1

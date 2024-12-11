@@ -1,7 +1,7 @@
 package com.b2c.prototype.service.processor.post.base;
 
-import com.b2c.prototype.modal.dto.request.RequestPostDto;
-import com.b2c.prototype.modal.dto.update.RequestPostDtoUpdate;
+import com.b2c.prototype.modal.dto.request.PostDto;
+import com.b2c.prototype.modal.dto.update.PostDtoUpdate;
 import com.b2c.prototype.modal.entity.post.Post;
 import com.b2c.prototype.dao.post.IPostDao;
 import com.b2c.prototype.service.processor.post.IPostService;
@@ -32,17 +32,17 @@ public class PostService extends AbstractTransitiveSelfEntityService implements 
     }
 
     @Override
-    public void savePost(RequestPostDto requestPostDto) {
+    public void savePost(PostDto requestPostDto) {
         createNewPost(requestPostDto);
     }
 
     @Override
-    public Post createNewPostWithResponse(RequestPostDto requestPostDto) {
+    public Post createNewPostWithResponse(PostDto requestPostDto) {
         return createNewPost(requestPostDto);
     }
 
     @Override
-    public void updatePost(RequestPostDtoUpdate requestUpdatePostDto) {
+    public void updatePost(PostDtoUpdate requestUpdatePostDto) {
         Post newPost = buildPost(requestUpdatePostDto.getNewEntityDto(),
                 requestUpdatePostDto.getOldEntityDto().getUniquePostId());
 
@@ -93,14 +93,14 @@ public class PostService extends AbstractTransitiveSelfEntityService implements 
         return getEntityDao().getTransitiveSelfEntitiesTree();
     }
 
-    private Post createNewPost(RequestPostDto requestPostDto) {
+    private Post createNewPost(PostDto requestPostDto) {
         Post newPost = buildPost(requestPostDto, getUUID());
 
         super.saveEntityTree(newPost);
         return newPost;
     }
 
-    private Post buildPost(RequestPostDto requestPostDto, String uniquePostId) {
+    private Post buildPost(PostDto requestPostDto, String uniquePostId) {
         Post parentPost = null;
         if (requestPostDto.getParent() != null) {
             Parameter parameter = parameterFactory.createStringParameter("uniquePostId", uniquePostId);

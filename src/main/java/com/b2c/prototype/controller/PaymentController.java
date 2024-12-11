@@ -1,6 +1,6 @@
 package com.b2c.prototype.controller;
 
-import com.b2c.prototype.modal.dto.request.RequestPaymentDto;
+import com.b2c.prototype.modal.dto.request.PaymentDto;
 import com.b2c.prototype.service.processor.payment.IPaymentService;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -21,8 +21,8 @@ public class PaymentController {
     }
 
     @PostMapping(value = "/payment", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createNewPayment(@RequestBody final RequestPaymentDto requestPaymentDto) {
-        paymentService.savePayment(requestPaymentDto);
+    public ResponseEntity<?> createNewPayment(@RequestBody final PaymentDto paymentDto) {
+        paymentService.savePayment(paymentDto);
 
         return new ResponseEntity<>(HttpStatusCode.valueOf(200));
     }

@@ -2,16 +2,9 @@ package com.b2c.prototype.dao.store.base;
 
 import com.b2c.prototype.dao.AbstractSingleEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
-import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
-import com.b2c.prototype.modal.entity.item.CurrencyDiscount;
-import com.b2c.prototype.modal.entity.item.ItemData;
-import com.b2c.prototype.modal.entity.item.ItemStatus;
-import com.b2c.prototype.modal.entity.item.ItemType;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
-import com.b2c.prototype.modal.entity.price.Currency;
-import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.modal.entity.store.CountType;
 import com.b2c.prototype.modal.entity.store.Store;
 import com.tm.core.dao.identifier.EntityIdentifierDao;
@@ -19,10 +12,7 @@ import com.tm.core.processor.finder.manager.EntityMappingManager;
 import com.tm.core.processor.finder.manager.IEntityMappingManager;
 import com.tm.core.processor.finder.table.EntityTable;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 
-import java.sql.Connection;
-import java.sql.Statement;
 import java.util.List;
 
 class BasicStoreDaoTest extends AbstractSingleEntityDaoTest {

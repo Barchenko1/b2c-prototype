@@ -14,9 +14,8 @@ import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.UserProfile;
 import com.b2c.prototype.util.CardUtil;
-import com.tm.core.dao.general.AbstractGeneralEntityDao;
+import com.tm.core.dao.common.AbstractEntityDao;
 import com.tm.core.dao.identifier.EntityIdentifierDao;
-import com.tm.core.modal.GeneralEntity;
 import com.tm.core.processor.finder.manager.EntityMappingManager;
 import com.tm.core.processor.finder.manager.IEntityMappingManager;
 import com.tm.core.processor.finder.parameter.Parameter;
@@ -94,7 +93,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
                 .street("street")
                 .buildingNumber(1)
                 .apartmentNumber(101)
-                .flor(9)
+                .florNumber(9)
                 .zipCode("90000")
                 .build();
         CreditCard creditCard = CreditCard.builder()
@@ -104,7 +103,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
                 .ownerName("name")
                 .ownerSecondName("secondName")
                 .isActive(CardUtil.isCardActive("06/28"))
-                .cvv(818)
+                .cvv("818")
                 .build();
         Post parent = Post.builder()
                 .id(1L)
@@ -142,6 +141,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
                 .id(1L)
                 .title("title")
                 .message("message")
+                .messageUniqNumber("messageUniqNumber1")
                 .sender("sender@email.com")
                 .receivers(List.of("receiver1@email.com", "receiver2@email.com"))
                 .subscribe("system")
@@ -173,6 +173,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
                 .id(1L)
                 .title("title")
                 .message("message")
+                .messageUniqNumber("messageUniqNumber1")
                 .sender("sender@email.com")
                 .receivers(List.of("receiver1@email.com", "receiver2@email.com"))
                 .subscribe("system")
@@ -203,6 +204,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
                 .id(1L)
                 .title("title")
                 .message("message")
+                .messageUniqNumber("messageUniqNumber1")
                 .sender("sender@email.com")
                 .receivers(List.of("receiver1@email.com", "receiver2@email.com"))
                 .subscribe("system")
@@ -215,6 +217,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
                 .title("title")
                 .message("message")
                 .sender("sender@email.com")
+                .messageUniqNumber("messageUniqNumber2")
                 .receivers(List.of("receiver1@email.com", "receiver2@email.com"))
                 .subscribe("system")
                 .sendSystem("system")
@@ -245,6 +248,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
         return Message.builder()
                 .title("title")
                 .message("message")
+                .messageUniqNumber("messageUniqNumber1")
                 .sender("sender@email.com")
                 .receivers(List.of("receiver1@email.com", "receiver2@email.com"))
                 .subscribe("system")
@@ -264,20 +268,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
         loadDataSet("/datasets/message/message_box/testMessageBoxDataSet.yml");
         Parameter parameter = new Parameter("id", 1L);
         MessageBox messageBox = prepareTestMessageBox();
-        List<MessageBox> resultList = dao.getGeneralEntityList(parameter);
-
-        assertEquals(1, resultList.size());
-        resultList.forEach(result -> {
-            checkMessageBox(messageBox, result);
-        });
-    }
-
-    @Test
-    void getEntityListWithClass_success() {
-        loadDataSet("/datasets/message/message_box/testMessageBoxDataSet.yml");
-        Parameter parameter = new Parameter("id", 1L);
-        MessageBox messageBox = prepareTestMessageBox();
-        List<MessageBox> resultList = dao.getGeneralEntityList(MessageBox.class, parameter);
+        List<MessageBox> resultList = dao.getEntityList(parameter);
 
         assertEquals(1, resultList.size());
         resultList.forEach(result -> {
@@ -290,16 +281,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
         Parameter parameter = new Parameter("id1", 1L);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.getGeneralEntityList(parameter);
-        });
-    }
-
-    @Test
-    void getEntityListWithClass_Failure() {
-        Parameter parameter = new Parameter("id1", 1L);
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.getGeneralEntityList(Object.class, parameter);
+            dao.getEntityList(parameter);
         });
     }
 
@@ -307,11 +289,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
     void saveEntity_success() {
         loadDataSet("/datasets/message/message_box/emptyMessageBoxDataSet.yml");
         MessageBox messageBox = prepareSaveMessageBox();
-
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(2, messageBox);
-
-        dao.saveGeneralEntity(generalEntity);
+        dao.persistEntity(messageBox);
         verifyExpectedData("/datasets/message/message_box/saveMessageBoxDataSet.yml");
     }
 
@@ -319,9 +297,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
     void saveEntityWithDependencies_success() {
         loadDataSet("/datasets/message/message_box/emptyMessageBoxDataSet.yml");
         MessageBox messageBox = prepareSaveMessageBox();
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(2, messageBox);
-        dao.saveGeneralEntity(generalEntity);
+        dao.persistEntity(messageBox);
         verifyExpectedData("/datasets/message/message_box/saveMessageBoxDataSet.yml");
     }
 
@@ -329,15 +305,12 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
     void saveEntity_transactionFailure() {
         MessageBox messageBox = prepareSaveMessageBox();
 
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(2, messageBox);
-
         SessionFactory sessionFactory = mock(SessionFactory.class);
         Session session = mock(Session.class);
         Transaction transaction = mock(Transaction.class);
 
         try {
-            Field sessionManagerField = AbstractGeneralEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
@@ -349,7 +322,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
         doThrow(new RuntimeException()).when(session).persist(messageBox);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.saveGeneralEntity(generalEntity);
+            dao.persistEntity(messageBox);
         });
 
         assertEquals(RuntimeException.class, exception.getClass());
@@ -363,7 +336,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
             s.persist(messageBox);
         };
 
-        dao.saveGeneralEntity(consumer);
+        dao.saveEntity(consumer);
         verifyExpectedData("/datasets/message/message_box/saveMessageBoxDataSet.yml");
     }
 
@@ -375,7 +348,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.saveGeneralEntity(consumer);
+            dao.saveEntity(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -393,7 +366,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
             oldMessageBox.addMessage(newMessage);
             return oldMessageBox;
         };
-        dao.updateGeneralEntity(messageBoxSupplier);
+        dao.updateEntity(messageBoxSupplier);
         verifyExpectedData("/datasets/message/message_box/updateMessageBoxDataSet.yml");
     }
 
@@ -404,7 +377,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            dao.updateGeneralEntity(messageBoxSupplier);
+            dao.updateEntity(messageBoxSupplier);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -420,7 +393,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
             newMessage.setId(2L);
             s.merge(messageBox);
         };
-        dao.updateGeneralEntity(consumer);
+        dao.updateEntity(consumer);
         verifyExpectedData("/datasets/message/message_box/updateMessageBoxDataSet.yml");
     }
 
@@ -432,7 +405,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.updateGeneralEntity(consumer);
+            dao.updateEntity(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -443,7 +416,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
         loadDataSet("/datasets/message/message_box/testMessageBoxDataSet.yml");
         Parameter parameter = new Parameter("id", 1);
 
-        dao.deleteGeneralEntity(parameter);
+        dao.findEntityAndDelete(parameter);
         verifyExpectedData("/datasets/message/message_box/emptyMessageBoxDataSet.yml");
     }
 
@@ -455,7 +428,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
             s.remove(messageBox);
         };
 
-        dao.deleteGeneralEntity(consumer);
+        dao.deleteEntity(consumer);
         verifyExpectedData("/datasets/message/message_box/emptyMessageBoxDataSet.yml");
     }
 
@@ -467,7 +440,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            dao.deleteGeneralEntity(consumer);
+            dao.deleteEntity(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -478,10 +451,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
         loadDataSet("/datasets/message/message_box/testMessageBoxDataSet.yml");
         MessageBox messageBox = prepareTestMessageBox();
 
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(1, messageBox);
-
-        dao.deleteGeneralEntity(generalEntity);
+        dao.deleteEntity(messageBox);
         verifyExpectedData("/datasets/message/message_box/emptyMessageBoxDataSet.yml");
     }
 
@@ -493,7 +463,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
         Transaction transaction = mock(Transaction.class);
 
         try {
-            Field sessionManagerField = AbstractGeneralEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
@@ -506,27 +476,16 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
 
         MessageBox messageBox = prepareTestMessageBox();
 
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(1, messageBox);
-
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            dao.deleteGeneralEntity(generalEntity);
+            dao.deleteEntity(messageBox);
         });
 
         assertEquals(RuntimeException.class, exception.getClass());
     }
 
     @Test
-    void deleteEntityWithClass_success() {
-        loadDataSet("/datasets/message/message_box/testMessageBoxDataSet.yml");
-        Parameter parameter = new Parameter("id", 1);
-
-        dao.deleteGeneralEntity(MessageBox.class, parameter);
-        verifyExpectedData("/datasets/message/message_box/emptyMessageBoxDataSet.yml");
-    }
-
-    @Test
     void deleteEntity_transactionFailure() {
+        loadDataSet("/datasets/message/message_box/testMessageBoxDataSet.yml");
         MessageBox messageBox = new MessageBox();
 
         Parameter parameter = new Parameter("id", 1L);
@@ -536,7 +495,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
         Transaction transaction = mock(Transaction.class);
 
         try {
-            Field sessionManagerField = AbstractGeneralEntityDao.class.getDeclaredField("sessionManager");
+            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionManager");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionManager);
         } catch (Exception e) {
@@ -547,44 +506,8 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
         when(session.beginTransaction()).thenReturn(transaction);
         doThrow(new RuntimeException()).when(transaction).commit();
 
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(1, messageBox);
-
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.deleteGeneralEntity(parameter);
-        });
-
-        assertEquals(RuntimeException.class, exception.getClass());
-    }
-
-    @Test
-    void deleteEntityWithClass_transactionFailure() {
-        loadDataSet("/datasets/message/message_box/testMessageBoxDataSet.yml");
-        MessageBox messageBox = new MessageBox();
-
-        Parameter parameter = new Parameter("id", 1L);
-
-        IThreadLocalSessionManager sessionManager = mock(IThreadLocalSessionManager.class);
-        Session session = mock(Session.class);
-        Transaction transaction = mock(Transaction.class);
-
-        try {
-            Field sessionManagerField = AbstractGeneralEntityDao.class.getDeclaredField("sessionManager");
-            sessionManagerField.setAccessible(true);
-            sessionManagerField.set(dao, sessionManager);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        when(sessionManager.getSession()).thenReturn(session);
-        when(session.beginTransaction()).thenReturn(transaction);
-        doThrow(new RuntimeException()).when(session).remove(any(Object.class));
-
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(2, messageBox);
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.deleteGeneralEntity(MessageBox.class, parameter);
+            dao.findEntityAndDelete(parameter);
         });
 
         assertEquals(RuntimeException.class, exception.getClass());
@@ -596,7 +519,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
         Parameter parameter = new Parameter("id", 1L);
         MessageBox messageBox = prepareTestMessageBox();
         Optional<MessageBox> resultOptional =
-                dao.getOptionalGeneralEntity(parameter);
+                dao.getOptionalEntity(parameter);
 
         assertTrue(resultOptional.isPresent());
         MessageBox result = resultOptional.get();
@@ -607,46 +530,10 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
     void getOptionalEntityWithDependencies_Failure() {
         Parameter parameter = new Parameter("id1", 1L);
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.getOptionalGeneralEntity(parameter);
+        assertThrows(RuntimeException.class, () -> {
+            dao.getOptionalEntity(parameter);
         });
 
-    }
-
-    @Test
-    void getOptionalEntityWithDependenciesWithClass_success() {
-        loadDataSet("/datasets/message/message_box/testMessageBoxDataSet.yml");
-        Parameter parameter = new Parameter("id", 1L);
-
-        MessageBox messageBox = prepareTestMessageBox();
-
-        Optional<MessageBox> resultOptional =
-                dao.getOptionalGeneralEntity(MessageBox.class, parameter);
-
-        assertTrue(resultOptional.isPresent());
-        MessageBox result = resultOptional.get();
-
-        checkMessageBox(messageBox, result);
-    }
-
-    @Test
-    void getOptionalEntityWithDependenciesWithClass_Failure() {
-        loadDataSet("/datasets/message/message_box/testMessageBoxDataSet.yml");
-        Parameter parameter = new Parameter("id1", 1L);
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.getOptionalGeneralEntity(MessageBox.class, parameter);
-        });
-    }
-
-    @Test
-    void getOptionalEntityWithDependencies_OptionEmpty() {
-        Parameter parameter = new Parameter("id", 100L);
-
-        Optional<MessageBox> result =
-                dao.getOptionalGeneralEntity(MessageBox.class, parameter);
-
-        assertTrue(result.isEmpty());
     }
 
     @Test
@@ -655,7 +542,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
         Parameter parameter = new Parameter("id", 1L);
 
         MessageBox messageBox = prepareTestMessageBox();
-        MessageBox result = dao.getGeneralEntity(parameter);
+        MessageBox result = dao.getEntity(parameter);
 
         checkMessageBox(messageBox, result);
     }
@@ -665,28 +552,8 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
         Parameter parameter = new Parameter("id1", 1L);
 
         assertThrows(RuntimeException.class, () -> {
-            dao.getGeneralEntity(parameter);
+            dao.getEntity(parameter);
         });
     }
 
-
-    @Test
-    void getEntityWithDependenciesWithClass_success() {
-        loadDataSet("/datasets/message/message_box/testMessageBoxDataSet.yml");
-        Parameter parameter = new Parameter("id", 1L);
-
-        MessageBox messageBox = prepareTestMessageBox();
-        MessageBox result = dao.getGeneralEntity(MessageBox.class, parameter);
-
-        checkMessageBox(messageBox, result);
-    }
-
-    @Test
-    void getEntityWithDependenciesWithClass_Failure() {
-        Parameter parameter = new Parameter("id1", 1L);
-
-        assertThrows(RuntimeException.class, () -> {
-            dao.getGeneralEntity(MessageBox.class, parameter);
-        });
-    }
 }

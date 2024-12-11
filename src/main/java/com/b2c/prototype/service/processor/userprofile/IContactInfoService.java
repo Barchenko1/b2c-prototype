@@ -6,9 +6,8 @@ import com.b2c.prototype.modal.dto.update.ContactInfoDtoUpdate;
 
 public interface IContactInfoService {
     void saveContactInfo(ContactInfoDto contactInfoDto);
-    void saveContactInfoWithResponse(ContactInfoDto contactInfoDto);
     void updateContactInfoByOrderId(ContactInfoDtoUpdate requestContactInfoDtoUpdate);
     void deleteContactInfoByOrderId(OneFieldEntityDto oneFieldEntityDto);
-    void updateContactInfoByUsername(ContactInfoDtoUpdate requestContactInfoDtoUpdate);
-    void deleteContactInfoByUsername(OneFieldEntityDto oneFieldEntityDto);
+    void updateContactInfoByEmail(ContactInfoDtoUpdate requestContactInfoDtoUpdate);
+    void deleteContactInfoByEmail(OneFieldEntityDto oneFieldEntityDto);
 }

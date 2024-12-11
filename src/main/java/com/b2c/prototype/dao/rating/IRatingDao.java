@@ -1,6 +1,6 @@
 package com.b2c.prototype.dao.rating;
 
-import com.tm.core.dao.single.ISingleEntityDao;
+import com.tm.core.dao.common.IEntityDao;
 
-public interface IRatingDao extends ISingleEntityDao{
+public interface IRatingDao extends IEntityDao {
 }

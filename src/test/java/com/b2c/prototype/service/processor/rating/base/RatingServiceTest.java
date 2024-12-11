@@ -31,7 +31,7 @@ class RatingServiceTest extends AbstractOneFieldEntityServiceTest<Rating> {
 
         ratingService.saveEntity(dto);
 
-        verify(dao).saveEntity(testValue);
+        verify(dao).persistEntity(testValue);
         verify(entityCachedMap).putEntity(testValue.getClass(), getFieldName(), testValue);
     }
 

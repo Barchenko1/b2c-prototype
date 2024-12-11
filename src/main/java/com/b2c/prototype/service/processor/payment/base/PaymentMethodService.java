@@ -5,7 +5,7 @@ import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.entity.payment.PaymentMethod;
 import com.b2c.prototype.service.processor.AbstractOneFieldEntityService;
 import com.b2c.prototype.service.processor.payment.IPaymentMethodService;
-import com.tm.core.dao.single.ISingleEntityDao;
+import com.tm.core.dao.common.IEntityDao;
 import com.tm.core.processor.finder.factory.IParameterFactory;
 
 import java.util.function.Function;
@@ -13,7 +13,7 @@ import java.util.function.Function;
 public class PaymentMethodService extends AbstractOneFieldEntityService<PaymentMethod> implements IPaymentMethodService {
 
     public PaymentMethodService(IParameterFactory parameterFactory,
-                                ISingleEntityDao paymentMethodDao,
+                                IEntityDao paymentMethodDao,
                                 IEntityCachedMap entityCachedMap) {
         super(parameterFactory, paymentMethodDao, entityCachedMap);
     }

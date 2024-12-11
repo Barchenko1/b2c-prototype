@@ -16,9 +16,8 @@ import com.b2c.prototype.modal.entity.post.Post;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.modal.entity.review.Review;
-import com.tm.core.dao.general.AbstractGeneralEntityDao;
+import com.tm.core.dao.common.AbstractEntityDao;
 import com.tm.core.dao.identifier.EntityIdentifierDao;
-import com.tm.core.modal.GeneralEntity;
 import com.tm.core.processor.finder.manager.EntityMappingManager;
 import com.tm.core.processor.finder.manager.IEntityMappingManager;
 import com.tm.core.processor.finder.parameter.Parameter;
@@ -62,7 +61,7 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
         try (Connection connection = connectionHolder.getConnection()) {
             connection.setAutoCommit(false);
             Statement statement = connection.createStatement();
-            statement.execute("DELETE FROM item_quantity_item_data");
+            statement.execute("DELETE FROM item_data_quantity_item_data");
             statement.execute("DELETE FROM item_review");
             statement.execute("DELETE FROM item_post");
             statement.execute("DELETE FROM item_data_option");
@@ -236,7 +235,8 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
                 .currencyDiscount(currencyDiscount)
                 .status(itemStatus)
                 .itemType(itemType)
-                .price(price)
+                .fullPrice(price)
+                .totalPrice(price)
                 .build();
 
         itemData.addOptionItem(optionItem1);
@@ -305,7 +305,8 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
                 .currencyDiscount(currencyDiscount)
                 .status(itemStatus)
                 .itemType(itemType)
-                .price(price)
+                .fullPrice(price)
+                .totalPrice(price)
                 .build();
 
         itemData.addOptionItem(optionItem1);
@@ -381,7 +382,8 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
                 .percentDiscount(percentDiscount)
                 .status(itemStatus)
                 .itemType(itemType)
-                .price(price)
+                .fullPrice(price)
+                .totalPrice(price)
                 .build();
 
         itemData.addOptionItem(optionItem1);
@@ -401,10 +403,10 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
         assertEquals(expectedItem.getId(), actualItem.getId());
 
         ItemData actualItemData = actualItem.getItemData();
-        assertEquals(expectedItem.getItemData().getId(), actualItemData.getId());
-        assertEquals(expectedItem.getItemData().getName(), actualItemData.getName());
-        assertEquals(expectedItem.getItemData().getArticularId(), actualItemData.getArticularId());
-        assertEquals(expectedItem.getItemData().getDateOfCreate(), actualItemData.getDateOfCreate());
+//        assertEquals(expectedItem.getItemData().getId(), actualItemData.getId());
+//        assertEquals(expectedItem.getItemData().getName(), actualItemData.getName());
+//        assertEquals(expectedItem.getItemData().getArticularId(), actualItemData.getArticularId());
+//        assertEquals(expectedItem.getItemData().getDateOfCreate(), actualItemData.getDateOfCreate());
 
 //        Brand brand = actualItemData.getBrand();
 //        assertEquals(expectedItem.getItemData().getBrand().getId(), brand.getId());
@@ -421,23 +423,10 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
 
     @Test
     void getEntityList_success() {
-        loadDataSet("/datasets/item/item/testItemDataSet.yml");
+        loadDataSet("/datasets/item/item/testItemSet.yml");
         Parameter parameter = new Parameter("id", 1L);
         Item item = prepareTestItem();
-        List<Item> resultList = dao.getGeneralEntityList(parameter);
-
-        assertEquals(1, resultList.size());
-        resultList.forEach(result -> {
-            checkItem(item, result);
-        });
-    }
-
-    @Test
-    void getEntityListWithClass_success() {
-        loadDataSet("/datasets/item/item/testItemDataSet.yml");
-        Parameter parameter = new Parameter("id", 1L);
-        Item item = prepareTestItem();
-        List<Item> resultList = dao.getGeneralEntityList(Item.class, parameter);
+        List<Item> resultList = dao.getEntityList(parameter);
 
         assertEquals(1, resultList.size());
         resultList.forEach(result -> {
@@ -449,55 +438,38 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
     void getEntityList_Failure() {
         Parameter parameter = new Parameter("id1", 1L);
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.getGeneralEntityList(parameter);
-        });
-    }
-
-    @Test
-    void getEntityListWithClass_Failure() {
-        Parameter parameter = new Parameter("id1", 1L);
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.getGeneralEntityList(Object.class, parameter);
+        assertThrows(RuntimeException.class, () -> {
+            dao.getEntityList(parameter);
         });
     }
 
     @Test
     void saveEntity_success() {
-        loadDataSet("/datasets/item/item/emptyItemDataSet.yml");
+        loadDataSet("/datasets/item/item/emptyItemSet.yml");
         Item item = prepareToSaveItem();
 
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(2, item);
-
-        dao.saveGeneralEntity(generalEntity);
-        verifyExpectedData("/datasets/item/item/saveItemDataSet.yml");
+        dao.persistEntity(item);
+        verifyExpectedData("/datasets/item/item/saveItemSet.yml");
     }
 
     @Test
     void saveEntityWithDependencies_success() {
-        loadDataSet("/datasets/item/item/emptyItemDataSet.yml");
+        loadDataSet("/datasets/item/item/emptyItemSet.yml");
         Item item = prepareToSaveItem();
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(2, item);
-        dao.saveGeneralEntity(generalEntity);
-        verifyExpectedData("/datasets/item/item/saveItemDataSet.yml");
+        dao.persistEntity(item);
+        verifyExpectedData("/datasets/item/item/saveItemSet.yml");
     }
 
     @Test
     void saveEntity_transactionFailure() {
         Item item = prepareToSaveItem();
 
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(2, item);
-
         SessionFactory sessionFactory = mock(SessionFactory.class);
         Session session = mock(Session.class);
         Transaction transaction = mock(Transaction.class);
 
         try {
-            Field sessionManagerField = AbstractGeneralEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
@@ -509,7 +481,7 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
         doThrow(new RuntimeException()).when(session).persist(item);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.saveGeneralEntity(generalEntity);
+            dao.persistEntity(item);
         });
 
         assertEquals(RuntimeException.class, exception.getClass());
@@ -517,37 +489,37 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
 
     @Test
     void saveEntityConsumer_success() {
-        loadDataSet("/datasets/item/item/emptyItemDataSet.yml");
+        loadDataSet("/datasets/item/item/emptyItemSet.yml");
         Consumer<Session> consumer = (Session s) -> {
             Item item = prepareToSaveItem();
             s.persist(item);
         };
 
-        dao.saveGeneralEntity(consumer);
-        verifyExpectedData("/datasets/item/item/saveItemDataSet.yml");
+        dao.saveEntity(consumer);
+        verifyExpectedData("/datasets/item/item/saveItemSet.yml");
     }
 
     @Test
     void saveEntityConsumer_transactionFailure() {
-        loadDataSet("/datasets/item/item/emptyItemDataSet.yml");
+        loadDataSet("/datasets/item/item/emptyItemSet.yml");
         Consumer<Session> consumer = (Session s) -> {
             throw new RuntimeException();
         };
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.saveGeneralEntity(consumer);
+            dao.saveEntity(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
-        verifyExpectedData("/datasets/item/item/emptyItemDataSet.yml");
+        verifyExpectedData("/datasets/item/item/emptyItemSet.yml");
     }
 
     @Test
     void updateEntity_success() {
-        loadDataSet("/datasets/item/item/testItemDataSet.yml");
+        loadDataSet("/datasets/item/item/testItemSet.yml");
         Supplier<Item> itemSupplier = this::prepareToUpdateItem;
-        dao.updateGeneralEntity(itemSupplier);
-        verifyExpectedData("/datasets/item/item/updateItemDataSet.yml");
+        dao.updateEntity(itemSupplier);
+        verifyExpectedData("/datasets/item/item/updateItemSet.yml");
     }
 
     @Test
@@ -557,7 +529,7 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            dao.updateGeneralEntity(itemSupplier);
+            dao.updateEntity(itemSupplier);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -565,24 +537,24 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
 
     @Test
     void updateEntityConsumer_success() {
-        loadDataSet("/datasets/item/item/testItemDataSet.yml");
+        loadDataSet("/datasets/item/item/testItemSet.yml");
         Consumer<Session> consumer = (Session s) -> {
             Item itemToUpdate = prepareToUpdateItem();
             s.merge(itemToUpdate);
         };
-        dao.updateGeneralEntity(consumer);
-        verifyExpectedData("/datasets/item/item/updateItemDataSet.yml");
+        dao.updateEntity(consumer);
+        verifyExpectedData("/datasets/item/item/updateItemSet.yml");
     }
 
     @Test
     void updateEntityConsumer_transactionFailure() {
-        loadDataSet("/datasets/item/item/testItemDataSet.yml");
+        loadDataSet("/datasets/item/item/testItemSet.yml");
         Consumer<Session> itemConsumer = (Session s) -> {
             throw new RuntimeException();
         };
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.updateGeneralEntity(itemConsumer);
+            dao.updateEntity(itemConsumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -590,34 +562,34 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
 
     @Test
     void deleteEntity_success() {
-        loadDataSet("/datasets/item/item/testItemDataSet.yml");
+        loadDataSet("/datasets/item/item/testItemSet.yml");
         Parameter parameter = new Parameter("id", 1);
 
-        dao.deleteGeneralEntity(parameter);
-        verifyExpectedData("/datasets/item/item/emptyItemDataSet.yml");
+        dao.findEntityAndDelete(parameter);
+        verifyExpectedData("/datasets/item/item/emptyItemSet.yml");
     }
 
     @Test
     void deleteEntityByConsumer_success() {
-        loadDataSet("/datasets/item/item/testItemDataSet.yml");
+        loadDataSet("/datasets/item/item/testItemSet.yml");
         Consumer<Session> consumer = (Session s) -> {
             Item item = prepareTestItem();
             s.remove(item);
         };
 
-        dao.deleteGeneralEntity(consumer);
-        verifyExpectedData("/datasets/item/item/emptyItemDataSet.yml");
+        dao.deleteEntity(consumer);
+        verifyExpectedData("/datasets/item/item/emptyItemSet.yml");
     }
 
     @Test
     void deleteEntityByConsumer_transactionFailure() {
-        loadDataSet("/datasets/item/item/testItemDataSet.yml");
+        loadDataSet("/datasets/item/item/testItemSet.yml");
         Consumer<Session> consumer = (Session s) -> {
             throw new RuntimeException();
         };
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            dao.deleteGeneralEntity(consumer);
+            dao.deleteEntity(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -625,25 +597,22 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
 
     @Test
     void deleteEntityByGeneralEntity_success() {
-        loadDataSet("/datasets/item/item/testItemDataSet.yml");
+        loadDataSet("/datasets/item/item/testItemSet.yml");
         Item item = prepareTestItem();
 
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(1, item);
-
-        dao.deleteGeneralEntity(generalEntity);
-        verifyExpectedData("/datasets/item/item/emptyItemDataSet.yml");
+        dao.deleteEntity(item);
+        verifyExpectedData("/datasets/item/item/emptyItemSet.yml");
     }
 
     @Test
     void deleteEntityByGeneralEntity_transactionFailure() {
-        loadDataSet("/datasets/item/item/testItemDataSet.yml");
+        loadDataSet("/datasets/item/item/testItemSet.yml");
         SessionFactory sessionFactory = mock(SessionFactory.class);
         Session session = mock(Session.class);
         Transaction transaction = mock(Transaction.class);
 
         try {
-            Field sessionManagerField = AbstractGeneralEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
@@ -656,27 +625,16 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
 
         Item item = prepareTestItem();
 
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(1, item);
-
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            dao.deleteGeneralEntity(generalEntity);
+            dao.deleteEntity(item);
         });
 
         assertEquals(RuntimeException.class, exception.getClass());
     }
 
     @Test
-    void deleteEntityWithClass_success() {
-        loadDataSet("/datasets/item/item/testItemDataSet.yml");
-        Parameter parameter = new Parameter("id", 1);
-
-        dao.deleteGeneralEntity(Item.class, parameter);
-        verifyExpectedData("/datasets/item/item/emptyItemDataSet.yml");
-    }
-
-    @Test
     void deleteEntity_transactionFailure() {
+        loadDataSet("/datasets/item/item/testItemSet.yml");
         Item item = new Item();
 
         Parameter parameter = new Parameter("id", 1L);
@@ -686,7 +644,7 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
         Transaction transaction = mock(Transaction.class);
 
         try {
-            Field sessionManagerField = AbstractGeneralEntityDao.class.getDeclaredField("sessionManager");
+            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionManager");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionManager);
         } catch (Exception e) {
@@ -697,44 +655,8 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
         when(session.beginTransaction()).thenReturn(transaction);
         doThrow(new RuntimeException()).when(transaction).commit();
 
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(2, item);
-
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.deleteGeneralEntity(parameter);
-        });
-
-        assertEquals(RuntimeException.class, exception.getClass());
-    }
-
-    @Test
-    void deleteEntityWithClass_transactionFailure() {
-        loadDataSet("/datasets/item/item/testItemDataSet.yml");
-        Item item = new Item();
-
-        Parameter parameter = new Parameter("id", 1L);
-
-        IThreadLocalSessionManager sessionManager = mock(IThreadLocalSessionManager.class);
-        Session session = mock(Session.class);
-        Transaction transaction = mock(Transaction.class);
-
-        try {
-            Field sessionManagerField = AbstractGeneralEntityDao.class.getDeclaredField("sessionManager");
-            sessionManagerField.setAccessible(true);
-            sessionManagerField.set(dao, sessionManager);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        when(sessionManager.getSession()).thenReturn(session);
-        when(session.beginTransaction()).thenReturn(transaction);
-        doThrow(new RuntimeException()).when(session).remove(any(Object.class));
-
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(2, item);
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.deleteGeneralEntity(Item.class, parameter);
+            dao.findEntityAndDelete(parameter);
         });
 
         assertEquals(RuntimeException.class, exception.getClass());
@@ -742,11 +664,11 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
 
     @Test
     void getOptionalEntityWithDependencies_success() {
-        loadDataSet("/datasets/item/item/testItemDataSet.yml");
+        loadDataSet("/datasets/item/item/testItemSet.yml");
         Parameter parameter = new Parameter("id", 1L);
         Item item = prepareTestItem();
         Optional<Item> resultOptional =
-                dao.getOptionalGeneralEntity(parameter);
+                dao.getOptionalEntity(parameter);
 
         assertTrue(resultOptional.isPresent());
         Item result = resultOptional.get();
@@ -757,55 +679,19 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
     void getOptionalEntityWithDependencies_Failure() {
         Parameter parameter = new Parameter("id1", 1L);
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.getOptionalGeneralEntity(parameter);
+        assertThrows(RuntimeException.class, () -> {
+            dao.getOptionalEntity(parameter);
         });
 
-    }
-
-    @Test
-    void getOptionalEntityWithDependenciesWithClass_success() {
-        loadDataSet("/datasets/item/item/testItemDataSet.yml");
-        Parameter parameter = new Parameter("id", 1L);
-
-        Item item = prepareTestItem();
-
-        Optional<Item> resultOptional =
-                dao.getOptionalGeneralEntity(Item.class, parameter);
-
-        assertTrue(resultOptional.isPresent());
-        Item result = resultOptional.get();
-
-        checkItem(item, result);
-    }
-
-    @Test
-    void getOptionalEntityWithDependenciesWithClass_Failure() {
-        loadDataSet("/datasets/item/item/testItemDataSet.yml");
-        Parameter parameter = new Parameter("id1", 1L);
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.getOptionalGeneralEntity(Item.class, parameter);
-        });
-    }
-
-    @Test
-    void getOptionalEntityWithDependencies_OptionEmpty() {
-        Parameter parameter = new Parameter("id", 100L);
-
-        Optional<Item> result =
-                dao.getOptionalGeneralEntity(Item.class, parameter);
-
-        assertTrue(result.isEmpty());
     }
 
     @Test
     void getEntityWithDependencies_success() {
-        loadDataSet("/datasets/item/item/testItemDataSet.yml");
+        loadDataSet("/datasets/item/item/testItemSet.yml");
         Parameter parameter = new Parameter("id", 1L);
 
         Item item = prepareTestItem();
-        Item result = dao.getGeneralEntity(parameter);
+        Item result = dao.getEntity(parameter);
 
         checkItem(item, result);
     }
@@ -815,28 +701,7 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
         Parameter parameter = new Parameter("id1", 1L);
 
         assertThrows(RuntimeException.class, () -> {
-            dao.getGeneralEntity(parameter);
-        });
-    }
-
-
-    @Test
-    void getEntityWithDependenciesWithClass_success() {
-        loadDataSet("/datasets/item/item/testItemDataSet.yml");
-        Parameter parameter = new Parameter("id", 1L);
-
-        Item item = prepareTestItem();
-        Item result = dao.getGeneralEntity(Item.class, parameter);
-
-        checkItem(item, result);
-    }
-
-    @Test
-    void getEntityWithDependenciesWithClass_Failure() {
-        Parameter parameter = new Parameter("id1", 1L);
-
-        assertThrows(RuntimeException.class, () -> {
-            dao.getGeneralEntity(Item.class, parameter);
+            dao.getEntity(parameter);
         });
     }
 

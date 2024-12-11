@@ -40,10 +40,10 @@
         <mapping class="com.b2c.prototype.modal.entity.price.Currency" />
         <mapping class="com.b2c.prototype.modal.entity.price.Price" />
         <mapping class="com.b2c.prototype.modal.entity.payment.CreditCard" />
-        <mapping class="com.b2c.prototype.modal.entity.payment.Payment" />
 
         <mapping class="com.b2c.prototype.modal.entity.item.CurrencyDiscount" />
         <mapping class="com.b2c.prototype.modal.entity.item.PercentDiscount" />
+        <mapping class="com.b2c.prototype.modal.entity.payment.Payment" />
 
         <mapping class="com.b2c.prototype.modal.entity.item.Brand" />
         <mapping class="com.b2c.prototype.modal.entity.item.Category" />
@@ -59,7 +59,7 @@
         <mapping class="com.b2c.prototype.modal.entity.wishlist.Wishlist" />
 
         <mapping class="com.b2c.prototype.modal.entity.item.Item" />
-        <mapping class="com.b2c.prototype.modal.entity.item.ItemQuantity" />
+        <mapping class="com.b2c.prototype.modal.entity.item.ItemDataQuantity" />
 
         <mapping class="com.b2c.prototype.modal.entity.message.MessageType" />
         <mapping class="com.b2c.prototype.modal.entity.message.MessageStatus" />

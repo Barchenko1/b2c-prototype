@@ -8,6 +8,7 @@ import com.b2c.prototype.dao.item.IBrandDao;
 import com.b2c.prototype.dao.item.IItemDao;
 import com.b2c.prototype.dao.item.IItemStatusDao;
 import com.b2c.prototype.dao.item.IItemTypeDao;
+import com.b2c.prototype.dao.item.IPercentDiscountDao;
 import com.b2c.prototype.dao.message.IMessageStatusDao;
 import com.b2c.prototype.dao.message.IMessageTypeDao;
 import com.b2c.prototype.dao.option.IOptionGroupDao;
@@ -29,6 +30,8 @@ import com.b2c.prototype.dao.embedded.IWishListDao;
 import com.b2c.prototype.dao.user.ICountryPhoneCodeDao;
 import com.b2c.prototype.processor.AsyncProcessor;
 import com.b2c.prototype.processor.IAsyncProcessor;
+import com.b2c.prototype.service.function.ITransformationFunctionService;
+import com.b2c.prototype.service.function.TransformationFunctionService;
 import com.b2c.prototype.service.processor.address.base.AddressService;
 import com.b2c.prototype.service.processor.address.base.CountryService;
 import com.b2c.prototype.service.processor.address.IAddressService;
@@ -36,12 +39,16 @@ import com.b2c.prototype.service.processor.address.ICountryService;
 import com.b2c.prototype.service.processor.delivery.IDeliveryTypeService;
 import com.b2c.prototype.service.processor.delivery.base.DeliveryTypeService;
 import com.b2c.prototype.service.processor.item.IBrandService;
+import com.b2c.prototype.service.processor.item.ICurrencyDiscountService;
 import com.b2c.prototype.service.processor.item.IItemStatusService;
 import com.b2c.prototype.service.processor.item.IItemTypeService;
+import com.b2c.prototype.service.processor.item.IPercentDiscountService;
 import com.b2c.prototype.service.processor.item.base.BrandService;
 import com.b2c.prototype.service.processor.item.base.CategoryService;
+import com.b2c.prototype.service.processor.item.base.CurrencyDiscountService;
 import com.b2c.prototype.service.processor.item.base.ItemStatusService;
 import com.b2c.prototype.service.processor.item.base.ItemTypeService;
+import com.b2c.prototype.service.processor.item.base.PercentDiscountService;
 import com.b2c.prototype.service.processor.message.IMessageStatusService;
 import com.b2c.prototype.service.processor.message.IMessageTypeService;
 import com.b2c.prototype.service.processor.message.base.MessageStatusService;
@@ -57,6 +64,7 @@ import com.b2c.prototype.service.processor.payment.base.PaymentMethodService;
 import com.b2c.prototype.service.processor.post.base.PostService;
 import com.b2c.prototype.service.processor.price.base.CurrencyService;
 import com.b2c.prototype.service.processor.price.ICurrencyService;
+import com.b2c.prototype.service.processor.query.IQueryService;
 import com.b2c.prototype.service.processor.rating.IRatingService;
 import com.b2c.prototype.service.processor.rating.base.RatingService;
 import com.b2c.prototype.service.processor.store.base.CountTypeService;
@@ -69,7 +77,7 @@ import com.b2c.prototype.service.processor.userprofile.basic.UserProfileService;
 import com.b2c.prototype.service.embedded.bucket.BucketService;
 import com.b2c.prototype.service.embedded.bucket.IBucketService;
 import com.b2c.prototype.service.processor.payment.base.CreditCardService;
-import com.b2c.prototype.service.processor.payment.ICardService;
+import com.b2c.prototype.service.processor.payment.ICreditCardService;
 import com.b2c.prototype.service.processor.item.ICategoryService;
 import com.b2c.prototype.service.processor.delivery.base.DeliveryService;
 import com.b2c.prototype.service.processor.delivery.IDeliveryService;
@@ -85,10 +93,7 @@ import com.b2c.prototype.service.embedded.wishlist.IWishListService;
 import com.b2c.prototype.service.embedded.wishlist.WishListService;
 import com.b2c.prototype.gateway.IRestClient;
 import com.b2c.prototype.gateway.RestClient;
-import com.tm.core.dao.factory.GeneralEntityFactory;
-import com.tm.core.dao.factory.IGeneralEntityFactory;
 import com.tm.core.dao.query.ISearchWrapper;
-import com.tm.core.dao.transaction.ITransactionWrapper;
 import com.tm.core.processor.finder.factory.IParameterFactory;
 import com.tm.core.processor.finder.factory.ParameterFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -120,14 +125,14 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public IGeneralEntityFactory generalEntityFactory() {
-        return new GeneralEntityFactory();
-    }
-
-    @Bean
     public IEntityCachedMap entityCachedMap(Map<Class<?>, Map<?, ?>> classEntityMap,
                                             ISearchWrapper searchWrapper) {
         return new EntityCachedMap(classEntityMap, searchWrapper);
+    }
+
+    @Bean
+    public ITransformationFunctionService transformationFunctionService() {
+        return new TransformationFunctionService();
     }
 
     // app service
@@ -215,9 +220,8 @@ public class ServiceBeanConfiguration {
 
     @Bean
     public IUserProfileService userProfileService(IParameterFactory parameterFactory,
-                                              IGeneralEntityFactory generalEntityFactory,
-                                              IUserProfileDao userProfileDao) {
-        return new UserProfileService(parameterFactory, generalEntityFactory, userProfileDao);
+                                                  IUserProfileDao userProfileDao) {
+        return new UserProfileService(parameterFactory, userProfileDao);
     }
 
     @Bean
@@ -227,12 +231,23 @@ public class ServiceBeanConfiguration {
 
     @Bean
     public IContactInfoService contactInfoService(IParameterFactory parameterFactory,
-                                                  IGeneralEntityFactory generalEntityFactory,
                                                   IContactInfoDao contactInfoDao,
-                                                  IUserProfileDao userProfileDao,
-                                                  IOrderItemDao orderItemDao,
+                                                  IQueryService queryService,
                                                   IEntityCachedMap entityCachedMap) {
-        return new ContactInfoService(parameterFactory, generalEntityFactory, contactInfoDao, userProfileDao, orderItemDao, entityCachedMap);
+        return new ContactInfoService(parameterFactory, contactInfoDao, queryService, entityCachedMap);
+    }
+
+    @Bean
+    public ICurrencyDiscountService currencyDiscountService(IParameterFactory parameterFactory,
+                                                            ICurrencyDiscountDao currencyDiscountDao,
+                                                            IEntityCachedMap entityCachedMap) {
+        return new CurrencyDiscountService(parameterFactory, currencyDiscountDao, entityCachedMap);
+    }
+
+    @Bean
+    public IPercentDiscountService percentDiscountService(IParameterFactory parameterFactory,
+                                                          IPercentDiscountDao percentDiscountDao) {
+        return new PercentDiscountService(parameterFactory, percentDiscountDao);
     }
 
     @Bean
@@ -247,8 +262,8 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public ICardService cardService(ICreditCardDao cardDao) {
-        return new CreditCardService(cardDao);
+    public ICreditCardService cardService(IParameterFactory parameterFactory, ICreditCardDao cardDao, IUserProfileDao userProfileDao) {
+        return new CreditCardService(parameterFactory, cardDao, userProfileDao);
     }
 
     @Bean
@@ -268,11 +283,10 @@ public class ServiceBeanConfiguration {
 
     @Bean
     public IAddressService addressService(IParameterFactory parameterFactory,
-                                          ITransactionWrapper transactionWrapper,
-                                          ISearchWrapper searchWrapper,
                                           IAddressDao addressDao,
+                                          IQueryService queryService,
                                           IEntityCachedMap entityCachedMap) {
-        return new AddressService(parameterFactory, transactionWrapper, searchWrapper, addressDao, entityCachedMap);
+        return new AddressService(parameterFactory, addressDao, queryService, entityCachedMap);
     }
 
     @Bean

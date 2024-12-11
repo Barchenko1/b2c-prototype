@@ -16,19 +16,14 @@ country:
 address:
   - id: 1
     street: "street"
+    street2: "street2"
     buildingNumber: 1
-    flor: 9
+    florNumber: 9
     apartmentNumber: 101
     zipCode: 90000
+    city: "city"
     country_id: 1
-post:
-  - id: 1
-    title: "parent"
-    message: "parent"
-    authorUserName: "parent"
-    authorEmail: "parent@email.com"
-    uniquePostId: "1"
-    dateOfCreate: 100000
+post: []
 credit_card:
   - id: 1
     cardNumber: "4444-1111-2222-3333"

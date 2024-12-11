@@ -52,7 +52,8 @@ item_data:
     currencydiscount_id: 1
     itemtype_id: 1
     status_id: 1
-    price_id: 1
+    fullprice_id: 1
+    totalprice_id: 1
 item_data_option:
   - itemdata_id: 1
     optionitem_id: 1

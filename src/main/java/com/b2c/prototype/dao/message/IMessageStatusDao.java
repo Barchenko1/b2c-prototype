@@ -1,6 +1,6 @@
 package com.b2c.prototype.dao.message;
 
-import com.tm.core.dao.single.ISingleEntityDao;
+import com.tm.core.dao.common.IEntityDao;
 
-public interface IMessageStatusDao extends ISingleEntityDao {
+public interface IMessageStatusDao extends IEntityDao {
 }

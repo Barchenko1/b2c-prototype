@@ -207,7 +207,8 @@ class BasicReviewDaoTest extends AbstractSingleEntityDaoTest {
                 .currencyDiscount(currencyDiscount)
                 .status(itemStatus)
                 .itemType(itemType)
-                .price(price)
+                .fullPrice(price)
+                .totalPrice(price)
                 .build();
 
         itemData.addOptionItem(optionItem1);

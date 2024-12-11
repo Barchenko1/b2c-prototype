@@ -27,5 +27,6 @@ payment:
   - id: 1
     paymentId: "1"
     payment_method_id: 1
-    price_id: 1
+    fullprice_id: 1
+    totalprice_id: 1
     credit_card_id: 1

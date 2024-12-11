@@ -10,9 +10,8 @@ import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.UserProfile;
 import com.b2c.prototype.util.CardUtil;
-import com.tm.core.dao.general.AbstractGeneralEntityDao;
+import com.tm.core.dao.common.AbstractEntityDao;
 import com.tm.core.dao.identifier.EntityIdentifierDao;
-import com.tm.core.modal.GeneralEntity;
 import com.tm.core.processor.finder.manager.EntityMappingManager;
 import com.tm.core.processor.finder.manager.IEntityMappingManager;
 import com.tm.core.processor.finder.parameter.Parameter;
@@ -72,8 +71,14 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
     }
 
     private static IEntityMappingManager getEntityMappingManager() {
+        EntityTable countryEntityTable = new EntityTable(Country.class, "country");
+        EntityTable addressEntityTable = new EntityTable(Address.class, "address");
+        EntityTable creditCardEntityTable = new EntityTable(CreditCard.class, "credit_card");
         EntityTable itemEntityTable = new EntityTable(UserProfile.class, "user_profile");
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
+        entityMappingManager.addEntityTable(countryEntityTable);
+        entityMappingManager.addEntityTable(addressEntityTable);
+        entityMappingManager.addEntityTable(creditCardEntityTable);
         entityMappingManager.addEntityTable(itemEntityTable);
         return entityMappingManager;
     }
@@ -104,8 +109,9 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
                 .street("street")
                 .buildingNumber(1)
                 .apartmentNumber(101)
-                .flor(9)
+                .florNumber(9)
                 .zipCode("90000")
+                .city("city")
                 .build();
         CreditCard creditCard = CreditCard.builder()
                 .id(1L)
@@ -114,7 +120,7 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
                 .ownerName("name")
                 .ownerSecondName("secondName")
                 .isActive(CardUtil.isCardActive("06/28"))
-                .cvv(818)
+                .cvv("818")
                 .build();
         Post parent = Post.builder()
                 .id(1L)
@@ -162,10 +168,12 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
         Address address = Address.builder()
                 .id(1L)
                 .country(country)
+                .city("city")
                 .street("street")
+                .street2("street2")
                 .buildingNumber(1)
                 .apartmentNumber(101)
-                .flor(9)
+                .florNumber(9)
                 .zipCode("90000")
                 .build();
         CreditCard creditCard = CreditCard.builder()
@@ -175,7 +183,7 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
                 .ownerName("name")
                 .ownerSecondName("secondName")
                 .isActive(CardUtil.isCardActive("06/28"))
-                .cvv(818)
+                .cvv("818")
                 .build();
         Post parent = Post.builder()
                 .id(1L)
@@ -223,10 +231,12 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
                 .id(1L)
                 .country(country)
                 .street("Update street")
+                .street2("street2")
                 .buildingNumber(1)
                 .apartmentNumber(101)
-                .flor(9)
+                .florNumber(9)
                 .zipCode("90000")
+                .city("city")
                 .build();
         CreditCard creditCard = CreditCard.builder()
                 .id(1L)
@@ -235,7 +245,7 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
                 .ownerName("Update name")
                 .ownerSecondName("Update secondName")
                 .isActive(CardUtil.isCardActive("06/28"))
-                .cvv(818)
+                .cvv("818")
                 .build();
         Post parent = Post.builder()
                 .id(1L)
@@ -277,25 +287,10 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
 
         UserProfile userProfile = prepareTestUserProfile();
         List<UserProfile> resultList =
-                dao.getGeneralEntityList(parameter);
+                dao.getEntityList(parameter);
 
         assertEquals(1, resultList.size());
         resultList.forEach(result -> checkUserProfile(userProfile, result));
-    }
-
-    @Test
-    void getEntityListWithClass_success() {
-        loadDataSet("/datasets/user/user_profile/testUserProfileDataSet.yml");
-        Parameter parameter = new Parameter("id", 1L);
-
-        UserProfile userProfile = prepareTestUserProfile();
-        List<UserProfile> resultList =
-                dao.getGeneralEntityList(UserProfile.class, parameter);
-
-        assertEquals(1, resultList.size());
-        resultList.forEach(result -> {
-            checkUserProfile(userProfile, result);
-        });
     }
 
     @Test
@@ -303,28 +298,15 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
         Parameter parameter = new Parameter("id1", 1L);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.getGeneralEntityList(parameter);
+            dao.getEntityList(parameter);
         });
     }
 
     @Test
-    void getEntityListWithClass_Failure() {
-        Parameter parameter = new Parameter("id1", 1L);
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.getGeneralEntityList(Object.class, parameter);
-        });
-    }
-
-    @Test
-    void saveRelationshipEntity_success() {
+    void saveEntity_success() {
         loadDataSet("/datasets/user/user_profile/emptyUserProfileDataSet.yml");
         UserProfile userProfile = prepareSaveUserProfile();
-
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(1, userProfile);
-
-        dao.saveGeneralEntity(generalEntity);
+        dao.mergeEntity(userProfile);
         verifyExpectedData("/datasets/user/user_profile/saveUserProfileDataSet.yml");
     }
 
@@ -340,34 +322,21 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
         address.setId(0L);
         CreditCard creditCard = userProfile.getCreditCardList().get(0);
         creditCard.setId(0L);
-        Post post = userProfile.getPostList().get(0);
-        post.setId(0L);
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(1, userProfile.getContactInfo().getContactPhone());
-        generalEntity.addEntityPriority(2, List.of(
-                contactInfo,
-                address,
-                creditCard,
-                post
-        ));
-        generalEntity.addEntityPriority(3, userProfile);
-        dao.saveGeneralEntity(generalEntity);
+        userProfile.setPostList(null);
+
+        dao.persistEntity(userProfile);
         verifyExpectedData("/datasets/user/user_profile/saveUserProfileWithDetailsDataSet.yml");
     }
 
     @Test
     void saveRelationshipEntity_transactionFailure() {
         UserProfile userProfile = prepareUpdateUserProfile();
-
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(2, userProfile);
-
         SessionFactory sessionFactory = mock(SessionFactory.class);
         Session session = mock(Session.class);
         Transaction transaction = mock(Transaction.class);
 
         try {
-            Field sessionManagerField = AbstractGeneralEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
@@ -379,21 +348,25 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
         doThrow(new RuntimeException()).when(session).persist(userProfile);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.saveGeneralEntity(generalEntity);
+            dao.persistEntity(userProfile);
         });
 
         assertEquals(RuntimeException.class, exception.getClass());
     }
 
     @Test
-    void saveRelationshipEntityConsumer_success() {
+    void saveEntityConsumer_success() {
         loadDataSet("/datasets/user/user_profile/emptyUserProfileDataSet.yml");
         Consumer<Session> consumer = (Session s) -> {
             UserProfile userProfile = prepareSaveUserProfile();
+            userProfile.setAddress(s.merge(userProfile.getAddress()));
+            userProfile.setContactInfo(s.merge(userProfile.getContactInfo()));
+            userProfile.setCreditCardList(userProfile.getCreditCardList().stream().map(s::merge).toList());
+            userProfile.setPostList(userProfile.getPostList().stream().map(s::merge).toList());
             s.persist(userProfile);
         };
 
-        dao.saveGeneralEntity(consumer);
+        dao.saveEntity(consumer);
         verifyExpectedData("/datasets/user/user_profile/saveUserProfileDataSet.yml");
     }
 
@@ -405,7 +378,7 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.saveGeneralEntity(consumer);
+            dao.saveEntity(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -416,7 +389,7 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
     void updateRelationshipEntity_success() {
         loadDataSet("/datasets/user/user_profile/testUserProfileDataSet.yml");
         Supplier<UserProfile> supplier = this::prepareUpdateUserProfile;
-        dao.updateGeneralEntity(supplier);
+        dao.updateEntity(supplier);
         verifyExpectedData("/datasets/user/user_profile/updateUserProfileDataSet.yml");
     }
 
@@ -427,7 +400,7 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            dao.updateGeneralEntity(supplier);
+            dao.updateEntity(supplier);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -440,7 +413,7 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
             UserProfile userProfile = prepareUpdateUserProfile();
             s.merge(userProfile);
         };
-        dao.updateGeneralEntity(consumer);
+        dao.updateEntity(consumer);
         verifyExpectedData("/datasets/user/user_profile/updateUserProfileDataSet.yml");
     }
 
@@ -454,7 +427,7 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.updateGeneralEntity(consumer);
+            dao.updateEntity(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -465,8 +438,8 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
         loadDataSet("/datasets/user/user_profile/testUserProfileDataSet.yml");
         Parameter parameter = new Parameter("id", 1);
 
-        dao.deleteGeneralEntity(parameter);
-        verifyExpectedData("/datasets/user/user_profile/emptyUserProfileDataSet.yml");
+        dao.findEntityAndDelete(parameter);
+        verifyExpectedData("/datasets/user/user_profile/emptyUserProfileWithoutDetailsDataSet.yml");
     }
 
     @Test
@@ -474,12 +447,12 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
         loadDataSet("/datasets/user/user_profile/testUserProfileDataSet.yml");
         Consumer<Session> consumer = (Session s) -> {
             UserProfile userProfile = prepareTestUserProfile();
-//            s.remove(userProfile.getAddress());
+            s.remove(userProfile.getAddress());
             s.remove(userProfile);
         };
 
-        dao.deleteGeneralEntity(consumer);
-        verifyExpectedData("/datasets/user/user_profile/emptyUserProfileDataSet.yml");
+        dao.deleteEntity(consumer);
+        verifyExpectedData("/datasets/user/user_profile/emptyUserProfileWithoutDetailsDataSet.yml");
     }
 
     @Test
@@ -490,7 +463,7 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            dao.deleteGeneralEntity(consumer);
+            dao.deleteEntity(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -501,12 +474,8 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
         loadDataSet("/datasets/user/user_profile/testUserProfileDataSet.yml");
         UserProfile userProfile = prepareTestUserProfile();
 
-        GeneralEntity generalEntity = new GeneralEntity();
-//        generalEntity.addEntityPriority(1, userProfile.getAddress());
-        generalEntity.addEntityPriority(2, userProfile);
-
-        dao.deleteGeneralEntity(generalEntity);
-        verifyExpectedData("/datasets/user/user_profile/emptyUserProfileDataSet.yml");
+        dao.deleteEntity(userProfile);
+        verifyExpectedData("/datasets/user/user_profile/emptyUserProfileWithoutDetailsDataSet.yml");
     }
 
     @Test
@@ -517,7 +486,7 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
         Transaction transaction = mock(Transaction.class);
 
         try {
-            Field sessionManagerField = AbstractGeneralEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
@@ -530,23 +499,11 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
 
         UserProfile userProfile = prepareTestUserProfile();
 
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(2, userProfile);
-
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            dao.deleteGeneralEntity(generalEntity);
+            dao.deleteEntity(userProfile);
         });
 
         assertEquals(RuntimeException.class, exception.getClass());
-    }
-
-    @Test
-    void deleteRelationshipEntityWithClass_success() {
-        loadDataSet("/datasets/user/user_profile/testUserProfileDataSet.yml");
-        Parameter parameter = new Parameter("id", 1);
-
-        dao.deleteGeneralEntity(UserProfile.class, parameter);
-        verifyExpectedData("/datasets/user/user_profile/emptyUserProfileDataSet.yml");
     }
 
     @Test
@@ -560,7 +517,7 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
         Transaction transaction = mock(Transaction.class);
 
         try {
-            Field sessionManagerField = AbstractGeneralEntityDao.class.getDeclaredField("sessionManager");
+            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionManager");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionManager);
         } catch (Exception e) {
@@ -572,40 +529,7 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
         doThrow(new RuntimeException()).when(session).remove(any(UserProfile.class));
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.deleteGeneralEntity(parameter);
-        });
-
-        assertEquals(RuntimeException.class, exception.getClass());
-    }
-
-    @Test
-    void deleteRelationshipEntityWithClass_transactionFailure() {
-        loadDataSet("/datasets/user/user_profile/testUserProfileDataSet.yml");
-        UserProfile userProfile = new UserProfile();
-
-        Parameter parameter = new Parameter("id", 1L);
-
-        IThreadLocalSessionManager sessionManager = mock(IThreadLocalSessionManager.class);
-        Session session = mock(Session.class);
-        Transaction transaction = mock(Transaction.class);
-
-        try {
-            Field sessionManagerField = AbstractGeneralEntityDao.class.getDeclaredField("sessionManager");
-            sessionManagerField.setAccessible(true);
-            sessionManagerField.set(dao, sessionManager);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        when(sessionManager.getSession()).thenReturn(session);
-        when(session.beginTransaction()).thenReturn(transaction);
-        doThrow(new RuntimeException()).when(session).remove(any(Object.class));
-
-        GeneralEntity generalEntity = new GeneralEntity();
-        generalEntity.addEntityPriority(2, userProfile);
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.deleteGeneralEntity(UserProfile.class, parameter);
+            dao.findEntityAndDelete(parameter);
         });
 
         assertEquals(RuntimeException.class, exception.getClass());
@@ -616,7 +540,7 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
         loadDataSet("/datasets/user/user_profile/testUserProfileDataSet.yml");
         Parameter parameter = new Parameter("id", 1L);
         UserProfile userProfile = prepareTestUserProfile();
-        Optional<UserProfile> resultOptional = dao.getOptionalGeneralEntity(parameter);
+        Optional<UserProfile> resultOptional = dao.getOptionalEntity(parameter);
 
         assertTrue(resultOptional.isPresent());
         UserProfile result = resultOptional.get();
@@ -629,45 +553,9 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
         Parameter parameter = new Parameter("id1", 1L);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.getOptionalGeneralEntity(parameter);
+            dao.getOptionalEntity(parameter);
         });
 
-    }
-
-    @Test
-    void getOptionalEntityWithDependenciesWithClass_success() {
-        loadDataSet("/datasets/user/user_profile/testUserProfileDataSet.yml");
-        Parameter parameter = new Parameter("id", 1L);
-
-        UserProfile userProfile = prepareTestUserProfile();
-
-        Optional<UserProfile> resultOptional =
-                dao.getOptionalGeneralEntity(UserProfile.class, parameter);
-
-        assertTrue(resultOptional.isPresent());
-        UserProfile result = resultOptional.get();
-
-        checkUserProfile(userProfile, result);
-    }
-
-    @Test
-    void getOptionalEntityWithDependenciesWithClass_Failure() {
-        loadDataSet("/datasets/user/user_profile/testUserProfileDataSet.yml");
-        Parameter parameter = new Parameter("id1", 1L);
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.getOptionalGeneralEntity(UserProfile.class, parameter);
-        });
-    }
-
-    @Test
-    void getOptionalEntityWithDependencies_OptionEmpty() {
-        Parameter parameter = new Parameter("id", 100L);
-
-        Optional<UserProfile> result =
-                dao.getOptionalGeneralEntity(UserProfile.class, parameter);
-
-        assertTrue(result.isEmpty());
     }
 
     @Test
@@ -676,7 +564,7 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
         Parameter parameter = new Parameter("id", 1L);
 
         UserProfile userProfile = prepareTestUserProfile();
-        UserProfile result = dao.getGeneralEntity(parameter);
+        UserProfile result = dao.getEntity(parameter);
 
         checkUserProfile(userProfile, result);
     }
@@ -686,29 +574,8 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
         Parameter parameter = new Parameter("id1", 1L);
 
         assertThrows(RuntimeException.class, () -> {
-            dao.getGeneralEntity(parameter);
+            dao.getEntity(parameter);
         });
     }
 
-
-    @Test
-    void getEntityWithDependenciesWithClass_success() {
-        loadDataSet("/datasets/user/user_profile/testUserProfileDataSet.yml");
-        Parameter parameter = new Parameter("id", 1L);
-
-        UserProfile userProfile = prepareTestUserProfile();
-
-        UserProfile result = dao.getGeneralEntity(UserProfile.class, parameter);
-
-        checkUserProfile(userProfile, result);
-    }
-
-    @Test
-    void getEntityWithDependenciesWithClass_Failure() {
-        Parameter parameter = new Parameter("id1", 1L);
-
-        assertThrows(RuntimeException.class, () -> {
-            dao.getGeneralEntity(UserProfile.class, parameter);
-        });
-    }
 }

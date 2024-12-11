@@ -2,6 +2,8 @@ package com.b2c.prototype.configuration;
 
 import com.b2c.prototype.dao.address.ICountryDao;
 import com.b2c.prototype.dao.address.base.BasicCountryDao;
+import com.b2c.prototype.dao.item.IPercentDiscountDao;
+import com.b2c.prototype.dao.item.base.BasicPercentDiscountDao;
 import com.b2c.prototype.dao.message.IMessageStatusDao;
 import com.b2c.prototype.dao.message.IMessageTypeDao;
 import com.b2c.prototype.dao.message.basic.BasicMessageStatusDao;
@@ -60,6 +62,8 @@ import com.b2c.prototype.dao.rating.IRatingDao;
 import com.b2c.prototype.dao.review.IReviewDao;
 import com.b2c.prototype.dao.user.IUserProfileDao;
 import com.b2c.prototype.dao.embedded.IWishListDao;
+import com.b2c.prototype.service.processor.query.IQueryService;
+import com.b2c.prototype.service.processor.query.QueryService;
 import com.tm.core.configuration.manager.DatabaseConfigurationAnnotationClass;
 import com.tm.core.configuration.manager.DatabaseType;
 import com.tm.core.configuration.manager.DatabaseTypeConfiguration;
@@ -153,6 +157,11 @@ public class BeanConfiguration {
     }
 
     @Bean
+    public IQueryService queryService(ISearchWrapper searchWrapper) {
+        return new QueryService(searchWrapper);
+    }
+
+    @Bean
     public ICountTypeDao countTypeDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
         return new BasicCountTypeDao(sessionFactory, entityIdentifierDao);
     }
@@ -160,6 +169,16 @@ public class BeanConfiguration {
     @Bean
     public ICurrencyDao currencyDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
         return new BasicCurrencyDao(sessionFactory, entityIdentifierDao);
+    }
+
+    @Bean
+    public ICurrencyDiscountDao currencyDiscountDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicCurrencyDiscountDao(sessionFactory, entityIdentifierDao);
+    }
+
+    @Bean
+    public IPercentDiscountDao percentDiscountDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicPercentDiscountDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean

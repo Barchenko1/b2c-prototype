@@ -6,8 +6,8 @@ import com.github.database.rider.core.api.dataset.YamlDataSet;
 import com.github.database.rider.core.configuration.DataSetConfig;
 import com.github.database.rider.core.dataset.DataSetExecutorImpl;
 import com.github.database.rider.junit5.api.DBRider;
-import com.tm.core.dao.general.AbstractGeneralEntityDao;
-import com.tm.core.dao.general.IGeneralEntityDao;
+import com.tm.core.dao.common.AbstractEntityDao;
+import com.tm.core.dao.common.IEntityDao;
 import com.tm.core.dao.identifier.IEntityIdentifierDao;
 import com.tm.core.processor.thread.IThreadLocalSessionManager;
 import com.tm.core.processor.thread.ThreadLocalSessionManager;
@@ -45,7 +45,7 @@ public abstract class AbstractGeneralEntityDaoTest {
     protected static ConnectionHolder connectionHolder;
     private static DataSetExecutor executor;
 
-    protected static IGeneralEntityDao dao;
+    protected static IEntityDao dao;
 
     public AbstractGeneralEntityDaoTest() {
     }
@@ -63,11 +63,11 @@ public abstract class AbstractGeneralEntityDaoTest {
     @BeforeEach
     public void setUp() {
         try {
-            Field sessionMenagerField = AbstractGeneralEntityDao.class.getDeclaredField("sessionManager");
+            Field sessionMenagerField = AbstractEntityDao.class.getDeclaredField("sessionManager");
             sessionMenagerField.setAccessible(true);
             sessionMenagerField.set(dao, sessionManager);
 
-            Field sessionFactoryField = AbstractGeneralEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionFactoryField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
             sessionFactoryField.setAccessible(true);
             sessionFactoryField.set(dao, sessionFactory);
         } catch (Exception e) {

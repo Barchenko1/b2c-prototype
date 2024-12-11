@@ -6,10 +6,10 @@ import com.b2c.prototype.dao.order.IOrderItemDao;
 import com.b2c.prototype.dao.user.IContactInfoDao;
 import com.b2c.prototype.modal.constant.OrderStatusEnum;
 import com.b2c.prototype.modal.dto.request.AddressDto;
-import com.b2c.prototype.modal.dto.request.RequestDeliveryDto;
-import com.b2c.prototype.modal.dto.request.RequestItemDto;
-import com.b2c.prototype.modal.dto.request.RequestOrderItemDto;
-import com.b2c.prototype.modal.dto.request.RequestPaymentDto;
+import com.b2c.prototype.modal.dto.request.DeliveryDto;
+import com.b2c.prototype.modal.dto.request.ItemDto;
+import com.b2c.prototype.modal.dto.request.OrderItemDto;
+import com.b2c.prototype.modal.dto.request.PaymentDto;
 import com.b2c.prototype.modal.dto.request.ContactInfoDto;
 import com.b2c.prototype.modal.dto.update.OrderItemDtoUpdate;
 import com.b2c.prototype.modal.entity.address.Address;
@@ -50,7 +50,7 @@ public class OrderItemService implements IOrderItemService {
     }
 
     @Override
-    public void createOrderItem(RequestOrderItemDto requestOrderItemDto) {
+    public void createOrderItem(OrderItemDto orderItemDto) {
         Transaction transaction = null;
 //        try (Session session = sess.getSession()) {
 //            transaction = session.beginTransaction();
@@ -96,7 +96,7 @@ public class OrderItemService implements IOrderItemService {
     }
 
 
-    private Map<Class<?>, Object> executeAsyncProcess(RequestOrderItemDto requestOrderItemDto) {
+    private Map<Class<?>, Object> executeAsyncProcess(OrderItemDto orderItemDto) {
         Task orderItemStatusTask = new Task(
                 () -> entityCachedMap.getEntity(OrderStatus.class, "value", OrderStatusEnum.NEW.name()),
                 OrderStatus.class
@@ -104,16 +104,16 @@ public class OrderItemService implements IOrderItemService {
 
         Task deliveryTask = new Task(
                 () -> {
-                    RequestDeliveryDto requestDeliveryDto = requestOrderItemDto.getRequestDeliveryDto();
-                    AddressDto addressDto = requestDeliveryDto.getDeliveryAddressDto();
+                    DeliveryDto deliveryDto = orderItemDto.getDeliveryDto();
+                    AddressDto addressDto = deliveryDto.getDeliveryAddressDto();
                     DeliveryType deliveryType =
-                            entityCachedMap.getEntity(OrderStatus.class, "value", requestDeliveryDto.getDeliveryType());
+                            entityCachedMap.getEntity(OrderStatus.class, "value", deliveryDto.getDeliveryType());
                     Address address = Address.builder()
 //                            .category(requestAddressDto.getCountry())
                             .street(addressDto.getStreet())
                             .buildingNumber(addressDto.getBuildingNumber())
                             .apartmentNumber(addressDto.getApartmentNumber())
-                            .flor(addressDto.getFlor())
+                            .florNumber(addressDto.getFlorNumber())
                             .build();
 
                     Delivery delivery = Delivery.builder()
@@ -127,9 +127,9 @@ public class OrderItemService implements IOrderItemService {
 
         Task paymentTask = new Task(
                 () -> {
-                    RequestPaymentDto requestPaymentDto = requestOrderItemDto.getRequestPaymentDto();
+                    PaymentDto paymentDto = orderItemDto.getPaymentDto();
                     PaymentMethod paymentMethod =
-                            entityCachedMap.getEntity(OrderStatus.class, "value", requestPaymentDto.getPaymentMethod());
+                            entityCachedMap.getEntity(OrderStatus.class, "value", paymentDto.getPaymentMethod());
                     CurrencyDiscount currencyDiscount = CurrencyDiscount.builder()
                             .build();
 
@@ -144,12 +144,12 @@ public class OrderItemService implements IOrderItemService {
 
         Task itemTask = new Task(
                 () -> {
-                    List<RequestItemDto> requestItemDtoList = requestOrderItemDto.getRequestItemDtoList();
-                    Parameter[] parameters = requestItemDtoList.stream()
+                    List<ItemDto> itemDtoList = orderItemDto.getItemDtoList();
+                    Parameter[] parameters = itemDtoList.stream()
                             .map(requestItemDto ->
                                     new Parameter("articularId", requestItemDto.getArticularId()))
                             .toArray(Parameter[]::new);
-//                    return getEntityDao().getGeneralEntityList(parameters);
+//                    return getEntityDao().getEntityList(parameters);
                     return null;
                 },
                 List.class
@@ -157,11 +157,11 @@ public class OrderItemService implements IOrderItemService {
 
         Task contactInfoTask = new Task(
                 () -> {
-                    List<ContactInfoDto> requestItemDtoList = requestOrderItemDto.getContactInfoDtoList();
+                    List<ContactInfoDto> requestItemDtoList = orderItemDto.getContactInfoDtoList();
                     Parameter[] parameters = requestItemDtoList.stream()
                             .map(requestItemDto -> new Parameter("name", requestItemDto.getName()))
                             .toArray(Parameter[]::new);
-//                    return getEntityDao().getGeneralEntityList(parameters);
+//                    return getEntityDao().getEntityList(parameters);
                     return null;
                 },
                 List.class

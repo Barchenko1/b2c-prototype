@@ -1,6 +1,7 @@
 package com.b2c.prototype.modal.base;
 
 import com.b2c.prototype.modal.entity.address.Country;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -23,13 +24,13 @@ public class AbstractAddress {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private Country country;
     private String city;
     private String street;
     private String street2;
     private int buildingNumber;
-    private int flor;
+    private int florNumber;
     private int apartmentNumber;
     private String zipCode;
 }

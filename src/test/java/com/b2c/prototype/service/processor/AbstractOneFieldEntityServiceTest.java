@@ -3,7 +3,7 @@ package com.b2c.prototype.service.processor;
 import com.b2c.prototype.dao.cashed.IEntityCachedMap;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDtoUpdate;
-import com.tm.core.dao.single.ISingleEntityDao;
+import com.tm.core.dao.common.IEntityDao;
 import com.tm.core.processor.finder.factory.IParameterFactory;
 import com.tm.core.processor.finder.parameter.Parameter;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +18,7 @@ public abstract class AbstractOneFieldEntityServiceTest<E> {
     protected IParameterFactory parameterFactory;
 
     @Mock
-    protected ISingleEntityDao dao;
+    protected IEntityDao dao;
 
     @Mock
     protected IEntityCachedMap entityCachedMap;
@@ -29,7 +29,7 @@ public abstract class AbstractOneFieldEntityServiceTest<E> {
     }
 
     protected void verifySaveEntity(E entity) {
-        verify(dao).saveEntity(entity);
+        verify(dao).persistEntity(entity);
         verify(entityCachedMap).putEntity(entity.getClass(), getFieldName(), entity);
     }
 

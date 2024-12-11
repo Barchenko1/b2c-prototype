@@ -5,13 +5,13 @@ import com.b2c.prototype.modal.dto.common.OneIntegerFieldEntityDto;
 import com.b2c.prototype.modal.entity.item.Rating;
 import com.b2c.prototype.service.processor.AbstractOneIntegerFieldEntityService;
 import com.b2c.prototype.service.processor.rating.IRatingService;
-import com.tm.core.dao.single.ISingleEntityDao;
+import com.tm.core.dao.common.IEntityDao;
 import com.tm.core.processor.finder.factory.IParameterFactory;
 
 import java.util.function.Function;
 
 public class RatingService extends AbstractOneIntegerFieldEntityService<Rating> implements IRatingService {
-    public RatingService(IParameterFactory parameterFactory, ISingleEntityDao dao, IEntityCachedMap entityCachedMap) {
+    public RatingService(IParameterFactory parameterFactory, IEntityDao dao, IEntityCachedMap entityCachedMap) {
         super(parameterFactory, dao, entityCachedMap);
     }
 

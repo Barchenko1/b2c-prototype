@@ -1,6 +1,6 @@
 package com.b2c.prototype.controller;
 
-import com.b2c.prototype.modal.dto.request.RequestPostDto;
+import com.b2c.prototype.modal.dto.request.PostDto;
 import com.b2c.prototype.service.processor.post.IPostService;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -20,7 +20,7 @@ public class PostController {
     }
 
     @PostMapping(value = "/post", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createNewPost(@RequestBody final RequestPostDto requestPostDto) {
+    public ResponseEntity<?> createNewPost(@RequestBody final PostDto requestPostDto) {
         postService.savePost(requestPostDto);
 
         return new ResponseEntity<>(HttpStatusCode.valueOf(200));

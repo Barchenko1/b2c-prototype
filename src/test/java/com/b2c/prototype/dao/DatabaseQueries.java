@@ -17,8 +17,8 @@ public final class DatabaseQueries {
             statement.execute("DELETE FROM order_item");
             statement.execute("DELETE FROM message_box_message");
             statement.execute("DELETE FROM message_receivers");
-            statement.execute("DELETE FROM item_quantity_item_data");
-            statement.execute("DELETE FROM item_quantity");
+            statement.execute("DELETE FROM item_data_quantity_item_data");
+            statement.execute("DELETE FROM item_data_quantity");
             statement.execute("DELETE FROM item_review");
             statement.execute("DELETE FROM item_post");
             statement.execute("DELETE FROM item_data_option");

@@ -93,7 +93,8 @@ item:
     currencydiscount_id: 1
     itemtype_id: 1
     status_id: 1
-    price_id: 1
+    fullprice_id: 1
+    totalprice_id: 1
   - id: 2
     name: "name"
     articularId: "100"
@@ -103,7 +104,8 @@ item:
     currencydiscount_id: 1
     itemtype_id: 1
     status_id: 1
-    price_id: 1
+    fullprice_id: 1
+    totalprice_id: 1
 item_data_option:
   - item_id: 1
     option_item_id: 1
@@ -119,16 +121,16 @@ item_post:
 item_review:
   - item_id: 1
     review_id: 1
-item_quantity:
+item_data_quantity:
   - id: 1
     quantity: 1
   - id: 2
     quantity: 2
-item_quantity_item_data:
+item_data_quantity_item_data:
   - item_id: 1
-    item_quantity_id: 1
+    item_data_quantity_id: 1
   - item_id: 2
-    item_quantity_id: 2
+    item_data_quantity_id: 2
 bucket:
   - id: 1
     dateOfUpdate: 100

@@ -3,7 +3,7 @@ package com.b2c.prototype.service.processor.item.base;
 import com.b2c.prototype.dao.item.ICurrencyDiscountDao;
 import com.b2c.prototype.dao.item.IItemDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
-import com.b2c.prototype.modal.dto.request.RequestItemDto;
+import com.b2c.prototype.modal.dto.request.ItemDto;
 import com.b2c.prototype.modal.dto.update.ItemDtoUpdate;
 import com.b2c.prototype.modal.entity.item.Item;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
@@ -37,7 +37,7 @@ public class ItemService implements IItemService {
     }
 
     @Override
-    public void saveItem(RequestItemDto requestItemDto) {
+    public void saveItem(ItemDto itemDto) {
         Transaction transaction = null;
         try (Session session = sessionManager.getSession()) {
             transaction = session.beginTransaction();
@@ -57,7 +57,7 @@ public class ItemService implements IItemService {
 //                    itemStatusCompletableFuture);
 //            allFutures.join();
 
-            Map<Class<?>, Object> processResultMap = executeAsyncProcess(requestItemDto);
+            Map<Class<?>, Object> processResultMap = executeAsyncProcess(itemDto);
 
             Item item = Item.builder()
 //                    .name(requestItemDto.getName())
@@ -85,7 +85,7 @@ public class ItemService implements IItemService {
 
     @Override
     public void updateItem(ItemDtoUpdate requestItemDtoUpdate) {
-        RequestItemDto requestItemDto = requestItemDtoUpdate.getNewEntityDto();
+        ItemDto itemDto = requestItemDtoUpdate.getNewEntityDto();
         String searchField = requestItemDtoUpdate.getSearchField();
         Transaction transaction = null;
         try (Session session = sessionManager.getSession()) {
@@ -158,7 +158,7 @@ public class ItemService implements IItemService {
         return List.of();
     }
 
-    private Map<Class<?>, Object> executeAsyncProcess(RequestItemDto requestItemDto) {
+    private Map<Class<?>, Object> executeAsyncProcess(ItemDto itemDto) {
 //        Task brandTask = new Task(
 //                () -> brandMapWrapper.getEntity(requestItemDto.getBrand()),
 //                Brand.class
@@ -179,7 +179,7 @@ public class ItemService implements IItemService {
         //todo
         Task optionGroupTask = new Task(
                 () -> {
-                    List<String> optionGroupValues = requestItemDto.getOptionGroupList().stream()
+                    List<String> optionGroupValues = itemDto.getOptionGroupList().stream()
                             .map(OneFieldEntityDto::getValue)
                             .toList();
 //                    return optionGroupMapWrapper.getEntityList(optionGroupValues);
@@ -198,7 +198,7 @@ public class ItemService implements IItemService {
     }
 
     private Map<Class<?>, Object> executeAsyncProcessForUpdate(ItemDtoUpdate requestItemDtoUpdate) {
-        RequestItemDto requestItemDto = requestItemDtoUpdate.getNewEntityDto();
+        ItemDto itemDto = requestItemDtoUpdate.getNewEntityDto();
         String searchField = requestItemDtoUpdate.getSearchField();
 //        Task brandTask = new Task(
 //                () -> brandMapWrapper.getEntity(requestItemDto.getBrand()),
@@ -219,7 +219,7 @@ public class ItemService implements IItemService {
         Task itemTask = new Task(
                 () -> {
                     Parameter parameter = new Parameter("article_id", searchField);
-                    return iItemDao.getGeneralEntity(parameter);
+                    return iItemDao.getEntity(parameter);
                 },
                 Item.class
         );

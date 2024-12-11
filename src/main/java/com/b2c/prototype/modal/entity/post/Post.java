@@ -1,6 +1,5 @@
 package com.b2c.prototype.modal.entity.post;
 
-import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.Item;
 import com.tm.core.modal.TransitiveSelfEntity;
 import jakarta.persistence.CascadeType;
@@ -27,6 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "post")
 @Data

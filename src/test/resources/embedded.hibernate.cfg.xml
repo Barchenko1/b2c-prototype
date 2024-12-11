@@ -26,6 +26,7 @@
         <mapping class="com.b2c.prototype.modal.entity.price.Currency" />
         <mapping class="com.b2c.prototype.modal.entity.price.Price" />
         <mapping class="com.b2c.prototype.modal.entity.item.CurrencyDiscount" />
+        <mapping class="com.b2c.prototype.modal.entity.item.PercentDiscount" />
         <mapping class="com.b2c.prototype.modal.entity.payment.CreditCard" />
         <mapping class="com.b2c.prototype.modal.entity.payment.PaymentMethod" />
         <mapping class="com.b2c.prototype.modal.entity.payment.Payment" />

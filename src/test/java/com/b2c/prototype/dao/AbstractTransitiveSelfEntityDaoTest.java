@@ -155,37 +155,11 @@ public abstract class AbstractTransitiveSelfEntityDaoTest {
     }
 
     @Test
-    void getTransitiveSelfEntityListWithClass_success() {
-        loadDataSet(testEntityDataSet.getDataSetPath()[0]);
-
-        Parameter parameter = new Parameter("id", 1L);
-
-        Class<?> clazz = testEntityDataSet.getEntity().getClass();
-
-        List<TransitiveSelfEntity> result = dao.getTransitiveSelfEntityList(clazz, parameter);
-
-        assertEquals(1, result.size());
-        
-        verifyExpectedData(testEntityDataSet.getDataSetPath()[0]);
-    }
-
-    @Test
     void getTransitiveSelfEntityList_Failure() {
         Parameter parameter = new Parameter("id1", 1L);
 
         assertThrows(RuntimeException.class, () -> {
             dao.getTransitiveSelfEntityList(parameter);
-        });
-    }
-
-    @Test
-    void getTransitiveSelfEntityListWithClass_Failure() {
-        Parameter parameter = new Parameter("id1", 1L);
-
-        Class<?> clazz = testEntityDataSet.getEntity().getClass();
-
-        assertThrows(RuntimeException.class, () -> {
-            dao.getTransitiveSelfEntityList(clazz, parameter);
         });
     }
 
@@ -340,22 +314,6 @@ public abstract class AbstractTransitiveSelfEntityDaoTest {
     }
 
     @Test
-    void getOptionalTransitiveSelfEntityWithClass_success() {
-        loadDataSet(testEntityDataSet.getDataSetPath()[0]);
-
-        Parameter parameter = new Parameter("id", 1L);
-
-        Class<?> clazz = testEntityDataSet.getEntity().getClass();
-
-        Optional<TransitiveSelfEntity> result = dao.getOptionalTransitiveSelfEntity(clazz, parameter);
-
-        assertTrue(result.isPresent());
-        TransitiveSelfEntity resultEntity = result.get();
-        assertNotNull(resultEntity);
-        verifyExpectedData(testEntityDataSet.getDataSetPath()[0]);
-    }
-
-    @Test
     void getOptionalTransitiveSelfEntity_Failure() {
         Parameter parameter = new Parameter("id1", 2L);
 
@@ -365,31 +323,10 @@ public abstract class AbstractTransitiveSelfEntityDaoTest {
     }
 
     @Test
-    void getOptionalTransitiveSelfEntityWithClass_Failure() {
-        Parameter parameter = new Parameter("id1", 2L);
-
-        Class<?> clazz = testEntityDataSet.getEntity().getClass();
-
-        assertThrows(RuntimeException.class, () -> {
-            dao.getOptionalTransitiveSelfEntity(clazz, parameter);
-        });
-    }
-
-    @Test
     void getOptionalTransitiveSelfEntity_NoResult() {
         Parameter parameter = new Parameter("id", 200L);
 
         Optional<TransitiveSelfEntity> result = dao.getOptionalTransitiveSelfEntity(parameter);
-
-        assertTrue(result.isEmpty());
-    }
-
-    @Test
-    void getOptionalTransitiveSelfEntityWithClass_NoResult() {
-        Parameter parameter = new Parameter("id", 100L);
-
-        Class<?> clazz = testEntityDataSet.getEntity().getClass();
-        Optional<TransitiveSelfEntity> result = dao.getOptionalTransitiveSelfEntity(clazz, parameter);
 
         assertTrue(result.isEmpty());
     }
@@ -406,35 +343,11 @@ public abstract class AbstractTransitiveSelfEntityDaoTest {
     }
 
     @Test
-    void getTransitiveSelfEntityWithClass_success() {
-        loadDataSet(testEntityDataSet.getDataSetPath()[0]);
-        Parameter parameter = new Parameter("id", 1L);
-
-        Class<?> clazz = testEntityDataSet.getEntity().getClass();
-
-        TransitiveSelfEntity result = dao.getTransitiveSelfEntity(clazz, parameter);
-
-        assertNotNull(result);
-        verifyExpectedData(testEntityDataSet.getDataSetPath()[0]);
-    }
-
-    @Test
     void getTransitiveSelfEntity_Failure() {
         Parameter parameter = new Parameter("id", 100L);
 
         assertThrows(RuntimeException.class, () -> {
             dao.getTransitiveSelfEntity(parameter);
-        });
-    }
-
-    @Test
-    void getTransitiveSelfEntityWith_Failure() {
-        Parameter parameter = new Parameter("id", 100L);
-
-        Class<?> clazz = testEntityDataSet.getEntity().getClass();
-
-        assertThrows(RuntimeException.class, () -> {
-            dao.getTransitiveSelfEntity(clazz, parameter);
         });
     }
 

@@ -1,6 +1,6 @@
 package com.b2c.prototype.dao.user;
 
-import com.tm.core.dao.general.IGeneralEntityDao;
+import com.tm.core.dao.common.IEntityDao;
 
-public interface IUserProfileDao extends IGeneralEntityDao {
+public interface IUserProfileDao extends IEntityDao {
 }

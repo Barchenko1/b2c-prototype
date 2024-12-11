@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class ResponseCardDto {
-    private String cartNumber;
+    private String cardNumber;
     private String dateOfExpire;
     private boolean isActive;
     private String ownerName;

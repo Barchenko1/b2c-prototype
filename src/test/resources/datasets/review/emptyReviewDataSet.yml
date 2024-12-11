@@ -76,7 +76,8 @@ item_data:
     currencydiscount_id: 1
     itemtype_id: 1
     status_id: 1
-    price_id: 1
+    fullprice_id: 1
+    totalprice_id: 1
 item:
   - id: 1
     itemdata_id: 1

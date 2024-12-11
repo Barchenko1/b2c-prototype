@@ -4,7 +4,7 @@ import com.b2c.prototype.dao.cashed.IEntityCachedMap;
 import com.b2c.prototype.dao.delivery.IDeliveryDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.request.AddressDto;
-import com.b2c.prototype.modal.dto.request.RequestDeliveryDto;
+import com.b2c.prototype.modal.dto.request.DeliveryDto;
 import com.b2c.prototype.modal.dto.update.DeliveryDtoUpdate;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
@@ -38,13 +38,13 @@ public class DeliveryService implements IDeliveryService {
     }
 
     @Override
-    public void saveDelivery(RequestDeliveryDto requestDeliveryDto) {
-        AddressDto requestAddressDto = requestDeliveryDto.getDeliveryAddressDto();
-        Map<Class<?>, Object> resultProcessMap = executeAsyncProcess(requestDeliveryDto);
+    public void saveDelivery(DeliveryDto deliveryDto) {
+        AddressDto requestAddressDto = deliveryDto.getDeliveryAddressDto();
+        Map<Class<?>, Object> resultProcessMap = executeAsyncProcess(deliveryDto);
 
         Address address = Address.builder()
 //                .category(requestAddressDto.getCountry())
-                .flor(requestAddressDto.getFlor())
+                .florNumber(requestAddressDto.getFlorNumber())
                 .apartmentNumber(requestAddressDto.getApartmentNumber())
                 .buildingNumber(requestAddressDto.getBuildingNumber())
                 .street(requestAddressDto.getStreet())
@@ -74,9 +74,9 @@ public class DeliveryService implements IDeliveryService {
 
     @Override
     public void updateDelivery(DeliveryDtoUpdate requestDeliveryDtoUpdate) {
-        RequestDeliveryDto requestDeliveryDto = requestDeliveryDtoUpdate.getNewEntityDto();
-        String requestDeliveryTypeDto = requestDeliveryDto.getDeliveryType();
-        AddressDto addressDto = requestDeliveryDto.getDeliveryAddressDto();
+        DeliveryDto deliveryDto = requestDeliveryDtoUpdate.getNewEntityDto();
+        String requestDeliveryTypeDto = deliveryDto.getDeliveryType();
+        AddressDto addressDto = deliveryDto.getDeliveryAddressDto();
 
         Map<Class<?>, Object> resultProcessMap = executeAsyncProcess(requestDeliveryDtoUpdate);
 
@@ -96,7 +96,7 @@ public class DeliveryService implements IDeliveryService {
             if (optionalAddressDto.isPresent()) {
                 address = Address.builder()
 //                        .category(requestAddressDto.getCountry())
-                        .flor(addressDto.getFlor())
+                        .florNumber(addressDto.getFlorNumber())
                         .apartmentNumber(addressDto.getApartmentNumber())
                         .buildingNumber(addressDto.getBuildingNumber())
                         .street(addressDto.getStreet())
@@ -131,9 +131,9 @@ public class DeliveryService implements IDeliveryService {
 //        super.deleteEntity(parameter);
     }
 
-    private Map<Class<?>, Object> executeAsyncProcess(RequestDeliveryDto requestDeliveryDto) {
+    private Map<Class<?>, Object> executeAsyncProcess(DeliveryDto deliveryDto) {
         Task deliveryTypeTask = new Task(
-                () -> entityCachedMap.getEntity(DeliveryType.class, "value", requestDeliveryDto.getDeliveryType()),
+                () -> entityCachedMap.getEntity(DeliveryType.class, "value", deliveryDto.getDeliveryType()),
                 DeliveryType.class
         );
 
@@ -152,7 +152,7 @@ public class DeliveryService implements IDeliveryService {
         Task deliveryTask = new Task(
                 () -> {
                     Parameter parameter = new Parameter("order_id", searchField);
-                    return deliveryDao.getOptionalGeneralEntity(parameter);
+                    return deliveryDao.getOptionalEntity(parameter);
                 },
                 Delivery.class
         );

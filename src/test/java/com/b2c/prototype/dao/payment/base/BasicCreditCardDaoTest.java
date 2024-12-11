@@ -34,7 +34,7 @@ class BasicCreditCardDaoTest extends AbstractSingleEntityDaoTest {
                 .ownerName("name")
                 .ownerSecondName("secondName")
                 .isActive(CardUtil.isCardActive("06/28"))
-                .cvv(818)
+                .cvv("818")
                 .build();
         return new EntityDataSet<>(creditCard, "/datasets/payment/credit_card/testCreditCardDataSet.yml");
     }
@@ -47,7 +47,7 @@ class BasicCreditCardDaoTest extends AbstractSingleEntityDaoTest {
                 .ownerName("name")
                 .ownerSecondName("secondName")
                 .isActive(CardUtil.isCardActive("06/28"))
-                .cvv(818)
+                .cvv("818")
                 .build();
         return new EntityDataSet<>(creditCard, "/datasets/payment/credit_card/saveCreditCardDataSet.yml");
     }
@@ -61,7 +61,7 @@ class BasicCreditCardDaoTest extends AbstractSingleEntityDaoTest {
                 .ownerName("Update Name")
                 .ownerSecondName("secondName")
                 .isActive(CardUtil.isCardActive("06/28"))
-                .cvv(818)
+                .cvv("818")
                 .build();
         return new EntityDataSet<>(creditCard, "/datasets/payment/credit_card/updateCreditCardDataSet.yml");
     }

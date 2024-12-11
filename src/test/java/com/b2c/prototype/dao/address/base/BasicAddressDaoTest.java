@@ -38,9 +38,10 @@ class BasicAddressDaoTest extends AbstractSingleEntityDaoTest {
                 .id(1L)
                 .country(country)
                 .street("street")
+                .street2("street2")
                 .buildingNumber(1)
                 .apartmentNumber(101)
-                .flor(9)
+                .florNumber(9)
                 .zipCode("90000")
                 .build();
         return new EntityDataSet<>(address, "/datasets/address/address/testAddressDataSet.yml");
@@ -55,9 +56,10 @@ class BasicAddressDaoTest extends AbstractSingleEntityDaoTest {
         Address address = Address.builder()
                 .country(country)
                 .street("street")
+                .street2("street2")
                 .buildingNumber(1)
                 .apartmentNumber(101)
-                .flor(9)
+                .florNumber(9)
                 .zipCode("90000")
                 .build();
         return new EntityDataSet<>(address, "/datasets/address/address/saveAddressDataSet.yml");
@@ -73,9 +75,10 @@ class BasicAddressDaoTest extends AbstractSingleEntityDaoTest {
                 .id(1L)
                 .country(country)
                 .street("Update street")
+                .street2("street2")
                 .buildingNumber(1)
                 .apartmentNumber(102)
-                .flor(9)
+                .florNumber(9)
                 .zipCode("90001")
                 .build();
         return new EntityDataSet<>(address, "/datasets/address/address/updateAddressDataSet.yml");

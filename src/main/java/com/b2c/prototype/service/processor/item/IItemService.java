@@ -1,6 +1,6 @@
 package com.b2c.prototype.service.processor.item;
 
-import com.b2c.prototype.modal.dto.request.RequestItemDto;
+import com.b2c.prototype.modal.dto.request.ItemDto;
 import com.b2c.prototype.modal.dto.update.ItemDtoUpdate;
 import com.b2c.prototype.modal.entity.item.Item;
 
@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface IItemService {
 
-    void saveItem(RequestItemDto requestItemDto);
+    void saveItem(ItemDto itemDto);
     void updateItem(ItemDtoUpdate requestItemDtoUpdate);
     void deleteItemByArticularId(String articularId);
 

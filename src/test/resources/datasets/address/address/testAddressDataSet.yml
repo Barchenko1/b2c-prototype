@@ -4,8 +4,9 @@ country:
 address:
   - id: 1
     street: "street"
+    street2: "street2"
     buildingNumber: 1
-    flor: 9
+    florNumber: 9
     apartmentNumber: 101
     zipCode: 90000
     country_id: 1

@@ -22,7 +22,7 @@ public class AbstractCreditCard {
     private long id;
     private String cardNumber;
     private String dateOfExpire;
-    private int cvv;
+    private String cvv;
     private boolean isActive;
     private String ownerName;
     private String ownerSecondName;

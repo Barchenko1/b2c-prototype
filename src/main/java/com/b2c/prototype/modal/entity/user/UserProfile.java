@@ -24,11 +24,11 @@ import java.util.List;
 @SuperBuilder
 @NoArgsConstructor
 public class UserProfile extends AbstractUserProfile {
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private ContactInfo contactInfo;
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Address address;
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<CreditCard> creditCardList;
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     private List<Post> postList;

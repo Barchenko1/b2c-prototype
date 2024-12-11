@@ -1,6 +1,6 @@
 package com.b2c.prototype.dao.price;
 
-import com.tm.core.dao.single.ISingleEntityDao;
+import com.tm.core.dao.common.IEntityDao;
 
-public interface ICurrencyDao extends ISingleEntityDao {
+public interface ICurrencyDao extends IEntityDao {
 }
