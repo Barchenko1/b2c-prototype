@@ -1,8 +1,9 @@
 package com.b2c.prototype.service.processor.item.base;
 
-import com.b2c.prototype.dao.cashed.IEntityCachedMap;
+import com.b2c.prototype.dao.cashed.ISingleValueMap;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.entity.item.ItemType;
+import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.processor.AbstractOneFieldEntityService;
 import com.b2c.prototype.service.processor.item.IItemTypeService;
 import com.tm.core.dao.common.IEntityDao;
@@ -14,15 +15,14 @@ public class ItemTypeService extends AbstractOneFieldEntityService<ItemType> imp
 
     public ItemTypeService(IParameterFactory parameterFactory,
                            IEntityDao itemTypeDao,
-                           IEntityCachedMap entityCachedMap) {
-        super(parameterFactory, itemTypeDao, entityCachedMap);
+                           ITransformationFunctionService transformationFunctionService,
+                           ISingleValueMap singleValueMap) {
+        super(parameterFactory, itemTypeDao, transformationFunctionService, singleValueMap);
     }
 
     @Override
     protected Function<OneFieldEntityDto, ItemType> getFunction() {
-        return oneFieldEntityDto -> ItemType.builder()
-                .value(oneFieldEntityDto.getValue())
-                .build();
+        return transformationFunctionService.getTransformationFunction(OneFieldEntityDto.class, ItemType.class);
     }
 
     @Override

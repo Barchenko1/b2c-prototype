@@ -8,16 +8,18 @@ credit_card:
     isActive: true
 payment_method:
   - id: 1
-    method: "Card"
+    value: "Card"
   - id: 2
-    method: "Blik"
+    value: "Blik"
 currency:
   - id: 1
     value: "USD"
-currency_discount:
+discount:
   - id: 1
     amount: 5
     charSequenceCode: "abc"
+    isActive: true
+    isPercent: false
     currency_id: 1
 price: []
 payment: []

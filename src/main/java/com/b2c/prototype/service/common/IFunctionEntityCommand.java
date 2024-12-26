@@ -11,9 +11,7 @@ public interface IFunctionEntityCommand {
     <E> void updateEntity(Supplier<E> entitySupplier);
     <E> void deleteEntity(Supplier<E> entitySupplier);
 
-    void saveEntity(Consumer<Session> consumer);
-    void updateEntity(Consumer<Session> consumer);
-    void deleteEntity(Consumer<Session> consumer);
+    void executeConsumer(Consumer<Session> consumer);
 
     <E> void updateEntityByParameter(Supplier<E> entitySupplier, Supplier<Parameter> parameterSupplier);
     void deleteEntityByParameter(Supplier<Parameter> parameterSupplier);

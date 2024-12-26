@@ -1,26 +1,21 @@
 package com.b2c.prototype.service.processor.address.base;
 
 import com.b2c.prototype.dao.address.IAddressDao;
-import com.b2c.prototype.dao.cashed.IEntityCachedMap;
-import com.b2c.prototype.dao.order.IOrderItemDao;
-import com.b2c.prototype.dao.user.IUserProfileDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.request.AddressDto;
-import com.b2c.prototype.modal.dto.update.AddressDtoUpdate;
+import com.b2c.prototype.modal.dto.update.AddressSearchFieldDto;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
-import com.b2c.prototype.modal.entity.item.CurrencyDiscount;
-import com.b2c.prototype.modal.entity.order.OrderItem;
-import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
+import com.b2c.prototype.modal.entity.order.OrderItemData;
 import com.b2c.prototype.modal.entity.user.UserProfile;
+import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.processor.query.IQueryService;
-import com.tm.core.processor.finder.factory.IParameterFactory;
+import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.processor.finder.parameter.Parameter;
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -43,18 +38,15 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class AddressServiceTest {
-    @Mock
-    private IParameterFactory parameterFactory;
-    @Mock
-    private IUserProfileDao userProfileDao;
-    @Mock
-    private IOrderItemDao orderItemDao;
+
     @Mock
     private IAddressDao addressDao;
     @Mock
     private IQueryService queryService;
     @Mock
-    private IEntityCachedMap entityCachedMap;
+    private ITransformationFunctionService transformationFunctionService;
+    @Mock
+    private ISupplierService supplierService;
     @InjectMocks
     private AddressService addressService;
 
@@ -64,180 +56,142 @@ class AddressServiceTest {
     }
 
     @Test
-    void testSaveAddress() {
-        AddressDto addressDto = getAddressDto();
-        when(entityCachedMap.getEntity(eq(Country.class), eq("value"), eq("USA")))
-                .thenReturn(getCountry());
-        addressService.saveAddress(addressDto);
-
-        ArgumentCaptor<Supplier<Address>> captor = ArgumentCaptor.forClass(Supplier.class);
-        verify(addressDao).saveEntity(captor.capture());
-        Address capturedEntity = captor.getValue().get();
-        assertEquals(addressDto.getStreet(), capturedEntity.getStreet());
-    }
-
-    @Test
-    void testSaveAddress_NullDto() {
-        when(entityCachedMap.getEntity(eq(Country.class), eq("value"), eq("USA")))
-                .thenReturn(getCountry());
-        doThrow(new RuntimeException()).when(addressDao).saveEntity(any(Supplier.class));
-        assertThrows(RuntimeException.class, () -> addressService.saveAddress(null));
-    }
-
-    @Test
-    void testUpdateAppUserAddress() {
-        AddressDtoUpdate addressDtoUpdate = new AddressDtoUpdate();
-        AddressDto newAddressDto = AddressDto.builder()
-                .country("USA")
-                .city("city")
-                .street("update street")
-                .street2("update street2")
-                .buildingNumber(1)
-                .florNumber(9)
-                .apartmentNumber(101)
-                .zipCode("91001")
-                .build();
-        addressDtoUpdate.setSearchField("search");
-        addressDtoUpdate.setNewEntityDto(newAddressDto);
+    void testSaveUpdateAppUserAddress() {
+        AddressSearchFieldDto addressSearchFieldDto = getAddressSearchFieldDto();
         UserProfile userProfile = mock(UserProfile.class);
-
-        when(parameterFactory.createStringParameter("username", addressDtoUpdate.getSearchField()))
-                .thenReturn(mock(Parameter.class));
-        when(entityCachedMap.getEntity(eq(Country.class), eq("value"), eq("USA")))
-                .thenReturn(getCountry());
-        when(queryService.getEntity(eq(UserProfile.class), any(Supplier.class))).thenReturn(userProfile);
-        when(userProfile.getAddress()).thenReturn(getAddress());
-
+        Parameter parameter = mock(Parameter.class);
+        Supplier<Parameter> parameterSupplier = () -> parameter;
+        when(supplierService.parameterStringSupplier("user_id", addressSearchFieldDto.getSearchField()))
+                .thenReturn(parameterSupplier);
+        when(queryService.getEntity(UserProfile.class, parameterSupplier))
+                .thenReturn(userProfile);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
             Session session = mock(Session.class);
             consumer.accept(session);
-            verify(session).merge(getUpdatedAddress());
+            verify(session).merge(userProfile);
             return null;
-        }).when(addressDao).updateEntity(any(Consumer.class));
+        }).when(addressDao).executeConsumer(any(Consumer.class));
 
-        addressService.updateAppUserAddress(addressDtoUpdate);
+        addressService.saveUpdateAppUserAddress(addressSearchFieldDto);
 
-        verify(addressDao).updateEntity(any(Consumer.class));
+        verify(addressDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
-    void testUpdateDeliveryAddress() {
-        AddressDtoUpdate addressDtoUpdate = new AddressDtoUpdate();
-        AddressDto newAddressDto = AddressDto.builder()
-                .country("USA")
-                .city("city")
-                .street("update street")
-                .street2("update street2")
-                .buildingNumber(1)
-                .florNumber(9)
-                .apartmentNumber(101)
-                .zipCode("91001")
-                .build();
-        addressDtoUpdate.setSearchField("search");
-        addressDtoUpdate.setNewEntityDto(newAddressDto);
-
-        OrderItem orderItem = mock(OrderItem.class);
-        Address address = mock(Address.class);
-        when(address.getCountry()).thenReturn(mock(Country.class));
-
+    void testSaveUpdateDeliveryAddress() {
+        AddressSearchFieldDto addressSearchFieldDto = getAddressSearchFieldDto();
+        OrderItemData orderItemData = mock(OrderItemData.class);
         Delivery delivery = mock(Delivery.class);
+        when(orderItemData.getDelivery()).thenReturn(delivery);
 
-        when(parameterFactory.createStringParameter("order_id", addressDtoUpdate.getSearchField()))
-                .thenReturn(mock(Parameter.class));
-        when(entityCachedMap.getEntity(eq(Country.class), eq("value"), eq("USA")))
-                .thenReturn(getCountry());
-        when(queryService.getEntity(eq(OrderItem.class), any(Supplier.class))).thenReturn(orderItem);
-        when(orderItem.getDelivery()).thenReturn(delivery);
-        when(delivery.getAddress()).thenReturn(getAddress());
-
+        Parameter parameter = mock(Parameter.class);
+        Supplier<Parameter> parameterSupplier = () -> parameter;
+        when(supplierService.parameterStringSupplier("order_id", addressSearchFieldDto.getSearchField()))
+                .thenReturn(parameterSupplier);
+        when(queryService.getEntity(OrderItemData.class, parameterSupplier))
+                .thenReturn(orderItemData);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
             Session session = mock(Session.class);
             consumer.accept(session);
-            verify(session).merge(getUpdatedAddress());
+            verify(session).merge(delivery);
             return null;
-        }).when(addressDao).updateEntity(any(Consumer.class));
+        }).when(addressDao).executeConsumer(any(Consumer.class));
 
-        addressService.updateDeliveryAddress(addressDtoUpdate);
+        addressService.saveUpdateDeliveryAddress(addressSearchFieldDto);
 
-        verify(addressDao).updateEntity(any(Consumer.class));
+        verify(addressDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
     void testDeleteAppUserAddress() {
-        OneFieldEntityDto dto = new OneFieldEntityDto("email");
+        OneFieldEntityDto dto = new OneFieldEntityDto("userId");
+        UserProfile userProfile = mock(UserProfile.class);
+        Address address = mock(Address.class);
 
-        Parameter parameter = mock(Parameter.class);
-        when(parameterFactory.createStringParameter("email", dto.getValue())).thenReturn(parameter);
+        when(userProfile.getAddress()).thenReturn(address);
+
+        Supplier<Address> addressSupplier = () -> address;
+        Function<UserProfile, Address> function = mock(Function.class);
+        when(transformationFunctionService.getTransformationFunction(UserProfile.class, Address.class))
+                .thenReturn(function);
+        when(supplierService.entityFieldSupplier(
+                UserProfile.class,
+                "user_id",
+                dto.getValue(),
+                function
+        )).thenReturn(addressSupplier);
 
         addressService.deleteAppUserAddress(dto);
 
-        verify(addressDao).findEntityAndDelete(parameter);
+        verify(addressDao).deleteEntity(any(Supplier.class));
     }
 
     @Test
     void testDeleteAppUserAddress_NullDto() {
-        assertThrows(NullPointerException.class, () -> addressService.deleteAppUserAddress(null));
+        Parameter parameter = mock(Parameter.class);
+        Supplier<Parameter> parameterSupplier = () -> parameter;
+
+        doThrow(new RuntimeException()).when(addressDao).deleteEntity(any(Supplier.class));
+        when(supplierService.parameterStringSupplier(eq("user_id"), any()))
+                .thenReturn(parameterSupplier);
+        when(queryService.getEntity(eq(UserProfile.class), any(Supplier.class)))
+                .thenReturn(null);
+        assertThrows(RuntimeException.class, () -> addressService.deleteAppUserAddress(null));
     }
 
     @Test
     void testDeleteDeliveryAddress() {
         OneFieldEntityDto dto = new OneFieldEntityDto("order_id");
+        OrderItemData orderItemData = mock(OrderItemData.class);
+        Delivery delivery = mock(Delivery.class);
+        Address address = getAddress();
 
-        Parameter parameter = mock(Parameter.class);
-        when(parameterFactory.createStringParameter("order_id", dto.getValue()))
-                .thenReturn(parameter);
+        when(orderItemData.getDelivery()).thenReturn(delivery);
+        when(delivery.getAddress()).thenReturn(address);
+        Supplier<Address> addressSupplier = () -> address;
+        Function<OrderItemData, Address> function = mock(Function.class);
+        when(transformationFunctionService.getTransformationFunction(OrderItemData.class, Address.class))
+                .thenReturn(function);
+        when(supplierService.entityFieldSupplier(
+                OrderItemData.class,
+                "order_id",
+                dto.getValue(),
+                function
+        )).thenReturn(addressSupplier);
 
         addressService.deleteDeliveryAddress(dto);
 
-        verify(addressDao).findEntityAndDelete(parameter);
+        verify(addressDao).deleteEntity(any(Supplier.class));
     }
 
     @Test
-    void testGetAddressByEmail() {
-        String email = "test@example.com";
+    void testGetAddressByUserId() {
+        String userId = "123";
         UserProfile userProfile = mock(UserProfile.class);
         Address address = getAddress();
+        OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto(userId);
         Parameter parameter = mock(Parameter.class);
-        OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto(email);
 
-        when(parameterFactory.createStringParameter("email", email))
-                .thenReturn(parameter);
-        when(queryService.getEntityDto(eq(UserProfile.class), any(Supplier.class), any(Function.class)))
+        Supplier<Parameter> parameterSupplier = () -> parameter;
+        when(supplierService.parameterStringSupplier("user_id", userId)).thenReturn(parameterSupplier);
+
+        Function<UserProfile, AddressDto> transformationFunction = user -> getAddressDto();
+        when(transformationFunctionService.getTransformationFunction(UserProfile.class, AddressDto.class))
+                .thenReturn(transformationFunction);
+
+        when(queryService.getEntityDto(eq(UserProfile.class), eq(parameterSupplier), eq(transformationFunction)))
                 .thenAnswer(invocation -> {
-                    Supplier<Parameter> paramSupplier = invocation.getArgument(1);
-                    Function<UserProfile, AddressDto> mappingFunction = invocation.getArgument(2);
-                    assertEquals(parameter, paramSupplier.get());
-                    return mappingFunction.apply(userProfile);
+                    Supplier<Parameter> supplierArg = invocation.getArgument(1);
+                    Function<UserProfile, AddressDto> functionArg = invocation.getArgument(2);
+                    assertEquals(parameterSupplier.get(), supplierArg.get());
+                    return functionArg.apply(userProfile);
                 });
+
         when(userProfile.getAddress()).thenReturn(address);
-        AddressDto addressDto = addressService.getAddressByEmail(oneFieldEntityDto);
 
-        AddressDto expectedAddressDto = getAddressDto();
-        assertEquals(expectedAddressDto, addressDto);
-    }
-
-    @Test
-    void testGetAddressByUsername() {
-        String username = "username";
-        UserProfile userProfile = mock(UserProfile.class);
-        Address address = getAddress();
-        Parameter parameter = mock(Parameter.class);
-        OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto(username);
-
-        when(parameterFactory.createStringParameter("username", username))
-                .thenReturn(parameter);
-        when(queryService.getEntityDto(eq(UserProfile.class), any(Supplier.class), any(Function.class)))
-                .thenAnswer(invocation -> {
-                    Supplier<Parameter> paramSupplier = invocation.getArgument(1);
-                    Function<UserProfile, AddressDto> mappingFunction = invocation.getArgument(2);
-                    assertEquals(parameter, paramSupplier.get());
-                    return mappingFunction.apply(userProfile);
-                });
-        when(userProfile.getAddress()).thenReturn(address);
-        AddressDto addressDto = addressService.getAddressByUsername(oneFieldEntityDto);
-
+        AddressDto addressDto = addressService.getAddressByUserId(oneFieldEntityDto);
         AddressDto expectedAddressDto = getAddressDto();
         assertEquals(expectedAddressDto, addressDto);
     }
@@ -245,28 +199,30 @@ class AddressServiceTest {
     @Test
     void testGetAddressByOrderId() {
         String orderId = "12345";
-        OrderItem orderItem = mock(OrderItem.class);
+        OrderItemData orderItemData = mock(OrderItemData.class);
         Delivery delivery = mock(Delivery.class);
         Address address = getAddress();
-        Parameter parameter = mock(Parameter.class);
         OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto(orderId);
+        Parameter parameter = mock(Parameter.class);
 
-        when(parameterFactory.createStringParameter("order_id", orderId))
-                .thenReturn(parameter);
-        when(orderItem.getDelivery()).thenReturn(delivery);
-        when(delivery.getAddress()).thenReturn(address);
-        when(queryService.getEntityDto(eq(OrderItem.class), any(Supplier.class), any(Function.class)))
+        Supplier<Parameter> parameterSupplier = () -> parameter;
+        when(supplierService.parameterStringSupplier("order_id", orderId)).thenReturn(parameterSupplier);
+
+        Function<OrderItemData, AddressDto> transformationFunction = user -> getAddressDto();
+        when(transformationFunctionService.getTransformationFunction(OrderItemData.class, AddressDto.class))
+                .thenReturn(transformationFunction);
+
+        when(queryService.getEntityDto(eq(OrderItemData.class), eq(parameterSupplier), eq(transformationFunction)))
                 .thenAnswer(invocation -> {
-                    Supplier<Parameter> paramSupplier = invocation.getArgument(1);
-                    Function<OrderItem, AddressDto> mappingFunction = invocation.getArgument(2);
-                    assertEquals(parameter, paramSupplier.get());
-                    return mappingFunction.apply(orderItem);
+                    Supplier<Parameter> supplierArg = invocation.getArgument(1);
+                    Function<OrderItemData, AddressDto> functionArg = invocation.getArgument(2);
+                    assertEquals(parameterSupplier.get(), supplierArg.get());
+                    return functionArg.apply(orderItemData);
                 });
-        when(orderItem.getDelivery()).thenReturn(delivery);
+        when(orderItemData.getDelivery()).thenReturn(delivery);
         when(delivery.getAddress()).thenReturn(address);
 
         AddressDto addressDto = addressService.getAddressByOrderId(oneFieldEntityDto);
-
         AddressDto expectedAddressDto = getAddressDto();
         assertEquals(expectedAddressDto, addressDto);
     }
@@ -288,9 +244,11 @@ class AddressServiceTest {
         when(address1.getCountry()).thenReturn(mock(Country.class));
         when(address2.getCountry()).thenReturn(mock(Country.class));
 
+        Function<Address, AddressDto> mockFunction = mock(Function.class);
+        when(transformationFunctionService.getTransformationFunction(Address.class, AddressDto.class))
+                .thenReturn(mockFunction);
         when(addressDao.getEntityList())
                 .thenReturn(List.of(address1, address2));
-
         List<AddressDto> result = addressService.getAddresses();
 
         assertEquals(2, result.size());
@@ -334,6 +292,35 @@ class AddressServiceTest {
                 .florNumber(9)
                 .apartmentNumber(101)
                 .zipCode("91000")
+                .build();
+    }
+
+    private AddressSearchFieldDto getAddressSearchFieldDto() {
+        return AddressSearchFieldDto.builder()
+                .searchField("123")
+                .newEntity(AddressDto.builder()
+                        .country("USA")
+                        .city("city")
+                        .street("street")
+                        .street2("street2")
+                        .buildingNumber(1)
+                        .florNumber(9)
+                        .apartmentNumber(101)
+                        .zipCode("91000")
+                        .build())
+                .build();
+    }
+
+    private AddressDto getUpdateAddressDto() {
+        return AddressDto.builder()
+                .country("USA")
+                .city("city")
+                .street("update street")
+                .street2("update street2")
+                .buildingNumber(1)
+                .florNumber(9)
+                .apartmentNumber(101)
+                .zipCode("91001")
                 .build();
     }
 

@@ -1,6 +1,7 @@
 package com.b2c.prototype.modal.base;
 
 import com.b2c.prototype.modal.entity.payment.PaymentMethod;
+import com.b2c.prototype.modal.entity.payment.PaymentStatus;
 import com.b2c.prototype.modal.entity.price.Price;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -35,4 +36,7 @@ public class AbstractPayment {
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
     @JoinColumn(name = "totalprice_id")
     private Price totalPrice;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "paymentstatus_id")
+    private PaymentStatus paymentStatus;
 }

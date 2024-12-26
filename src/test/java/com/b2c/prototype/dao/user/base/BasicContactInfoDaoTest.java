@@ -189,7 +189,7 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
             s.persist(contactInfo);
         };
 
-        dao.saveEntity(consumer);
+        dao.executeConsumer(consumer);
         verifyExpectedData("/datasets/user/contact_info/saveContactInfoDataSet.yml");
     }
 
@@ -201,7 +201,7 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.saveEntity(consumer);
+            dao.executeConsumer(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -240,7 +240,7 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
             s.merge(contactInfo.getContactPhone());
             s.merge(contactInfo);
         };
-        dao.updateEntity(consumer);
+        dao.executeConsumer(consumer);
         verifyExpectedData("/datasets/user/contact_info/updateContactInfoDataSet.yml");
     }
 
@@ -254,14 +254,14 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.updateEntity(consumer);
+            dao.executeConsumer(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
     }
 
     @Test
-    void deleteEntity_success() {
+    void findEntityAndDelete_success() {
         loadDataSet("/datasets/user/contact_info/testContactInfoDataSet.yml");
         Parameter parameter = new Parameter("id", 1);
 
@@ -278,7 +278,7 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
             s.remove(contactInfo.getContactPhone());
         };
 
-        dao.deleteEntity(consumer);
+        dao.executeConsumer(consumer);
         verifyExpectedData("/datasets/user/contact_info/emptyContactInfoDataSet.yml");
     }
 
@@ -290,14 +290,14 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            dao.deleteEntity(consumer);
+            dao.executeConsumer(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
     }
 
     @Test
-    void deleteEntityByGeneralEntity_success() {
+    void deleteEntity_success() {
         loadDataSet("/datasets/user/contact_info/testContactInfoDataSet.yml");
         ContactInfo contactInfo = prepareTestContactInfo();
 

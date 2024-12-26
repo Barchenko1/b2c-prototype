@@ -1,5 +1,6 @@
 package com.b2c.prototype.modal.base;
 
+import com.b2c.prototype.modal.entity.price.Price;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,4 +24,5 @@ public abstract class AbstractDiscount {
     @Column(name = "charSequenceCode", unique = true, nullable = false)
     private String charSequenceCode;
     private double amount;
+    private boolean isActive;
 }

@@ -2,8 +2,8 @@ package com.b2c.prototype.configuration;
 
 import com.b2c.prototype.dao.address.ICountryDao;
 import com.b2c.prototype.dao.address.base.BasicCountryDao;
-import com.b2c.prototype.dao.item.IPercentDiscountDao;
-import com.b2c.prototype.dao.item.base.BasicPercentDiscountDao;
+import com.b2c.prototype.dao.item.IDiscountDao;
+import com.b2c.prototype.dao.item.base.BasicDiscountDao;
 import com.b2c.prototype.dao.message.IMessageStatusDao;
 import com.b2c.prototype.dao.message.IMessageTypeDao;
 import com.b2c.prototype.dao.message.basic.BasicMessageStatusDao;
@@ -32,7 +32,6 @@ import com.b2c.prototype.dao.user.base.BasicUserProfileDao;
 import com.b2c.prototype.dao.item.base.BasicBrandDao;
 import com.b2c.prototype.dao.embedded.base.BasicBucketDao;
 import com.b2c.prototype.dao.payment.base.BasicCreditCardDao;
-import com.b2c.prototype.dao.item.base.BasicCurrencyDiscountDao;
 import com.b2c.prototype.dao.option.base.BasicOptionItemDao;
 import com.b2c.prototype.dao.option.base.BasicOptionGroupDao;
 import com.b2c.prototype.dao.order.base.BasicOrderItemDao;
@@ -54,7 +53,6 @@ import com.b2c.prototype.dao.payment.ICreditCardDao;
 import com.b2c.prototype.dao.payment.IPaymentDao;
 import com.b2c.prototype.dao.post.IPostDao;
 import com.b2c.prototype.dao.item.IBrandDao;
-import com.b2c.prototype.dao.item.ICurrencyDiscountDao;
 import com.b2c.prototype.dao.item.IItemDao;
 import com.b2c.prototype.dao.item.IItemStatusDao;
 import com.b2c.prototype.dao.item.IItemTypeDao;
@@ -172,13 +170,8 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public ICurrencyDiscountDao currencyDiscountDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
-        return new BasicCurrencyDiscountDao(sessionFactory, entityIdentifierDao);
-    }
-
-    @Bean
-    public IPercentDiscountDao percentDiscountDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
-        return new BasicPercentDiscountDao(sessionFactory, entityIdentifierDao);
+    public IDiscountDao discountDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicDiscountDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean
@@ -229,11 +222,6 @@ public class BeanConfiguration {
     @Bean
     public IItemTypeDao itemTypeDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
         return new BasicItemTypeDao(sessionFactory, entityIdentifierDao);
-    }
-
-    @Bean
-    public ICurrencyDiscountDao discountDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
-        return new BasicCurrencyDiscountDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean

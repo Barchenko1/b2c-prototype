@@ -3,31 +3,37 @@ package com.b2c.prototype.service.processor.payment.base;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDtoUpdate;
 import com.b2c.prototype.modal.entity.payment.PaymentMethod;
+import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.processor.AbstractOneFieldEntityServiceTest;
 import com.tm.core.processor.finder.parameter.Parameter;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 class PaymentMethodServiceTest extends AbstractOneFieldEntityServiceTest<PaymentMethod> {
-
+    @Mock
+    private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
     private PaymentMethodService service;
     
     @Override
     protected String getFieldName() {
-        return "method";
+        return "value";
     }
 
     @Test
     public void testSaveEntity() {
         OneFieldEntityDto dto = new OneFieldEntityDto("testValue");
         PaymentMethod testValue = createTestValue();
-
+        Function<OneFieldEntityDto, PaymentMethod> mockFunction = input -> testValue;
+        when(transformationFunctionService.getTransformationFunction(OneFieldEntityDto.class, PaymentMethod.class))
+                .thenReturn(mockFunction);
         service.saveEntity(dto);
 
         verifySaveEntity(testValue);
@@ -37,14 +43,17 @@ class PaymentMethodServiceTest extends AbstractOneFieldEntityServiceTest<Payment
     public void testUpdateEntity() {
         OneFieldEntityDto oldDto = new OneFieldEntityDto("oldValue");
         OneFieldEntityDto newDto = new OneFieldEntityDto("newValue");
-        OneFieldEntityDtoUpdate dtoUpdate = new OneFieldEntityDtoUpdate();
-        dtoUpdate.setOldEntityDto(oldDto);
-        dtoUpdate.setNewEntityDto(newDto);
-
-        PaymentMethod testValue = PaymentMethod.builder()
-                .method("newValue")
+        OneFieldEntityDtoUpdate dtoUpdate = OneFieldEntityDtoUpdate.builder()
+                .oldEntity(oldDto)
+                .newEntity(newDto)
                 .build();
 
+        PaymentMethod testValue = PaymentMethod.builder()
+                .value("newValue")
+                .build();
+        Function<OneFieldEntityDto, PaymentMethod> mockFunction = input -> testValue;
+        when(transformationFunctionService.getTransformationFunction(OneFieldEntityDto.class, PaymentMethod.class))
+                .thenReturn(mockFunction);
         service.updateEntity(dtoUpdate);
 
         verifyUpdateEntity(testValue, dtoUpdate);
@@ -54,7 +63,9 @@ class PaymentMethodServiceTest extends AbstractOneFieldEntityServiceTest<Payment
     public void testDeleteEntity() {
         OneFieldEntityDto dto = new OneFieldEntityDto("testValue");
         PaymentMethod testValue = createTestValue();
-
+        Function<OneFieldEntityDto, PaymentMethod> mockFunction = input -> testValue;
+        when(transformationFunctionService.getTransformationFunction(OneFieldEntityDto.class, PaymentMethod.class))
+                .thenReturn(mockFunction);
         service.deleteEntity(dto);
 
         verifyDeleteEntity(testValue, dto);
@@ -90,7 +101,7 @@ class PaymentMethodServiceTest extends AbstractOneFieldEntityServiceTest<Payment
 
     private PaymentMethod createTestValue() {
         return PaymentMethod.builder()
-                .method("testValue")
+                .value("testValue")
                 .build();
     }
 }

@@ -1,157 +1,121 @@
 package com.b2c.prototype.service.processor.userprofile.basic;
 
-import com.b2c.prototype.dao.cashed.IEntityCachedMap;
-import com.b2c.prototype.dao.order.IOrderItemDao;
 import com.b2c.prototype.dao.user.IContactPhoneDao;
-import com.b2c.prototype.dao.user.IUserProfileDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
+import com.b2c.prototype.modal.dto.request.ContactInfoSearchFieldOrderNumberDto;
 import com.b2c.prototype.modal.dto.request.ContactPhoneDto;
 import com.b2c.prototype.modal.dto.update.ContactPhoneDtoUpdate;
-import com.b2c.prototype.modal.entity.order.OrderItem;
+import com.b2c.prototype.modal.entity.order.OrderItemData;
+import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
-import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.modal.entity.user.UserProfile;
+import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.processor.query.IQueryService;
 import com.b2c.prototype.service.processor.userprofile.IContactPhoneService;
 import com.b2c.prototype.service.common.EntityOperationDao;
 import com.b2c.prototype.service.common.IEntityOperationDao;
-import com.tm.core.processor.finder.factory.IParameterFactory;
-import com.tm.core.processor.finder.parameter.Parameter;
+import com.b2c.prototype.service.supplier.ISupplierService;
 
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class ContactPhoneService implements IContactPhoneService {
 
-    private final IParameterFactory parameterFactory;
     private final IEntityOperationDao entityOperationDao;
-    private final IUserProfileDao userProfileDao;
-    private final IOrderItemDao orderItemDao;
     private final IQueryService queryService;
-    private final IEntityCachedMap entityCachedMap;
+    private final ITransformationFunctionService transformationFunctionService;
+    private final ISupplierService supplierService;
 
-    public ContactPhoneService(IParameterFactory parameterFactory,
-                               IContactPhoneDao contactPhoneDao,
-                               IUserProfileDao userProfileDao,
-                               IOrderItemDao orderItemDao,
+    public ContactPhoneService(IContactPhoneDao contactPhoneDao,
                                IQueryService queryService,
-                               IEntityCachedMap entityCachedMap) {
-        this.parameterFactory = parameterFactory;
+                               ITransformationFunctionService transformationFunctionService,
+                               ISupplierService supplierService) {
         this.entityOperationDao = new EntityOperationDao(contactPhoneDao);
-        this.userProfileDao = userProfileDao;
-        this.orderItemDao = orderItemDao;
+        this.transformationFunctionService = transformationFunctionService;
+        this.supplierService = supplierService;
         this.queryService = queryService;
-        this.entityCachedMap = entityCachedMap;
     }
 
     @Override
-    public void saveContactPhone(ContactPhoneDto contactPhoneDto) {
-        entityOperationDao.saveEntity(contactPhoneSupplier(contactPhoneDto));
-    }
-
-    @Override
-    public void updateContactPhoneByEmail(ContactPhoneDtoUpdate contactPhoneDtoUpdate) {
-        entityOperationDao.updateEntity(session -> {
-            UserProfile userProfile = userProfileDao.getEntity(
-                    emailParameterSupplier(contactPhoneDtoUpdate.getSearchField()).get());
-            ContactPhone newContactPhone = mapToEntityFunction().apply(contactPhoneDtoUpdate.getNewEntityDto());
-            newContactPhone.setId(userProfile.getContactInfo().getContactPhone().getId());
-            session.merge(newContactPhone);
+    public void saveUpdateContactPhoneByUserId(ContactPhoneDtoUpdate contactPhoneDtoUpdate) {
+        entityOperationDao.executeConsumer(session -> {
+            UserProfile userProfile = queryService.getEntity(
+                    UserProfile.class,
+                    supplierService.parameterStringSupplier("user_id", contactPhoneDtoUpdate.getSearchField()));
+            ContactPhone newContactPhone = transformationFunctionService.getEntity(
+                    ContactPhone.class,
+                    contactPhoneDtoUpdate.getNewEntity());
+            ContactInfo contactInfo = userProfile.getContactInfo();
+            contactInfo.setContactPhone(newContactPhone);
+            session.merge(contactInfo);
         });
     }
 
     @Override
-    public void updateContactPhoneByOrderId(ContactPhoneDtoUpdate contactPhoneDtoUpdate) {
-        entityOperationDao.updateEntity(session -> {
-            OrderItem orderItem = orderItemDao.getEntity(
-                    orderIdParameterSupplier(contactPhoneDtoUpdate.getSearchField()).get());
-            ContactPhone newContactPhone = mapToEntityFunction().apply(contactPhoneDtoUpdate.getNewEntityDto());
-            newContactPhone.setId(orderItem.getBeneficiaries().get(0).getContactPhone().getId());
-            session.merge(newContactPhone);
+    public void saveUpdateContactPhoneByOrderId(ContactPhoneDtoUpdate contactPhoneDtoUpdate) {
+        entityOperationDao.executeConsumer(session -> {
+            OrderItemData orderItemData = queryService.getEntity(
+                    OrderItemData.class,
+                    supplierService.parameterStringSupplier("order_id", contactPhoneDtoUpdate.getSearchField()));
+            ContactPhone newContactPhone = transformationFunctionService
+                    .getEntity(ContactPhone.class, contactPhoneDtoUpdate.getNewEntity());
+            List<ContactInfo> contactInfoList = orderItemData.getBeneficiaries();
+            ContactInfo contactInfo = contactInfoList.get(contactPhoneDtoUpdate.getOrderNumber());
+            contactInfo.setContactPhone(newContactPhone);
+            session.merge(contactInfo);
         });
     }
 
     @Override
-    public void deleteContactPhoneByEmail(OneFieldEntityDto oneFieldEntityDto) {
-        entityOperationDao.deleteEntityByParameter(
-                emailParameterSupplier(oneFieldEntityDto.getValue()));
+    public void deleteContactPhoneByUserId(OneFieldEntityDto oneFieldEntityDto) {
+        entityOperationDao.deleteEntity(
+                userProfileContactPhoneSupplier(oneFieldEntityDto.getValue()));
     }
 
     @Override
-    public void deleteContactPhoneByOrderId(OneFieldEntityDto oneFieldEntityDto) {
-        entityOperationDao.deleteEntityByParameter(
-                orderIdParameterSupplier(oneFieldEntityDto.getValue()));
+    public void deleteContactPhoneByOrderId(ContactInfoSearchFieldOrderNumberDto contactInfoSearchFieldOrderNumberDto) {
+        entityOperationDao.deleteEntity(
+                orderItemContactPhoneSupplier(contactInfoSearchFieldOrderNumberDto));
     }
 
     @Override
-    public ContactPhoneDto getContactPhoneByEmail(OneFieldEntityDto oneFieldEntityDto) {
+    public ContactPhoneDto getContactPhoneByUserId(OneFieldEntityDto oneFieldEntityDto) {
         return queryService.getEntityDto(
                 UserProfile.class,
-                emailParameterSupplier(oneFieldEntityDto.getValue()),
-                mapUserProfileToDtoFunction());
+                supplierService.parameterStringSupplier("user_id", oneFieldEntityDto.getValue()),
+                transformationFunctionService.getTransformationFunction(UserProfile.class, ContactPhoneDto.class));
     }
 
     @Override
-    public ContactPhoneDto getContactPhoneByOrderId(OneFieldEntityDto oneFieldEntityDto) {
-        return queryService.getEntityDto(
-                OrderItem.class,
-                orderIdParameterSupplier(oneFieldEntityDto.getValue()),
-                mapOrderItemToDtoFunction());
+    public List<ContactPhoneDto> getContactPhoneByOrderId(OneFieldEntityDto oneFieldEntityDto) {
+        return queryService.getSubEntityDtoList(
+                OrderItemData.class,
+                supplierService.parameterStringSupplier("order_id", oneFieldEntityDto.getValue()),
+                transformationFunctionService.getTransformationFunction(OrderItemData.class, ContactPhoneDto.class, "list"));
     }
 
     @Override
     public List<ContactPhoneDto> getContactPhoneList() {
-        return entityOperationDao.getEntityDtoList(mapToDtoFunction());
+        return entityOperationDao.getEntityDtoList(
+                transformationFunctionService.getTransformationFunction(ContactPhone.class, ContactPhoneDto.class));
     }
 
-    private Function<ContactPhoneDto, ContactPhone> mapToEntityFunction() {
-        return (contactPhoneDto) -> {
-            CountryPhoneCode countryPhoneCode = entityCachedMap.getEntity(
-                    CountryPhoneCode.class,
-                    "code",
-                    contactPhoneDto.getCountryPhoneCode());
-            return ContactPhone.builder()
-                    .phoneNumber(contactPhoneDto.getPhoneNumber())
-                    .countryPhoneCode(countryPhoneCode)
-                    .build();
+    private Supplier<ContactPhone> userProfileContactPhoneSupplier(String userId) {
+        return () -> {
+            UserProfile userProfile = queryService.getEntity(UserProfile.class,
+                    supplierService.parameterStringSupplier("user_id", userId));
+            return userProfile.getContactInfo().getContactPhone();
         };
     }
 
-    private Function<UserProfile, ContactPhoneDto> mapUserProfileToDtoFunction() {
-        return (userProfile) -> {
-            ContactPhone contactPhone = userProfile.getContactInfo().getContactPhone();
-            return mapToDtoFunction().apply(contactPhone);
+    private Supplier<ContactPhone> orderItemContactPhoneSupplier(
+            ContactInfoSearchFieldOrderNumberDto contactInfoSearchFieldOrderNumberDto) {
+        return () -> {
+            OrderItemData orderItemData = queryService.getEntity(OrderItemData.class,
+                    supplierService.parameterStringSupplier("order_id", contactInfoSearchFieldOrderNumberDto.getValue()));
+            List<ContactInfo> contactInfoList = orderItemData.getBeneficiaries();
+            return contactInfoList.get(contactInfoSearchFieldOrderNumberDto.getOrderNumber()).getContactPhone();
         };
     }
 
-    private Function<OrderItem, ContactPhoneDto> mapOrderItemToDtoFunction() {
-        return (orderItem) -> {
-            ContactPhone contactPhone = orderItem.getBeneficiaries().get(0).getContactPhone();
-            return mapToDtoFunction().apply(contactPhone);
-        };
-    }
-
-    private Function<ContactPhone, ContactPhoneDto> mapToDtoFunction() {
-        return (contactPhone) -> ContactPhoneDto.builder()
-                .phoneNumber(contactPhone.getPhoneNumber())
-                .countryPhoneCode(contactPhone.getCountryPhoneCode().getCode())
-                .build();
-    }
-
-    private Supplier<ContactPhone> contactPhoneSupplier(ContactPhoneDto contactPhoneDto) {
-        return () -> mapToEntityFunction().apply(contactPhoneDto);
-    }
-
-    private Supplier<Parameter> orderIdParameterSupplier(String value) {
-        return () -> parameterFactory.createStringParameter(
-                "order_id", value
-        );
-    }
-
-    private Supplier<Parameter> emailParameterSupplier(String value) {
-        return () -> parameterFactory.createStringParameter(
-                "email", value
-        );
-    }
 }

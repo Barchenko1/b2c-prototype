@@ -232,7 +232,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
             s.persist(delivery);
         };
 
-        dao.saveEntity(consumer);
+        dao.executeConsumer(consumer);
         verifyExpectedData("/datasets/delivery/delivery/saveDeliveryWithAddressDataSet.yml");
     }
 
@@ -244,7 +244,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.saveEntity(consumer);
+            dao.executeConsumer(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -279,21 +279,21 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
             Delivery deliveryToUpdate = prepareToUpdateDelivery();
             s.merge(deliveryToUpdate);
         };
-        dao.updateEntity(consumer);
+        dao.executeConsumer(consumer);
         verifyExpectedData("/datasets/delivery/delivery/updateDeliveryDataSet.yml");
     }
 
     @Test
     void updateEntityConsumer_transactionFailure() {
         loadDataSet("/datasets/delivery/delivery/testDeliveryDataSet.yml");
-        Consumer<Session> rootTestEntitySupplier = (Session s) -> {
+        Consumer<Session> consumer = (Session s) -> {
             Delivery delivery = prepareToUpdateDelivery();
             s.merge(delivery);
             throw new RuntimeException();
         };
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.updateEntity(rootTestEntitySupplier);
+            dao.executeConsumer(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -317,7 +317,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
             s.remove(delivery);
         };
 
-        dao.deleteEntity(consumer);
+        dao.executeConsumer(consumer);
         verifyExpectedData("/datasets/delivery/delivery/emptyDeliveryWithoutAddressDataSet.yml");
     }
 
@@ -329,7 +329,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            dao.deleteEntity(consumer);
+            dao.executeConsumer(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());

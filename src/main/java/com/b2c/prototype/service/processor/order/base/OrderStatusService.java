@@ -1,8 +1,9 @@
 package com.b2c.prototype.service.processor.order.base;
 
-import com.b2c.prototype.dao.cashed.IEntityCachedMap;
+import com.b2c.prototype.dao.cashed.ISingleValueMap;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.entity.order.OrderStatus;
+import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.processor.AbstractOneFieldEntityService;
 import com.b2c.prototype.service.processor.order.IOrderStatusService;
 import com.tm.core.dao.common.IEntityDao;
@@ -14,15 +15,14 @@ public class OrderStatusService extends AbstractOneFieldEntityService<OrderStatu
 
     public OrderStatusService(IParameterFactory parameterFactory,
                               IEntityDao orderStatusDao,
-                              IEntityCachedMap entityCachedMap) {
-        super(parameterFactory, orderStatusDao, entityCachedMap);
+                              ITransformationFunctionService transformationFunctionService,
+                              ISingleValueMap singleValueMap) {
+        super(parameterFactory, orderStatusDao, transformationFunctionService, singleValueMap);
     }
 
     @Override
     protected Function<OneFieldEntityDto, OrderStatus> getFunction() {
-        return oneFieldEntityDto -> OrderStatus.builder()
-                .value(oneFieldEntityDto.getValue())
-                .build();
+        return transformationFunctionService.getTransformationFunction(OneFieldEntityDto.class, OrderStatus.class);
     }
 
     @Override

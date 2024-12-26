@@ -1,8 +1,9 @@
 package com.b2c.prototype.service.processor.price.base;
 
-import com.b2c.prototype.dao.cashed.IEntityCachedMap;
+import com.b2c.prototype.dao.cashed.ISingleValueMap;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.entity.price.Currency;
+import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.processor.AbstractOneFieldEntityService;
 import com.b2c.prototype.service.processor.price.ICurrencyService;
 import com.tm.core.dao.common.IEntityDao;
@@ -14,15 +15,14 @@ public class CurrencyService extends AbstractOneFieldEntityService<Currency> imp
 
     public CurrencyService(IParameterFactory parameterFactory,
                            IEntityDao dao,
-                           IEntityCachedMap entityCachedMap) {
-        super(parameterFactory, dao, entityCachedMap);
+                           ITransformationFunctionService transformationFunctionService,
+                           ISingleValueMap singleValueMap) {
+        super(parameterFactory, dao, transformationFunctionService, singleValueMap);
     }
 
     @Override
     protected Function<OneFieldEntityDto, Currency> getFunction() {
-        return oneFieldEntityDto -> Currency.builder()
-                .value(oneFieldEntityDto.getValue())
-                .build();
+        return transformationFunctionService.getTransformationFunction(OneFieldEntityDto.class, Currency.class);
     }
 
     @Override

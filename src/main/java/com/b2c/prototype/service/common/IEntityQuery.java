@@ -16,5 +16,5 @@ public interface IEntityQuery {
     <R, E> R getEntityDto(Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction);
     <R, E> Optional<R> getOptionalEntityDto(Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction);
     <R, E> List<R> getEntityDtoList(Function<E, R> mapToDtoFunction);
-    <R, E> List<R> getSubEntityDtoList(Supplier<Parameter[]> parameterSupplier, Function<E, R> mapToDtoFunction);
+    <R, E> List<R> getSubEntityDtoList(Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction);
 }

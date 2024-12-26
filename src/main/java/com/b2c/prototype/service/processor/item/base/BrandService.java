@@ -1,8 +1,9 @@
 package com.b2c.prototype.service.processor.item.base;
 
-import com.b2c.prototype.dao.cashed.IEntityCachedMap;
+import com.b2c.prototype.dao.cashed.ISingleValueMap;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.entity.item.Brand;
+import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.processor.AbstractOneFieldEntityService;
 import com.b2c.prototype.service.processor.item.IBrandService;
 import com.tm.core.dao.common.IEntityDao;
@@ -14,15 +15,14 @@ public class BrandService extends AbstractOneFieldEntityService<Brand> implement
 
     public BrandService(IParameterFactory parameterFactory,
                         IEntityDao brandDao,
-                        IEntityCachedMap entityCachedMap) {
-        super(parameterFactory, brandDao, entityCachedMap);
+                        ITransformationFunctionService transformationFunctionService,
+                        ISingleValueMap singleValueMap) {
+        super(parameterFactory, brandDao, transformationFunctionService, singleValueMap);
     }
 
     @Override
     protected Function<OneFieldEntityDto, Brand> getFunction() {
-        return requestOneFieldEntityDto -> Brand.builder()
-                .value(requestOneFieldEntityDto.getValue())
-                .build();
+        return transformationFunctionService.getTransformationFunction(OneFieldEntityDto.class, Brand.class);
     }
 
     @Override

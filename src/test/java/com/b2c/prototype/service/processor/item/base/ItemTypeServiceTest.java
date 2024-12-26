@@ -3,18 +3,22 @@ package com.b2c.prototype.service.processor.item.base;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDtoUpdate;
 import com.b2c.prototype.modal.entity.item.ItemType;
+import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.processor.AbstractOneFieldEntityServiceTest;
 import com.tm.core.processor.finder.parameter.Parameter;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 class ItemTypeServiceTest extends AbstractOneFieldEntityServiceTest<ItemType> {
-
+    @Mock
+    private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
     private ItemTypeService itemTypeService;
     
@@ -27,7 +31,9 @@ class ItemTypeServiceTest extends AbstractOneFieldEntityServiceTest<ItemType> {
     public void testSaveEntity() {
         OneFieldEntityDto dto = new OneFieldEntityDto("testValue");
         ItemType testValue = createTestValue();
-
+        Function<OneFieldEntityDto, ItemType> mockFunction = input -> testValue;
+        when(transformationFunctionService.getTransformationFunction(OneFieldEntityDto.class, ItemType.class))
+                .thenReturn(mockFunction);
         itemTypeService.saveEntity(dto);
 
         verifySaveEntity(testValue);
@@ -37,14 +43,17 @@ class ItemTypeServiceTest extends AbstractOneFieldEntityServiceTest<ItemType> {
     public void testUpdateEntity() {
         OneFieldEntityDto oldDto = new OneFieldEntityDto("oldValue");
         OneFieldEntityDto newDto = new OneFieldEntityDto("newValue");
-        OneFieldEntityDtoUpdate dtoUpdate = new OneFieldEntityDtoUpdate();
-        dtoUpdate.setOldEntityDto(oldDto);
-        dtoUpdate.setNewEntityDto(newDto);
+        OneFieldEntityDtoUpdate dtoUpdate = OneFieldEntityDtoUpdate.builder()
+                .oldEntity(oldDto)
+                .newEntity(newDto)
+                .build();
 
         ItemType testValue = ItemType.builder()
                 .value("newValue")
                 .build();
-
+        Function<OneFieldEntityDto, ItemType> mockFunction = input -> testValue;
+        when(transformationFunctionService.getTransformationFunction(OneFieldEntityDto.class, ItemType.class))
+                .thenReturn(mockFunction);
         itemTypeService.updateEntity(dtoUpdate);
 
         verifyUpdateEntity(testValue, dtoUpdate);
@@ -54,7 +63,9 @@ class ItemTypeServiceTest extends AbstractOneFieldEntityServiceTest<ItemType> {
     public void testDeleteEntity() {
         OneFieldEntityDto dto = new OneFieldEntityDto("testValue");
         ItemType testValue = createTestValue();
-
+        Function<OneFieldEntityDto, ItemType> mockFunction = input -> testValue;
+        when(transformationFunctionService.getTransformationFunction(OneFieldEntityDto.class, ItemType.class))
+                .thenReturn(mockFunction);
         itemTypeService.deleteEntity(dto);
 
         verifyDeleteEntity(testValue, dto);

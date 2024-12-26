@@ -1,8 +1,7 @@
 package com.b2c.prototype.dao.payment.base;
 
 import com.b2c.prototype.dao.AbstractGeneralEntityDaoTest;
-import com.b2c.prototype.modal.entity.item.CurrencyDiscount;
-import com.b2c.prototype.modal.entity.item.PercentDiscount;
+import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
 import com.b2c.prototype.modal.entity.payment.Payment;
 import com.b2c.prototype.modal.entity.payment.PaymentMethod;
@@ -48,18 +47,16 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
 
     private static IEntityMappingManager getEntityMappingManager() {
         EntityTable cardEntityTable = new EntityTable(CreditCard.class, "credit_card");
+        EntityTable discount = new EntityTable(Discount.class, "discount");
         EntityTable currencyEntityTable = new EntityTable(Currency.class, "currency");
         EntityTable priceEntityTable = new EntityTable(Price.class, "price");
-        EntityTable currencyDiscount = new EntityTable(CurrencyDiscount.class, "currency_discount");
-        EntityTable percentDiscount = new EntityTable(PercentDiscount.class, "percent_discount");
         EntityTable paymentEntityTable = new EntityTable(Payment.class, "payment");
 
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(cardEntityTable);
         entityMappingManager.addEntityTable(currencyEntityTable);
         entityMappingManager.addEntityTable(priceEntityTable);
-        entityMappingManager.addEntityTable(currencyDiscount);
-        entityMappingManager.addEntityTable(percentDiscount);
+        entityMappingManager.addEntityTable(discount);
         entityMappingManager.addEntityTable(paymentEntityTable);
         return entityMappingManager;
     }
@@ -75,7 +72,7 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
                 .build();
         PaymentMethod paymentMethod = PaymentMethod.builder()
                 .id(1L)
-                .method("Card")
+                .value("Card")
                 .build();
         Currency currency = Currency.builder()
                 .id(1L)
@@ -85,15 +82,17 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
                 .amount(10)
                 .currency(currency)
                 .build();
-        CurrencyDiscount currencyDiscount = CurrencyDiscount.builder()
+        Discount discount = Discount.builder()
                 .id(1L)
                 .amount(5)
                 .charSequenceCode("abc")
+                .isActive(true)
+                .isPercent(false)
                 .currency(currency)
                 .build();
         return Payment.builder()
                 .paymentId("1")
-                .currencyDiscount(currencyDiscount)
+                .discount(discount)
                 .paymentMethod(paymentMethod)
                 .creditCard(creditCard)
                 .fullPrice(price)
@@ -113,16 +112,18 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
                 .build();
         PaymentMethod paymentMethod = PaymentMethod.builder()
                 .id(1L)
-                .method("Card")
+                .value("Card")
                 .build();
         Currency currency = Currency.builder()
                 .id(1L)
                 .value("USD")
                 .build();
-        CurrencyDiscount currencyDiscount = CurrencyDiscount.builder()
+        Discount discount = Discount.builder()
                 .id(1L)
                 .amount(5)
                 .charSequenceCode("abc")
+                .isActive(true)
+                .isPercent(false)
                 .currency(currency)
                 .build();
         Price price = Price.builder()
@@ -134,7 +135,7 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
         return Payment.builder()
                 .id(1L)
                 .paymentId("Update 1")
-                .currencyDiscount(currencyDiscount)
+                .discount(discount)
                 .paymentMethod(paymentMethod)
                 .creditCard(creditCard)
                 .fullPrice(price)
@@ -154,16 +155,18 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
                 .build();
         PaymentMethod paymentMethod = PaymentMethod.builder()
                 .id(1L)
-                .method("Card")
+                .value("Card")
                 .build();
         Currency currency = Currency.builder()
                 .id(1L)
                 .value("USD")
                 .build();
-        CurrencyDiscount currencyDiscount = CurrencyDiscount.builder()
+        Discount discount = Discount.builder()
                 .id(1L)
                 .amount(5)
                 .charSequenceCode("abc")
+                .isActive(true)
+                .isPercent(false)
                 .currency(currency)
                 .build();
         Price price = Price.builder()
@@ -175,7 +178,7 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
         return Payment.builder()
                 .id(1L)
                 .paymentId("1")
-                .currencyDiscount(currencyDiscount)
+                .discount(discount)
                 .paymentMethod(paymentMethod)
                 .creditCard(creditCard)
                 .fullPrice(price)
@@ -185,7 +188,7 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
 
     private void checkPayment(Payment expectedPayment, Payment actualPayment) {
         assertEquals(expectedPayment.getId(), actualPayment.getId());
-        assertEquals(expectedPayment.getPaymentId(), actualPayment.getPaymentId());
+        assertEquals(expectedPayment.getPaymentMethod().getId(), actualPayment.getPaymentMethod().getId());
 //        assertEquals(expectedPayment.getCreditCard().getId(), actualPayment.getCreditCard().getId());
 //        assertEquals(expectedPayment.getCreditCard().getCardNumber(), actualPayment.getCreditCard().getCardNumber());
 //        assertEquals(expectedPayment.getCreditCard().getDateOfExpire(), actualPayment.getCreditCard().getDateOfExpire());
@@ -233,10 +236,10 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
         payment.getCreditCard().setId(1L);
         payment.setPaymentMethod(PaymentMethod.builder()
                         .id(1L)
-                        .method("Blik")
+                        .value("Blik")
                         .build());
         payment.setCreditCard(null);
-        payment.setCurrencyDiscount(null);
+        payment.setDiscount(null);
 
         dao.persistEntity(payment);
         verifyExpectedData("/datasets/payment/payment/savePaymentWithoutDependentsDataSet.yml");
@@ -254,7 +257,6 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
     void saveEntity_transactionFailure() {
         Payment payment = new Payment();
         payment.setId(1L);
-        payment.setPaymentId("1");
 
         SessionFactory sessionFactory = mock(SessionFactory.class);
         Session session = mock(Session.class);
@@ -289,7 +291,7 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
             s.persist(payment);
         };
 
-        dao.saveEntity(consumer);
+        dao.executeConsumer(consumer);
         verifyExpectedData("/datasets/payment/payment/savePaymentDependentsDataSet.yml");
     }
 
@@ -301,7 +303,7 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.saveEntity(consumer);
+            dao.executeConsumer(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -320,7 +322,6 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
     void updateEntity_transactionFailure() {
         Payment payment = prepareToSavePayment();
         payment.setId(1L);
-        payment.setPaymentId("Update 1");
 
         Supplier<Payment> paymentSupplier = () -> {
             throw new RuntimeException();
@@ -342,22 +343,21 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
             s.merge(paymentToUpdate.getCreditCard());
             s.merge(paymentToUpdate);
         };
-        dao.updateEntity(consumer);
+        dao.executeConsumer(consumer);
         verifyExpectedData("/datasets/payment/payment/updatePaymentDataSet.yml");
     }
 
     @Test
     void updateEntityConsumer_transactionFailure() {
         loadDataSet("/datasets/payment/payment/testPaymentDataSet.yml");
-        Consumer<Session> paymentSupplier = (Session s) -> {
+        Consumer<Session> consumer = (Session s) -> {
             Payment payment = prepareToSavePayment();
             payment.setId(1L);
-            payment.setPaymentId("Update 1");
             s.merge(payment);
         };
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.updateEntity(paymentSupplier);
+            dao.executeConsumer(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -381,7 +381,7 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
             s.remove(payment);
         };
 
-        dao.deleteEntity(consumer);
+        dao.executeConsumer(consumer);
         verifyExpectedData("/datasets/payment/payment/emptyPaymentWithCardDataSet.yml");
     }
 
@@ -393,7 +393,7 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            dao.deleteEntity(consumer);
+            dao.executeConsumer(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -440,7 +440,6 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
     void deleteEntity_transactionFailure() {
         loadDataSet("/datasets/payment/payment/testPaymentDataSet.yml");
         Payment payment = new Payment();
-        payment.setPaymentId("1");
 
         Parameter parameter = new Parameter("id", 1L);
 

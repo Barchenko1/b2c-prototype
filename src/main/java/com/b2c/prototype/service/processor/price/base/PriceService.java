@@ -1,314 +1,175 @@
 package com.b2c.prototype.service.processor.price.base;
 
-import com.b2c.prototype.dao.cashed.IEntityCachedMap;
 import com.b2c.prototype.dao.price.IPriceDao;
+import com.b2c.prototype.modal.constant.PriceType;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.request.PriceDto;
 import com.b2c.prototype.modal.dto.request.PriceDtoSearchField;
-import com.b2c.prototype.modal.entity.item.ItemData;
-import com.b2c.prototype.modal.entity.order.OrderItem;
+import com.b2c.prototype.modal.dto.response.ResponsePriceDto;
+import com.b2c.prototype.modal.entity.item.ItemDataOption;
+import com.b2c.prototype.modal.entity.order.OrderItemData;
 import com.b2c.prototype.modal.entity.payment.Payment;
-import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
+import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.processor.price.IPriceService;
 import com.b2c.prototype.service.processor.query.IQueryService;
 import com.b2c.prototype.service.common.EntityOperationDao;
 import com.b2c.prototype.service.common.IEntityOperationDao;
-import com.tm.core.processor.finder.factory.IParameterFactory;
-import com.tm.core.processor.finder.parameter.Parameter;
+import com.b2c.prototype.service.supplier.ISupplierService;
 
 import java.util.List;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class PriceService implements IPriceService {
 
-    private final IParameterFactory parameterFactory;
     private final IEntityOperationDao entityOperationDao;
     private final IQueryService queryService;
-    private final IEntityCachedMap entityCachedMap;
+    private final ITransformationFunctionService transformationFunctionService;
+    private final ISupplierService supplierService;
 
-    public PriceService(IParameterFactory parameterFactory,
-                        IPriceDao priceDao,
+    public PriceService(IPriceDao priceDao,
                         IQueryService queryService,
-                        IEntityCachedMap entityCachedMap) {
-        this.parameterFactory = parameterFactory;
+                        ITransformationFunctionService transformationFunctionService,
+                        ISupplierService supplierService) {
         this.entityOperationDao = new EntityOperationDao(priceDao);
+        this.transformationFunctionService = transformationFunctionService;
+        this.supplierService = supplierService;
         this.queryService = queryService;
-        this.entityCachedMap = entityCachedMap;
     }
 
     @Override
-    public void saveFullPriceByOrderId(PriceDtoSearchField priceDtoSearchField) {
-        entityOperationDao.saveEntity(session -> {
-            OrderItem orderItem = queryService.getEntity(
-                    OrderItem.class,
-                    orderIdParameterSupplier(priceDtoSearchField.getSearchField()));
-            Price price = mapToEntityFunction().apply(priceDtoSearchField.getNewEntityDto());
-            Payment payment = orderItem.getPayment();
-            payment.setFullPrice(price);
-            session.persist(price);
+    public void saveUpdatePriceByOrderId(PriceDtoSearchField priceDtoSearchField, PriceType priceType) {
+        entityOperationDao.executeConsumer(session -> {
+            OrderItemData orderItemData = queryService.getEntity(
+                    OrderItemData.class,
+                    supplierService.parameterStringSupplier("order_id", priceDtoSearchField.getSearchField()));
+            Price price = transformationFunctionService.getEntity(
+                    Price.class, priceDtoSearchField.getNewEntity(), priceType.getValue());
+            Payment payment = orderItemData.getPayment();
+
+            if (priceType == PriceType.FULL_PRICE) {
+                updateFullPrice(payment, price);
+            }
+            if (priceType == PriceType.TOTAL_PRICE) {
+                updateTotalPrice(payment, price);
+            }
             session.merge(payment);
         });
     }
 
     @Override
-    public void saveTotalPriceByOrderId(PriceDtoSearchField priceDtoSearchField) {
-        entityOperationDao.saveEntity(session -> {
-            OrderItem orderItem = queryService.getEntity(
-                    OrderItem.class,
-                    orderIdParameterSupplier(priceDtoSearchField.getSearchField()));
-            Price price = mapToEntityFunction().apply(priceDtoSearchField.getNewEntityDto());
-            Payment payment = orderItem.getPayment();
-            payment.setTotalPrice(price);
-            session.persist(price);
-            session.merge(payment);
+    public void saveUpdatePriceByArticularId(PriceDtoSearchField priceDtoSearchField, PriceType priceType) {
+        entityOperationDao.executeConsumer(session -> {
+            ItemDataOption itemDataOption = queryService.getEntity(
+                    ItemDataOption.class,
+                    supplierService.parameterStringSupplier("articularId", priceDtoSearchField.getSearchField()));
+            Price price = transformationFunctionService.getEntity(
+                    Price.class, priceDtoSearchField.getNewEntity(), priceType.getValue());
+
+            if (priceType == PriceType.FULL_PRICE) {
+                updateFullPrice(itemDataOption, price);
+            }
+            if (priceType == PriceType.TOTAL_PRICE) {
+                updateTotalPrice(itemDataOption, price);
+            }
+            session.merge(itemDataOption);
         });
     }
 
     @Override
-    public void saveFullPriceByArticularId(PriceDtoSearchField priceDtoSearchField) {
-        entityOperationDao.saveEntity(session -> {
-            ItemData itemData = queryService.getEntity(
-                    ItemData.class,
-                    articularIdParameterSupplier(priceDtoSearchField.getSearchField()));
-            Price price = mapToEntityFunction().apply(priceDtoSearchField.getNewEntityDto());
-            itemData.setFullPrice(price);
-            session.persist(price);
-            session.merge(itemData);
-        });
+    public void deletePriceByOrderId(OneFieldEntityDto oneFieldEntityDto, PriceType priceType) {
+        entityOperationDao.deleteEntity(
+                supplierService.entityFieldSupplier(
+                        OrderItemData.class,
+                        "order_id",
+                        oneFieldEntityDto.getValue(),
+                        transformationFunctionService.getTransformationFunction(
+                                OrderItemData.class, Price.class, priceType.getValue())
+                )
+        );
     }
 
     @Override
-    public void saveTotalPriceByArticularId(PriceDtoSearchField priceDtoSearchField) {
-        entityOperationDao.saveEntity(session -> {
-            ItemData itemData = queryService.getEntity(
-                    ItemData.class,
-                    articularIdParameterSupplier(priceDtoSearchField.getSearchField()));
-            Price price = mapToEntityFunction().apply(priceDtoSearchField.getNewEntityDto());
-            itemData.setTotalPrice(price);
-            session.persist(price);
-            session.merge(itemData);
-        });
+    public void deletePriceByArticularId(OneFieldEntityDto oneFieldEntityDto, PriceType priceType) {
+        entityOperationDao.deleteEntity(
+                supplierService.entityFieldSupplier(
+                        ItemDataOption.class,
+                        "articularId",
+                        oneFieldEntityDto.getValue(),
+                        transformationFunctionService.getTransformationFunction(
+                                ItemDataOption.class, Price.class, priceType.getValue())
+                )
+        );
     }
 
     @Override
-    public void updateFullPriceByOrderId(PriceDtoSearchField priceDtoSearchField) {
-        entityOperationDao.updateEntity(session -> {
-            OrderItem orderItem = queryService.getEntity(
-                    OrderItem.class,
-                    orderIdParameterSupplier(priceDtoSearchField.getSearchField()));
-            Price price = mapToEntityFunction().apply(priceDtoSearchField.getNewEntityDto());
-            Payment payment = orderItem.getPayment();
-            Price existingFullPrice = payment.getFullPrice();
-            existingFullPrice.setAmount(price.getAmount());
-            existingFullPrice.setCurrency(price.getCurrency());
-            session.merge(existingFullPrice);
-        });
-    }
-
-    @Override
-    public void updateTotalPriceByOrderId(PriceDtoSearchField priceDtoSearchField) {
-        entityOperationDao.updateEntity(session -> {
-            OrderItem orderItem = queryService.getEntity(
-                    OrderItem.class,
-                    orderIdParameterSupplier(priceDtoSearchField.getSearchField()));
-            Price price = mapToEntityFunction().apply(priceDtoSearchField.getNewEntityDto());
-            Payment payment = orderItem.getPayment();
-            Price existingFullPrice = payment.getTotalPrice();
-            existingFullPrice.setAmount(price.getAmount());
-            existingFullPrice.setCurrency(price.getCurrency());
-            session.merge(existingFullPrice);
-        });
-    }
-
-    @Override
-    public void updateFullPriceByArticularId(PriceDtoSearchField priceDtoSearchField) {
-        entityOperationDao.updateEntity(session -> {
-            ItemData itemData = queryService.getEntity(
-                    ItemData.class,
-                    articularIdParameterSupplier(priceDtoSearchField.getSearchField()));
-            Price price = mapToEntityFunction().apply(priceDtoSearchField.getNewEntityDto());
-            Price existingFullPrice = itemData.getFullPrice();
-            existingFullPrice.setAmount(price.getAmount());
-            existingFullPrice.setCurrency(price.getCurrency());
-            session.merge(existingFullPrice);
-        });
-    }
-
-    @Override
-    public void updateTotalPriceByArticularId(PriceDtoSearchField priceDtoSearchField) {
-        entityOperationDao.updateEntity(session -> {
-            ItemData itemData = queryService.getEntity(
-                    ItemData.class,
-                    articularIdParameterSupplier(priceDtoSearchField.getSearchField()));
-            Price price = mapToEntityFunction().apply(priceDtoSearchField.getNewEntityDto());
-            Price existingFullPrice = itemData.getTotalPrice();
-            existingFullPrice.setAmount(price.getAmount());
-            existingFullPrice.setCurrency(price.getCurrency());
-            session.merge(existingFullPrice);
-        });
-    }
-
-
-    @Override
-    public void deleteFullPriceByOrderId(OneFieldEntityDto oneFieldEntityDto) {
-        entityOperationDao.deleteEntity(orderItemFullPriceSupplier(oneFieldEntityDto.getValue()));
-    }
-
-    @Override
-    public void deleteTotalPriceByOrderId(OneFieldEntityDto oneFieldEntityDto) {
-        entityOperationDao.deleteEntity(orderItemTotalPriceSupplier(oneFieldEntityDto.getValue()));
-    }
-
-    @Override
-    public void deleteFullPriceByArticularId(OneFieldEntityDto oneFieldEntityDto) {
-        entityOperationDao.deleteEntity(articularIdFullPriceSupplier(oneFieldEntityDto.getValue()));
-    }
-
-    @Override
-    public void deleteTotalPriceByArticularId(OneFieldEntityDto oneFieldEntityDto) {
-        entityOperationDao.deleteEntity(articularIdTotalPriceSupplier(oneFieldEntityDto.getValue()));
-    }
-
-    @Override
-    public PriceDto getFullPriceByOrderId(OneFieldEntityDto oneFieldEntityDto) {
+    public PriceDto getPriceByOrderId(OneFieldEntityDto oneFieldEntityDto, PriceType priceType) {
         return queryService.getEntityDto(
-                OrderItem.class,
-                orderIdParameterSupplier(oneFieldEntityDto.getValue()),
-                mapOrderItemToFullPriceDtoFunction());
+                OrderItemData.class,
+                supplierService.parameterStringSupplier("order_id", oneFieldEntityDto.getValue()),
+                transformationFunctionService.getTransformationFunction(
+                        OrderItemData.class, PriceDto.class, priceType.getValue()));
     }
 
     @Override
-    public PriceDto getTotalPriceByOrderId(OneFieldEntityDto oneFieldEntityDto) {
+    public PriceDto getPriceByArticularId(OneFieldEntityDto oneFieldEntityDto, PriceType priceType) {
         return queryService.getEntityDto(
-                OrderItem.class,
-                orderIdParameterSupplier(oneFieldEntityDto.getValue()),
-                mapOrderItemToTotalPriceDtoFunction());
+                ItemDataOption.class,
+                supplierService.parameterStringSupplier("articularId", oneFieldEntityDto.getValue()),
+                transformationFunctionService.getTransformationFunction(
+                        ItemDataOption.class, PriceDto.class, priceType.getValue()));
     }
 
     @Override
-    public PriceDto getFullPriceByArticularId(OneFieldEntityDto oneFieldEntityDto) {
+    public ResponsePriceDto getResponsePriceDtoByArticularId(OneFieldEntityDto oneFieldEntityDto) {
         return queryService.getEntityDto(
-                ItemData.class,
-                articularIdParameterSupplier(oneFieldEntityDto.getValue()),
-                mapItemToFullPriceDtoFunction());
+                ItemDataOption.class,
+                supplierService.parameterStringSupplier("articularId", oneFieldEntityDto.getValue()),
+                transformationFunctionService.getTransformationFunction(ItemDataOption.class, ResponsePriceDto.class));
     }
 
     @Override
-    public PriceDto getTotalPriceByArticularId(OneFieldEntityDto oneFieldEntityDto) {
+    public ResponsePriceDto getResponsePriceDtoByOrderId(OneFieldEntityDto oneFieldEntityDto) {
         return queryService.getEntityDto(
-                ItemData.class,
-                articularIdParameterSupplier(oneFieldEntityDto.getValue()),
-                mapItemToTotalPriceDtoFunction());
+                OrderItemData.class,
+                supplierService.parameterStringSupplier("order_id", oneFieldEntityDto.getValue()),
+                transformationFunctionService.getTransformationFunction(OrderItemData.class, ResponsePriceDto.class));
     }
 
     @Override
     public List<PriceDto> getPrices() {
-        return entityOperationDao.getEntityDtoList(mapPriceToPriceDtoFunction());
+        return entityOperationDao.getEntityDtoList(
+                transformationFunctionService.getTransformationFunction(Price.class, PriceDto.class));
     }
 
-    private Supplier<Parameter> orderIdParameterSupplier(String value) {
-        return () -> parameterFactory.createStringParameter("orderId", value);
+    private void updateFullPrice(Payment payment, Price price) {
+        Price existingPrice = payment.getFullPrice();
+        if (existingPrice != null) {
+            price.setId(existingPrice.getId());
+        }
+        payment.setFullPrice(price);
     }
 
-    private Supplier<Parameter> articularIdParameterSupplier(String value) {
-        return () -> parameterFactory.createStringParameter("articularId", value);
+    private void updateTotalPrice(Payment payment, Price price) {
+        Price existingPrice = payment.getTotalPrice();
+        if (existingPrice != null) {
+            price.setId(existingPrice.getId());
+        }
+        payment.setTotalPrice(price);
     }
 
-    private Supplier<Price> orderItemFullPriceSupplier(String value) {
-        return () -> {
-            OrderItem orderItem = queryService.getEntity(
-                    OrderItem.class,
-                    orderIdParameterSupplier(value));
-            return orderItem.getPayment().getFullPrice();
-        };
+    private void updateFullPrice(ItemDataOption itemDataOption, Price price) {
+        Price existingPrice = itemDataOption.getFullPrice();
+        if (existingPrice != null) {
+            price.setId(existingPrice.getId());
+        }
+        itemDataOption.setFullPrice(price);
     }
 
-    private Supplier<Price> orderItemTotalPriceSupplier(String value) {
-        return () -> {
-            OrderItem orderItem = queryService.getEntity(
-                    OrderItem.class,
-                    orderIdParameterSupplier(value));
-            return orderItem.getPayment().getTotalPrice();
-        };
-    }
-
-    private Supplier<Price> articularIdFullPriceSupplier(String value) {
-        return () -> {
-            ItemData itemData = queryService.getEntity(
-                    ItemData.class,
-                    articularIdParameterSupplier(value));
-            return itemData.getFullPrice();
-        };
-    }
-
-    private Supplier<Price> articularIdTotalPriceSupplier(String value) {
-        return () -> {
-            ItemData itemData = queryService.getEntity(
-                    ItemData.class,
-                    articularIdParameterSupplier(value));
-            return itemData.getTotalPrice();
-        };
-    }
-
-    private Function<PriceDto, Price> mapToEntityFunction() {
-        return priceDto -> {
-            Currency currency = entityCachedMap.getEntity(
-                    Currency.class,
-                    "value",
-                    priceDto.getCurrency());
-            return Price.builder()
-                    .amount(priceDto.getAmount())
-                    .currency(currency)
-                    .build();
-        };
-    }
-
-    private Function<OrderItem, PriceDto> mapOrderItemToFullPriceDtoFunction() {
-        return orderItem -> {
-            Price fullPrice = orderItem.getPayment().getFullPrice();
-            return PriceDto.builder()
-                    .amount(fullPrice.getAmount())
-                    .currency(fullPrice.getCurrency().getValue())
-                    .build();
-        };
-    }
-
-    private Function<OrderItem, PriceDto> mapOrderItemToTotalPriceDtoFunction() {
-        return orderItem -> {
-            Price fullPrice = orderItem.getPayment().getTotalPrice();
-            return PriceDto.builder()
-                    .amount(fullPrice.getAmount())
-                    .currency(fullPrice.getCurrency().getValue())
-                    .build();
-        };
-    }
-
-    private Function<ItemData, PriceDto> mapItemToFullPriceDtoFunction() {
-        return itemData -> {
-            Price fullPrice = itemData.getFullPrice();
-            return PriceDto.builder()
-                    .amount(fullPrice.getAmount())
-                    .currency(fullPrice.getCurrency().getValue())
-                    .build();
-        };
-    }
-
-    private Function<ItemData, PriceDto> mapItemToTotalPriceDtoFunction() {
-        return itemData -> {
-            Price fullPrice = itemData.getTotalPrice();
-            return PriceDto.builder()
-                    .amount(fullPrice.getAmount())
-                    .currency(fullPrice.getCurrency().getValue())
-                    .build();
-        };
-    }
-
-    private Function<Price, PriceDto> mapPriceToPriceDtoFunction() {
-        return price -> PriceDto.builder()
-                .amount(price.getAmount())
-                .currency(price.getCurrency().getValue())
-                .build();
+    private void updateTotalPrice(ItemDataOption itemDataOption, Price price) {
+        Price existingPrice = itemDataOption.getTotalPrice();
+        if (existingPrice != null) {
+            price.setId(existingPrice.getId());
+        }
+        itemDataOption.setTotalPrice(price);
     }
 }

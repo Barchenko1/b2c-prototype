@@ -366,7 +366,7 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
             s.persist(userProfile);
         };
 
-        dao.saveEntity(consumer);
+        dao.executeConsumer(consumer);
         verifyExpectedData("/datasets/user/user_profile/saveUserProfileDataSet.yml");
     }
 
@@ -378,7 +378,7 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.saveEntity(consumer);
+            dao.executeConsumer(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -413,7 +413,7 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
             UserProfile userProfile = prepareUpdateUserProfile();
             s.merge(userProfile);
         };
-        dao.updateEntity(consumer);
+        dao.executeConsumer(consumer);
         verifyExpectedData("/datasets/user/user_profile/updateUserProfileDataSet.yml");
     }
 
@@ -427,7 +427,7 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.updateEntity(consumer);
+            dao.executeConsumer(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -451,7 +451,7 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
             s.remove(userProfile);
         };
 
-        dao.deleteEntity(consumer);
+        dao.executeConsumer(consumer);
         verifyExpectedData("/datasets/user/user_profile/emptyUserProfileWithoutDetailsDataSet.yml");
     }
 
@@ -463,7 +463,7 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            dao.deleteEntity(consumer);
+            dao.executeConsumer(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());

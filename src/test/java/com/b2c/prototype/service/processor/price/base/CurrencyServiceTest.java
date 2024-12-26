@@ -3,18 +3,22 @@ package com.b2c.prototype.service.processor.price.base;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDtoUpdate;
 import com.b2c.prototype.modal.entity.price.Currency;
+import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.processor.AbstractOneFieldEntityServiceTest;
 import com.tm.core.processor.finder.parameter.Parameter;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 class CurrencyServiceTest extends AbstractOneFieldEntityServiceTest<Currency> {
-    
+    @Mock
+    private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
     private CurrencyService currencyService;
 
@@ -27,7 +31,9 @@ class CurrencyServiceTest extends AbstractOneFieldEntityServiceTest<Currency> {
     public void testSaveEntity() {
         OneFieldEntityDto dto = new OneFieldEntityDto("testValue");
         Currency testValue = createTestValue();
-
+        Function<OneFieldEntityDto, Currency> mockFunction = input -> testValue;
+        when(transformationFunctionService.getTransformationFunction(OneFieldEntityDto.class, Currency.class))
+                .thenReturn(mockFunction);
         currencyService.saveEntity(dto);
 
         verifySaveEntity(testValue);
@@ -37,14 +43,17 @@ class CurrencyServiceTest extends AbstractOneFieldEntityServiceTest<Currency> {
     public void testUpdateEntity() {
         OneFieldEntityDto oldDto = new OneFieldEntityDto("oldValue");
         OneFieldEntityDto newDto = new OneFieldEntityDto("newValue");
-        OneFieldEntityDtoUpdate dtoUpdate = new OneFieldEntityDtoUpdate();
-        dtoUpdate.setOldEntityDto(oldDto);
-        dtoUpdate.setNewEntityDto(newDto);
+        OneFieldEntityDtoUpdate dtoUpdate = OneFieldEntityDtoUpdate.builder()
+                .oldEntity(oldDto)
+                .newEntity(newDto)
+                .build();
 
         Currency testValue = Currency.builder()
                 .value("newValue")
                 .build();
-
+        Function<OneFieldEntityDto, Currency> mockFunction = input -> testValue;
+        when(transformationFunctionService.getTransformationFunction(OneFieldEntityDto.class, Currency.class))
+                .thenReturn(mockFunction);
         currencyService.updateEntity(dtoUpdate);
 
         verifyUpdateEntity(testValue, dtoUpdate);
@@ -54,7 +63,9 @@ class CurrencyServiceTest extends AbstractOneFieldEntityServiceTest<Currency> {
     public void testDeleteEntity() {
         OneFieldEntityDto dto = new OneFieldEntityDto("testValue");
         Currency testValue = createTestValue();
-
+        Function<OneFieldEntityDto, Currency> mockFunction = input -> testValue;
+        when(transformationFunctionService.getTransformationFunction(OneFieldEntityDto.class, Currency.class))
+                .thenReturn(mockFunction);
         currencyService.deleteEntity(dto);
 
         verifyDeleteEntity(testValue, dto);

@@ -22,7 +22,7 @@ public class PaymentController {
 
     @PostMapping(value = "/payment", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createNewPayment(@RequestBody final PaymentDto paymentDto) {
-        paymentService.savePayment(paymentDto);
+//        paymentService.saveUpdatePayment(paymentDto);
 
         return new ResponseEntity<>(HttpStatusCode.valueOf(200));
     }

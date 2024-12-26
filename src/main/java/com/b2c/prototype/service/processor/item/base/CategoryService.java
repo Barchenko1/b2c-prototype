@@ -1,6 +1,6 @@
 package com.b2c.prototype.service.processor.item.base;
 
-import com.b2c.prototype.dao.cashed.IEntityCachedMap;
+import com.b2c.prototype.dao.cashed.ISingleValueMap;
 import com.b2c.prototype.dao.item.ICategoryDao;
 import com.b2c.prototype.modal.dto.request.CategoryDto;
 import com.b2c.prototype.modal.dto.update.CategoryDtoUpdate;
@@ -22,12 +22,12 @@ import java.util.Optional;
 public class CategoryService extends AbstractTransitiveSelfEntityService implements ICategoryService {
 
     private final ICategoryDao categoryDao;
-    private final IEntityCachedMap entityCachedMap;
+    private final ISingleValueMap singleValueMap;
 
     public CategoryService(ICategoryDao categoryDao,
-                           IEntityCachedMap entityCachedMap) {
+                           ISingleValueMap singleValueMap) {
         this.categoryDao = categoryDao;
-        this.entityCachedMap = entityCachedMap;
+        this.singleValueMap = singleValueMap;
     }
 
     @Override
@@ -40,19 +40,19 @@ public class CategoryService extends AbstractTransitiveSelfEntityService impleme
         Category newCategory = buildCategory(categoryDto);
 
         super.saveEntityTree(newCategory);
-        addNewEntityTreeToMap(entityCachedMap, newCategory);
+        addNewEntityTreeToMap(singleValueMap, newCategory);
     }
 
     @Override
     public void updateCategory(CategoryDtoUpdate categoryDtoUpdate) {
-        Category oldCategory = buildCategory(categoryDtoUpdate.getOldEntityDto());
-        Category newCategory = buildCategory(categoryDtoUpdate.getNewEntityDto());
+        Category oldCategory = buildCategory(categoryDtoUpdate.getOldEntity());
+        Category newCategory = buildCategory(categoryDtoUpdate.getNewEntity());
 
-        CategoryDto oldCategoryDto = categoryDtoUpdate.getOldEntityDto();
+        CategoryDto oldCategoryDto = categoryDtoUpdate.getOldEntity();
         Parameter parameter =
                 parameterFactory.createStringParameter("name", oldCategoryDto.getName());
         categoryDao.updateEntityTreeOldMain(newCategory, parameter);
-        updateEntityTreeOldMainMap(entityCachedMap, oldCategory, newCategory);
+        updateEntityTreeOldMainMap(singleValueMap, oldCategory, newCategory);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class CategoryService extends AbstractTransitiveSelfEntityService impleme
         Parameter parameter =
                 parameterFactory.createStringParameter("name", categoryDto.getName());
         categoryDao.deleteEntityTree(parameter);
-        deleteEntityFromMap(entityCachedMap, oldCategory);
+        deleteEntityFromMap(singleValueMap, oldCategory);
     }
 
     @Override
@@ -117,15 +117,15 @@ public class CategoryService extends AbstractTransitiveSelfEntityService impleme
         return category;
     }
 
-    private <E extends TransitiveSelfEntity> void deleteEntityFromMap(IEntityCachedMap entityCachedMap, E entity) {
-        entityCachedMap.removeEntity(Category.class, entity.getRootField());
+    private <E extends TransitiveSelfEntity> void deleteEntityFromMap(ISingleValueMap singleValueMap, E entity) {
+        singleValueMap.removeEntity(Category.class, entity.getRootField());
         if (entity.getChildNodeList() != null) {
             entity.getChildNodeList().forEach(childNode ->
-                    entityCachedMap.removeEntity(Category.class, childNode.getRootField()));
+                    singleValueMap.removeEntity(Category.class, childNode.getRootField()));
         }
     }
 
-    private <E extends TransitiveSelfEntity> void addNewEntityTreeToMap(IEntityCachedMap entityMapWrapper, E entity) {
+    private <E extends TransitiveSelfEntity> void addNewEntityTreeToMap(ISingleValueMap entityMapWrapper, E entity) {
         if (entity.getParent() != null) {
             entityMapWrapper.putEntity(Category.class, entity.getParent().getRootField(), entity.getParent());
         }
@@ -136,9 +136,9 @@ public class CategoryService extends AbstractTransitiveSelfEntityService impleme
         }
     }
 
-    private <E extends TransitiveSelfEntity> void updateEntityTreeOldMainMap(IEntityCachedMap entityMapWrapper, E oldEntity, E newEntity) {
+    private <E extends TransitiveSelfEntity> void updateEntityTreeOldMainMap(ISingleValueMap entityMapWrapper, E oldEntity, E newEntity) {
         if (oldEntity.getParent() != null) {
-            entityMapWrapper.updateEntity(
+            entityMapWrapper.putRemoveEntity(
                     Category.class,
                     oldEntity.getParent().getRootField(),
                     newEntity.getParent().getRootField(),

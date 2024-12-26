@@ -3,19 +3,23 @@ package com.b2c.prototype.service.processor.message;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDtoUpdate;
 import com.b2c.prototype.modal.entity.message.MessageType;
+import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.processor.AbstractOneFieldEntityServiceTest;
 import com.b2c.prototype.service.processor.message.base.MessageTypeService;
 import com.tm.core.processor.finder.parameter.Parameter;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 class MessageTypeServiceTest extends AbstractOneFieldEntityServiceTest<MessageType> {
-
+    @Mock
+    private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
     private MessageTypeService messageTypeService;
     
@@ -28,7 +32,9 @@ class MessageTypeServiceTest extends AbstractOneFieldEntityServiceTest<MessageTy
     public void testSaveEntity() {
         OneFieldEntityDto dto = new OneFieldEntityDto("testValue");
         MessageType testValue = createTestValue();
-
+        Function<OneFieldEntityDto, MessageType> mockFunction = input -> testValue;
+        when(transformationFunctionService.getTransformationFunction(OneFieldEntityDto.class, MessageType.class))
+                .thenReturn(mockFunction);
         messageTypeService.saveEntity(dto);
 
         verifySaveEntity(testValue);
@@ -38,14 +44,17 @@ class MessageTypeServiceTest extends AbstractOneFieldEntityServiceTest<MessageTy
     public void testUpdateEntity() {
         OneFieldEntityDto oldDto = new OneFieldEntityDto("oldValue");
         OneFieldEntityDto newDto = new OneFieldEntityDto("newValue");
-        OneFieldEntityDtoUpdate dtoUpdate = new OneFieldEntityDtoUpdate();
-        dtoUpdate.setOldEntityDto(oldDto);
-        dtoUpdate.setNewEntityDto(newDto);
+        OneFieldEntityDtoUpdate dtoUpdate = OneFieldEntityDtoUpdate.builder()
+                .oldEntity(oldDto)
+                .newEntity(newDto)
+                .build();
 
         MessageType testValue = MessageType.builder()
                 .value("newValue")
                 .build();
-
+        Function<OneFieldEntityDto, MessageType> mockFunction = input -> testValue;
+        when(transformationFunctionService.getTransformationFunction(OneFieldEntityDto.class, MessageType.class))
+                .thenReturn(mockFunction);
         messageTypeService.updateEntity(dtoUpdate);
 
         verifyUpdateEntity(testValue, dtoUpdate);
@@ -55,7 +64,9 @@ class MessageTypeServiceTest extends AbstractOneFieldEntityServiceTest<MessageTy
     public void testDeleteEntity() {
         OneFieldEntityDto dto = new OneFieldEntityDto("testValue");
         MessageType testValue = createTestValue();
-
+        Function<OneFieldEntityDto, MessageType> mockFunction = input -> testValue;
+        when(transformationFunctionService.getTransformationFunction(OneFieldEntityDto.class, MessageType.class))
+                .thenReturn(mockFunction);
         messageTypeService.deleteEntity(dto);
 
         verifyDeleteEntity(testValue, dto);

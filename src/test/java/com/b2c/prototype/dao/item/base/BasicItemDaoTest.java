@@ -3,12 +3,11 @@ package com.b2c.prototype.dao.item.base;
 import com.b2c.prototype.dao.AbstractGeneralEntityDaoTest;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
-import com.b2c.prototype.modal.entity.item.CurrencyDiscount;
+import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.item.Item;
 import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.modal.entity.item.ItemStatus;
 import com.b2c.prototype.modal.entity.item.ItemType;
-import com.b2c.prototype.modal.entity.item.PercentDiscount;
 import com.b2c.prototype.modal.entity.item.Rating;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
@@ -61,7 +60,6 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
         try (Connection connection = connectionHolder.getConnection()) {
             connection.setAutoCommit(false);
             Statement statement = connection.createStatement();
-            statement.execute("DELETE FROM item_data_quantity_item_data");
             statement.execute("DELETE FROM item_review");
             statement.execute("DELETE FROM item_post");
             statement.execute("DELETE FROM item_data_option");
@@ -74,11 +72,11 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
     private static IEntityMappingManager getEntityMappingManager() {
         EntityTable brandEntityTable = new EntityTable(Brand.class, "brand");
         EntityTable categoryEntityTable = new EntityTable(Category.class, "category");
-        EntityTable discountEntityTable = new EntityTable(CurrencyDiscount.class, "currency_discount");
+        EntityTable discountEntityTable = new EntityTable(Discount.class, "discount");
         EntityTable itemStatusEntityTable = new EntityTable(ItemStatus.class, "item_status");
         EntityTable itemTypeEntityTable = new EntityTable(ItemType.class, "item_type");
         EntityTable optionGroupEntityTable = new EntityTable(OptionGroup.class, "option_group");
-        EntityTable optionItemEntityTable = new EntityTable(CurrencyDiscount.class, "option_item");
+        EntityTable optionItemEntityTable = new EntityTable(OptionItem.class, "option_item");
         EntityTable currencyEntityTable = new EntityTable(Currency.class, "currency");
         EntityTable priceEntityTable = new EntityTable(Price.class, "price");
         EntityTable ratingEntityTable = new EntityTable(Rating.class, "rating");
@@ -192,10 +190,12 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
                 .id(1L)
                 .value("USD")
                 .build();
-        CurrencyDiscount currencyDiscount = CurrencyDiscount.builder()
+        Discount discount = Discount.builder()
                 .id(1L)
                 .amount(10)
                 .charSequenceCode("abc")
+                .isPercent(false)
+                .isActive(true)
                 .currency(currency)
                 .build();
         ItemStatus itemStatus = ItemStatus.builder()
@@ -227,20 +227,11 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
                 .build();
         ItemData itemData = ItemData.builder()
                 .id(1L)
-                .name("name")
-                .articularId("100")
-                .dateOfCreate(100L)
                 .category(category)
                 .brand(brand)
-                .currencyDiscount(currencyDiscount)
                 .status(itemStatus)
                 .itemType(itemType)
-                .fullPrice(price)
-                .totalPrice(price)
                 .build();
-
-        itemData.addOptionItem(optionItem1);
-        itemData.addOptionItem(optionItem2);
 
         Item item = Item.builder()
                 .itemData(itemData)
@@ -261,10 +252,12 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
                 .id(1L)
                 .value("USD")
                 .build();
-        CurrencyDiscount currencyDiscount = CurrencyDiscount.builder()
+        Discount discount = Discount.builder()
                 .id(1L)
-                .amount(5)
+                .amount(10)
                 .charSequenceCode("abc")
+                .isPercent(false)
+                .isActive(true)
                 .currency(currency)
                 .build();
         ItemStatus itemStatus = ItemStatus.builder()
@@ -297,20 +290,11 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
 
         ItemData itemData = ItemData.builder()
                 .id(1L)
-                .name("name")
-                .articularId("100")
-                .dateOfCreate(100L)
                 .category(category)
                 .brand(brand)
-                .currencyDiscount(currencyDiscount)
                 .status(itemStatus)
                 .itemType(itemType)
-                .fullPrice(price)
-                .totalPrice(price)
                 .build();
-
-        itemData.addOptionItem(optionItem1);
-        itemData.addOptionItem(optionItem2);
 
         Item item = Item.builder()
                 .id(1L)
@@ -332,16 +316,13 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
                 .id(1L)
                 .value("USD")
                 .build();
-        CurrencyDiscount currencyDiscount = CurrencyDiscount.builder()
+        Discount discount = Discount.builder()
                 .id(1L)
-                .amount(5)
+                .amount(10)
                 .charSequenceCode("abc")
+                .isPercent(false)
+                .isActive(true)
                 .currency(currency)
-                .build();
-        PercentDiscount percentDiscount = PercentDiscount.builder()
-                .id(1L)
-                .amount(5)
-                .charSequenceCode("abc")
                 .build();
         ItemStatus itemStatus = ItemStatus.builder()
                 .id(1L)
@@ -373,21 +354,12 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
 
         ItemData itemData = ItemData.builder()
                 .id(1L)
-                .name("Update name")
-                .articularId("200")
-                .dateOfCreate(200L)
                 .category(category)
+                .itemId("123")
                 .brand(brand)
-                .currencyDiscount(currencyDiscount)
-                .percentDiscount(percentDiscount)
                 .status(itemStatus)
                 .itemType(itemType)
-                .fullPrice(price)
-                .totalPrice(price)
                 .build();
-
-        itemData.addOptionItem(optionItem1);
-        itemData.addOptionItem(optionItem2);
 
         Item item = Item.builder()
                 .id(1L)
@@ -495,7 +467,7 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
             s.persist(item);
         };
 
-        dao.saveEntity(consumer);
+        dao.executeConsumer(consumer);
         verifyExpectedData("/datasets/item/item/saveItemSet.yml");
     }
 
@@ -507,7 +479,7 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.saveEntity(consumer);
+            dao.executeConsumer(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -542,7 +514,7 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
             Item itemToUpdate = prepareToUpdateItem();
             s.merge(itemToUpdate);
         };
-        dao.updateEntity(consumer);
+        dao.executeConsumer(consumer);
         verifyExpectedData("/datasets/item/item/updateItemSet.yml");
     }
 
@@ -554,7 +526,7 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.updateEntity(itemConsumer);
+            dao.executeConsumer(itemConsumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -577,7 +549,7 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
             s.remove(item);
         };
 
-        dao.deleteEntity(consumer);
+        dao.executeConsumer(consumer);
         verifyExpectedData("/datasets/item/item/emptyItemSet.yml");
     }
 
@@ -589,7 +561,7 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            dao.deleteEntity(consumer);
+            dao.executeConsumer(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());

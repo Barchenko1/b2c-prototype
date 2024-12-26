@@ -1,9 +1,7 @@
 package com.b2c.prototype.modal.entity.payment;
 
 import com.b2c.prototype.modal.base.AbstractPayment;
-import com.b2c.prototype.modal.entity.item.CurrencyDiscount;
-import com.b2c.prototype.modal.entity.item.PercentDiscount;
-import com.b2c.prototype.modal.entity.price.Price;
+import com.b2c.prototype.modal.entity.item.Discount;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -29,7 +27,5 @@ public class Payment extends AbstractPayment {
     @JoinColumn(name = "credit_card_id")
     private CreditCard creditCard;
     @ManyToOne(fetch = FetchType.LAZY, cascade =  CascadeType.MERGE)
-    private CurrencyDiscount currencyDiscount;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    private PercentDiscount percentDiscount;
+    private Discount discount;
 }

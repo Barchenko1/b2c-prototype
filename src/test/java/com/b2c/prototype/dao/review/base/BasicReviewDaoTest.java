@@ -4,7 +4,7 @@ import com.b2c.prototype.dao.AbstractSingleEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
-import com.b2c.prototype.modal.entity.item.CurrencyDiscount;
+import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.item.Item;
 import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.modal.entity.item.ItemStatus;
@@ -163,10 +163,12 @@ class BasicReviewDaoTest extends AbstractSingleEntityDaoTest {
                 .id(1L)
                 .value("USD")
                 .build();
-        CurrencyDiscount currencyDiscount = CurrencyDiscount.builder()
+        Discount discount = Discount.builder()
                 .id(1L)
                 .amount(5)
                 .charSequenceCode("abc")
+                .isActive(true)
+                .isPercent(false)
                 .currency(currency)
                 .build();
         ItemStatus itemStatus = ItemStatus.builder()
@@ -199,20 +201,11 @@ class BasicReviewDaoTest extends AbstractSingleEntityDaoTest {
 
         ItemData itemData = ItemData.builder()
                 .id(1L)
-                .name("name")
-                .articularId("100")
-                .dateOfCreate(100L)
                 .category(category)
                 .brand(brand)
-                .currencyDiscount(currencyDiscount)
                 .status(itemStatus)
                 .itemType(itemType)
-                .fullPrice(price)
-                .totalPrice(price)
                 .build();
-
-        itemData.addOptionItem(optionItem1);
-        itemData.addOptionItem(optionItem2);
 
         Item item = Item.builder()
                 .id(1L)

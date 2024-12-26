@@ -220,9 +220,9 @@ public class InitializeConstantDbConfiguration {
             paymentMethodList.stream()
                     .map(paymentMethodName -> localizationInterpreter.interpret("payment.method", paymentMethodName.toLowerCase(), defaultLocale))
                     .filter(localizedName -> existingPaymentMethod.stream()
-                                    .noneMatch(paymentMethod -> paymentMethod.getMethod().equals(localizedName)))
+                                    .noneMatch(paymentMethod -> paymentMethod.getValue().equals(localizedName)))
                     .map(paymentMethodName -> PaymentMethod.builder()
-                            .method(paymentMethodName)
+                            .value(paymentMethodName)
                             .build())
                     .forEach(paymentMethodDao::persistEntity);
         }
@@ -384,7 +384,7 @@ public class InitializeConstantDbConfiguration {
                 };
                 //not work
 //                categoryDao.saveEntityTree(newCategory);
-                transactionWrapper.saveEntity(consumer);
+                transactionWrapper.executeConsumer(consumer);
             });
         });
     };

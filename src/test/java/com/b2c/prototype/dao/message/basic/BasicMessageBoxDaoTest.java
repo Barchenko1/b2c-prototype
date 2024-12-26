@@ -336,7 +336,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
             s.persist(messageBox);
         };
 
-        dao.saveEntity(consumer);
+        dao.executeConsumer(consumer);
         verifyExpectedData("/datasets/message/message_box/saveMessageBoxDataSet.yml");
     }
 
@@ -348,7 +348,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.saveEntity(consumer);
+            dao.executeConsumer(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -393,7 +393,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
             newMessage.setId(2L);
             s.merge(messageBox);
         };
-        dao.updateEntity(consumer);
+        dao.executeConsumer(consumer);
         verifyExpectedData("/datasets/message/message_box/updateMessageBoxDataSet.yml");
     }
 
@@ -405,7 +405,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.updateEntity(consumer);
+            dao.executeConsumer(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -428,7 +428,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
             s.remove(messageBox);
         };
 
-        dao.deleteEntity(consumer);
+        dao.executeConsumer(consumer);
         verifyExpectedData("/datasets/message/message_box/emptyMessageBoxDataSet.yml");
     }
 
@@ -440,7 +440,7 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            dao.deleteEntity(consumer);
+            dao.executeConsumer(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());

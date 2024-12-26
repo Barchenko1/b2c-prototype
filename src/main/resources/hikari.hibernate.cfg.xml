@@ -25,10 +25,11 @@
         <property name="hibernate.connection.provider_class">org.hibernate.hikaricp.internal.HikariCPConnectionProvider</property>
         <property name="hibernate.connection.isolation">2</property>
         <!-- add annotated resources here -->
-        <mapping class="com.b2c.prototype.modal.entity.order.OrderItem" />
+        <mapping class="com.b2c.prototype.modal.entity.order.OrderItemData" />
         <mapping class="com.b2c.prototype.modal.entity.order.OrderStatus" />
 
         <mapping class="com.b2c.prototype.modal.entity.payment.PaymentMethod" />
+        <mapping class="com.b2c.prototype.modal.entity.payment.PaymentStatus" />
         <mapping class="com.b2c.prototype.modal.entity.payment.Payment" />
 
         <mapping class="com.b2c.prototype.modal.entity.address.Address" />
@@ -41,9 +42,7 @@
         <mapping class="com.b2c.prototype.modal.entity.price.Price" />
         <mapping class="com.b2c.prototype.modal.entity.payment.CreditCard" />
 
-        <mapping class="com.b2c.prototype.modal.entity.item.CurrencyDiscount" />
-        <mapping class="com.b2c.prototype.modal.entity.item.PercentDiscount" />
-        <mapping class="com.b2c.prototype.modal.entity.payment.Payment" />
+        <mapping class="com.b2c.prototype.modal.entity.item.Discount" />
 
         <mapping class="com.b2c.prototype.modal.entity.item.Brand" />
         <mapping class="com.b2c.prototype.modal.entity.item.Category" />
@@ -57,7 +56,7 @@
 
         <mapping class="com.b2c.prototype.modal.entity.item.ItemData" />
         <mapping class="com.b2c.prototype.modal.entity.item.Item" />
-        <mapping class="com.b2c.prototype.modal.entity.item.ItemDataQuantity" />
+        <mapping class="com.b2c.prototype.modal.entity.item.ItemDataOptionQuantity" />
 
         <mapping class="com.b2c.prototype.modal.entity.message.MessageType" />
         <mapping class="com.b2c.prototype.modal.entity.message.MessageStatus" />

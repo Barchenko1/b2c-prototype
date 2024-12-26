@@ -45,6 +45,7 @@ contact_info:
   - id: 1
     name: "Wolter"
     secondName: "White"
+    ordernumber: 0
     contact_phone_id: 1
 country:
   - id: 1
@@ -73,7 +74,7 @@ credit_card:
     cvv: 818
     ownerName: "name"
     ownerSecondName: "secondName"
-    isactive: true
+    isActive: true
 user_profile:
   - id: 1
     username: "username"

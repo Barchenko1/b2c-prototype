@@ -3,18 +3,22 @@ package com.b2c.prototype.service.processor.store.base;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDtoUpdate;
 import com.b2c.prototype.modal.entity.store.CountType;
+import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.processor.AbstractOneFieldEntityServiceTest;
 import com.tm.core.processor.finder.parameter.Parameter;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 public class CountTypeServiceTest extends AbstractOneFieldEntityServiceTest<CountType> {
-
+    @Mock
+    private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
     private CountTypeService countTypeService;
 
@@ -27,7 +31,9 @@ public class CountTypeServiceTest extends AbstractOneFieldEntityServiceTest<Coun
     public void testSaveEntity() {
         OneFieldEntityDto dto = new OneFieldEntityDto("testValue");
         CountType testValue = createTestValue();
-
+        Function<OneFieldEntityDto, CountType> mockFunction = input -> testValue;
+        when(transformationFunctionService.getTransformationFunction(OneFieldEntityDto.class, CountType.class))
+                .thenReturn(mockFunction);
         countTypeService.saveEntity(dto);
 
         verifySaveEntity(testValue);
@@ -37,14 +43,17 @@ public class CountTypeServiceTest extends AbstractOneFieldEntityServiceTest<Coun
     public void testUpdateEntity() {
         OneFieldEntityDto oldDto = new OneFieldEntityDto("oldValue");
         OneFieldEntityDto newDto = new OneFieldEntityDto("newValue");
-        OneFieldEntityDtoUpdate dtoUpdate = new OneFieldEntityDtoUpdate();
-        dtoUpdate.setOldEntityDto(oldDto);
-        dtoUpdate.setNewEntityDto(newDto);
+        OneFieldEntityDtoUpdate dtoUpdate = OneFieldEntityDtoUpdate.builder()
+                .oldEntity(oldDto)
+                .newEntity(newDto)
+                .build();
 
         CountType testValue = CountType.builder()
                 .value("newValue")
                 .build();
-
+        Function<OneFieldEntityDto, CountType> mockFunction = input -> testValue;
+        when(transformationFunctionService.getTransformationFunction(OneFieldEntityDto.class, CountType.class))
+                .thenReturn(mockFunction);
         countTypeService.updateEntity(dtoUpdate);
 
         verifyUpdateEntity(testValue, dtoUpdate);
@@ -54,7 +63,9 @@ public class CountTypeServiceTest extends AbstractOneFieldEntityServiceTest<Coun
     public void testDeleteEntity() {
         OneFieldEntityDto dto = new OneFieldEntityDto("testValue");
         CountType testValue = createTestValue();
-
+        Function<OneFieldEntityDto, CountType> mockFunction = input -> testValue;
+        when(transformationFunctionService.getTransformationFunction(OneFieldEntityDto.class, CountType.class))
+                .thenReturn(mockFunction);
         countTypeService.deleteEntity(dto);
 
         verifyDeleteEntity(testValue, dto);

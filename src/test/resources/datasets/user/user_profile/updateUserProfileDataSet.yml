@@ -37,10 +37,11 @@ credit_card:
     cvv: 818
     ownerName: "Update name"
     ownerSecondName: "Update secondName"
-    isactive: true
+    isActive: true
 user_profile:
   - id: 1
     username: "Update username"
+    user_id: "123"
     email: "Update email"
     dateOfCreate: 200
     isActive: false

@@ -1,6 +1,6 @@
 package com.b2c.prototype.service.processor;
 
-import com.b2c.prototype.dao.cashed.IEntityCachedMap;
+import com.b2c.prototype.dao.cashed.ISingleValueMap;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDtoUpdate;
 import com.tm.core.dao.common.IEntityDao;
@@ -21,7 +21,7 @@ public abstract class AbstractOneFieldEntityServiceTest<E> {
     protected IEntityDao dao;
 
     @Mock
-    protected IEntityCachedMap entityCachedMap;
+    protected ISingleValueMap singleValueMap;
 
     @BeforeEach
     public void setUp() {
@@ -30,24 +30,24 @@ public abstract class AbstractOneFieldEntityServiceTest<E> {
 
     protected void verifySaveEntity(E entity) {
         verify(dao).persistEntity(entity);
-        verify(entityCachedMap).putEntity(entity.getClass(), getFieldName(), entity);
+        verify(singleValueMap).putEntity(entity.getClass(), getFieldName(), entity);
     }
 
     protected void verifyUpdateEntity(E entity, OneFieldEntityDtoUpdate oneFieldEntityDtoUpdate) {
-        String searchParameter = oneFieldEntityDtoUpdate.getOldEntityDto().getValue();
+        String searchParameter = oneFieldEntityDtoUpdate.getOldEntity().getValue();
         Parameter parameter = parameterFactory.createStringParameter(getFieldName(), searchParameter);
         verify(dao).findEntityAndUpdate(entity, parameter);
-        verify(entityCachedMap).updateEntity(
+        verify(singleValueMap).putRemoveEntity(
                 entity.getClass(),
                 searchParameter,
-                oneFieldEntityDtoUpdate.getNewEntityDto().getValue(),
+                oneFieldEntityDtoUpdate.getNewEntity().getValue(),
                 entity
         );
     }
 
     protected void verifyDeleteEntity(E entity, OneFieldEntityDto oneFieldEntityDto) {
         verify(dao).deleteEntity(entity);
-        verify(entityCachedMap).removeEntity(entity.getClass(), oneFieldEntityDto.getValue());
+        verify(singleValueMap).removeEntity(entity.getClass(), oneFieldEntityDto.getValue());
     }
 
     protected abstract String getFieldName();

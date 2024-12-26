@@ -1,6 +1,6 @@
 package com.b2c.prototype.dao.cached;
 
-import com.b2c.prototype.dao.cashed.EntityCachedMap;
+import com.b2c.prototype.dao.cashed.SingleValueMap;
 import com.tm.core.dao.query.ISearchWrapper;
 import com.tm.core.processor.finder.factory.IParameterFactory;
 import com.tm.core.processor.finder.parameter.Parameter;
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class EntityCachedMapTest {
+class singleValueMapTest {
 
     @Mock
     private ISearchWrapper searchWrapper;
@@ -34,7 +34,7 @@ class EntityCachedMapTest {
     @Mock
     private IParameterFactory parameterFactory;
 
-    private EntityCachedMap entityCachedMap;
+    private SingleValueMap singleValueMap;
     private Map<Class<?>, Map<?, ?>> initEntityMap;
     private Map<Class<?>, Map<Object, Object>> classEntityMap;
 
@@ -43,11 +43,11 @@ class EntityCachedMapTest {
         MockitoAnnotations.openMocks(this);
         initEntityMap = new HashMap<>();
         classEntityMap = new HashMap<>();
-        entityCachedMap = new EntityCachedMap(initEntityMap, searchWrapper);
+        singleValueMap = new SingleValueMap(initEntityMap, searchWrapper);
         try {
-            Field entityIdentifierDaoField = EntityCachedMap.class.getDeclaredField("classEntityMap");
+            Field entityIdentifierDaoField = SingleValueMap.class.getDeclaredField("classEntityMap");
             entityIdentifierDaoField.setAccessible(true);
-            entityIdentifierDaoField.set(entityCachedMap, classEntityMap);
+            entityIdentifierDaoField.set(singleValueMap, classEntityMap);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -58,7 +58,7 @@ class EntityCachedMapTest {
         Map<Object, Object> entityMap = new HashMap<>();
         classEntityMap.put(String.class, entityMap);
 
-        Map<Object, Object> result = entityCachedMap.getEntityMap(String.class);
+        Map<Object, Object> result = singleValueMap.getEntityMap(String.class);
 
         assertEquals(entityMap, result);
     }
@@ -74,7 +74,7 @@ class EntityCachedMapTest {
         when(searchWrapper.getOptionalEntitySupplier(eq(Object.class), any(Parameter.class)))
                 .thenReturn(() -> Optional.of(entity));
 
-        Optional<Object> result = entityCachedMap.getOptionalEntity(Object.class, key, value);
+        Optional<Object> result = singleValueMap.getOptionalEntity(Object.class, key, value);
 
         assertTrue(result.isPresent());
         assertEquals(entity, result.get());
@@ -90,7 +90,7 @@ class EntityCachedMapTest {
         entityMap.put(value, entity);
         classEntityMap.put(Object.class, entityMap);
 
-        Object result = entityCachedMap.getEntity(Object.class, key, value);
+        Object result = singleValueMap.getEntity(Object.class, key, value);
 
         assertEquals(entity, result);
         verify(searchWrapper, never()).getOptionalEntitySupplier(any(), any());
@@ -103,7 +103,7 @@ class EntityCachedMapTest {
         when(searchWrapper.getOptionalEntitySupplier(eq(Object.class), any(Parameter.class)))
                 .thenReturn(Optional::empty);
 
-        assertThrows(RuntimeException.class, () -> entityCachedMap.getEntity(Object.class, "id", 1L));
+        assertThrows(RuntimeException.class, () -> singleValueMap.getEntity(Object.class, "id", 1L));
 
         verify(searchWrapper, times(1)).getOptionalEntitySupplier(eq(Object.class), any(Parameter.class));
     }
@@ -116,7 +116,7 @@ class EntityCachedMapTest {
         when(searchWrapper.getOptionalEntitySupplier(eq(Object.class), any(Parameter.class)))
                 .thenReturn(() -> Optional.of(entity));
 
-        Object result = entityCachedMap.getEntity(Object.class, "str", "str");
+        Object result = singleValueMap.getEntity(Object.class, "str", "str");
 
         assertEquals(entity, result);
         verify(searchWrapper, times(1)).getOptionalEntitySupplier(eq(Object.class), any(Parameter.class));
@@ -131,7 +131,7 @@ class EntityCachedMapTest {
         when(searchWrapper.getOptionalEntitySupplier(eq(Object.class), any(Parameter.class)))
                 .thenReturn(() -> Optional.of(entity));
 
-        boolean result = entityCachedMap.isEntityExist(Object.class, "key", "dbValue");
+        boolean result = singleValueMap.isEntityExist(Object.class, "key", "dbValue");
 
         assertTrue(result);
         verify(searchWrapper, times(1)).getOptionalEntitySupplier(eq(Object.class), any(Parameter.class));
@@ -145,7 +145,7 @@ class EntityCachedMapTest {
         when(searchWrapper.getOptionalEntitySupplier(eq(Object.class), any(Parameter.class)))
                 .thenReturn(() -> Optional.of(entity));
 
-        boolean result = entityCachedMap.isEntityExist(Object.class, "str", "str");
+        boolean result = singleValueMap.isEntityExist(Object.class, "str", "str");
 
         assertTrue(result);
         verify(searchWrapper, times(1)).getOptionalEntitySupplier(eq(Object.class), any(Parameter.class));
@@ -159,7 +159,7 @@ class EntityCachedMapTest {
                 .thenReturn(Optional::empty);
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            entityCachedMap.getEntity(Object.class, "long", 1L);
+            singleValueMap.getEntity(Object.class, "long", 1L);
         });
 
         assertEquals(RuntimeException.class, exception.getClass());
@@ -173,7 +173,7 @@ class EntityCachedMapTest {
         when(searchWrapper.getOptionalEntitySupplier(eq(Object.class), any(Parameter.class)))
                 .thenReturn(() -> Optional.of(entity));
 
-        Object result = entityCachedMap.getEntity(Object.class, "boolean", true);
+        Object result = singleValueMap.getEntity(Object.class, "boolean", true);
 
         assertEquals(entity, result);
         verify(searchWrapper, times(1)).getOptionalEntitySupplier(eq(Object.class), any(Parameter.class));
@@ -187,7 +187,7 @@ class EntityCachedMapTest {
         when(searchWrapper.getOptionalEntitySupplier(eq(Object.class), any(Parameter.class)))
                 .thenReturn(() -> Optional.of(entity));
 
-        Object result = entityCachedMap.getEntity(Object.class, "double", 2.5);
+        Object result = singleValueMap.getEntity(Object.class, "double", 2.5);
 
         assertEquals(entity, result);
         verify(searchWrapper, times(1)).getOptionalEntitySupplier(eq(Object.class), any(Parameter.class));
@@ -200,7 +200,7 @@ class EntityCachedMapTest {
         Object entity = new Object();
         String key = "key";
 
-        entityCachedMap.putEntity(Object.class, key, entity);
+        singleValueMap.putEntity(Object.class, key, entity);
 
         assertEquals(entity, entityMap.get(key));
     }
@@ -212,7 +212,7 @@ class EntityCachedMapTest {
         Object entity = new Object();
         entityMap.put("oldKey", entity);
 
-        entityCachedMap.updateEntity(Object.class, "oldKey", "newKey", entity);
+        singleValueMap.putRemoveEntity(Object.class, "oldKey", "newKey", entity);
 
         assertNull(entityMap.get("oldKey"));
         assertEquals(entity, entityMap.get("newKey"));
@@ -227,7 +227,7 @@ class EntityCachedMapTest {
         String value = "value";
         entityMap.put(value, entity);
 
-        entityCachedMap.removeEntity(Object.class, value);
+        singleValueMap.removeEntity(Object.class, value);
 
         assertNull(entityMap.get(key));
     }
@@ -241,7 +241,7 @@ class EntityCachedMapTest {
         entityMap.put(1, entity1);
         entityMap.put(2, entity2);
 
-        List<Object> result = entityCachedMap.getEntityList(Object.class, "id", List.of(1, 2));
+        List<Object> result = singleValueMap.getEntityList(Object.class, "id", List.of(1, 2));
 
         assertEquals(List.of(entity1, entity2), result);
     }

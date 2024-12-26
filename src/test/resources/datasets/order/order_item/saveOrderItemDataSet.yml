@@ -14,15 +14,13 @@ price:
   - id: 1
     amount: 100
     currency_id: 1
-currency_discount:
+discount:
   - id: 1
     amount: 5
     charSequenceCode: "abc"
+    isActive: true
+    isPercent: false
     currency_id: 1
-percent_discount:
-  - id: 1
-    amount: 5
-    charSequenceCode: "abc"
 option_group:
   - id: 1
     value: "Size"
@@ -44,27 +42,20 @@ category:
     name: "child"
 item_data:
   - id: 1
-    name: "name"
-    articularId: "100"
-    dateOfCreate: "100"
     brand_id: 1
     category_id: 3
-    currencydiscount_id: 1
     itemtype_id: 1
     status_id: 1
-    fullprice_id: 1
-    totalprice_id: 1
 item_data_option:
-  - itemdata_id: 1
+  - id: 1
+    articularId: 1
+    dateOfCreate: 10000
     optionitem_id: 1
-  - itemdata_id: 1
-    optionitem_id: 2
-item_data_quantity:
+    itemdata_id: 1
+item_data_option_quantity:
   - id: 1
     quantity: 1
-item_data_quantity_item_data:
-  - item_data_id: 1
-    item_data_quantity_id: 1
+    itemdataoption_id: 1
 delivery_type:
   - id: 1
     value: "Post"
@@ -97,9 +88,9 @@ credit_card:
     isActive: true
 payment_method:
   - id: 1
-    method: "Card"
+    value: "Card"
   - id: 2
-    method: "Blik"
+    value: "Blik"
 payment:
   - id: 1
     paymentId: "1"
@@ -118,16 +109,18 @@ contact_info:
   - id: 1
     name: "Wolter"
     secondName: "White"
+    ordernumber: 0
     contact_phone_id: 1
 user_profile:
   - id: 1
     username: "username"
+    user_id: "123"
     email: "email"
     dateOfCreate: 100
     isActive: true
     address_id: 1
     contactinfo_id: 1
-order_item:
+order_item_data:
   - order_id: "100"
     dateOfCreate: 100
     delivery_id: 1

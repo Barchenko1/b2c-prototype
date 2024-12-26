@@ -1,8 +1,9 @@
 package com.b2c.prototype.service.processor.delivery.base;
 
-import com.b2c.prototype.dao.cashed.IEntityCachedMap;
+import com.b2c.prototype.dao.cashed.ISingleValueMap;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
+import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.processor.AbstractOneFieldEntityService;
 import com.b2c.prototype.service.processor.delivery.IDeliveryTypeService;
 import com.tm.core.dao.common.IEntityDao;
@@ -14,15 +15,14 @@ public class DeliveryTypeService extends AbstractOneFieldEntityService<DeliveryT
 
     public DeliveryTypeService(IParameterFactory parameterFactory,
                                IEntityDao deliveryTypeDao,
-                               IEntityCachedMap entityCachedMap) {
-        super(parameterFactory, deliveryTypeDao, entityCachedMap);
+                               ITransformationFunctionService transformationFunctionService,
+                               ISingleValueMap singleValueMap) {
+        super(parameterFactory, deliveryTypeDao, transformationFunctionService, singleValueMap);
     }
 
     @Override
     protected Function<OneFieldEntityDto, DeliveryType> getFunction() {
-        return requestOneFieldEntityDto -> DeliveryType.builder()
-                .value(requestOneFieldEntityDto.getValue())
-                .build();
+        return transformationFunctionService.getTransformationFunction(OneFieldEntityDto.class, DeliveryType.class);
     }
 
     @Override

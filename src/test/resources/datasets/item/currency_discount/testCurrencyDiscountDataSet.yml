@@ -1,8 +1,0 @@
-currency:
-  - id: 1
-    value: "USD"
-currency_discount:
-  - id: 1
-    amount: 10
-    charSequenceCode: "abc"
-    currency_id: 1

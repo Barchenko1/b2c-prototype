@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public abstract class AbstractDifferentEntityDtoUpdate<T, R> {
-    private T oldEntityDto;
-    private R newEntityDto;
+    private T oldEntity;
+    private R newEntity;
 }

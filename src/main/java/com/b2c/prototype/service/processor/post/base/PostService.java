@@ -43,12 +43,12 @@ public class PostService extends AbstractTransitiveSelfEntityService implements 
 
     @Override
     public void updatePost(PostDtoUpdate requestUpdatePostDto) {
-        Post newPost = buildPost(requestUpdatePostDto.getNewEntityDto(),
-                requestUpdatePostDto.getOldEntityDto().getUniquePostId());
+        Post newPost = buildPost(requestUpdatePostDto.getNewEntity(),
+                requestUpdatePostDto.getOldEntity().getUniquePostId());
 
         Parameter parameter = parameterFactory.createStringParameter(
                 "uniquePostId",
-                requestUpdatePostDto.getOldEntityDto().getUniquePostId());
+                requestUpdatePostDto.getOldEntity().getUniquePostId());
         super.updateEntityTreeOldMain(newPost, parameter);
     }
 

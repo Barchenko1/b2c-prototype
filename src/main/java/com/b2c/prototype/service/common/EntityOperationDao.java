@@ -40,21 +40,9 @@ public class EntityOperationDao implements IEntityOperationDao {
     }
 
     @Override
-    public void saveEntity(Consumer<Session> consumer) {
+    public void executeConsumer(Consumer<Session> consumer) {
         LOGGER.info("Saving entity");
-        dao.saveEntity(consumer);
-    }
-
-    @Override
-    public void updateEntity(Consumer<Session> consumer) {
-        LOGGER.info("Updating entity");
-        dao.updateEntity(consumer);
-    }
-
-    @Override
-    public void deleteEntity(Consumer<Session> consumer) {
-        LOGGER.info("Deleting entity");
-        dao.deleteEntity(consumer);
+        dao.executeConsumer(consumer);
     }
 
     @Override
@@ -142,10 +130,9 @@ public class EntityOperationDao implements IEntityOperationDao {
     }
 
     @Override
-    public <R, E> List<R> getSubEntityDtoList(Supplier<Parameter[]> parameterSupplier, Function<E, R> mapToDtoFunction) {
+    public <R, E> List<R> getSubEntityDtoList(Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction) {
         LOGGER.info("Getting entity dto list");
-        Parameter[] parametersArray = parameterSupplier.get();
-        List<E> entityList = dao.getEntityList(parametersArray);
+        List<E> entityList = dao.getEntityList(parameterSupplier.get());
         return entityList.stream()
                 .map(entity -> transformEntityToDto(entity, mapToDtoFunction))
                 .toList();

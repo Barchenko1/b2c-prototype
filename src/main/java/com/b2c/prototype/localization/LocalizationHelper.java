@@ -1,22 +1,13 @@
 package com.b2c.prototype.localization;
 
 import com.b2c.prototype.configuration.LocalizationInterpreter;
-import com.b2c.prototype.dao.cashed.IEntityCachedMap;
+import com.b2c.prototype.dao.cashed.ISingleValueMap;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
 import com.b2c.prototype.modal.entity.item.Brand;
-import com.b2c.prototype.modal.entity.item.Category;
-import com.b2c.prototype.modal.entity.item.ItemStatus;
-import com.b2c.prototype.modal.entity.item.ItemType;
-import com.b2c.prototype.modal.entity.item.Rating;
-import com.b2c.prototype.modal.entity.option.OptionGroup;
-import com.b2c.prototype.modal.entity.order.OrderStatus;
-import com.b2c.prototype.modal.entity.payment.PaymentMethod;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class LocalizationHelper {
@@ -32,11 +23,11 @@ public class LocalizationHelper {
 //    private final Map<Integer, Rating> ratingMap;
 //    private final Map<String, OptionGroup> optionGroupMap;
 
-    private final IEntityCachedMap entityCachedMap;
+    private final ISingleValueMap singleValueMap;
 
-    public LocalizationHelper(LocalizationInterpreter localizationInterpreter, IEntityCachedMap entityCachedMap) {
+    public LocalizationHelper(LocalizationInterpreter localizationInterpreter, ISingleValueMap singleValueMap) {
         this.localizationInterpreter = localizationInterpreter;
-        this.entityCachedMap = entityCachedMap;
+        this.singleValueMap = singleValueMap;
     }
 
 //    public LocalizationHelper(LocalizationInterpreter localizationInterpreter,
@@ -49,7 +40,7 @@ public class LocalizationHelper {
 //                              Map<String, Category> categoryMap,
 //                              Map<Integer, Rating> ratingMap,
 //                              Map<String, OptionGroup> optionGroupMap,
-//                              IEntityCachedMap entityCachedMap) {
+//                              IsingleValueMap singleValueMap) {
 //        this.localizationInterpreter = localizationInterpreter;
 //        this.deliveryTypeMap = deliveryTypeMap;
 //        this.paymenMethodMap = paymenMethodMap;
@@ -61,12 +52,12 @@ public class LocalizationHelper {
 //        this.ratingMap = ratingMap;
 //        this.optionGroupMap = optionGroupMap;
 //
-//        this.entityCachedMap = entityCachedMap;
+//        this.singleValueMap = singleValueMap;
 //    }
 
 
     public String getLocalizeDeliveryTypeName(String deliveryTypeConfigName, Locale locale) {
-        Map<Object, Object> deliveryTypeMap = entityCachedMap.getEntityMap(DeliveryType.class);
+        Map<Object, Object> deliveryTypeMap = singleValueMap.getEntityMap(DeliveryType.class);
         DeliveryType deliveryType = (DeliveryType) deliveryTypeMap.get(deliveryTypeConfigName);
         return localizationInterpreter.interpret("delivery.type", deliveryType.getValue(), locale);
     }
@@ -100,7 +91,7 @@ public class LocalizationHelper {
 //    }
 
     public String getLocalizeBrandName(String brandConfigName, Locale locale) {
-        Brand brand = entityCachedMap.getEntity(Brand.class, "value",brandConfigName);
+        Brand brand = singleValueMap.getEntity(Brand.class, "value",brandConfigName);
         return localizationInterpreter.interpret("brand", brand.getValue(), locale);
     }
 

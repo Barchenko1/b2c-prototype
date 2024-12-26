@@ -5,7 +5,6 @@
 //import com.b2c.prototype.modal.embedded.bucket.Bucket;
 //import com.b2c.prototype.modal.entity.item.Brand;
 //import com.b2c.prototype.modal.entity.item.Category;
-//import com.b2c.prototype.modal.entity.item.CurrencyDiscount;
 //import com.b2c.prototype.modal.entity.item.Item;
 //import com.b2c.prototype.modal.entity.item.ItemData;
 //import com.b2c.prototype.modal.entity.item.ItemQuantity;

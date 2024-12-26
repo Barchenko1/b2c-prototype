@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @Builder
 public class DeliveryDto {
-    private AddressDto deliveryAddressDto;
+    private AddressDto deliveryAddress;
     private String deliveryType;
 }

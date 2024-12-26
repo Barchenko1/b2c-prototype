@@ -2,9 +2,17 @@ package com.b2c.prototype.dao.store.base;
 
 import com.b2c.prototype.dao.AbstractSingleEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
+import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
+import com.b2c.prototype.modal.entity.item.Discount;
+import com.b2c.prototype.modal.entity.item.ItemData;
+import com.b2c.prototype.modal.entity.item.ItemDataOption;
+import com.b2c.prototype.modal.entity.item.ItemStatus;
+import com.b2c.prototype.modal.entity.item.ItemType;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
+import com.b2c.prototype.modal.entity.price.Currency;
+import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.modal.entity.store.CountType;
 import com.b2c.prototype.modal.entity.store.Store;
 import com.tm.core.dao.identifier.EntityIdentifierDao;
@@ -12,7 +20,10 @@ import com.tm.core.processor.finder.manager.EntityMappingManager;
 import com.tm.core.processor.finder.manager.IEntityMappingManager;
 import com.tm.core.processor.finder.table.EntityTable;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 
+import java.sql.Connection;
+import java.sql.Statement;
 import java.util.List;
 
 class BasicStoreDaoTest extends AbstractSingleEntityDaoTest {
@@ -23,6 +34,55 @@ class BasicStoreDaoTest extends AbstractSingleEntityDaoTest {
         entityMappingManager.addEntityTable(new EntityTable(Store.class, "store"));
         entityIdentifierDao = new EntityIdentifierDao(sessionManager, entityMappingManager);
         dao = new BasicStoreDao(sessionFactory, entityIdentifierDao);
+    }
+
+    @Override
+    protected String getEmptyDataSetPath() {
+        return "/datasets/store/store/emptyStoreDataSet.yml";
+    }
+
+    @Override
+    protected EntityDataSet<?> getTestDataSet() {
+        CountType countType = CountType.builder()
+                .id(1L)
+                .value("LIMITED")
+                .build();
+        Store store = Store.builder()
+                .id(1L)
+                .itemDataOption(prepareTestItemDataOption())
+                .countType(countType)
+                .count(10)
+                .build();
+        return new EntityDataSet<>(store, "/datasets/store/store/testStoreDataSet.yml");
+    }
+
+    @Override
+    protected EntityDataSet<?> getSaveDataSet() {
+        CountType countType = CountType.builder()
+                .id(1L)
+                .value("LIMITED")
+                .build();
+        Store store = Store.builder()
+                .itemDataOption(prepareTestItemDataOption())
+                .countType(countType)
+                .count(10)
+                .build();
+        return new EntityDataSet<>(store, "/datasets/store/store/saveStoreDataSet.yml");
+    }
+
+    @Override
+    protected EntityDataSet<?> getUpdateDataSet() {
+        CountType countType = CountType.builder()
+                .id(1L)
+                .value("LIMITED")
+                .build();
+        Store store = Store.builder()
+                .id(1L)
+                .countType(countType)
+                .itemDataOption(prepareTestItemDataOption())
+                .count(9)
+                .build();
+        return new EntityDataSet<>(store, "/datasets/store/store/updateStoreDataSet.yml");
     }
 
     private Category prepareCategories() {
@@ -48,65 +108,63 @@ class BasicStoreDaoTest extends AbstractSingleEntityDaoTest {
         return child;
     }
 
-    private OptionItem prepareOptionItem() {
+    private ItemDataOption prepareTestItemDataOption() {
+        Brand brand = Brand.builder()
+                .id(1L)
+                .value("Hermes")
+                .build();
+        Category category = prepareCategories();
+        Currency currency = Currency.builder()
+                .id(1L)
+                .value("USD")
+                .build();
+        Discount discount = Discount.builder()
+                .id(1L)
+                .amount(5)
+                .charSequenceCode("abc")
+                .isActive(true)
+                .isPercent(false)
+                .currency(currency)
+                .build();
+        ItemStatus itemStatus = ItemStatus.builder()
+                .id(1L)
+                .value("NEW")
+                .build();
+        ItemType itemType = ItemType.builder()
+                .id(1L)
+                .value("Clothes")
+                .build();
         OptionGroup optionGroup = OptionGroup.builder()
                 .id(1L)
                 .value("Size")
                 .build();
-
-        return OptionItem.builder()
+        OptionItem optionItem = OptionItem.builder()
                 .id(1L)
                 .optionName("L")
                 .optionGroup(optionGroup)
                 .build();
+        Price price = Price.builder()
+                .id(1L)
+                .amount(100)
+                .currency(currency)
+                .build();
+
+        ItemData itemData = ItemData.builder()
+                .id(1L)
+                .category(category)
+                .brand(brand)
+                .status(itemStatus)
+                .itemType(itemType)
+                .build();
+
+        return ItemDataOption.builder()
+                .id(1L)
+                .articularId("1")
+                .dateOfCreate(10000)
+                .itemData(itemData)
+                .optionItem(optionItem)
+                .articularId("1")
+                .build();
     }
 
-    @Override
-    protected String getEmptyDataSetPath() {
-        return "/datasets/store/store/emptyStoreDataSet.yml";
-    }
-
-    @Override
-    protected EntityDataSet<?> getTestDataSet() {
-        CountType countType = CountType.builder()
-                .id(1L)
-                .value("LIMITED")
-                .build();
-        Store store = Store.builder()
-                .id(1L)
-                .countType(countType)
-                .count(10)
-                .optionItem(prepareOptionItem())
-                .build();
-        return new EntityDataSet<>(store, "/datasets/store/store/testStoreDataSet.yml");
-    }
-
-    @Override
-    protected EntityDataSet<?> getSaveDataSet() {
-        CountType countType = CountType.builder()
-                .id(1L)
-                .value("LIMITED")
-                .build();
-        Store store = Store.builder()
-                .countType(countType)
-                .count(10)
-                .optionItem(prepareOptionItem())
-                .build();
-        return new EntityDataSet<>(store, "/datasets/store/store/saveStoreDataSet.yml");
-    }
-
-    @Override
-    protected EntityDataSet<?> getUpdateDataSet() {
-        CountType countType = CountType.builder()
-                .id(1L)
-                .value("LIMITED")
-                .build();
-        Store store = Store.builder()
-                .id(1L)
-                .countType(countType)
-                .count(9)
-                .optionItem(prepareOptionItem())
-                .build();
-        return new EntityDataSet<>(store, "/datasets/store/store/updateStoreDataSet.yml");
-    }
 }

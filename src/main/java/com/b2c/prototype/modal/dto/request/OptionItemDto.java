@@ -10,5 +10,5 @@ import java.util.Set;
 @Data
 @Builder
 public class OptionItemDto {
-    private Map<String, List<String>> optionGroupOptionItemsMap;
+    private Map<String, Set<String>> optionGroupOptionItemsMap;
 }

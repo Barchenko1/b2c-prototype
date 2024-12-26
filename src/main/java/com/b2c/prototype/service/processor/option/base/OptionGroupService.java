@@ -1,8 +1,9 @@
 package com.b2c.prototype.service.processor.option.base;
 
-import com.b2c.prototype.dao.cashed.IEntityCachedMap;
+import com.b2c.prototype.dao.cashed.ISingleValueMap;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
+import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.processor.AbstractOneFieldEntityService;
 import com.b2c.prototype.service.processor.option.IOptionGroupService;
 import com.tm.core.dao.common.IEntityDao;
@@ -14,15 +15,14 @@ public class OptionGroupService extends AbstractOneFieldEntityService<OptionGrou
 
     public OptionGroupService(IParameterFactory parameterFactory,
                               IEntityDao optionGroupDao,
-                              IEntityCachedMap entityCachedMap) {
-        super(parameterFactory, optionGroupDao, entityCachedMap);
+                              ITransformationFunctionService transformationFunctionService,
+                              ISingleValueMap singleValueMap) {
+        super(parameterFactory, optionGroupDao, transformationFunctionService, singleValueMap);
     }
 
     @Override
     protected Function<OneFieldEntityDto, OptionGroup> getFunction() {
-        return oneFieldEntityDto -> OptionGroup.builder()
-                .value(oneFieldEntityDto.getValue())
-                .build();
+        return transformationFunctionService.getTransformationFunction(OneFieldEntityDto.class, OptionGroup.class);
     }
 
     @Override

@@ -5,4 +5,4 @@ credit_card:
     cvv: 818
     ownerName: "name"
     ownerSecondName: "secondName"
-    isactive: true
+    isActive: true

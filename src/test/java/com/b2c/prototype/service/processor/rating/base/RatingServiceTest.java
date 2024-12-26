@@ -3,19 +3,24 @@ package com.b2c.prototype.service.processor.rating.base;
 import com.b2c.prototype.modal.dto.common.OneIntegerFieldEntityDto;
 import com.b2c.prototype.modal.dto.common.OneIntegerFieldEntityDtoUpdate;
 import com.b2c.prototype.modal.entity.item.Rating;
+import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.processor.AbstractOneFieldEntityServiceTest;
 import com.tm.core.processor.finder.parameter.Parameter;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
 import java.util.Optional;
+import java.util.function.Function;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class RatingServiceTest extends AbstractOneFieldEntityServiceTest<Rating> {
 
+    @Mock
+    private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
     private RatingService ratingService;
 
@@ -28,34 +33,39 @@ class RatingServiceTest extends AbstractOneFieldEntityServiceTest<Rating> {
     public void testSaveEntity() {
         OneIntegerFieldEntityDto dto = new OneIntegerFieldEntityDto(1);
         Rating testValue = createTestValue();
-
+        Function<OneIntegerFieldEntityDto, Rating> mockFunction = input -> testValue;
+        when(transformationFunctionService.getTransformationFunction(OneIntegerFieldEntityDto.class, Rating.class))
+                .thenReturn(mockFunction);
         ratingService.saveEntity(dto);
 
         verify(dao).persistEntity(testValue);
-        verify(entityCachedMap).putEntity(testValue.getClass(), getFieldName(), testValue);
+        verify(singleValueMap).putEntity(testValue.getClass(), getFieldName(), testValue);
     }
 
     @Test
     public void testUpdateEntity() {
         OneIntegerFieldEntityDto oldDto = new OneIntegerFieldEntityDto(1);
         OneIntegerFieldEntityDto newDto = new OneIntegerFieldEntityDto(2);
-        OneIntegerFieldEntityDtoUpdate dtoUpdate = new OneIntegerFieldEntityDtoUpdate();
-        dtoUpdate.setOldEntityDto(oldDto);
-        dtoUpdate.setNewEntityDto(newDto);
+        OneIntegerFieldEntityDtoUpdate dtoUpdate = OneIntegerFieldEntityDtoUpdate.builder()
+                .oldEntity(oldDto)
+                .newEntity(newDto)
+                .build();
 
         Rating testValue = Rating.builder()
                 .value(2)
                 .build();
-
+        Function<OneIntegerFieldEntityDto, Rating> mockFunction = input -> testValue;
+        when(transformationFunctionService.getTransformationFunction(OneIntegerFieldEntityDto.class, Rating.class))
+                .thenReturn(mockFunction);
         ratingService.updateEntity(dtoUpdate);
 
-        Integer searchParameter = dtoUpdate.getOldEntityDto().getValue();
+        Integer searchParameter = dtoUpdate.getOldEntity().getValue();
         Parameter parameter = parameterFactory.createIntegerParameter(getFieldName(), searchParameter);
         verify(dao).findEntityAndUpdate(testValue, parameter);
-        verify(entityCachedMap).updateEntity(
+        verify(singleValueMap).putRemoveEntity(
                 testValue.getClass(),
                 searchParameter,
-                dtoUpdate.getNewEntityDto().getValue(),
+                dtoUpdate.getNewEntity().getValue(),
                 testValue
         );
     }
@@ -64,11 +74,13 @@ class RatingServiceTest extends AbstractOneFieldEntityServiceTest<Rating> {
     public void testDeleteEntity() {
         OneIntegerFieldEntityDto dto = new OneIntegerFieldEntityDto(1);
         Rating testValue = createTestValue();
-
+        Function<OneIntegerFieldEntityDto, Rating> mockFunction = input -> testValue;
+        when(transformationFunctionService.getTransformationFunction(OneIntegerFieldEntityDto.class, Rating.class))
+                .thenReturn(mockFunction);
         ratingService.deleteEntity(dto);
 
         verify(dao).deleteEntity(testValue);
-        verify(entityCachedMap).removeEntity(testValue.getClass(), dto.getValue());
+        verify(singleValueMap).removeEntity(testValue.getClass(), dto.getValue());
     }
 
     @Test

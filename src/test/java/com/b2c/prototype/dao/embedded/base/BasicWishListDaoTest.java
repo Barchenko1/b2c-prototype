@@ -6,7 +6,6 @@
 //import com.b2c.prototype.modal.entity.address.Country;
 //import com.b2c.prototype.modal.entity.item.Brand;
 //import com.b2c.prototype.modal.entity.item.Category;
-//import com.b2c.prototype.modal.entity.item.CurrencyDiscount;
 //import com.b2c.prototype.modal.entity.item.Item;
 //import com.b2c.prototype.modal.entity.item.ItemStatus;
 //import com.b2c.prototype.modal.entity.item.ItemType;

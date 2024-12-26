@@ -49,7 +49,7 @@ public class ConstantBeanConfiguration {
     public Map<String, PaymentMethod> paymentMethodMap(IPaymentMethodDao paymentMethodDao) {
         List<PaymentMethod> paymentMethodList = paymentMethodDao.getEntityList();
         return paymentMethodList.stream()
-                .collect(Collectors.toMap(PaymentMethod::getMethod, Function.identity(), (existing, replacement) -> existing));
+                .collect(Collectors.toMap(PaymentMethod::getValue, Function.identity(), (existing, replacement) -> existing));
     }
 
     @Bean

@@ -28,7 +28,7 @@ class BasicPaymentMethodDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getTestDataSet() {
         PaymentMethod paymentMethod = PaymentMethod.builder()
                 .id(1L)
-                .method("Card")
+                .value("Card")
                 .build();
         return new EntityDataSet<>(paymentMethod, "/datasets/payment/payment_method/testPaymentMethodDataSet.yml");
     }
@@ -36,7 +36,7 @@ class BasicPaymentMethodDaoTest extends AbstractSingleEntityDaoTest {
     @Override
     protected EntityDataSet<?> getSaveDataSet() {
         PaymentMethod paymentMethod = PaymentMethod.builder()
-                .method("Card")
+                .value("Card")
                 .build();
         return new EntityDataSet<>(paymentMethod, "/datasets/payment/payment_method/savePaymentMethodDataSet.yml");
     }
@@ -45,7 +45,7 @@ class BasicPaymentMethodDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getUpdateDataSet() {
         PaymentMethod paymentMethod = PaymentMethod.builder()
                 .id(1L)
-                .method("Update Card")
+                .value("Update Card")
                 .build();
         return new EntityDataSet<>(paymentMethod, "/datasets/payment/payment_method/updatePaymentMethodDataSet.yml");
     }

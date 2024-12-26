@@ -1,8 +1,9 @@
 package com.b2c.prototype.service.processor;
 
-import com.b2c.prototype.dao.cashed.IEntityCachedMap;
+import com.b2c.prototype.dao.cashed.ISingleValueMap;
 import com.b2c.prototype.modal.dto.common.OneIntegerFieldEntityDto;
 import com.b2c.prototype.modal.dto.common.OneIntegerFieldEntityDtoUpdate;
+import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.tm.core.dao.common.IEntityDao;
 import com.tm.core.processor.finder.factory.IParameterFactory;
 import com.tm.core.processor.finder.parameter.Parameter;
@@ -15,14 +16,17 @@ public abstract class AbstractOneIntegerFieldEntityService<E> implements IOneInt
 
     private final IParameterFactory parameterFactory;
     private final IEntityDao dao;
-    private final IEntityCachedMap entityCachedMap;
+    protected final ITransformationFunctionService transformationFunctionService;
+    private final ISingleValueMap singleValueMap;
 
     public AbstractOneIntegerFieldEntityService(IParameterFactory parameterFactory,
                                                 IEntityDao dao,
-                                                IEntityCachedMap entityCachedMap) {
+                                                ITransformationFunctionService transformationFunctionService,
+                                                ISingleValueMap singleValueMap) {
         this.parameterFactory = parameterFactory;
         this.dao = dao;
-        this.entityCachedMap = entityCachedMap;
+        this.transformationFunctionService = transformationFunctionService;
+        this.singleValueMap = singleValueMap;
     }
 
     protected abstract Function<OneIntegerFieldEntityDto, E> getFunction();
@@ -32,17 +36,17 @@ public abstract class AbstractOneIntegerFieldEntityService<E> implements IOneInt
     public void saveEntity(OneIntegerFieldEntityDto oneIntegerFieldEntityDto) {
         E entity = getFunction().apply(oneIntegerFieldEntityDto);
         dao.persistEntity(entity);
-        entityCachedMap.putEntity(entity.getClass(), getFieldName(), entity);
+        singleValueMap.putEntity(entity.getClass(), getFieldName(), entity);
     }
 
     @Override
     public void updateEntity(OneIntegerFieldEntityDtoUpdate oneFieldEntityDtoUpdate) {
-        OneIntegerFieldEntityDto newEntityRequest = oneFieldEntityDtoUpdate.getNewEntityDto();
+        OneIntegerFieldEntityDto newEntityRequest = oneFieldEntityDtoUpdate.getNewEntity();
         E entity = getFunction().apply(newEntityRequest);
-        Integer searchParameter = oneFieldEntityDtoUpdate.getOldEntityDto().getValue();
+        Integer searchParameter = oneFieldEntityDtoUpdate.getOldEntity().getValue();
         Parameter parameter = parameterFactory.createIntegerParameter(getFieldName(), searchParameter);
         dao.findEntityAndUpdate(entity, parameter);
-        entityCachedMap.updateEntity(
+        singleValueMap.putRemoveEntity(
                 entity.getClass(),
                 searchParameter,
                 newEntityRequest.getValue(),
@@ -53,7 +57,7 @@ public abstract class AbstractOneIntegerFieldEntityService<E> implements IOneInt
     public void deleteEntity(OneIntegerFieldEntityDto oneIntegerFieldEntityDto) {
         E entity = getFunction().apply(oneIntegerFieldEntityDto);
         dao.deleteEntity(entity);
-        entityCachedMap.removeEntity(entity.getClass(), oneIntegerFieldEntityDto.getValue());
+        singleValueMap.removeEntity(entity.getClass(), oneIntegerFieldEntityDto.getValue());
     }
 
     @Override

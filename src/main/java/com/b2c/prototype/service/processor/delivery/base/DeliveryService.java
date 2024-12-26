@@ -1,162 +1,76 @@
 package com.b2c.prototype.service.processor.delivery.base;
 
-import com.b2c.prototype.dao.cashed.IEntityCachedMap;
 import com.b2c.prototype.dao.delivery.IDeliveryDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
-import com.b2c.prototype.modal.dto.request.AddressDto;
 import com.b2c.prototype.modal.dto.request.DeliveryDto;
-import com.b2c.prototype.modal.dto.update.DeliveryDtoUpdate;
-import com.b2c.prototype.modal.entity.address.Address;
+import com.b2c.prototype.modal.dto.update.DeliverySearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
-import com.b2c.prototype.modal.entity.delivery.DeliveryType;
-import com.b2c.prototype.processor.IAsyncProcessor;
-import com.b2c.prototype.processor.Task;
+import com.b2c.prototype.modal.entity.order.OrderItemData;
+import com.b2c.prototype.service.common.EntityOperationDao;
+import com.b2c.prototype.service.common.IEntityOperationDao;
+import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.processor.delivery.IDeliveryService;
-import com.tm.core.processor.finder.parameter.Parameter;
-import com.tm.core.processor.thread.ThreadLocalSessionManager;
+import com.b2c.prototype.service.processor.query.IQueryService;
+import com.b2c.prototype.service.supplier.ISupplierService;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
-import java.util.Map;
-import java.util.Optional;
+import java.util.List;
 
 @Slf4j
 public class DeliveryService implements IDeliveryService {
 
-    private ThreadLocalSessionManager sessionManager;
-    private final IAsyncProcessor asyncProcessor;
-    private final IDeliveryDao deliveryDao;
-    private final IEntityCachedMap entityCachedMap;
+    private final IEntityOperationDao entityOperationDao;
+    private final IQueryService queryService;
+    private final ITransformationFunctionService transformationFunctionService;
+    private final ISupplierService supplierService;
 
-    public DeliveryService(IAsyncProcessor asyncProcessor,
-                           IDeliveryDao deliveryDao,
-                           IEntityCachedMap entityCachedMap) {
-        this.asyncProcessor = asyncProcessor;
-        this.deliveryDao = deliveryDao;
-        this.entityCachedMap = entityCachedMap;
+    public DeliveryService(IDeliveryDao deliveryDao,
+                           IQueryService queryService,
+                           ITransformationFunctionService transformationFunctionService,
+                           ISupplierService supplierService) {
+        this.entityOperationDao = new EntityOperationDao(deliveryDao);
+        this.queryService = queryService;
+        this.transformationFunctionService = transformationFunctionService;
+        this.supplierService = supplierService;
     }
 
     @Override
-    public void saveDelivery(DeliveryDto deliveryDto) {
-        AddressDto requestAddressDto = deliveryDto.getDeliveryAddressDto();
-        Map<Class<?>, Object> resultProcessMap = executeAsyncProcess(deliveryDto);
-
-        Address address = Address.builder()
-//                .category(requestAddressDto.getCountry())
-                .florNumber(requestAddressDto.getFlorNumber())
-                .apartmentNumber(requestAddressDto.getApartmentNumber())
-                .buildingNumber(requestAddressDto.getBuildingNumber())
-                .street(requestAddressDto.getStreet())
-                .build();
-
-        Delivery delivery = Delivery.builder()
-                .deliveryType((DeliveryType) resultProcessMap.get(DeliveryType.class))
-                .address(address)
-                .build();
-
-        Transaction transaction = null;
-        try (Session session = sessionManager.getSession()) {
-            transaction = session.beginTransaction();
-            session.persist(address);
-            session.persist(delivery);
-            transaction.commit();
-        } catch (Exception e) {
-            log.warn("transaction error {}", e.getMessage());
-            if (transaction != null) {
-                transaction.rollback();
+    public void saveUpdateDelivery(DeliverySearchFieldEntityDto deliverySearchFieldEntityDto) {
+        entityOperationDao.executeConsumer(session -> {
+            OrderItemData orderItemData = queryService.getEntity(
+                    OrderItemData.class,
+                    supplierService.parameterStringSupplier("order_id", deliverySearchFieldEntityDto.getSearchField()));
+            DeliveryDto deliveryDto = deliverySearchFieldEntityDto.getNewEntity();
+            Delivery newDelivery = transformationFunctionService.getEntity(Delivery.class, deliveryDto);
+            Delivery delivery = orderItemData.getDelivery();
+            if (delivery != null) {
+                newDelivery.setId(delivery.getId());
             }
-            throw new RuntimeException(e);
-        } finally {
-            sessionManager.closeSession();
-        }
-    }
-
-    @Override
-    public void updateDelivery(DeliveryDtoUpdate requestDeliveryDtoUpdate) {
-        DeliveryDto deliveryDto = requestDeliveryDtoUpdate.getNewEntityDto();
-        String requestDeliveryTypeDto = deliveryDto.getDeliveryType();
-        AddressDto addressDto = deliveryDto.getDeliveryAddressDto();
-
-        Map<Class<?>, Object> resultProcessMap = executeAsyncProcess(requestDeliveryDtoUpdate);
-
-        Optional<String> optionalDeliveryTypeName = Optional.ofNullable(requestDeliveryTypeDto);
-        Optional<AddressDto> optionalAddressDto = Optional.ofNullable(addressDto);
-        Transaction transaction = null;
-        try (Session session = sessionManager.getSession()) {
-            transaction = session.beginTransaction();
-
-            optionalDeliveryTypeName
-                    .ifPresent(deliveryTypeDto -> {
-                        DeliveryType deliveryType = (DeliveryType) resultProcessMap.get(Optional.class);
-                        session.merge(deliveryType);
-                    });
-
-            Address address = null;
-            if (optionalAddressDto.isPresent()) {
-                address = Address.builder()
-//                        .category(requestAddressDto.getCountry())
-                        .florNumber(addressDto.getFlorNumber())
-                        .apartmentNumber(addressDto.getApartmentNumber())
-                        .buildingNumber(addressDto.getBuildingNumber())
-                        .street(addressDto.getStreet())
-                        .build();
-                session.merge(address);
-            }
-
-            if(optionalAddressDto.isPresent() && optionalDeliveryTypeName.isPresent()) {
-                Delivery delivery = Delivery.builder()
-                        .deliveryType((DeliveryType) resultProcessMap.get(DeliveryType.class))
-                        .address(address)
-                        .build();
-
-                session.merge(delivery);
-            }
-            transaction.commit();
-        } catch (Exception e) {
-            log.warn("transaction error {}", e.getMessage());
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            throw new RuntimeException(e);
-        } finally {
-            sessionManager.closeSession();
-        }
+            orderItemData.setDelivery(newDelivery);
+            session.merge(orderItemData);
+        });
     }
 
     @Override
     public void deleteDelivery(OneFieldEntityDto oneFieldEntityDto) {
-        String searchField = oneFieldEntityDto.getValue();
-//        Parameter parameter = parameterFactory.createStringParameter("searchField", searchField);
-//        super.deleteEntity(parameter);
+        entityOperationDao.deleteEntity(
+                supplierService.entityFieldSupplier(
+                        OrderItemData.class,
+                        supplierService.parameterStringSupplier("order_id", oneFieldEntityDto.getValue()),
+                        transformationFunctionService.getTransformationFunction(OrderItemData.class, Delivery.class)));
     }
 
-    private Map<Class<?>, Object> executeAsyncProcess(DeliveryDto deliveryDto) {
-        Task deliveryTypeTask = new Task(
-                () -> entityCachedMap.getEntity(DeliveryType.class, "value", deliveryDto.getDeliveryType()),
-                DeliveryType.class
-        );
-
-        return asyncProcessor.process(deliveryTypeTask);
+    @Override
+    public DeliveryDto getDelivery(OneFieldEntityDto oneFieldEntityDto) {
+        return queryService.getEntityDto(
+                OrderItemData.class,
+                supplierService.parameterStringSupplier("order_id", oneFieldEntityDto.getValue()),
+                transformationFunctionService.getTransformationFunction(OrderItemData.class, DeliveryDto.class));
     }
 
-    private Map<Class<?>, Object> executeAsyncProcess(DeliveryDtoUpdate requestDeliveryDtoUpdate) {
-        String deliveryTypeStr = requestDeliveryDtoUpdate.getNewEntityDto().getDeliveryType();
-        String searchField = requestDeliveryDtoUpdate.getSearchField();
-
-        Task deliveryTypeTask = new Task(
-                () -> entityCachedMap.getEntity(DeliveryType.class, "value", deliveryTypeStr),
-                DeliveryType.class
-        );
-
-        Task deliveryTask = new Task(
-                () -> {
-                    Parameter parameter = new Parameter("order_id", searchField);
-                    return deliveryDao.getOptionalEntity(parameter);
-                },
-                Delivery.class
-        );
-
-        return asyncProcessor.process(deliveryTypeTask, deliveryTask);
+    @Override
+    public List<DeliveryDto> getDeliveries() {
+        return entityOperationDao.getEntityDtoList(
+                transformationFunctionService.getTransformationFunction(Delivery.class, DeliveryDto.class));
     }
 }

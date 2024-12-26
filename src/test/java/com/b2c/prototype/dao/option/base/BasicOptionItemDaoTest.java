@@ -49,7 +49,6 @@ class BasicOptionItemDaoTest extends AbstractGeneralEntityDaoTest {
         try (Connection connection = connectionHolder.getConnection()) {
             connection.setAutoCommit(false);
             Statement statement = connection.createStatement();
-            statement.execute("DELETE FROM item_data_quantity_item_data");
             statement.execute("DELETE FROM item_review");
             statement.execute("DELETE FROM item_post");
             statement.execute("DELETE FROM item_data_option");
@@ -184,7 +183,7 @@ class BasicOptionItemDaoTest extends AbstractGeneralEntityDaoTest {
             s.persist(optionItem);
         };
 
-        dao.saveEntity(consumer);
+        dao.executeConsumer(consumer);
         verifyExpectedData("/datasets/option/option_item/saveOptionItemDataSet.yml");
     }
 
@@ -196,7 +195,7 @@ class BasicOptionItemDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.saveEntity(consumer);
+            dao.executeConsumer(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -233,7 +232,7 @@ class BasicOptionItemDaoTest extends AbstractGeneralEntityDaoTest {
             s.merge(optionItemToUpdate.getOptionGroup());
             s.merge(optionItemToUpdate);
         };
-        dao.updateEntity(consumer);
+        dao.executeConsumer(consumer);
         verifyExpectedData("/datasets/option/option_item/updateOptionItemDataSet.yml");
     }
 
@@ -247,7 +246,7 @@ class BasicOptionItemDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.updateEntity(optionItemConsumer);
+            dao.executeConsumer(optionItemConsumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -271,7 +270,7 @@ class BasicOptionItemDaoTest extends AbstractGeneralEntityDaoTest {
             s.remove(optionItem);
         };
 
-        dao.deleteEntity(consumer);
+        dao.executeConsumer(consumer);
         verifyExpectedData("/datasets/option/option_item/emptyOptionItemDataSet.yml");
     }
 
@@ -283,7 +282,7 @@ class BasicOptionItemDaoTest extends AbstractGeneralEntityDaoTest {
         };
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            dao.deleteEntity(consumer);
+            dao.executeConsumer(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());

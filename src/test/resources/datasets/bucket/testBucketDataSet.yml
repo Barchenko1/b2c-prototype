@@ -14,15 +14,13 @@ price:
   - id: 1
     amount: 100
     currency_id: 1
-currency_discount:
+discount:
   - id: 1
     amount: 5
     charSequenceCode: "abc"
+    isActive: true
+    isPercent: false
     currency_id: 1
-percent_discount:
-  - id: 1
-    amount: 5
-    charSequenceCode: "abc"
 option_group:
   - id: 1
     name: "Size"
@@ -85,27 +83,15 @@ review:
     rating_id: 5
 item:
   - id: 1
-    name: "name"
-    articularId: "100"
-    dateOfCreate: "100"
     brand_id: 1
     category_id: 3
-    currencydiscount_id: 1
     itemtype_id: 1
     status_id: 1
-    fullprice_id: 1
-    totalprice_id: 1
   - id: 2
-    name: "name"
-    articularId: "100"
-    dateOfCreate: "100"
     brand_id: 1
     category_id: 3
-    currencydiscount_id: 1
     itemtype_id: 1
     status_id: 1
-    fullprice_id: 1
-    totalprice_id: 1
 item_data_option:
   - item_id: 1
     option_item_id: 1
@@ -121,7 +107,7 @@ item_post:
 item_review:
   - item_id: 1
     review_id: 1
-item_data_quantity:
+item_data_option_quantity:
   - id: 1
     quantity: 1
   - id: 2
