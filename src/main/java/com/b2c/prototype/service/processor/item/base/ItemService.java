@@ -2,27 +2,20 @@ package com.b2c.prototype.service.processor.item.base;
 
 import com.b2c.prototype.dao.item.IItemDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
-import com.b2c.prototype.modal.dto.request.ItemDto;
-import com.b2c.prototype.modal.dto.update.ItemDtoUpdate;
+import com.b2c.prototype.modal.dto.searchfield.ItemSearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.item.Item;
-import com.b2c.prototype.modal.entity.option.OptionGroup;
-import com.b2c.prototype.processor.IAsyncProcessor;
-import com.b2c.prototype.processor.Task;
+import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.service.common.EntityOperationDao;
 import com.b2c.prototype.service.common.IEntityOperationDao;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.processor.item.IItemService;
 import com.b2c.prototype.service.processor.query.IQueryService;
 import com.b2c.prototype.service.supplier.ISupplierService;
-import com.tm.core.processor.finder.parameter.Parameter;
-import com.tm.core.processor.thread.ThreadLocalSessionManager;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+
+import static com.b2c.prototype.util.Constant.ITEM_ID;
 
 @Slf4j
 public class ItemService implements IItemService {
@@ -43,30 +36,49 @@ public class ItemService implements IItemService {
     }
 
     @Override
-    public void saveUpdateItem(ItemDtoUpdate itemDtoUpdate) {
+    public void saveUpdateItem(ItemSearchFieldEntityDto itemSearchFieldEntityDto) {
         entityOperationDao.executeConsumer(session -> {
-
+            ItemData itemData = queryService.getEntity(
+                    ItemData.class,
+                    supplierService.parameterStringSupplier(ITEM_ID, itemSearchFieldEntityDto.getSearchField()));
+            Item item = transformationFunctionService.getEntity(Item.class, itemSearchFieldEntityDto.getNewEntity());
+            item.setItemData(itemData);
+            session.merge(item);
         });
     }
 
     @Override
     public void deleteItem(OneFieldEntityDto oneFieldEntityDto) {
-
+        entityOperationDao.deleteEntity(
+                supplierService.entityFieldSupplier(
+                        ItemData.class,
+                        supplierService.parameterStringSupplier(ITEM_ID, oneFieldEntityDto.getValue()),
+                        transformationFunctionService.getTransformationFunction(ItemData.class, Item.class)));
     }
 
     @Override
     public Item getItemByItemId(OneFieldEntityDto oneFieldEntityDto) {
-        return null;
+        return queryService.getEntityDto(
+                ItemData.class,
+                supplierService.parameterStringSupplier(ITEM_ID, oneFieldEntityDto.getValue()),
+                transformationFunctionService.getTransformationFunction(ItemData.class, Item.class)
+        );
     }
 
     @Override
     public List<Item> getItemListByCategory(OneFieldEntityDto oneFieldEntityDto) {
-        return List.of();
+        return queryService.getSubEntityDtoList(
+                ItemData.class,
+                supplierService.parameterStringSupplier(ITEM_ID, oneFieldEntityDto.getValue()),
+                transformationFunctionService.getTransformationFunction(ItemData.class, Item.class));
     }
 
     @Override
     public List<Item> getItemListByItemType(OneFieldEntityDto oneFieldEntityDto) {
-        return List.of();
+        return queryService.getSubEntityDtoList(
+                ItemData.class,
+                supplierService.parameterStringSupplier(ITEM_ID, oneFieldEntityDto.getValue()),
+                transformationFunctionService.getTransformationFunction(ItemData.class, Item.class));
     }
 
     @Override

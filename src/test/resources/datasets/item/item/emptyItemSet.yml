@@ -44,24 +44,18 @@ post:
   - id: 1
     title: "parent"
     message: "parent"
-    authorUserName: "parent"
-    authorEmail: "parent@email.com"
     uniquePostId: "1"
     dateOfCreate: 100000
   - id: 2
     post_id: 1
     title: "root"
     message: "root"
-    authorUserName: "root"
-    authorEmail: "root@email.com"
     uniquePostId: "2"
     dateOfCreate: 100000
   - id: 3
     post_id: 2
     title: "child"
     message: "child"
-    authorUserName: "child"
-    authorEmail: "child@email.com"
     uniquePostId: "3"
     dateOfCreate: 100000
 rating:
@@ -79,19 +73,19 @@ review:
   - id: 1
     title: "title"
     message: "message"
+    review_id: 123
     dateOfCreate: 100
     rating_id: 5
 item_data:
   - id: 1
     brand_id: 1
-    itemId: 123
+    item_id: 123
     category_id: 3
     itemtype_id: 1
     status_id: 1
 item_data_option:
   - id: 1
-    articularId: 1
+    articular_id: 1
     dateOfCreate: 10000
-    itemdata_id: 1
     optionitem_id: 1
 item: []

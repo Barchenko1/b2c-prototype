@@ -1,16 +1,14 @@
 package com.b2c.prototype.service.processor.item;
 
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
-import com.b2c.prototype.modal.dto.request.ItemDto;
-import com.b2c.prototype.modal.dto.update.ItemDtoUpdate;
+import com.b2c.prototype.modal.dto.searchfield.ItemSearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.item.Item;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IItemService {
 
-    void saveUpdateItem(ItemDtoUpdate itemDtoUpdate);
+    void saveUpdateItem(ItemSearchFieldEntityDto itemSearchFieldEntityDto);
     void deleteItem(OneFieldEntityDto oneFieldEntityDto);
 
     Item getItemByItemId(OneFieldEntityDto oneFieldEntityDto);

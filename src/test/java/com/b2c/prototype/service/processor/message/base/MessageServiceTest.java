@@ -32,6 +32,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static com.b2c.prototype.util.Constant.USER_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -83,7 +84,7 @@ class MessageServiceTest {
         NativeQuery<MessageBox> query = mock(NativeQuery.class);
 
         when(session.createNativeQuery(any(String.class), eq(MessageBox.class))).thenReturn(query);
-        when(supplierService.parameterStringSupplier("user_id", messageDtoUpdate.getMainSearchField()))
+        when(supplierService.parameterStringSupplier(USER_ID, messageDtoUpdate.getMainSearchField()))
                 .thenReturn(supplier);
         when(queryService.getQueryEntity(eq(query), any(Supplier.class))).thenReturn(messageBox);
         when(transformationFunctionService.getEntity(eq(Message.class), eq(messageDto))).thenReturn(newMessage);
@@ -117,7 +118,7 @@ class MessageServiceTest {
         NativeQuery<MessageBox> query = mock(NativeQuery.class);
 
         when(session.createNativeQuery(any(String.class), eq(MessageBox.class))).thenReturn(query);
-        when(supplierService.parameterStringSupplier("user_id", multipleFieldsSearchDtoDelete.getMainSearchField()))
+        when(supplierService.parameterStringSupplier(USER_ID, multipleFieldsSearchDtoDelete.getMainSearchField()))
                 .thenReturn(supplier);
         when(queryService.getQueryEntity(eq(query), any(Supplier.class))).thenReturn(messageBox);
         when(messageBox.getMessages()).thenReturn(Set.of(existingMessage));
@@ -149,7 +150,7 @@ class MessageServiceTest {
         NativeQuery<MessageBox> query = mock(NativeQuery.class);
 
         when(session.createNativeQuery(any(String.class), eq(MessageBox.class))).thenReturn(query);
-        when(supplierService.parameterStringSupplier("user_id", oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier(USER_ID, oneFieldEntityDto.getValue()))
                 .thenReturn(supplier);
         when(queryService.getQueryEntity(eq(query), any(Supplier.class))).thenReturn(messageBox);
         when(messageBox.getMessages()).thenReturn(Set.of(existingMessage));

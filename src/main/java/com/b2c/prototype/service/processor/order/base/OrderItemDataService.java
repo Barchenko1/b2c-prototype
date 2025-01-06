@@ -1,9 +1,10 @@
 package com.b2c.prototype.service.processor.order.base;
 
-import com.b2c.prototype.dao.order.IOrderItemDao;
+import com.b2c.prototype.dao.order.IOrderItemDataDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.request.OrderItemDataDto;
-import com.b2c.prototype.modal.dto.update.OrderItemDataDtoUpdate;
+import com.b2c.prototype.modal.dto.response.ResponseOrderItemDataDto;
+import com.b2c.prototype.modal.dto.searchfield.OrderItemDataSearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.order.OrderItemData;
 import com.b2c.prototype.service.common.EntityOperationDao;
 import com.b2c.prototype.service.common.IEntityOperationDao;
@@ -13,7 +14,7 @@ import com.b2c.prototype.service.supplier.ISupplierService;
 
 import java.util.List;
 
-import static com.b2c.prototype.util.UniqueIdUtil.getUUID;
+import static com.b2c.prototype.util.Constant.ORDER_ID;
 
 public class OrderItemDataService implements IOrderItemDataService {
 
@@ -21,10 +22,9 @@ public class OrderItemDataService implements IOrderItemDataService {
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
 
-
-    public OrderItemDataService(IOrderItemDao orderItemDao,
-                            ITransformationFunctionService transformationFunctionService,
-                            ISupplierService supplierService) {
+    public OrderItemDataService(IOrderItemDataDao orderItemDao,
+                                ITransformationFunctionService transformationFunctionService,
+                                ISupplierService supplierService) {
         this.entityOperationDao = new EntityOperationDao(orderItemDao);
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
@@ -35,18 +35,17 @@ public class OrderItemDataService implements IOrderItemDataService {
         entityOperationDao.executeConsumer(session -> {
             OrderItemData orderItemData =
                     transformationFunctionService.getEntity(OrderItemData.class, orderItemDataDto);
-            orderItemData.setOrderId(getUUID());
             session.merge(orderItemData);
         });
     }
 
     @Override
-    public void updateOrderItemData(OrderItemDataDtoUpdate orderItemDataDtoUpdate) {
+    public void updateOrderItemData(OrderItemDataSearchFieldEntityDto orderItemDataSearchFieldEntityDto) {
         entityOperationDao.executeConsumer(session -> {
             OrderItemData orderItemData = entityOperationDao.getEntity(
-                    supplierService.parameterStringSupplier("order_id", orderItemDataDtoUpdate.getSearchField()));
+                    supplierService.parameterStringSupplier(ORDER_ID, orderItemDataSearchFieldEntityDto.getSearchField()));
             OrderItemData newOrderItemData =
-                    transformationFunctionService.getEntity(OrderItemData.class, orderItemDataDtoUpdate.getNewEntity());
+                    transformationFunctionService.getEntity(OrderItemData.class, orderItemDataSearchFieldEntityDto.getNewEntity());
             newOrderItemData.setOrderId(orderItemData.getOrderId());
             newOrderItemData.setId(orderItemData.getId());
             session.merge(orderItemData);
@@ -56,19 +55,19 @@ public class OrderItemDataService implements IOrderItemDataService {
     @Override
     public void deleteOrderItemData(OneFieldEntityDto oneFieldEntityDto) {
         entityOperationDao.deleteEntityByParameter(
-                supplierService.parameterStringSupplier("order_id", oneFieldEntityDto.getValue()));
+                supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()));
     }
 
     @Override
-    public OrderItemDataDto getOrderItemData(OneFieldEntityDto oneFieldEntityDto) {
+    public ResponseOrderItemDataDto getResponseOrderItemData(OneFieldEntityDto oneFieldEntityDto) {
         return entityOperationDao.getEntityDto(
-                supplierService.parameterStringSupplier("order_id", oneFieldEntityDto.getValue()),
-                transformationFunctionService.getTransformationFunction(OrderItemData.class, OrderItemDataDto.class));
+                supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()),
+                transformationFunctionService.getTransformationFunction(OrderItemData.class, ResponseOrderItemDataDto.class));
     }
 
     @Override
-    public List<OrderItemDataDto> getOrderItemListData(OneFieldEntityDto oneFieldEntityDto) {
+    public List<ResponseOrderItemDataDto> getResponseOrderItemDataList() {
         return entityOperationDao.getEntityDtoList(
-                transformationFunctionService.getTransformationFunction(OrderItemData.class, OrderItemDataDto.class));
+                transformationFunctionService.getTransformationFunction(OrderItemData.class, ResponseOrderItemDataDto.class));
     }
 }

@@ -3,7 +3,7 @@ package com.b2c.prototype.service.processor.delivery.base;
 import com.b2c.prototype.dao.delivery.IDeliveryDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.request.DeliveryDto;
-import com.b2c.prototype.modal.dto.update.DeliverySearchFieldEntityDto;
+import com.b2c.prototype.modal.dto.searchfield.DeliverySearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
 import com.b2c.prototype.modal.entity.order.OrderItemData;
 import com.b2c.prototype.service.common.EntityOperationDao;
@@ -15,6 +15,8 @@ import com.b2c.prototype.service.supplier.ISupplierService;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+
+import static com.b2c.prototype.util.Constant.ORDER_ID;
 
 @Slf4j
 public class DeliveryService implements IDeliveryService {
@@ -39,7 +41,7 @@ public class DeliveryService implements IDeliveryService {
         entityOperationDao.executeConsumer(session -> {
             OrderItemData orderItemData = queryService.getEntity(
                     OrderItemData.class,
-                    supplierService.parameterStringSupplier("order_id", deliverySearchFieldEntityDto.getSearchField()));
+                    supplierService.parameterStringSupplier(ORDER_ID, deliverySearchFieldEntityDto.getSearchField()));
             DeliveryDto deliveryDto = deliverySearchFieldEntityDto.getNewEntity();
             Delivery newDelivery = transformationFunctionService.getEntity(Delivery.class, deliveryDto);
             Delivery delivery = orderItemData.getDelivery();
@@ -56,7 +58,7 @@ public class DeliveryService implements IDeliveryService {
         entityOperationDao.deleteEntity(
                 supplierService.entityFieldSupplier(
                         OrderItemData.class,
-                        supplierService.parameterStringSupplier("order_id", oneFieldEntityDto.getValue()),
+                        supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()),
                         transformationFunctionService.getTransformationFunction(OrderItemData.class, Delivery.class)));
     }
 
@@ -64,7 +66,7 @@ public class DeliveryService implements IDeliveryService {
     public DeliveryDto getDelivery(OneFieldEntityDto oneFieldEntityDto) {
         return queryService.getEntityDto(
                 OrderItemData.class,
-                supplierService.parameterStringSupplier("order_id", oneFieldEntityDto.getValue()),
+                supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(OrderItemData.class, DeliveryDto.class));
     }
 

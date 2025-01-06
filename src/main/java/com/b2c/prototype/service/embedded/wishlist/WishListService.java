@@ -28,7 +28,7 @@ public class WishListService implements IWishListService {
     public void deleteFromWishList(WishListDto requestItemBucketDto) {
 //        Parameter[] parameter = parameterFactory.createParameterArray(
 //                parameterFactory.createStringParameter("username", requestItemBucketDto.getUserId()),
-//                parameterFactory.createStringParameter("articularId", requestItemBucketDto.getArticularId())
+//                parameterFactory.createStringParameter(articularId, requestItemBucketDto.getArticularId())
 //        );
 
 //        super.deleteEntityByParameter(parameter);

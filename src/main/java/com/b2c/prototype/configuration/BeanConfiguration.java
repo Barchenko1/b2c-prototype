@@ -34,7 +34,7 @@ import com.b2c.prototype.dao.embedded.base.BasicBucketDao;
 import com.b2c.prototype.dao.payment.base.BasicCreditCardDao;
 import com.b2c.prototype.dao.option.base.BasicOptionItemDao;
 import com.b2c.prototype.dao.option.base.BasicOptionGroupDao;
-import com.b2c.prototype.dao.order.base.BasicOrderItemDao;
+import com.b2c.prototype.dao.order.base.BasicOrderItemDataDao;
 import com.b2c.prototype.dao.order.base.BasicOrderStatusDao;
 import com.b2c.prototype.dao.payment.base.BasicPaymentDao;
 import com.b2c.prototype.dao.post.base.BasicPostDao;
@@ -47,7 +47,7 @@ import com.b2c.prototype.dao.embedded.base.BasicWishListDao;
 import com.b2c.prototype.dao.embedded.IBucketDao;
 import com.b2c.prototype.dao.option.IOptionItemDao;
 import com.b2c.prototype.dao.option.IOptionGroupDao;
-import com.b2c.prototype.dao.order.IOrderItemDao;
+import com.b2c.prototype.dao.order.IOrderItemDataDao;
 import com.b2c.prototype.dao.order.IOrderStatusDao;
 import com.b2c.prototype.dao.payment.ICreditCardDao;
 import com.b2c.prototype.dao.payment.IPaymentDao;
@@ -210,8 +210,8 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public IOrderItemDao orderItemDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
-        return new BasicOrderItemDao(sessionFactory, entityIdentifierDao);
+    public IOrderItemDataDao orderItemDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicOrderItemDataDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean

@@ -7,7 +7,7 @@ import com.b2c.prototype.modal.dto.request.CreditCardDto;
 import com.b2c.prototype.modal.dto.request.DiscountDto;
 import com.b2c.prototype.modal.dto.request.PaymentDto;
 import com.b2c.prototype.modal.dto.request.PriceDto;
-import com.b2c.prototype.modal.dto.update.PaymentSearchFieldEntityDto;
+import com.b2c.prototype.modal.dto.searchfield.PaymentSearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.order.OrderItemData;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
@@ -31,6 +31,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static com.b2c.prototype.util.Constant.ORDER_ID;
+import static com.b2c.prototype.util.Constant.PAYMENT_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.any;
@@ -72,7 +74,7 @@ class PaymentServiceTest {
         Payment payment = mock(Payment.class);
         Payment newPayment = getPayment();
 
-        when(supplierService.parameterStringSupplier("order_id", paymentSearchFieldEntityDto.getSearchField()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, paymentSearchFieldEntityDto.getSearchField()))
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(OrderItemData.class, parameterSupplier))
                 .thenReturn(orderItemData);
@@ -107,7 +109,7 @@ class PaymentServiceTest {
         Payment payment = null;
         Payment newPayment = getPayment();
 
-        when(supplierService.parameterStringSupplier("order_id", paymentSearchFieldEntityDto.getSearchField()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, paymentSearchFieldEntityDto.getSearchField()))
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(OrderItemData.class, parameterSupplier))
                 .thenReturn(orderItemData);
@@ -134,14 +136,17 @@ class PaymentServiceTest {
         oneFieldEntityDto.setValue("123");
         Payment payment = getPayment();
 
+        Parameter parameter = mock(Parameter.class);
+        Supplier<Parameter> parameterSupplier = () -> parameter;
+        when(supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()))
+                .thenReturn(parameterSupplier);
         Supplier<Payment> paymentSupplier = () -> payment;
         Function<OrderItemData, Payment> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(eq(OrderItemData.class), eq(Payment.class)))
                 .thenReturn(function);
         when(supplierService.entityFieldSupplier(
                 OrderItemData.class,
-                "order_id",
-                oneFieldEntityDto.getValue(),
+                parameterSupplier,
                 function)
         ).thenReturn(paymentSupplier);
 
@@ -160,7 +165,7 @@ class PaymentServiceTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-        when(supplierService.parameterStringSupplier("paymentId", oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier(PAYMENT_ID, oneFieldEntityDto.getValue()))
                 .thenReturn(parameterSupplier);
         when(supplierService.entityFieldSupplier(Payment.class, parameterSupplier))
                 .thenReturn(paymentSupplier);
@@ -179,7 +184,7 @@ class PaymentServiceTest {
         Function<OrderItemData, PaymentDto> function = mock(Function.class);
 
         PaymentDto paymentDto = getPaymentDto();
-        when(supplierService.parameterStringSupplier("order_id", oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()))
                 .thenReturn(parameterSupplier);
         when(transformationFunctionService.getTransformationFunction(eq(OrderItemData.class), eq(PaymentDto.class)))
                 .thenReturn(function);
@@ -201,7 +206,7 @@ class PaymentServiceTest {
 
         Payment payment = getPayment();
         PaymentDto paymentDto = getPaymentDto();
-        when(supplierService.parameterStringSupplier("paymentId", oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier(PAYMENT_ID, oneFieldEntityDto.getValue()))
                 .thenReturn(parameterSupplier);
         when(transformationFunctionService.getTransformationFunction(eq(Payment.class), eq(PaymentDto.class)))
                 .thenReturn(function);
@@ -241,7 +246,7 @@ class PaymentServiceTest {
                 .build();
         return Payment.builder()
                 .id(1L)
-                .paymentId("paymentId")
+                .paymentId("123")
                 .paymentMethod(paymentMethod)
                 .creditCard(getCreditCard())
                 .fullPrice(getPrice(120))

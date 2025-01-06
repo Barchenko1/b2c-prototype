@@ -12,7 +12,7 @@ import com.b2c.prototype.dao.item.IItemTypeDao;
 import com.b2c.prototype.dao.message.IMessageStatusDao;
 import com.b2c.prototype.dao.message.IMessageTypeDao;
 import com.b2c.prototype.dao.option.IOptionGroupDao;
-import com.b2c.prototype.dao.order.IOrderItemDao;
+import com.b2c.prototype.dao.order.IOrderItemDataDao;
 import com.b2c.prototype.dao.order.IOrderStatusDao;
 import com.b2c.prototype.dao.payment.IPaymentMethodDao;
 import com.b2c.prototype.dao.price.ICurrencyDao;
@@ -318,7 +318,7 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public IOrderItemDataService orderItemService(IOrderItemDao orderItemDao,
+    public IOrderItemDataService orderItemService(IOrderItemDataDao orderItemDao,
                                                   ITransformationFunctionService transformationFunctionService,
                                                   ISupplierService supplierService) {
         return new OrderItemDataService(orderItemDao, transformationFunctionService, supplierService);

@@ -18,4 +18,4 @@ discount:
     isPercent: false
     currency_id: 1
 payment:
-  - paymentId: "1"
+  - upayment_id: "1"

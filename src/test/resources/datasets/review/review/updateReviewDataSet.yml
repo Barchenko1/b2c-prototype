@@ -1,0 +1,88 @@
+brand:
+  - id: 1
+    value: "Hermes"
+item_status:
+  - id: 1
+    value: "NEW"
+item_type:
+  - id: 1
+    value: "Clothes"
+currency:
+  - id: 1
+    value: "USD"
+price:
+  - id: 1
+    amount: 100
+    currency_id: 1
+discount:
+  - id: 1
+    amount: 5
+    charSequenceCode: "abc"
+    isActive: true
+    isPercent: false
+    currency_id: 1
+option_group:
+  - id: 1
+    value: "Size"
+option_item:
+  - id: 1
+    optionName: "L"
+    optiongroup_id: 1
+  - id: 2
+    optionName: "M"
+    optiongroup_id: 1
+category:
+  - id: 1
+    name: "parent"
+  - id: 2
+    category_id: 1
+    name: "root"
+  - id: 3
+    category_id: 2
+    name: "child"
+post:
+  - id: 1
+    title: "parent"
+    message: "parent"
+    uniquePostId: "1"
+    dateOfCreate: 100000
+  - id: 2
+    post_id: 1
+    title: "root"
+    message: "root"
+    uniquePostId: "2"
+    dateOfCreate: 100000
+  - id: 3
+    post_id: 2
+    title: "child"
+    message: "child"
+    uniquePostId: "3"
+    dateOfCreate: 100000
+item_data:
+  - id: 1
+    item_id: 123
+    brand_id: 1
+    category_id: 3
+    itemtype_id: 1
+    status_id: 1
+item:
+  - id: 1
+    itemdata_id: 1
+rating:
+  - id: 1
+    value: 1
+  - id: 2
+    value: 2
+  - id: 3
+    value: 3
+  - id: 4
+    value: 4
+  - id: 5
+    value: 5
+review:
+  - id: 1
+    title: "Update title"
+    message: "Update message"
+    dateOfCreate: 200
+    rating_id: 3
+

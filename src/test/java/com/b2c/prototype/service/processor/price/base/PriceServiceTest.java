@@ -1,13 +1,16 @@
 package com.b2c.prototype.service.processor.price.base;
 
+import static com.b2c.prototype.util.Constant.ORDER_ID;
+import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import com.b2c.prototype.dao.price.IPriceDao;
-import com.b2c.prototype.modal.constant.PriceType;
+import com.b2c.prototype.modal.constant.PriceTypeEnum;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.request.PriceDto;
-import com.b2c.prototype.modal.dto.request.PriceDtoSearchField;
+import com.b2c.prototype.modal.dto.searchfield.PriceSearchFieldEntityDto;
 import com.b2c.prototype.modal.dto.response.ResponsePriceDto;
 import com.b2c.prototype.modal.entity.item.ItemDataOption;
 import com.b2c.prototype.modal.entity.order.OrderItemData;
@@ -50,19 +53,19 @@ class PriceServiceTest {
 
     @Test
     void testSaveUpdateFullPriceByArticularId() {
-        PriceDtoSearchField priceDtoSearchField = getPriceDtoSearchField();
+        PriceSearchFieldEntityDto priceSearchFieldEntityDto = getPriceDtoSearchField();
 
         ItemDataOption itemDataOption = mock(ItemDataOption.class);
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        PriceType priceType = PriceType.FULL_PRICE;
+        PriceTypeEnum priceType = PriceTypeEnum.FULL_PRICE;
 
-        when(supplierService.parameterStringSupplier("articularId", priceDtoSearchField.getSearchField()))
+        when(supplierService.parameterStringSupplier(ARTICULAR_ID, priceSearchFieldEntityDto.getSearchField()))
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(ItemDataOption.class, parameterSupplier))
                 .thenReturn(itemDataOption);
-        when(transformationFunctionService.getEntity(Price.class, priceDtoSearchField.getNewEntity(), priceType.getValue()))
+        when(transformationFunctionService.getEntity(Price.class, priceSearchFieldEntityDto.getNewEntity(), priceType.getValue()))
                 .thenReturn(getPrice(100.0));
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -72,26 +75,26 @@ class PriceServiceTest {
             return null;
         }).when(priceDao).executeConsumer(any(Consumer.class));
 
-        priceService.saveUpdatePriceByArticularId(priceDtoSearchField, priceType);
+        priceService.saveUpdatePriceByArticularId(priceSearchFieldEntityDto, priceType);
 
         verify(priceDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
     void testSaveUpdateTotalPriceByArticularId() {
-        PriceDtoSearchField priceDtoSearchField = getPriceDtoSearchField();
+        PriceSearchFieldEntityDto priceSearchFieldEntityDto = getPriceDtoSearchField();
 
         ItemDataOption itemDataOption = mock(ItemDataOption.class);
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        PriceType priceType = PriceType.TOTAL_PRICE;
+        PriceTypeEnum priceType = PriceTypeEnum.TOTAL_PRICE;
 
-        when(supplierService.parameterStringSupplier("articularId", priceDtoSearchField.getSearchField()))
+        when(supplierService.parameterStringSupplier(ARTICULAR_ID, priceSearchFieldEntityDto.getSearchField()))
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(ItemDataOption.class, parameterSupplier))
                 .thenReturn(itemDataOption);
-        when(transformationFunctionService.getEntity(Price.class, priceDtoSearchField.getNewEntity(), priceType.getValue()))
+        when(transformationFunctionService.getEntity(Price.class, priceSearchFieldEntityDto.getNewEntity(), priceType.getValue()))
                 .thenReturn(getPrice(100.0));
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -101,27 +104,27 @@ class PriceServiceTest {
             return null;
         }).when(priceDao).executeConsumer(any(Consumer.class));
 
-        priceService.saveUpdatePriceByArticularId(priceDtoSearchField, priceType);
+        priceService.saveUpdatePriceByArticularId(priceSearchFieldEntityDto, priceType);
 
         verify(priceDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
     void testSaveUpdateFullPriceByArticularIdExistingPriceNull() {
-        PriceDtoSearchField priceDtoSearchField = getPriceDtoSearchField();
+        PriceSearchFieldEntityDto priceSearchFieldEntityDto = getPriceDtoSearchField();
 
         ItemDataOption itemDataOption = mock(ItemDataOption.class);
         when(itemDataOption.getFullPrice()).thenReturn(getPrice(100.0));
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        PriceType priceType = PriceType.FULL_PRICE;
+        PriceTypeEnum priceType = PriceTypeEnum.FULL_PRICE;
 
         Function<Price, PriceDto> function = mock(Function.class);
-        when(supplierService.parameterStringSupplier("articularId", priceDtoSearchField.getSearchField()))
+        when(supplierService.parameterStringSupplier(ARTICULAR_ID, priceSearchFieldEntityDto.getSearchField()))
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(ItemDataOption.class, parameterSupplier))
                 .thenReturn(itemDataOption);
-        when(transformationFunctionService.getEntity(Price.class, priceDtoSearchField.getNewEntity(), priceType.getValue()))
+        when(transformationFunctionService.getEntity(Price.class, priceSearchFieldEntityDto.getNewEntity(), priceType.getValue()))
                 .thenReturn(getPrice(100.0));
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -131,26 +134,26 @@ class PriceServiceTest {
             return null;
         }).when(priceDao).executeConsumer(any(Consumer.class));
 
-        priceService.saveUpdatePriceByArticularId(priceDtoSearchField, priceType);
+        priceService.saveUpdatePriceByArticularId(priceSearchFieldEntityDto, priceType);
 
         verify(priceDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
     void testSaveUpdateTotalPriceByArticularIdExistingPriceNull() {
-        PriceDtoSearchField priceDtoSearchField = getPriceDtoSearchField();
+        PriceSearchFieldEntityDto priceSearchFieldEntityDto = getPriceDtoSearchField();
 
         ItemDataOption itemDataOption = mock(ItemDataOption.class);
         when(itemDataOption.getTotalPrice()).thenReturn(getPrice(100.0));
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        PriceType priceType = PriceType.TOTAL_PRICE;
+        PriceTypeEnum priceType = PriceTypeEnum.TOTAL_PRICE;
 
-        when(supplierService.parameterStringSupplier("articularId", priceDtoSearchField.getSearchField()))
+        when(supplierService.parameterStringSupplier(ARTICULAR_ID, priceSearchFieldEntityDto.getSearchField()))
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(ItemDataOption.class, parameterSupplier))
                 .thenReturn(itemDataOption);
-        when(transformationFunctionService.getEntity(Price.class, priceDtoSearchField.getNewEntity(), priceType.getValue()))
+        when(transformationFunctionService.getEntity(Price.class, priceSearchFieldEntityDto.getNewEntity(), priceType.getValue()))
                 .thenReturn(getPrice(100.0));
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -160,14 +163,14 @@ class PriceServiceTest {
             return null;
         }).when(priceDao).executeConsumer(any(Consumer.class));
 
-        priceService.saveUpdatePriceByArticularId(priceDtoSearchField, priceType);
+        priceService.saveUpdatePriceByArticularId(priceSearchFieldEntityDto, priceType);
 
         verify(priceDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
     void testSaveUpdateTotalPriceByOrderId() {
-        PriceDtoSearchField priceDtoSearchField = getPriceDtoSearchField();
+        PriceSearchFieldEntityDto priceSearchFieldEntityDto = getPriceDtoSearchField();
 
         OrderItemData orderItemData = mock(OrderItemData.class);
         Payment payment = mock(Payment.class);
@@ -175,13 +178,13 @@ class PriceServiceTest {
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        PriceType priceType = PriceType.TOTAL_PRICE;
+        PriceTypeEnum priceType = PriceTypeEnum.TOTAL_PRICE;
 
-        when(supplierService.parameterStringSupplier("order_id", priceDtoSearchField.getSearchField()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, priceSearchFieldEntityDto.getSearchField()))
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(OrderItemData.class, parameterSupplier))
                 .thenReturn(orderItemData);
-        when(transformationFunctionService.getEntity(Price.class, priceDtoSearchField.getNewEntity(), priceType.getValue()))
+        when(transformationFunctionService.getEntity(Price.class, priceSearchFieldEntityDto.getNewEntity(), priceType.getValue()))
                 .thenReturn(getPrice(100.0));
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -191,14 +194,14 @@ class PriceServiceTest {
             return null;
         }).when(priceDao).executeConsumer(any(Consumer.class));
 
-        priceService.saveUpdatePriceByOrderId(priceDtoSearchField, priceType);
+        priceService.saveUpdatePriceByOrderId(priceSearchFieldEntityDto, priceType);
 
         verify(priceDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
     void testSaveUpdateFullPriceByOrderId() {
-        PriceDtoSearchField priceDtoSearchField = getPriceDtoSearchField();
+        PriceSearchFieldEntityDto priceSearchFieldEntityDto = getPriceDtoSearchField();
 
         OrderItemData orderItemData = mock(OrderItemData.class);
         Payment payment = mock(Payment.class);
@@ -206,13 +209,13 @@ class PriceServiceTest {
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        PriceType priceType = PriceType.FULL_PRICE;
+        PriceTypeEnum priceType = PriceTypeEnum.FULL_PRICE;
 
-        when(supplierService.parameterStringSupplier("order_id", priceDtoSearchField.getSearchField()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, priceSearchFieldEntityDto.getSearchField()))
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(OrderItemData.class, parameterSupplier))
                 .thenReturn(orderItemData);
-        when(transformationFunctionService.getEntity(Price.class, priceDtoSearchField.getNewEntity(), priceType.getValue()))
+        when(transformationFunctionService.getEntity(Price.class, priceSearchFieldEntityDto.getNewEntity(), priceType.getValue()))
                 .thenReturn(getPrice(100.0));
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -222,14 +225,14 @@ class PriceServiceTest {
             return null;
         }).when(priceDao).executeConsumer(any(Consumer.class));
 
-        priceService.saveUpdatePriceByOrderId(priceDtoSearchField, priceType);
+        priceService.saveUpdatePriceByOrderId(priceSearchFieldEntityDto, priceType);
 
         verify(priceDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
     void testSaveUpdateTotalPriceByOrderIdExistingPriceNull() {
-        PriceDtoSearchField priceDtoSearchField = getPriceDtoSearchField();
+        PriceSearchFieldEntityDto priceSearchFieldEntityDto = getPriceDtoSearchField();
 
         OrderItemData orderItemData = mock(OrderItemData.class);
         Payment payment = mock(Payment.class);
@@ -237,13 +240,13 @@ class PriceServiceTest {
         when(payment.getTotalPrice()).thenReturn(getPrice(100.0));
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        PriceType priceType = PriceType.TOTAL_PRICE;
+        PriceTypeEnum priceType = PriceTypeEnum.TOTAL_PRICE;
 
-        when(supplierService.parameterStringSupplier("order_id", priceDtoSearchField.getSearchField()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, priceSearchFieldEntityDto.getSearchField()))
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(OrderItemData.class, parameterSupplier))
                 .thenReturn(orderItemData);
-        when(transformationFunctionService.getEntity(Price.class, priceDtoSearchField.getNewEntity(), priceType.getValue()))
+        when(transformationFunctionService.getEntity(Price.class, priceSearchFieldEntityDto.getNewEntity(), priceType.getValue()))
                 .thenReturn(getPrice(100.0));
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -253,14 +256,14 @@ class PriceServiceTest {
             return null;
         }).when(priceDao).executeConsumer(any(Consumer.class));
 
-        priceService.saveUpdatePriceByOrderId(priceDtoSearchField, priceType);
+        priceService.saveUpdatePriceByOrderId(priceSearchFieldEntityDto, priceType);
 
         verify(priceDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
     void testSaveUpdateFullPriceByOrderIdExistingPriceNull() {
-        PriceDtoSearchField priceDtoSearchField = getPriceDtoSearchField();
+        PriceSearchFieldEntityDto priceSearchFieldEntityDto = getPriceDtoSearchField();
 
         OrderItemData orderItemData = mock(OrderItemData.class);
         Payment payment = mock(Payment.class);
@@ -268,13 +271,13 @@ class PriceServiceTest {
         when(payment.getFullPrice()).thenReturn(getPrice(100.0));
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        PriceType priceType = PriceType.FULL_PRICE;
+        PriceTypeEnum priceType = PriceTypeEnum.FULL_PRICE;
 
-        when(supplierService.parameterStringSupplier("order_id", priceDtoSearchField.getSearchField()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, priceSearchFieldEntityDto.getSearchField()))
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(OrderItemData.class, parameterSupplier))
                 .thenReturn(orderItemData);
-        when(transformationFunctionService.getEntity(Price.class, priceDtoSearchField.getNewEntity(), priceType.getValue()))
+        when(transformationFunctionService.getEntity(Price.class, priceSearchFieldEntityDto.getNewEntity(), priceType.getValue()))
                 .thenReturn(getPrice(100.0));
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -284,7 +287,7 @@ class PriceServiceTest {
             return null;
         }).when(priceDao).executeConsumer(any(Consumer.class));
 
-        priceService.saveUpdatePriceByOrderId(priceDtoSearchField, priceType);
+        priceService.saveUpdatePriceByOrderId(priceSearchFieldEntityDto, priceType);
 
         verify(priceDao).executeConsumer(any(Consumer.class));
     }
@@ -293,17 +296,20 @@ class PriceServiceTest {
     void testDeleteFullPriceByOrderId() {
         OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto();
         oneFieldEntityDto.setValue("123");
-        PriceType priceType = PriceType.FULL_PRICE;
+        PriceTypeEnum priceType = PriceTypeEnum.FULL_PRICE;
         Price price = getPrice(100.0);
         Supplier<Price> priceSupplier = () -> price;
 
+        Parameter parameter = mock(Parameter.class);
+        Supplier<Parameter> parameterSupplier = () -> parameter;
+        when(supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()))
+                .thenReturn(parameterSupplier);
         Function<OrderItemData, Price> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(OrderItemData.class, Price.class, priceType.getValue()))
                 .thenReturn(function);
         when(supplierService.entityFieldSupplier(
                 OrderItemData.class,
-                "order_id",
-                oneFieldEntityDto.getValue(),
+                parameterSupplier,
                 function
         )).thenReturn(priceSupplier);
         priceService.deletePriceByOrderId(oneFieldEntityDto, priceType);
@@ -315,17 +321,21 @@ class PriceServiceTest {
     void testDeleteTotalPriceByArticularId() {
         OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto();
         oneFieldEntityDto.setValue("123");
-        PriceType priceType = PriceType.TOTAL_PRICE;
+        PriceTypeEnum priceType = PriceTypeEnum.TOTAL_PRICE;
         Price price = getPrice(100.0);
         Supplier<Price> priceSupplier = () -> price;
+
+        Parameter parameter = mock(Parameter.class);
+        Supplier<Parameter> parameterSupplier = () -> parameter;
+        when(supplierService.parameterStringSupplier(ARTICULAR_ID, oneFieldEntityDto.getValue()))
+                .thenReturn(parameterSupplier);
 
         Function<ItemDataOption, Price> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(ItemDataOption.class, Price.class, priceType.getValue()))
                 .thenReturn(function);
         when(supplierService.entityFieldSupplier(
                 ItemDataOption.class,
-                "articularId",
-                oneFieldEntityDto.getValue(),
+                parameterSupplier,
                 function
         )).thenReturn(priceSupplier);
         priceService.deletePriceByArticularId(oneFieldEntityDto, priceType);
@@ -338,13 +348,13 @@ class PriceServiceTest {
         OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto();
         oneFieldEntityDto.setValue("123");
         OrderItemData orderItemData = mock(OrderItemData.class);
-        PriceType priceType = PriceType.FULL_PRICE;
+        PriceTypeEnum priceType = PriceTypeEnum.FULL_PRICE;
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
         PriceDto priceDto = getPriceDto(150.0);
         Function<OrderItemData, PriceDto> function = mock(Function.class);
-        when(supplierService.parameterStringSupplier("order_id", oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()))
                 .thenReturn(parameterSupplier);
         when(transformationFunctionService.getTransformationFunction(OrderItemData.class, PriceDto.class, priceType.getValue()))
                 .thenReturn(function);
@@ -368,7 +378,7 @@ class PriceServiceTest {
         OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto();
         oneFieldEntityDto.setValue("123");
         ItemDataOption itemDataOption = mock(ItemDataOption.class);
-        PriceType priceType = PriceType.FULL_PRICE;
+        PriceTypeEnum priceType = PriceTypeEnum.FULL_PRICE;
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
@@ -376,7 +386,7 @@ class PriceServiceTest {
         Function<ItemDataOption, PriceDto> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(ItemDataOption.class, PriceDto.class, priceType.getValue()))
                 .thenReturn(function);
-        when(supplierService.parameterStringSupplier("articularId", oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier(ARTICULAR_ID, oneFieldEntityDto.getValue()))
                 .thenReturn(parameterSupplier);
         when(function.apply(itemDataOption)).thenReturn(priceDto);
         when(queryService.getEntityDto(ItemDataOption.class, parameterSupplier, function))
@@ -408,7 +418,7 @@ class PriceServiceTest {
         Function<OrderItemData, ResponsePriceDto> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(OrderItemData.class, ResponsePriceDto.class))
                 .thenReturn(function);
-        when(supplierService.parameterStringSupplier("order_id", oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()))
                 .thenReturn(parameterSupplier);
         when(function.apply(orderItemData)).thenReturn(responsePriceDto);
         when(queryService.getEntityDto(OrderItemData.class, parameterSupplier, function))
@@ -438,7 +448,7 @@ class PriceServiceTest {
         Function<ItemDataOption, ResponsePriceDto> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(ItemDataOption.class, ResponsePriceDto.class))
                 .thenReturn(function);
-        when(supplierService.parameterStringSupplier("articularId", oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier(ARTICULAR_ID, oneFieldEntityDto.getValue()))
                 .thenReturn(parameterSupplier);
         when(function.apply(itemDataOption)).thenReturn(responsePriceDto);
         when(queryService.getEntityDto(ItemDataOption.class, parameterSupplier, function))
@@ -473,8 +483,8 @@ class PriceServiceTest {
         });
     }
 
-    private PriceDtoSearchField getPriceDtoSearchField() {
-        return PriceDtoSearchField.builder()
+    private PriceSearchFieldEntityDto getPriceDtoSearchField() {
+        return PriceSearchFieldEntityDto.builder()
                 .searchField("ART123")
                 .newEntity(getPriceDto(10))
                 .build();

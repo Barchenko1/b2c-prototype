@@ -13,6 +13,8 @@ import com.b2c.prototype.service.supplier.ISupplierService;
 
 import java.util.List;
 
+import static com.b2c.prototype.util.Constant.USER_ID;
+
 public class UserProfileService implements IUserProfileService {
 
     private final IEntityOperationDao entityOperationDao;
@@ -38,7 +40,7 @@ public class UserProfileService implements IUserProfileService {
     public void updateUserStatusByUserId(String userId, boolean isActive) {
         entityOperationDao.executeConsumer(session -> {
             UserProfile existingUser = entityOperationDao.getEntity(
-                    supplierService.parameterStringSupplier("user_id", userId));
+                    supplierService.parameterStringSupplier(USER_ID, userId));
             existingUser.setActive(isActive);
             session.merge(existingUser);
         });
@@ -47,13 +49,13 @@ public class UserProfileService implements IUserProfileService {
     @Override
     public void deleteUserProfileByUserId(String userId) {
         entityOperationDao.deleteEntityByParameter(
-                supplierService.parameterStringSupplier("user_id", userId));
+                supplierService.parameterStringSupplier(USER_ID, userId));
     }
 
     @Override
     public UserProfileDto getUserProfileByUserId(String userId) {
         return entityOperationDao.getEntityDto(
-                supplierService.parameterStringSupplier("user_id", userId),
+                supplierService.parameterStringSupplier(USER_ID, userId),
                 transformationFunctionService.getTransformationFunction(UserProfile.class, UserProfileDto.class));
     }
 

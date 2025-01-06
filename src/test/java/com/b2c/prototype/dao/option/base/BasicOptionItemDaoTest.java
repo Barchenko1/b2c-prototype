@@ -49,8 +49,6 @@ class BasicOptionItemDaoTest extends AbstractGeneralEntityDaoTest {
         try (Connection connection = connectionHolder.getConnection()) {
             connection.setAutoCommit(false);
             Statement statement = connection.createStatement();
-            statement.execute("DELETE FROM item_review");
-            statement.execute("DELETE FROM item_post");
             statement.execute("DELETE FROM item_data_option");
             connection.commit();
         } catch (Exception e) {

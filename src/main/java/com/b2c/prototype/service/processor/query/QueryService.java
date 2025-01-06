@@ -1,10 +1,7 @@
 package com.b2c.prototype.service.processor.query;
 
-import com.b2c.prototype.modal.entity.message.MessageBox;
 import com.tm.core.dao.query.ISearchWrapper;
 import com.tm.core.processor.finder.parameter.Parameter;
-import org.hibernate.Session;
-import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
 
 import java.util.List;
@@ -78,10 +75,25 @@ public class QueryService implements IQueryService {
                 .toList();
     }
 
+    public  <E> E getQueryEntityTest(Query<E> query, Supplier<Parameter> parameterSupplier) {
+        Parameter parameter = parameterSupplier.get();
+        query.setParameter(parameter.getName(), parameter.getValue());
+        return query.uniqueResult();
+    }
+
     @Override
     public  <E> E getQueryEntity(Query<E> query, Supplier<Parameter> parameterSupplier) {
         Parameter parameter = parameterSupplier.get();
         query.setParameter(parameter.getName(), parameter.getValue());
+        return query.uniqueResult();
+    }
+
+    @Override
+    public <E> E getQueryEntityParameterArray(Query<E> query, Supplier<Parameter[]> parameterSupplier) {
+        Parameter[] parameters = parameterSupplier.get();
+        for (Parameter parameter : parameters) {
+            query.setParameter(parameter.getName(), parameter.getValue());
+        }
         return query.uniqueResult();
     }
 }

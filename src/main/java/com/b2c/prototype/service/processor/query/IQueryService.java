@@ -20,4 +20,6 @@ public interface IQueryService {
     <R, E> List<R> getSubEntityDtoList(Class<?> clazz, Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction);
 
     <E> E getQueryEntity(Query<E> query, Supplier<Parameter> parameterSupplier);
+    <E> E getQueryEntityParameterArray(Query<E> query, Supplier<Parameter[]> parameterSupplier);
+
 }

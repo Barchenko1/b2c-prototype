@@ -1,16 +1,13 @@
 package com.b2c.prototype.service.processor.item;
 
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
-import com.b2c.prototype.modal.dto.request.ItemDataOptionDto;
+import com.b2c.prototype.modal.dto.searchfield.ItemDataOptionArraySearchFieldEntityDto;
 import com.b2c.prototype.modal.dto.response.ResponseItemDataOptionDto;
-import com.b2c.prototype.modal.dto.update.ItemDataOptionDtoUpdate;
-import com.b2c.prototype.modal.entity.item.ItemDataOption;
 
 import java.util.List;
 
 public interface IItemDataOptionService {
-    void saveItemDataOption(ItemDataOptionDto itemDataOptionDto);
-    void updateItemDataOption(ItemDataOptionDtoUpdate itemDataOptionDtoUpdate);
+    void saveUpdateItemDataOption(ItemDataOptionArraySearchFieldEntityDto itemDataOptionArraySearchFieldEntityDto);
     void deleteItemDataOption(OneFieldEntityDto oneFieldEntityDto);
 
     public ResponseItemDataOptionDto getResponseItemDataOptionDto(OneFieldEntityDto oneFieldEntityDto);

@@ -24,7 +24,7 @@ enums:
   deliveryTypes: IN_POST, COURIER
   itemStatuses: NEW, EXIST, COMING_SOON, OUT_OF_STOCK
   itemTypes: TECHNIQUE
-  messageStatuses: UNREAD, READIED, DELETED
+  messageStatuses: unread, read, delete
   messageTypes: SYSTEM
   optionGroups: TECHNIQUE
   orderStatuses: NEW, PENDING, COMPLETE, TERMINATED

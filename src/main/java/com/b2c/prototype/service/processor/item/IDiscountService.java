@@ -4,15 +4,15 @@ import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.request.DiscountDto;
 import com.b2c.prototype.modal.dto.request.DiscountStatusDto;
 import com.b2c.prototype.modal.dto.response.ResponseDiscountDto;
-import com.b2c.prototype.modal.dto.update.DiscountDtoUpdate;
+import com.b2c.prototype.modal.dto.searchfield.DiscountSearchFieldEntityDto;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface IDiscountService {
     void saveDiscount(DiscountDto discountDto);
-    void updateItemDataDiscount(DiscountDtoUpdate discountDtoUpdate);
-    void updateDiscount(DiscountDtoUpdate discountDtoUpdate);
+    void updateItemDataDiscount(DiscountSearchFieldEntityDto discountSearchFieldEntityDto);
+    void updateDiscount(DiscountSearchFieldEntityDto discountSearchFieldEntityDto);
     void changeDiscountStatus(DiscountStatusDto discountStatusDto);
     void deleteDiscount(OneFieldEntityDto oneFieldEntityDto);
 

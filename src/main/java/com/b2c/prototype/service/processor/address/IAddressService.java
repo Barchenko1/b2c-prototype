@@ -2,13 +2,13 @@ package com.b2c.prototype.service.processor.address;
 
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.request.AddressDto;
-import com.b2c.prototype.modal.dto.update.AddressSearchFieldDto;
+import com.b2c.prototype.modal.dto.searchfield.AddressSearchFieldEntityDto;
 
 import java.util.List;
 
 public interface IAddressService {
-    void saveUpdateAppUserAddress(AddressSearchFieldDto addressSearchFieldDto);
-    void saveUpdateDeliveryAddress(AddressSearchFieldDto addressSearchFieldDto);
+    void saveUpdateAppUserAddress(AddressSearchFieldEntityDto addressSearchFieldEntityDto);
+    void saveUpdateDeliveryAddress(AddressSearchFieldEntityDto addressSearchFieldEntityDto);
     void deleteAppUserAddress(OneFieldEntityDto oneFieldEntityDto);
     void deleteDeliveryAddress(OneFieldEntityDto oneFieldEntityDto);
 

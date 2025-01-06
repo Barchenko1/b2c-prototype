@@ -5,9 +5,8 @@ import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.request.DiscountDto;
 import com.b2c.prototype.modal.dto.request.DiscountStatusDto;
 import com.b2c.prototype.modal.dto.response.ResponseDiscountDto;
-import com.b2c.prototype.modal.dto.update.DiscountDtoUpdate;
+import com.b2c.prototype.modal.dto.searchfield.DiscountSearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.item.Discount;
-import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.modal.entity.item.ItemDataOption;
 import com.b2c.prototype.service.common.EntityOperationDao;
 import com.b2c.prototype.service.common.IEntityOperationDao;
@@ -18,6 +17,8 @@ import com.b2c.prototype.service.supplier.ISupplierService;
 
 import java.util.List;
 import java.util.Optional;
+
+import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 
 public class DiscountService implements IDiscountService {
 
@@ -44,14 +45,14 @@ public class DiscountService implements IDiscountService {
     }
 
     @Override
-    public void updateItemDataDiscount(DiscountDtoUpdate discountDtoUpdate) {
+    public void updateItemDataDiscount(DiscountSearchFieldEntityDto discountSearchFieldEntityDto) {
         entityOperationDao.executeConsumer(session -> {
             ItemDataOption itemDataOption = queryService.getEntity(
                     ItemDataOption.class,
-                    supplierService.parameterStringSupplier("articularId", discountDtoUpdate.getSearchField()));
+                    supplierService.parameterStringSupplier(ARTICULAR_ID, discountSearchFieldEntityDto.getSearchField()));
             Discount discount = transformationFunctionService.getEntity(
                     Discount.class,
-                    discountDtoUpdate.getNewEntity());
+                    discountSearchFieldEntityDto.getNewEntity());
 
             itemDataOption.setDiscount(discount);
             session.merge(itemDataOption);
@@ -60,10 +61,10 @@ public class DiscountService implements IDiscountService {
     }
 
     @Override
-    public void updateDiscount(DiscountDtoUpdate discountDtoUpdate) {
+    public void updateDiscount(DiscountSearchFieldEntityDto discountSearchFieldEntityDto) {
         entityOperationDao.updateEntityByParameter(
-                supplierService.getSupplier(Discount.class, discountDtoUpdate.getNewEntity()),
-                supplierService.parameterStringSupplier("charSequenceCode", discountDtoUpdate.getSearchField()));
+                supplierService.getSupplier(Discount.class, discountSearchFieldEntityDto.getNewEntity()),
+                supplierService.parameterStringSupplier("charSequenceCode", discountSearchFieldEntityDto.getSearchField()));
     }
 
     @Override

@@ -3,7 +3,7 @@ package com.b2c.prototype.service.processor.address.base;
 import com.b2c.prototype.dao.address.IAddressDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.request.AddressDto;
-import com.b2c.prototype.modal.dto.update.AddressSearchFieldDto;
+import com.b2c.prototype.modal.dto.searchfield.AddressSearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
@@ -26,6 +26,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static com.b2c.prototype.util.Constant.ORDER_ID;
+import static com.b2c.prototype.util.Constant.USER_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -57,11 +59,11 @@ class AddressServiceTest {
 
     @Test
     void testSaveUpdateAppUserAddress() {
-        AddressSearchFieldDto addressSearchFieldDto = getAddressSearchFieldDto();
+        AddressSearchFieldEntityDto addressSearchFieldEntityDto = getAddressSearchFieldDto();
         UserProfile userProfile = mock(UserProfile.class);
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier("user_id", addressSearchFieldDto.getSearchField()))
+        when(supplierService.parameterStringSupplier(USER_ID, addressSearchFieldEntityDto.getSearchField()))
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(UserProfile.class, parameterSupplier))
                 .thenReturn(userProfile);
@@ -73,21 +75,21 @@ class AddressServiceTest {
             return null;
         }).when(addressDao).executeConsumer(any(Consumer.class));
 
-        addressService.saveUpdateAppUserAddress(addressSearchFieldDto);
+        addressService.saveUpdateAppUserAddress(addressSearchFieldEntityDto);
 
         verify(addressDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
     void testSaveUpdateDeliveryAddress() {
-        AddressSearchFieldDto addressSearchFieldDto = getAddressSearchFieldDto();
+        AddressSearchFieldEntityDto addressSearchFieldEntityDto = getAddressSearchFieldDto();
         OrderItemData orderItemData = mock(OrderItemData.class);
         Delivery delivery = mock(Delivery.class);
         when(orderItemData.getDelivery()).thenReturn(delivery);
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier("order_id", addressSearchFieldDto.getSearchField()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, addressSearchFieldEntityDto.getSearchField()))
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(OrderItemData.class, parameterSupplier))
                 .thenReturn(orderItemData);
@@ -99,7 +101,7 @@ class AddressServiceTest {
             return null;
         }).when(addressDao).executeConsumer(any(Consumer.class));
 
-        addressService.saveUpdateDeliveryAddress(addressSearchFieldDto);
+        addressService.saveUpdateDeliveryAddress(addressSearchFieldEntityDto);
 
         verify(addressDao).executeConsumer(any(Consumer.class));
     }
@@ -112,14 +114,17 @@ class AddressServiceTest {
 
         when(userProfile.getAddress()).thenReturn(address);
 
+        Parameter parameter = mock(Parameter.class);
+        Supplier<Parameter> parameterSupplier = () -> parameter;
+        when(supplierService.parameterStringSupplier(USER_ID, dto.getValue()))
+                .thenReturn(parameterSupplier);
         Supplier<Address> addressSupplier = () -> address;
         Function<UserProfile, Address> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(UserProfile.class, Address.class))
                 .thenReturn(function);
         when(supplierService.entityFieldSupplier(
                 UserProfile.class,
-                "user_id",
-                dto.getValue(),
+                parameterSupplier,
                 function
         )).thenReturn(addressSupplier);
 
@@ -143,11 +148,15 @@ class AddressServiceTest {
 
     @Test
     void testDeleteDeliveryAddress() {
-        OneFieldEntityDto dto = new OneFieldEntityDto("order_id");
+        OneFieldEntityDto dto = new OneFieldEntityDto("123");
         OrderItemData orderItemData = mock(OrderItemData.class);
         Delivery delivery = mock(Delivery.class);
         Address address = getAddress();
 
+        Parameter parameter = mock(Parameter.class);
+        Supplier<Parameter> parameterSupplier = () -> parameter;
+        when(supplierService.parameterStringSupplier(ORDER_ID, dto.getValue()))
+                .thenReturn(parameterSupplier);
         when(orderItemData.getDelivery()).thenReturn(delivery);
         when(delivery.getAddress()).thenReturn(address);
         Supplier<Address> addressSupplier = () -> address;
@@ -156,8 +165,7 @@ class AddressServiceTest {
                 .thenReturn(function);
         when(supplierService.entityFieldSupplier(
                 OrderItemData.class,
-                "order_id",
-                dto.getValue(),
+                parameterSupplier,
                 function
         )).thenReturn(addressSupplier);
 
@@ -175,7 +183,7 @@ class AddressServiceTest {
         Parameter parameter = mock(Parameter.class);
 
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier("user_id", userId)).thenReturn(parameterSupplier);
+        when(supplierService.parameterStringSupplier(USER_ID, userId)).thenReturn(parameterSupplier);
 
         Function<UserProfile, AddressDto> transformationFunction = user -> getAddressDto();
         when(transformationFunctionService.getTransformationFunction(UserProfile.class, AddressDto.class))
@@ -206,7 +214,7 @@ class AddressServiceTest {
         Parameter parameter = mock(Parameter.class);
 
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier("order_id", orderId)).thenReturn(parameterSupplier);
+        when(supplierService.parameterStringSupplier(ORDER_ID, orderId)).thenReturn(parameterSupplier);
 
         Function<OrderItemData, AddressDto> transformationFunction = user -> getAddressDto();
         when(transformationFunctionService.getTransformationFunction(OrderItemData.class, AddressDto.class))
@@ -295,8 +303,8 @@ class AddressServiceTest {
                 .build();
     }
 
-    private AddressSearchFieldDto getAddressSearchFieldDto() {
-        return AddressSearchFieldDto.builder()
+    private AddressSearchFieldEntityDto getAddressSearchFieldDto() {
+        return AddressSearchFieldEntityDto.builder()
                 .searchField("123")
                 .newEntity(AddressDto.builder()
                         .country("USA")

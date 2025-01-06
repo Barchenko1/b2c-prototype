@@ -2,10 +2,14 @@ package com.b2c.prototype.configuration;
 
 import com.b2c.prototype.dao.address.ICountryDao;
 import com.b2c.prototype.dao.delivery.IDeliveryTypeDao;
+import com.b2c.prototype.dao.message.IMessageStatusDao;
+import com.b2c.prototype.dao.message.IMessageTypeDao;
 import com.b2c.prototype.dao.payment.IPaymentMethodDao;
 import com.b2c.prototype.dao.user.ICountryPhoneCodeDao;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
+import com.b2c.prototype.modal.entity.message.MessageStatus;
+import com.b2c.prototype.modal.entity.message.MessageType;
 import com.b2c.prototype.modal.entity.payment.PaymentMethod;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.order.OrderStatus;
@@ -22,8 +26,6 @@ import com.b2c.prototype.dao.item.IItemStatusDao;
 import com.b2c.prototype.dao.item.IItemTypeDao;
 import com.b2c.prototype.dao.rating.IRatingDao;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
-import com.tm.core.processor.finder.factory.IParameterFactory;
-import com.tm.core.processor.finder.parameter.Parameter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -116,6 +118,20 @@ public class ConstantBeanConfiguration {
     }
 
     @Bean
+    public Map<String, MessageStatus> messageStatusMap(IMessageStatusDao messageStatusDao) {
+        List<MessageStatus> messageStatusList = messageStatusDao.getEntityList();
+        return messageStatusList.stream()
+                .collect(Collectors.toMap(MessageStatus::getValue, messageStatus -> messageStatus, (existing, replacement) -> existing));
+    }
+
+    @Bean
+    public Map<String, MessageType> messageTypeMap(IMessageTypeDao messageTypeDao) {
+        List<MessageType> messageTypeList = messageTypeDao.getEntityList();
+        return messageTypeList.stream()
+                .collect(Collectors.toMap(MessageType::getValue, messageType -> messageType, (existing, replacement) -> existing));
+    }
+
+    @Bean
     public Map<Class<?>, Map<?, ?>> classEntityMap(
             IDeliveryTypeDao deliveryTypeDao,
             IPaymentMethodDao paymentMethodDao,
@@ -127,7 +143,9 @@ public class ConstantBeanConfiguration {
             IItemStatusDao itemStatusDao,
             IOptionGroupDao optionGroupDao,
             ICountryDao countryDao,
-            ICountryPhoneCodeDao countryPhoneCodeDao) {
+            ICountryPhoneCodeDao countryPhoneCodeDao,
+            IMessageStatusDao messageStatusDao,
+            IMessageTypeDao messageTypeDao) {
         return new HashMap<>(){{
             put(DeliveryType.class, deliveryTypeMap(deliveryTypeDao));
             put(PaymentMethod.class, paymentMethodMap(paymentMethodDao));
@@ -140,6 +158,8 @@ public class ConstantBeanConfiguration {
             put(OptionGroup.class, optionGroupMap(optionGroupDao));
             put(Country.class, countryMap(countryDao));
             put(CountryPhoneCode.class, countryPhoneCodeMap(countryPhoneCodeDao));
+            put(MessageStatus.class, messageStatusMap(messageStatusDao));
+            put(MessageType.class, messageTypeMap(messageTypeDao));
         }};
     }
 

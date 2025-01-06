@@ -9,7 +9,6 @@ contact_phone:
     country_phone_code_id: 2
 contact_info:
   - id: 1
-    name: "Update Wolter"
-    secondName: "Update White"
-    ordernumber: 0
+    firstName: "Update Wolter"
+    lastName: "Update White"
     contact_phone_id: 1

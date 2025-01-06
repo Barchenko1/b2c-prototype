@@ -2,9 +2,10 @@ package com.b2c.prototype.service.processor.option.base;
 
 import com.b2c.prototype.dao.cashed.ISingleValueMap;
 import com.b2c.prototype.dao.option.IOptionItemDao;
+import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.delete.MultipleFieldsSearchDtoDelete;
 import com.b2c.prototype.modal.dto.request.OptionItemDto;
-import com.b2c.prototype.modal.dto.update.OptionItemDtoUpdate;
+import com.b2c.prototype.modal.dto.searchfield.OptionItemSearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.item.ItemDataOption;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
@@ -14,11 +15,15 @@ import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.processor.option.IOptionItemService;
 import com.b2c.prototype.service.processor.query.IQueryService;
 import com.b2c.prototype.service.supplier.ISupplierService;
+import com.tm.core.processor.finder.parameter.Parameter;
+import org.hibernate.query.NativeQuery;
 
 import java.util.List;
 import java.util.Set;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
+
+import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
+import static com.b2c.prototype.util.Query.SELECT_OPTION_ITEM_BY_OPTION_GROUP_AND_OPTION_ITEM_NAME;
 
 public class OptionItemService implements IOptionItemService {
 
@@ -40,132 +45,85 @@ public class OptionItemService implements IOptionItemService {
     }
 
     @Override
-    public void saveUpdateOptionItemSetByArticularId(OptionItemDtoUpdate optionItemDtoUpdate) {
+    public void saveUpdateOptionItemSetByArticularId(OptionItemSearchFieldEntityDto optionItemSearchFieldEntityDto) {
         entityOperationDao.executeConsumer(session -> {
-            Set<OptionItem> optionItemSet = (Set<OptionItem>) transformationFunctionService.getEntity(
-                    OptionItem.class, optionItemDtoUpdate.getNewEntity(), "set");
+            OptionItem newOptionItem = transformationFunctionService.getEntity(
+                    OptionItem.class, optionItemSearchFieldEntityDto.getNewEntity());
             ItemDataOption itemDataOption = queryService.getEntity(
                     ItemDataOption.class,
-                    supplierService.parameterStringSupplier("articularId", optionItemDtoUpdate.getSearchField()));
-            optionItemSet.forEach(optionItem -> {
-                OptionGroup optionGroup = optionItem.getOptionGroup();
-                session.merge(optionItem);
-                singleValueMap.putEntity(OptionItem.class, "optionName", optionItem);
-                if (optionGroup != null) {
-                    singleValueMap.putEntity(OptionGroup.class, "value", optionGroup);
-                }
+                    supplierService.parameterStringSupplier(ARTICULAR_ID, optionItemSearchFieldEntityDto.getSearchField()));
+            OptionItem optionItem = itemDataOption.getOptionItem();
+            optionItem.setOptionName(newOptionItem.getOptionName());
+            optionItem.setOptionGroup(newOptionItem.getOptionGroup());
+            itemDataOption.setOptionItem(optionItem);
+
+            session.merge(itemDataOption);
+            singleValueMap.putEntity(OptionGroup.class, "value", newOptionItem.getOptionGroup());
+            singleValueMap.putEntity(OptionItem.class, "optionName", newOptionItem.getOptionName());
+        });
+    }
+
+    @Override
+    public void saveUpdateOptionItemSetByOptionGroupName(OptionItemDto optionItemDto) {
+        entityOperationDao.executeConsumer(session -> {
+            Set<OptionItem> newOptionItemSet = (Set<OptionItem>) transformationFunctionService.getEntityCollection(
+                    OptionItem.class, optionItemDto);
+            newOptionItemSet.forEach(newOptionItem -> {
+                session.merge(newOptionItem);
+                singleValueMap.putEntity(OptionGroup.class, "value", newOptionItem.getOptionGroup());
+                singleValueMap.putEntity(OptionItem.class, "optionName", newOptionItem);
             });
         });
     }
 
     @Override
-    public void saveUpdateOptionItemSetByOptionGroupName(OptionItemDtoUpdate optionItemDtoUpdate) {
-        entityOperationDao.executeConsumer(session -> {
-            Set<OptionItem> optionItemSet = (Set<OptionItem>) transformationFunctionService.getEntity(
-                    OptionItem.class, optionItemDtoUpdate.getNewEntity(), "set");
-            ItemDataOption itemDataOption = queryService.getEntity(
-                    ItemDataOption.class,
-                    supplierService.parameterStringSupplier("", optionItemDtoUpdate.getSearchField()));
-            optionItemSet.forEach(optionItem -> {
-                OptionGroup optionGroup = optionItem.getOptionGroup();
-                session.merge(optionItem);
-                singleValueMap.putEntity(OptionItem.class, "optionName", optionItem);
-                if (optionGroup != null) {
-                    singleValueMap.putEntity(OptionGroup.class, "value", optionGroup);
-                }
-            });
-        });
-    }
-
-    @Override
-    public void replaceOptionItemSetByArticularId(OptionItemDtoUpdate optionItemDtoUpdate) {
-        entityOperationDao.executeConsumer(session -> {
-            Set<OptionItem> newOptionItemSet = (Set<OptionItem>) transformationFunctionService.getEntity(
-                    OptionItem.class, optionItemDtoUpdate.getNewEntity(), "set");
-            ItemDataOption itemDataOption = queryService.getEntity(
-                    ItemDataOption.class,
-                    supplierService.parameterStringSupplier("articularId", optionItemDtoUpdate.getSearchField()));
-            newOptionItemSet.forEach(optionItem -> {
-                OptionGroup optionGroup = optionItem.getOptionGroup();
-                session.merge(optionItem);
-                singleValueMap.putEntity(OptionItem.class, "optionName", optionItem);
-                if (optionGroup != null) {
-                    singleValueMap.getEntityMap(OptionGroup.class).putIfAbsent("value", optionGroup);
-                }
-            });
-
-        });
-    }
-
-    @Override
-    public void replaceOptionItemSetByOptionGroupName(OptionItemDtoUpdate optionItemDtoUpdate) {
-        entityOperationDao.executeConsumer(session -> {
-            Set<OptionItem> newOptionItemSet = (Set<OptionItem>) transformationFunctionService.getEntity(
-                    OptionItem.class, optionItemDtoUpdate.getNewEntity(), "set");
-            ItemDataOption itemDataOption = queryService.getEntity(
-                    ItemDataOption.class,
-                    supplierService.parameterStringSupplier("articularId", optionItemDtoUpdate.getSearchField()));
-//            existingOptionItem.setOptionName(optionItemDtoUpdate.getOptionItemValue());
-//            Set<ItemData> itemDataSet = existingOptionItem.getItemDataSet();
-//            itemDataSet.forEach(itemData -> {
-//                itemData.removeOptionItem(existingOptionItem);
-//                newOptionItemSet.forEach(itemData::addOptionItem);
-//                session.merge(itemData);
-//            });
-        });
-    }
-
-    @Override
-    public void deleteOptionItemByArticularId(MultipleFieldsSearchDtoDelete multipleFieldsSearchDtoDelete) {
-        entityOperationDao.deleteEntity(optionItemByArticularIdSupplier(multipleFieldsSearchDtoDelete));
+    public void deleteOptionItemByArticularId(OneFieldEntityDto oneFieldEntityDto) {
+        entityOperationDao.deleteEntity(
+                supplierService.entityFieldSupplier(
+                        ItemDataOption.class,
+                        supplierService.parameterStringSupplier(ARTICULAR_ID, oneFieldEntityDto.getValue()),
+                        transformationFunctionService.getTransformationFunction(ItemDataOption.class, OptionItem.class)));
     }
 
     @Override
     public void deleteOptionItemByOptionGroupName(MultipleFieldsSearchDtoDelete multipleFieldsSearchDtoDelete) {
-        entityOperationDao.deleteEntity(optionItemByOptionGroupNameSupplier(multipleFieldsSearchDtoDelete));
+        entityOperationDao.executeConsumer(session -> {
+            NativeQuery<OptionItem> query = session.createNativeQuery(SELECT_OPTION_ITEM_BY_OPTION_GROUP_AND_OPTION_ITEM_NAME, OptionItem.class);
+            OptionItem optionItem = queryService.getQueryEntityParameterArray(
+                    query,
+                    () -> new Parameter[] {
+                            supplierService.parameterStringSupplier("value", multipleFieldsSearchDtoDelete.getMainSearchField()).get(),
+                            supplierService.parameterStringSupplier("optionName", multipleFieldsSearchDtoDelete.getInnerSearchField()).get()
+                    }
+            );
+
+            session.remove(optionItem);
+        });
     }
 
     @Override
-    public List<String> getOptionItemListByOptionGroup(String optionGroupName) {
-        return getFilteredOptionItemListByOptionGroupName(optionGroupName).stream()
-                .map(OptionItem::getOptionName)
+    public List<OptionItemDto> getOptionItemListByOptionGroup(OneFieldEntityDto oneFieldEntityDto) {
+        List<OptionItem> optionItemList = queryService.getSubEntityList(
+                OptionItem.class,
+                supplierService.parameterStringSupplier("value", oneFieldEntityDto.getValue()));
+        return optionItemList.stream()
+                .map(transformationFunctionService.getTransformationFunction(OptionItem.class, OptionItemDto.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<OptionItemDto> getOptionItems() {
+    public OptionItemDto getOptionItemByItemArticularId(OneFieldEntityDto oneFieldEntityDto) {
+        return queryService.getEntityDto(
+                ItemDataOption.class,
+                supplierService.parameterStringSupplier(ARTICULAR_ID, oneFieldEntityDto.getValue()),
+                transformationFunctionService.getTransformationFunction(ItemDataOption.class, OptionItemDto.class));
+    }
+
+    @Override
+    public List<OptionItemDto> getOptionItemList() {
         return queryService.getEntityDtoList(
                 OptionItem.class,
                 transformationFunctionService.getTransformationFunction(OptionItem.class, OptionItemDto.class, "set"));
     }
 
-    private List<OptionItem> getFilteredOptionItemListByOptionGroupName(String optionGroupName) {
-        List<OptionItem> optionItemList = queryService.getSubEntityList(
-                OptionItem.class,
-                supplierService.parameterStringSupplier("value", optionGroupName));
-        return optionItemList.stream()
-                .filter(oi -> oi.getOptionGroup().getValue().equals(optionGroupName))
-                .collect(Collectors.toList());
-    }
-
-    Supplier<OptionItem> optionItemByArticularIdSupplier(MultipleFieldsSearchDtoDelete multipleFieldsSearchDtoDelete) {
-        return () -> {
-            ItemDataOption itemDataOption = queryService.getEntity(
-                    ItemDataOption.class,
-                    supplierService.parameterStringSupplier("articularId", multipleFieldsSearchDtoDelete.getMainSearchField()));
-            return itemDataOption.getOptionItem();
-        };
-    }
-
-    Supplier<OptionItem> optionItemByOptionGroupNameSupplier(MultipleFieldsSearchDtoDelete multipleFieldsSearchDtoDelete) {
-        return () -> {
-            List<OptionItem> optionItemList = queryService.getSubEntityList(
-                    OptionItem.class,
-                    supplierService.parameterStringSupplier("value", multipleFieldsSearchDtoDelete.getMainSearchField()));
-            return optionItemList.stream()
-                    .filter(oi -> multipleFieldsSearchDtoDelete.getInnerSearchField().equals(oi.getOptionName()))
-                    .findFirst()
-                    .orElse(null);
-        };
-    }
 }

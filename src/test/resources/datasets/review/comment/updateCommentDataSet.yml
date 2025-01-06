@@ -1,0 +1,9 @@
+comment:
+  - id: 1
+    title: "parent"
+  - id: 2
+    comment_id: 1
+    title: "Update root"
+  - id: 3
+    comment_id: 2
+    title: "child"

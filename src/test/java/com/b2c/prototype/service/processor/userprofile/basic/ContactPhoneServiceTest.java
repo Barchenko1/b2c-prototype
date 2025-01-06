@@ -3,10 +3,11 @@ package com.b2c.prototype.service.processor.userprofile.basic;
 import com.b2c.prototype.dao.cashed.ISingleValueMap;
 import com.b2c.prototype.dao.user.IContactPhoneDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
-import com.b2c.prototype.modal.dto.request.ContactInfoSearchFieldOrderNumberDto;
+import com.b2c.prototype.modal.dto.searchfield.BeneficiarySearchFieldOrderNumberDto;
 import com.b2c.prototype.modal.dto.request.ContactPhoneDto;
-import com.b2c.prototype.modal.dto.update.ContactPhoneDtoUpdate;
+import com.b2c.prototype.modal.dto.searchfield.ContactPhoneSearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.order.OrderItemData;
+import com.b2c.prototype.modal.entity.order.Beneficiary;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
@@ -27,10 +28,11 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static com.b2c.prototype.util.Constant.ORDER_ID;
+import static com.b2c.prototype.util.Constant.USER_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -58,7 +60,7 @@ class ContactPhoneServiceTest {
 
     @Test
     void testSaveUpdateContactPhoneByUserId() {
-        ContactPhoneDtoUpdate contactPhoneDtoUpdate = ContactPhoneDtoUpdate.builder()
+        ContactPhoneSearchFieldEntityDto contactPhoneSearchFieldEntityDto = ContactPhoneSearchFieldEntityDto.builder()
                 .newEntity(ContactPhoneDto.builder()
                         .phoneNumber("48")
                         .countryPhoneCode("US")
@@ -78,8 +80,8 @@ class ContactPhoneServiceTest {
                 .thenReturn(userProfile);
         when(transformationFunctionService.getEntity(
                 ContactPhone.class,
-                contactPhoneDtoUpdate.getNewEntity())).thenReturn(contactPhone);
-        when(supplierService.parameterStringSupplier("user_id", contactPhoneDtoUpdate.getSearchField()))
+                contactPhoneSearchFieldEntityDto.getNewEntity())).thenReturn(contactPhone);
+        when(supplierService.parameterStringSupplier(USER_ID, contactPhoneSearchFieldEntityDto.getSearchField()))
                 .thenReturn(parameterSupplier);
         when(userProfile.getContactInfo()).thenReturn(contactInfo);
         when(contactInfo.getContactPhone()).thenReturn(contactPhone);
@@ -92,14 +94,14 @@ class ContactPhoneServiceTest {
             return null;
         }).when(contactPhoneDao).executeConsumer(any(Consumer.class));
 
-        contactPhoneService.saveUpdateContactPhoneByUserId(contactPhoneDtoUpdate);
+        contactPhoneService.saveUpdateContactPhoneByUserId(contactPhoneSearchFieldEntityDto);
 
         verify(contactPhoneDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
     void testSaveUpdateContactPhoneByOrderId() {
-        ContactPhoneDtoUpdate contactPhoneDtoUpdate = ContactPhoneDtoUpdate.builder()
+        ContactPhoneSearchFieldEntityDto contactPhoneSearchFieldEntityDto = ContactPhoneSearchFieldEntityDto.builder()
                 .orderNumber(0)
                 .newEntity(ContactPhoneDto.builder()
                         .phoneNumber("48")
@@ -113,29 +115,29 @@ class ContactPhoneServiceTest {
         Parameter mockParameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> mockParameter;
         OrderItemData orderItemData = mock(OrderItemData.class);
-        ContactInfo contactInfo = mock(ContactInfo.class);
-        List<ContactInfo> orderItemList = List.of(contactInfo);
+        Beneficiary beneficiary = mock(Beneficiary.class);
+        List<Beneficiary> orderItemList = List.of(beneficiary);
 
         when(singleValueMap.getEntity(CountryPhoneCode.class, "code", "US")).thenReturn(getCountryPhoneCode());
         when(queryService.getEntity(eq(OrderItemData.class), any(Supplier.class)))
                 .thenReturn(orderItemData);
         when(transformationFunctionService.getEntity(
                 ContactPhone.class,
-                contactPhoneDtoUpdate.getNewEntity())).thenReturn(contactPhone);
-        when(supplierService.parameterStringSupplier("order_id", contactPhoneDtoUpdate.getSearchField()))
+                contactPhoneSearchFieldEntityDto.getNewEntity())).thenReturn(contactPhone);
+        when(supplierService.parameterStringSupplier(ORDER_ID, contactPhoneSearchFieldEntityDto.getSearchField()))
                 .thenReturn(parameterSupplier);
         when(orderItemData.getBeneficiaries()).thenReturn(orderItemList);
-        when(contactInfo.getContactPhone()).thenReturn(contactPhone);
+        when(beneficiary.getContactPhone()).thenReturn(contactPhone);
 
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
             Session session = mock(Session.class);
             consumer.accept(session);
-            verify(session).merge(contactInfo);
+            verify(session).merge(beneficiary);
             return null;
         }).when(contactPhoneDao).executeConsumer(any(Consumer.class));
 
-        contactPhoneService.saveUpdateContactPhoneByOrderId(contactPhoneDtoUpdate);
+        contactPhoneService.saveUpdateContactPhoneByOrderId(contactPhoneSearchFieldEntityDto);
 
         verify(contactPhoneDao).executeConsumer(any(Consumer.class));
     }
@@ -147,15 +149,19 @@ class ContactPhoneServiceTest {
         OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto(userId);
         UserProfile userProfile = mock(UserProfile.class);
         ContactInfo contactInfo = mock(ContactInfo.class);
+        ContactPhone contactPhone = getTestContactPhone();
+        Supplier<ContactPhone> contactPhoneSupplier = () -> contactPhone;
 
         Supplier<Parameter> parameterSupplier = () -> mockParameter;
-        when(queryService.getEntity(eq(UserProfile.class), any(Supplier.class)))
-                .thenReturn(userProfile);
-        when(supplierService.parameterStringSupplier("user_id", userId))
+        Function<UserProfile, ContactPhone> function = mock(Function.class);
+        when(transformationFunctionService.getTransformationFunction(UserProfile.class, ContactPhone.class))
+                .thenReturn(function);
+        when(supplierService.entityFieldSupplier(UserProfile.class, parameterSupplier, function))
+                .thenReturn(contactPhoneSupplier);
+        when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(parameterSupplier);
         when(userProfile.getContactInfo()).thenReturn(contactInfo);
         when(contactInfo.getContactPhone()).thenReturn(getTestContactPhone());
-        doNothing().when(contactPhoneDao).deleteEntity(any(Supplier.class));
 
         contactPhoneService.deleteContactPhoneByUserId(oneFieldEntityDto);
 
@@ -166,27 +172,34 @@ class ContactPhoneServiceTest {
     void testDeleteContactPhoneByOrderId() {
         String orderId = "123";
         Parameter mockParameter = mock(Parameter.class);
-        ContactInfoSearchFieldOrderNumberDto contactInfoSearchFieldOrderNumberDto =
-                ContactInfoSearchFieldOrderNumberDto.builder()
+        BeneficiarySearchFieldOrderNumberDto beneficiarySearchFieldOrderNumberDto =
+                BeneficiarySearchFieldOrderNumberDto.builder()
                         .orderNumber(0)
                         .value(orderId)
                         .build();
         OrderItemData orderItemData = mock(OrderItemData.class);
-        ContactInfo contactInfo = mock(ContactInfo.class);
-        List<ContactInfo> contactInfoList = List.of(contactInfo);
+        Beneficiary beneficiary = mock(Beneficiary.class);
+        ContactPhone contactPhone = getTestContactPhone();
+        List<Beneficiary> beneficiaryList = List.of(beneficiary);
 
         Supplier<Parameter> parameterSupplier = () -> mockParameter;
         when(queryService.getEntity(eq(OrderItemData.class), any(Supplier.class)))
                 .thenReturn(orderItemData);
-        when(supplierService.parameterStringSupplier("order_id", orderId))
+        when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-        when(orderItemData.getBeneficiaries()).thenReturn(contactInfoList);
-        when(contactInfo.getContactPhone()).thenReturn(getTestContactPhone());
-        doNothing().when(contactPhoneDao).deleteEntity(any(Supplier.class));
+        when(orderItemData.getBeneficiaries()).thenReturn(beneficiaryList);
+        when(beneficiary.getContactPhone()).thenReturn(contactPhone);
+        doAnswer(invocation -> {
+            Consumer<Session> consumer = invocation.getArgument(0);
+            Session session = mock(Session.class);
+            consumer.accept(session);
+            verify(session).remove(contactPhone);
+            return null;
+        }).when(contactPhoneDao).executeConsumer(any(Consumer.class));
 
-        contactPhoneService.deleteContactPhoneByOrderId(contactInfoSearchFieldOrderNumberDto);
+        contactPhoneService.deleteContactPhoneByOrderId(beneficiarySearchFieldOrderNumberDto);
 
-        verify(contactPhoneDao).deleteEntity(any(Supplier.class));
+        verify(contactPhoneDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
@@ -202,7 +215,7 @@ class ContactPhoneServiceTest {
         Supplier<Parameter> parameterSupplier = () -> mockParameter;
         Function<UserProfile, ContactPhoneDto> mapFunction = profile -> contactPhoneDto;
 
-        when(supplierService.parameterStringSupplier("user_id", oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier(USER_ID, oneFieldEntityDto.getValue()))
                 .thenReturn(parameterSupplier);
         when(transformationFunctionService.getTransformationFunction(UserProfile.class, ContactPhoneDto.class))
                 .thenReturn(mapFunction);
@@ -229,13 +242,13 @@ class ContactPhoneServiceTest {
         ContactPhoneDto contactPhoneDto = createContactPhoneDto();
         Parameter mockParameter = mock(Parameter.class);
         OrderItemData orderItemData = mock(OrderItemData.class);
-        ContactInfo contactInfo = mock(ContactInfo.class);
+        Beneficiary beneficiary = mock(Beneficiary.class);
         ContactPhone contactPhone = getTestContactPhone();
 
         Supplier<Parameter> parameterSupplier = () -> mockParameter;
         Function<OrderItemData, ContactPhoneDto> mapFunction = profile -> contactPhoneDto;
 
-        when(supplierService.parameterStringSupplier("order_id", oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()))
                 .thenReturn(parameterSupplier);
         when(transformationFunctionService.getTransformationFunction(OrderItemData.class, ContactPhoneDto.class, "list"))
                 .thenReturn(mapFunction);
@@ -247,8 +260,8 @@ class ContactPhoneServiceTest {
                     assertEquals(mockParameter, paramSupplier.get());
                     return List.of(mappingFunction.apply(orderItemData));
                 });
-        when(orderItemData.getBeneficiaries()).thenReturn(List.of(contactInfo));
-        when(contactInfo.getContactPhone()).thenReturn(contactPhone);
+        when(orderItemData.getBeneficiaries()).thenReturn(List.of(beneficiary));
+        when(beneficiary.getContactPhone()).thenReturn(contactPhone);
 
         List<ContactPhoneDto> resultList = contactPhoneService.getContactPhoneByOrderId(oneFieldEntityDto);
         assertEquals(1, resultList.size());

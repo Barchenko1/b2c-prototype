@@ -5,9 +5,9 @@ import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
 import com.b2c.prototype.modal.entity.post.Post;
+import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
-import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.UserProfile;
 import com.b2c.prototype.util.CardUtil;
 import com.tm.core.dao.common.AbstractEntityDao;
@@ -56,7 +56,6 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
             connection.setAutoCommit(false);
             Statement statement = connection.createStatement();
             statement.execute("DELETE FROM user_profile_credit_card");
-            statement.execute("DELETE FROM user_profile_post");
 
             statement.execute("TRUNCATE TABLE contact_info RESTART IDENTITY CASCADE");
             statement.execute("TRUNCATE TABLE contact_phone RESTART IDENTITY CASCADE");
@@ -95,8 +94,8 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
                 .build();
         ContactInfo contactInfo = ContactInfo.builder()
                 .id(1L)
-                .name("Wolter")
-                .secondName("White")
+                .firstName("Wolter")
+                .lastName("White")
                 .contactPhone(contactPhone)
                 .build();
         Country country = Country.builder()
@@ -126,8 +125,6 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
                 .id(1L)
                 .title("parent")
                 .uniquePostId("1")
-                .authorEmail("parent@email.com")
-                .authorUserName("parent")
                 .message("parent")
                 .dateOfCreate(100000)
                 .build();
@@ -141,7 +138,6 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
                 .contactInfo(contactInfo)
                 .address(address)
                 .creditCardList(List.of(creditCard))
-                .postList(List.of(parent))
                 .build();
     }
 
@@ -157,8 +153,8 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
                 .build();
         ContactInfo contactInfo = ContactInfo.builder()
                 .id(1L)
-                .name("Wolter")
-                .secondName("White")
+                .firstName("Wolter")
+                .lastName("White")
                 .contactPhone(contactPhone)
                 .build();
         Country country = Country.builder()
@@ -189,8 +185,6 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
                 .id(1L)
                 .title("parent")
                 .uniquePostId("1")
-                .authorEmail("parent@email.com")
-                .authorUserName("parent")
                 .message("parent")
                 .dateOfCreate(100000)
                 .build();
@@ -203,7 +197,6 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
                 .contactInfo(contactInfo)
                 .address(address)
                 .creditCardList(List.of(creditCard))
-                .postList(List.of(parent))
                 .build();
     }
 
@@ -219,8 +212,8 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
                 .build();
         ContactInfo contactInfo = ContactInfo.builder()
                 .id(1L)
-                .name("Wolter")
-                .secondName("White")
+                .firstName("Wolter")
+                .lastName("White")
                 .contactPhone(contactPhone)
                 .build();
         Country country = Country.builder()
@@ -251,8 +244,6 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
                 .id(1L)
                 .title("Update parent")
                 .uniquePostId("1")
-                .authorEmail("parent@email.com")
-                .authorUserName("Update parent")
                 .message("Update parent")
                 .dateOfCreate(100000)
                 .build();
@@ -266,7 +257,6 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
                 .contactInfo(contactInfo)
                 .address(address)
                 .creditCardList(List.of(creditCard))
-                .postList(List.of(parent))
                 .build();
     }
 
@@ -322,7 +312,6 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
         address.setId(0L);
         CreditCard creditCard = userProfile.getCreditCardList().get(0);
         creditCard.setId(0L);
-        userProfile.setPostList(null);
 
         dao.persistEntity(userProfile);
         verifyExpectedData("/datasets/user/user_profile/saveUserProfileWithDetailsDataSet.yml");
@@ -362,7 +351,6 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
             userProfile.setAddress(s.merge(userProfile.getAddress()));
             userProfile.setContactInfo(s.merge(userProfile.getContactInfo()));
             userProfile.setCreditCardList(userProfile.getCreditCardList().stream().map(s::merge).toList());
-            userProfile.setPostList(userProfile.getPostList().stream().map(s::merge).toList());
             s.persist(userProfile);
         };
 

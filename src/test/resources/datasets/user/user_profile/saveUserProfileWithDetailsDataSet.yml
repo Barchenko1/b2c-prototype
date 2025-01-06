@@ -7,9 +7,8 @@ contact_phone:
     country_phone_code_id: 1
 contact_info:
   - id: 1
-    name: "Wolter"
-    secondName: "White"
-    ordernumber: 0
+    firstName: "Wolter"
+    lastName: "White"
     contact_phone_id: 1
 country:
   - id: 1
@@ -24,7 +23,6 @@ address:
     zipCode: 90000
     city: "city"
     country_id: 1
-post: []
 credit_card:
   - id: 1
     cardNumber: "4444-1111-2222-3333"

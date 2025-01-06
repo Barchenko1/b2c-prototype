@@ -4,7 +4,7 @@ import com.b2c.prototype.dao.item.IItemDataDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.request.ItemDataDto;
 import com.b2c.prototype.modal.dto.response.ResponseItemDataDto;
-import com.b2c.prototype.modal.dto.update.ItemDataDtoUpdate;
+import com.b2c.prototype.modal.dto.searchfield.ItemDataSearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.ItemData;
@@ -27,6 +27,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static com.b2c.prototype.util.Constant.ITEM_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doAnswer;
@@ -39,16 +40,12 @@ class ItemDataServiceTest {
 
     @Mock
     private IItemDataDao itemDataDao;
-
     @Mock
     private IQueryService queryService;
-
     @Mock
     private ITransformationFunctionService transformationFunctionService;
-
     @Mock
     private ISupplierService supplierService;
-
     @InjectMocks
     private ItemDataService itemDataService;
 
@@ -58,74 +55,85 @@ class ItemDataServiceTest {
     }
 
     @Test
-    void testSaveUpdateItemData() {
-        String articularId = "articularIdValue";
-        ItemDataDtoUpdate itemDataDtoUpdate = ItemDataDtoUpdate.builder()
-                .searchField(articularId)
-                .newEntity(getItemDataDto())
-                .build();
-        ItemDataOption itemDataOption = getItemDataOption();
-        ItemData updateItemData = getItemData();
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
+    void testSaveItemData() {
+        ItemDataDto itemDataDto = getItemDataDto();
+        ItemData itemData = getItemData();
 
-        when(supplierService.parameterStringSupplier("articularId", itemDataDtoUpdate.getSearchField()))
-                .thenReturn(parameterSupplier);
-        when(queryService.getEntity(ItemDataOption.class, parameterSupplier))
-                .thenReturn(itemDataOption);
-        when(transformationFunctionService.getEntity(ItemData.class, itemDataDtoUpdate.getNewEntity()))
-                .thenReturn(updateItemData);
+        when(transformationFunctionService.getEntity(ItemData.class, itemDataDto))
+                .thenReturn(itemData);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
             Session session = mock(Session.class);
             consumer.accept(session);
-            verify(session).merge(itemDataOption);
+            verify(session).merge(itemData);
             return null;
         }).when(itemDataDao).executeConsumer(any(Consumer.class));
 
-        itemDataService.saveUpdateItemData(itemDataDtoUpdate);
+        itemDataService.saveItemData(itemDataDto);
+
+        verify(itemDataDao).executeConsumer(any(Consumer.class));
+    }
+
+    @Test
+    void testUpdateItemData() {
+        String articularId = "articularIdValue";
+        ItemDataSearchFieldEntityDto itemDataSearchFieldEntityDto = ItemDataSearchFieldEntityDto.builder()
+                .searchField(articularId)
+                .newEntity(getItemDataDto())
+                .build();
+        ItemData itemData = getItemData();
+        Parameter parameter = mock(Parameter.class);
+        Supplier<Parameter> parameterSupplier = () -> parameter;
+
+        when(supplierService.parameterStringSupplier(ITEM_ID, itemDataSearchFieldEntityDto.getSearchField()))
+                .thenReturn(parameterSupplier);
+        when(itemDataDao.getEntity(parameter)).thenReturn(itemData);
+        when(transformationFunctionService.getEntity(ItemData.class, itemDataSearchFieldEntityDto.getNewEntity()))
+                .thenReturn(itemData);
+        doAnswer(invocation -> {
+            Consumer<Session> consumer = invocation.getArgument(0);
+            Session session = mock(Session.class);
+            consumer.accept(session);
+            verify(session).merge(itemData);
+            return null;
+        }).when(itemDataDao).executeConsumer(any(Consumer.class));
+
+        itemDataService.updateItemData(itemDataSearchFieldEntityDto);
 
         verify(itemDataDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
     void testDeleteItemData() {
-        String articularId = "articularIdValue";
+        String articularId = "articular_id";
         OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto(articularId);
-        ItemData itemData = getItemData();
-        Supplier<ItemData> itemDataSupplier = () -> itemData;
-        Function<ItemDataOption, ItemData> function = mock(Function.class);
 
-        when(transformationFunctionService.getTransformationFunction(ItemDataOption.class, ItemData.class))
-                .thenReturn(function);
-        when(supplierService.entityFieldSupplier(
-                ItemDataOption.class,
-                "articularId",
-                oneFieldEntityDto.getValue(),
-                function
-        )).thenReturn(itemDataSupplier);
+        Parameter parameter = mock(Parameter.class);
+        Supplier<Parameter> parameterSupplier = () -> parameter;
+        when(supplierService.parameterStringSupplier(ITEM_ID, oneFieldEntityDto.getValue()))
+                .thenReturn(parameterSupplier);
 
         itemDataService.deleteItemData(oneFieldEntityDto);
 
-        verify(itemDataDao).deleteEntity(itemDataSupplier);
+        verify(itemDataDao).findEntityAndDelete(parameter);
     }
 
     @Test
     void testGetItemData() {
-        String articularId = "articularIdValue";
-        OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto(articularId);
+        String itemId = "itemId";
+        OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto(itemId);
+        ItemData itemData = getItemData();
         ResponseItemDataDto responseDto = getResponseItemDataDto();
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-        Function<ItemDataOption, ItemData> function = mock(Function.class);
-
-        when(supplierService.parameterStringSupplier("articularId", articularId))
+        Function<ItemData, ResponseItemDataDto> function = mock(Function.class);
+        when(supplierService.parameterStringSupplier(ITEM_ID, itemId))
                 .thenReturn(parameterSupplier);
-        when(transformationFunctionService.getTransformationFunction(ItemDataOption.class, ItemData.class))
+        when(transformationFunctionService.getTransformationFunction(ItemData.class, ResponseItemDataDto.class))
                 .thenReturn(function);
-        when(queryService.getEntityDto(eq(ItemDataOption.class), any(), any())).thenReturn(responseDto);
-
+        when(itemDataDao.getEntity(parameter)).thenReturn(itemData);
+        when(function.apply(itemData)).thenReturn(responseDto);
         ResponseItemDataDto result = itemDataService.getItemData(oneFieldEntityDto);
 
         assertEquals(responseDto, result);
@@ -135,12 +143,14 @@ class ItemDataServiceTest {
     void testGetItemDataList() {
         ResponseItemDataDto responseItemDataDto = getResponseItemDataDto();
         List<ResponseItemDataDto> responseDtoList = List.of(responseItemDataDto);
-        Function<ItemData, ResponseItemDataDto> function = mock(Function.class);
+        ItemData itemData = getItemData();
+        ResponseItemDataDto responseDto = getResponseItemDataDto();
 
-        when(transformationFunctionService.getTransformationFunction(eq(ItemData.class), eq(ResponseItemDataDto.class)))
+        Function<ItemData, ResponseItemDataDto> function = mock(Function.class);
+        when(transformationFunctionService.getTransformationFunction(ItemData.class, ResponseItemDataDto.class))
                 .thenReturn(function);
-        when(queryService.getEntityDtoList(ItemDataOption.class, function))
-                .thenReturn(responseDtoList);
+        when(itemDataDao.getEntityList()).thenReturn(List.of(itemData));
+        when(function.apply(itemData)).thenReturn(responseDto);
 
         List<ResponseItemDataDto> result = itemDataService.getItemDataList();
 
@@ -150,13 +160,14 @@ class ItemDataServiceTest {
     @Test
     void testGetItemDataListFiltered() {
         List<ResponseItemDataDto> responseDtoList = List.of(getResponseItemDataDto());
+        ItemData itemData = getItemData();
+        ResponseItemDataDto responseDto = getResponseItemDataDto();
 
         Function<ItemData, ResponseItemDataDto> function = mock(Function.class);
-
-        when(transformationFunctionService.getTransformationFunction(eq(ItemData.class), eq(ResponseItemDataDto.class)))
+        when(transformationFunctionService.getTransformationFunction(ItemData.class, ResponseItemDataDto.class))
                 .thenReturn(function);
-        when(queryService.getEntityDtoList(ItemDataOption.class, function))
-                .thenReturn(responseDtoList);
+        when(itemDataDao.getEntityList()).thenReturn(List.of(itemData));
+        when(function.apply(itemData)).thenReturn(responseDto);
 
         List<ResponseItemDataDto> result = itemDataService.getItemDataListFiltered();
 
@@ -168,12 +179,13 @@ class ItemDataServiceTest {
         String sortType = "asc";
         ResponseItemDataDto responseDto = getResponseItemDataDto();
         List<ResponseItemDataDto> responseDtoList = List.of(responseDto);
-        Function<ItemData, ResponseItemDataDto> function = mock(Function.class);
+        ItemData itemData = getItemData();
 
-        when(transformationFunctionService.getTransformationFunction(eq(ItemData.class), eq(ResponseItemDataDto.class)))
+        Function<ItemData, ResponseItemDataDto> function = mock(Function.class);
+        when(transformationFunctionService.getTransformationFunction(ItemData.class, ResponseItemDataDto.class))
                 .thenReturn(function);
-        when(queryService.getEntityDtoList(ItemDataOption.class, function))
-                .thenReturn(responseDtoList);
+        when(itemDataDao.getEntityList()).thenReturn(List.of(itemData));
+        when(function.apply(itemData)).thenReturn(responseDto);
 
         List<ResponseItemDataDto> result = itemDataService.getItemDataListSorted(sortType);
 
@@ -211,7 +223,6 @@ class ItemDataServiceTest {
     private ItemDataOption getItemDataOption() {
         return ItemDataOption.builder()
                 .articularId("articularIdValue")
-                .itemData(getItemData())
                 .build();
     }
 }

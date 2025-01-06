@@ -114,8 +114,6 @@ public class PostService extends AbstractTransitiveSelfEntityService implements 
         Post post = Post.builder()
                 .title(requestPostDto.getTitle())
                 .message(requestPostDto.getMessage())
-                .authorUserName(requestPostDto.getAuthorUserName())
-                .authorEmail(requestPostDto.getAuthorEmail())
                 .parent(parentPost)
                 .uniquePostId(uniquePostId)
                 .dateOfCreate(System.currentTimeMillis())

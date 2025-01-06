@@ -21,6 +21,7 @@
         <!-- add annotated resources here -->
         <mapping class="com.b2c.prototype.modal.entity.user.CountryPhoneCode" />
         <mapping class="com.b2c.prototype.modal.entity.user.ContactPhone" />
+        <mapping class="com.b2c.prototype.modal.entity.order.Beneficiary" />
         <mapping class="com.b2c.prototype.modal.entity.user.ContactInfo" />
         <mapping class="com.b2c.prototype.modal.entity.price.Currency" />
         <mapping class="com.b2c.prototype.modal.entity.price.Price" />
@@ -34,6 +35,11 @@
         <mapping class="com.b2c.prototype.modal.entity.address.Address" />
         <mapping class="com.b2c.prototype.modal.entity.delivery.Delivery" />
         <mapping class="com.b2c.prototype.modal.entity.order.OrderStatus" />
+        <mapping class="com.b2c.prototype.modal.entity.user.UserProfile" />
+        <mapping class="com.b2c.prototype.modal.entity.item.ItemDataOptionQuantity" />
+        <mapping class="com.b2c.prototype.modal.entity.item.ItemDataOption" />
+        <mapping class="com.b2c.prototype.modal.entity.option.OptionItem" />
+        <mapping class="com.b2c.prototype.modal.entity.option.OptionGroup" />
         <mapping class="com.b2c.prototype.modal.embedded.order.TempOrderItem" />
         <mapping class="com.b2c.prototype.modal.embedded.user.TempUserProfile" />
         <mapping class="com.b2c.prototype.modal.embedded.item.TempItemDataQuantity" />

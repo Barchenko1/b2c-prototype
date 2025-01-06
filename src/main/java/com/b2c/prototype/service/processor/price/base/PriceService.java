@@ -1,10 +1,10 @@
 package com.b2c.prototype.service.processor.price.base;
 
 import com.b2c.prototype.dao.price.IPriceDao;
-import com.b2c.prototype.modal.constant.PriceType;
+import com.b2c.prototype.modal.constant.PriceTypeEnum;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.request.PriceDto;
-import com.b2c.prototype.modal.dto.request.PriceDtoSearchField;
+import com.b2c.prototype.modal.dto.searchfield.PriceSearchFieldEntityDto;
 import com.b2c.prototype.modal.dto.response.ResponsePriceDto;
 import com.b2c.prototype.modal.entity.item.ItemDataOption;
 import com.b2c.prototype.modal.entity.order.OrderItemData;
@@ -18,6 +18,9 @@ import com.b2c.prototype.service.common.IEntityOperationDao;
 import com.b2c.prototype.service.supplier.ISupplierService;
 
 import java.util.List;
+
+import static com.b2c.prototype.util.Constant.ORDER_ID;
+import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 
 public class PriceService implements IPriceService {
 
@@ -37,19 +40,19 @@ public class PriceService implements IPriceService {
     }
 
     @Override
-    public void saveUpdatePriceByOrderId(PriceDtoSearchField priceDtoSearchField, PriceType priceType) {
+    public void saveUpdatePriceByOrderId(PriceSearchFieldEntityDto priceSearchFieldEntityDto, PriceTypeEnum priceType) {
         entityOperationDao.executeConsumer(session -> {
             OrderItemData orderItemData = queryService.getEntity(
                     OrderItemData.class,
-                    supplierService.parameterStringSupplier("order_id", priceDtoSearchField.getSearchField()));
+                    supplierService.parameterStringSupplier(ORDER_ID, priceSearchFieldEntityDto.getSearchField()));
             Price price = transformationFunctionService.getEntity(
-                    Price.class, priceDtoSearchField.getNewEntity(), priceType.getValue());
+                    Price.class, priceSearchFieldEntityDto.getNewEntity(), priceType.getValue());
             Payment payment = orderItemData.getPayment();
 
-            if (priceType == PriceType.FULL_PRICE) {
+            if (priceType == PriceTypeEnum.FULL_PRICE) {
                 updateFullPrice(payment, price);
             }
-            if (priceType == PriceType.TOTAL_PRICE) {
+            if (priceType == PriceTypeEnum.TOTAL_PRICE) {
                 updateTotalPrice(payment, price);
             }
             session.merge(payment);
@@ -57,18 +60,18 @@ public class PriceService implements IPriceService {
     }
 
     @Override
-    public void saveUpdatePriceByArticularId(PriceDtoSearchField priceDtoSearchField, PriceType priceType) {
+    public void saveUpdatePriceByArticularId(PriceSearchFieldEntityDto priceSearchFieldEntityDto, PriceTypeEnum priceType) {
         entityOperationDao.executeConsumer(session -> {
             ItemDataOption itemDataOption = queryService.getEntity(
                     ItemDataOption.class,
-                    supplierService.parameterStringSupplier("articularId", priceDtoSearchField.getSearchField()));
+                    supplierService.parameterStringSupplier(ARTICULAR_ID, priceSearchFieldEntityDto.getSearchField()));
             Price price = transformationFunctionService.getEntity(
-                    Price.class, priceDtoSearchField.getNewEntity(), priceType.getValue());
+                    Price.class, priceSearchFieldEntityDto.getNewEntity(), priceType.getValue());
 
-            if (priceType == PriceType.FULL_PRICE) {
+            if (priceType == PriceTypeEnum.FULL_PRICE) {
                 updateFullPrice(itemDataOption, price);
             }
-            if (priceType == PriceType.TOTAL_PRICE) {
+            if (priceType == PriceTypeEnum.TOTAL_PRICE) {
                 updateTotalPrice(itemDataOption, price);
             }
             session.merge(itemDataOption);
@@ -76,12 +79,11 @@ public class PriceService implements IPriceService {
     }
 
     @Override
-    public void deletePriceByOrderId(OneFieldEntityDto oneFieldEntityDto, PriceType priceType) {
+    public void deletePriceByOrderId(OneFieldEntityDto oneFieldEntityDto, PriceTypeEnum priceType) {
         entityOperationDao.deleteEntity(
                 supplierService.entityFieldSupplier(
                         OrderItemData.class,
-                        "order_id",
-                        oneFieldEntityDto.getValue(),
+                        supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()),
                         transformationFunctionService.getTransformationFunction(
                                 OrderItemData.class, Price.class, priceType.getValue())
                 )
@@ -89,12 +91,11 @@ public class PriceService implements IPriceService {
     }
 
     @Override
-    public void deletePriceByArticularId(OneFieldEntityDto oneFieldEntityDto, PriceType priceType) {
+    public void deletePriceByArticularId(OneFieldEntityDto oneFieldEntityDto, PriceTypeEnum priceType) {
         entityOperationDao.deleteEntity(
                 supplierService.entityFieldSupplier(
                         ItemDataOption.class,
-                        "articularId",
-                        oneFieldEntityDto.getValue(),
+                        supplierService.parameterStringSupplier(ARTICULAR_ID, oneFieldEntityDto.getValue()),
                         transformationFunctionService.getTransformationFunction(
                                 ItemDataOption.class, Price.class, priceType.getValue())
                 )
@@ -102,19 +103,19 @@ public class PriceService implements IPriceService {
     }
 
     @Override
-    public PriceDto getPriceByOrderId(OneFieldEntityDto oneFieldEntityDto, PriceType priceType) {
+    public PriceDto getPriceByOrderId(OneFieldEntityDto oneFieldEntityDto, PriceTypeEnum priceType) {
         return queryService.getEntityDto(
                 OrderItemData.class,
-                supplierService.parameterStringSupplier("order_id", oneFieldEntityDto.getValue()),
+                supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(
                         OrderItemData.class, PriceDto.class, priceType.getValue()));
     }
 
     @Override
-    public PriceDto getPriceByArticularId(OneFieldEntityDto oneFieldEntityDto, PriceType priceType) {
+    public PriceDto getPriceByArticularId(OneFieldEntityDto oneFieldEntityDto, PriceTypeEnum priceType) {
         return queryService.getEntityDto(
                 ItemDataOption.class,
-                supplierService.parameterStringSupplier("articularId", oneFieldEntityDto.getValue()),
+                supplierService.parameterStringSupplier(ARTICULAR_ID, oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(
                         ItemDataOption.class, PriceDto.class, priceType.getValue()));
     }
@@ -123,7 +124,7 @@ public class PriceService implements IPriceService {
     public ResponsePriceDto getResponsePriceDtoByArticularId(OneFieldEntityDto oneFieldEntityDto) {
         return queryService.getEntityDto(
                 ItemDataOption.class,
-                supplierService.parameterStringSupplier("articularId", oneFieldEntityDto.getValue()),
+                supplierService.parameterStringSupplier(ARTICULAR_ID, oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(ItemDataOption.class, ResponsePriceDto.class));
     }
 
@@ -131,7 +132,7 @@ public class PriceService implements IPriceService {
     public ResponsePriceDto getResponsePriceDtoByOrderId(OneFieldEntityDto oneFieldEntityDto) {
         return queryService.getEntityDto(
                 OrderItemData.class,
-                supplierService.parameterStringSupplier("order_id", oneFieldEntityDto.getValue()),
+                supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(OrderItemData.class, ResponsePriceDto.class));
     }
 

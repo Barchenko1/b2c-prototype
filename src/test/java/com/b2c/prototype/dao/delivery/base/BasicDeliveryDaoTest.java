@@ -305,7 +305,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
         Parameter parameter = new Parameter("id", 1);
 
         dao.findEntityAndDelete(parameter);
-        verifyExpectedData("/datasets/delivery/delivery/emptyDeliveryWithoutAddressDataSet.yml");
+        verifyExpectedData("/datasets/delivery/delivery/emptyDeliveryWithAddressDataSet.yml");
     }
 
     @Test
@@ -341,7 +341,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
         Delivery delivery = prepareTestDelivery();
 
         dao.deleteEntity(delivery);
-        verifyExpectedData("/datasets/delivery/delivery/emptyDeliveryWithoutAddressDataSet.yml");
+        verifyExpectedData("/datasets/delivery/delivery/emptyDeliveryWithAddressDataSet.yml");
     }
 
     @Test

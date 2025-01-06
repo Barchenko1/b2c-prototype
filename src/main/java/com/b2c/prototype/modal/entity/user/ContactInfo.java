@@ -8,6 +8,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.Date;
+
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "contact_info")
@@ -15,5 +17,5 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 public class ContactInfo extends AbstractContactInfo {
-    private int orderNumber;
+    private Date birthdayDate;
 }

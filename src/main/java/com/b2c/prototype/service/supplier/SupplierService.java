@@ -24,17 +24,6 @@ public class SupplierService implements ISupplierService {
 
     @Override
     public <E, R> Supplier<R> entityFieldSupplier(Class<E> entityClass,
-                                                  String fieldName,
-                                                  String fieldValue,
-                                                  Function<E, R> fieldExtractor) {
-        return () -> {
-            E entity = queryService.getEntity(entityClass, parameterStringSupplier(fieldName, fieldValue));
-            return fieldExtractor.apply(entity);
-        };
-    }
-
-    @Override
-    public <E, R> Supplier<R> entityFieldSupplier(Class<E> entityClass,
                                                   Supplier<Parameter> parameterSupplier,
                                                   Function<E, R> fieldExtractor) {
         return () -> {

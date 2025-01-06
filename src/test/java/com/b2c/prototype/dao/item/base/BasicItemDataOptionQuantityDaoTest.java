@@ -36,7 +36,7 @@ class BasicItemDataOptionQuantityDaoTest extends AbstractSingleEntityDaoTest {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(ItemDataOptionQuantity.class, "item_data_option_quantity"));
         entityIdentifierDao = new EntityIdentifierDao(sessionManager, entityMappingManager);
-        dao = new BasicItemQuantityDao(sessionFactory, entityIdentifierDao);
+        dao = new BasicItemDataOptionQuantityDao(sessionFactory, entityIdentifierDao);
     }
 
     @BeforeEach
@@ -140,7 +140,6 @@ class BasicItemDataOptionQuantityDaoTest extends AbstractSingleEntityDaoTest {
                 .id(1L)
                 .articularId("1")
                 .dateOfCreate(10000)
-                .itemData(itemData)
                 .optionItem(optionItem)
                 .articularId("1")
                 .build();
@@ -183,7 +182,7 @@ class BasicItemDataOptionQuantityDaoTest extends AbstractSingleEntityDaoTest {
                 .rating(rating)
                 .build();
 
-        item.addReview(review);
+//        item.addReview(review);
     }
 
     private void addPosts(Item item) {
@@ -191,8 +190,6 @@ class BasicItemDataOptionQuantityDaoTest extends AbstractSingleEntityDaoTest {
                 .id(1L)
                 .title("parent")
                 .uniquePostId("1")
-                .authorEmail("parent@email.com")
-                .authorUserName("parent")
                 .message("parent")
                 .dateOfCreate(100000)
                 .build();
@@ -200,8 +197,6 @@ class BasicItemDataOptionQuantityDaoTest extends AbstractSingleEntityDaoTest {
                 .id(2L)
                 .title("root")
                 .uniquePostId("2")
-                .authorEmail("root@email.com")
-                .authorUserName("root")
                 .message("root")
                 .dateOfCreate(100000)
                 .build();
@@ -209,8 +204,6 @@ class BasicItemDataOptionQuantityDaoTest extends AbstractSingleEntityDaoTest {
                 .id(3L)
                 .title("child")
                 .uniquePostId("3")
-                .authorEmail("child@email.com")
-                .authorUserName("child")
                 .message("child")
                 .dateOfCreate(100000)
                 .build();
@@ -218,8 +211,8 @@ class BasicItemDataOptionQuantityDaoTest extends AbstractSingleEntityDaoTest {
         parent.addChildPost(root);
         root.addChildPost(child);
 
-        item.addPost(parent);
-        item.addPost(root);
-        item.addPost(child);
+//        item.addPost(parent);
+//        item.addPost(root);
+//        item.addPost(child);
     }
 }

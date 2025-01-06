@@ -42,7 +42,7 @@ category:
     name: "child"
 item_data:
   - id: 1
-    itemId: 123
+    item_id: 123
     brand_id: 1
     category_id: 3
     itemtype_id: 1

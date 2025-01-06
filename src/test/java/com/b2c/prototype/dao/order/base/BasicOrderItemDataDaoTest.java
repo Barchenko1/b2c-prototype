@@ -20,9 +20,9 @@ import com.b2c.prototype.modal.entity.order.OrderStatus;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
 import com.b2c.prototype.modal.entity.payment.Payment;
 import com.b2c.prototype.modal.entity.payment.PaymentMethod;
-import com.b2c.prototype.modal.entity.post.Post;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
+import com.b2c.prototype.modal.entity.order.Beneficiary;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
@@ -34,7 +34,6 @@ import com.tm.core.processor.finder.manager.EntityMappingManager;
 import com.tm.core.processor.finder.manager.IEntityMappingManager;
 import com.tm.core.processor.finder.parameter.Parameter;
 import com.tm.core.processor.finder.table.EntityTable;
-import com.tm.core.processor.thread.IThreadLocalSessionManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -45,9 +44,11 @@ import org.junit.jupiter.api.Test;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -66,7 +67,7 @@ class BasicOrderItemDataDaoTest extends AbstractGeneralEntityDaoTest {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(OrderItemData.class, "order_item_data"));
         entityIdentifierDao = new EntityIdentifierDao(sessionManager, entityMappingManager);
-        dao = new BasicOrderItemDao(sessionFactory, entityIdentifierDao);
+        dao = new BasicOrderItemDataDao(sessionFactory, entityIdentifierDao);
     }
 
     @BeforeEach
@@ -74,24 +75,49 @@ class BasicOrderItemDataDaoTest extends AbstractGeneralEntityDaoTest {
         try (Connection connection = connectionHolder.getConnection()) {
             connection.setAutoCommit(false);
             Statement statement = connection.createStatement();
-//            statement.execute("DELETE FROM item_data_quantity_item_data");
-//            statement.execute("DELETE FROM order_data_quantity_item");
-            statement.execute("DELETE FROM orderitemdata_quantityitem");
-            statement.execute("DELETE FROM order_item_data_contact_info");
+            statement.execute("DELETE FROM order_item_data_item_data_option_quantity");
+            statement.execute("DELETE FROM order_item_data_beneficiary");
             statement.execute("DELETE FROM order_item_data");
             statement.execute("DELETE FROM item_data_option_quantity");
-            statement.execute("DELETE FROM item_post");
             statement.execute("DELETE FROM item_review");
             statement.execute("DELETE FROM item_data_option");
             statement.execute("DELETE FROM item");
             statement.execute("DELETE FROM item_data");
             statement.execute("DELETE FROM payment");
+            statement.execute("DELETE FROM price");
             statement.execute("DELETE FROM user_profile_credit_card");
-            statement.execute("DELETE FROM user_profile_post");
+            statement.execute("DELETE FROM credit_card");
+            statement.execute("DELETE FROM delivery");
+            statement.execute("DELETE FROM user_profile");
+            statement.execute("DELETE FROM address");
+            statement.execute("DELETE FROM country");
+
+            statement.execute("TRUNCATE TABLE price RESTART IDENTITY CASCADE");
+            statement.execute("TRUNCATE TABLE address RESTART IDENTITY CASCADE");
+            statement.execute("TRUNCATE TABLE credit_card RESTART IDENTITY CASCADE");
+            statement.execute("TRUNCATE TABLE contact_phone RESTART IDENTITY CASCADE");
+
             connection.commit();
         } catch (Exception e) {
             throw new RuntimeException("Failed to clean table: item_option", e);
         }
+    }
+
+    private Beneficiary prepareBeneficiary() {
+        CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
+                .id(1L)
+                .code("+11")
+                .build();
+        ContactPhone contactPhone = ContactPhone.builder()
+                .phoneNumber("111-111-111")
+                .countryPhoneCode(countryPhoneCode)
+                .build();
+        return Beneficiary.builder()
+                .firstName("Wolter")
+                .lastName("White")
+                .orderNumber(0)
+                .contactPhone(contactPhone)
+                .build();
     }
 
     private ContactInfo prepareContactInfo() {
@@ -104,11 +130,19 @@ class BasicOrderItemDataDaoTest extends AbstractGeneralEntityDaoTest {
                 .phoneNumber("111-111-111")
                 .countryPhoneCode(countryPhoneCode)
                 .build();
+        String dateString = "2025-01-01";
+        Date parsedDate = null;
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            parsedDate = formatter.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         return ContactInfo.builder()
                 .id(1L)
-                .name("Wolter")
-                .secondName("White")
-                .contactPhone(contactPhone)
+                .firstName("Wolter")
+                .lastName("White")
+                .birthdayDate(parsedDate)
                 .build();
     }
 
@@ -116,10 +150,11 @@ class BasicOrderItemDataDaoTest extends AbstractGeneralEntityDaoTest {
         Country country = Country.builder()
                 .id(1L)
                 .value("USA")
+                .flagImagePath(null)
                 .build();
         return Address.builder()
-                .id(1L)
                 .country(country)
+                .city("New York")
                 .street("street")
                 .street2("street2")
                 .buildingNumber(1)
@@ -136,7 +171,6 @@ class BasicOrderItemDataDaoTest extends AbstractGeneralEntityDaoTest {
                 .build();
 
         return Delivery.builder()
-                .id(1L)
                 .address(createAddress())
                 .deliveryType(deliveryType)
                 .build();
@@ -179,16 +213,6 @@ class BasicOrderItemDataDaoTest extends AbstractGeneralEntityDaoTest {
 
     private UserProfile prepareTestUserProfile() {
         CreditCard creditCard = prepareCard();
-        Post parent = Post.builder()
-                .id(1L)
-                .title("parent")
-                .uniquePostId("1")
-                .authorEmail("parent@email.com")
-                .authorUserName("parent")
-                .message("parent")
-                .dateOfCreate(100000)
-                .build();
-
         return UserProfile.builder()
                 .id(1L)
                 .username("username")
@@ -198,28 +222,15 @@ class BasicOrderItemDataDaoTest extends AbstractGeneralEntityDaoTest {
                 .contactInfo(prepareContactInfo())
                 .address(createAddress())
                 .creditCardList(List.of(creditCard))
-                .postList(List.of(parent))
                 .build();
     }
 
-    private ItemData prepareTestOrderItemData() {
+    private ItemData prepareTestItemData() {
         Brand brand = Brand.builder()
                 .id(1L)
                 .value("Hermes")
                 .build();
         Category category = prepareCategories();
-        Currency currency = Currency.builder()
-                .id(1L)
-                .value("USD")
-                .build();
-        Discount discount = Discount.builder()
-                .id(1L)
-                .amount(5)
-                .charSequenceCode("abc")
-                .isActive(true)
-                .isPercent(false)
-                .currency(currency)
-                .build();
         ItemStatus itemStatus = ItemStatus.builder()
                 .id(1L)
                 .value("NEW")
@@ -227,15 +238,6 @@ class BasicOrderItemDataDaoTest extends AbstractGeneralEntityDaoTest {
         ItemType itemType = ItemType.builder()
                 .id(1L)
                 .value("Clothes")
-                .build();
-        OptionGroup optionGroup = OptionGroup.builder()
-                .id(1L)
-                .value("Size")
-                .build();
-        Price price = Price.builder()
-                .id(1L)
-                .amount(100)
-                .currency(currency)
                 .build();
 
         ItemData itemData = ItemData.builder()
@@ -259,14 +261,13 @@ class BasicOrderItemDataDaoTest extends AbstractGeneralEntityDaoTest {
                 .optionName("L")
                 .optionGroup(optionGroup)
                 .build();
-        ItemData itemData = prepareTestOrderItemData();
         ItemDataOption itemDataOption = ItemDataOption.builder()
+                .id(1L)
+                .dateOfCreate(10000)
                 .optionItem(optionItem)
                 .articularId("1")
-                .itemData(itemData)
                 .build();
         return ItemDataOptionQuantity.builder()
-                .id(1L)
                 .itemDataOption(itemDataOption)
                 .quantity(1)
                 .build();
@@ -281,7 +282,6 @@ class BasicOrderItemDataDaoTest extends AbstractGeneralEntityDaoTest {
 
     private Payment prepareTestPayment() {
         CreditCard creditCard = CreditCard.builder()
-                .id(1L)
                 .cardNumber("4444-1111-2222-3333")
                 .dateOfExpire("06/28")
                 .ownerName("name")
@@ -306,13 +306,11 @@ class BasicOrderItemDataDaoTest extends AbstractGeneralEntityDaoTest {
                 .currency(currency)
                 .build();
         Price price = Price.builder()
-                .id(1L)
                 .amount(100)
                 .currency(currency)
                 .build();
 
         return Payment.builder()
-                .id(1L)
                 .paymentId("1")
                 .discount(discount)
                 .paymentMethod(paymentMethod)
@@ -322,30 +320,46 @@ class BasicOrderItemDataDaoTest extends AbstractGeneralEntityDaoTest {
                 .build();
     }
 
-    private OrderItemData prepareTestOrderItem() {
-
-        return OrderItemData.builder()
+    private OrderItemData prepareTestOrderItemData() {
+        ItemDataOptionQuantity itemDataOptionQuantity = prepareTestOrderItemQuantity();
+        itemDataOptionQuantity.setId(1L);
+        Beneficiary beneficiary = prepareBeneficiary();
+        beneficiary.setId(1L);
+        beneficiary.getContactPhone().setId(1L);
+        UserProfile userProfile = prepareTestUserProfile();
+        userProfile.getContactInfo().setId(1L);
+        OrderItemData orderItemData = OrderItemData.builder()
                 .id(1L)
                 .dateOfCreate(100L)
-                .beneficiaries(List.of(prepareContactInfo()))
+                .beneficiaries(List.of(beneficiary))
                 .payment(prepareTestPayment())
                 .delivery(prepareTestDelivery())
-                .itemDataOptionQuantitySet(Set.of(prepareTestOrderItemQuantity()))
+                .itemDataOptionQuantities(List.of(itemDataOptionQuantity))
                 .orderStatus(prepareTestOrderStatus())
-                .userProfile(prepareTestUserProfile())
+                .userProfile(userProfile)
                 .orderId("100")
                 .note("note")
                 .build();
+
+        orderItemData.getDelivery().setId(1L);
+        orderItemData.getDelivery().getAddress().setId(1L);
+
+        orderItemData.getPayment().setId(1L);
+        orderItemData.getPayment().getFullPrice().setId(1L);
+        orderItemData.getPayment().getTotalPrice().setId(1L);
+        orderItemData.getPayment().getCreditCard().setId(1L);
+
+        return orderItemData;
     }
 
     private OrderItemData prepareSaveOrderItem() {
 
         return OrderItemData.builder()
                 .dateOfCreate(100L)
-                .beneficiaries(List.of(prepareContactInfo()))
+                .beneficiaries(List.of(prepareBeneficiary()))
                 .payment(prepareTestPayment())
                 .delivery(prepareTestDelivery())
-                .itemDataOptionQuantitySet(Set.of(prepareTestOrderItemQuantity()))
+                .itemDataOptionQuantities(List.of(prepareTestOrderItemQuantity()))
                 .orderStatus(prepareTestOrderStatus())
                 .userProfile(prepareTestUserProfile())
                 .orderId("100")
@@ -354,18 +368,34 @@ class BasicOrderItemDataDaoTest extends AbstractGeneralEntityDaoTest {
     }
 
     private OrderItemData prepareUpdateOrderItem() {
-        return OrderItemData.builder()
+        ItemDataOptionQuantity itemDataOptionQuantity = prepareTestOrderItemQuantity();
+        itemDataOptionQuantity.setId(1L);
+        Beneficiary beneficiary = prepareBeneficiary();
+        beneficiary.setId(1L);
+        beneficiary.getContactPhone().setId(1L);
+        UserProfile userProfile = prepareTestUserProfile();
+        userProfile.getContactInfo().setId(1L);
+        OrderItemData orderItemData = OrderItemData.builder()
                 .id(1L)
                 .dateOfCreate(100L)
-                .beneficiaries(List.of(prepareContactInfo()))
+                .beneficiaries(List.of(beneficiary))
                 .payment(prepareTestPayment())
                 .delivery(prepareTestDelivery())
-                .itemDataOptionQuantitySet(Set.of(prepareTestOrderItemQuantity()))
+                .itemDataOptionQuantities(List.of(itemDataOptionQuantity))
                 .orderStatus(prepareTestOrderStatus())
-                .userProfile(prepareTestUserProfile())
+                .userProfile(userProfile)
                 .orderId("100")
                 .note("note")
                 .build();
+        orderItemData.getDelivery().setId(1L);
+        orderItemData.getDelivery().getAddress().setId(1L);
+
+        orderItemData.getPayment().setId(1L);
+        orderItemData.getPayment().getFullPrice().setId(1L);
+        orderItemData.getPayment().getTotalPrice().setId(1L);
+        orderItemData.getPayment().getCreditCard().setId(1L);
+
+        return orderItemData;
     }
 
     private void checkOrderItem(OrderItemData expectedOrderItemData, OrderItemData actualOrderItemData) {
@@ -376,7 +406,7 @@ class BasicOrderItemDataDaoTest extends AbstractGeneralEntityDaoTest {
     void getEntityList_success() {
         loadDataSet("/datasets/order/order_item/testOrderItemDataSet.yml");
         Parameter parameter = new Parameter("id", 1L);
-        OrderItemData orderItemData = prepareTestOrderItem();
+        OrderItemData orderItemData = prepareTestOrderItemData();
         List<OrderItemData> resultList = dao.getEntityList(parameter);
 
         assertEquals(1, resultList.size());
@@ -395,18 +425,10 @@ class BasicOrderItemDataDaoTest extends AbstractGeneralEntityDaoTest {
     }
 
     @Test
-    void saveEntity_success() {
-        loadDataSet("/datasets/order/order_item/emptyOrderItemDataSet.yml");
-        OrderItemData orderItemData = prepareSaveOrderItem();
-
-        dao.persistEntity(orderItemData);
-        verifyExpectedData("/datasets/order/order_item/saveOrderItemDataSet.yml");
-    }
-
-    @Test
     void saveEntityWithDependencies_success() {
         loadDataSet("/datasets/order/order_item/emptyOrderItemDataSet.yml");
         OrderItemData orderItemData = prepareSaveOrderItem();
+
         dao.persistEntity(orderItemData);
         verifyExpectedData("/datasets/order/order_item/saveOrderItemDataSet.yml");
     }
@@ -483,19 +505,21 @@ class BasicOrderItemDataDaoTest extends AbstractGeneralEntityDaoTest {
         loadDataSet("/datasets/order/order_item/testOrderItemDataSet.yml");
         Consumer<Session> consumer = (Session s) -> {
             OrderItemData orderItemData = prepareUpdateOrderItem();
-            Address address = createAddress();
+            Address address = orderItemData.getDelivery().getAddress();
             s.merge(address);
             orderItemData.getDelivery().setAddress(address);
             orderItemData.getUserProfile().setAddress(address);
 
-            CreditCard creditCard = prepareCard();
+            CreditCard creditCard = orderItemData.getPayment().getCreditCard();
             s.merge(creditCard);
             orderItemData.getPayment().setCreditCard(creditCard);
             orderItemData.getUserProfile().setCreditCardList(List.of(creditCard));
 
-            ContactInfo contactInfo = prepareContactInfo();
+            ContactInfo contactInfo = orderItemData.getUserProfile().getContactInfo();
+            Beneficiary beneficiary = orderItemData.getBeneficiaries().get(0);
             s.merge(contactInfo);
-            orderItemData.setBeneficiaries(List.of(contactInfo));
+            s.merge(beneficiary);
+            orderItemData.setBeneficiaries(List.of(beneficiary));
             orderItemData.getUserProfile().setContactInfo(contactInfo);
 
             s.merge(orderItemData);
@@ -519,24 +543,24 @@ class BasicOrderItemDataDaoTest extends AbstractGeneralEntityDaoTest {
     }
 
     @Test
-    void deleteEntity_success() {
+    void findEntityAndDelete_success() {
         loadDataSet("/datasets/order/order_item/testOrderItemDataSet.yml");
         Parameter parameter = new Parameter("id", 1);
 
         dao.findEntityAndDelete(parameter);
-        verifyExpectedData("/datasets/order/order_item/emptyOrderItemDataSet.yml");
+        verifyExpectedData("/datasets/order/order_item/deleteOrderItemDataSet.yml");
     }
 
     @Test
     void deleteEntityByConsumer_success() {
         loadDataSet("/datasets/order/order_item/testOrderItemDataSet.yml");
         Consumer<Session> consumer = (Session s) -> {
-            OrderItemData orderItemData = prepareTestOrderItem();
+            OrderItemData orderItemData = prepareTestOrderItemData();
             s.remove(orderItemData);
         };
 
         dao.executeConsumer(consumer);
-        verifyExpectedData("/datasets/order/order_item/emptyOrderItemDataSet.yml");
+        verifyExpectedData("/datasets/order/order_item/deleteOrderItemDataSet.yml");
     }
 
     @Test
@@ -554,16 +578,16 @@ class BasicOrderItemDataDaoTest extends AbstractGeneralEntityDaoTest {
     }
 
     @Test
-    void deleteEntityByGeneralEntity_success() {
+    void deleteEntity_success() {
         loadDataSet("/datasets/order/order_item/testOrderItemDataSet.yml");
-        OrderItemData orderItemData = prepareTestOrderItem();
+        OrderItemData orderItemData = prepareTestOrderItemData();
 
         dao.deleteEntity(orderItemData);
-        verifyExpectedData("/datasets/order/order_item/emptyOrderItemDataSet.yml");
+        verifyExpectedData("/datasets/order/order_item/deleteOrderItemDataSet.yml");
     }
 
     @Test
-    void deleteEntityByGeneralEntity_transactionFailure() {
+    void deleteEntity_transactionFailure() {
         loadDataSet("/datasets/order/order_item/testOrderItemDataSet.yml");
         SessionFactory sessionFactory = mock(SessionFactory.class);
         Session session = mock(Session.class);
@@ -581,7 +605,7 @@ class BasicOrderItemDataDaoTest extends AbstractGeneralEntityDaoTest {
         when(session.beginTransaction()).thenReturn(transaction);
         doThrow(new RuntimeException()).when(session).remove(any(Object.class));
 
-        OrderItemData orderItemData = prepareTestOrderItem();
+        OrderItemData orderItemData = prepareTestOrderItemData();
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
             dao.deleteEntity(orderItemData);
@@ -591,40 +615,10 @@ class BasicOrderItemDataDaoTest extends AbstractGeneralEntityDaoTest {
     }
 
     @Test
-    void deleteEntity_transactionFailure() {
-        loadDataSet("/datasets/order/order_item/testOrderItemDataSet.yml");
-        OrderItemData orderItemData = new OrderItemData();
-
-        Parameter parameter = new Parameter("id", 1L);
-
-        IThreadLocalSessionManager sessionManager = mock(IThreadLocalSessionManager.class);
-        Session session = mock(Session.class);
-        Transaction transaction = mock(Transaction.class);
-
-        try {
-            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionManager");
-            sessionManagerField.setAccessible(true);
-            sessionManagerField.set(dao, sessionManager);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        when(sessionManager.getSession()).thenReturn(session);
-        when(session.beginTransaction()).thenReturn(transaction);
-        doThrow(new RuntimeException()).when(transaction).commit();
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.findEntityAndDelete(parameter);
-        });
-
-        assertEquals(RuntimeException.class, exception.getClass());
-    }
-
-    @Test
     void getOptionalEntityWithDependencies_success() {
         loadDataSet("/datasets/order/order_item/testOrderItemDataSet.yml");
         Parameter parameter = new Parameter("id", 1L);
-        OrderItemData orderItemData = prepareTestOrderItem();
+        OrderItemData orderItemData = prepareTestOrderItemData();
         Optional<OrderItemData> resultOptional =
                 dao.getOptionalEntity(parameter);
 
@@ -648,7 +642,7 @@ class BasicOrderItemDataDaoTest extends AbstractGeneralEntityDaoTest {
         loadDataSet("/datasets/order/order_item/testOrderItemDataSet.yml");
         Parameter parameter = new Parameter("id", 1L);
 
-        OrderItemData orderItemData = prepareTestOrderItem();
+        OrderItemData orderItemData = prepareTestOrderItemData();
         OrderItemData result = dao.getEntity(parameter);
 
         checkOrderItem(orderItemData, result);

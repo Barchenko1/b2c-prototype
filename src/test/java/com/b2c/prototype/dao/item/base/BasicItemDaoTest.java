@@ -140,7 +140,7 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
                 .rating(rating)
                 .build();
 
-        item.addReview(review);
+//        item.addReview(review);
     }
 
     private void addPosts(Item item) {
@@ -148,8 +148,6 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
                 .id(1L)
                 .title("parent")
                 .uniquePostId("1")
-                .authorEmail("parent@email.com")
-                .authorUserName("parent")
                 .message("parent")
                 .dateOfCreate(100000)
                 .build();
@@ -157,8 +155,6 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
                 .id(2L)
                 .title("root")
                 .uniquePostId("2")
-                .authorEmail("root@email.com")
-                .authorUserName("root")
                 .message("root")
                 .dateOfCreate(100000)
                 .build();
@@ -166,8 +162,6 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
                 .id(3L)
                 .title("child")
                 .uniquePostId("3")
-                .authorEmail("child@email.com")
-                .authorUserName("child")
                 .message("child")
                 .dateOfCreate(100000)
                 .build();
@@ -175,9 +169,9 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
         parent.addChildPost(root);
         root.addChildPost(child);
 
-        item.addPost(parent);
-        item.addPost(root);
-        item.addPost(child);
+//        item.addPost(parent);
+//        item.addPost(root);
+//        item.addPost(child);
     }
 
     private Item prepareToSaveItem() {
@@ -190,14 +184,6 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
                 .id(1L)
                 .value("USD")
                 .build();
-        Discount discount = Discount.builder()
-                .id(1L)
-                .amount(10)
-                .charSequenceCode("abc")
-                .isPercent(false)
-                .isActive(true)
-                .currency(currency)
-                .build();
         ItemStatus itemStatus = ItemStatus.builder()
                 .id(1L)
                 .value("NEW")
@@ -205,25 +191,6 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
         ItemType itemType = ItemType.builder()
                 .id(1L)
                 .value("Clothes")
-                .build();
-        OptionGroup optionGroup = OptionGroup.builder()
-                .id(1L)
-                .value("Size")
-                .build();
-        OptionItem optionItem1 = OptionItem.builder()
-                .id(1L)
-                .optionName("L")
-                .optionGroup(optionGroup)
-                .build();
-        OptionItem optionItem2 = OptionItem.builder()
-                .id(2L)
-                .optionName("M")
-                .optionGroup(optionGroup)
-                .build();
-        Price price = Price.builder()
-                .id(1L)
-                .amount(100)
-                .currency(currency)
                 .build();
         ItemData itemData = ItemData.builder()
                 .id(1L)
@@ -248,18 +215,6 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
                 .value("Hermes")
                 .build();
         Category category = prepareCategories();
-        Currency currency = Currency.builder()
-                .id(1L)
-                .value("USD")
-                .build();
-        Discount discount = Discount.builder()
-                .id(1L)
-                .amount(10)
-                .charSequenceCode("abc")
-                .isPercent(false)
-                .isActive(true)
-                .currency(currency)
-                .build();
         ItemStatus itemStatus = ItemStatus.builder()
                 .id(1L)
                 .value("NEW")
@@ -267,25 +222,6 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
         ItemType itemType = ItemType.builder()
                 .id(1L)
                 .value("Clothes")
-                .build();
-        OptionGroup optionGroup = OptionGroup.builder()
-                .id(1L)
-                .value("Size")
-                .build();
-        OptionItem optionItem1 = OptionItem.builder()
-                .id(1L)
-                .optionName("L")
-                .optionGroup(optionGroup)
-                .build();
-        OptionItem optionItem2 = OptionItem.builder()
-                .id(2L)
-                .optionName("M")
-                .optionGroup(optionGroup)
-                .build();
-        Price price = Price.builder()
-                .id(1L)
-                .amount(100)
-                .currency(currency)
                 .build();
 
         ItemData itemData = ItemData.builder()
@@ -312,18 +248,6 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
                 .value("Hermes")
                 .build();
         Category category = prepareCategories();
-        Currency currency = Currency.builder()
-                .id(1L)
-                .value("USD")
-                .build();
-        Discount discount = Discount.builder()
-                .id(1L)
-                .amount(10)
-                .charSequenceCode("abc")
-                .isPercent(false)
-                .isActive(true)
-                .currency(currency)
-                .build();
         ItemStatus itemStatus = ItemStatus.builder()
                 .id(1L)
                 .value("NEW")
@@ -331,25 +255,6 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
         ItemType itemType = ItemType.builder()
                 .id(1L)
                 .value("Clothes")
-                .build();
-        OptionGroup optionGroup = OptionGroup.builder()
-                .id(1L)
-                .value("Size")
-                .build();
-        OptionItem optionItem1 = OptionItem.builder()
-                .id(1L)
-                .optionName("L")
-                .optionGroup(optionGroup)
-                .build();
-        OptionItem optionItem2 = OptionItem.builder()
-                .id(2L)
-                .optionName("M")
-                .optionGroup(optionGroup)
-                .build();
-        Price price = Price.builder()
-                .id(1L)
-                .amount(100)
-                .currency(currency)
                 .build();
 
         ItemData itemData = ItemData.builder()

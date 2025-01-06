@@ -12,7 +12,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +24,10 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import static com.b2c.prototype.util.UniqueIdUtil.getUUID;
 
 @Entity
 @Table(name = "review")
@@ -35,16 +40,22 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
+    @Column(name = "review_id", unique = true, nullable = false)
+    private String reviewId;
     private String title;
     private String message;
     private long dateOfCreate;
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private UserProfile userProfile;
-    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private Rating rating;
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "reviews")
-    @Builder.Default
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private Set<Item> items = new HashSet<>();
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    private List<Comment> comments;
+
+    @PrePersist
+    protected void onPrePersist() {
+        if (this.reviewId == null) {
+            this.reviewId = getUUID();
+        }
+    }
 }

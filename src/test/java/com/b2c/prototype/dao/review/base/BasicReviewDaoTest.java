@@ -4,17 +4,14 @@ import com.b2c.prototype.dao.AbstractSingleEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
-import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.item.Item;
 import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.modal.entity.item.ItemStatus;
 import com.b2c.prototype.modal.entity.item.ItemType;
 import com.b2c.prototype.modal.entity.item.Rating;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
-import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.modal.entity.post.Post;
 import com.b2c.prototype.modal.entity.price.Currency;
-import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.modal.entity.review.Review;
 import com.tm.core.dao.identifier.EntityIdentifierDao;
 import com.tm.core.processor.finder.manager.EntityMappingManager;
@@ -23,7 +20,6 @@ import com.tm.core.processor.finder.table.EntityTable;
 import org.junit.jupiter.api.BeforeAll;
 
 import java.util.List;
-import java.util.Set;
 
 class BasicReviewDaoTest extends AbstractSingleEntityDaoTest {
 
@@ -37,7 +33,7 @@ class BasicReviewDaoTest extends AbstractSingleEntityDaoTest {
 
     @Override
     protected String getEmptyDataSetPath() {
-        return "/datasets/review/emptyReviewDataSet.yml";
+        return "/datasets/review/review/emptyReviewDataSet.yml";
     }
 
     @Override
@@ -46,16 +42,14 @@ class BasicReviewDaoTest extends AbstractSingleEntityDaoTest {
                 .id(5L)
                 .value(5)
                 .build();
-        Item item = preparItem();
         Review review = Review.builder()
                 .id(1L)
                 .dateOfCreate(100)
                 .title("title")
                 .message("message")
                 .rating(rating)
-                .items(Set.of(item))
                 .build();
-        return new EntityDataSet<>(review, "/datasets/review/testReviewDataSet.yml");
+        return new EntityDataSet<>(review, "/datasets/review/review/testReviewDataSet.yml");
     }
 
     @Override
@@ -70,9 +64,8 @@ class BasicReviewDaoTest extends AbstractSingleEntityDaoTest {
                 .title("title")
                 .message("message")
                 .rating(rating)
-                .items(Set.of(item))
                 .build();
-        return new EntityDataSet<>(review, "/datasets/review/saveReviewDataSet.yml");
+        return new EntityDataSet<>(review, "/datasets/review/review/saveReviewDataSet.yml");
     }
 
     @Override
@@ -81,16 +74,15 @@ class BasicReviewDaoTest extends AbstractSingleEntityDaoTest {
                 .id(3L)
                 .value(3)
                 .build();
-        Item item = preparItem();
         Review review = Review.builder()
                 .id(1L)
+                .reviewId("123")
                 .dateOfCreate(200)
                 .title("Update title")
                 .message("Update message")
                 .rating(rating)
-                .items(Set.of(item))
                 .build();
-        return new EntityDataSet<>(review, "/datasets/review/updateReviewDataSet.yml");
+        return new EntityDataSet<>(review, "/datasets/review/review/updateReviewDataSet.yml");
     }
 
     private Category prepareCategories() {
@@ -121,8 +113,6 @@ class BasicReviewDaoTest extends AbstractSingleEntityDaoTest {
                 .id(1L)
                 .title("parent")
                 .uniquePostId("1")
-                .authorEmail("parent@email.com")
-                .authorUserName("parent")
                 .message("parent")
                 .dateOfCreate(100000)
                 .build();
@@ -130,8 +120,6 @@ class BasicReviewDaoTest extends AbstractSingleEntityDaoTest {
                 .id(2L)
                 .title("root")
                 .uniquePostId("2")
-                .authorEmail("root@email.com")
-                .authorUserName("root")
                 .message("root")
                 .dateOfCreate(100000)
                 .build();
@@ -139,18 +127,12 @@ class BasicReviewDaoTest extends AbstractSingleEntityDaoTest {
                 .id(3L)
                 .title("child")
                 .uniquePostId("3")
-                .authorEmail("child@email.com")
-                .authorUserName("child")
                 .message("child")
                 .dateOfCreate(100000)
                 .build();
 
         parent.addChildPost(root);
         root.addChildPost(child);
-
-        item.addPost(parent);
-        item.addPost(root);
-        item.addPost(child);
     }
 
     private Item preparItem() {
@@ -162,14 +144,6 @@ class BasicReviewDaoTest extends AbstractSingleEntityDaoTest {
         Currency currency = Currency.builder()
                 .id(1L)
                 .value("USD")
-                .build();
-        Discount discount = Discount.builder()
-                .id(1L)
-                .amount(5)
-                .charSequenceCode("abc")
-                .isActive(true)
-                .isPercent(false)
-                .currency(currency)
                 .build();
         ItemStatus itemStatus = ItemStatus.builder()
                 .id(1L)
@@ -183,21 +157,6 @@ class BasicReviewDaoTest extends AbstractSingleEntityDaoTest {
                 .id(1L)
                 .value("Size")
                 .build();
-        OptionItem optionItem1 = OptionItem.builder()
-                .id(1L)
-                .optionName("L")
-                .optionGroup(optionGroup)
-                .build();
-        OptionItem optionItem2 = OptionItem.builder()
-                .id(2L)
-                .optionName("M")
-                .optionGroup(optionGroup)
-                .build();
-        Price price = Price.builder()
-                .id(1L)
-                .amount(100)
-                .currency(currency)
-                .build();
 
         ItemData itemData = ItemData.builder()
                 .id(1L)
@@ -209,7 +168,6 @@ class BasicReviewDaoTest extends AbstractSingleEntityDaoTest {
 
         Item item = Item.builder()
                 .id(1L)
-                .itemData(itemData)
                 .build();
 
         addPosts(item);

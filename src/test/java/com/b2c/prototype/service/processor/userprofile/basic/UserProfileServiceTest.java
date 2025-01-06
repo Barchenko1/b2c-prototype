@@ -31,6 +31,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static com.b2c.prototype.util.Constant.USER_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -81,7 +82,7 @@ class UserProfileServiceTest {
         userProfile.setActive(false);
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier("user_id", userId))
+        when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(parameterSupplier);
         when(userProfileDao.getEntity(parameter))
                 .thenReturn(userProfile);
@@ -104,7 +105,7 @@ class UserProfileServiceTest {
         String userId = "test-user-id";
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier("user_id", userId)).thenReturn(parameterSupplier);
+        when(supplierService.parameterStringSupplier(USER_ID, userId)).thenReturn(parameterSupplier);
 
         userProfileService.deleteUserProfileByUserId(userId);
 
@@ -119,7 +120,7 @@ class UserProfileServiceTest {
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier("user_id", userId))
+        when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(parameterSupplier);
         when(transformationFunctionService.getTransformationFunction(UserProfile.class, UserProfileDto.class))
                 .thenReturn(transformationFunction);
@@ -162,8 +163,8 @@ class UserProfileServiceTest {
                         .build())
                 .email("email@email.com")
                 .contactInfo(ContactInfoDto.builder()
-                        .name("name")
-                        .secondName("secondName")
+                        .firstName("name")
+                        .lastName("lastName")
                         .contactPhone(ContactPhoneDto.builder()
                                 .countryPhoneCode("+11")
                                 .phoneNumber("phoneNumber")
@@ -175,7 +176,6 @@ class UserProfileServiceTest {
                         .ownerName("name")
                         .ownerSecondName("secondName")
                         .build()))
-                .postList(List.of())
                 .build();
     }
 
@@ -191,8 +191,8 @@ class UserProfileServiceTest {
                 .build();
         ContactInfo contactInfo = ContactInfo.builder()
                 .id(1L)
-                .name("name")
-                .secondName("secondName")
+                .firstName("name")
+                .lastName("lastName")
                 .contactPhone(contactPhone)
                 .build();
         Country country = Country.builder()
@@ -228,7 +228,6 @@ class UserProfileServiceTest {
                 .contactInfo(contactInfo)
                 .address(address)
                 .creditCardList(List.of(creditCard))
-                .postList(List.of())
                 .build();
     }
 
@@ -239,8 +238,8 @@ class UserProfileServiceTest {
                         .phoneNumber(contactInfo.getContactPhone().getPhoneNumber())
                         .countryPhoneCode(contactInfo.getContactPhone().getCountryPhoneCode().getCode())
                         .build())
-                .name(userProfile.getContactInfo().getName())
-                .secondName(userProfile.getContactInfo().getSecondName())
+                .firstName(userProfile.getContactInfo().getFirstName())
+                .lastName(userProfile.getContactInfo().getLastName())
                 .build();
         Address address = userProfile.getAddress();
         AddressDto addressDto = AddressDto.builder()
@@ -265,7 +264,6 @@ class UserProfileServiceTest {
                 .contactInfo(contactInfoDto)
                 .creditCards(List.of(creditCardDto))
                 .addressDto(addressDto)
-                .postList(List.of())
                 .build();
     };
 }

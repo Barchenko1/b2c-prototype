@@ -2,8 +2,11 @@ package com.b2c.prototype.service.function;
 
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 public class TransformationFunctionService implements ITransformationFunctionService {
@@ -32,10 +35,34 @@ public class TransformationFunctionService implements ITransformationFunctionSer
     }
 
     @Override
+    public <E, R> Function<E, Collection<R>> getTransformationCollectionFunction(Class<E> classFrom, Class<R> classTo) {
+        return null;
+    }
+
+    @Override
+    public <E, R> Function<E, Collection<R>> getTransformationCollectionFunction(Class<E> classFrom, Class<R> classTo, String sol) {
+        return null;
+    }
+
+    @Override
     public <E, R> R getEntity(Class<R> classTo, E dataEntity, String sol) {
         @SuppressWarnings("unchecked")
         Class<E> classFrom = (Class<E>) dataEntity.getClass();
         return mapFunction(classFrom, classTo, sol).apply(dataEntity);
+    }
+
+    @Override
+    public <E, R> Collection<R> getEntityCollection(Class<R> classTo, E dataEntity) {
+        @SuppressWarnings("unchecked")
+        Class<E> classFrom = (Class<E>) dataEntity.getClass();
+        return mapCollectionFunction(classFrom, classTo, null).apply(dataEntity);
+    }
+
+    @Override
+    public <E, R> Collection<R> getEntityCollection(Class<R> classTo, E dataEntity, String sol) {
+        @SuppressWarnings("unchecked")
+        Class<E> classFrom = (Class<E>) dataEntity.getClass();
+        return mapCollectionFunction(classFrom, classTo, null).apply(dataEntity);
     }
 
     @Override
@@ -45,7 +72,7 @@ public class TransformationFunctionService implements ITransformationFunctionSer
 
     @Override
     public <E, R> void addTransformationFunction(Class<E> classFrom, Class<R> classTo, Function<?, ?> function) {
-        this.functionMap.put(createKey(OneFieldEntityDto.class, classTo, null), function);
+        this.functionMap.put(createKey(classFrom, classTo, null), function);
     }
 
     @Override
@@ -58,6 +85,16 @@ public class TransformationFunctionService implements ITransformationFunctionSer
         this.functionMap.put(createKey(classFrom, classTo, sol), function);
     }
 
+    @Override
+    public <E, R> void addTransformationCollectionFunction(Class<E> classFrom, Class<R> classTo, Function<?, Collection<?>> function) {
+
+    }
+
+    @Override
+    public <E, R> void addTransformationCollectionFunction(Class<E> classFrom, Class<R> classTo, String sol, Function<?, Collection<?>> function) {
+
+    }
+
     private <E, R> String createKey(Class<E> classFrom, Class<R> classTo, String sol) {
         return sol != null && !sol.isEmpty()
                 ? classFrom.getName() + "->" + classTo.getName() + "[" + sol+ "]"
@@ -67,6 +104,11 @@ public class TransformationFunctionService implements ITransformationFunctionSer
     @SuppressWarnings("unchecked")
     private <E, R> Function<E, R> mapFunction(Class<E> classFrom, Class<R> classTo, String sol) {
         return (Function<E, R>) this.functionMap.get(createKey(classFrom, classTo, sol));
+    }
+
+    @SuppressWarnings("unchecked")
+    private <E, R> Function<E, Collection<R>> mapCollectionFunction(Class<E> classFrom, Class<R> classTo, String sol) {
+        return (Function<E, Collection<R>>) this.functionMap.get(createKey(classFrom, classTo, sol));
     }
 
 }

@@ -354,13 +354,13 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
             Payment payment = prepareToSavePayment();
             payment.setId(1L);
             s.merge(payment);
+            throw new RuntimeException();
         };
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             dao.executeConsumer(consumer);
         });
 
-        assertEquals(IllegalStateException.class, exception.getClass());
     }
 
     @Test

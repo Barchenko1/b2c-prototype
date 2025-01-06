@@ -4,7 +4,7 @@ import com.b2c.prototype.dao.delivery.IDeliveryDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.request.AddressDto;
 import com.b2c.prototype.modal.dto.request.DeliveryDto;
-import com.b2c.prototype.modal.dto.update.DeliverySearchFieldEntityDto;
+import com.b2c.prototype.modal.dto.searchfield.DeliverySearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
@@ -26,6 +26,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static com.b2c.prototype.util.Constant.ORDER_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.any;
@@ -69,7 +70,7 @@ class DeliveryServiceTest {
 
 
         when(orderItemData.getDelivery()).thenReturn(existingDelivery);
-        when(supplierService.parameterStringSupplier("order_id", deliverySearchFieldEntityDto.getSearchField()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, deliverySearchFieldEntityDto.getSearchField()))
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(OrderItemData.class, parameterSupplier))
                 .thenReturn(orderItemData);
@@ -104,7 +105,7 @@ class DeliveryServiceTest {
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
         when(orderItemData.getDelivery()).thenReturn(existingDelivery);
-        when(supplierService.parameterStringSupplier("order_id", deliverySearchFieldEntityDto.getSearchField()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, deliverySearchFieldEntityDto.getSearchField()))
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(OrderItemData.class, parameterSupplier))
                 .thenReturn(orderItemData);
@@ -135,7 +136,7 @@ class DeliveryServiceTest {
         Function<OrderItemData, Delivery> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(OrderItemData.class, Delivery.class))
                 .thenReturn(function);
-        when(supplierService.parameterStringSupplier("order_id", oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()))
                 .thenReturn(parameterSupplier);
         when(supplierService.entityFieldSupplier(
                 OrderItemData.class,
@@ -156,7 +157,7 @@ class DeliveryServiceTest {
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
         DeliveryDto deliveryDto =  getDeliveryDto();
-        when(supplierService.parameterStringSupplier("order_id", oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()))
                 .thenReturn(parameterSupplier);
         Function<OrderItemData, DeliveryDto> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(OrderItemData.class, DeliveryDto.class))

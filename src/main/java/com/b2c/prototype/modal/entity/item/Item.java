@@ -9,9 +9,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -20,8 +18,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "item")
@@ -36,43 +34,13 @@ public class Item {
     private long id;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private ItemData itemData;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinTable(
-            name = "item_review",
-            joinColumns = {@JoinColumn(name = "item_id")},
-            inverseJoinColumns = {@JoinColumn(name = "review_id")}
-    )
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, orphanRemoval = true)
     @Builder.Default
     @EqualsAndHashCode.Exclude
-    private Set<Review> reviews = new HashSet<>();
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinTable(
-            name = "item_post",
-            joinColumns = {@JoinColumn(name = "item_id")},
-            inverseJoinColumns = {@JoinColumn(name = "post_id")}
-    )
+    private List<Review> reviews = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, orphanRemoval = true)
     @Builder.Default
     @EqualsAndHashCode.Exclude
-    private Set<Post> posts = new HashSet<>();
-
-    public void addReview(Review review) {
-        this.reviews.add(review);
-        review.getItems().add(this);
-    }
-
-    public void removeReview(Review review) {
-        this.reviews.remove(review);
-        review.getItems().remove(this);
-    }
-
-    public void addPost(Post post) {
-        this.posts.add(post);
-        post.getItems().add(this);
-    }
-
-    public void removePost(Post post) {
-        this.posts.remove(post);
-        post.getItems().add(this);
-    }
+    private List<Post> posts = new ArrayList<>();
 
 }

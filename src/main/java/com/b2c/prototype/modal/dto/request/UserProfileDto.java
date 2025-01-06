@@ -13,6 +13,4 @@ public class UserProfileDto {
     private ContactInfoDto contactInfo;
     private AddressDto addressDto;
     private List<ResponseCreditCardDto> creditCards;
-    private List<PostDto> postList;
-
 }

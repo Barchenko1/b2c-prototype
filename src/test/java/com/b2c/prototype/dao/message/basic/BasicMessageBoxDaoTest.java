@@ -9,9 +9,9 @@ import com.b2c.prototype.modal.entity.message.MessageStatus;
 import com.b2c.prototype.modal.entity.message.MessageType;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
 import com.b2c.prototype.modal.entity.post.Post;
+import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
-import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.UserProfile;
 import com.b2c.prototype.util.CardUtil;
 import com.tm.core.dao.common.AbstractEntityDao;
@@ -79,8 +79,8 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
                 .build();
         ContactInfo contactInfo = ContactInfo.builder()
                 .id(1L)
-                .name("Wolter")
-                .secondName("White")
+                .firstName("Wolter")
+                .lastName("White")
                 .contactPhone(contactPhone)
                 .build();
         Country country = Country.builder()
@@ -109,8 +109,6 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
                 .id(1L)
                 .title("parent")
                 .uniquePostId("1")
-                .authorEmail("parent@email.com")
-                .authorUserName("parent")
                 .message("parent")
                 .dateOfCreate(100000)
                 .build();
@@ -124,7 +122,6 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
                 .contactInfo(contactInfo)
                 .address(address)
                 .creditCardList(List.of(creditCard))
-                .postList(List.of(parent))
                 .build();
     }
 

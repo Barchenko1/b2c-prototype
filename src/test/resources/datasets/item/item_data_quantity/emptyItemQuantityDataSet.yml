@@ -53,20 +53,21 @@ rating:
     value: 5
 review:
   - id: 1
+    review_id: 123
     title: "title"
     message: "message"
     dateOfCreate: 100
     rating_id: 5
 item_data:
   - id: 1
+    item_id: 123
     brand_id: 1
     category_id: 3
     itemtype_id: 1
     status_id: 1
 item_data_option:
   - id: 1
-    articularId: 1
+    articular_id: 1
     dateOfCreate: 10000
     optionitem_id: 1
-    itemdata_id: 1
 item_data_option_quantity: []

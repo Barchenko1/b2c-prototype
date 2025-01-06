@@ -2,7 +2,7 @@ package com.b2c.prototype.service.processor.delivery;
 
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.request.DeliveryDto;
-import com.b2c.prototype.modal.dto.update.DeliverySearchFieldEntityDto;
+import com.b2c.prototype.modal.dto.searchfield.DeliverySearchFieldEntityDto;
 
 import java.util.List;
 

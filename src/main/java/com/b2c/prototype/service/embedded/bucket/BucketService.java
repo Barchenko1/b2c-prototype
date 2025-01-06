@@ -32,7 +32,7 @@ public class BucketService implements IBucketService {
 //        Supplier<Bucket> bucketSupplier = () -> {
 //            Parameter[] parameters = parameterFactory.createParameterArray(
 //                    parameterFactory.createStringParameter("userId", itemBucketDto.getUserId()),
-//                    parameterFactory.createStringParameter("articularId", itemBucketDto.getArticularId())
+//                    parameterFactory.createStringParameter(articularId, itemBucketDto.getArticularId())
 //            );
 
 //            return getEntityDao().getEntity(parameters);
@@ -44,7 +44,7 @@ public class BucketService implements IBucketService {
     public void deleteItemFromBucket(ItemBucketDto itemBucketDto) {
 //        Parameter[] parameters = parameterFactory.createParameterArray(
 //                parameterFactory.createStringParameter("userId", itemBucketDto.getUserId()),
-//                parameterFactory.createStringParameter("articularId", itemBucketDto.getArticularId())
+//                parameterFactory.createStringParameter(articularId, itemBucketDto.getArticularId())
 //        );
 //        super.deleteEntityByParameter(parameters);
     }

@@ -24,6 +24,6 @@ discount:
     isPercent: false
     currency_id: 1
 payment:
-  - paymentId: "1"
+  - upayment_id: "1"
     payment_method_id: 1
     discount_id: 1

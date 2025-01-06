@@ -19,14 +19,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.Set;
+
+import static com.b2c.prototype.util.Constant.USER_ID;
+import static com.b2c.prototype.util.Query.SELECT_MESSAGEBOX_BY_USER_ID;
 
 public class MessageService implements IMessageService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageService.class);
 
-    private static final String SELECT_MESSAGEBOX_BY_USER_ID =
-            "SELECT mb.* FROM message_box mb JOIN user_profile up ON up.id = mb.user_profile_id WHERE up.id = ?";
     private final IEntityOperationDao entityOperationDao;
     private final IQueryService queryService;
     private final ITransformationFunctionService transformationFunctionService;
@@ -48,7 +48,7 @@ public class MessageService implements IMessageService {
             NativeQuery<MessageBox> query = session.createNativeQuery(SELECT_MESSAGEBOX_BY_USER_ID, MessageBox.class);
             MessageBox messageBox = queryService.getQueryEntity(
                     query,
-                    supplierService.parameterStringSupplier("user_id", messageDtoUpdate.getMainSearchField()));
+                    supplierService.parameterStringSupplier(USER_ID, messageDtoUpdate.getMainSearchField()));
             Message existingMessage = getExistingMessage(messageBox, messageDtoUpdate.getInnerSearchField());
             Message newMessage = transformationFunctionService
                     .getEntity(Message.class, messageDtoUpdate.getNewEntity());
@@ -66,7 +66,7 @@ public class MessageService implements IMessageService {
             NativeQuery<MessageBox> query = session.createNativeQuery(SELECT_MESSAGEBOX_BY_USER_ID, MessageBox.class);
             MessageBox messageBox = queryService.getQueryEntity(
                     query,
-                    supplierService.parameterStringSupplier("user_id", multipleFieldsSearchDtoDelete.getMainSearchField()));
+                    supplierService.parameterStringSupplier(USER_ID, multipleFieldsSearchDtoDelete.getMainSearchField()));
             Message existingMessage = getExistingMessage(messageBox, multipleFieldsSearchDtoDelete.getInnerSearchField());
             messageBox.removeMessage(existingMessage);
             session.merge(messageBox);
@@ -79,7 +79,7 @@ public class MessageService implements IMessageService {
             NativeQuery<MessageBox> query = session.createNativeQuery(SELECT_MESSAGEBOX_BY_USER_ID, MessageBox.class);
             MessageBox messageBox = queryService.getQueryEntity(
                     query,
-                    supplierService.parameterStringSupplier("user_id", oneFieldEntityDto.getValue()));
+                    supplierService.parameterStringSupplier(USER_ID, oneFieldEntityDto.getValue()));
             messageBox.getMessages().forEach(message -> {
                 messageBox.removeMessage(message);
                 session.remove(message);

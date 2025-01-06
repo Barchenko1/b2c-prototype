@@ -1,3 +1,6 @@
+import com.b2c.prototype.modal.entity.item.Item;
+import com.b2c.prototype.modal.entity.post.Post;
+
 //package com.b2c.prototype.dao.embedded.processor;
 //
 //import com.b2c.prototype.dao.AbstractSingleEntityDaoTest;
@@ -144,7 +147,7 @@
 //        item.addPost(root);
 //        item.addPost(child);
 //    }
-//
+
 //    private Item prepareTestItem() {
 //        Brand brand = Brand.builder()
 //                .id(1L)

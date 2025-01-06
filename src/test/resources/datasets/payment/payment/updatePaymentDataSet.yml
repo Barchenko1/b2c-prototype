@@ -27,7 +27,7 @@ price:
     amount: 20
 payment:
   - id: 1
-    paymentId: "Update 1"
+    upayment_id: "Update 1"
     payment_method_id: 1
     fullprice_id: 1
     totalprice_id: 1

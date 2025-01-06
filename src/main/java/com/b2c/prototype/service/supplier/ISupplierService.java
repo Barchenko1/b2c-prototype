@@ -7,10 +7,6 @@ import java.util.function.Supplier;
 
 public interface ISupplierService {
     <E, R> Supplier<R> entityFieldSupplier(Class<E> entityClass,
-                                           String fieldName,
-                                           String fieldValue,
-                                           Function<E, R> fieldExtractor);
-    <E, R> Supplier<R> entityFieldSupplier(Class<E> entityClass,
                                            Supplier<Parameter> parameterSupplier,
                                            Function<E, R> fieldExtractor);
     <E> Supplier<E> entityFieldSupplier(Class<E> entityClass,

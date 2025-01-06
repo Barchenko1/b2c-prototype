@@ -25,9 +25,9 @@ public class AbstractContactInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
-    private String name;
-    private String secondName;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE})
+    private String firstName;
+    private String lastName;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinColumn(name = "contact_phone_id")
     private ContactPhone contactPhone;
 }

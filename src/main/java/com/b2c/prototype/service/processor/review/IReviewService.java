@@ -1,15 +1,15 @@
 package com.b2c.prototype.service.processor.review;
 
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
-import com.b2c.prototype.modal.dto.request.ReviewDto;
 import com.b2c.prototype.modal.dto.response.ResponseReviewDto;
-import com.b2c.prototype.modal.dto.update.ReviewDtoUpdate;
+import com.b2c.prototype.modal.dto.searchfield.ReviewSearchFieldEntityDto;
+
+import java.util.List;
 
 public interface IReviewService {
-    void saveReview(ReviewDto reviewDto);
-    void updateReview(ReviewDtoUpdate reviewDtoUpdate);
+    void saveUpdateReview(ReviewSearchFieldEntityDto reviewSearchFieldEntityDto);
     void deleteReview(OneFieldEntityDto oneFieldEntityDto);
 
-    ResponseReviewDto getReview(OneFieldEntityDto oneFieldEntityDto);
+    List<ResponseReviewDto> getReviewListByItemId(OneFieldEntityDto oneFieldEntityDto);
 
 }

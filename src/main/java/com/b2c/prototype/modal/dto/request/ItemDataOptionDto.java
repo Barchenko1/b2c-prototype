@@ -10,7 +10,7 @@ import java.util.Set;
 @Data
 @Builder
 public class ItemDataOptionDto {
-    private Map<OneFieldEntityDto, Set<OneFieldEntityDto>> optionGroupOptionItemMap;
+    private Map<OneFieldEntityDto, OneFieldEntityDto> optionGroupOptionItemMap;
     private ItemDataDto itemData;
     private PriceDto fullPrice;
     private PriceDto totalPrice;

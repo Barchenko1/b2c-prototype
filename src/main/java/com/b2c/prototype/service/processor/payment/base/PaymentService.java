@@ -3,7 +3,7 @@ package com.b2c.prototype.service.processor.payment.base;
 import com.b2c.prototype.dao.payment.IPaymentDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.request.PaymentDto;
-import com.b2c.prototype.modal.dto.update.PaymentSearchFieldEntityDto;
+import com.b2c.prototype.modal.dto.searchfield.PaymentSearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.order.OrderItemData;
 import com.b2c.prototype.modal.entity.payment.Payment;
 import com.b2c.prototype.service.common.EntityOperationDao;
@@ -15,6 +15,8 @@ import com.b2c.prototype.service.supplier.ISupplierService;
 
 import java.util.List;
 
+import static com.b2c.prototype.util.Constant.ORDER_ID;
+import static com.b2c.prototype.util.Constant.PAYMENT_ID;
 import static com.b2c.prototype.util.UniqueIdUtil.getUUID;
 
 public class PaymentService implements IPaymentService {
@@ -39,7 +41,7 @@ public class PaymentService implements IPaymentService {
         entityOperationDao.executeConsumer(session -> {
             OrderItemData orderItemData = queryService.getEntity(
                     OrderItemData.class,
-                    supplierService.parameterStringSupplier("order_id", paymentSearchFieldEntityDto.getSearchField()));
+                    supplierService.parameterStringSupplier(ORDER_ID, paymentSearchFieldEntityDto.getSearchField()));
             PaymentDto paymentDto = paymentSearchFieldEntityDto.getNewEntity();
             Payment newPayment = transformationFunctionService.getEntity(
                     Payment.class,
@@ -60,8 +62,7 @@ public class PaymentService implements IPaymentService {
         entityOperationDao.deleteEntity(
                 supplierService.entityFieldSupplier(
                         OrderItemData.class,
-                        "order_id",
-                        oneFieldEntityDto.getValue(),
+                        supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()),
                         transformationFunctionService.getTransformationFunction(OrderItemData.class, Payment.class)));
     }
 
@@ -70,21 +71,21 @@ public class PaymentService implements IPaymentService {
         entityOperationDao.deleteEntity(
                 supplierService.entityFieldSupplier(
                         Payment.class,
-                        supplierService.parameterStringSupplier("paymentId", oneFieldEntityDto.getValue())));
+                        supplierService.parameterStringSupplier(PAYMENT_ID, oneFieldEntityDto.getValue())));
     }
 
     @Override
     public PaymentDto getPaymentByOrderId(OneFieldEntityDto oneFieldEntityDto) {
         return queryService.getEntityDto(
                 OrderItemData.class,
-                supplierService.parameterStringSupplier("order_id", oneFieldEntityDto.getValue()),
+                supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(OrderItemData.class, PaymentDto.class));
     }
 
     @Override
     public PaymentDto getPaymentByPaymentId(OneFieldEntityDto oneFieldEntityDto) {
         return entityOperationDao.getEntityDto(
-                supplierService.parameterStringSupplier("paymentId", oneFieldEntityDto.getValue()),
+                supplierService.parameterStringSupplier(PAYMENT_ID, oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(Payment.class, PaymentDto.class));
     }
 

@@ -161,7 +161,6 @@ class BasicStoreDaoTest extends AbstractSingleEntityDaoTest {
                 .id(1L)
                 .articularId("1")
                 .dateOfCreate(10000)
-                .itemData(itemData)
                 .optionItem(optionItem)
                 .articularId("1")
                 .build();

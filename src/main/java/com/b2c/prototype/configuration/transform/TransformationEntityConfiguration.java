@@ -1,9 +1,11 @@
 package com.b2c.prototype.configuration.transform;
 
 import com.b2c.prototype.dao.cashed.ISingleValueMap;
+import com.b2c.prototype.modal.constant.MessageStatusEnum;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.common.OneIntegerFieldEntityDto;
 import com.b2c.prototype.modal.dto.request.AddressDto;
+import com.b2c.prototype.modal.dto.request.BeneficiaryDto;
 import com.b2c.prototype.modal.dto.request.ContactInfoDto;
 import com.b2c.prototype.modal.dto.request.ContactPhoneDto;
 import com.b2c.prototype.modal.dto.request.CreditCardDto;
@@ -46,6 +48,7 @@ import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.modal.entity.review.Review;
 import com.b2c.prototype.modal.entity.store.CountType;
+import com.b2c.prototype.modal.entity.order.Beneficiary;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
@@ -56,6 +59,7 @@ import com.b2c.prototype.util.CardUtil;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -106,9 +110,8 @@ public class TransformationEntityConfiguration {
         transformationFunctionService.addTransformationFunction(ContactPhone.class, ContactPhoneDto.class, mapContactPhoneToContactPhoneDtoFunction());
         transformationFunctionService.addTransformationFunction(ContactPhoneDto.class, ContactPhone.class, mapContactPhoneDtoToContactPhoneFunction());
         transformationFunctionService.addTransformationFunction(UserProfile.class, ContactPhoneDto.class, mapUserProfileToContactPhoneDtoFunction());
-        transformationFunctionService.addTransformationFunction(OrderItemData.class, ContactPhoneDto.class, "list",mapOrderItemToContactPhoneDtoFunction());
-
-        transformationFunctionService.addTransformationFunction(ContactInfoDto.class, ContactInfo.class, mapContactInfoDtoToContactInfoFunction());
+        transformationFunctionService.addTransformationFunction(OrderItemData.class, ContactPhoneDto.class, mapOrderItemToContactPhoneDtoFunction());
+        transformationFunctionService.addTransformationFunction(BeneficiaryDto.class, Beneficiary.class, "list", mapContactInfoDtoToContactInfoFunction());
 
         transformationFunctionService.addTransformationFunction(RegistrationUserProfileDto.class, UserProfile.class, mapRegistrationUserProfileDtoToUserProfileFunction());
         transformationFunctionService.addTransformationFunction(UserProfile.class, UserProfileDto.class, mapUserProfileToUserProfileDtoFunction());
@@ -126,7 +129,7 @@ public class TransformationEntityConfiguration {
         transformationFunctionService.addTransformationFunction(OptionItemDto.class, OptionItem.class, "set", mapOptionItemDtoToOptionItemSet());
         transformationFunctionService.addTransformationFunction(OptionItem.class, OptionItemDto.class, mapOptionItemSetToOptionItemDto());
 
-        transformationFunctionService.addTransformationFunction(OrderItemData.class, ContactInfo.class, "list", mapOrderItemToContactInfoListFunction());
+        transformationFunctionService.addTransformationFunction(OrderItemData.class, Beneficiary.class, "list", mapOrderItemToContactInfoListFunction());
     }
 
     private Function<OneFieldEntityDto, Brand> mapOneFieldEntityDtoBrandFunction() {
@@ -278,25 +281,28 @@ public class TransformationEntityConfiguration {
     }
 
     private Function<MessageDto, Message> mapMessageDtoToMessageFunction() {
-        MessageStatus messageStatus = singleValueMap.getEntity(
-                MessageStatus.class,
-                "value",
-                "value");
-        MessageType messageType = singleValueMap.getEntity(
-                MessageType.class,
-                "value",
-                "value");
-        return messageDto -> Message.builder()
-                .sender(messageDto.getSender())
-                .title(messageDto.getTitle())
-                .message(messageDto.getMessage())
-                .messageUniqNumber(getUUID())
-                .dateOfSend(System.currentTimeMillis())
-                .receivers(messageDto.getReceivers())
-                .subscribe("subscribe")
-                .type(messageType)
-                .status(messageStatus)
-                .build();
+        return messageDto -> {
+            MessageStatus messageStatus = singleValueMap.getEntity(
+                    MessageStatus.class,
+                    "value",
+                    MessageStatusEnum.UNREAD.getValue());
+            MessageType messageType = singleValueMap.getEntity(
+                    MessageType.class,
+                    "value",
+                    "value");
+
+            return Message.builder()
+                    .sender(messageDto.getSender())
+                    .title(messageDto.getTitle())
+                    .message(messageDto.getMessage())
+                    .messageUniqNumber(getUUID())
+                    .dateOfSend(System.currentTimeMillis())
+                    .receivers(messageDto.getReceivers())
+                    .subscribe("subscribe")
+                    .type(messageType)
+                    .status(messageStatus)
+                    .build();
+        };
     }
 
     private Function<Message, ResponseMessageOverviewDto> mapMessageToResponseMessageOverviewDtoFunction() {
@@ -350,25 +356,25 @@ public class TransformationEntityConfiguration {
                 .toList();
     }
 
-    private Function<ContactInfoDto, ContactInfo> mapContactInfoDtoToContactInfoFunction() {
-        return contactInfoDto -> {
+    private Function<BeneficiaryDto, Beneficiary> mapContactInfoDtoToContactInfoFunction() {
+        return beneficiaryDto -> {
             CountryPhoneCode countryPhoneCode = singleValueMap.getEntity(
                     CountryPhoneCode.class,
                     "code",
-                    contactInfoDto.getContactPhone().getCountryPhoneCode());
+                    beneficiaryDto.getContactPhone().getCountryPhoneCode());
             ContactPhone contactPhone = ContactPhone.builder()
-                    .phoneNumber(contactInfoDto.getContactPhone().getPhoneNumber())
+                    .phoneNumber(beneficiaryDto.getContactPhone().getPhoneNumber())
                     .countryPhoneCode(countryPhoneCode)
                     .build();
-            return ContactInfo.builder()
-                    .name(contactInfoDto.getName())
-                    .secondName(contactInfoDto.getSecondName())
+            return Beneficiary.builder()
+                    .firstName(beneficiaryDto.getFirstName())
+                    .lastName(beneficiaryDto.getLastName())
                     .contactPhone(contactPhone)
                     .build();
         };
     }
 
-    Function<OrderItemData, List<ContactInfo>> mapOrderItemToContactInfoListFunction() {
+    Function<OrderItemData, List<Beneficiary>> mapOrderItemToContactInfoListFunction() {
         return OrderItemData::getBeneficiaries;
     }
 
@@ -377,8 +383,8 @@ public class TransformationEntityConfiguration {
             ContactInfo contactInfo = userProfile.getContactInfo();
             ContactPhone contactPhone = contactInfo.getContactPhone();
             return ContactInfoDto.builder()
-                    .name(contactInfo.getName())
-                    .secondName(contactInfo.getSecondName())
+                    .firstName(contactInfo.getFirstName())
+                    .lastName(contactInfo.getLastName())
                     .contactPhone(ContactPhoneDto.builder()
                             .phoneNumber(contactPhone.getPhoneNumber())
                             .countryPhoneCode(contactPhone.getCountryPhoneCode().getCode())
@@ -553,11 +559,6 @@ public class TransformationEntityConfiguration {
             Brand brand = singleValueMap.getEntity(Brand.class, "value", itemDataDto.getBrandName());
             ItemType itemType = singleValueMap.getEntity(ItemType.class, "value", itemDataDto.getItemTypeName());
             ItemStatus itemStatus = singleValueMap.getEntity(ItemStatus.class, "value", itemDataDto.getItemStatus());
-//            Price price = mapPriceDtoToPriceFunction().apply(itemDataDto.getPrice());
-//            Discount discount = null;
-//            if (itemDataDto.getDiscount() != null) {
-//                discount = mapDiscountDtoToDiscountFunction().apply(itemDataDto.getDiscount());
-//            }
             return ItemData.builder()
                     .category(category)
                     .brand(brand)
@@ -568,19 +569,13 @@ public class TransformationEntityConfiguration {
     }
 
     private Function<ItemData, ResponseItemDataDto> mapItemDataToItemDataDtoFunction() {
-        return itemData -> {
-//            PriceDto fullPrice = mapItemDataToFullPriceDtoFunction().apply(itemData);
-//            PriceDto currentPrice = priceCalculationService.calculateCurrentPrice(
-//                    itemData.getFullPrice(), itemData.getDiscount());
-
-            return ResponseItemDataDto.builder()
-                    .brandName(itemData.getBrand().getValue())
-                    .categoryName(itemData.getCategory().getName())
-                    .itemTypeName(itemData.getItemType().getValue())
-                    .itemStatus(itemData.getStatus().getValue())
+        return itemData -> ResponseItemDataDto.builder()
+                .brandName(itemData.getBrand().getValue())
+                .categoryName(itemData.getCategory().getName())
+                .itemTypeName(itemData.getItemType().getValue())
+                .itemStatus(itemData.getStatus().getValue())
 //                    .description(itemData.ge)
-                    .build();
-        };
+                .build();
     }
 
     private Function<DeliveryDto, Delivery> mapDeliveryDtoToDeliveryFunction() {

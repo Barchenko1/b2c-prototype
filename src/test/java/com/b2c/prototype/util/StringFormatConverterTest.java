@@ -12,7 +12,6 @@ class StringFormatConverterTest {
         assertEquals("", StringFormatConverter.firstLetterToUpperCaseOtherLower(""));
         assertNull(StringFormatConverter.firstLetterToUpperCaseOtherLower(null));
 
-        // Single word tests
         assertEquals("Test", StringFormatConverter.firstLetterToUpperCaseOtherLower("test"));
         assertEquals("Test", StringFormatConverter.firstLetterToUpperCaseOtherLower("TEST"));
         assertEquals("Test", StringFormatConverter.firstLetterToUpperCaseOtherLower("TeSt"));
@@ -40,7 +39,6 @@ class StringFormatConverterTest {
         assertEquals("", StringFormatConverter.allLettersToUpperCase(""));
         assertNull(StringFormatConverter.allLettersToUpperCase(null));
 
-        // Single word tests
         assertEquals("TEST", StringFormatConverter.allLettersToUpperCase("test"));
         assertEquals("TEST", StringFormatConverter.allLettersToUpperCase("Test"));
 
