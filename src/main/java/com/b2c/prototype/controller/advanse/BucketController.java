@@ -1,4 +1,4 @@
-package com.b2c.prototype.controller;
+package com.b2c.prototype.controller.advanse;
 
 import com.b2c.prototype.service.embedded.bucket.IBucketService;
 import org.springframework.beans.factory.annotation.Autowired;

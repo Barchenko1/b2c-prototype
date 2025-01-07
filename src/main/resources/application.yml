@@ -16,7 +16,14 @@ spring:
   messages:
     basename: ib18n
 enums:
-  brands: HP, APPLE, ANDROID
+#  brands: HP, APPLE, ANDROID
+  brands:
+    - value: HP
+      label: "HP"
+    - value: APPLE
+      label: "APPLE"
+    - value: ANDROID
+      label: "ANDROID"
   countTypes: LIMITED, UNLIMITED
   countryPhoneCodes: +48
   countries: POLAND

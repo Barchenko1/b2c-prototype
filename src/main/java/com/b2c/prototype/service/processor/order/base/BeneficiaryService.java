@@ -1,6 +1,6 @@
-package com.b2c.prototype.service.processor.item.base;
+package com.b2c.prototype.service.processor.order.base;
 
-import com.b2c.prototype.dao.item.IBeneficiaryDao;
+import com.b2c.prototype.dao.order.IBeneficiaryDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.searchfield.BeneficiaryArrayDtoSearchField;
 import com.b2c.prototype.modal.dto.request.BeneficiaryDto;
@@ -10,7 +10,7 @@ import com.b2c.prototype.modal.entity.order.Beneficiary;
 import com.b2c.prototype.service.common.EntityOperationDao;
 import com.b2c.prototype.service.common.IEntityOperationDao;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.processor.item.IBeneficiaryService;
+import com.b2c.prototype.service.processor.order.IBeneficiaryService;
 import com.b2c.prototype.service.processor.query.IQueryService;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import org.slf4j.Logger;

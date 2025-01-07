@@ -31,6 +31,7 @@ class BasicCountTypeDaoTest extends AbstractSingleEntityDaoTest {
         CountType countType = CountType.builder()
                 .id(1L)
                 .value("LIMITED")
+                .label("limited")
                 .build();
         return new EntityDataSet<>(countType, "/datasets/store/count_type/testCountTypeDataSet.yml");
     }
@@ -39,6 +40,7 @@ class BasicCountTypeDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getSaveDataSet() {
         CountType countType = CountType.builder()
                 .value("LIMITED")
+                .label("limited")
                 .build();
         return new EntityDataSet<>(countType, "/datasets/store/count_type/saveCountTypeDataSet.yml");
     }
@@ -48,6 +50,7 @@ class BasicCountTypeDaoTest extends AbstractSingleEntityDaoTest {
         CountType countType = CountType.builder()
                 .id(1L)
                 .value("UNLIMITED")
+                .label("unlimited")
                 .build();
         return new EntityDataSet<>(countType, "/datasets/store/count_type/updateCountTypeDataSet.yml");
     }

@@ -100,6 +100,7 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
                 .build();
         Country country = Country.builder()
                 .id(1L)
+                .label("USA")
                 .value("USA")
                 .build();
         Address address = Address.builder()
@@ -159,6 +160,7 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
                 .build();
         Country country = Country.builder()
                 .id(1L)
+                .label("USA")
                 .value("USA")
                 .build();
         Address address = Address.builder()
@@ -180,13 +182,6 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
                 .ownerSecondName("secondName")
                 .isActive(CardUtil.isCardActive("06/28"))
                 .cvv("818")
-                .build();
-        Post parent = Post.builder()
-                .id(1L)
-                .title("parent")
-                .uniquePostId("1")
-                .message("parent")
-                .dateOfCreate(100000)
                 .build();
 
         return UserProfile.builder()
@@ -218,6 +213,7 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
                 .build();
         Country country = Country.builder()
                 .id(1L)
+                .label("USA")
                 .value("USA")
                 .build();
         Address address = Address.builder()

@@ -46,6 +46,7 @@ class BasicStoreDaoTest extends AbstractSingleEntityDaoTest {
         CountType countType = CountType.builder()
                 .id(1L)
                 .value("LIMITED")
+                .label("limited")
                 .build();
         Store store = Store.builder()
                 .id(1L)
@@ -61,6 +62,7 @@ class BasicStoreDaoTest extends AbstractSingleEntityDaoTest {
         CountType countType = CountType.builder()
                 .id(1L)
                 .value("LIMITED")
+                .label("limited")
                 .build();
         Store store = Store.builder()
                 .itemDataOption(prepareTestItemDataOption())
@@ -75,6 +77,7 @@ class BasicStoreDaoTest extends AbstractSingleEntityDaoTest {
         CountType countType = CountType.builder()
                 .id(1L)
                 .value("LIMITED")
+                .label("limited")
                 .build();
         Store store = Store.builder()
                 .id(1L)
@@ -112,31 +115,28 @@ class BasicStoreDaoTest extends AbstractSingleEntityDaoTest {
         Brand brand = Brand.builder()
                 .id(1L)
                 .value("Hermes")
+                .label("Hermes")
                 .build();
         Category category = prepareCategories();
         Currency currency = Currency.builder()
                 .id(1L)
+                .label("USD")
                 .value("USD")
-                .build();
-        Discount discount = Discount.builder()
-                .id(1L)
-                .amount(5)
-                .charSequenceCode("abc")
-                .isActive(true)
-                .isPercent(false)
-                .currency(currency)
                 .build();
         ItemStatus itemStatus = ItemStatus.builder()
                 .id(1L)
                 .value("NEW")
+                .label("NEW")
                 .build();
         ItemType itemType = ItemType.builder()
                 .id(1L)
                 .value("Clothes")
+                .label("Clothes")
                 .build();
         OptionGroup optionGroup = OptionGroup.builder()
                 .id(1L)
                 .value("Size")
+                .label("Size")
                 .build();
         OptionItem optionItem = OptionItem.builder()
                 .id(1L)

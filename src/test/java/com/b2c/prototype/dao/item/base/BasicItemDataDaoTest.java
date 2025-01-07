@@ -90,46 +90,23 @@ class BasicItemDataDaoTest extends AbstractGeneralEntityDaoTest {
         Brand brand = Brand.builder()
                 .id(1L)
                 .value("Hermes")
+                .label("Hermes")
                 .build();
         Category category = prepareCategories();
         Currency currency = Currency.builder()
                 .id(1L)
+                .label("USD")
                 .value("USD")
-                .build();
-        Discount discount = Discount.builder()
-                .id(1L)
-                .amount(5)
-                .charSequenceCode("abc")
-                .isPercent(false)
-                .isActive(true)
-                .currency(currency)
                 .build();
         ItemStatus itemStatus = ItemStatus.builder()
                 .id(1L)
                 .value("NEW")
+                .label("NEW")
                 .build();
         ItemType itemType = ItemType.builder()
                 .id(1L)
                 .value("Clothes")
-                .build();
-        OptionGroup optionGroup = OptionGroup.builder()
-                .id(1L)
-                .value("Size")
-                .build();
-        OptionItem optionItem1 = OptionItem.builder()
-                .id(1L)
-                .optionName("L")
-                .optionGroup(optionGroup)
-                .build();
-        OptionItem optionItem2 = OptionItem.builder()
-                .id(2L)
-                .optionName("M")
-                .optionGroup(optionGroup)
-                .build();
-        Price price = Price.builder()
-                .id(1L)
-                .amount(100)
-                .currency(currency)
+                .label("Clothes")
                 .build();
 
         ItemData itemData = ItemData.builder()
@@ -147,46 +124,23 @@ class BasicItemDataDaoTest extends AbstractGeneralEntityDaoTest {
         Brand brand = Brand.builder()
                 .id(1L)
                 .value("Hermes")
+                .label("Hermes")
                 .build();
         Category category = prepareCategories();
         Currency currency = Currency.builder()
                 .id(1L)
+                .label("USD")
                 .value("USD")
-                .build();
-        Discount discount = Discount.builder()
-                .id(1L)
-                .amount(5)
-                .charSequenceCode("abc")
-                .isPercent(false)
-                .isActive(true)
-                .currency(currency)
                 .build();
         ItemStatus itemStatus = ItemStatus.builder()
                 .id(1L)
                 .value("NEW")
+                .label("NEW")
                 .build();
         ItemType itemType = ItemType.builder()
                 .id(1L)
                 .value("Clothes")
-                .build();
-        OptionGroup optionGroup = OptionGroup.builder()
-                .id(1L)
-                .value("Size")
-                .build();
-        OptionItem optionItem1 = OptionItem.builder()
-                .id(1L)
-                .optionName("L")
-                .optionGroup(optionGroup)
-                .build();
-        OptionItem optionItem2 = OptionItem.builder()
-                .id(2L)
-                .optionName("M")
-                .optionGroup(optionGroup)
-                .build();
-        Price price = Price.builder()
-                .id(1L)
-                .amount(100)
-                .currency(currency)
+                .label("Clothes")
                 .build();
 
         ItemData itemData = ItemData.builder()
@@ -204,46 +158,23 @@ class BasicItemDataDaoTest extends AbstractGeneralEntityDaoTest {
         Brand brand = Brand.builder()
                 .id(1L)
                 .value("Hermes")
+                .label("Hermes")
                 .build();
         Category category = prepareCategories();
         Currency currency = Currency.builder()
                 .id(1L)
+                .label("USD")
                 .value("USD")
-                .build();
-        Discount discount = Discount.builder()
-                .id(1L)
-                .amount(5)
-                .charSequenceCode("abc")
-                .isPercent(false)
-                .isActive(true)
-                .currency(currency)
                 .build();
         ItemStatus itemStatus = ItemStatus.builder()
                 .id(1L)
                 .value("NEW")
+                .label("NEW")
                 .build();
         ItemType itemType = ItemType.builder()
                 .id(1L)
                 .value("Clothes")
-                .build();
-        OptionGroup optionGroup = OptionGroup.builder()
-                .id(1L)
-                .value("Size")
-                .build();
-        OptionItem optionItem1 = OptionItem.builder()
-                .id(1L)
-                .optionName("L")
-                .optionGroup(optionGroup)
-                .build();
-        OptionItem optionItem2 = OptionItem.builder()
-                .id(2L)
-                .optionName("M")
-                .optionGroup(optionGroup)
-                .build();
-        Price price = Price.builder()
-                .id(1L)
-                .amount(100)
-                .currency(currency)
+                .label("Clothes")
                 .build();
 
         ItemData itemData = ItemData.builder()

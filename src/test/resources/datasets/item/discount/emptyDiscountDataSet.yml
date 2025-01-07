@@ -1,4 +1,5 @@
 currency:
   - id: 1
     value: "USD"
+    label: "USD"
 discount: []

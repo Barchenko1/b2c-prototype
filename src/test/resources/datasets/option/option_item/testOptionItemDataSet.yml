@@ -1,6 +1,7 @@
 item: []
 option_group:
   - id: 1
+    label: "Size"
     value: "Size"
 option_item:
   - id: 1

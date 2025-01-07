@@ -151,7 +151,7 @@ public abstract class AbstractSingleEntityCacheDaoTest {
     }
 
     @Test
-    public void saveEntity_success() {
+    void saveEntity_success() {
         loadDataSet(emptyDataSet);
         dao.persistEntity(saveEntityDataSet.getEntity());
         verifyExpectedData(saveEntityDataSet.getDataSetPath()[0]);

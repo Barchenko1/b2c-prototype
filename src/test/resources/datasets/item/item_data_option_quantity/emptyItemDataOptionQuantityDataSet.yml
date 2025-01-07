@@ -1,18 +1,25 @@
 brand:
   - id: 1
     value: "Hermes"
+    label: "Hermes"
 item_status:
   - id: 1
     value: "NEW"
+    label: "NEW"
 item_type:
   - id: 1
     value: "Clothes"
+    label: "Clothes"
 currency:
   - id: 1
     value: "USD"
+    label: "USD"
 price:
   - id: 1
     amount: 100
+    currency_id: 1
+  - id: 2
+    amount: 20
     currency_id: 1
 discount:
   - id: 1
@@ -23,6 +30,7 @@ discount:
     currency_id: 1
 option_group:
   - id: 1
+    label: "Size"
     value: "Size"
 option_item:
   - id: 1
@@ -51,6 +59,13 @@ rating:
     value: 4
   - id: 5
     value: 5
+review:
+  - id: 1
+    review_id: 123
+    title: "title"
+    message: "message"
+    dateOfCreate: 100
+    rating_id: 5
 item_data:
   - id: 1
     item_id: 123
@@ -63,7 +78,4 @@ item_data_option:
     articular_id: 1
     dateOfCreate: 10000
     optionitem_id: 1
-item_data_option_quantity:
-  - id: 1
-    quantity: 2
-    itemdataoption_id: 1
+item_data_option_quantity: []

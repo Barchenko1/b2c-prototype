@@ -184,6 +184,7 @@ class ItemServiceTest {
         Category category = prepareCategories();
         Currency currency = Currency.builder()
                 .id(1L)
+                .label("USD")
                 .value("USD")
                 .build();
         Discount discount = Discount.builder()

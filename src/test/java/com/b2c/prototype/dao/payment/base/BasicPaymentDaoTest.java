@@ -73,9 +73,11 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
         PaymentMethod paymentMethod = PaymentMethod.builder()
                 .id(1L)
                 .value("Card")
+                .label("Card")
                 .build();
         Currency currency = Currency.builder()
                 .id(1L)
+                .label("USD")
                 .value("USD")
                 .build();
         Price price = Price.builder()
@@ -113,9 +115,11 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
         PaymentMethod paymentMethod = PaymentMethod.builder()
                 .id(1L)
                 .value("Card")
+                .label("Card")
                 .build();
         Currency currency = Currency.builder()
                 .id(1L)
+                .label("USD")
                 .value("USD")
                 .build();
         Discount discount = Discount.builder()
@@ -156,9 +160,11 @@ class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
         PaymentMethod paymentMethod = PaymentMethod.builder()
                 .id(1L)
                 .value("Card")
+                .label("Card")
                 .build();
         Currency currency = Currency.builder()
                 .id(1L)
+                .label("USD")
                 .value("USD")
                 .build();
         Discount discount = Discount.builder()

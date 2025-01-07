@@ -4,6 +4,7 @@ import com.b2c.prototype.dao.cashed.ISingleValueMap;
 import com.b2c.prototype.dao.item.IDiscountDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.request.DiscountDto;
+import com.b2c.prototype.modal.dto.request.DiscountStatusDto;
 import com.b2c.prototype.modal.dto.response.ResponseDiscountDto;
 import com.b2c.prototype.modal.dto.searchfield.DiscountSearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.item.Discount;
@@ -28,6 +29,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
+import static com.b2c.prototype.util.Constant.CHAR_SEQUENCE_CODE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -114,7 +116,6 @@ class DiscountServiceTest {
         verify(discountDao).executeConsumer(any(Consumer.class));
     }
 
-
     @Test
     void updateDiscount_shouldUpdateDiscount() {
         DiscountDto dto = createTestDto();
@@ -132,7 +133,7 @@ class DiscountServiceTest {
                 .thenReturn(currency);
         when(supplierService.getSupplier(Discount.class, discountSearchFieldEntityDto.getNewEntity()))
                 .thenReturn(discountSupplier);
-        when(supplierService.parameterStringSupplier("charSequenceCode", discountSearchFieldEntityDto.getSearchField()))
+        when(supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, discountSearchFieldEntityDto.getSearchField()))
                 .thenReturn(parameterSupplier);
 
         discountService.updateDiscount(discountSearchFieldEntityDto);
@@ -146,12 +147,42 @@ class DiscountServiceTest {
     }
 
     @Test
+    void changeDiscountStatus_shouldUpdateDiscount() {
+        DiscountStatusDto discountStatusDto = DiscountStatusDto.builder()
+                .charSequenceCode("abc")
+                .isActive(false)
+                .build();
+        Discount discount = createTestDiscount();
+        discount.setActive(false);
+
+        Parameter mockParameter = mock(Parameter.class);
+        Supplier<Parameter> parameterSupplier = () -> mockParameter;
+
+        when(supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, discountStatusDto.getCharSequenceCode()))
+                .thenReturn(parameterSupplier);
+        when(queryService.getEntity(Discount.class, parameterSupplier))
+                .thenReturn(discount);
+
+        doAnswer(invocation -> {
+            Consumer<Session> consumer = invocation.getArgument(0);
+            Session session = mock(Session.class);
+            consumer.accept(session);
+            verify(session).merge(discount);
+            return null;
+        }).when(discountDao).executeConsumer(any(Consumer.class));
+
+        discountService.changeDiscountStatus(discountStatusDto);
+
+        verify(discountDao).executeConsumer(any(Consumer.class));
+    }
+
+    @Test
     void deleteDiscount_shouldDeleteDiscount() {
         DiscountDto dto = createTestDto();
         Parameter mockParameter = mock(Parameter.class);
         OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto(dto.getCharSequenceCode());
         Supplier<Parameter> parameterSupplier = () -> mockParameter;
-        when(supplierService.parameterStringSupplier("charSequenceCode", dto.getCharSequenceCode()))
+        when(supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, dto.getCharSequenceCode()))
                 .thenReturn(parameterSupplier);
 
         discountService.deleteDiscount(oneFieldEntityDto);
@@ -173,7 +204,7 @@ class DiscountServiceTest {
         OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto(code);
         when(discountDao.getEntity(mockParameter)).thenReturn(entity);
 
-        when(supplierService.parameterStringSupplier("charSequenceCode", oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, oneFieldEntityDto.getValue()))
                 .thenReturn(parameterSupplier);
         when(transformationFunctionService.getTransformationFunction(Discount.class, ResponseDiscountDto.class))
                 .thenReturn(mapFunction);
@@ -199,7 +230,7 @@ class DiscountServiceTest {
         Discount entity = createTestDiscount();
         OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto(code);
         when(discountDao.getEntity(mockParameter)).thenReturn(entity);
-        when(supplierService.parameterStringSupplier("charSequenceCode", oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, oneFieldEntityDto.getValue()))
                 .thenReturn(parameterSupplier);
         when(transformationFunctionService.getTransformationFunction(Discount.class, ResponseDiscountDto.class))
                 .thenReturn(mapFunction);
@@ -226,7 +257,7 @@ class DiscountServiceTest {
                 .build();
         OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto(code);
         when(discountDao.getEntity(mockParameter)).thenReturn(null);
-        when(supplierService.parameterStringSupplier("charSequenceCode", oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, oneFieldEntityDto.getValue()))
                 .thenReturn(parameterSupplier);
         when(transformationFunctionService.getTransformationFunction(Discount.class, ResponseDiscountDto.class))
                 .thenReturn(mapFunction);
@@ -256,7 +287,7 @@ class DiscountServiceTest {
                         .charSequenceCode("CODE124")
                         .build()
         ));
-        when(supplierService.parameterStringSupplier("charSequenceCode", oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, oneFieldEntityDto.getValue()))
                 .thenReturn(parameterSupplier);
         when(transformationFunctionService.getTransformationFunction(Discount.class, DiscountDto.class))
                 .thenReturn(mapFunction);

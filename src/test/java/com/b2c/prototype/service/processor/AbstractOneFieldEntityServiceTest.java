@@ -3,6 +3,8 @@ package com.b2c.prototype.service.processor;
 import com.b2c.prototype.dao.cashed.ISingleValueMap;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDtoUpdate;
+import com.b2c.prototype.modal.dto.response.ResponseOneFieldEntityDto;
+import com.b2c.prototype.modal.entity.address.Country;
 import com.tm.core.dao.common.IEntityDao;
 import com.tm.core.processor.finder.factory.IParameterFactory;
 import com.tm.core.processor.finder.parameter.Parameter;
@@ -10,6 +12,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 public abstract class AbstractOneFieldEntityServiceTest<E> {
@@ -51,4 +56,26 @@ public abstract class AbstractOneFieldEntityServiceTest<E> {
     }
 
     protected abstract String getFieldName();
+
+    protected ResponseOneFieldEntityDto getResponseOneFieldEntityDto() {
+        return ResponseOneFieldEntityDto.builder()
+                .value("testValue")
+                .label("label")
+                .build();
+    }
+
+
+//    protected void testGetAllEntity(Object entity, ) {
+//        Country testValue = createTestValue();
+//        ResponseOneFieldEntityDto responseOneFieldEntityDto = getResponseOneFieldEntityDto();
+//
+//        when(dao.getEntityList()).thenReturn(List.of(testValue));
+//        when(transformationFunctionService.getEntity(ResponseOneFieldEntityDto.class, testValue))
+//                .thenReturn(responseOneFieldEntityDto);
+//
+//        List<ResponseOneFieldEntityDto> list = countryService.getEntities();
+//
+//        assertEquals(1, list.size());
+//        assertEquals(responseOneFieldEntityDto, list.get(0));
+//    }
 }

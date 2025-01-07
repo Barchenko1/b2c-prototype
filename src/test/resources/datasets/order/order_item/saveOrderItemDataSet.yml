@@ -1,15 +1,19 @@
 brand:
   - id: 1
     value: "Hermes"
+    label: "Hermes"
 item_status:
   - id: 1
     value: "NEW"
+    label: "NEW"
 item_type:
   - id: 1
     value: "Clothes"
+    label: "Clothes"
 currency:
   - id: 1
     value: "USD"
+    label: "USD"
 price:
   - id: 1
     amount: 100
@@ -23,6 +27,7 @@ discount:
     currency_id: 1
 option_group:
   - id: 1
+    label: "Size"
     value: "Size"
 option_item:
   - id: 1
@@ -59,8 +64,10 @@ item_data_option_quantity:
 delivery_type:
   - id: 1
     value: "Post"
+    label: "Post"
 country:
   - id: 1
+    label: "USA"
     value: "USA"
 address:
   - id: 1
@@ -79,6 +86,7 @@ delivery:
 order_status:
   - id: 1
     value: "Pending"
+    label: "Pending"
 credit_card:
   - id: 1
     cardNumber: "4444-1111-2222-3333"
@@ -90,8 +98,10 @@ credit_card:
 payment_method:
   - id: 1
     value: "Card"
+    label: "Card"
   - id: 2
     value: "Blik"
+    label: "Blik"
 payment:
   - id: 1
     upayment_id: "1"

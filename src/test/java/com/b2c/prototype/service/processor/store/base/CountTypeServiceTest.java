@@ -2,6 +2,8 @@ package com.b2c.prototype.service.processor.store.base;
 
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDtoUpdate;
+import com.b2c.prototype.modal.dto.response.ResponseOneFieldEntityDto;
+import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.store.CountType;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.processor.AbstractOneFieldEntityServiceTest;
@@ -10,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -76,13 +79,16 @@ public class CountTypeServiceTest extends AbstractOneFieldEntityServiceTest<Coun
         OneFieldEntityDto dto = new OneFieldEntityDto("testValue");
         Parameter parameter = parameterFactory.createStringParameter(getFieldName(), dto.getValue());
         CountType testValue = createTestValue();
+        ResponseOneFieldEntityDto responseOneFieldEntityDto = getResponseOneFieldEntityDto();
 
         when(parameterFactory.createStringParameter(getFieldName(), dto.getValue())).thenReturn(parameter);
         when(dao.getEntity(parameter)).thenReturn(testValue);
+        when(transformationFunctionService.getEntity(ResponseOneFieldEntityDto.class, testValue))
+                .thenReturn(responseOneFieldEntityDto);
 
-        CountType result = countTypeService.getEntity(dto);
+        ResponseOneFieldEntityDto result = countTypeService.getEntity(dto);
 
-        assertEquals(testValue, result);
+        assertEquals(responseOneFieldEntityDto, result);
     }
 
     @Test
@@ -90,13 +96,31 @@ public class CountTypeServiceTest extends AbstractOneFieldEntityServiceTest<Coun
         OneFieldEntityDto dto = new OneFieldEntityDto("testValue");
         Parameter parameter = parameterFactory.createStringParameter(getFieldName(), dto.getValue());
         CountType testValue = createTestValue();
+        ResponseOneFieldEntityDto responseOneFieldEntityDto = getResponseOneFieldEntityDto();
 
         when(parameterFactory.createStringParameter(getFieldName(), dto.getValue())).thenReturn(parameter);
-        when(dao.getOptionalEntity(parameter)).thenReturn(Optional.of(testValue));
+        when(dao.getEntity(parameter)).thenReturn(testValue);
+        when(transformationFunctionService.getEntity(ResponseOneFieldEntityDto.class, testValue))
+                .thenReturn(responseOneFieldEntityDto);
 
-        Optional<CountType> result = countTypeService.getEntityOptional(dto);
+        Optional<ResponseOneFieldEntityDto> result = countTypeService.getEntityOptional(dto);
 
-        assertEquals(Optional.of(testValue), result);
+        assertEquals(Optional.of(responseOneFieldEntityDto), result);
+    }
+
+    @Test
+    public void testGetAllEntity() {
+        CountType testValue = createTestValue();
+        ResponseOneFieldEntityDto responseOneFieldEntityDto = getResponseOneFieldEntityDto();
+
+        when(dao.getEntityList()).thenReturn(List.of(testValue));
+        when(transformationFunctionService.getEntity(ResponseOneFieldEntityDto.class, testValue))
+                .thenReturn(responseOneFieldEntityDto);
+
+        List<ResponseOneFieldEntityDto> list = countTypeService.getEntities();
+
+        assertEquals(1, list.size());
+        assertEquals(responseOneFieldEntityDto, list.get(0));
     }
 
     private CountType createTestValue() {

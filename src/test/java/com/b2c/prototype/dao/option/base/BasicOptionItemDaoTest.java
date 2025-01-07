@@ -71,6 +71,7 @@ class BasicOptionItemDaoTest extends AbstractGeneralEntityDaoTest {
     public OptionItem prepareToSaveOptionItem() {
         OptionGroup optionGroup = OptionGroup.builder()
                 .value("Size")
+                .label("Size")
                 .build();
 
         return OptionItem.builder()
@@ -96,6 +97,7 @@ class BasicOptionItemDaoTest extends AbstractGeneralEntityDaoTest {
         OptionGroup optionGroup = OptionGroup.builder()
                 .id(1L)
                 .value("Color")
+                .label("Color")
                 .build();
 
         return OptionItem.builder()

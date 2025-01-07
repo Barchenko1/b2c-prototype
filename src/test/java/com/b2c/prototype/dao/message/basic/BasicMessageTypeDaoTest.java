@@ -29,6 +29,7 @@ class BasicMessageTypeDaoTest extends AbstractSingleEntityDaoTest {
         MessageType messageType = MessageType.builder()
                 .id(1L)
                 .value("InMail")
+                .label("InMail")
                 .build();
         return new EntityDataSet<>(messageType, "/datasets/message/message_type/testMessageTypeDataSet.yml");
     }
@@ -37,6 +38,7 @@ class BasicMessageTypeDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getSaveDataSet() {
         MessageType messageType = MessageType.builder()
                 .value("InMail")
+                .label("InMail")
                 .build();
         return new EntityDataSet<>(messageType, "/datasets/message/message_type/saveMessageTypeDataSet.yml");
     }
@@ -46,6 +48,7 @@ class BasicMessageTypeDaoTest extends AbstractSingleEntityDaoTest {
         MessageType messageType = MessageType.builder()
                 .id(1L)
                 .value("Update InMail")
+                .label("InMail")
                 .build();
         return new EntityDataSet<>(messageType, "/datasets/message/message_type/updateMessageTypeDataSet.yml");
     }

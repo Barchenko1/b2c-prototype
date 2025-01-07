@@ -1,5 +1,6 @@
 package com.b2c.prototype.modal.entity.user;
 
+import com.b2c.prototype.modal.base.AbstractOneColumnEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

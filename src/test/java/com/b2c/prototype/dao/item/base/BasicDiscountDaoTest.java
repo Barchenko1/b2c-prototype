@@ -29,6 +29,7 @@ class BasicDiscountDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getTestDataSet() {
         Currency currency = Currency.builder()
                 .id(1L)
+                .label("USD")
                 .value("USD")
                 .build();
         Discount discount = Discount.builder()
@@ -46,6 +47,7 @@ class BasicDiscountDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getSaveDataSet() {
         Currency currency = Currency.builder()
                 .id(1L)
+                .label("USD")
                 .value("USD")
                 .build();
         Discount discount = Discount.builder()
@@ -62,6 +64,7 @@ class BasicDiscountDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getUpdateDataSet() {
         Currency currency = Currency.builder()
                 .id(1L)
+                .label("USD")
                 .value("USD")
                 .build();
         Discount discount = Discount.builder()

@@ -1,6 +1,6 @@
-package com.b2c.prototype.dao.item.base;
+package com.b2c.prototype.dao.order.base;
 
-import com.b2c.prototype.dao.item.IBeneficiaryDao;
+import com.b2c.prototype.dao.order.IBeneficiaryDao;
 import com.b2c.prototype.modal.entity.order.Beneficiary;
 import com.tm.core.dao.common.AbstractEntityDao;
 import com.tm.core.dao.identifier.IEntityIdentifierDao;

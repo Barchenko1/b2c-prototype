@@ -1,4 +1,4 @@
-package com.b2c.prototype.service.processor.item;
+package com.b2c.prototype.service.processor.order;
 
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.searchfield.BeneficiaryArrayDtoSearchField;

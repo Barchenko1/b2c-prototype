@@ -1,5 +1,6 @@
 country:
   - id: 1
+    label: "USA"
     value: "USA"
 address:
   - id: 1

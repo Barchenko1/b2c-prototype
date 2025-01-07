@@ -55,7 +55,7 @@ class BasicItemDataOptionQuantityDaoTest extends AbstractSingleEntityDaoTest {
 
     @Override
     protected String getEmptyDataSetPath() {
-        return "/datasets/item/item_data_quantity/emptyItemQuantityDataSet.yml";
+        return "/datasets/item/item_data_option_quantity/emptyItemDataOptionQuantityDataSet.yml";
     }
 
     @Override
@@ -65,7 +65,7 @@ class BasicItemDataOptionQuantityDaoTest extends AbstractSingleEntityDaoTest {
                 .itemDataOption(prepareTestItemDataOption())
                 .quantity(1)
                 .build();
-        return new EntityDataSet<>(itemDataOptionQuantity, "/datasets/item/item_data_quantity/testItemQuantityDataSet.yml");
+        return new EntityDataSet<>(itemDataOptionQuantity, "/datasets/item/item_data_option_quantity/testItemDataOptionQuantityDataSet.yml");
     }
 
     @Override
@@ -74,7 +74,7 @@ class BasicItemDataOptionQuantityDaoTest extends AbstractSingleEntityDaoTest {
                 .itemDataOption(prepareTestItemDataOption())
                 .quantity(1)
                 .build();
-        return new EntityDataSet<>(itemDataOptionQuantity, "/datasets/item/item_data_quantity/saveItemQuantityDataSet.yml");
+        return new EntityDataSet<>(itemDataOptionQuantity, "/datasets/item/item_data_option_quantity/saveItemDataOptionQuantityDataSet.yml");
     }
 
     @Override
@@ -84,18 +84,34 @@ class BasicItemDataOptionQuantityDaoTest extends AbstractSingleEntityDaoTest {
                 .itemDataOption(prepareTestItemDataOption())
                 .quantity(2)
                 .build();
-        return new EntityDataSet<>(itemDataOptionQuantity, "/datasets/item/item_data_quantity/updateItemQuantityDataSet.yml");
+        return new EntityDataSet<>(itemDataOptionQuantity, "/datasets/item/item_data_option_quantity/updateItemDataOptionQuantityDataSet.yml");
     }
 
     private ItemDataOption prepareTestItemDataOption() {
-        Brand brand = Brand.builder()
-                .id(1L)
-                .value("Hermes")
-                .build();
-        Category category = prepareCategories();
         Currency currency = Currency.builder()
                 .id(1L)
+                .label("USD")
                 .value("USD")
+                .build();
+        OptionGroup optionGroup = OptionGroup.builder()
+                .id(1L)
+                .value("Size")
+                .label("Size")
+                .build();
+        OptionItem optionItem = OptionItem.builder()
+                .id(1L)
+                .optionName("L")
+                .optionGroup(optionGroup)
+                .build();
+        Price price1 = Price.builder()
+                .id(1L)
+                .amount(100)
+                .currency(currency)
+                .build();
+        Price price2 = Price.builder()
+                .id(2L)
+                .amount(20)
+                .currency(currency)
                 .build();
         Discount discount = Discount.builder()
                 .id(1L)
@@ -105,36 +121,6 @@ class BasicItemDataOptionQuantityDaoTest extends AbstractSingleEntityDaoTest {
                 .isPercent(false)
                 .currency(currency)
                 .build();
-        ItemStatus itemStatus = ItemStatus.builder()
-                .id(1L)
-                .value("NEW")
-                .build();
-        ItemType itemType = ItemType.builder()
-                .id(1L)
-                .value("Clothes")
-                .build();
-        OptionGroup optionGroup = OptionGroup.builder()
-                .id(1L)
-                .value("Size")
-                .build();
-        OptionItem optionItem = OptionItem.builder()
-                .id(1L)
-                .optionName("L")
-                .optionGroup(optionGroup)
-                .build();
-        Price price = Price.builder()
-                .id(1L)
-                .amount(100)
-                .currency(currency)
-                .build();
-
-        ItemData itemData = ItemData.builder()
-                .id(1L)
-                .category(category)
-                .brand(brand)
-                .status(itemStatus)
-                .itemType(itemType)
-                .build();
 
         return ItemDataOption.builder()
                 .id(1L)
@@ -142,77 +128,9 @@ class BasicItemDataOptionQuantityDaoTest extends AbstractSingleEntityDaoTest {
                 .dateOfCreate(10000)
                 .optionItem(optionItem)
                 .articularId("1")
+                .fullPrice(price1)
+                .discount(discount)
+                .totalPrice(price2)
                 .build();
-    }
-
-    private Category prepareCategories() {
-        Category parent = Category.builder()
-                .id(1L)
-                .name("parent")
-                .build();
-        Category root = Category.builder()
-                .id(2L)
-                .name("root")
-                .parent(parent)
-                .build();
-        Category child = Category.builder()
-                .id(3L)
-                .name("child")
-                .build();
-
-        parent.setChildNodeList(List.of(root));
-        root.setParent(parent);
-        root.setChildNodeList(List.of(child));
-        child.setParent(root);
-
-        return child;
-    }
-
-    private void addReview(Item item) {
-        Rating rating = Rating.builder()
-                .id(5L)
-                .value(5)
-                .build();
-
-        Review review = Review.builder()
-                .id(1L)
-                .title("title")
-                .message("message")
-                .dateOfCreate(100)
-                .rating(rating)
-                .build();
-
-//        item.addReview(review);
-    }
-
-    private void addPosts(Item item) {
-        Post parent = Post.builder()
-                .id(1L)
-                .title("parent")
-                .uniquePostId("1")
-                .message("parent")
-                .dateOfCreate(100000)
-                .build();
-        Post root = Post.builder()
-                .id(2L)
-                .title("root")
-                .uniquePostId("2")
-                .message("root")
-                .dateOfCreate(100000)
-                .build();
-        Post child = Post.builder()
-                .id(3L)
-                .title("child")
-                .uniquePostId("3")
-                .message("child")
-                .dateOfCreate(100000)
-                .build();
-
-        parent.addChildPost(root);
-        root.addChildPost(child);
-
-//        item.addPost(parent);
-//        item.addPost(root);
-//        item.addPost(child);
     }
 }

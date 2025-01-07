@@ -1,8 +1,10 @@
 package com.b2c.prototype.service.processor;
 
 import com.b2c.prototype.dao.cashed.ISingleValueMap;
+import com.b2c.prototype.modal.base.AbstractOneColumnEntity;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDtoUpdate;
+import com.b2c.prototype.modal.dto.response.ResponseOneFieldEntityDto;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.tm.core.dao.common.IEntityDao;
 import com.tm.core.processor.finder.factory.IParameterFactory;
@@ -17,7 +19,6 @@ public abstract class AbstractOneFieldEntityService<E> implements IOneFieldEntit
     private final IParameterFactory parameterFactory;
     private final IEntityDao dao;
     protected final ITransformationFunctionService transformationFunctionService;
-//    protected final ISupplierService supplierService;
     private final ISingleValueMap singleValueMap;
 
     public AbstractOneFieldEntityService(IParameterFactory parameterFactory,
@@ -36,6 +37,7 @@ public abstract class AbstractOneFieldEntityService<E> implements IOneFieldEntit
     @Override
     public void saveEntity(OneFieldEntityDto oneFieldEntityDto) {
         E entity = getFunction().apply(oneFieldEntityDto);
+//        E entity = (E) transformationFunctionService.getEntity(AbstractOneColumnEntity.class, oneFieldEntityDto);
         dao.persistEntity(entity);
         singleValueMap.putEntity(entity.getClass(), getFieldName(), entity);
     }
@@ -44,6 +46,7 @@ public abstract class AbstractOneFieldEntityService<E> implements IOneFieldEntit
     public void updateEntity(OneFieldEntityDtoUpdate oneFieldEntityDtoUpdate) {
         OneFieldEntityDto newEntityRequest = oneFieldEntityDtoUpdate.getNewEntity();
         E entity = getFunction().apply(newEntityRequest);
+//        E entity = (E) transformationFunctionService.getEntity(AbstractOneColumnEntity.class, newEntityRequest);
         String searchParameter = oneFieldEntityDtoUpdate.getOldEntity().getValue();
         Parameter parameter = parameterFactory.createStringParameter(getFieldName(), searchParameter);
         dao.findEntityAndUpdate(entity, parameter);
@@ -64,19 +67,26 @@ public abstract class AbstractOneFieldEntityService<E> implements IOneFieldEntit
     }
 
     @Override
-    public E getEntity(OneFieldEntityDto oneFieldEntityDto) {
+    public ResponseOneFieldEntityDto getEntity(OneFieldEntityDto oneFieldEntityDto) {
         Parameter parameter = parameterFactory.createStringParameter(getFieldName(), oneFieldEntityDto.getValue());
-        return dao.getEntity(parameter);
+        E entity = dao.getEntity(parameter);
+        return transformationFunctionService.getEntity(ResponseOneFieldEntityDto.class, entity);
     }
 
     @Override
-    public Optional<E> getEntityOptional(OneFieldEntityDto oneFieldEntityDto) {
+    public Optional<ResponseOneFieldEntityDto> getEntityOptional(OneFieldEntityDto oneFieldEntityDto) {
         Parameter parameter = parameterFactory.createStringParameter(getFieldName(), oneFieldEntityDto.getValue());
-        return dao.getOptionalEntity(parameter);
+        E entity = dao.getEntity(parameter);
+        return Optional.of(transformationFunctionService.getEntity(ResponseOneFieldEntityDto.class, entity));
     }
 
     @Override
-    public List<E> getEntities() {
-        return dao.getEntityList();
+    public List<ResponseOneFieldEntityDto> getEntities() {
+        return dao.getEntityList().stream()
+                .map(e -> (E) e)
+                .map(entity ->
+                        transformationFunctionService.getEntity(ResponseOneFieldEntityDto.class, entity)
+                )
+                .toList();
     }
 }

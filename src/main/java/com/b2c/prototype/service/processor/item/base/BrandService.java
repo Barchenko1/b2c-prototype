@@ -1,6 +1,7 @@
 package com.b2c.prototype.service.processor.item.base;
 
 import com.b2c.prototype.dao.cashed.ISingleValueMap;
+import com.b2c.prototype.modal.base.AbstractOneColumnEntity;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
@@ -24,6 +25,11 @@ public class BrandService extends AbstractOneFieldEntityService<Brand> implement
     protected Function<OneFieldEntityDto, Brand> getFunction() {
         return transformationFunctionService.getTransformationFunction(OneFieldEntityDto.class, Brand.class);
     }
+
+//    @Override
+//    protected Function<AbstractOneColumnEntity, OneFieldEntityDto> getFunctionDto() {
+//        return transformationFunctionService.getTransformationFunction(AbstractOneColumnEntity.class, OneFieldEntityDto.class);
+//    }
 
     @Override
     protected String getFieldName() {

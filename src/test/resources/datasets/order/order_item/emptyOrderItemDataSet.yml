@@ -1,15 +1,19 @@
 brand:
   - id: 1
     value: "Hermes"
+    label: "Hermes"
 item_status:
   - id: 1
     value: "NEW"
+    label: "NEW"
 item_type:
   - id: 1
     value: "Clothes"
+    label: "Clothes"
 currency:
   - id: 1
     value: "USD"
+    label: "USD"
 discount:
   - id: 1
     amount: 5
@@ -19,6 +23,7 @@ discount:
     currency_id: 1
 option_group:
   - id: 1
+    label: "Size"
     value: "Size"
 option_item:
   - id: 1
@@ -51,17 +56,22 @@ item_data_option:
 delivery_type:
   - id: 1
     value: "Post"
+    label: "Post"
 country:
   - id: 1
+    label: "USA"
     value: "USA"
 order_status:
   - id: 1
     value: "Pending"
+    label: "Pending"
 payment_method:
   - id: 1
     value: "Card"
+    label: "Card"
   - id: 2
     value: "Blik"
+    label: "Blik"
 country_phone_code:
   - id: 1
     code: "+11"

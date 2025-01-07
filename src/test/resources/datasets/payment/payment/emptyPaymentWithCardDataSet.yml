@@ -9,11 +9,14 @@ credit_card:
 payment_method:
   - id: 1
     value: "Card"
+    label: "Card"
   - id: 2
     value: "Blik"
+    label: "Blil"
 currency:
   - id: 1
     value: "USD"
+    label: "USD"
 discount:
   - id: 1
     amount: 5

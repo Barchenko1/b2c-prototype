@@ -1,8 +1,10 @@
 message_status:
   - id: 1
+    label: "New"
     value: "New"
 message_type:
   - id: 1
+    label: "InMail"
     value: "InMail"
 message:
   - dateOfSend: 100

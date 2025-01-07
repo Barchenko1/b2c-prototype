@@ -1,6 +1,7 @@
 currency:
   - id: 1
     value: "USD"
+    label: "USD"
 price:
   - id: 1
     amount: 20

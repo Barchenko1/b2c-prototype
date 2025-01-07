@@ -225,6 +225,7 @@ class OrderItemDataServiceTest {
     private Address createAddress() {
         Country country = Country.builder()
                 .id(1L)
+                .label("USA")
                 .value("USA")
                 .build();
         return Address.builder()
@@ -268,6 +269,7 @@ class OrderItemDataServiceTest {
                 .build();
         Currency currency = Currency.builder()
                 .id(1L)
+                .label("USD")
                 .value("USD")
                 .build();
         Discount discount = Discount.builder()

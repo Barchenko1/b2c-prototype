@@ -1,2 +1,3 @@
 order_status:
   - value: "Pending"
+    label: "Pending"

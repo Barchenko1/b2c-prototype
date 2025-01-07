@@ -178,19 +178,23 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
         Brand brand = Brand.builder()
                 .id(1L)
                 .value("Hermes")
+                .label("Hermes")
                 .build();
         Category category = prepareCategories();
         Currency currency = Currency.builder()
                 .id(1L)
+                .label("USD")
                 .value("USD")
                 .build();
         ItemStatus itemStatus = ItemStatus.builder()
                 .id(1L)
                 .value("NEW")
+                .label("NEW")
                 .build();
         ItemType itemType = ItemType.builder()
                 .id(1L)
                 .value("Clothes")
+                .label("Clothes")
                 .build();
         ItemData itemData = ItemData.builder()
                 .id(1L)
@@ -213,15 +217,18 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
         Brand brand = Brand.builder()
                 .id(1L)
                 .value("Hermes")
+                .label("Hermes")
                 .build();
         Category category = prepareCategories();
         ItemStatus itemStatus = ItemStatus.builder()
                 .id(1L)
                 .value("NEW")
+                .label("NEW")
                 .build();
         ItemType itemType = ItemType.builder()
                 .id(1L)
                 .value("Clothes")
+                .label("Clothes")
                 .build();
 
         ItemData itemData = ItemData.builder()
@@ -246,15 +253,18 @@ class BasicItemDaoTest extends AbstractGeneralEntityDaoTest {
         Brand brand = Brand.builder()
                 .id(1L)
                 .value("Hermes")
+                .label("Hermes")
                 .build();
         Category category = prepareCategories();
         ItemStatus itemStatus = ItemStatus.builder()
                 .id(1L)
                 .value("NEW")
+                .label("NEW")
                 .build();
         ItemType itemType = ItemType.builder()
                 .id(1L)
                 .value("Clothes")
+                .label("Clothes")
                 .build();
 
         ItemData itemData = ItemData.builder()

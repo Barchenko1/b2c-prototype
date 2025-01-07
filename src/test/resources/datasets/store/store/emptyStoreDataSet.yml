@@ -1,18 +1,23 @@
 count_type:
   - id: 1
     value: "LIMITED"
+    label: "limited"
 brand:
   - id: 1
     value: "Hermes"
+    label: "Hermes"
 item_status:
   - id: 1
     value: "NEW"
+    label: "NEW"
 item_type:
   - id: 1
     value: "Clothes"
+    label: "Clothes"
 currency:
   - id: 1
     value: "USD"
+    label: "USD"
 price:
   - id: 1
     amount: 100
@@ -26,6 +31,7 @@ discount:
     currency_id: 1
 option_group:
   - id: 1
+    label: "Size"
     value: "Size"
 option_item:
   - id: 1

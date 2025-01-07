@@ -1,3 +1,4 @@
 item_type:
   - id: 1
-    value: "Apple"
+    value: "Clothes"
+    label: "Clothes"

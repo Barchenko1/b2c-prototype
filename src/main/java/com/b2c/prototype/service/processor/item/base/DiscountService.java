@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
+import static com.b2c.prototype.util.Constant.CHAR_SEQUENCE_CODE;
 
 public class DiscountService implements IDiscountService {
 
@@ -41,7 +42,6 @@ public class DiscountService implements IDiscountService {
     public void saveDiscount(DiscountDto discountDto) {
         entityOperationDao.saveEntity(
                 supplierService.getSupplier(Discount.class, discountDto));
-
     }
 
     @Override
@@ -64,7 +64,7 @@ public class DiscountService implements IDiscountService {
     public void updateDiscount(DiscountSearchFieldEntityDto discountSearchFieldEntityDto) {
         entityOperationDao.updateEntityByParameter(
                 supplierService.getSupplier(Discount.class, discountSearchFieldEntityDto.getNewEntity()),
-                supplierService.parameterStringSupplier("charSequenceCode", discountSearchFieldEntityDto.getSearchField()));
+                supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, discountSearchFieldEntityDto.getSearchField()));
     }
 
     @Override
@@ -72,7 +72,7 @@ public class DiscountService implements IDiscountService {
         entityOperationDao.executeConsumer(session -> {
             Discount currencyDiscount = queryService.getEntity(
                     Discount.class,
-                    supplierService.parameterStringSupplier("charSequenceCode", discountStatusDto.getCharSequenceCode()));
+                    supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, discountStatusDto.getCharSequenceCode()));
             currencyDiscount.setActive(discountStatusDto.isActive());
             session.merge(currencyDiscount);
         });
@@ -81,20 +81,20 @@ public class DiscountService implements IDiscountService {
     @Override
     public void deleteDiscount(OneFieldEntityDto oneFieldEntityDto) {
         entityOperationDao.deleteEntityByParameter(
-                supplierService.parameterStringSupplier("charSequenceCode", oneFieldEntityDto.getValue()));
+                supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, oneFieldEntityDto.getValue()));
     }
 
     @Override
     public ResponseDiscountDto getDiscount(OneFieldEntityDto oneFieldEntityDto) {
         return entityOperationDao.getEntityDto(
-                supplierService.parameterStringSupplier("charSequenceCode", oneFieldEntityDto.getValue()),
+                supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(Discount.class, ResponseDiscountDto.class));
     }
 
     @Override
     public Optional<ResponseDiscountDto> getOptionalDiscount(OneFieldEntityDto oneFieldEntityDto) {
         return entityOperationDao.getOptionalEntityDto(
-                supplierService.parameterStringSupplier("charSequenceCode", oneFieldEntityDto.getValue()),
+                supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(Discount.class, ResponseDiscountDto.class));
     }
 

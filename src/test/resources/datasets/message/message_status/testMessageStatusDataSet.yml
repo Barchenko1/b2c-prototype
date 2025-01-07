@@ -1,3 +1,4 @@
 message_status:
   - id: 1
+    label: "New"
     value: "New"

@@ -1,3 +1,4 @@
 country:
   - id: 1
+    label: "USA"
     value: "USA"

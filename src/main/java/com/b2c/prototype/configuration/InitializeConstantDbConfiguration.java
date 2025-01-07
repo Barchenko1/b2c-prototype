@@ -1,5 +1,6 @@
 package com.b2c.prototype.configuration;
 
+import com.b2c.prototype.configuration.modal.ApplicationProperty;
 import com.b2c.prototype.configuration.modal.TransitiveSelfYaml;
 import com.b2c.prototype.dao.address.ICountryDao;
 import com.b2c.prototype.dao.delivery.IDeliveryTypeDao;
@@ -52,7 +53,7 @@ public class InitializeConstantDbConfiguration {
 
     private final LocalizationInterpreter localizationInterpreter;
     private final Set<Locale> availableLocales;
-    private final EnumConfiguration enumConfiguration;
+    private final ApplicationPropertyConfiguration applicationPropertyConfiguration;
     private final ITransactionWrapper transactionWrapper;
     private final IBrandDao brandDao;
     private final ICountTypeDao countTypeDao;
@@ -73,7 +74,8 @@ public class InitializeConstantDbConfiguration {
 
     public InitializeConstantDbConfiguration(LocalizationInterpreter localizationInterpreter,
                                              Set<Locale> availableLocales,
-                                             EnumConfiguration enumConfiguration, ITransactionWrapper transactionWrapper,
+                                             ApplicationPropertyConfiguration applicationPropertyConfiguration,
+                                             ITransactionWrapper transactionWrapper,
                                              IBrandDao brandDao,
                                              ICountTypeDao countTypeDao,
                                              ICountryPhoneCodeDao countryPhoneCodeDao,
@@ -87,10 +89,11 @@ public class InitializeConstantDbConfiguration {
                                              IOptionGroupDao optionGroupDao,
                                              IOrderStatusDao orderStatusDao,
                                              IPaymentMethodDao paymentMethodDao,
-                                             IRatingDao ratingDao, ICategoryDao categoryDao) {
+                                             IRatingDao ratingDao,
+                                             ICategoryDao categoryDao) {
         this.localizationInterpreter = localizationInterpreter;
         this.availableLocales = availableLocales;
-        this.enumConfiguration = enumConfiguration;
+        this.applicationPropertyConfiguration = applicationPropertyConfiguration;
         this.transactionWrapper = transactionWrapper;
         this.brandDao = brandDao;
         this.countTypeDao = countTypeDao;
@@ -140,147 +143,146 @@ public class InitializeConstantDbConfiguration {
     }
 
     private void initializeCountTypes(Locale defaultLocale) {
-        Set<String> countTypeNames = enumConfiguration.getCountTypes();
+        Set<String> countTypeNames = applicationPropertyConfiguration.getCountTypes();
         List<CountType> existingCountTypes = countTypeDao.getEntityList();
 
         countTypeNames.stream()
-                .map(name -> localizationInterpreter.interpret("count.type", name.toLowerCase(), defaultLocale))
-                .filter(localizedName -> existingCountTypes.stream()
-                        .noneMatch(existing -> existing.getValue().equals(localizedName)))
-                .map(countType -> CountType.builder()
-                        .value(countType)
-                        .build())
+//                .map(name -> localizationInterpreter.interpret("count.type", name.toLowerCase(), defaultLocale))
+//                .filter(localizedName -> existingCountTypes.stream()
+//                        .noneMatch(existing -> existing.getValue().equals(localizedName)))
+//                .map(countType -> CountType.builder()
+//                        .value(countType)
+//                        .build())
                 .forEach(countTypeDao::persistEntity);
     }
 
     private void initializeCountryPhoneCode(Locale defaultLocale) {
-        Set<String> countryPhoneCodes = enumConfiguration.getCountryPhoneCodes();
+        Set<String> countryPhoneCodes = applicationPropertyConfiguration.getCountryPhoneCodes();
         List<CountryPhoneCode> existingCountryPhoneCodes = countryPhoneCodeDao.getEntityList();
 
         countryPhoneCodes.stream()
-                .map(name -> localizationInterpreter.interpret("contact.phone", name.toLowerCase(), defaultLocale))
-                .filter(localizedName -> existingCountryPhoneCodes.stream()
-                        .noneMatch(existing -> existing.getCode().equals(localizedName)))
-                .map(countryPhoneCodeName -> CountryPhoneCode.builder()
-                        .code(countryPhoneCodeName)
-                        .build())
+//                .map(name -> localizationInterpreter.interpret("contact.phone", name.toLowerCase(), defaultLocale))
+//                .filter(localizedName -> existingCountryPhoneCodes.stream()
+//                        .noneMatch(existing -> existing.getCode().equals(localizedName)))
+//                .map(countryPhoneCodeName -> CountryPhoneCode.builder()
+//                        .code(countryPhoneCodeName)
+//                        .build())
                 .forEach(countryPhoneCodeDao::persistEntity);
     }
 
     private void initializeCountries(Locale defaultLocale) {
-        Set<String> countryNames = enumConfiguration.getCountries();
+        Set<String> countryNames = applicationPropertyConfiguration.getCountries();
         List<Country> existingCountries = countryDao.getEntityList();
 
         countryNames.stream()
-                .map(name -> localizationInterpreter.interpret("country", name.toLowerCase(), defaultLocale))
-                .filter(localizedName -> existingCountries.stream()
-                        .noneMatch(existing -> existing.getValue().equals(localizedName)))
-                .map(countryName -> Country.builder()
-                        .value(countryName)
-                        .build())
+//                .map(name -> localizationInterpreter.interpret("country", name.toLowerCase(), defaultLocale))
+//                .filter(localizedName -> existingCountries.stream()
+//                        .noneMatch(existing -> existing.getValue().equals(localizedName)))
+//                .map(countryName -> Country.builder()
+//                        .value(countryName)
+//                        .build())
                 .forEach(countryDao::persistEntity);
     }
 
     private void initializeCurrencies(Locale defaultLocale) {
-        Set<String> currencyNames = enumConfiguration.getCurrencies();
+        Set<String> currencyNames = applicationPropertyConfiguration.getCurrencies();
         List<Currency> existingCurrencies = currencyDao.getEntityList();
 
         currencyNames.stream()
-                .map(name -> localizationInterpreter.interpret("currency", name.toLowerCase(), defaultLocale))
-                .filter(localizedName -> existingCurrencies.stream()
-                        .noneMatch(existing -> existing.getValue().equals(localizedName)))
-                .map(currency -> Currency.builder()
-                        .value(currency)
-                        .build())
+//                .map(name -> localizationInterpreter.interpret("currency", name.toLowerCase(), defaultLocale))
+//                .filter(localizedName -> existingCurrencies.stream()
+//                        .noneMatch(existing -> existing.getValue().equals(localizedName)))
+//                .map(currency -> Currency.builder()
+//                        .value(currency)
+//                        .build())
                 .forEach(currencyDao::persistEntity);
     }
 
     private void initializeDeliveryTypeEntities(Locale defaultLocale) {
-        Set<String> deliveryTypeList = enumConfiguration.getDeliveryTypes();
+        Set<String> deliveryTypeList = applicationPropertyConfiguration.getDeliveryTypes();
         List<DeliveryType> existingDeliveryType = deliveryTypeDao.getEntityList();
 
         if (deliveryTypeList != null) {
             deliveryTypeList.stream()
-                    .map(deliveryTypeName -> localizationInterpreter.interpret("delivery.type", deliveryTypeName.toLowerCase(), defaultLocale))
-                    .filter(localizedName ->
-                            existingDeliveryType.stream()
-                                    .noneMatch(deliveryType -> deliveryType.getValue().equals(localizedName)))
-                    .map(deliveryTypeName -> DeliveryType.builder()
-                            .value(deliveryTypeName)
-                            .build())
+//                    .map(deliveryTypeName -> localizationInterpreter.interpret("delivery.type", deliveryTypeName.toLowerCase(), defaultLocale))
+//                    .filter(localizedName ->
+//                            existingDeliveryType.stream()
+//                                    .noneMatch(deliveryType -> deliveryType.getValue().equals(localizedName)))
+//                    .map(deliveryTypeName -> DeliveryType.builder()
+//                            .value(deliveryTypeName)
+//                            .build())
                     .forEach(deliveryTypeDao::persistEntity);
         }
     }
 
     private void initializePaymentMethodEntities(Locale defaultLocale) {
-        Set<String> paymentMethodList = enumConfiguration.getPaymentMethods();
+        Set<String> paymentMethodList = applicationPropertyConfiguration.getPaymentMethods();
         List<PaymentMethod> existingPaymentMethod = paymentMethodDao.getEntityList();
 
         if (paymentMethodList != null) {
             paymentMethodList.stream()
-                    .map(paymentMethodName -> localizationInterpreter.interpret("payment.method", paymentMethodName.toLowerCase(), defaultLocale))
-                    .filter(localizedName -> existingPaymentMethod.stream()
-                                    .noneMatch(paymentMethod -> paymentMethod.getValue().equals(localizedName)))
-                    .map(paymentMethodName -> PaymentMethod.builder()
-                            .value(paymentMethodName)
-                            .build())
+//                    .map(paymentMethodName -> localizationInterpreter.interpret("payment.method", paymentMethodName.toLowerCase(), defaultLocale))
+//                    .filter(localizedName -> existingPaymentMethod.stream()
+//                                    .noneMatch(paymentMethod -> paymentMethod.getValue().equals(localizedName)))
+//                    .map(paymentMethodName -> PaymentMethod.builder()
+//                            .value(paymentMethodName)
+//                            .build())
                     .forEach(paymentMethodDao::persistEntity);
         }
     }
 
     private void initializeOrderStatusEntities(Locale defaultLocale) {
-        Set<String> orderStatusList = enumConfiguration.getOrderStatuses();
+        Set<String> orderStatusList = applicationPropertyConfiguration.getOrderStatuses();
         List<OrderStatus> existingOrderStatus = orderStatusDao.getEntityList();
 
         if (orderStatusList != null) {
             orderStatusList.stream()
-                    .map(orderStatusName -> localizationInterpreter.interpret("item.status", orderStatusName.toLowerCase(), defaultLocale))
-                    .filter(localizedName ->
-                            existingOrderStatus.stream()
-                                    .noneMatch(orderStatus -> orderStatus.getValue().equals(localizedName)))
-                    .map(orderStatusName -> OrderStatus.builder()
-                            .value(orderStatusName)
-                            .build())
+//                    .map(orderStatusName -> localizationInterpreter.interpret("item.status", orderStatusName.toLowerCase(), defaultLocale))
+//                    .filter(localizedName ->
+//                            existingOrderStatus.stream()
+//                                    .noneMatch(orderStatus -> orderStatus.getValue().equals(localizedName)))
+//                    .map(orderStatusName -> OrderStatus.builder()
+//                            .value(orderStatusName)
+//                            .build())
                     .forEach(orderStatusDao::persistEntity);
         }
     }
 
     private void initializeBrandEntities(Locale defaultLocale) {
-        Set<String> brandSet = enumConfiguration.getBrands();
+        Set<ApplicationProperty> applicationPropertySet = applicationPropertyConfiguration.getBrands();
         List<Brand> existingBrands = brandDao.getEntityList();
 
-        if (brandSet != null) {
-            brandSet.stream()
-                    .map(brandName -> localizationInterpreter.interpret("brand", brandName.toLowerCase(), defaultLocale))
-                    .filter(localizedName ->
-                            existingBrands.stream()
-                                    .noneMatch(brand -> brand.getValue().equals(localizedName)))
-                    .map(brandName -> Brand.builder()
-                            .value(brandName)
+        if (applicationPropertySet != null) {
+            applicationPropertySet.stream()
+                    .filter(ap -> existingBrands.stream()
+                            .noneMatch(brand -> brand.getValue().equals(ap.getValue().toLowerCase())))
+                    .map(ap -> Brand.builder()
+                            .label(localizationInterpreter.interpret("brand", ap.getValue().toLowerCase(), defaultLocale))
+                            .value(ap.getValue())
                             .build())
                     .forEach(brandDao::persistEntity);
         }
     }
 
     private void initializeItemStatusEntities(Locale defaultLocale) {
-        Set<String> itemStatusList = enumConfiguration.getItemStatuses();
+        Set<String> itemStatusList = applicationPropertyConfiguration.getItemStatuses();
         List<ItemStatus> existItemStatus = itemStatusDao.getEntityList();
 
         if (itemStatusList != null) {
             itemStatusList.stream()
-                    .map(itemStatusName -> localizationInterpreter.interpret("item.status", itemStatusName.toLowerCase(), defaultLocale))
-                    .filter(localizedName ->
-                            existItemStatus.stream()
-                                    .noneMatch(itemStatus -> itemStatus.getValue().equals(localizedName)))
-                    .map(itemStatusName -> ItemStatus.builder()
-                            .value(itemStatusName)
-                            .build())
+//                    .map(itemStatusName -> localizationInterpreter.interpret("item.status", itemStatusName.toLowerCase(), defaultLocale))
+//                    .filter(localizedName ->
+//                            existItemStatus.stream()
+//                                    .noneMatch(itemStatus -> itemStatus.getValue().equals(localizedName)))
+//                    .map(itemStatusName -> ItemStatus.builder()
+//                            .value(itemStatusName)
+//                            .build())
                     .forEach(itemStatusDao::persistEntity);
         }
     }
 
     private void initializeItemTypesEntities(Locale defaultLocale) {
-        Set<String> itemTypeList = enumConfiguration.getItemTypes();
+        Set<String> itemTypeList = applicationPropertyConfiguration.getItemTypes();
         List<ItemType> existItemTypes = itemTypeDao.getEntityList();
 
         if (itemTypeList != null) {
@@ -297,52 +299,52 @@ public class InitializeConstantDbConfiguration {
     }
 
     private void initializeMessageStatuses(Locale locale) {
-        Set<String> messageStatusNames = enumConfiguration.getMessageStatuses();
+        Set<String> messageStatusNames = applicationPropertyConfiguration.getMessageStatuses();
         List<MessageStatus> existingMessageStatuses = messageStatusDao.getEntityList();
 
         messageStatusNames.stream()
-                .map(name -> localizationInterpreter.interpret("message.status", name.toLowerCase(), locale))
-                .filter(localizedName -> existingMessageStatuses.stream()
-                        .noneMatch(existing -> existing.getValue().equals(localizedName)))
-                .map(messageStatusValue -> MessageStatus.builder()
-                        .value(messageStatusValue)
-                        .build())
+//                .map(name -> localizationInterpreter.interpret("message.status", name.toLowerCase(), locale))
+//                .filter(localizedName -> existingMessageStatuses.stream()
+//                        .noneMatch(existing -> existing.getValue().equals(localizedName)))
+//                .map(messageStatusValue -> MessageStatus.builder()
+//                        .value(messageStatusValue)
+//                        .build())
                 .forEach(messageStatusDao::persistEntity);
     }
 
     private void initializeMessageTypes(Locale locale) {
-        Set<String> messageTypeNames = enumConfiguration.getMessageTypes();
+        Set<String> messageTypeNames = applicationPropertyConfiguration.getMessageTypes();
         List<MessageType> existingMessageTypes = messageTypeDao.getEntityList();
 
         messageTypeNames.stream()
-                .map(name -> localizationInterpreter.interpret("message.type", name.toLowerCase(), locale))
-                .filter(localizedName -> existingMessageTypes.stream()
-                        .noneMatch(existing -> existing.getValue().equals(localizedName)))
-                .map(messageTypeValue -> MessageType.builder()
-                        .value(messageTypeValue)
-                        .build())
+//                .map(name -> localizationInterpreter.interpret("message.type", name.toLowerCase(), locale))
+//                .filter(localizedName -> existingMessageTypes.stream()
+//                        .noneMatch(existing -> existing.getValue().equals(localizedName)))
+//                .map(messageTypeValue -> MessageType.builder()
+//                        .value(messageTypeValue)
+//                        .build())
                 .forEach(messageTypeDao::persistEntity);
     }
 
     private void initializeOptionGroupEntities(Locale defaultLocale) {
-        Set<String> optionGroupList = enumConfiguration.getItemTypes();
+        Set<String> optionGroupList = applicationPropertyConfiguration.getItemTypes();
         List<ItemType> existOptionGroup = optionGroupDao.getEntityList();
 
         if (optionGroupList != null) {
             optionGroupList.stream()
-                    .map(optionGroupName -> localizationInterpreter.interpret("option.group", optionGroupName.toLowerCase(), defaultLocale))
-                    .filter(localizedName ->
-                            existOptionGroup.stream()
-                                    .noneMatch(optionGroup -> optionGroup.getValue().equals(localizedName)))
-                    .map(optionGroupName -> OptionGroup.builder()
-                            .value(optionGroupName)
-                            .build())
+//                    .map(optionGroupName -> localizationInterpreter.interpret("option.group", optionGroupName.toLowerCase(), defaultLocale))
+//                    .filter(localizedName ->
+//                            existOptionGroup.stream()
+//                                    .noneMatch(optionGroup -> optionGroup.getValue().equals(localizedName)))
+//                    .map(optionGroupName -> OptionGroup.builder()
+//                            .value(optionGroupName)
+//                            .build())
                     .forEach(optionGroupDao::persistEntity);
         }
     }
 
     private void initializeRatingEntities() {
-        Set<Integer> ratingList = enumConfiguration.getRatings();
+        Set<Integer> ratingList = applicationPropertyConfiguration.getRatings();
         List<Rating> existRatingList = ratingDao.getEntityList();
 
         if (ratingList != null) {
@@ -358,7 +360,7 @@ public class InitializeConstantDbConfiguration {
     }
 
     private void initializeCategory(Locale defaultLocale) {
-        Set<TransitiveSelfYaml> categories = enumConfiguration.getCategories();
+        Set<TransitiveSelfYaml> categories = applicationPropertyConfiguration.getCategories();
         List<Category> existCategoryList = categoryDao.getTransitiveSelfEntityList();
         List<TransitiveSelfYaml> configYamlList = extractTransitiveSelfYaml(categories);
         List<TransitiveSelfYaml> nonExistingCategories = findNonExistingCategories(configYamlList, existCategoryList);

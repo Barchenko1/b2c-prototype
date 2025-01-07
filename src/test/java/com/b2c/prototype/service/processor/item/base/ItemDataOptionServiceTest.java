@@ -314,6 +314,7 @@ class ItemDataOptionServiceTest {
     private Price getPrice(double amount) {
         Currency currency = Currency.builder()
                 .id(1L)
+                .label("USD")
                 .value("USD")
                 .build();
         return Price.builder()

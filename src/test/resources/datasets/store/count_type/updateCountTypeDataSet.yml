@@ -1,4 +1,5 @@
 count_type:
   - id: 1
     value: "UNLIMITED"
+    label: "unlimited"
 

@@ -20,6 +20,8 @@ public class AbstractOneColumnEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
+    @Column(name = "label", nullable = false)
+    private String label;
     @Column(name = "value", nullable = false)
     private String value;
 

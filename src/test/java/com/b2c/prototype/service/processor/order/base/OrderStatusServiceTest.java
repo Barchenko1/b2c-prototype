@@ -1,7 +1,9 @@
 package com.b2c.prototype.service.processor.order.base;
 
+import com.b2c.prototype.modal.base.AbstractOneColumnEntity;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDtoUpdate;
+import com.b2c.prototype.modal.dto.response.ResponseOneFieldEntityDto;
 import com.b2c.prototype.modal.entity.order.OrderStatus;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.processor.AbstractOneFieldEntityServiceTest;
@@ -10,10 +12,13 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class OrderStatusServiceTest extends AbstractOneFieldEntityServiceTest<OrderStatus> {
@@ -76,13 +81,16 @@ class OrderStatusServiceTest extends AbstractOneFieldEntityServiceTest<OrderStat
         OneFieldEntityDto dto = new OneFieldEntityDto("testValue");
         Parameter parameter = parameterFactory.createStringParameter(getFieldName(), dto.getValue());
         OrderStatus testValue = createTestValue();
+        ResponseOneFieldEntityDto responseOneFieldEntityDto = getResponseOneFieldEntityDto();
 
         when(parameterFactory.createStringParameter(getFieldName(), dto.getValue())).thenReturn(parameter);
         when(dao.getEntity(parameter)).thenReturn(testValue);
+        when(transformationFunctionService.getEntity(ResponseOneFieldEntityDto.class, testValue))
+                .thenReturn(responseOneFieldEntityDto);
 
-        OrderStatus result = service.getEntity(dto);
+        ResponseOneFieldEntityDto result = service.getEntity(dto);
 
-        assertEquals(testValue, result);
+        assertEquals(responseOneFieldEntityDto, result);
     }
 
     @Test
@@ -90,13 +98,31 @@ class OrderStatusServiceTest extends AbstractOneFieldEntityServiceTest<OrderStat
         OneFieldEntityDto dto = new OneFieldEntityDto("testValue");
         Parameter parameter = parameterFactory.createStringParameter(getFieldName(), dto.getValue());
         OrderStatus testValue = createTestValue();
+        ResponseOneFieldEntityDto responseOneFieldEntityDto = getResponseOneFieldEntityDto();
 
         when(parameterFactory.createStringParameter(getFieldName(), dto.getValue())).thenReturn(parameter);
-        when(dao.getOptionalEntity(parameter)).thenReturn(Optional.of(testValue));
+        when(dao.getEntity(parameter)).thenReturn(testValue);
+        when(transformationFunctionService.getEntity(ResponseOneFieldEntityDto.class, testValue))
+                .thenReturn(responseOneFieldEntityDto);
 
-        Optional<OrderStatus> result = service.getEntityOptional(dto);
+        Optional<ResponseOneFieldEntityDto> result = service.getEntityOptional(dto);
 
-        assertEquals(Optional.of(testValue), result);
+        assertEquals(Optional.of(responseOneFieldEntityDto), result);
+    }
+
+    @Test
+    public void testGetAllEntity() {
+        OrderStatus testValue = createTestValue();
+        ResponseOneFieldEntityDto responseOneFieldEntityDto = getResponseOneFieldEntityDto();
+
+        when(dao.getEntityList()).thenReturn(List.of(testValue));
+        when(transformationFunctionService.getEntity(ResponseOneFieldEntityDto.class, testValue))
+                .thenReturn(responseOneFieldEntityDto);
+
+        List<ResponseOneFieldEntityDto> list = service.getEntities();
+
+        assertEquals(1, list.size());
+        assertEquals(responseOneFieldEntityDto, list.get(0));
     }
 
     private OrderStatus createTestValue() {

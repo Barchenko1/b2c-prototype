@@ -1,8 +1,10 @@
 delivery_type:
   - id: 1
+    label: "Type"
     value: "Type"
 country:
   - id: 1
+    label: "USA"
     value: "USA"
 address: []
 delivery: []

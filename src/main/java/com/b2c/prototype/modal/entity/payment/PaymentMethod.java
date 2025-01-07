@@ -10,12 +10,6 @@ import jakarta.persistence.Table;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-//@Entity
-//@Table(name = "payment_method")
-//@Data
-//@Builder
-//@NoArgsConstructor
-//@AllArgsConstructor
 @Entity
 @Table(name = "payment_method")
 @SuperBuilder

@@ -29,6 +29,7 @@ class BasicOrderStatusDaoTest extends AbstractSingleEntityDaoTest {
         OrderStatus orderStatus = OrderStatus.builder()
                 .id(1L)
                 .value("Pending")
+                .label("Pending")
                 .build();
         return new EntityDataSet<>(orderStatus, "/datasets/order/order_status/testOrderStatusDataSet.yml");
     }
@@ -37,6 +38,7 @@ class BasicOrderStatusDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getSaveDataSet() {
         OrderStatus orderStatus = OrderStatus.builder()
                 .value("Pending")
+                .label("Pending")
                 .build();
         return new EntityDataSet<>(orderStatus, "/datasets/order/order_status/saveOrderStatusDataSet.yml");
     }
@@ -46,6 +48,7 @@ class BasicOrderStatusDaoTest extends AbstractSingleEntityDaoTest {
         OrderStatus orderStatus = OrderStatus.builder()
                 .id(1L)
                 .value("Update Pending")
+                .label("Pending")
                 .build();
         return new EntityDataSet<>(orderStatus, "/datasets/order/order_status/updateOrderStatusDataSet.yml");
     }

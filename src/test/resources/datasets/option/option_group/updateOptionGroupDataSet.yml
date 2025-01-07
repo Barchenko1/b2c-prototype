@@ -1,3 +1,4 @@
 option_group:
   - id: 1
     value: "Update Color"
+    label: "Color"

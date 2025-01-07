@@ -1,2 +1,3 @@
 count_type:
   - value: "LIMITED"
+    label: "limited"

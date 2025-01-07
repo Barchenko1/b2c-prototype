@@ -28,6 +28,7 @@ class BasicItemTypeDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<ItemType> getSaveDataSet() {
         ItemType itemType = ItemType.builder()
                 .value("Clothes")
+                .label("Clothes")
                 .build();
         return new EntityDataSet<>(itemType, "/datasets/item/item_type/saveItemTypeDataSet.yml");
     }
@@ -37,6 +38,7 @@ class BasicItemTypeDaoTest extends AbstractSingleEntityDaoTest {
         ItemType itemType = ItemType.builder()
                 .id(1L)
                 .value("Clothes")
+                .label("Clothes")
                 .build();
         return new EntityDataSet<>(itemType, "/datasets/item/item_type/testItemTypeDataSet.yml");
     }
@@ -46,6 +48,7 @@ class BasicItemTypeDaoTest extends AbstractSingleEntityDaoTest {
         ItemType itemType = ItemType.builder()
                 .id(1L)
                 .value("Update Clothes")
+                .label("Clothes")
                 .build();
         return new EntityDataSet<>(itemType, "/datasets/item/item_type/updateItemTypeDataSet.yml");
     }

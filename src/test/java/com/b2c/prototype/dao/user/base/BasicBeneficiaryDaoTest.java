@@ -1,7 +1,7 @@
 package com.b2c.prototype.dao.user.base;
 
 import com.b2c.prototype.dao.AbstractGeneralEntityDaoTest;
-import com.b2c.prototype.dao.item.base.BasicBeneficiaryDao;
+import com.b2c.prototype.dao.order.base.BasicBeneficiaryDao;
 import com.b2c.prototype.modal.entity.order.Beneficiary;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;

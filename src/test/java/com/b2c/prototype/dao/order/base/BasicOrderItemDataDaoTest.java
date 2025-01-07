@@ -150,6 +150,7 @@ class BasicOrderItemDataDaoTest extends AbstractGeneralEntityDaoTest {
         Country country = Country.builder()
                 .id(1L)
                 .value("USA")
+                .label("USA")
                 .flagImagePath(null)
                 .build();
         return Address.builder()
@@ -168,6 +169,7 @@ class BasicOrderItemDataDaoTest extends AbstractGeneralEntityDaoTest {
         DeliveryType deliveryType = DeliveryType.builder()
                 .id(1L)
                 .value("Post")
+                .label("Post")
                 .build();
 
         return Delivery.builder()
@@ -229,15 +231,18 @@ class BasicOrderItemDataDaoTest extends AbstractGeneralEntityDaoTest {
         Brand brand = Brand.builder()
                 .id(1L)
                 .value("Hermes")
+                .label("Hermes")
                 .build();
         Category category = prepareCategories();
         ItemStatus itemStatus = ItemStatus.builder()
                 .id(1L)
                 .value("NEW")
+                .label("NEW")
                 .build();
         ItemType itemType = ItemType.builder()
                 .id(1L)
                 .value("Clothes")
+                .label("Clothes")
                 .build();
 
         ItemData itemData = ItemData.builder()
@@ -255,6 +260,7 @@ class BasicOrderItemDataDaoTest extends AbstractGeneralEntityDaoTest {
         OptionGroup optionGroup = OptionGroup.builder()
                 .id(1L)
                 .value("Size")
+                .label("Size")
                 .build();
         OptionItem optionItem = OptionItem.builder()
                 .id(1L)
@@ -277,6 +283,7 @@ class BasicOrderItemDataDaoTest extends AbstractGeneralEntityDaoTest {
         return OrderStatus.builder()
                 .id(1L)
                 .value("Pending")
+                .label("Pending")
                 .build();
     }
 
@@ -292,9 +299,11 @@ class BasicOrderItemDataDaoTest extends AbstractGeneralEntityDaoTest {
         PaymentMethod paymentMethod = PaymentMethod.builder()
                 .id(1L)
                 .value("Card")
+                .label("Card")
                 .build();
         Currency currency = Currency.builder()
                 .id(1L)
+                .label("USD")
                 .value("USD")
                 .build();
         Discount discount = Discount.builder()

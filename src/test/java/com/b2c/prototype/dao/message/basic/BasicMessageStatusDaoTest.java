@@ -29,6 +29,7 @@ class BasicMessageStatusDaoTest extends AbstractSingleEntityDaoTest {
         MessageStatus messageStatus = MessageStatus.builder()
                 .id(1L)
                 .value("New")
+                .label("New")
                 .build();
         return new EntityDataSet<>(messageStatus, "/datasets/message/message_status/testMessageStatusDataSet.yml");
     }
@@ -37,6 +38,7 @@ class BasicMessageStatusDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getSaveDataSet() {
         MessageStatus messageStatus = MessageStatus.builder()
                 .value("New")
+                .label("New")
                 .build();
         return new EntityDataSet<>(messageStatus, "/datasets/message/message_status/saveMessageStatusDataSet.yml");
     }
@@ -46,6 +48,7 @@ class BasicMessageStatusDaoTest extends AbstractSingleEntityDaoTest {
         MessageStatus messageStatus = MessageStatus.builder()
                 .id(1L)
                 .value("Update New")
+                .label("New")
                 .build();
         return new EntityDataSet<>(messageStatus, "/datasets/message/message_status/updateMessageStatusDataSet.yml");
     }

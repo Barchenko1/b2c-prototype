@@ -57,6 +57,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
     private Delivery prepareToSaveDelivery() {
         Country country = Country.builder()
                 .id(1L)
+                .label("USA")
                 .value("USA")
                 .build();
         Address address = Address.builder()
@@ -71,6 +72,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
         DeliveryType deliveryType = DeliveryType.builder()
                 .id(1L)
                 .value("Type")
+                .label("Type")
                 .build();
 
 
@@ -83,6 +85,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
     private Delivery prepareToUpdateDelivery() {
         Country country = Country.builder()
                 .id(1L)
+                .label("USA")
                 .value("USA")
                 .build();
         Address address = Address.builder()
@@ -98,6 +101,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
         DeliveryType deliveryType = DeliveryType.builder()
                 .id(1L)
                 .value("Type")
+                .label("Type")
                 .build();
 
         return Delivery.builder()
@@ -110,6 +114,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
     private Delivery prepareTestDelivery() {
         Country country = Country.builder()
                 .id(1L)
+                .label("USA")
                 .value("USA")
                 .build();
         Address address = Address.builder()
@@ -125,6 +130,7 @@ class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
         DeliveryType deliveryType = DeliveryType.builder()
                 .id(1L)
                 .value("Type")
+                .label("Type")
                 .build();
 
         return Delivery.builder()

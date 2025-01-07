@@ -1,6 +1,6 @@
 package com.b2c.prototype.service.processor.item.base;
 
-import com.b2c.prototype.dao.item.IBeneficiaryDao;
+import com.b2c.prototype.dao.order.IBeneficiaryDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.searchfield.BeneficiaryArrayDtoSearchField;
 import com.b2c.prototype.modal.dto.request.BeneficiaryDto;
@@ -11,6 +11,7 @@ import com.b2c.prototype.modal.entity.order.Beneficiary;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
+import com.b2c.prototype.service.processor.order.base.BeneficiaryService;
 import com.b2c.prototype.service.processor.query.IQueryService;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.processor.finder.parameter.Parameter;

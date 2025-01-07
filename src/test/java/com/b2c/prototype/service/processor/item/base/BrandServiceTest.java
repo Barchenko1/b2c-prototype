@@ -2,6 +2,8 @@ package com.b2c.prototype.service.processor.item.base;
 
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDtoUpdate;
+import com.b2c.prototype.modal.dto.response.ResponseOneFieldEntityDto;
+import com.b2c.prototype.modal.entity.delivery.DeliveryType;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.processor.AbstractOneFieldEntityServiceTest;
@@ -10,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -78,13 +81,16 @@ class BrandServiceTest extends AbstractOneFieldEntityServiceTest<Brand> {
         OneFieldEntityDto dto = new OneFieldEntityDto("testValue");
         Parameter parameter = parameterFactory.createStringParameter(getFieldName(), dto.getValue());
         Brand testValue = createTestValue();
+        ResponseOneFieldEntityDto responseOneFieldEntityDto = getResponseOneFieldEntityDto();
 
         when(parameterFactory.createStringParameter(getFieldName(), dto.getValue())).thenReturn(parameter);
         when(dao.getEntity(parameter)).thenReturn(testValue);
+        when(transformationFunctionService.getEntity(ResponseOneFieldEntityDto.class, testValue))
+                .thenReturn(responseOneFieldEntityDto);
 
-        Brand result = brandService.getEntity(dto);
+        ResponseOneFieldEntityDto result = brandService.getEntity(dto);
 
-        assertEquals(testValue, result);
+        assertEquals(responseOneFieldEntityDto, result);
     }
 
     @Test
@@ -92,13 +98,31 @@ class BrandServiceTest extends AbstractOneFieldEntityServiceTest<Brand> {
         OneFieldEntityDto dto = new OneFieldEntityDto("testValue");
         Parameter parameter = parameterFactory.createStringParameter(getFieldName(), dto.getValue());
         Brand testValue = createTestValue();
+        ResponseOneFieldEntityDto responseOneFieldEntityDto = getResponseOneFieldEntityDto();
 
         when(parameterFactory.createStringParameter(getFieldName(), dto.getValue())).thenReturn(parameter);
-        when(dao.getOptionalEntity(parameter)).thenReturn(Optional.of(testValue));
+        when(dao.getEntity(parameter)).thenReturn(testValue);
+        when(transformationFunctionService.getEntity(ResponseOneFieldEntityDto.class, testValue))
+                .thenReturn(responseOneFieldEntityDto);
 
-        Optional<Brand> result = brandService.getEntityOptional(dto);
+        Optional<ResponseOneFieldEntityDto> result = brandService.getEntityOptional(dto);
 
-        assertEquals(Optional.of(testValue), result);
+        assertEquals(Optional.of(responseOneFieldEntityDto), result);
+    }
+
+    @Test
+    public void testGetEntities() {
+        Brand testValue = createTestValue();
+        ResponseOneFieldEntityDto responseOneFieldEntityDto = getResponseOneFieldEntityDto();
+
+        when(dao.getEntityList()).thenReturn(List.of(testValue));
+        when(transformationFunctionService.getEntity(ResponseOneFieldEntityDto.class, testValue))
+                .thenReturn(responseOneFieldEntityDto);
+
+        List<ResponseOneFieldEntityDto> list = brandService.getEntities();
+
+        assertEquals(1, list.size());
+        assertEquals(responseOneFieldEntityDto, list.get(0));
     }
 
     private Brand createTestValue() {

@@ -1,4 +1,4 @@
-package com.b2c.prototype.controller;
+package com.b2c.prototype.controller.advanse;
 
 import com.b2c.prototype.service.processor.delivery.IDeliveryService;
 import org.springframework.web.bind.annotation.RequestMapping;

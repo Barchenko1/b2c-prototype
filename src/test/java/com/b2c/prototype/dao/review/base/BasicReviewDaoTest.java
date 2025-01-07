@@ -139,23 +139,23 @@ class BasicReviewDaoTest extends AbstractSingleEntityDaoTest {
         Brand brand = Brand.builder()
                 .id(1L)
                 .value("Hermes")
+                .label("Hermes")
                 .build();
         Category category = prepareCategories();
         Currency currency = Currency.builder()
                 .id(1L)
+                .label("USD")
                 .value("USD")
                 .build();
         ItemStatus itemStatus = ItemStatus.builder()
                 .id(1L)
                 .value("NEW")
+                .label("NEW")
                 .build();
         ItemType itemType = ItemType.builder()
                 .id(1L)
                 .value("Clothes")
-                .build();
-        OptionGroup optionGroup = OptionGroup.builder()
-                .id(1L)
-                .value("Size")
+                .label("Clothes")
                 .build();
 
         ItemData itemData = ItemData.builder()
