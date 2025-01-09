@@ -71,7 +71,8 @@ class BasicMessageBoxDaoTest extends AbstractGeneralEntityDaoTest {
     private UserProfile prepareTestUserProfile() {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(1L)
-                .code("+11")
+                .value("+11")
+                .label("+11")
                 .build();
         ContactPhone contactPhone = ContactPhone.builder()
                 .phoneNumber("111-111-111")

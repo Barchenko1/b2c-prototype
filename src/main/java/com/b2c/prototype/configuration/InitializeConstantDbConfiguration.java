@@ -143,117 +143,123 @@ public class InitializeConstantDbConfiguration {
     }
 
     private void initializeCountTypes(Locale defaultLocale) {
-        Set<String> countTypeNames = applicationPropertyConfiguration.getCountTypes();
+        Set<ApplicationProperty> countTypeNames = applicationPropertyConfiguration.getCountTypes();
         List<CountType> existingCountTypes = countTypeDao.getEntityList();
 
-        countTypeNames.stream()
-//                .map(name -> localizationInterpreter.interpret("count.type", name.toLowerCase(), defaultLocale))
-//                .filter(localizedName -> existingCountTypes.stream()
-//                        .noneMatch(existing -> existing.getValue().equals(localizedName)))
-//                .map(countType -> CountType.builder()
-//                        .value(countType)
-//                        .build())
-                .forEach(countTypeDao::persistEntity);
+        if (countTypeNames != null) {
+            countTypeNames.stream()
+                    .filter(ap -> existingCountTypes.stream()
+                            .noneMatch(countType -> countType.getValue().equals(ap.getValue().toLowerCase())))
+                    .map(ap -> CountType.builder()
+                            .label(localizationInterpreter.interpret("country_phone_code", ap.getValue().toLowerCase(), defaultLocale))
+                            .value(ap.getValue())
+                            .build())
+                    .forEach(countTypeDao::persistEntity);
+        }
     }
 
     private void initializeCountryPhoneCode(Locale defaultLocale) {
-        Set<String> countryPhoneCodes = applicationPropertyConfiguration.getCountryPhoneCodes();
+        Set<ApplicationProperty> countryPhoneCodes = applicationPropertyConfiguration.getCountryPhoneCodes();
         List<CountryPhoneCode> existingCountryPhoneCodes = countryPhoneCodeDao.getEntityList();
 
-        countryPhoneCodes.stream()
-//                .map(name -> localizationInterpreter.interpret("contact.phone", name.toLowerCase(), defaultLocale))
-//                .filter(localizedName -> existingCountryPhoneCodes.stream()
-//                        .noneMatch(existing -> existing.getCode().equals(localizedName)))
-//                .map(countryPhoneCodeName -> CountryPhoneCode.builder()
-//                        .code(countryPhoneCodeName)
-//                        .build())
-                .forEach(countryPhoneCodeDao::persistEntity);
+        if (countryPhoneCodes != null) {
+            countryPhoneCodes.stream()
+                    .filter(ap -> existingCountryPhoneCodes.stream()
+                            .noneMatch(countryPhoneCode -> countryPhoneCode.getValue().equals(ap.getValue().toLowerCase())))
+                    .map(ap -> CountryPhoneCode.builder()
+                            .label(localizationInterpreter.interpret("country_phone_code", ap.getValue().toLowerCase(), defaultLocale))
+                            .value(ap.getValue())
+                            .build())
+                    .forEach(countryPhoneCodeDao::persistEntity);
+        }
     }
 
     private void initializeCountries(Locale defaultLocale) {
-        Set<String> countryNames = applicationPropertyConfiguration.getCountries();
+        Set<ApplicationProperty> countrySet = applicationPropertyConfiguration.getCountries();
         List<Country> existingCountries = countryDao.getEntityList();
 
-        countryNames.stream()
-//                .map(name -> localizationInterpreter.interpret("country", name.toLowerCase(), defaultLocale))
-//                .filter(localizedName -> existingCountries.stream()
-//                        .noneMatch(existing -> existing.getValue().equals(localizedName)))
-//                .map(countryName -> Country.builder()
-//                        .value(countryName)
-//                        .build())
-                .forEach(countryDao::persistEntity);
+        if (countrySet != null) {
+            countrySet.stream()
+                    .filter(ap -> existingCountries.stream()
+                            .noneMatch(country -> country.getValue().equals(ap.getValue().toLowerCase())))
+                    .map(ap -> Country.builder()
+                            .label(localizationInterpreter.interpret("country", ap.getValue().toLowerCase(), defaultLocale))
+                            .value(ap.getValue())
+                            .build())
+                    .forEach(countryDao::persistEntity);
+        }
     }
 
     private void initializeCurrencies(Locale defaultLocale) {
-        Set<String> currencyNames = applicationPropertyConfiguration.getCurrencies();
+        Set<ApplicationProperty> currencySet = applicationPropertyConfiguration.getCurrencies();
         List<Currency> existingCurrencies = currencyDao.getEntityList();
 
-        currencyNames.stream()
-//                .map(name -> localizationInterpreter.interpret("currency", name.toLowerCase(), defaultLocale))
-//                .filter(localizedName -> existingCurrencies.stream()
-//                        .noneMatch(existing -> existing.getValue().equals(localizedName)))
-//                .map(currency -> Currency.builder()
-//                        .value(currency)
-//                        .build())
-                .forEach(currencyDao::persistEntity);
+        if (currencySet != null) {
+            currencySet.stream()
+                    .filter(ap -> existingCurrencies.stream()
+                            .noneMatch(currency -> currency.getValue().equals(ap.getValue().toLowerCase())))
+                    .map(ap -> Currency.builder()
+                            .label(localizationInterpreter.interpret("currency", ap.getValue().toLowerCase(), defaultLocale))
+                            .value(ap.getValue())
+                            .build())
+                    .forEach(currencyDao::persistEntity);
+        }
     }
 
     private void initializeDeliveryTypeEntities(Locale defaultLocale) {
-        Set<String> deliveryTypeList = applicationPropertyConfiguration.getDeliveryTypes();
-        List<DeliveryType> existingDeliveryType = deliveryTypeDao.getEntityList();
+        Set<ApplicationProperty> deliveryTypeSet = applicationPropertyConfiguration.getDeliveryTypes();
+        List<DeliveryType> existingDeliveryTypeList = deliveryTypeDao.getEntityList();
 
-        if (deliveryTypeList != null) {
-            deliveryTypeList.stream()
-//                    .map(deliveryTypeName -> localizationInterpreter.interpret("delivery.type", deliveryTypeName.toLowerCase(), defaultLocale))
-//                    .filter(localizedName ->
-//                            existingDeliveryType.stream()
-//                                    .noneMatch(deliveryType -> deliveryType.getValue().equals(localizedName)))
-//                    .map(deliveryTypeName -> DeliveryType.builder()
-//                            .value(deliveryTypeName)
-//                            .build())
+        if (deliveryTypeSet != null) {
+            deliveryTypeSet.stream()
+                    .filter(ap -> existingDeliveryTypeList.stream()
+                            .noneMatch(deliveryType -> deliveryType.getValue().equals(ap.getValue().toLowerCase())))
+                    .map(ap -> DeliveryType.builder()
+                            .label(localizationInterpreter.interpret("delivery.type", ap.getValue().toLowerCase(), defaultLocale))
+                            .value(ap.getValue())
+                            .build())
                     .forEach(deliveryTypeDao::persistEntity);
         }
     }
 
     private void initializePaymentMethodEntities(Locale defaultLocale) {
-        Set<String> paymentMethodList = applicationPropertyConfiguration.getPaymentMethods();
-        List<PaymentMethod> existingPaymentMethod = paymentMethodDao.getEntityList();
+        Set<ApplicationProperty> paymentMethodSet = applicationPropertyConfiguration.getPaymentMethods();
+        List<PaymentMethod> existingPaymentMethodList = paymentMethodDao.getEntityList();
 
-        if (paymentMethodList != null) {
-            paymentMethodList.stream()
-//                    .map(paymentMethodName -> localizationInterpreter.interpret("payment.method", paymentMethodName.toLowerCase(), defaultLocale))
-//                    .filter(localizedName -> existingPaymentMethod.stream()
-//                                    .noneMatch(paymentMethod -> paymentMethod.getValue().equals(localizedName)))
-//                    .map(paymentMethodName -> PaymentMethod.builder()
-//                            .value(paymentMethodName)
-//                            .build())
+        if (paymentMethodSet != null) {
+            paymentMethodSet.stream()
+                    .filter(ap -> existingPaymentMethodList.stream()
+                            .noneMatch(orderStatus -> orderStatus.getValue().equals(ap.getValue().toLowerCase())))
+                    .map(ap -> OrderStatus.builder()
+                            .label(localizationInterpreter.interpret("payment.method", ap.getValue().toLowerCase(), defaultLocale))
+                            .value(ap.getValue())
+                            .build())
                     .forEach(paymentMethodDao::persistEntity);
         }
     }
 
     private void initializeOrderStatusEntities(Locale defaultLocale) {
-        Set<String> orderStatusList = applicationPropertyConfiguration.getOrderStatuses();
+        Set<ApplicationProperty> applicationPropertySet = applicationPropertyConfiguration.getOrderStatuses();
         List<OrderStatus> existingOrderStatus = orderStatusDao.getEntityList();
 
-        if (orderStatusList != null) {
-            orderStatusList.stream()
-//                    .map(orderStatusName -> localizationInterpreter.interpret("item.status", orderStatusName.toLowerCase(), defaultLocale))
-//                    .filter(localizedName ->
-//                            existingOrderStatus.stream()
-//                                    .noneMatch(orderStatus -> orderStatus.getValue().equals(localizedName)))
-//                    .map(orderStatusName -> OrderStatus.builder()
-//                            .value(orderStatusName)
-//                            .build())
+        if (applicationPropertySet != null) {
+            applicationPropertySet.stream()
+                    .filter(ap -> existingOrderStatus.stream()
+                            .noneMatch(orderStatus -> orderStatus.getValue().equals(ap.getValue().toLowerCase())))
+                    .map(ap -> OrderStatus.builder()
+                            .label(localizationInterpreter.interpret("order.status", ap.getValue().toLowerCase(), defaultLocale))
+                            .value(ap.getValue())
+                            .build())
                     .forEach(orderStatusDao::persistEntity);
         }
     }
 
     private void initializeBrandEntities(Locale defaultLocale) {
-        Set<ApplicationProperty> applicationPropertySet = applicationPropertyConfiguration.getBrands();
+        Set<ApplicationProperty> brandSet = applicationPropertyConfiguration.getBrands();
         List<Brand> existingBrands = brandDao.getEntityList();
 
-        if (applicationPropertySet != null) {
-            applicationPropertySet.stream()
+        if (brandSet != null) {
+            brandSet.stream()
                     .filter(ap -> existingBrands.stream()
                             .noneMatch(brand -> brand.getValue().equals(ap.getValue().toLowerCase())))
                     .map(ap -> Brand.builder()
@@ -265,81 +271,82 @@ public class InitializeConstantDbConfiguration {
     }
 
     private void initializeItemStatusEntities(Locale defaultLocale) {
-        Set<String> itemStatusList = applicationPropertyConfiguration.getItemStatuses();
+        Set<ApplicationProperty> itemStatuses = applicationPropertyConfiguration.getItemStatuses();
         List<ItemStatus> existItemStatus = itemStatusDao.getEntityList();
 
-        if (itemStatusList != null) {
-            itemStatusList.stream()
-//                    .map(itemStatusName -> localizationInterpreter.interpret("item.status", itemStatusName.toLowerCase(), defaultLocale))
-//                    .filter(localizedName ->
-//                            existItemStatus.stream()
-//                                    .noneMatch(itemStatus -> itemStatus.getValue().equals(localizedName)))
-//                    .map(itemStatusName -> ItemStatus.builder()
-//                            .value(itemStatusName)
-//                            .build())
+        if (itemStatuses != null) {
+            itemStatuses.stream()
+                    .filter(ap -> existItemStatus.stream()
+                            .noneMatch(itemStatus -> itemStatus.getValue().equals(ap.getValue().toLowerCase())))
+                    .map(ap -> ItemStatus.builder()
+                            .label(localizationInterpreter.interpret("item.status", ap.getValue().toLowerCase(), defaultLocale))
+                            .value(ap.getValue())
+                            .build())
                     .forEach(itemStatusDao::persistEntity);
         }
     }
 
     private void initializeItemTypesEntities(Locale defaultLocale) {
-        Set<String> itemTypeList = applicationPropertyConfiguration.getItemTypes();
+        Set<ApplicationProperty> itemTypeSet = applicationPropertyConfiguration.getItemTypes();
         List<ItemType> existItemTypes = itemTypeDao.getEntityList();
 
-        if (itemTypeList != null) {
-            itemTypeList.stream()
-                    .map(itemTypeName -> localizationInterpreter.interpret("item.type", itemTypeName.toLowerCase(), defaultLocale))
-                    .filter(localizedName ->
-                            existItemTypes.stream()
-                                    .noneMatch(itemType -> itemType.getValue().equals(localizedName)))
-                    .map(itemTypeName -> ItemType.builder()
-                            .value(itemTypeName)
+        if (itemTypeSet != null) {
+            itemTypeSet.stream()
+                    .filter(ap -> existItemTypes.stream()
+                            .noneMatch(itemStatus -> itemStatus.getValue().equals(ap.getValue().toLowerCase())))
+                    .map(ap -> ItemStatus.builder()
+                            .label(localizationInterpreter.interpret("item.type", ap.getValue().toLowerCase(), defaultLocale))
+                            .value(ap.getValue())
                             .build())
                     .forEach(itemTypeDao::persistEntity);
         }
     }
 
-    private void initializeMessageStatuses(Locale locale) {
-        Set<String> messageStatusNames = applicationPropertyConfiguration.getMessageStatuses();
+    private void initializeMessageStatuses(Locale defaultLocale) {
+        Set<ApplicationProperty> messageStatuses = applicationPropertyConfiguration.getMessageStatuses();
         List<MessageStatus> existingMessageStatuses = messageStatusDao.getEntityList();
 
-        messageStatusNames.stream()
-//                .map(name -> localizationInterpreter.interpret("message.status", name.toLowerCase(), locale))
-//                .filter(localizedName -> existingMessageStatuses.stream()
-//                        .noneMatch(existing -> existing.getValue().equals(localizedName)))
-//                .map(messageStatusValue -> MessageStatus.builder()
-//                        .value(messageStatusValue)
-//                        .build())
-                .forEach(messageStatusDao::persistEntity);
+        if (messageStatuses != null) {
+            messageStatuses.stream()
+                    .filter(ap -> existingMessageStatuses.stream()
+                            .noneMatch(messageStatus -> messageStatus.getValue().equals(ap.getValue().toLowerCase())))
+                    .map(ap -> ItemStatus.builder()
+                            .label(localizationInterpreter.interpret("message.status", ap.getValue().toLowerCase(), defaultLocale))
+                            .value(ap.getValue())
+                            .build())
+                    .forEach(messageStatusDao::persistEntity);
+        }
     }
 
-    private void initializeMessageTypes(Locale locale) {
-        Set<String> messageTypeNames = applicationPropertyConfiguration.getMessageTypes();
+    private void initializeMessageTypes(Locale defaultLocale) {
+        Set<ApplicationProperty> messageTypes = applicationPropertyConfiguration.getMessageTypes();
         List<MessageType> existingMessageTypes = messageTypeDao.getEntityList();
 
-        messageTypeNames.stream()
-//                .map(name -> localizationInterpreter.interpret("message.type", name.toLowerCase(), locale))
-//                .filter(localizedName -> existingMessageTypes.stream()
-//                        .noneMatch(existing -> existing.getValue().equals(localizedName)))
-//                .map(messageTypeValue -> MessageType.builder()
-//                        .value(messageTypeValue)
-//                        .build())
-                .forEach(messageTypeDao::persistEntity);
+        if (messageTypes != null) {
+            messageTypes.stream()
+                    .filter(ap -> existingMessageTypes.stream()
+                            .noneMatch(messageStatus -> messageStatus.getValue().equals(ap.getValue().toLowerCase())))
+                    .map(ap -> ItemStatus.builder()
+                            .label(localizationInterpreter.interpret("message.type", ap.getValue().toLowerCase(), defaultLocale))
+                            .value(ap.getValue())
+                            .build())
+                    .forEach(messageStatusDao::persistEntity);
+        }
     }
 
     private void initializeOptionGroupEntities(Locale defaultLocale) {
-        Set<String> optionGroupList = applicationPropertyConfiguration.getItemTypes();
-        List<ItemType> existOptionGroup = optionGroupDao.getEntityList();
+        Set<ApplicationProperty> optionGroupSet = applicationPropertyConfiguration.getOptionGroups();
+        List<OptionGroup> existOptionGroupList = optionGroupDao.getEntityList();
 
-        if (optionGroupList != null) {
-            optionGroupList.stream()
-//                    .map(optionGroupName -> localizationInterpreter.interpret("option.group", optionGroupName.toLowerCase(), defaultLocale))
-//                    .filter(localizedName ->
-//                            existOptionGroup.stream()
-//                                    .noneMatch(optionGroup -> optionGroup.getValue().equals(localizedName)))
-//                    .map(optionGroupName -> OptionGroup.builder()
-//                            .value(optionGroupName)
-//                            .build())
-                    .forEach(optionGroupDao::persistEntity);
+        if (optionGroupSet != null) {
+            optionGroupSet.stream()
+                    .filter(ap -> existOptionGroupList.stream()
+                            .noneMatch(og -> og.getValue().equals(ap.getValue().toLowerCase())))
+                    .map(ap -> ItemStatus.builder()
+                            .label(localizationInterpreter.interpret("option.group", ap.getValue().toLowerCase(), defaultLocale))
+                            .value(ap.getValue())
+                            .build())
+                    .forEach(messageStatusDao::persistEntity);
         }
     }
 
@@ -390,91 +397,6 @@ public class InitializeConstantDbConfiguration {
             });
         });
     };
-
-//    private Category buildCategory(TransitiveSelfYaml transitiveSelfYaml) {
-//        Category category = Category.builder()
-//                .name(transitiveSelfYaml.getName())
-//                .build();
-//
-//        if (transitiveSelfYaml.getSub() != null) {
-//            for (TransitiveSelfYaml sub : transitiveSelfYaml.getSub()) {
-//                Category childCategory = buildCategory(sub);
-//                category.addChildTransitiveEntity(childCategory);
-//            }
-//        }
-//
-//        return category;
-//    }
-//
-//    public List<TransitiveSelfYaml> extractTransitiveSelfYaml(Set<TransitiveSelfYaml> categories) {
-//        List<TransitiveSelfYaml> result = new ArrayList<>();
-//        for (TransitiveSelfYaml category : categories) {
-//            extractNamesRecursive(category, result);
-//        }
-//        return result;
-//    }
-//
-//    private void extractNamesRecursive(TransitiveSelfYaml category, List<TransitiveSelfYaml> transitiveSelfYamlList) {
-//        transitiveSelfYamlList.add(category);
-//
-//        if (category.getSub() != null && !category.getSub().isEmpty()) {
-//            for (TransitiveSelfYaml subCategory : category.getSub()) {
-//                extractNamesRecursive(subCategory, transitiveSelfYamlList);
-//            }
-//        }
-//    }
-//
-//    public List<TransitiveSelfYaml> findNonExistingCategories(List<TransitiveSelfYaml> configYamlList, List<Category> existCategoryList) {
-//        Set<String> existingCategoryNames = existCategoryList.stream()
-//                .map(Category::getRootField)
-//                .collect(Collectors.toSet());
-//
-//        return configYamlList.stream()
-//                .filter(configYaml -> !existingCategoryNames.contains(configYaml.getName()))
-//                .collect(Collectors.toList());
-//    }
-//
-//    public Map<Category, List<TransitiveSelfYaml>> findNonExistingCategoriesMap(
-//            Set<TransitiveSelfYaml> configYamlCategories,
-//            List<Category> existCategoryList
-//    ) {
-//        Map<Category, List<TransitiveSelfYaml>> resultMap = new HashMap<>();
-//
-//        Map<String, Category> existingCategoriesByName = existCategoryList.stream()
-//                .collect(Collectors.toMap(Category::getRootField, category -> category));
-//
-//        for (TransitiveSelfYaml yamlCategory : configYamlCategories) {
-//            findNewSubcategories(yamlCategory, existingCategoriesByName, resultMap);
-//        }
-//
-//        return resultMap;
-//    }
-//
-//    private void findNewSubcategories(
-//            TransitiveSelfYaml yamlCategory,
-//            Map<String, Category> existingCategoriesByName,
-//            Map<Category, List<TransitiveSelfYaml>> resultMap
-//    ) {
-//        Category existingParentCategory = existingCategoriesByName.get(yamlCategory.getName());
-//
-//        if (existingParentCategory != null) {
-//            List<TransitiveSelfYaml> newSubcategories;
-//            if (yamlCategory.getSub() != null && !yamlCategory.getSub().isEmpty()) {
-//                newSubcategories = yamlCategory.getSub().stream()
-//                        .filter(subName -> existingParentCategory.getChildNodeList().stream()
-//                                .noneMatch(child -> child.getName().equals(subName.getName())))
-//                        .collect(Collectors.toList());
-//
-//                if (!newSubcategories.isEmpty()) {
-//                    resultMap.put(existingParentCategory, newSubcategories);
-//                }
-//
-//                for (TransitiveSelfYaml subYaml : yamlCategory.getSub()) {
-//                    findNewSubcategories(subYaml, existingCategoriesByName, resultMap);
-//                }
-//            }
-//        }
-//    }
 
 
 }

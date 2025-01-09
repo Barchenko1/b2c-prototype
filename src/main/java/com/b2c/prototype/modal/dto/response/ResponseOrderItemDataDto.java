@@ -1,10 +1,10 @@
 package com.b2c.prototype.modal.dto.response;
 
-import com.b2c.prototype.modal.dto.request.BeneficiaryDto;
-import com.b2c.prototype.modal.dto.request.DeliveryDto;
-import com.b2c.prototype.modal.dto.request.ItemDataOptionQuantityDto;
-import com.b2c.prototype.modal.dto.request.PaymentDto;
-import com.b2c.prototype.modal.dto.request.UserProfileDto;
+import com.b2c.prototype.modal.dto.payload.BeneficiaryDto;
+import com.b2c.prototype.modal.dto.payload.DeliveryDto;
+import com.b2c.prototype.modal.dto.payload.ItemDataOptionQuantityDto;
+import com.b2c.prototype.modal.dto.payload.PaymentDto;
+import com.b2c.prototype.modal.dto.payload.UserProfileDto;
 import lombok.Builder;
 import lombok.Data;
 

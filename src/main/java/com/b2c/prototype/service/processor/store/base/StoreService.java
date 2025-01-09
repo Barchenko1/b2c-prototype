@@ -3,7 +3,7 @@ package com.b2c.prototype.service.processor.store.base;
 import com.b2c.prototype.dao.cashed.ISingleValueMap;
 import com.b2c.prototype.dao.store.IStoreDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
-import com.b2c.prototype.modal.dto.request.StoreDto;
+import com.b2c.prototype.modal.dto.payload.StoreDto;
 import com.b2c.prototype.modal.dto.response.ResponseStoreDto;
 import com.b2c.prototype.modal.entity.item.ItemDataOption;
 import com.b2c.prototype.modal.entity.store.CountType;

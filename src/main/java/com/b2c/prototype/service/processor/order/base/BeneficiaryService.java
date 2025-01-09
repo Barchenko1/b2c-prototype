@@ -3,7 +3,7 @@ package com.b2c.prototype.service.processor.order.base;
 import com.b2c.prototype.dao.order.IBeneficiaryDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.searchfield.BeneficiaryArrayDtoSearchField;
-import com.b2c.prototype.modal.dto.request.BeneficiaryDto;
+import com.b2c.prototype.modal.dto.payload.BeneficiaryDto;
 import com.b2c.prototype.modal.dto.searchfield.BeneficiarySearchFieldOrderNumberDto;
 import com.b2c.prototype.modal.entity.order.OrderItemData;
 import com.b2c.prototype.modal.entity.order.Beneficiary;

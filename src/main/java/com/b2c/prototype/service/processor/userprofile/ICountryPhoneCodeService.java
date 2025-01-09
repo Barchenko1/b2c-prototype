@@ -1,7 +1,6 @@
 package com.b2c.prototype.service.processor.userprofile;
 
-import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
-import com.b2c.prototype.service.processor.IOneFieldEntityService;
+import com.b2c.prototype.service.processor.IConstantEntityService;
 
-public interface ICountryPhoneCodeService extends IOneFieldEntityService<CountryPhoneCode> {
+public interface ICountryPhoneCodeService extends IConstantEntityService {
 }

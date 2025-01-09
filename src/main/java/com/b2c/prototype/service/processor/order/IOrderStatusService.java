@@ -1,7 +1,6 @@
 package com.b2c.prototype.service.processor.order;
 
-import com.b2c.prototype.modal.entity.order.OrderStatus;
-import com.b2c.prototype.service.processor.IOneFieldEntityService;
+import com.b2c.prototype.service.processor.IConstantEntityService;
 
-public interface IOrderStatusService extends IOneFieldEntityService<OrderStatus> {
+public interface IOrderStatusService extends IConstantEntityService {
 }

@@ -1,6 +1,6 @@
 package com.b2c.prototype.modal.entity.store;
 
-import com.b2c.prototype.modal.base.AbstractOneColumnEntity;
+import com.b2c.prototype.modal.base.AbstractConstantEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.NoArgsConstructor;
@@ -10,5 +10,5 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "count_type")
 @SuperBuilder
 @NoArgsConstructor
-public class CountType extends AbstractOneColumnEntity {
+public class CountType extends AbstractConstantEntity {
 }

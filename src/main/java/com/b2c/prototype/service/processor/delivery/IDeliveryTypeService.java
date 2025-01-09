@@ -1,7 +1,6 @@
 package com.b2c.prototype.service.processor.delivery;
 
-import com.b2c.prototype.modal.entity.delivery.DeliveryType;
-import com.b2c.prototype.service.processor.IOneFieldEntityService;
+import com.b2c.prototype.service.processor.IConstantEntityService;
 
-public interface IDeliveryTypeService extends IOneFieldEntityService<DeliveryType> {
+public interface IDeliveryTypeService extends IConstantEntityService {
 }

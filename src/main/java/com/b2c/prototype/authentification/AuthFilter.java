@@ -26,7 +26,7 @@ public class AuthFilter extends GenericFilterBean {
         try {
             logBuilder.append("[AuthFilter_doFilter] ## URL: ").append(url);
 
-//            APIServletRequestWrapper requestWrapper = new APIServletRequestWrapper(request);
+//            APIServletRequestWrapper requestWrapper = new APIServletRequestWrapper(payload);
 //            APIServletResponseWrapper responseWrapper = new APIServletResponseWrapper(response);
 
 //            chain.doFilter(requestWrapper, responseWrapper);

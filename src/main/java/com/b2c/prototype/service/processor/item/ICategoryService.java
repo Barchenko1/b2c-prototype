@@ -1,6 +1,6 @@
 package com.b2c.prototype.service.processor.item;
 
-import com.b2c.prototype.modal.dto.request.CategoryDto;
+import com.b2c.prototype.modal.dto.payload.CategoryDto;
 import com.b2c.prototype.modal.dto.update.CategoryDtoUpdate;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.tm.core.util.TransitiveSelfEnum;

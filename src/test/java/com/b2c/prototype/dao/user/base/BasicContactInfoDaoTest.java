@@ -62,7 +62,8 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
     private ContactInfo prepareTestContactInfo() {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(1L)
-                .code("+11")
+                .value("+11")
+                .label("+11")
                 .build();
         ContactPhone contactPhone = ContactPhone.builder()
                 .id(1L)
@@ -80,7 +81,8 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
     private ContactInfo prepareToSaveContactInfo() {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(1L)
-                .code("+11")
+                .value("+11")
+                .label("+11")
                 .build();
         ContactPhone contactPhone = ContactPhone.builder()
                 .countryPhoneCode(countryPhoneCode)
@@ -96,7 +98,8 @@ class BasicContactInfoDaoTest extends AbstractGeneralEntityDaoTest {
     private ContactInfo prepareToUpdateContactInfo() {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(2L)
-                .code("+22")
+                .value("+22")
+                .label("+22")
                 .build();
         ContactPhone contactPhone = ContactPhone.builder()
                 .id(1L)

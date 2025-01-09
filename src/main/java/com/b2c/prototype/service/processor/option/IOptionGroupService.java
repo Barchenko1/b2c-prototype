@@ -1,8 +1,7 @@
 package com.b2c.prototype.service.processor.option;
 
-import com.b2c.prototype.modal.entity.option.OptionGroup;
-import com.b2c.prototype.service.processor.IOneFieldEntityService;
+import com.b2c.prototype.service.processor.IConstantEntityService;
 
-public interface IOptionGroupService extends IOneFieldEntityService<OptionGroup> {
+public interface IOptionGroupService extends IConstantEntityService {
 
 }

@@ -2,7 +2,7 @@ package com.b2c.prototype.service.processor.item.base;
 
 import com.b2c.prototype.dao.cashed.ISingleValueMap;
 import com.b2c.prototype.dao.item.ICategoryDao;
-import com.b2c.prototype.modal.dto.request.CategoryDto;
+import com.b2c.prototype.modal.dto.payload.CategoryDto;
 import com.b2c.prototype.modal.dto.update.CategoryDtoUpdate;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.service.transitive.AbstractTransitiveSelfEntityService;

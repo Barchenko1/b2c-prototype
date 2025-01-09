@@ -2,7 +2,7 @@ package com.b2c.prototype.service.processor.userprofile;
 
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.searchfield.BeneficiarySearchFieldOrderNumberDto;
-import com.b2c.prototype.modal.dto.request.ContactPhoneDto;
+import com.b2c.prototype.modal.dto.payload.ContactPhoneDto;
 import com.b2c.prototype.modal.dto.searchfield.ContactPhoneSearchFieldEntityDto;
 
 import java.util.List;

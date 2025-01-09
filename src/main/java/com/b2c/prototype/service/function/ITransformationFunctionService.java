@@ -10,18 +10,25 @@ public interface ITransformationFunctionService {
     <E, R> Collection<R> getEntityCollection(Class<R> classTo, E dataEntity);
     <E, R> Collection<R> getEntityCollection(Class<R> classTo, E dataEntity, String sol);
 
-    <E, R> Function<E, R> getTransformationFunction(Class<E> classFrom, Class<R> classTo);
-    <E, R> Function<E, R> getTransformationFunction(Class<E> classFrom, Class<R> classTo, String sol);
-
     <E, R> Function<E, Collection<R>> getTransformationCollectionFunction(Class<E> classFrom, Class<R> classTo);
     <E, R> Function<E, Collection<R>> getTransformationCollectionFunction(Class<E> classFrom, Class<R> classTo, String sol);
+
+    <E, R> Function<E, R> getTransformationFunction(Class<E> classFrom, Class<R> classTo);
+    <E, R> Function<E, R> getTransformationFunction(Class<E> classFrom, Class<R> classTo, String sol);
 
     <E, R> void addTransformationFunction(Class<E> classFrom, Class<R> classTo, Function<?, ?> function);
     <E, R> void addTransformationFunction(Class<E> classFrom, Class<R> classTo, String sol, Function<?, ?> function);
 
-    <E, R> void addTransformationCollectionFunction(Class<E> classFrom, Class<R> classTo, Function<?, Collection<?>> function);
-    <E, R> void addTransformationCollectionFunction(Class<E> classFrom, Class<R> classTo, String sol, Function<?, Collection<?>> function);
+//    <E, R> void addTransformationCollectionFunction(Class<E> classFrom, Class<R> classTo, Function<?, Collection<?>> function);
+//    <E, R> void addTransformationCollectionFunction(Class<E> classFrom, Class<R> classTo, String sol, Function<?, Collection<?>> function);
+//
+//    <E, R> void addOneFieldEntityDtoTransformationFunction(Class<R> classTo, Function<E, R> function);
+//    <E, R> void addOneFieldEntityDtoTransformationFunction(Class<R> classTo, String sol, Function<E, R> function);
+//
+//    <E, R> void addConstantEntityPayloadDtoTransformationFunction(Class<R> classTo, Function<E, R> function);
+//    <E, R> void addConstantEntityPayloadDtoTransformationFunction(Class<R> classTo, String sol, Function<E, R> function);
+//
+//    <E, R> void addResponseConstantEntityPayloadDtoTransformationFunction(Class<E> classFrom, Function<E, R> function);
+//    <E, R> void addResponseConstantEntityPayloadDtoTransformationFunction(Class<E> classFrom, String sol, Function<E, R> function);
 
-    <E, R> void addOneFieldEntityDtoTransformationFunction(Class<R> classTo, Function<E, R> function);
-    <E, R> void addOneFieldEntityDtoTransformationFunction(Class<R> classTo, String sol, Function<E, R> function);
 }

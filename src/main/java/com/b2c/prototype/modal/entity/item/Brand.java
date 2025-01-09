@@ -1,6 +1,6 @@
 package com.b2c.prototype.modal.entity.item;
 
-import com.b2c.prototype.modal.base.AbstractOneColumnEntity;
+import com.b2c.prototype.modal.base.AbstractConstantEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.NoArgsConstructor;
@@ -10,6 +10,6 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "brand")
 @SuperBuilder
 @NoArgsConstructor
-public class Brand extends AbstractOneColumnEntity {
+public class Brand extends AbstractConstantEntity {
 
 }

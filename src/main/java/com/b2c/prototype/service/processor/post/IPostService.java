@@ -1,6 +1,6 @@
 package com.b2c.prototype.service.processor.post;
 
-import com.b2c.prototype.modal.dto.request.PostDto;
+import com.b2c.prototype.modal.dto.payload.PostDto;
 import com.b2c.prototype.modal.dto.update.PostDtoUpdate;
 import com.b2c.prototype.modal.entity.post.Post;
 import com.tm.core.util.TransitiveSelfEnum;

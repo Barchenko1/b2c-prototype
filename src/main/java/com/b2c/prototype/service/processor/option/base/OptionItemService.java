@@ -4,7 +4,7 @@ import com.b2c.prototype.dao.cashed.ISingleValueMap;
 import com.b2c.prototype.dao.option.IOptionItemDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.delete.MultipleFieldsSearchDtoDelete;
-import com.b2c.prototype.modal.dto.request.OptionItemDto;
+import com.b2c.prototype.modal.dto.payload.OptionItemDto;
 import com.b2c.prototype.modal.dto.searchfield.OptionItemSearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.item.ItemDataOption;
 import com.b2c.prototype.modal.entity.option.OptionGroup;

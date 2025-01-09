@@ -1,6 +1,6 @@
 package com.b2c.prototype.controller.advanse;
 
-import com.b2c.prototype.modal.dto.request.PaymentDto;
+import com.b2c.prototype.modal.dto.payload.PaymentDto;
 import com.b2c.prototype.service.processor.payment.IPaymentService;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;

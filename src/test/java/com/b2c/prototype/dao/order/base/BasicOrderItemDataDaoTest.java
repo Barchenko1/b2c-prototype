@@ -106,7 +106,8 @@ class BasicOrderItemDataDaoTest extends AbstractGeneralEntityDaoTest {
     private Beneficiary prepareBeneficiary() {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(1L)
-                .code("+11")
+                .value("+11")
+                .label("+11")
                 .build();
         ContactPhone contactPhone = ContactPhone.builder()
                 .phoneNumber("111-111-111")
@@ -123,7 +124,8 @@ class BasicOrderItemDataDaoTest extends AbstractGeneralEntityDaoTest {
     private ContactInfo prepareContactInfo() {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(1L)
-                .code("+11")
+                .value("+11")
+                .label("+11")
                 .build();
         ContactPhone contactPhone = ContactPhone.builder()
                 .id(1L)

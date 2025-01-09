@@ -4,7 +4,7 @@ import com.b2c.prototype.dao.cashed.ISingleValueMap;
 import com.b2c.prototype.dao.user.IContactPhoneDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.searchfield.BeneficiarySearchFieldOrderNumberDto;
-import com.b2c.prototype.modal.dto.request.ContactPhoneDto;
+import com.b2c.prototype.modal.dto.payload.ContactPhoneDto;
 import com.b2c.prototype.modal.dto.searchfield.ContactPhoneSearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.order.OrderItemData;
 import com.b2c.prototype.modal.entity.order.Beneficiary;
@@ -286,7 +286,7 @@ class ContactPhoneServiceTest {
 
         Function<ContactPhone, ContactPhoneDto> mapFunction = contactPhone -> ContactPhoneDto.builder()
                 .phoneNumber(contactPhone.getPhoneNumber())
-                .countryPhoneCode(contactPhone.getCountryPhoneCode().getCode())
+                .countryPhoneCode(contactPhone.getCountryPhoneCode().getValue())
                 .build();
         when(transformationFunctionService.getTransformationFunction(ContactPhone.class, ContactPhoneDto.class))
                 .thenReturn(mapFunction);
@@ -314,7 +314,7 @@ class ContactPhoneServiceTest {
 
     private CountryPhoneCode getCountryPhoneCode() {
         return CountryPhoneCode.builder()
-                .code("US")
+                .value("US")
                 .build();
     }
 }

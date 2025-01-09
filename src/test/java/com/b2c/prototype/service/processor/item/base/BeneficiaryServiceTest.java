@@ -3,9 +3,9 @@ package com.b2c.prototype.service.processor.item.base;
 import com.b2c.prototype.dao.order.IBeneficiaryDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.searchfield.BeneficiaryArrayDtoSearchField;
-import com.b2c.prototype.modal.dto.request.BeneficiaryDto;
+import com.b2c.prototype.modal.dto.payload.BeneficiaryDto;
 import com.b2c.prototype.modal.dto.searchfield.BeneficiarySearchFieldOrderNumberDto;
-import com.b2c.prototype.modal.dto.request.ContactPhoneDto;
+import com.b2c.prototype.modal.dto.payload.ContactPhoneDto;
 import com.b2c.prototype.modal.entity.order.OrderItemData;
 import com.b2c.prototype.modal.entity.order.Beneficiary;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
@@ -172,7 +172,7 @@ class BeneficiaryServiceTest {
                     .lastName(iob.getLastName())
                     .contactPhone(ContactPhoneDto.builder()
                             .phoneNumber(iob.getContactPhone().getPhoneNumber())
-                            .countryPhoneCode(iob.getContactPhone().getCountryPhoneCode().getCode())
+                            .countryPhoneCode(iob.getContactPhone().getCountryPhoneCode().getValue())
                             .build())
                     .build();
         };
@@ -206,7 +206,7 @@ class BeneficiaryServiceTest {
                 .lastName("newLastName")
                 .contactPhone(ContactPhone.builder()
                         .countryPhoneCode(CountryPhoneCode.builder()
-                                .code("USA")
+                                .value("USA")
                                 .build())
                         .phoneNumber("newPhoneNumber")
                         .build())

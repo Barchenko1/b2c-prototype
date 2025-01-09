@@ -1,10 +1,10 @@
 package com.b2c.prototype.service.processor.userprofile.basic;
 
-import com.b2c.prototype.modal.dto.request.AddressDto;
-import com.b2c.prototype.modal.dto.request.ContactInfoDto;
-import com.b2c.prototype.modal.dto.request.ContactPhoneDto;
-import com.b2c.prototype.modal.dto.request.RegistrationUserProfileDto;
-import com.b2c.prototype.modal.dto.request.UserProfileDto;
+import com.b2c.prototype.modal.dto.payload.AddressDto;
+import com.b2c.prototype.modal.dto.payload.ContactInfoDto;
+import com.b2c.prototype.modal.dto.payload.ContactPhoneDto;
+import com.b2c.prototype.modal.dto.payload.RegistrationUserProfileDto;
+import com.b2c.prototype.modal.dto.payload.UserProfileDto;
 import com.b2c.prototype.modal.dto.response.ResponseCreditCardDto;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
@@ -182,7 +182,8 @@ class UserProfileServiceTest {
     private UserProfile getUserProfile() {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(1L)
-                .code("+11")
+                .value("+11")
+                .label("+11")
                 .build();
         ContactPhone contactPhone = ContactPhone.builder()
                 .id(1L)
@@ -236,7 +237,7 @@ class UserProfileServiceTest {
         ContactInfoDto contactInfoDto = ContactInfoDto.builder()
                 .contactPhone(ContactPhoneDto.builder()
                         .phoneNumber(contactInfo.getContactPhone().getPhoneNumber())
-                        .countryPhoneCode(contactInfo.getContactPhone().getCountryPhoneCode().getCode())
+                        .countryPhoneCode(contactInfo.getContactPhone().getCountryPhoneCode().getValue())
                         .build())
                 .firstName(userProfile.getContactInfo().getFirstName())
                 .lastName(userProfile.getContactInfo().getLastName())

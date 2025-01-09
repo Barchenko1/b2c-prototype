@@ -1,7 +1,7 @@
 package com.b2c.prototype.modal.dto.searchfield;
 
 import com.b2c.prototype.modal.dto.common.AbstractSearchFieldEntityDto;
-import com.b2c.prototype.modal.dto.request.DiscountDto;
+import com.b2c.prototype.modal.dto.payload.DiscountDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;

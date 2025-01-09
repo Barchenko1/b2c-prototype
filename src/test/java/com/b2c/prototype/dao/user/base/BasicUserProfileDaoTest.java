@@ -85,7 +85,8 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
     private UserProfile prepareTestUserProfile() {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(1L)
-                .code("+11")
+                .value("+11")
+                .label("+11")
                 .build();
         ContactPhone contactPhone = ContactPhone.builder()
                 .id(1L)
@@ -145,7 +146,8 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
     private UserProfile prepareSaveUserProfile() {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(1L)
-                .code("+11")
+                .value("+11")
+                .label("+11")
                 .build();
         ContactPhone contactPhone = ContactPhone.builder()
                 .id(1L)
@@ -198,7 +200,8 @@ class BasicUserProfileDaoTest extends AbstractGeneralEntityDaoTest {
     private UserProfile prepareUpdateUserProfile() {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(1L)
-                .code("+11")
+                .value("+11")
+                .label("+11")
                 .build();
         ContactPhone contactPhone = ContactPhone.builder()
                 .id(1L)

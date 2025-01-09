@@ -16,7 +16,6 @@ spring:
   messages:
     basename: ib18n
 enums:
-#  brands: HP, APPLE, ANDROID
   brands:
     - value: HP
       label: "HP"
@@ -24,18 +23,18 @@ enums:
       label: "APPLE"
     - value: ANDROID
       label: "ANDROID"
-  countTypes: LIMITED, UNLIMITED
-  countryPhoneCodes: +48
-  countries: POLAND
-  currencies: USD, PLN, EUR
-  deliveryTypes: IN_POST, COURIER
-  itemStatuses: NEW, EXIST, COMING_SOON, OUT_OF_STOCK
-  itemTypes: TECHNIQUE
-  messageStatuses: unread, read, delete
-  messageTypes: SYSTEM
-  optionGroups: TECHNIQUE
-  orderStatuses: NEW, PENDING, COMPLETE, TERMINATED
-  paymentMethods: CARD, CASH, BLIK
+#  countTypes: LIMITED, UNLIMITED
+#  countryPhoneCodes: +48
+#  countries: POLAND
+#  currencies: USD, PLN, EUR
+#  deliveryTypes: IN_POST, COURIER
+#  itemStatuses: NEW, EXIST, COMING_SOON, OUT_OF_STOCK
+#  itemTypes: TECHNIQUE
+#  messageStatuses: unread, read, delete
+#  messageTypes: SYSTEM
+#  optionGroups: TECHNIQUE
+#  orderStatuses: NEW, PENDING, COMPLETE, TERMINATED
+#  paymentMethods: CARD, CASH, BLIK
   ratings: 1, 2, 3, 4, 5
   categories:
     - name: "Electronics"

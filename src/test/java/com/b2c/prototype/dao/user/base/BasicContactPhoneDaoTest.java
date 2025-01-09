@@ -29,7 +29,8 @@ class BasicContactPhoneDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getTestDataSet() {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(1L)
-                .code("+11")
+                .value("+11")
+                .label("+11")
                 .build();
         ContactPhone contactPhone = ContactPhone.builder()
                 .id(1L)
@@ -43,7 +44,8 @@ class BasicContactPhoneDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getSaveDataSet() {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(1L)
-                .code("+11")
+                .value("+11")
+                .label("+11")
                 .build();
         ContactPhone contactPhone = ContactPhone.builder()
                 .countryPhoneCode(countryPhoneCode)
@@ -56,7 +58,8 @@ class BasicContactPhoneDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getUpdateDataSet() {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(2L)
-                .code("+22")
+                .value("+22")
+                .label("+22")
                 .build();
         ContactPhone contactPhone = ContactPhone.builder()
                 .id(1L)

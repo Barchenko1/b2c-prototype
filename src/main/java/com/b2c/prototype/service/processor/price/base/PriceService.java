@@ -3,7 +3,7 @@ package com.b2c.prototype.service.processor.price.base;
 import com.b2c.prototype.dao.price.IPriceDao;
 import com.b2c.prototype.modal.constant.PriceTypeEnum;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
-import com.b2c.prototype.modal.dto.request.PriceDto;
+import com.b2c.prototype.modal.dto.payload.PriceDto;
 import com.b2c.prototype.modal.dto.searchfield.PriceSearchFieldEntityDto;
 import com.b2c.prototype.modal.dto.response.ResponsePriceDto;
 import com.b2c.prototype.modal.entity.item.ItemDataOption;

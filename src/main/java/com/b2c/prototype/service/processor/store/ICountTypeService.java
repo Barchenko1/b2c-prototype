@@ -1,7 +1,6 @@
 package com.b2c.prototype.service.processor.store;
 
-import com.b2c.prototype.modal.entity.store.CountType;
-import com.b2c.prototype.service.processor.IOneFieldEntityService;
+import com.b2c.prototype.service.processor.IConstantEntityService;
 
-public interface ICountTypeService extends IOneFieldEntityService<CountType> {
+public interface ICountTypeService extends IConstantEntityService {
 }

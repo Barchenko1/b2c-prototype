@@ -1,7 +1,6 @@
 package com.b2c.prototype.service.processor.item;
 
-import com.b2c.prototype.modal.entity.item.ItemType;
-import com.b2c.prototype.service.processor.IOneFieldEntityService;
+import com.b2c.prototype.service.processor.IConstantEntityService;
 
-public interface IItemTypeService extends IOneFieldEntityService<ItemType> {
+public interface IItemTypeService extends IConstantEntityService {
 }

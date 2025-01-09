@@ -90,39 +90,6 @@ class TransformationFunctionServiceTest {
     }
 
     @Test
-    void testAddAndRetrieveOneFieldEntityDtoTransformationFunction() {
-        // Arrange
-        Class<String> classTo = String.class;
-        Function<OneFieldEntityDto, String> transformationFunction = dto -> "Field: " + dto.toString();
-
-        
-        transformationFunctionService.addOneFieldEntityDtoTransformationFunction(classTo, transformationFunction);
-        Function<OneFieldEntityDto, String> retrievedFunction = transformationFunctionService.getTransformationFunction(OneFieldEntityDto.class, classTo);
-
-        
-        assertNotNull(retrievedFunction);
-        OneFieldEntityDto mockDto = new OneFieldEntityDto();
-        assertEquals("Field: " + mockDto.toString(), retrievedFunction.apply(mockDto));
-    }
-
-    @Test
-    void testAddAndRetrieveOneFieldEntityDtoTransformationFunctionWithSol() {
-        // Arrange
-        Class<String> classTo = String.class;
-        String sol = "oneField";
-        Function<OneFieldEntityDto, String> transformationFunction = dto -> "Field: " + dto.toString();
-
-        
-        transformationFunctionService.addOneFieldEntityDtoTransformationFunction(classTo, sol, transformationFunction);
-        Function<OneFieldEntityDto, String> retrievedFunction = transformationFunctionService.getTransformationFunction(OneFieldEntityDto.class, classTo, sol);
-
-        
-        assertNotNull(retrievedFunction);
-        OneFieldEntityDto mockDto = new OneFieldEntityDto();
-        assertEquals("Field: " + mockDto.toString(), retrievedFunction.apply(mockDto));
-    }
-
-    @Test
     void testGetTransformationFunction_NotFound() {
         
         Function<String, Integer> retrievedFunction = transformationFunctionService.getTransformationFunction(String.class, Integer.class);

@@ -2,7 +2,7 @@ package com.b2c.prototype.service.processor.item.base;
 
 import com.b2c.prototype.dao.item.IItemDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
-import com.b2c.prototype.modal.dto.request.ItemDto;
+import com.b2c.prototype.modal.dto.payload.ItemDto;
 import com.b2c.prototype.modal.dto.searchfield.ItemSearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;

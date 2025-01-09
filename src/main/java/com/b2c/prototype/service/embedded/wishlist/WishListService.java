@@ -1,7 +1,7 @@
 package com.b2c.prototype.service.embedded.wishlist;
 
 import com.b2c.prototype.dao.embedded.IWishListDao;
-import com.b2c.prototype.modal.dto.request.WishListDto;
+import com.b2c.prototype.modal.dto.payload.WishListDto;
 import com.b2c.prototype.modal.embedded.wishlist.Wishlist;
 import com.tm.core.dao.common.IEntityDao;
 import lombok.extern.slf4j.Slf4j;

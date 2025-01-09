@@ -1,14 +1,9 @@
 package com.b2c.prototype.modal.entity.address;
 
-import com.b2c.prototype.modal.base.AbstractOneColumnEntity;
-import jakarta.persistence.Column;
+import com.b2c.prototype.modal.base.AbstractConstantEntity;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -21,6 +16,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Country extends AbstractOneColumnEntity {
+public class Country extends AbstractConstantEntity {
     private String flagImagePath;
 }

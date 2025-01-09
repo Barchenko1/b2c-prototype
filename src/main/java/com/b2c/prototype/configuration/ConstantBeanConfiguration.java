@@ -114,7 +114,7 @@ public class ConstantBeanConfiguration {
     public Map<String, CountryPhoneCode> countryPhoneCodeMap(ICountryPhoneCodeDao countryPhoneCodeDao) {
         List<CountryPhoneCode> optionGroupList = countryPhoneCodeDao.getEntityList();
         return optionGroupList.stream()
-                .collect(Collectors.toMap(CountryPhoneCode::getCode, countryPhoneCode -> countryPhoneCode, (existing, replacement) -> existing));
+                .collect(Collectors.toMap(CountryPhoneCode::getValue, countryPhoneCode -> countryPhoneCode, (existing, replacement) -> existing));
     }
 
     @Bean

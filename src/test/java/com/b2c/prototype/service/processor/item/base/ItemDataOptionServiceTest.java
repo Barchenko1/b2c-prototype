@@ -2,11 +2,11 @@ package com.b2c.prototype.service.processor.item.base;
 
 import com.b2c.prototype.dao.item.IItemDataOptionDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
-import com.b2c.prototype.modal.dto.request.DiscountDto;
-import com.b2c.prototype.modal.dto.request.ItemDataDto;
+import com.b2c.prototype.modal.dto.payload.DiscountDto;
+import com.b2c.prototype.modal.dto.payload.ItemDataDto;
 import com.b2c.prototype.modal.dto.searchfield.ItemDataOptionArraySearchFieldEntityDto;
-import com.b2c.prototype.modal.dto.request.ItemDataOptionDto;
-import com.b2c.prototype.modal.dto.request.PriceDto;
+import com.b2c.prototype.modal.dto.payload.ItemDataOptionDto;
+import com.b2c.prototype.modal.dto.payload.PriceDto;
 import com.b2c.prototype.modal.dto.response.ResponseItemDataOptionDto;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;

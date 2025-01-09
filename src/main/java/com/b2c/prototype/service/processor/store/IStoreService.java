@@ -1,7 +1,7 @@
 package com.b2c.prototype.service.processor.store;
 
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
-import com.b2c.prototype.modal.dto.request.StoreDto;
+import com.b2c.prototype.modal.dto.payload.StoreDto;
 import com.b2c.prototype.modal.dto.response.ResponseStoreDto;
 
 import java.util.List;

@@ -3,18 +3,18 @@ package com.b2c.prototype.service.processor.order.base;
 import com.b2c.prototype.dao.order.IOrderItemDataDao;
 import com.b2c.prototype.modal.constant.PaymentMethodEnum;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
-import com.b2c.prototype.modal.dto.request.AddressDto;
-import com.b2c.prototype.modal.dto.request.BeneficiaryDto;
-import com.b2c.prototype.modal.dto.request.ContactInfoDto;
-import com.b2c.prototype.modal.dto.request.ContactPhoneDto;
-import com.b2c.prototype.modal.dto.request.CreditCardDto;
-import com.b2c.prototype.modal.dto.request.DeliveryDto;
-import com.b2c.prototype.modal.dto.request.DiscountDto;
-import com.b2c.prototype.modal.dto.request.ItemDataOptionQuantityDto;
-import com.b2c.prototype.modal.dto.request.OrderItemDataDto;
-import com.b2c.prototype.modal.dto.request.PaymentDto;
-import com.b2c.prototype.modal.dto.request.PriceDto;
-import com.b2c.prototype.modal.dto.request.UserProfileDto;
+import com.b2c.prototype.modal.dto.payload.AddressDto;
+import com.b2c.prototype.modal.dto.payload.BeneficiaryDto;
+import com.b2c.prototype.modal.dto.payload.ContactInfoDto;
+import com.b2c.prototype.modal.dto.payload.ContactPhoneDto;
+import com.b2c.prototype.modal.dto.payload.CreditCardDto;
+import com.b2c.prototype.modal.dto.payload.DeliveryDto;
+import com.b2c.prototype.modal.dto.payload.DiscountDto;
+import com.b2c.prototype.modal.dto.payload.ItemDataOptionQuantityDto;
+import com.b2c.prototype.modal.dto.payload.OrderItemDataDto;
+import com.b2c.prototype.modal.dto.payload.PaymentDto;
+import com.b2c.prototype.modal.dto.payload.PriceDto;
+import com.b2c.prototype.modal.dto.payload.UserProfileDto;
 import com.b2c.prototype.modal.dto.response.ResponseCreditCardDto;
 import com.b2c.prototype.modal.dto.response.ResponseOrderItemDataDto;
 import com.b2c.prototype.modal.dto.searchfield.OrderItemDataSearchFieldEntityDto;
@@ -189,7 +189,8 @@ class OrderItemDataServiceTest {
     private Beneficiary prepareBeneficiary() {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(1L)
-                .code("+11")
+                .value("+11")
+                .label("+11")
                 .build();
         ContactPhone contactPhone = ContactPhone.builder()
                 .id(1L)
@@ -207,7 +208,8 @@ class OrderItemDataServiceTest {
     private ContactInfo prepareContactInfo() {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(1L)
-                .code("+11")
+                .value("+11")
+                .label("+11")
                 .build();
         ContactPhone contactPhone = ContactPhone.builder()
                 .id(1L)

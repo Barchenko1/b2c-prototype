@@ -1,6 +1,6 @@
 package com.b2c.prototype.controller.advanse;
 
-import com.b2c.prototype.modal.dto.request.PostDto;
+import com.b2c.prototype.modal.dto.payload.PostDto;
 import com.b2c.prototype.service.processor.post.IPostService;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;

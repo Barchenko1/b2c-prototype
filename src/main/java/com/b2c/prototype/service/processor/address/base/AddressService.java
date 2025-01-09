@@ -2,7 +2,7 @@ package com.b2c.prototype.service.processor.address.base;
 
 import com.b2c.prototype.dao.address.IAddressDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
-import com.b2c.prototype.modal.dto.request.AddressDto;
+import com.b2c.prototype.modal.dto.payload.AddressDto;
 import com.b2c.prototype.modal.dto.searchfield.AddressSearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.delivery.Delivery;

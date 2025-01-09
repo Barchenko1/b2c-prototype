@@ -1,12 +1,8 @@
 package com.b2c.prototype.service.function;
 
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
-
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 
 public class TransformationFunctionService implements ITransformationFunctionService {
@@ -66,18 +62,8 @@ public class TransformationFunctionService implements ITransformationFunctionSer
     }
 
     @Override
-    public <E, R> void addOneFieldEntityDtoTransformationFunction(Class<R> classTo, Function<E, R> function) {
-        this.functionMap.put(createKey(OneFieldEntityDto.class, classTo, null), function);
-    }
-
-    @Override
     public <E, R> void addTransformationFunction(Class<E> classFrom, Class<R> classTo, Function<?, ?> function) {
         this.functionMap.put(createKey(classFrom, classTo, null), function);
-    }
-
-    @Override
-    public <E, R> void addOneFieldEntityDtoTransformationFunction(Class<R> classTo, String sol, Function<E, R> function) {
-        this.functionMap.put(createKey(OneFieldEntityDto.class, classTo, sol), function);
     }
 
     @Override
@@ -85,20 +71,10 @@ public class TransformationFunctionService implements ITransformationFunctionSer
         this.functionMap.put(createKey(classFrom, classTo, sol), function);
     }
 
-    @Override
-    public <E, R> void addTransformationCollectionFunction(Class<E> classFrom, Class<R> classTo, Function<?, Collection<?>> function) {
-
-    }
-
-    @Override
-    public <E, R> void addTransformationCollectionFunction(Class<E> classFrom, Class<R> classTo, String sol, Function<?, Collection<?>> function) {
-
-    }
-
     private <E, R> String createKey(Class<E> classFrom, Class<R> classTo, String sol) {
         return sol != null && !sol.isEmpty()
-                ? classFrom.getName() + "->" + classTo.getName() + "[" + sol+ "]"
-                : classFrom.getName() + "->" + classTo.getName();
+                ? classFrom.getSimpleName() + " -> " + classTo.getSimpleName() + "[" + sol+ "]"
+                : classFrom.getSimpleName() + " -> " + classTo.getSimpleName();
     }
 
     @SuppressWarnings("unchecked")

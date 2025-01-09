@@ -1,27 +1,19 @@
 package com.b2c.prototype.modal.entity.user;
 
-import com.b2c.prototype.modal.base.AbstractOneColumnEntity;
-import jakarta.persistence.Column;
+import com.b2c.prototype.modal.base.AbstractConstantEntity;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "country_phone_code")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class CountryPhoneCode {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false, nullable = false)
-    private long id;
-    private String code;
+@SuperBuilder
+public class CountryPhoneCode extends AbstractConstantEntity {
+
 }

@@ -28,7 +28,8 @@ class BasicCountryPhoneCodeDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getTestDataSet() {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(1L)
-                .code("+48")
+                .value("+48")
+                .label("+48")
                 .build();
         return new EntityDataSet<>(countryPhoneCode, "/datasets/user/country_phone_code/testCountryPhoneCodeDataSet.yml");
     }
@@ -36,7 +37,8 @@ class BasicCountryPhoneCodeDaoTest extends AbstractSingleEntityDaoTest {
     @Override
     protected EntityDataSet<?> getSaveDataSet() {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
-                .code("+48")
+                .value("+48")
+                .label("+48")
                 .build();
         return new EntityDataSet<>(countryPhoneCode, "/datasets/user/country_phone_code/saveCountryPhoneCodeDataSet.yml");
     }
@@ -45,7 +47,8 @@ class BasicCountryPhoneCodeDaoTest extends AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> getUpdateDataSet() {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(1L)
-                .code("Update +48")
+                .value("Update +48")
+                .label("Update +48")
                 .build();
         return new EntityDataSet<>(countryPhoneCode, "/datasets/user/country_phone_code/updateCountryPhoneCodeDataSet.yml");
     }

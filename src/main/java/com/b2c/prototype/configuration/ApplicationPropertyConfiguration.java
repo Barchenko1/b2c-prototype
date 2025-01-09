@@ -12,20 +12,20 @@ import java.util.Set;
 @ConfigurationProperties(prefix = "enums")
 @Data
 public class ApplicationPropertyConfiguration {
-    private Set<String> deliveryTypes;
-    private Set<String> paymentMethods;
-    private Set<String> orderStatuses;
-    private Set<String> optionGroups;
+    private Set<ApplicationProperty> deliveryTypes;
+    private Set<ApplicationProperty> paymentMethods;
+    private Set<ApplicationProperty> orderStatuses;
+    private Set<ApplicationProperty> optionGroups;
     private Set<ApplicationProperty> brands;
-    private Set<String> countTypes;
-    private Set<String> countryPhoneCodes;
-    private Set<String> countries;
-    private Set<String> currencies;
-    private Set<String> itemStatuses;
-    private Set<String> itemTypes;
+    private Set<ApplicationProperty> countTypes;
+    private Set<ApplicationProperty> countryPhoneCodes;
+    private Set<ApplicationProperty> countries;
+    private Set<ApplicationProperty> currencies;
+    private Set<ApplicationProperty> itemStatuses;
+    private Set<ApplicationProperty> itemTypes;
     private Set<Integer> ratings;
-    private Set<String> messageStatuses;
-    private Set<String> messageTypes;
+    private Set<ApplicationProperty> messageStatuses;
+    private Set<ApplicationProperty> messageTypes;
 
     private Set<TransitiveSelfYaml> categories;
 }

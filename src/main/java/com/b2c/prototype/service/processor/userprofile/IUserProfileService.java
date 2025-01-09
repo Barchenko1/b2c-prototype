@@ -1,7 +1,7 @@
 package com.b2c.prototype.service.processor.userprofile;
 
-import com.b2c.prototype.modal.dto.request.RegistrationUserProfileDto;
-import com.b2c.prototype.modal.dto.request.UserProfileDto;
+import com.b2c.prototype.modal.dto.payload.RegistrationUserProfileDto;
+import com.b2c.prototype.modal.dto.payload.UserProfileDto;
 
 import java.util.List;
 

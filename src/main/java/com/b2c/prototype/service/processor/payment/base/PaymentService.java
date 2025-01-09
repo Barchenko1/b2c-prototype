@@ -2,7 +2,7 @@ package com.b2c.prototype.service.processor.payment.base;
 
 import com.b2c.prototype.dao.payment.IPaymentDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
-import com.b2c.prototype.modal.dto.request.PaymentDto;
+import com.b2c.prototype.modal.dto.payload.PaymentDto;
 import com.b2c.prototype.modal.dto.searchfield.PaymentSearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.order.OrderItemData;
 import com.b2c.prototype.modal.entity.payment.Payment;

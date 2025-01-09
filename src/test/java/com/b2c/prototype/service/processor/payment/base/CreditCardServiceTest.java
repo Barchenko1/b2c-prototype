@@ -3,7 +3,7 @@ package com.b2c.prototype.service.processor.payment.base;
 import com.b2c.prototype.dao.payment.ICreditCardDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.delete.MultipleFieldsSearchDtoDelete;
-import com.b2c.prototype.modal.dto.request.CreditCardDto;
+import com.b2c.prototype.modal.dto.payload.CreditCardDto;
 import com.b2c.prototype.modal.dto.searchfield.CreditCardSearchFieldEntityDto;
 import com.b2c.prototype.modal.dto.response.ResponseCreditCardDto;
 import com.b2c.prototype.modal.dto.update.CreditCardSearchFieldEntityUpdateDto;

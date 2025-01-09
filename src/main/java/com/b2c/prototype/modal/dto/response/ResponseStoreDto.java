@@ -1,7 +1,7 @@
 package com.b2c.prototype.modal.dto.response;
 
-import com.b2c.prototype.modal.dto.request.ItemDataDto;
-import com.b2c.prototype.modal.dto.request.ItemDataOptionDto;
+import com.b2c.prototype.modal.dto.payload.ItemDataDto;
+import com.b2c.prototype.modal.dto.payload.ItemDataOptionDto;
 import lombok.Builder;
 import lombok.Data;
 

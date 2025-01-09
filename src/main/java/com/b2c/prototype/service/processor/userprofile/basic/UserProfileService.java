@@ -1,7 +1,7 @@
 package com.b2c.prototype.service.processor.userprofile.basic;
 
-import com.b2c.prototype.modal.dto.request.RegistrationUserProfileDto;
-import com.b2c.prototype.modal.dto.request.UserProfileDto;
+import com.b2c.prototype.modal.dto.payload.RegistrationUserProfileDto;
+import com.b2c.prototype.modal.dto.payload.UserProfileDto;
 import com.b2c.prototype.modal.entity.user.UserProfile;
 import com.b2c.prototype.dao.user.IUserProfileDao;
 

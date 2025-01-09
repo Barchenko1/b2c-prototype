@@ -3,7 +3,7 @@ package com.b2c.prototype.service.processor.userprofile.basic;
 import com.b2c.prototype.dao.user.IContactPhoneDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.searchfield.BeneficiarySearchFieldOrderNumberDto;
-import com.b2c.prototype.modal.dto.request.ContactPhoneDto;
+import com.b2c.prototype.modal.dto.payload.ContactPhoneDto;
 import com.b2c.prototype.modal.dto.searchfield.ContactPhoneSearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.order.OrderItemData;
 import com.b2c.prototype.modal.entity.order.Beneficiary;

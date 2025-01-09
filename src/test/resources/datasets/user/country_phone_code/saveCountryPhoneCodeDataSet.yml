@@ -1,2 +1,3 @@
 country_phone_code:
-  - code: "+48"
+  - value: "+48"
+    label: "+48"

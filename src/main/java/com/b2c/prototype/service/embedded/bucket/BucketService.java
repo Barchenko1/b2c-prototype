@@ -1,11 +1,9 @@
 package com.b2c.prototype.service.embedded.bucket;
 
-import com.b2c.prototype.modal.dto.request.ItemBucketDto;
+import com.b2c.prototype.modal.dto.payload.ItemBucketDto;
 import com.b2c.prototype.dao.embedded.IBucketDao;
 import com.b2c.prototype.modal.embedded.bucket.Bucket;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.function.Supplier;
 
 @Slf4j
 public class BucketService implements IBucketService {

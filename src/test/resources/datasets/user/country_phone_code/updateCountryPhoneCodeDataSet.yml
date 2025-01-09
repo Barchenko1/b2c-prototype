@@ -1,3 +1,4 @@
 country_phone_code:
   - id: 1
-    code: "Update +48"
+    value: "Update +48"
+    label: "Update +48"

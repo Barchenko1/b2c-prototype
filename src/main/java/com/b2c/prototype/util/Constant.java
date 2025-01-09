@@ -7,6 +7,7 @@ public interface Constant {
     String PAYMENT_ID = "upayment_id";
     String ITEM_ID = "itemId";
     String CHAR_SEQUENCE_CODE = "charSequenceCode";
+    String VALUE = "value";
 
 
 }

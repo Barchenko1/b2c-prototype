@@ -1,7 +1,7 @@
 package com.b2c.prototype.service.processor.order;
 
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
-import com.b2c.prototype.modal.dto.request.OrderItemDataDto;
+import com.b2c.prototype.modal.dto.payload.OrderItemDataDto;
 import com.b2c.prototype.modal.dto.response.ResponseOrderItemDataDto;
 import com.b2c.prototype.modal.dto.searchfield.OrderItemDataSearchFieldEntityDto;
 

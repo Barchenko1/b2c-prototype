@@ -1,7 +1,7 @@
 package com.b2c.prototype.service.processor.item;
 
-import com.b2c.prototype.modal.dto.request.ItemDataOptionOneQuantityDto;
-import com.b2c.prototype.modal.dto.request.ItemDataOptionQuantityDto;
+import com.b2c.prototype.modal.dto.payload.ItemDataOptionOneQuantityDto;
+import com.b2c.prototype.modal.dto.payload.ItemDataOptionQuantityDto;
 
 public interface IItemDataOptionQuantityService {
     void increaseOneItemDataOptionQuantityCount(ItemDataOptionOneQuantityDto itemDataOptionOneQuantityDto);

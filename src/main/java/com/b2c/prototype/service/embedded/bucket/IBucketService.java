@@ -1,6 +1,6 @@
 package com.b2c.prototype.service.embedded.bucket;
 
-import com.b2c.prototype.modal.dto.request.ItemBucketDto;
+import com.b2c.prototype.modal.dto.payload.ItemBucketDto;
 
 public interface IBucketService {
     void addItemToBucket(ItemBucketDto itemBucketDto);

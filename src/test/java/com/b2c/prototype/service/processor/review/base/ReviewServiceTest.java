@@ -2,7 +2,7 @@ package com.b2c.prototype.service.processor.review.base;
 
 import com.b2c.prototype.dao.review.IReviewDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
-import com.b2c.prototype.modal.dto.request.ReviewDto;
+import com.b2c.prototype.modal.dto.payload.ReviewDto;
 import com.b2c.prototype.modal.dto.response.ResponseReviewDto;
 import com.b2c.prototype.modal.dto.searchfield.ReviewSearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.item.Item;

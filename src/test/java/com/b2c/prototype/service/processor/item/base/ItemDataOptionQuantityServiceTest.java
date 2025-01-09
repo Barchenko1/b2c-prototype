@@ -1,8 +1,8 @@
 package com.b2c.prototype.service.processor.item.base;
 
 import com.b2c.prototype.dao.item.IItemDataOptionQuantityDao;
-import com.b2c.prototype.modal.dto.request.ItemDataOptionOneQuantityDto;
-import com.b2c.prototype.modal.dto.request.ItemDataOptionQuantityDto;
+import com.b2c.prototype.modal.dto.payload.ItemDataOptionOneQuantityDto;
+import com.b2c.prototype.modal.dto.payload.ItemDataOptionQuantityDto;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.item.ItemDataOption;
 import com.b2c.prototype.modal.entity.item.ItemDataOptionQuantity;
