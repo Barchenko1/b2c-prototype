@@ -1,83 +1,54 @@
-package com.b2c.prototype.dao;
+package com.b2c.prototype.e2e;
 
 import com.github.database.rider.core.api.connection.ConnectionHolder;
 import com.github.database.rider.core.api.dataset.DataSetExecutor;
 import com.github.database.rider.core.api.dataset.YamlDataSet;
 import com.github.database.rider.core.configuration.DataSetConfig;
 import com.github.database.rider.core.dataset.DataSetExecutorImpl;
-import com.github.database.rider.junit5.api.DBRider;
-import com.tm.core.dao.common.AbstractEntityDao;
-import com.tm.core.dao.common.IEntityDao;
-import com.tm.core.dao.identifier.IEntityIdentifierDao;
-import com.tm.core.processor.thread.IThreadLocalSessionManager;
 import com.tm.core.processor.thread.ThreadLocalSessionManager;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.operation.DatabaseOperation;
-import org.hibernate.SessionFactory;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import javax.sql.DataSource;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.util.Arrays;
 
 import static com.b2c.prototype.dao.ConfigureSessionFactoryTest.getSessionFactory;
 import static com.b2c.prototype.dao.DataSourcePool.getPostgresDataSource;
-import static com.b2c.prototype.dao.DatabaseQueries.cleanDatabase;
 
-@ExtendWith(MockitoExtension.class)
-@DBRider
-public abstract class AbstractGeneralEntityDaoTest {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles({"test", "unittest"})
+public class BasicE2ETest {
+    protected MockMvc mockMvc;
 
-    protected static IThreadLocalSessionManager sessionManager;
-    protected static SessionFactory sessionFactory;
+    @Autowired
+    WebApplicationContext webApplicationContext;
 
-    protected static IEntityIdentifierDao entityIdentifierDao;
-
-    protected static ConnectionHolder connectionHolder;
+    private static ConnectionHolder connectionHolder;
     private static DataSetExecutor executor;
 
-    protected static IEntityDao dao;
-
-    public AbstractGeneralEntityDaoTest() {
+    @BeforeEach
+    void setUp() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
     @BeforeAll
     public static void setUpAll() {
         DataSource dataSource = getPostgresDataSource();
         connectionHolder = dataSource::getConnection;
-        executor = DataSetExecutorImpl.instance("executor-name", connectionHolder);
-
-        sessionFactory = getSessionFactory();
-        sessionManager = new ThreadLocalSessionManager(sessionFactory);
-    }
-
-    @BeforeEach
-    public void setUp() {
-        try {
-            Field sessionMenagerField = AbstractEntityDao.class.getDeclaredField("sessionManager");
-            sessionMenagerField.setAccessible(true);
-            sessionMenagerField.set(dao, sessionManager);
-
-            Field sessionFactoryField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
-            sessionFactoryField.setAccessible(true);
-            sessionFactoryField.set(dao, sessionFactory);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @AfterAll
-    public static void tearDown() {
-        cleanDatabase(connectionHolder);
+        executor = DataSetExecutorImpl.instance("e2e", connectionHolder);
     }
 
     protected void loadDataSet(String dataSetPath) {

@@ -1,16 +1,12 @@
 package com.b2c.prototype.dao.item.base;
 
-import com.b2c.prototype.dao.AbstractGeneralEntityDaoTest;
+import com.b2c.prototype.dao.AbstractCustomEntityDaoTest;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
-import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.modal.entity.item.ItemStatus;
 import com.b2c.prototype.modal.entity.item.ItemType;
-import com.b2c.prototype.modal.entity.option.OptionGroup;
-import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.modal.entity.price.Currency;
-import com.b2c.prototype.modal.entity.price.Price;
 import com.tm.core.dao.common.AbstractEntityDao;
 import com.tm.core.dao.identifier.EntityIdentifierDao;
 import com.tm.core.processor.finder.manager.EntityMappingManager;
@@ -41,7 +37,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class BasicItemDataDaoTest extends AbstractGeneralEntityDaoTest {
+class BasicItemDataDaoTest extends AbstractCustomEntityDaoTest {
 
     @BeforeAll
     static void setup() {

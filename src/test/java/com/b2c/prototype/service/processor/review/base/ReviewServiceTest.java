@@ -183,7 +183,7 @@ class ReviewServiceTest {
 
     private Review getReview() {
         return Review.builder()
-                .reviewId("review_id")
+                .uniqueId("review_id")
                 .title("title")
                 .message("message")
                 .dateOfCreate(100)

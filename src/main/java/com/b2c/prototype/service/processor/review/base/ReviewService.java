@@ -48,12 +48,12 @@ public class ReviewService implements IReviewService {
             ReviewDto reviewDto = reviewSearchFieldEntityDto.getNewEntity();
             Review newReview = transformationFunctionService.getEntity(Review.class, reviewDto);
             Review existingReview = item.getReviews().stream()
-                    .filter(reviewEntity -> reviewEntity.getReviewId().equals(reviewDto.getReviewId()))
+                    .filter(reviewEntity -> reviewEntity.getUniqueId().equals(reviewDto.getReviewId()))
                     .findFirst()
                     .orElse(null);
             if (existingReview != null) {
                 newReview.setId(existingReview.getId());
-                newReview.setReviewId(existingReview.getReviewId());
+                newReview.setUniqueId(existingReview.getUniqueId());
                 item.getReviews().remove(existingReview);
             }
             item.getReviews().add(newReview);

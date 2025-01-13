@@ -1,6 +1,6 @@
 package com.b2c.prototype.dao.review.base;
 
-import com.b2c.prototype.dao.AbstractSingleEntityDaoTest;
+import com.b2c.prototype.dao.AbstractSimpleEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
@@ -9,7 +9,6 @@ import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.modal.entity.item.ItemStatus;
 import com.b2c.prototype.modal.entity.item.ItemType;
 import com.b2c.prototype.modal.entity.item.Rating;
-import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.post.Post;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.review.Review;
@@ -21,7 +20,7 @@ import org.junit.jupiter.api.BeforeAll;
 
 import java.util.List;
 
-class BasicReviewDaoTest extends AbstractSingleEntityDaoTest {
+class BasicReviewDaoTest extends AbstractSimpleEntityDaoTest {
 
     @BeforeAll
     public static void setup() {
@@ -76,7 +75,7 @@ class BasicReviewDaoTest extends AbstractSingleEntityDaoTest {
                 .build();
         Review review = Review.builder()
                 .id(1L)
-                .reviewId("123")
+                .uniqueId("123")
                 .dateOfCreate(200)
                 .title("Update title")
                 .message("Update message")

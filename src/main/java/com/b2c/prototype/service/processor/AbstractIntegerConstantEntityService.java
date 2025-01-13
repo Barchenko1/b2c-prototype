@@ -2,7 +2,6 @@ package com.b2c.prototype.service.processor;
 
 import com.b2c.prototype.dao.cashed.ISingleValueMap;
 import com.b2c.prototype.modal.dto.common.ConstantNumberEntityPayloadDto;
-import com.b2c.prototype.modal.dto.common.ConstantNumberSearchEntityPayloadDtoUpdate;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.tm.core.dao.common.IEntityDao;
 import com.tm.core.processor.finder.factory.IParameterFactory;
@@ -41,36 +40,34 @@ public abstract class AbstractIntegerConstantEntityService<E> implements IIntege
 
     @Override
     @SuppressWarnings("unchecked")
-    public void updateEntity(ConstantNumberSearchEntityPayloadDtoUpdate oneFieldEntityDtoUpdate) {
-        ConstantNumberEntityPayloadDto constantNumberEntityPayloadDto = oneFieldEntityDtoUpdate.getNewEntity();
+    public void updateEntity(Integer searchValue, ConstantNumberEntityPayloadDto constantNumberEntityPayloadDto) {
         E entity = (E) transformationFunctionService.getEntity(dao.getEntityClass(), constantNumberEntityPayloadDto);
-        Integer searchParameter = oneFieldEntityDtoUpdate.getSearchField();
-        Parameter parameter = parameterFactory.createIntegerParameter(VALUE, searchParameter);
+        Parameter parameter = parameterFactory.createIntegerParameter(VALUE, searchValue);
         dao.findEntityAndUpdate(entity, parameter);
         singleValueMap.putRemoveEntity(
                 entity.getClass(),
-                searchParameter,
+                searchValue,
                 constantNumberEntityPayloadDto.getValue(),
                 entity);
     }
 
     @Override
-    public void deleteEntity(ConstantNumberEntityPayloadDto constantNumberEntityPayloadDto) {
-        Parameter parameter = parameterFactory.createNumberParameter(VALUE, constantNumberEntityPayloadDto.getValue());
+    public void deleteEntity(int ratingValue) {
+        Parameter parameter = parameterFactory.createNumberParameter(VALUE, ratingValue);
         dao.findEntityAndDelete(parameter);
-        singleValueMap.removeEntity(dao.getEntityClass(), constantNumberEntityPayloadDto.getValue());
+        singleValueMap.removeEntity(dao.getEntityClass(), ratingValue);
     }
 
     @Override
-    public ConstantNumberEntityPayloadDto getEntity(ConstantNumberEntityPayloadDto constantNumberEntityPayloadDto) {
-        Parameter parameter = parameterFactory.createNumberParameter(VALUE, constantNumberEntityPayloadDto.getValue());
+    public ConstantNumberEntityPayloadDto getEntity(int ratingValue) {
+        Parameter parameter = parameterFactory.createNumberParameter(VALUE, ratingValue);
         E entity = dao.getEntity(parameter);
         return transformationFunctionService.getEntity(ConstantNumberEntityPayloadDto.class, entity);
     }
 
     @Override
-    public Optional<ConstantNumberEntityPayloadDto> getEntityOptional(ConstantNumberEntityPayloadDto constantNumberEntityPayloadDto) {
-        Parameter parameter = parameterFactory.createNumberParameter(VALUE, constantNumberEntityPayloadDto.getValue());
+    public Optional<ConstantNumberEntityPayloadDto> getEntityOptional(int ratingValue) {
+        Parameter parameter = parameterFactory.createNumberParameter(VALUE, ratingValue);
         E entity = dao.getEntity(parameter);
         return Optional.of(transformationFunctionService.getEntity(ConstantNumberEntityPayloadDto.class, entity));
     }

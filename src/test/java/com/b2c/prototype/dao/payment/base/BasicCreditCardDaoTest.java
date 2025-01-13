@@ -1,6 +1,6 @@
 package com.b2c.prototype.dao.payment.base;
 
-import com.b2c.prototype.dao.AbstractSingleEntityDaoTest;
+import com.b2c.prototype.dao.AbstractSimpleEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
 import com.b2c.prototype.util.CardUtil;
@@ -10,7 +10,7 @@ import com.tm.core.processor.finder.manager.IEntityMappingManager;
 import com.tm.core.processor.finder.table.EntityTable;
 import org.junit.jupiter.api.BeforeAll;
 
-class BasicCreditCardDaoTest extends AbstractSingleEntityDaoTest {
+class BasicCreditCardDaoTest extends AbstractSimpleEntityDaoTest {
 
     @BeforeAll
     public static void setup() {

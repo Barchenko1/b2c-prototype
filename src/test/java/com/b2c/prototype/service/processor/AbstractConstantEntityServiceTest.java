@@ -1,8 +1,6 @@
 package com.b2c.prototype.service.processor;
 
 import com.b2c.prototype.dao.cashed.ISingleValueMap;
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
-import com.b2c.prototype.modal.dto.common.ConstantEntityPayloadSearchFieldDto;
 import com.b2c.prototype.modal.dto.payload.ConstantEntityPayloadDto;
 import com.tm.core.dao.common.IEntityDao;
 import com.tm.core.processor.finder.factory.IParameterFactory;
@@ -35,22 +33,21 @@ public abstract class AbstractConstantEntityServiceTest<E> {
         verify(singleValueMap).putEntity(entity.getClass(), VALUE, entity);
     }
 
-    protected void verifyUpdateEntity(E entity, ConstantEntityPayloadSearchFieldDto constantEntityPayloadSearchFieldDto) {
-        String searchParameter = constantEntityPayloadSearchFieldDto.getSearchField();
-        Parameter parameter = parameterFactory.createStringParameter(VALUE, searchParameter);
+    protected void verifyUpdateEntity(E entity, ConstantEntityPayloadDto constantEntityPayloadDto) {
+        Parameter parameter = parameterFactory.createStringParameter(VALUE, "testValue");
         verify(dao).findEntityAndUpdate(entity, parameter);
         verify(singleValueMap).putRemoveEntity(
                 entity.getClass(),
-                searchParameter,
-                constantEntityPayloadSearchFieldDto.getNewEntity().getValue(),
+                "testValue",
+                constantEntityPayloadDto.getValue(),
                 entity
         );
     }
 
-    protected void verifyDeleteEntity(OneFieldEntityDto oneFieldEntityDto) {
-        Parameter parameter = parameterFactory.createStringParameter(VALUE, oneFieldEntityDto.getValue());
+    protected void verifyDeleteEntity(String value) {
+        Parameter parameter = parameterFactory.createStringParameter(VALUE, value);
         verify(dao).findEntityAndDelete(parameter);
-        verify(singleValueMap).removeEntity(any(), eq(oneFieldEntityDto.getValue()));
+        verify(singleValueMap).removeEntity(any(), eq(value));
     }
 
     protected ConstantEntityPayloadDto getResponseOneFieldEntityDto() {
@@ -60,18 +57,4 @@ public abstract class AbstractConstantEntityServiceTest<E> {
                 .build();
     }
 
-
-//    protected void testGetAllEntity(Object entity, ) {
-//        Country testValue = createTestValue();
-//        ResponseOneFieldEntityDto responseOneFieldEntityDto = getResponseOneFieldEntityDto();
-//
-//        when(dao.getEntityList()).thenReturn(List.of(testValue));
-//        when(transformationFunctionService.getEntity(ResponseOneFieldEntityDto.class, testValue))
-//                .thenReturn(responseOneFieldEntityDto);
-//
-//        List<ResponseOneFieldEntityDto> list = countryService.getEntities();
-//
-//        assertEquals(1, list.size());
-//        assertEquals(responseOneFieldEntityDto, list.get(0));
-//    }
 }

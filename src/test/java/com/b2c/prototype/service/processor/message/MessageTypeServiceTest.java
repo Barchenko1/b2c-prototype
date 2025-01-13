@@ -1,10 +1,6 @@
 package com.b2c.prototype.service.processor.message;
 
-import com.b2c.prototype.modal.base.AbstractConstantEntity;
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
-import com.b2c.prototype.modal.dto.common.ConstantEntityPayloadSearchFieldDto;
 import com.b2c.prototype.modal.dto.payload.ConstantEntityPayloadDto;
-import com.b2c.prototype.modal.entity.message.MessageStatus;
 import com.b2c.prototype.modal.entity.message.MessageType;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.processor.AbstractConstantEntityServiceTest;
@@ -19,8 +15,6 @@ import java.util.Optional;
 
 import static com.b2c.prototype.util.Constant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 class MessageTypeServiceTest extends AbstractConstantEntityServiceTest<MessageType> {
@@ -53,10 +47,6 @@ class MessageTypeServiceTest extends AbstractConstantEntityServiceTest<MessageTy
                 .label("newLabel")
                 .value("newValue")
                 .build();
-        ConstantEntityPayloadSearchFieldDto dtoUpdate = ConstantEntityPayloadSearchFieldDto.builder()
-                .searchField("searchField")
-                .newEntity(newDto)
-                .build();
 
         MessageType testValue = MessageType.builder()
                 .value("newValue")
@@ -65,50 +55,50 @@ class MessageTypeServiceTest extends AbstractConstantEntityServiceTest<MessageTy
         when(transformationFunctionService.getEntity(MessageType.class, newDto))
                 .thenReturn(testValue);
 
-        messageTypeService.updateEntity(dtoUpdate);
+        messageTypeService.updateEntity("testValue", newDto);
 
-        verifyUpdateEntity(testValue, dtoUpdate);
+        verifyUpdateEntity(testValue, newDto);
     }
 
     @Test
     public void testDeleteEntity() {
-        OneFieldEntityDto dto = new OneFieldEntityDto("testValue");
+        
 
-        messageTypeService.deleteEntity(dto);
+        messageTypeService.deleteEntity("testValue");
 
-        verifyDeleteEntity(dto);
+        verifyDeleteEntity("testValue");
     }
 
     @Test
     public void testGetEntity() {
-        OneFieldEntityDto dto = new OneFieldEntityDto("testValue");
-        Parameter parameter = parameterFactory.createStringParameter(VALUE, dto.getValue());
+        
+        Parameter parameter = parameterFactory.createStringParameter(VALUE, "testValue");
         MessageType testValue = createTestValue();
         ConstantEntityPayloadDto constantEntityPayloadDto = getResponseOneFieldEntityDto();
 
-        when(parameterFactory.createStringParameter(VALUE, dto.getValue())).thenReturn(parameter);
+        when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
         when(dao.getEntity(parameter)).thenReturn(testValue);
         when(transformationFunctionService.getEntity(ConstantEntityPayloadDto.class, testValue))
                 .thenReturn(constantEntityPayloadDto);
 
-        ConstantEntityPayloadDto result = messageTypeService.getEntity(dto);
+        ConstantEntityPayloadDto result = messageTypeService.getEntity("testValue");
 
         assertEquals(constantEntityPayloadDto, result);
     }
 
     @Test
     public void testGetEntityOptional() {
-        OneFieldEntityDto dto = new OneFieldEntityDto("testValue");
-        Parameter parameter = parameterFactory.createStringParameter(VALUE, dto.getValue());
+        
+        Parameter parameter = parameterFactory.createStringParameter(VALUE, "testValue");
         MessageType testValue = createTestValue();
         ConstantEntityPayloadDto constantEntityPayloadDto = getResponseOneFieldEntityDto();
 
-        when(parameterFactory.createStringParameter(VALUE, dto.getValue())).thenReturn(parameter);
+        when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
         when(dao.getEntity(parameter)).thenReturn(testValue);
         when(transformationFunctionService.getEntity(ConstantEntityPayloadDto.class, testValue))
                 .thenReturn(constantEntityPayloadDto);
 
-        Optional<ConstantEntityPayloadDto> result = messageTypeService.getEntityOptional(dto);
+        Optional<ConstantEntityPayloadDto> result = messageTypeService.getEntityOptional("testValue");
 
         assertEquals(Optional.of(constantEntityPayloadDto), result);
     }

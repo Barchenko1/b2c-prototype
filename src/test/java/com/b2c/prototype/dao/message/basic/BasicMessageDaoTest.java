@@ -1,6 +1,6 @@
 package com.b2c.prototype.dao.message.basic;
 
-import com.b2c.prototype.dao.AbstractSingleEntityDaoTest;
+import com.b2c.prototype.dao.AbstractSimpleEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
 import com.b2c.prototype.modal.entity.message.Message;
 import com.b2c.prototype.modal.entity.message.MessageStatus;
@@ -16,7 +16,7 @@ import java.sql.Connection;
 import java.sql.Statement;
 import java.util.List;
 
-class BasicMessageDaoTest extends AbstractSingleEntityDaoTest {
+class BasicMessageDaoTest extends AbstractSimpleEntityDaoTest {
 
     @BeforeAll
     public static void setup() {

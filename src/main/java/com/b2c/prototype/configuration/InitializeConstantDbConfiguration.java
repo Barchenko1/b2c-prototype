@@ -396,7 +396,7 @@ public class InitializeConstantDbConfiguration {
                 transactionWrapper.executeConsumer(consumer);
             });
         });
-    };
+    }
 
 
 }

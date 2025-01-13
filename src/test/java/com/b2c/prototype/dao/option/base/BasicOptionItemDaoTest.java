@@ -1,6 +1,6 @@
 package com.b2c.prototype.dao.option.base;
 
-import com.b2c.prototype.dao.AbstractGeneralEntityDaoTest;
+import com.b2c.prototype.dao.AbstractCustomEntityDaoTest;
 import com.b2c.prototype.modal.entity.item.Item;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
@@ -35,7 +35,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class BasicOptionItemDaoTest extends AbstractGeneralEntityDaoTest {
+class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
 
     @BeforeAll
     public static void setup() {

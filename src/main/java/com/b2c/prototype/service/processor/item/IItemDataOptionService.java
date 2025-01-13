@@ -8,12 +8,12 @@ import java.util.List;
 
 public interface IItemDataOptionService {
     void saveUpdateItemDataOption(ItemDataOptionArraySearchFieldEntityDto itemDataOptionArraySearchFieldEntityDto);
-    void deleteItemDataOption(OneFieldEntityDto oneFieldEntityDto);
+    void deleteItemDataOption(String articularId);
 
-    public ResponseItemDataOptionDto getResponseItemDataOptionDto(OneFieldEntityDto oneFieldEntityDto);
-    public List<ResponseItemDataOptionDto> getResponseItemDataOptionDtoList();
-    public List<ResponseItemDataOptionDto> getResponseItemDataOptionDtoFiltered();
-    public List<ResponseItemDataOptionDto> getResponseItemDataOptionDtoSorted(String sortType);
+    ResponseItemDataOptionDto getResponseItemDataOptionDto(String articularId);
+    List<ResponseItemDataOptionDto> getResponseItemDataOptionDtoList();
+    List<ResponseItemDataOptionDto> getResponseItemDataOptionDtoFiltered();
+    List<ResponseItemDataOptionDto> getResponseItemDataOptionDtoSorted(String sortType);
 
 
 }

@@ -1,8 +1,5 @@
 package com.b2c.prototype.controller.singlevalue;
 
-import com.b2c.prototype.modal.constant.OpterationTypeEnum;
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
-import com.b2c.prototype.modal.dto.common.ConstantEntityPayloadSearchFieldDto;
 import com.b2c.prototype.modal.dto.payload.ConstantEntityPayloadDto;
 import com.b2c.prototype.service.processor.IConstantEntityService;
 import com.b2c.prototype.service.processor.address.ICountryService;
@@ -26,6 +23,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -66,43 +64,44 @@ public class ConstantController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> postConstantEntity(@RequestBody ConstantEntityPayloadDto constantEntityPayloadDto,
-                                                   @RequestHeader(name = "Accept-Language", defaultValue = "en") String location,
-                                                   @RequestHeader(value = "serviceId") String serviceId,
-                                                   @RequestHeader(value = "operationType") String operationType) {
-        if (OpterationTypeEnum.SAVE.getValue().equals(operationType)) {
-            keyServiceMap.get(serviceId).saveEntity(constantEntityPayloadDto);
-            return ResponseEntity.ok().build();
-        }
-        if (OpterationTypeEnum.GET.getValue().equals(operationType)) {
-            OneFieldEntityDto oneFieldEntityDto = OneFieldEntityDto.builder()
-                    .value(constantEntityPayloadDto.getValue())
-                    .build();
-            return ResponseEntity.ok(keyServiceMap.get(serviceId).getEntity(oneFieldEntityDto));
-        }
-        return ResponseEntity.badRequest().body("Invalid operationType. Allowed values: create, retrieve.");
-    }
-
-    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> updateConstantEntity(@RequestBody ConstantEntityPayloadSearchFieldDto constantEntityPayloadSearchFieldDto,
-                                                        @RequestHeader(value = "serviceId") String serviceId) {
-        keyServiceMap.get(serviceId).updateEntity(constantEntityPayloadSearchFieldDto);
+    public ResponseEntity<?> saveConstantEntity(@RequestBody ConstantEntityPayloadDto constantEntityPayloadDto,
+                                                @RequestHeader(value = "serviceId") String serviceId) {
+        keyServiceMap.get(serviceId).saveEntity(constantEntityPayloadDto);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> deleteConstantEntity(@RequestBody OneFieldEntityDto oneFieldEntityDto,
-                                                        @RequestHeader(value = "serviceId") String serviceId) {
-        keyServiceMap.get(serviceId).deleteEntity(oneFieldEntityDto);
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> updateConstantEntity(@RequestBody ConstantEntityPayloadDto constantEntityPayloadDto,
+                                                     @RequestHeader(value = "serviceId") String serviceId,
+                                                     @RequestParam(value = "value") final String value) {
+        keyServiceMap.get(serviceId).updateEntity(value, constantEntityPayloadDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping(produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity<Void> deleteConstantEntity(@RequestHeader(value = "serviceId") String serviceId,
+                                                     @RequestParam(value = "value") final String value) {
+        keyServiceMap.get(serviceId).deleteEntity(value);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping("/all")
     public ResponseEntity<?> getConstantEntities(@RequestHeader(name = "Accept-Language", defaultValue = "en") String location,
-                                                    @RequestHeader(value = "serviceId") String serviceId) {
+                                                 @RequestHeader(value = "serviceId") String serviceId) {
         if (keyServiceMap.containsKey(serviceId)) {
             return ResponseEntity.ok(keyServiceMap.get(serviceId).getEntities());
         }
-        return ResponseEntity.badRequest().body("Invalid operationType. Allowed values: create, retrieve.");
+        return ResponseEntity.badRequest().body("Invalid serviceId.");
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getConstantEntity(@RequestHeader(name = "Accept-Language", defaultValue = "en") String location,
+                                               @RequestHeader(name = "serviceId") final String serviceId,
+                                               @RequestParam(value = "value") final String value) {
+        if (keyServiceMap.containsKey(serviceId)) {
+            return ResponseEntity.ok(keyServiceMap.get(serviceId).getEntity(value));
+        }
+        return ResponseEntity.badRequest().body("Invalid serviceId.");
     }
 }

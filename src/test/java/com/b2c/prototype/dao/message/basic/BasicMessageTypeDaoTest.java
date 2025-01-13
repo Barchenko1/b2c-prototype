@@ -1,6 +1,6 @@
 package com.b2c.prototype.dao.message.basic;
 
-import com.b2c.prototype.dao.AbstractSingleEntityDaoTest;
+import com.b2c.prototype.dao.AbstractSimpleEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
 import com.b2c.prototype.modal.entity.message.MessageType;
 import com.tm.core.dao.identifier.EntityIdentifierDao;
@@ -9,7 +9,7 @@ import com.tm.core.processor.finder.manager.IEntityMappingManager;
 import com.tm.core.processor.finder.table.EntityTable;
 import org.junit.jupiter.api.BeforeAll;
 
-class BasicMessageTypeDaoTest extends AbstractSingleEntityDaoTest {
+class BasicMessageTypeDaoTest extends AbstractSimpleEntityDaoTest {
 
     @BeforeAll
     public static void setup() {

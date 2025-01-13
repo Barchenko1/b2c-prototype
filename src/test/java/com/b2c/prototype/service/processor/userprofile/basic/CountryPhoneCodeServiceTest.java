@@ -1,10 +1,6 @@
 package com.b2c.prototype.service.processor.userprofile.basic;
 
-import com.b2c.prototype.modal.base.AbstractConstantEntity;
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
-import com.b2c.prototype.modal.dto.common.ConstantEntityPayloadSearchFieldDto;
 import com.b2c.prototype.modal.dto.payload.ConstantEntityPayloadDto;
-import com.b2c.prototype.modal.entity.store.CountType;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.processor.AbstractConstantEntityServiceTest;
@@ -17,9 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.b2c.prototype.util.Constant.VALUE;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 class CountryPhoneCodeServiceTest extends AbstractConstantEntityServiceTest<CountryPhoneCode> {
@@ -50,10 +44,6 @@ class CountryPhoneCodeServiceTest extends AbstractConstantEntityServiceTest<Coun
                 .label("newLabel")
                 .value("newValue")
                 .build();
-        ConstantEntityPayloadSearchFieldDto dtoUpdate = ConstantEntityPayloadSearchFieldDto.builder()
-                .searchField("searchField")
-                .newEntity(newDto)
-                .build();
 
         CountryPhoneCode testValue = CountryPhoneCode.builder()
                 .value("newValue")
@@ -62,50 +52,50 @@ class CountryPhoneCodeServiceTest extends AbstractConstantEntityServiceTest<Coun
         when(transformationFunctionService.getEntity(CountryPhoneCode.class, newDto))
                 .thenReturn(testValue);
 
-        countryPhoneCodeService.updateEntity(dtoUpdate);
+        countryPhoneCodeService.updateEntity("testValue", newDto);
 
-        verifyUpdateEntity(testValue, dtoUpdate);
+        verifyUpdateEntity(testValue, newDto);
     }
 
     @Test
     public void testDeleteEntity() {
-        OneFieldEntityDto dto = new OneFieldEntityDto("testValue");
+        
 
-        countryPhoneCodeService.deleteEntity(dto);
+        countryPhoneCodeService.deleteEntity("testValue");
 
-        verifyDeleteEntity(dto);
+        verifyDeleteEntity("testValue");
     }
 
     @Test
     public void testGetEntity() {
-        OneFieldEntityDto dto = new OneFieldEntityDto("testValue");
-        Parameter parameter = parameterFactory.createStringParameter(VALUE, dto.getValue());
+        
+        Parameter parameter = parameterFactory.createStringParameter(VALUE, "testValue");
         CountryPhoneCode testValue = createTestValue();
         ConstantEntityPayloadDto constantEntityPayloadDto = getResponseOneFieldEntityDto();
 
-        when(parameterFactory.createStringParameter(VALUE, dto.getValue())).thenReturn(parameter);
+        when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
         when(dao.getEntity(parameter)).thenReturn(testValue);
         when(transformationFunctionService.getEntity(ConstantEntityPayloadDto.class, testValue))
                 .thenReturn(constantEntityPayloadDto);
 
-        ConstantEntityPayloadDto result = countryPhoneCodeService.getEntity(dto);
+        ConstantEntityPayloadDto result = countryPhoneCodeService.getEntity("testValue");
 
         assertEquals(constantEntityPayloadDto, result);
     }
 
     @Test
     public void testGetEntityOptional() {
-        OneFieldEntityDto dto = new OneFieldEntityDto("testValue");
-        Parameter parameter = parameterFactory.createStringParameter(VALUE, dto.getValue());
+        
+        Parameter parameter = parameterFactory.createStringParameter(VALUE, "testValue");
         CountryPhoneCode testValue = createTestValue();
         ConstantEntityPayloadDto constantEntityPayloadDto = getResponseOneFieldEntityDto();
 
-        when(parameterFactory.createStringParameter(VALUE, dto.getValue())).thenReturn(parameter);
+        when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
         when(dao.getEntity(parameter)).thenReturn(testValue);
         when(transformationFunctionService.getEntity(ConstantEntityPayloadDto.class, testValue))
                 .thenReturn(constantEntityPayloadDto);
 
-        Optional<ConstantEntityPayloadDto> result = countryPhoneCodeService.getEntityOptional(dto);
+        Optional<ConstantEntityPayloadDto> result = countryPhoneCodeService.getEntityOptional("testValue");
 
         assertEquals(Optional.of(constantEntityPayloadDto), result);
     }

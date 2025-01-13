@@ -76,7 +76,7 @@ rating:
     value: 5
 review:
   - id: 1
-    review_id: 123
+    unique_id: 123
     title: "title"
     message: "message"
     dateOfCreate: 100

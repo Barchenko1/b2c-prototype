@@ -1,6 +1,6 @@
 package com.b2c.prototype.dao.address.base;
 
-import com.b2c.prototype.dao.AbstractSingleEntityDaoTest;
+import com.b2c.prototype.dao.AbstractSimpleEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.tm.core.dao.identifier.EntityIdentifierDao;
@@ -11,7 +11,7 @@ import com.tm.core.processor.thread.IThreadLocalSessionManager;
 import com.tm.core.processor.thread.ThreadLocalSessionManager;
 import org.junit.jupiter.api.BeforeAll;
 
-public class BasicCountryDaoTest extends AbstractSingleEntityDaoTest {
+public class BasicCountryDaoTest extends AbstractSimpleEntityDaoTest {
 
     @BeforeAll
     public static void setup() {

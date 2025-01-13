@@ -1,6 +1,6 @@
 package com.b2c.prototype.dao.delivery.base;
 
-import com.b2c.prototype.dao.AbstractGeneralEntityDaoTest;
+import com.b2c.prototype.dao.AbstractCustomEntityDaoTest;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
@@ -33,7 +33,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class BasicDeliveryDaoTest extends AbstractGeneralEntityDaoTest {
+class BasicDeliveryDaoTest extends AbstractCustomEntityDaoTest {
 
     @BeforeAll
     public static void setup() {

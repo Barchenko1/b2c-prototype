@@ -35,6 +35,7 @@ public class Comment extends TransitiveSelfEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
+    @Column(name = "unique_comment_id", unique = true, nullable = false)
     private String uniqueCommentId;
     private String title;
     private String message;

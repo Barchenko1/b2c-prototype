@@ -65,15 +65,15 @@ public class ItemDataOptionService implements IItemDataOptionService {
     }
 
     @Override
-    public void deleteItemDataOption(OneFieldEntityDto oneFieldEntityDto) {
+    public void deleteItemDataOption(String articularId) {
         entityOperationDao.deleteEntityByParameter(
-                supplierService.parameterStringSupplier(ARTICULAR_ID, oneFieldEntityDto.getValue()));
+                supplierService.parameterStringSupplier(ARTICULAR_ID, articularId));
     }
 
     @Override
-    public ResponseItemDataOptionDto getResponseItemDataOptionDto(OneFieldEntityDto oneFieldEntityDto) {
+    public ResponseItemDataOptionDto getResponseItemDataOptionDto(String articularId) {
         return entityOperationDao.getEntityDto(
-                supplierService.parameterStringSupplier(ARTICULAR_ID, oneFieldEntityDto.getValue()),
+                supplierService.parameterStringSupplier(ARTICULAR_ID, articularId),
                 transformationFunctionService.getTransformationFunction(ItemDataOption.class, ResponseItemDataOptionDto.class));
     }
 

@@ -1,6 +1,6 @@
 package com.b2c.prototype.dao.payment.base;
 
-import com.b2c.prototype.dao.AbstractGeneralEntityDaoTest;
+import com.b2c.prototype.dao.AbstractCustomEntityDaoTest;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
 import com.b2c.prototype.modal.entity.payment.Payment;
@@ -36,7 +36,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class BasicPaymentDaoTest extends AbstractGeneralEntityDaoTest {
+class BasicPaymentDaoTest extends AbstractCustomEntityDaoTest {
 
     @BeforeAll
     public static void setup() {

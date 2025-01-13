@@ -49,7 +49,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @DBRider
-public abstract class AbstractSingleEntityDaoTest {
+public abstract class AbstractSimpleEntityDaoTest {
 
     protected static IThreadLocalSessionManager sessionManager;
     protected static SessionFactory sessionFactory;
@@ -64,7 +64,7 @@ public abstract class AbstractSingleEntityDaoTest {
     protected EntityDataSet<?> saveEntityDataSet;
     protected EntityDataSet<?> updateEntityDataSet;
 
-    public AbstractSingleEntityDaoTest() {
+    public AbstractSimpleEntityDaoTest() {
         this.emptyDataSet = getEmptyDataSetPath();
         this.testEntityDataSet = getTestDataSet();
         this.saveEntityDataSet = getSaveDataSet();

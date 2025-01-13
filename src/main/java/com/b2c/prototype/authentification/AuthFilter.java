@@ -23,16 +23,12 @@ public class AuthFilter extends GenericFilterBean {
         final String url = request.getRequestURL().toString();
         StringBuilder logBuilder = new StringBuilder();
 
-        try {
-            logBuilder.append("[AuthFilter_doFilter] ## URL: ").append(url);
+        logBuilder.append("[AuthFilter_doFilter] ## URL: ").append(url);
 
 //            APIServletRequestWrapper requestWrapper = new APIServletRequestWrapper(payload);
 //            APIServletResponseWrapper responseWrapper = new APIServletResponseWrapper(response);
 
 //            chain.doFilter(requestWrapper, responseWrapper);
-        } finally {
-//            log.debug(logBuilder.toString());
-        }
     }
 
     private boolean isNotSwaggerRequest(final HttpServletRequest req) {

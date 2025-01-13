@@ -4,7 +4,6 @@ import com.b2c.prototype.dao.cashed.ISingleValueMap;
 import com.b2c.prototype.modal.base.AbstractConstantEntity;
 import com.b2c.prototype.modal.constant.MessageStatusEnum;
 import com.b2c.prototype.modal.dto.common.ConstantNumberEntityPayloadDto;
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.payload.AddressDto;
 import com.b2c.prototype.modal.dto.payload.BeneficiaryDto;
 import com.b2c.prototype.modal.dto.payload.ContactInfoDto;
@@ -143,14 +142,6 @@ public class TransformationEntityConfiguration {
         };
     }
 
-    private <T extends AbstractConstantEntity> Function<OneFieldEntityDto, T> mapOneFieldEntityDtoToConstantEntityFunction(Supplier<T> entitySupplier) {
-        return oneFieldEntityDto -> {
-            T entity = entitySupplier.get();
-            entity.setValue(oneFieldEntityDto.getValue());
-            return entity;
-        };
-    }
-
     private <T extends AbstractConstantEntity> Function<T, ConstantEntityPayloadDto> mapConstantEntityToConstantEntityPayloadDtoFunction() {
         return abstractConstantEntity -> ConstantEntityPayloadDto.builder()
                 .label(abstractConstantEntity.getLabel())
@@ -167,96 +158,96 @@ public class TransformationEntityConfiguration {
 
 
 
-    private Function<ConstantEntityPayloadDto, Brand> mapConstantEntityPayloadDtoBrandFunction() {
-        return constantEntityPayloadDto -> Brand.builder()
-                .label(constantEntityPayloadDto.getLabel())
-                .value(constantEntityPayloadDto.getValue())
-                .build();
-    }
-
-    private Function<ConstantEntityPayloadDto, CountType> mapConstantEntityPayloadDtoCountTypeFunction() {
-        return constantEntityPayloadDto -> CountType.builder()
-                .label(constantEntityPayloadDto.getLabel())
-                .value(constantEntityPayloadDto.getValue())
-                .build();
-    }
-
-    private Function<ConstantEntityPayloadDto, CountryPhoneCode> mapConstantEntityPayloadDtoCountryPhoneCodeFunction() {
-        return constantEntityPayloadDto -> CountryPhoneCode.builder()
-                .label(constantEntityPayloadDto.getLabel())
-                .value(constantEntityPayloadDto.getValue())
-                .build();
-    }
-
-    private Function<ConstantEntityPayloadDto, Country> mapConstantEntityPayloadDtoCountryFunction() {
-        return constantEntityPayloadDto -> Country.builder()
-                .label(constantEntityPayloadDto.getLabel())
-                .value(constantEntityPayloadDto.getValue())
-                .build();
-    }
-
-    private Function<ConstantEntityPayloadDto, Currency> mapConstantEntityPayloadDtoCurrencyFunction() {
-        return constantEntityPayloadDto -> Currency.builder()
-                .label(constantEntityPayloadDto.getLabel())
-                .value(constantEntityPayloadDto.getValue())
-                .build();
-    }
-
-    private Function<ConstantEntityPayloadDto, DeliveryType> mapOneFieldEntityDtoDeliveryTypeFunction() {
-        return constantEntityPayloadDto -> DeliveryType.builder()
-                .label(constantEntityPayloadDto.getLabel())
-                .value(constantEntityPayloadDto.getValue())
-                .build();
-    }
-
-    private Function<ConstantEntityPayloadDto, ItemStatus> mapOneFieldEntityDtoItemStatusFunction() {
-        return constantEntityPayloadDto -> ItemStatus.builder()
-                .label(constantEntityPayloadDto.getLabel())
-                .value(constantEntityPayloadDto.getValue())
-                .build();
-    }
-
-    private Function<ConstantEntityPayloadDto, ItemType> mapOneFieldEntityDtoItemTypeFunction() {
-        return constantEntityPayloadDto -> ItemType.builder()
-                .label(constantEntityPayloadDto.getLabel())
-                .value(constantEntityPayloadDto.getValue())
-                .build();
-    }
-
-    private Function<ConstantEntityPayloadDto, MessageStatus> mapOneFieldEntityDtoMessageStatusFunction() {
-        return constantEntityPayloadDto -> MessageStatus.builder()
-                .label(constantEntityPayloadDto.getLabel())
-                .value(constantEntityPayloadDto.getValue())
-                .build();
-    }
-
-    private Function<ConstantEntityPayloadDto, MessageType> mapOneFieldEntityDtoMessageTypeFunction() {
-        return constantEntityPayloadDto -> MessageType.builder()
-                .label(constantEntityPayloadDto.getLabel())
-                .value(constantEntityPayloadDto.getValue())
-                .build();
-    }
-
-    private Function<ConstantEntityPayloadDto, OptionGroup> mapOneFieldEntityDtoOptionGroupFunction() {
-        return constantEntityPayloadDto -> OptionGroup.builder()
-                .label(constantEntityPayloadDto.getLabel())
-                .value(constantEntityPayloadDto.getValue())
-                .build();
-    }
-
-    private Function<ConstantEntityPayloadDto, OrderStatus> mapOneFieldEntityDtoOrderStatusFunction() {
-        return constantEntityPayloadDto -> OrderStatus.builder()
-                .label(constantEntityPayloadDto.getLabel())
-                .value(constantEntityPayloadDto.getValue())
-                .build();
-    }
-
-    private Function<ConstantEntityPayloadDto, PaymentMethod> mapOneFieldEntityDtoPaymentMethodFunction() {
-        return constantEntityPayloadDto -> PaymentMethod.builder()
-                .label(constantEntityPayloadDto.getLabel())
-                .value(constantEntityPayloadDto.getValue())
-                .build();
-    }
+//    private Function<ConstantEntityPayloadDto, Brand> mapConstantEntityPayloadDtoBrandFunction() {
+//        return constantEntityPayloadDto -> Brand.builder()
+//                .label(constantEntityPayloadDto.getLabel())
+//                .value(constantEntityPayloadDto.getValue())
+//                .build();
+//    }
+//
+//    private Function<ConstantEntityPayloadDto, CountType> mapConstantEntityPayloadDtoCountTypeFunction() {
+//        return constantEntityPayloadDto -> CountType.builder()
+//                .label(constantEntityPayloadDto.getLabel())
+//                .value(constantEntityPayloadDto.getValue())
+//                .build();
+//    }
+//
+//    private Function<ConstantEntityPayloadDto, CountryPhoneCode> mapConstantEntityPayloadDtoCountryPhoneCodeFunction() {
+//        return constantEntityPayloadDto -> CountryPhoneCode.builder()
+//                .label(constantEntityPayloadDto.getLabel())
+//                .value(constantEntityPayloadDto.getValue())
+//                .build();
+//    }
+//
+//    private Function<ConstantEntityPayloadDto, Country> mapConstantEntityPayloadDtoCountryFunction() {
+//        return constantEntityPayloadDto -> Country.builder()
+//                .label(constantEntityPayloadDto.getLabel())
+//                .value(constantEntityPayloadDto.getValue())
+//                .build();
+//    }
+//
+//    private Function<ConstantEntityPayloadDto, Currency> mapConstantEntityPayloadDtoCurrencyFunction() {
+//        return constantEntityPayloadDto -> Currency.builder()
+//                .label(constantEntityPayloadDto.getLabel())
+//                .value(constantEntityPayloadDto.getValue())
+//                .build();
+//    }
+//
+//    private Function<ConstantEntityPayloadDto, DeliveryType> mapOneFieldEntityDtoDeliveryTypeFunction() {
+//        return constantEntityPayloadDto -> DeliveryType.builder()
+//                .label(constantEntityPayloadDto.getLabel())
+//                .value(constantEntityPayloadDto.getValue())
+//                .build();
+//    }
+//
+//    private Function<ConstantEntityPayloadDto, ItemStatus> mapOneFieldEntityDtoItemStatusFunction() {
+//        return constantEntityPayloadDto -> ItemStatus.builder()
+//                .label(constantEntityPayloadDto.getLabel())
+//                .value(constantEntityPayloadDto.getValue())
+//                .build();
+//    }
+//
+//    private Function<ConstantEntityPayloadDto, ItemType> mapOneFieldEntityDtoItemTypeFunction() {
+//        return constantEntityPayloadDto -> ItemType.builder()
+//                .label(constantEntityPayloadDto.getLabel())
+//                .value(constantEntityPayloadDto.getValue())
+//                .build();
+//    }
+//
+//    private Function<ConstantEntityPayloadDto, MessageStatus> mapOneFieldEntityDtoMessageStatusFunction() {
+//        return constantEntityPayloadDto -> MessageStatus.builder()
+//                .label(constantEntityPayloadDto.getLabel())
+//                .value(constantEntityPayloadDto.getValue())
+//                .build();
+//    }
+//
+//    private Function<ConstantEntityPayloadDto, MessageType> mapOneFieldEntityDtoMessageTypeFunction() {
+//        return constantEntityPayloadDto -> MessageType.builder()
+//                .label(constantEntityPayloadDto.getLabel())
+//                .value(constantEntityPayloadDto.getValue())
+//                .build();
+//    }
+//
+//    private Function<ConstantEntityPayloadDto, OptionGroup> mapOneFieldEntityDtoOptionGroupFunction() {
+//        return constantEntityPayloadDto -> OptionGroup.builder()
+//                .label(constantEntityPayloadDto.getLabel())
+//                .value(constantEntityPayloadDto.getValue())
+//                .build();
+//    }
+//
+//    private Function<ConstantEntityPayloadDto, OrderStatus> mapOneFieldEntityDtoOrderStatusFunction() {
+//        return constantEntityPayloadDto -> OrderStatus.builder()
+//                .label(constantEntityPayloadDto.getLabel())
+//                .value(constantEntityPayloadDto.getValue())
+//                .build();
+//    }
+//
+//    private Function<ConstantEntityPayloadDto, PaymentMethod> mapOneFieldEntityDtoPaymentMethodFunction() {
+//        return constantEntityPayloadDto -> PaymentMethod.builder()
+//                .label(constantEntityPayloadDto.getLabel())
+//                .value(constantEntityPayloadDto.getValue())
+//                .build();
+//    }
 
     private Function<ConstantNumberEntityPayloadDto, Rating> mapOneIntegerFieldEntityDtoRatingFunction() {
         return constantIntegerEntityPayloadDto -> Rating.builder()

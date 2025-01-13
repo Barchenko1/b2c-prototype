@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1")
 public class OrderController {
-    private IOrderItemDataService orderItemDataService;
+    private final IOrderItemDataService orderItemDataService;
 
     public OrderController(IOrderItemDataService orderItemDataService) {
         this.orderItemDataService = orderItemDataService;

@@ -2,17 +2,17 @@ comment:
   - id: 1
     title: "parent"
     message: "parent"
-    uniqueCommentId: "1"
+    unique_comment_id: "1"
     dateOfCreate: 100000
   - id: 2
     comment_id: 1
     title: "root"
     message: "root"
-    uniqueCommentId: "2"
+    unique_comment_id: "2"
     dateOfCreate: 100000
   - id: 3
     comment_id: 2
     title: "child"
     message: "child"
-    uniqueCommentId: "3"
+    unique_comment_id: "3"
     dateOfCreate: 100000

@@ -11,12 +11,12 @@ import java.util.Optional;
 
 public interface IDiscountService {
     void saveDiscount(DiscountDto discountDto);
-    void updateItemDataDiscount(DiscountSearchFieldEntityDto discountSearchFieldEntityDto);
-    void updateDiscount(DiscountSearchFieldEntityDto discountSearchFieldEntityDto);
+    void updateItemDataDiscount(String articularId, DiscountDto discountDto);
+    void updateDiscount(String charSequenceCode, DiscountDto discountDto);
     void changeDiscountStatus(DiscountStatusDto discountStatusDto);
     void deleteDiscount(OneFieldEntityDto oneFieldEntityDto);
 
-    ResponseDiscountDto getDiscount(OneFieldEntityDto oneFieldEntityDto);
-    Optional<ResponseDiscountDto> getOptionalDiscount(OneFieldEntityDto oneFieldEntityDto);
+    ResponseDiscountDto getDiscount(String charSequenceCode);
+    Optional<ResponseDiscountDto> getOptionalDiscount(String charSequenceCode);
     List<DiscountDto> getDiscounts();
 }

@@ -1,7 +1,6 @@
 package com.b2c.prototype.service.processor.rating.base;
 
 import com.b2c.prototype.modal.dto.common.ConstantNumberEntityPayloadDto;
-import com.b2c.prototype.modal.dto.common.ConstantNumberSearchEntityPayloadDtoUpdate;
 import com.b2c.prototype.modal.entity.item.Rating;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.processor.AbstractConstantEntityServiceTest;
@@ -46,11 +45,6 @@ class RatingServiceTest extends AbstractConstantEntityServiceTest<Rating> {
     @Test
     public void testUpdateEntity() {
         ConstantNumberEntityPayloadDto newDto = new ConstantNumberEntityPayloadDto(2);
-        ConstantNumberSearchEntityPayloadDtoUpdate dtoUpdate = ConstantNumberSearchEntityPayloadDtoUpdate.builder()
-                .searchField(1)
-                .newEntity(newDto)
-                .build();
-
         Rating testValue = Rating.builder()
                 .value(2)
                 .build();
@@ -58,28 +52,25 @@ class RatingServiceTest extends AbstractConstantEntityServiceTest<Rating> {
         when(transformationFunctionService.getEntity(Rating.class, newDto))
                 .thenReturn(testValue);
 
-        ratingService.updateEntity(dtoUpdate);
+        ratingService.updateEntity(1, newDto);
 
-        Integer searchParameter = dtoUpdate.getSearchField();
-        Parameter parameter = parameterFactory.createIntegerParameter(VALUE, searchParameter);
+        Parameter parameter = parameterFactory.createIntegerParameter(VALUE, 1);
         verify(dao).findEntityAndUpdate(testValue, parameter);
         verify(singleValueMap).putRemoveEntity(
                 testValue.getClass(),
-                searchParameter,
-                dtoUpdate.getNewEntity().getValue(),
+                1,
+                newDto.getValue(),
                 testValue
         );
     }
 
     @Test
     public void testDeleteEntity() {
-        ConstantNumberEntityPayloadDto dto = new ConstantNumberEntityPayloadDto(1);
+        ratingService.deleteEntity(1);
 
-        ratingService.deleteEntity(dto);
-
-        Parameter parameter = parameterFactory.createNumberParameter(VALUE, dto.getValue());
+        Parameter parameter = parameterFactory.createNumberParameter(VALUE, 1);
         verify(dao).findEntityAndDelete(parameter);
-        verify(singleValueMap).removeEntity(any(), eq(dto.getValue()));
+        verify(singleValueMap).removeEntity(any(), eq(1));
     }
 
     @Test
@@ -88,12 +79,12 @@ class RatingServiceTest extends AbstractConstantEntityServiceTest<Rating> {
         Parameter parameter = parameterFactory.createNumberParameter(VALUE, constantNumberEntityPayloadDto.getValue());
         Rating testValue = createTestValue();
 
-        when(parameterFactory.createNumberParameter(VALUE, constantNumberEntityPayloadDto.getValue())).thenReturn(parameter);
+        when(parameterFactory.createNumberParameter(VALUE, 1)).thenReturn(parameter);
         when(dao.getEntity(parameter)).thenReturn(testValue);
         when(transformationFunctionService.getEntity(ConstantNumberEntityPayloadDto.class, testValue))
                 .thenReturn(constantNumberEntityPayloadDto);
 
-        ConstantNumberEntityPayloadDto result = ratingService.getEntity(constantNumberEntityPayloadDto);
+        ConstantNumberEntityPayloadDto result = ratingService.getEntity(1);
 
         assertEquals(constantNumberEntityPayloadDto, result);
     }
@@ -104,12 +95,12 @@ class RatingServiceTest extends AbstractConstantEntityServiceTest<Rating> {
         Parameter parameter = parameterFactory.createNumberParameter(VALUE, constantNumberEntityPayloadDto.getValue());
         Rating testValue = createTestValue();
 
-        when(parameterFactory.createNumberParameter(VALUE, constantNumberEntityPayloadDto.getValue())).thenReturn(parameter);
+        when(parameterFactory.createNumberParameter(VALUE, 1)).thenReturn(parameter);
         when(dao.getEntity(parameter)).thenReturn(testValue);
         when(transformationFunctionService.getEntity(ConstantNumberEntityPayloadDto.class, testValue))
                 .thenReturn(constantNumberEntityPayloadDto);
 
-        Optional<ConstantNumberEntityPayloadDto> result = ratingService.getEntityOptional(constantNumberEntityPayloadDto);
+        Optional<ConstantNumberEntityPayloadDto> result = ratingService.getEntityOptional(1);
 
         assertTrue(result.isPresent());
         assertEquals(constantNumberEntityPayloadDto, result.get());

@@ -131,34 +131,34 @@ class ItemDataOptionServiceTest {
 
     @Test
     void deleteItemDataOption_ShouldDeleteEntityByParameter() {
-        OneFieldEntityDto dto = new OneFieldEntityDto("testValue");
+        String articularId = "testValue";
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(ARTICULAR_ID, dto.getValue()))
+        when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
                 .thenReturn(parameterSupplier);
 
-        itemDataOptionService.deleteItemDataOption(dto);
+        itemDataOptionService.deleteItemDataOption(articularId);
 
         verify(itemDataOptionDao).findEntityAndDelete(parameter);
     }
 
     @Test
     void getResponseItemDataOptionDto_ShouldReturnDto() {
-        OneFieldEntityDto dto = new OneFieldEntityDto("testValue");
+        String value = "testValue";
         ItemDataOption itemDataOption = getItemDataOption();
         ResponseItemDataOptionDto responseDto = responseItemDataOptionDto();
 
         Function<ItemDataOption, ResponseItemDataOptionDto> function = mock(Function.class);
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(ARTICULAR_ID, dto.getValue()))
+        when(supplierService.parameterStringSupplier(ARTICULAR_ID, value))
                 .thenReturn(parameterSupplier);
         when(itemDataOptionDao.getEntity(parameter)).thenReturn(itemDataOption);
         when(transformationFunctionService.getTransformationFunction(ItemDataOption.class, ResponseItemDataOptionDto.class))
                 .thenReturn(function);
         when(function.apply(itemDataOption)).thenReturn(responseDto);
 
-        ResponseItemDataOptionDto result = itemDataOptionService.getResponseItemDataOptionDto(dto);
+        ResponseItemDataOptionDto result = itemDataOptionService.getResponseItemDataOptionDto(value);
 
         assertEquals(responseDto, result);
     }

@@ -1,23 +1,14 @@
 package com.b2c.prototype.dao.item.base;
 
-import com.b2c.prototype.dao.AbstractSingleEntityDaoTest;
+import com.b2c.prototype.dao.AbstractSimpleEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
-import com.b2c.prototype.modal.entity.item.Brand;
-import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.Discount;
-import com.b2c.prototype.modal.entity.item.Item;
-import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.modal.entity.item.ItemDataOption;
 import com.b2c.prototype.modal.entity.item.ItemDataOptionQuantity;
-import com.b2c.prototype.modal.entity.item.ItemStatus;
-import com.b2c.prototype.modal.entity.item.ItemType;
-import com.b2c.prototype.modal.entity.item.Rating;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
-import com.b2c.prototype.modal.entity.post.Post;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
-import com.b2c.prototype.modal.entity.review.Review;
 import com.tm.core.dao.identifier.EntityIdentifierDao;
 import com.tm.core.processor.finder.manager.EntityMappingManager;
 import com.tm.core.processor.finder.manager.IEntityMappingManager;
@@ -27,9 +18,8 @@ import org.junit.jupiter.api.BeforeEach;
 
 import java.sql.Connection;
 import java.sql.Statement;
-import java.util.List;
 
-class BasicItemDataOptionQuantityDaoTest extends AbstractSingleEntityDaoTest {
+class BasicItemDataOptionQuantityDaoTest extends AbstractSimpleEntityDaoTest {
 
     @BeforeAll
     public static void setup() {
