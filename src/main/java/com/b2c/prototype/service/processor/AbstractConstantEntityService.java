@@ -1,52 +1,55 @@
 package com.b2c.prototype.service.processor;
 
 import com.b2c.prototype.dao.cashed.ISingleValueMap;
-import com.b2c.prototype.modal.dto.payload.ConstantEntityPayloadDto;
-import com.b2c.prototype.service.function.ITransformationFunctionService;
+import com.b2c.prototype.modal.base.IConstant;
 import com.tm.core.dao.common.IEntityDao;
 import com.tm.core.processor.finder.factory.IParameterFactory;
 import com.tm.core.processor.finder.parameter.Parameter;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 import static com.b2c.prototype.util.Constant.VALUE;
 
-public abstract class AbstractConstantEntityService<E> implements IConstantEntityService {
+public abstract class AbstractConstantEntityService<T, E extends IConstant> implements IConstantEntityService<T> {
 
     private final IParameterFactory parameterFactory;
     private final IEntityDao dao;
-    protected final ITransformationFunctionService transformationFunctionService;
     private final ISingleValueMap singleValueMap;
+    private final Function<T, E> mapDtoToEntityFunction;
+    private final Function<E, T> mapEntityToDtoFunction;
+
+//    protected abstract Object extractValue(T payload);
 
     public AbstractConstantEntityService(IParameterFactory parameterFactory,
                                          IEntityDao dao,
-                                         ITransformationFunctionService transformationFunctionService,
-                                         ISingleValueMap singleValueMap) {
+                                         ISingleValueMap singleValueMap,
+                                         Function<T, E> mapDtoToEntityFunction,
+                                         Function<E, T> mapEntityToDtoFunction) {
         this.parameterFactory = parameterFactory;
         this.dao = dao;
-        this.transformationFunctionService = transformationFunctionService;
         this.singleValueMap = singleValueMap;
+        this.mapDtoToEntityFunction = mapDtoToEntityFunction;
+        this.mapEntityToDtoFunction = mapEntityToDtoFunction;
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public void saveEntity(ConstantEntityPayloadDto constantEntityPayloadDto) {
-        E entity = (E) transformationFunctionService.getEntity(dao.getEntityClass(), constantEntityPayloadDto);
+    public void saveEntity(T payload) {
+        E entity = mapDtoToEntityFunction.apply(payload);
         dao.persistEntity(entity);
-        singleValueMap.putEntity(dao.getEntityClass(), VALUE, entity);
+        singleValueMap.putEntity(entity.getClass(), VALUE, entity);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public void updateEntity(String searchValue, ConstantEntityPayloadDto constantEntityPayloadDto) {
-        E entity = (E) transformationFunctionService.getEntity(dao.getEntityClass(), constantEntityPayloadDto);
+    public void updateEntity(String searchValue, T payload) {
+        E entity = mapDtoToEntityFunction.apply(payload);
         Parameter parameter = parameterFactory.createStringParameter(VALUE, searchValue);
         dao.findEntityAndUpdate(entity, parameter);
         singleValueMap.putRemoveEntity(
                 entity.getClass(),
                 searchValue,
-                constantEntityPayloadDto.getValue(),
+                entity.getValue(),
                 entity);
     }
 
@@ -58,26 +61,25 @@ public abstract class AbstractConstantEntityService<E> implements IConstantEntit
     }
 
     @Override
-    public ConstantEntityPayloadDto getEntity(String value) {
+    public T getEntity(String value) {
         Parameter parameter = parameterFactory.createStringParameter(VALUE, value);
         E entity = dao.getEntity(parameter);
-        return transformationFunctionService.getEntity(ConstantEntityPayloadDto.class, entity);
+        return mapEntityToDtoFunction.apply(entity);
     }
 
     @Override
-    public Optional<ConstantEntityPayloadDto> getEntityOptional(String value) {
+    public Optional<T> getEntityOptional(String value) {
         Parameter parameter = parameterFactory.createStringParameter(VALUE, value);
         E entity = dao.getEntity(parameter);
-        return Optional.of(transformationFunctionService.getEntity(ConstantEntityPayloadDto.class, entity));
+        return Optional.of(mapEntityToDtoFunction.apply(entity));
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<ConstantEntityPayloadDto> getEntities() {
+    public List<T> getEntities() {
         return dao.getEntityList().stream()
                 .map(e -> (E) e)
-                .map(entity ->
-                        transformationFunctionService.getEntity(ConstantEntityPayloadDto.class, entity))
+                .map(mapEntityToDtoFunction)
                 .toList();
     }
 }

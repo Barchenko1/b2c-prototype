@@ -16,7 +16,7 @@ class BasicPostDaoTest extends AbstractTransitiveSelfEntityDaoTest {
     static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(Post.class, "post"));
-        entityIdentifierDao = new EntityIdentifierDao(sessionManager, entityMappingManager);
+        entityIdentifierDao = new EntityIdentifierDao(entityMappingManager);
         dao = new BasicPostDao(sessionFactory, entityIdentifierDao);
     }
 

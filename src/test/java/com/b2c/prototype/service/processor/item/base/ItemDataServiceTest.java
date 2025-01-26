@@ -29,6 +29,7 @@ import java.util.function.Supplier;
 
 import static com.b2c.prototype.util.Constant.ITEM_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.eq;
@@ -132,7 +133,7 @@ class ItemDataServiceTest {
                 .thenReturn(parameterSupplier);
         when(transformationFunctionService.getTransformationFunction(ItemData.class, ResponseItemDataDto.class))
                 .thenReturn(function);
-        when(itemDataDao.getEntity(parameter)).thenReturn(itemData);
+        when(itemDataDao.getEntityGraph(anyString(), eq(parameter))).thenReturn(itemData);
         when(function.apply(itemData)).thenReturn(responseDto);
         ResponseItemDataDto result = itemDataService.getItemData(oneFieldEntityDto);
 

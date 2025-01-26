@@ -21,11 +21,10 @@ import com.tm.core.processor.finder.manager.EntityMappingManager;
 import com.tm.core.processor.finder.manager.IEntityMappingManager;
 import com.tm.core.processor.finder.parameter.Parameter;
 import com.tm.core.processor.finder.table.EntityTable;
-import com.tm.core.processor.thread.IThreadLocalSessionManager;
-import com.tm.core.processor.thread.ThreadLocalSessionManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.NativeQuery;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,16 +41,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
 
     @BeforeAll
     public static void setup() {
-        IThreadLocalSessionManager sessionManager = new ThreadLocalSessionManager(sessionFactory);
-        entityIdentifierDao = new EntityIdentifierDao(sessionManager, getEntityMappingManager());
+        entityIdentifierDao = new EntityIdentifierDao(getEntityMappingManager());
         dao = new BasicItemDao(sessionFactory, entityIdentifierDao);
     }
 
@@ -526,27 +528,33 @@ class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
 
         Parameter parameter = new Parameter("id", 1L);
 
-        IThreadLocalSessionManager sessionManager = mock(IThreadLocalSessionManager.class);
+        SessionFactory sessionFactory = mock(SessionFactory.class);
         Session session = mock(Session.class);
         Transaction transaction = mock(Transaction.class);
+        NativeQuery<Item> nativeQuery = mock(NativeQuery.class);
 
         try {
-            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionManager");
+            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
-            sessionManagerField.set(dao, sessionManager);
+            sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        when(sessionManager.getSession()).thenReturn(session);
+        when(sessionFactory.openSession()).thenReturn(session);
         when(session.beginTransaction()).thenReturn(transaction);
-        doThrow(new RuntimeException()).when(transaction).commit();
+        when(session.createNativeQuery(anyString(), eq(Item.class))).thenReturn(nativeQuery);
+        when(nativeQuery.getSingleResult()).thenReturn(item);
+        doThrow(new RuntimeException()).when(session).remove(item);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             dao.findEntityAndDelete(parameter);
         });
 
         assertEquals(RuntimeException.class, exception.getClass());
+        verify(transaction).rollback();
+        verify(transaction, never()).commit();
+        verify(session).close();
     }
 
     @Test

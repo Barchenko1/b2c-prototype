@@ -1,0 +1,7 @@
+option_group:
+  - id: 1
+    value: "Color"
+    label: "Color"
+  - id: 2
+    value: "Size"
+    label: "Size"

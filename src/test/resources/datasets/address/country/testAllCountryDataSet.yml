@@ -1,0 +1,9 @@
+country:
+  - id: 1
+    label: "USA"
+    value: "USA"
+    flagImagePath: "/images/usa.jpg"
+  - id: 2
+    label: "CANADA"
+    value: "CANADA"
+    flagImagePath: "/images/canada.jpg"

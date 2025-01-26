@@ -1,17 +1,17 @@
 package com.b2c.prototype.service.processor.message;
 
-import com.b2c.prototype.modal.dto.payload.ConstantEntityPayloadDto;
+import com.b2c.prototype.modal.dto.payload.ConstantPayloadDto;
 import com.b2c.prototype.modal.entity.message.MessageType;
-import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.processor.AbstractConstantEntityServiceTest;
 import com.b2c.prototype.service.processor.message.base.MessageTypeService;
 import com.tm.core.processor.finder.parameter.Parameter;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 import static com.b2c.prototype.util.Constant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,22 +19,36 @@ import static org.mockito.Mockito.when;
 
 class MessageTypeServiceTest extends AbstractConstantEntityServiceTest<MessageType> {
     @Mock
-    private ITransformationFunctionService transformationFunctionService;
-    @InjectMocks
+    private Function<MessageType, ConstantPayloadDto> mapEntityToDtoFunction;
+    @Mock
+    private Function<ConstantPayloadDto, MessageType> mapDtoToEntityFunction;
     private MessageTypeService messageTypeService;
-    
 
+    @BeforeEach
+    void setUp() {
+        when(transformationFunctionService.getTransformationFunction(ConstantPayloadDto.class, MessageType.class))
+                .thenReturn(mapDtoToEntityFunction);
+        when(transformationFunctionService.getTransformationFunction(MessageType.class, ConstantPayloadDto.class))
+                .thenReturn(mapEntityToDtoFunction);
+
+        messageTypeService = new MessageTypeService(
+                parameterFactory,
+                dao,
+                transformationFunctionService,
+                singleValueMap
+        );
+    }
 
     @Test
     public void testSaveEntity() {
-        ConstantEntityPayloadDto dto = ConstantEntityPayloadDto.builder()
+        ConstantPayloadDto dto = ConstantPayloadDto.builder()
                 .label("testLabel")
                 .value("testValue")
                 .build();
         MessageType testValue = createTestValue();
+
+        when(mapDtoToEntityFunction.apply(dto)).thenReturn(testValue);
         when(dao.getEntityClass()).thenAnswer(invocation -> MessageType.class);
-        when(transformationFunctionService.getEntity(MessageType.class, dto))
-                .thenReturn(testValue);
 
         messageTypeService.saveEntity(dto);
 
@@ -43,7 +57,7 @@ class MessageTypeServiceTest extends AbstractConstantEntityServiceTest<MessageTy
 
     @Test
     public void testUpdateEntity() {
-        ConstantEntityPayloadDto newDto = ConstantEntityPayloadDto.builder()
+        ConstantPayloadDto newDto = ConstantPayloadDto.builder()
                 .label("newLabel")
                 .value("newValue")
                 .build();
@@ -51,13 +65,13 @@ class MessageTypeServiceTest extends AbstractConstantEntityServiceTest<MessageTy
         MessageType testValue = MessageType.builder()
                 .value("newValue")
                 .build();
+
+        when(mapDtoToEntityFunction.apply(newDto)).thenReturn(testValue);
         when(dao.getEntityClass()).thenAnswer(invocation -> MessageType.class);
-        when(transformationFunctionService.getEntity(MessageType.class, newDto))
-                .thenReturn(testValue);
 
         messageTypeService.updateEntity("testValue", newDto);
 
-        verifyUpdateEntity(testValue, newDto);
+        verifyUpdateEntity(testValue, newDto.getValue());
     }
 
     @Test
@@ -74,16 +88,15 @@ class MessageTypeServiceTest extends AbstractConstantEntityServiceTest<MessageTy
         
         Parameter parameter = parameterFactory.createStringParameter(VALUE, "testValue");
         MessageType testValue = createTestValue();
-        ConstantEntityPayloadDto constantEntityPayloadDto = getResponseOneFieldEntityDto();
+        ConstantPayloadDto constantPayloadDto = getResponseOneFieldEntityDto();
 
+        when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
         when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
         when(dao.getEntity(parameter)).thenReturn(testValue);
-        when(transformationFunctionService.getEntity(ConstantEntityPayloadDto.class, testValue))
-                .thenReturn(constantEntityPayloadDto);
 
-        ConstantEntityPayloadDto result = messageTypeService.getEntity("testValue");
+        ConstantPayloadDto result = messageTypeService.getEntity("testValue");
 
-        assertEquals(constantEntityPayloadDto, result);
+        assertEquals(constantPayloadDto, result);
     }
 
     @Test
@@ -91,31 +104,29 @@ class MessageTypeServiceTest extends AbstractConstantEntityServiceTest<MessageTy
         
         Parameter parameter = parameterFactory.createStringParameter(VALUE, "testValue");
         MessageType testValue = createTestValue();
-        ConstantEntityPayloadDto constantEntityPayloadDto = getResponseOneFieldEntityDto();
+        ConstantPayloadDto constantPayloadDto = getResponseOneFieldEntityDto();
 
+        when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
         when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
         when(dao.getEntity(parameter)).thenReturn(testValue);
-        when(transformationFunctionService.getEntity(ConstantEntityPayloadDto.class, testValue))
-                .thenReturn(constantEntityPayloadDto);
 
-        Optional<ConstantEntityPayloadDto> result = messageTypeService.getEntityOptional("testValue");
+        Optional<ConstantPayloadDto> result = messageTypeService.getEntityOptional("testValue");
 
-        assertEquals(Optional.of(constantEntityPayloadDto), result);
+        assertEquals(Optional.of(constantPayloadDto), result);
     }
 
     @Test
     public void testGetEntities() {
         MessageType testValue = createTestValue();
-        ConstantEntityPayloadDto constantEntityPayloadDto = getResponseOneFieldEntityDto();
+        ConstantPayloadDto constantPayloadDto = getResponseOneFieldEntityDto();
 
+        when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
         when(dao.getEntityList()).thenReturn(List.of(testValue));
-        when(transformationFunctionService.getEntity(ConstantEntityPayloadDto.class, testValue))
-                .thenReturn(constantEntityPayloadDto);
 
-        List<ConstantEntityPayloadDto> list = messageTypeService.getEntities();
+        List<ConstantPayloadDto> list = messageTypeService.getEntities();
 
         assertEquals(1, list.size());
-        assertEquals(constantEntityPayloadDto, list.get(0));
+        assertEquals(constantPayloadDto, list.get(0));
     }
 
     private MessageType createTestValue() {

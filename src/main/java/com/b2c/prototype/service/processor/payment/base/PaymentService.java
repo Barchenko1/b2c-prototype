@@ -84,14 +84,14 @@ public class PaymentService implements IPaymentService {
 
     @Override
     public PaymentDto getPaymentByPaymentId(OneFieldEntityDto oneFieldEntityDto) {
-        return entityOperationDao.getEntityDto(
+        return entityOperationDao.getEntityDto("",
                 supplierService.parameterStringSupplier(PAYMENT_ID, oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(Payment.class, PaymentDto.class));
     }
 
     @Override
     public List<PaymentDto> getAllPayments() {
-        return entityOperationDao.getEntityDtoList(
+        return entityOperationDao.getEntityDtoList("",
                 transformationFunctionService.getTransformationFunction(Payment.class, PaymentDto.class));
     }
 }

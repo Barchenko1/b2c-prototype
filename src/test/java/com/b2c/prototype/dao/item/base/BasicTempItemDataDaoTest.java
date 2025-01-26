@@ -1,6 +1,6 @@
 package com.b2c.prototype.dao.item.base;
 
-import com.b2c.prototype.dao.AbstractSingleEntityCacheDaoTest;
+import com.b2c.prototype.dao.AbstractTempEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
 import com.b2c.prototype.modal.embedded.item.TempItemData;
 import com.tm.core.dao.identifier.EntityIdentifierDao;
@@ -9,13 +9,13 @@ import com.tm.core.processor.finder.manager.IEntityMappingManager;
 import com.tm.core.processor.finder.table.EntityTable;
 import org.junit.jupiter.api.BeforeAll;
 
-class BasicTempItemDataDaoTest extends AbstractSingleEntityCacheDaoTest {
+class BasicTempItemDataDaoTest extends AbstractTempEntityDaoTest {
 
     @BeforeAll
     static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(TempItemData.class, "temp_item_data"));
-        entityIdentifierDao = new EntityIdentifierDao(sessionManager, entityMappingManager);
+        entityIdentifierDao = new EntityIdentifierDao(entityMappingManager);
         dao = new BasicTempItemDataDao(sessionFactory, entityIdentifierDao);
     }
 

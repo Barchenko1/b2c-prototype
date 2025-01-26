@@ -16,7 +16,7 @@ class BasicCommentDaoTest extends AbstractTransitiveSelfEntityDaoTest {
     public static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(Comment.class, "comment"));
-        entityIdentifierDao = new EntityIdentifierDao(sessionManager, entityMappingManager);
+        entityIdentifierDao = new EntityIdentifierDao(entityMappingManager);
         dao = new BasicCommentDao(sessionFactory, entityIdentifierDao);
     }
 

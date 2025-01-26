@@ -42,6 +42,8 @@ import java.util.function.Supplier;
 import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 import static com.b2c.prototype.util.Constant.ITEM_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -153,7 +155,7 @@ class ItemDataOptionServiceTest {
         Supplier<Parameter> parameterSupplier = () -> parameter;
         when(supplierService.parameterStringSupplier(ARTICULAR_ID, value))
                 .thenReturn(parameterSupplier);
-        when(itemDataOptionDao.getEntity(parameter)).thenReturn(itemDataOption);
+        when(itemDataOptionDao.getEntityGraph(anyString(), eq(parameter))).thenReturn(itemDataOption);
         when(transformationFunctionService.getTransformationFunction(ItemDataOption.class, ResponseItemDataOptionDto.class))
                 .thenReturn(function);
         when(function.apply(itemDataOption)).thenReturn(responseDto);

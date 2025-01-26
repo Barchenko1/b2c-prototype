@@ -1,6 +1,6 @@
 package com.b2c.prototype.dao.item.base;
 
-import com.b2c.prototype.dao.AbstractSimpleEntityDaoTest;
+import com.b2c.prototype.dao.AbstractConstantEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.item.ItemDataOption;
@@ -19,13 +19,13 @@ import org.junit.jupiter.api.BeforeEach;
 import java.sql.Connection;
 import java.sql.Statement;
 
-class BasicItemDataOptionQuantityDaoTest extends AbstractSimpleEntityDaoTest {
+class BasicItemDataOptionQuantityDaoTest extends AbstractConstantEntityDaoTest {
 
     @BeforeAll
     public static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(ItemDataOptionQuantity.class, "item_data_option_quantity"));
-        entityIdentifierDao = new EntityIdentifierDao(sessionManager, entityMappingManager);
+        entityIdentifierDao = new EntityIdentifierDao(entityMappingManager);
         dao = new BasicItemDataOptionQuantityDao(sessionFactory, entityIdentifierDao);
     }
 

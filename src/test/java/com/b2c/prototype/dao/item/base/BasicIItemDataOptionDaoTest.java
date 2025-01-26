@@ -13,10 +13,10 @@ import com.tm.core.processor.finder.manager.EntityMappingManager;
 import com.tm.core.processor.finder.manager.IEntityMappingManager;
 import com.tm.core.processor.finder.parameter.Parameter;
 import com.tm.core.processor.finder.table.EntityTable;
-import com.tm.core.processor.thread.IThreadLocalSessionManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.NativeQuery;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,8 +33,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class BasicIItemDataOptionDaoTest extends AbstractCustomEntityDaoTest {
@@ -43,7 +47,7 @@ class BasicIItemDataOptionDaoTest extends AbstractCustomEntityDaoTest {
     static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(ItemDataOption.class, "item_data_option"));
-        entityIdentifierDao = new EntityIdentifierDao(sessionManager, entityMappingManager);
+        entityIdentifierDao = new EntityIdentifierDao(entityMappingManager);
         dao = new BasicIItemDataOptionDao(sessionFactory, entityIdentifierDao);
     }
 
@@ -419,30 +423,36 @@ class BasicIItemDataOptionDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void deleteEntity_transactionFailure() {
         loadDataSet("/datasets/item/item_data_option/testItemDataOptionDataSet.yml");
-
+        ItemDataOption itemDataOption = prepareTestItemDataOption();
         Parameter parameter = new Parameter("id", 1L);
 
-        IThreadLocalSessionManager sessionManager = mock(IThreadLocalSessionManager.class);
+        SessionFactory sessionFactory = mock(SessionFactory.class);
         Session session = mock(Session.class);
         Transaction transaction = mock(Transaction.class);
+        NativeQuery<ItemDataOption> nativeQuery = mock(NativeQuery.class);
 
         try {
-            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionManager");
+            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
-            sessionManagerField.set(dao, sessionManager);
+            sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        when(sessionManager.getSession()).thenReturn(session);
+        when(sessionFactory.openSession()).thenReturn(session);
         when(session.beginTransaction()).thenReturn(transaction);
-        doThrow(new RuntimeException()).when(transaction).commit();
+        when(session.createNativeQuery(anyString(), eq(ItemDataOption.class))).thenReturn(nativeQuery);
+        when(nativeQuery.getSingleResult()).thenReturn(itemDataOption);
+        doThrow(new RuntimeException()).when(session).remove(itemDataOption);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             dao.findEntityAndDelete(parameter);
         });
 
         assertEquals(RuntimeException.class, exception.getClass());
+        verify(transaction).rollback();
+        verify(transaction, never()).commit();
+        verify(session).close();
     }
 
     @Test

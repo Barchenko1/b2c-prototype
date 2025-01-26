@@ -60,6 +60,8 @@ import java.util.function.Supplier;
 import static com.b2c.prototype.util.Constant.ORDER_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -156,11 +158,11 @@ class OrderItemDataServiceTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-        when(orderItemDataDao.getEntity(parameter))
+        Function<OrderItemData, ResponseOrderItemDataDto> function = mock(Function.class);
+        when(orderItemDataDao.getEntityGraph(anyString(), eq(parameter)))
                 .thenReturn(entity);
         when(supplierService.parameterStringSupplier(ORDER_ID, dto.getValue()))
                 .thenReturn(parameterSupplier);
-        Function<OrderItemData, ResponseOrderItemDataDto> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(OrderItemData.class, ResponseOrderItemDataDto.class))
                 .thenReturn(function);
         when(function.apply(entity)).thenReturn(responseOrderItemDataDto);

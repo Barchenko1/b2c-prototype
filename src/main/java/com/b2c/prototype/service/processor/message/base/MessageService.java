@@ -90,21 +90,21 @@ public class MessageService implements IMessageService {
 
     @Override
     public List<ResponseMessageOverviewDto> getMessageOverviewBySenderEmail(OneFieldEntityDto oneFieldEntityDto) {
-        return entityOperationDao.getSubEntityDtoList(
+        return entityOperationDao.getSubEntityDtoList("",
                 supplierService.parameterStringSupplier("sender", oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class));
     }
 
     @Override
     public List<ResponseMessageOverviewDto> getMessageOverviewByReceiverEmail(OneFieldEntityDto oneFieldEntityDto) {
-        return entityOperationDao.getSubEntityDtoList(
+        return entityOperationDao.getSubEntityDtoList("",
                 supplierService.parameterStringSupplier("receiver", oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class));
     }
 
     @Override
     public ResponseMessagePayloadDto getMessagePayloadDto(OneFieldEntityDto oneFieldEntityDto) {
-        return entityOperationDao.getEntityDto(
+        return entityOperationDao.getEntityDto("",
                 supplierService.parameterStringSupplier("messageUniqNumber", oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(Message.class, ResponseMessagePayloadDto.class)
         );

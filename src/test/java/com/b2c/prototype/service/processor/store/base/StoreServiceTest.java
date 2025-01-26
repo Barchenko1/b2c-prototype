@@ -150,7 +150,6 @@ class StoreServiceTest {
     void testGetStoreResponse() {
         OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto();
         oneFieldEntityDto.setValue("articular1");
-
         Store store = getStore();
         ResponseStoreDto responseStoreDto = mock(ResponseStoreDto.class);
 
@@ -161,7 +160,7 @@ class StoreServiceTest {
         Function<Store, ResponseStoreDto> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(Store.class, ResponseStoreDto.class))
                 .thenReturn(function);
-        when(storeDao.getEntity(parameter)).thenReturn(store);
+        when(storeDao.getEntityGraph(anyString(), eq(parameter))).thenReturn(store);
         when(function.apply(store)).thenReturn(responseStoreDto);
 
         ResponseStoreDto result = storeService.getStoreResponse(oneFieldEntityDto);

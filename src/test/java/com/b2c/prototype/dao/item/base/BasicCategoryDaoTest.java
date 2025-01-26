@@ -16,7 +16,7 @@ class BasicCategoryDaoTest extends AbstractTransitiveSelfEntityDaoTest {
     static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(Category.class, "category"));
-        entityIdentifierDao = new EntityIdentifierDao(sessionManager, entityMappingManager);
+        entityIdentifierDao = new EntityIdentifierDao(entityMappingManager);
         dao = new BasicCategoryDao(sessionFactory, entityIdentifierDao);
     }
 

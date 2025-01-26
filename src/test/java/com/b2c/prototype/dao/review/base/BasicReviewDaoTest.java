@@ -1,6 +1,6 @@
 package com.b2c.prototype.dao.review.base;
 
-import com.b2c.prototype.dao.AbstractSimpleEntityDaoTest;
+import com.b2c.prototype.dao.AbstractConstantEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
@@ -20,13 +20,13 @@ import org.junit.jupiter.api.BeforeAll;
 
 import java.util.List;
 
-class BasicReviewDaoTest extends AbstractSimpleEntityDaoTest {
+class BasicReviewDaoTest extends AbstractConstantEntityDaoTest {
 
     @BeforeAll
     public static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(Review.class, "review"));
-        entityIdentifierDao = new EntityIdentifierDao(sessionManager, entityMappingManager);
+        entityIdentifierDao = new EntityIdentifierDao(entityMappingManager);
         dao = new BasicReviewDao(sessionFactory, entityIdentifierDao);
     }
 

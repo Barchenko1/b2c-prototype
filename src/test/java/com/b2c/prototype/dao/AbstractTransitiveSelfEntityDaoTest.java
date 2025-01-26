@@ -11,8 +11,6 @@ import com.tm.core.dao.transitive.AbstractTransitiveSelfEntityDao;
 import com.tm.core.dao.transitive.ITransitiveSelfEntityDao;
 import com.tm.core.modal.TransitiveSelfEntity;
 import com.tm.core.processor.finder.parameter.Parameter;
-import com.tm.core.processor.thread.IThreadLocalSessionManager;
-import com.tm.core.processor.thread.ThreadLocalSessionManager;
 import com.tm.core.util.TransitiveSelfEnum;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
@@ -22,6 +20,7 @@ import org.dbunit.operation.DatabaseOperation;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.NativeQuery;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,6 +43,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -54,7 +55,6 @@ import static org.mockito.Mockito.when;
 @DBRider
 public abstract class AbstractTransitiveSelfEntityDaoTest {
 
-    protected static IThreadLocalSessionManager sessionManager;
     protected static SessionFactory sessionFactory;
 
     protected static IEntityIdentifierDao entityIdentifierDao;
@@ -84,7 +84,6 @@ public abstract class AbstractTransitiveSelfEntityDaoTest {
         executor = DataSetExecutorImpl.instance("executor-name", connectionHolder);
 
         sessionFactory = getSessionFactory();
-        sessionManager = new ThreadLocalSessionManager(sessionFactory);
     }
 
     @BeforeEach
@@ -97,10 +96,6 @@ public abstract class AbstractTransitiveSelfEntityDaoTest {
             Field sessionFactoryField = AbstractTransitiveSelfEntityDao.class.getDeclaredField("sessionFactory");
             sessionFactoryField.setAccessible(true);
             sessionFactoryField.set(dao, sessionFactory);
-
-            Field sessionManagerField = AbstractTransitiveSelfEntityDao.class.getDeclaredField("sessionManager");
-            sessionManagerField.setAccessible(true);
-            sessionManagerField.set(dao, sessionManager);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -209,36 +204,33 @@ public abstract class AbstractTransitiveSelfEntityDaoTest {
 
     @Test
     void updateEntityTreeOldMain_transactionFailure() {
-        IThreadLocalSessionManager sessionManager = mock(IThreadLocalSessionManager.class);
+        SessionFactory sessionFactory = mock(SessionFactory.class);
         Session session = mock(Session.class);
         Transaction transaction = mock(Transaction.class);
-        IEntityIdentifierDao entityIdentifierDao = mock(IEntityIdentifierDao.class);
+        NativeQuery<Object> nativeQuery = mock(NativeQuery.class);
 
         try {
-            Field entityIdentifierDaoField = AbstractTransitiveSelfEntityDao.class.getDeclaredField("entityIdentifierDao");
-            entityIdentifierDaoField.setAccessible(true);
-            entityIdentifierDaoField.set(dao, entityIdentifierDao);
-
-            Field sessionManagerField = AbstractTransitiveSelfEntityDao.class.getDeclaredField("sessionManager");
+            Field sessionManagerField = AbstractTransitiveSelfEntityDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
-            sessionManagerField.set(dao, sessionManager);
+            sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
         Parameter parameter = new Parameter("id", 2L);
 
-        when(sessionManager.getSession()).thenReturn(session);
+        when(sessionFactory.openSession()).thenReturn(session);
         when(session.beginTransaction()).thenReturn(transaction);
-        when(entityIdentifierDao.getEntity(TransitiveSelfEntity.class, parameter)).thenReturn(testEntityDataSet.getEntity());
-        doThrow(new RuntimeException()).when(session).persist(updateEntityDataSet.getEntity());
+        when(session.createNativeQuery(anyString(), any(Class.class))).thenReturn(nativeQuery);
+        when(nativeQuery.getSingleResult()).thenReturn(updateEntityDataSet.getEntity());
+        doThrow(new RuntimeException()).when(session).merge(updateEntityDataSet.getEntity());
 
         assertThrows(RuntimeException.class, () -> {
             dao.updateEntityTreeOldMain(updateEntityDataSet.getEntity(), parameter);
         });
         verify(transaction).rollback();
         verify(transaction, never()).commit();
-        verify(sessionManager).closeSession();
+        verify(session).close();
     }
 
     @Test
@@ -272,21 +264,24 @@ public abstract class AbstractTransitiveSelfEntityDaoTest {
     void deleteEntityTree_transactionFailure() {
         loadDataSet(testEntityDataSet.getDataSetPath()[0]);
 
-        IThreadLocalSessionManager sessionManager = mock(IThreadLocalSessionManager.class);
+        SessionFactory sessionFactory = mock(SessionFactory.class);
         Session session = mock(Session.class);
         Transaction transaction = mock(Transaction.class);
+        NativeQuery<Object> nativeQuery = mock(NativeQuery.class);
 
         try {
-            Field sessionManagerField = AbstractTransitiveSelfEntityDao.class.getDeclaredField("sessionManager");
+            Field sessionManagerField = AbstractTransitiveSelfEntityDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
-            sessionManagerField.set(dao, sessionManager);
+            sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
         Parameter parameter = new Parameter("id", 1L);
-        when(sessionManager.getSession()).thenReturn(session);
+        when(sessionFactory.openSession()).thenReturn(session);
         when(session.beginTransaction()).thenReturn(transaction);
+        when(session.createNativeQuery(anyString(), any(Class.class))).thenReturn(nativeQuery);
+        when(nativeQuery.getSingleResult()).thenReturn(testEntityDataSet.getEntity());
         doThrow(new RuntimeException()).when(session).remove(testEntityDataSet.getEntity());
 
         assertThrows(RuntimeException.class, () -> {
@@ -297,7 +292,7 @@ public abstract class AbstractTransitiveSelfEntityDaoTest {
 
         verify(transaction).rollback();
         verify(transaction, never()).commit();
-        verify(sessionManager).closeSession();
+        verify(session).close();
     }
 
     @Test

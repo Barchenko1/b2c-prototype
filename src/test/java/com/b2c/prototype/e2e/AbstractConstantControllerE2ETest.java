@@ -1,81 +1,134 @@
 package com.b2c.prototype.e2e;
 
-import com.github.database.rider.core.api.connection.ConnectionHolder;
-import com.github.database.rider.core.api.dataset.DataSetExecutor;
-import com.github.database.rider.core.api.dataset.YamlDataSet;
-import com.github.database.rider.core.configuration.DataSetConfig;
-import com.github.database.rider.core.dataset.DataSetExecutorImpl;
-import org.dbunit.DatabaseUnitException;
-import org.dbunit.database.DatabaseConnection;
-import org.dbunit.database.IDatabaseConnection;
-import org.dbunit.dataset.IDataSet;
-import org.dbunit.operation.DatabaseOperation;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MvcResult;
 
-import javax.sql.DataSource;
-import java.io.InputStream;
-import java.sql.Connection;
-import java.util.Arrays;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
 
-import static com.b2c.prototype.dao.DataSourcePool.getPostgresDataSource;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles({"test", "unittest"})
-public class AbstractConstantControllerE2ETest {
-    protected MockMvc mockMvc;
+public class AbstractConstantControllerE2ETest extends BasicE2ETest {
 
-    @Autowired
-    WebApplicationContext webApplicationContext;
+    private final String URL_TEMPLATE = "/api/v1/singlevalue";
+    private final String SERVICE_ID = "serviceId";
 
-    private static ConnectionHolder connectionHolder;
-    private static DataSetExecutor executor;
+    protected <T> void postConstantEntity(T payloadDto,
+                                          String serviceId,
+                                          String dataSetPath,
+                                          String verifyDataSetPath) {
+        loadDataSet(dataSetPath);
+        try {
+            String jsonPayload = objectMapper.writeValueAsString(payloadDto);
 
-    @BeforeEach
-    void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }
-
-    @BeforeAll
-    public static void setUpAll() {
-        DataSource dataSource = getPostgresDataSource();
-        connectionHolder = dataSource::getConnection;
-        executor = DataSetExecutorImpl.instance("e2e", connectionHolder);
-    }
-
-    protected void loadDataSet(String dataSetPath) {
-        try (Connection connection = connectionHolder.getConnection()) {
-            connection.setAutoCommit(false);
-            IDatabaseConnection dbConnection = new DatabaseConnection(connection);
-            InputStream inputStream = this.getClass().getResourceAsStream(dataSetPath);
-            if (inputStream == null) {
-                throw new RuntimeException("Dataset file not found: " + dataSetPath);
-            }
-            IDataSet dataSet = new YamlDataSet(inputStream);
-            System.out.println("Loading dataset from: " + dataSetPath);
-            System.out.println("Dataset contents: " + Arrays.toString(dataSet.getTableNames()));
-
-            DatabaseOperation.CLEAN_INSERT.execute(dbConnection, dataSet);
-            connection.commit();
+            mockMvc.perform(post(URL_TEMPLATE)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header(SERVICE_ID, serviceId)
+                            .content(jsonPayload))
+                    .andExpect(status().isOk());
         } catch (Exception e) {
-            throw new RuntimeException("Failed to load dataset: " + dataSetPath, e);
+            throw new RuntimeException(e);
+        }
+
+        verifyExpectedData(verifyDataSetPath);
+    }
+
+    protected <T> void putConstantEntity(T payloadDto,
+                                         String serviceId,
+                                         String value,
+                                         String dataSetPath,
+                                         String verifyDataSetPath) {
+        loadDataSet(dataSetPath);
+        try {
+            String jsonPayload = objectMapper.writeValueAsString(payloadDto);
+
+            mockMvc.perform(put(URL_TEMPLATE)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header(SERVICE_ID, serviceId)
+                            .param("value", value)
+                            .content(jsonPayload))
+                    .andExpect(status().isOk());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        verifyExpectedData(verifyDataSetPath);
+    }
+
+    protected <T> void patchConstantEntity(T payloadDto,
+                                           String serviceId,
+                                           String value,
+                                           String dataSetPath,
+                                           String verifyDataSetPath) {
+        loadDataSet(dataSetPath);
+        try {
+            String jsonPayload = objectMapper.writeValueAsString(payloadDto);
+
+            mockMvc.perform(patch(URL_TEMPLATE)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header(SERVICE_ID, serviceId)
+                            .param("value", value)
+                            .content(jsonPayload))
+                    .andExpect(status().isOk());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        verifyExpectedData(verifyDataSetPath);
+    }
+
+    protected void deleteConstantEntity(String serviceId, String value, String dataSetPath, String verifyDataSetPath) {
+        loadDataSet(dataSetPath);
+
+        try {
+            mockMvc.perform(delete(URL_TEMPLATE)
+                            .header(SERVICE_ID, serviceId)
+                            .param("value", value))
+                    .andExpect(status().isOk());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        verifyExpectedData(verifyDataSetPath);
+    }
+
+    protected MvcResult getConstantEntities(String serviceId, String dataSetPath) {
+        loadDataSet(dataSetPath);
+        try {
+
+            return mockMvc.perform(get(URL_TEMPLATE + "/all")
+                            .header(SERVICE_ID, serviceId))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                    .andExpect(status().is2xxSuccessful())
+                    .andReturn();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
-    protected void verifyExpectedData(String dataSetPath) {
-        DataSetConfig dataSetConfig = new DataSetConfig(dataSetPath);
-        String[] expectedDataSets = new String[]{dataSetPath};
-
+    protected MvcResult getConstantEntity(String serviceId, String value, String dataSetPath) {
+        loadDataSet(dataSetPath);
         try {
-            executor.compareCurrentDataSetWith(dataSetConfig, expectedDataSets);
-        } catch (DatabaseUnitException e) {
-            throw new RuntimeException("Dataset comparison failed", e);
+
+            return mockMvc.perform(get(URL_TEMPLATE)
+                            .header(SERVICE_ID, serviceId)
+                            .param("value", value))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                    .andExpect(status().is2xxSuccessful())
+                    .andReturn();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

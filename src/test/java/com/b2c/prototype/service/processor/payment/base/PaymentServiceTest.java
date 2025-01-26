@@ -35,6 +35,7 @@ import static com.b2c.prototype.util.Constant.ORDER_ID;
 import static com.b2c.prototype.util.Constant.PAYMENT_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.eq;
@@ -210,7 +211,7 @@ class PaymentServiceTest {
                 .thenReturn(parameterSupplier);
         when(transformationFunctionService.getTransformationFunction(eq(Payment.class), eq(PaymentDto.class)))
                 .thenReturn(function);
-        when(paymentDao.getEntity(parameter))
+        when(paymentDao.getEntityGraph(anyString(), eq(parameter)))
                 .thenReturn(payment);
         when(function.apply(payment)).thenReturn(paymentDto);
 

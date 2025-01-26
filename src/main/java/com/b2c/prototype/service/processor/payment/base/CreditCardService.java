@@ -146,21 +146,21 @@ public class CreditCardService implements ICreditCardService {
 
     @Override
     public List<ResponseCreditCardDto> getCardListByUserId(OneFieldEntityDto oneFieldEntityDto) {
-        return entityOperationDao.getSubEntityDtoList(
+        return entityOperationDao.getSubEntityDtoList("",
                 supplierService.parameterStringSupplier(USER_ID, oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(CreditCard.class, ResponseCreditCardDto.class));
     }
 
     @Override
     public ResponseCreditCardDto getCardByOrderId(OneFieldEntityDto oneFieldEntityDto) {
-        return entityOperationDao.getEntityDto(
+        return entityOperationDao.getEntityDto("",
                 supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(CreditCard.class, ResponseCreditCardDto.class));
     }
 
     @Override
     public List<ResponseCreditCardDto> getAllCards() {
-        return entityOperationDao.getEntityDtoList(
+        return entityOperationDao.getEntityDtoList("",
                 transformationFunctionService.getTransformationFunction(CreditCard.class, ResponseCreditCardDto.class));
     }
 

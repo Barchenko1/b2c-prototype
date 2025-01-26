@@ -31,6 +31,8 @@ import com.b2c.prototype.processor.AsyncProcessor;
 import com.b2c.prototype.processor.IAsyncProcessor;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.function.TransformationFunctionService;
+import com.b2c.prototype.service.orchestrator.ConstantOrchestratorService;
+import com.b2c.prototype.service.orchestrator.IConstantOrchestratorService;
 import com.b2c.prototype.service.processor.address.base.AddressService;
 import com.b2c.prototype.service.processor.address.base.CountryService;
 import com.b2c.prototype.service.processor.address.IAddressService;
@@ -127,7 +129,7 @@ public class ServiceBeanConfiguration {
 
     @Bean
     public ISingleValueMap singleValueMap(Map<Class<?>, Map<?, ?>> classEntityMap,
-                                           ISearchWrapper searchWrapper) {
+                                          ISearchWrapper searchWrapper) {
         return new SingleValueMap(classEntityMap, searchWrapper);
     }
 
@@ -338,6 +340,41 @@ public class ServiceBeanConfiguration {
     @Bean
     public IPostService postService(IPostDao postDao) {
         return new PostService(postDao);
+    }
+
+    @Bean
+    public IConstantOrchestratorService constantOrchestratorService(
+            IBrandService brandService,
+            ICountTypeService countTypeService,
+            ICountryPhoneCodeService countryPhoneCodeService,
+            ICountryService countryService,
+            ICurrencyService currencyService,
+            IDeliveryTypeService deliveryTypeService,
+            IItemStatusService itemStatusService,
+            IItemTypeService itemTypeService,
+            IMessageStatusService messageStatusService,
+            IMessageTypeService messageTypeService,
+            IOptionGroupService optionGroupService,
+            IOrderStatusService orderStatusService,
+            IPaymentMethodService paymentMethodService,
+            IRatingService ratingService
+    ) {
+        return new ConstantOrchestratorService(
+                brandService,
+                countTypeService,
+                countryPhoneCodeService,
+                countryService,
+                currencyService,
+                deliveryTypeService,
+                itemStatusService,
+                itemTypeService,
+                messageStatusService,
+                messageTypeService,
+                optionGroupService,
+                orderStatusService,
+                paymentMethodService,
+                ratingService
+        );
     }
 
 }

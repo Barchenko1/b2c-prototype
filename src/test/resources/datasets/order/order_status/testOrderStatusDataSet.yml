@@ -2,4 +2,3 @@ order_status:
   - id: 1
     value: "Pending"
     label: "Pending"
-    label: "Pending"

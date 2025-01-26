@@ -1,0 +1,7 @@
+message_type:
+  - id: 1
+    label: "InMail"
+    value: "InMail"
+  - id: 2
+    label: "InApp"
+    value: "InApp"

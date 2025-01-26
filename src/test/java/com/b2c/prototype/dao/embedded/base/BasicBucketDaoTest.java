@@ -35,7 +35,7 @@
 //    public static void setup() {
 //        IEntityMappingManager entityMappingManager = new EntityMappingManager();
 //        entityMappingManager.addEntityTable(new EntityTable(Bucket.class, "bucket"));
-//        entityIdentifierDao = new EntityIdentifierDao(sessionManager, entityMappingManager);
+//        entityIdentifierDao = new EntityIdentifierDao(entityMappingManager);
 //        dao = new BasicBucketDao(sessionFactory, entityIdentifierDao);
 //    }
 //

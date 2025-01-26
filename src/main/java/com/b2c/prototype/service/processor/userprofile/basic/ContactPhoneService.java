@@ -108,7 +108,7 @@ public class ContactPhoneService implements IContactPhoneService {
 
     @Override
     public List<ContactPhoneDto> getContactPhoneList() {
-        return entityOperationDao.getEntityDtoList(
+        return entityOperationDao.getEntityDtoList("",
                 transformationFunctionService.getTransformationFunction(ContactPhone.class, ContactPhoneDto.class));
     }
 

@@ -14,7 +14,6 @@ public final class DatabaseQueries {
             // Clean up tables in the correct order
             statement.execute("DELETE FROM order_item_data_item_data_option_quantity");
             statement.execute("DELETE FROM order_item_data_beneficiary");
-//            statement.execute("DELETE FROM order_item_data_quantity_item");
             statement.execute("DELETE FROM message_box_message");
             statement.execute("DELETE FROM message_receivers");
             statement.execute("DELETE FROM item_data_option_quantity");
@@ -37,7 +36,6 @@ public final class DatabaseQueries {
             statement.execute("DELETE FROM beneficiary");
             statement.execute("DELETE FROM contact_phone");
             // Add other child tables in correct order
-
             statement.execute("DELETE FROM delivery");
 
             statement.execute("DELETE FROM payment_method");

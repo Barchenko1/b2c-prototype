@@ -60,14 +60,14 @@ public class OrderItemDataService implements IOrderItemDataService {
 
     @Override
     public ResponseOrderItemDataDto getResponseOrderItemData(OneFieldEntityDto oneFieldEntityDto) {
-        return entityOperationDao.getEntityDto(
+        return entityOperationDao.getEntityDto("",
                 supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(OrderItemData.class, ResponseOrderItemDataDto.class));
     }
 
     @Override
     public List<ResponseOrderItemDataDto> getResponseOrderItemDataList() {
-        return entityOperationDao.getEntityDtoList(
+        return entityOperationDao.getEntityDtoList("",
                 transformationFunctionService.getTransformationFunction(OrderItemData.class, ResponseOrderItemDataDto.class));
     }
 }

@@ -1,6 +1,6 @@
 package com.b2c.prototype.dao.user.base;
 
-import com.b2c.prototype.dao.AbstractSimpleEntityDaoTest;
+import com.b2c.prototype.dao.AbstractConstantEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
@@ -10,13 +10,13 @@ import com.tm.core.processor.finder.manager.IEntityMappingManager;
 import com.tm.core.processor.finder.table.EntityTable;
 import org.junit.jupiter.api.BeforeAll;
 
-class BasicContactPhoneDaoTest extends AbstractSimpleEntityDaoTest {
+class BasicContactPhoneDaoTest extends AbstractConstantEntityDaoTest {
 
     @BeforeAll
     public static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(ContactPhone.class, "contact_phone"));
-        entityIdentifierDao = new EntityIdentifierDao(sessionManager, entityMappingManager);
+        entityIdentifierDao = new EntityIdentifierDao(entityMappingManager);
         dao = new BasicContactPhoneDao(sessionFactory, entityIdentifierDao);
     }
 

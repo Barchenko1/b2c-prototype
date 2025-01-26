@@ -72,7 +72,7 @@ public class DeliveryService implements IDeliveryService {
 
     @Override
     public List<DeliveryDto> getDeliveries() {
-        return entityOperationDao.getEntityDtoList(
+        return entityOperationDao.getEntityDtoList("",
                 transformationFunctionService.getTransformationFunction(Delivery.class, DeliveryDto.class));
     }
 }

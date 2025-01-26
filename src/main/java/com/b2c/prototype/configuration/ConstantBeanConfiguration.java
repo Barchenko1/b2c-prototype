@@ -5,6 +5,7 @@ import com.b2c.prototype.dao.delivery.IDeliveryTypeDao;
 import com.b2c.prototype.dao.message.IMessageStatusDao;
 import com.b2c.prototype.dao.message.IMessageTypeDao;
 import com.b2c.prototype.dao.payment.IPaymentMethodDao;
+import com.b2c.prototype.dao.price.ICurrencyDao;
 import com.b2c.prototype.dao.user.ICountryPhoneCodeDao;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
@@ -25,6 +26,7 @@ import com.b2c.prototype.dao.item.ICategoryDao;
 import com.b2c.prototype.dao.item.IItemStatusDao;
 import com.b2c.prototype.dao.item.IItemTypeDao;
 import com.b2c.prototype.dao.rating.IRatingDao;
+import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -83,7 +85,7 @@ public class ConstantBeanConfiguration {
     }
 
     @Bean
-    public Map<Integer, Rating> ratingMap(IRatingDao ratingDao) {
+    public Map<Object, Rating> ratingMap(IRatingDao ratingDao) {
         List<Rating> ratingList = ratingDao.getEntityList();
         return ratingList.stream()
                 .collect(Collectors.toMap(Rating::getValue, value -> value, (existing, replacement) -> existing));
@@ -108,6 +110,13 @@ public class ConstantBeanConfiguration {
         List<Country> countryList = countryDao.getEntityList();
         return countryList.stream()
                 .collect(Collectors.toMap(Country::getValue, country -> country, (existing, replacement) -> existing));
+    }
+
+    @Bean
+    public Map<String, Currency> currencyMap(ICurrencyDao currencyDao) {
+        List<Currency> currencyList = currencyDao.getEntityList();
+        return currencyList.stream()
+                .collect(Collectors.toMap(Currency::getValue, currency -> currency, (existing, replacement) -> existing));
     }
 
     @Bean
@@ -143,6 +152,7 @@ public class ConstantBeanConfiguration {
             IItemStatusDao itemStatusDao,
             IOptionGroupDao optionGroupDao,
             ICountryDao countryDao,
+            ICurrencyDao currencyDao,
             ICountryPhoneCodeDao countryPhoneCodeDao,
             IMessageStatusDao messageStatusDao,
             IMessageTypeDao messageTypeDao) {
@@ -157,6 +167,7 @@ public class ConstantBeanConfiguration {
             put(ItemStatus.class, itemStatusMap(itemStatusDao));
             put(OptionGroup.class, optionGroupMap(optionGroupDao));
             put(Country.class, countryMap(countryDao));
+            put(Currency.class, currencyMap(currencyDao));
             put(CountryPhoneCode.class, countryPhoneCodeMap(countryPhoneCodeDao));
             put(MessageStatus.class, messageStatusMap(messageStatusDao));
             put(MessageType.class, messageTypeMap(messageTypeDao));

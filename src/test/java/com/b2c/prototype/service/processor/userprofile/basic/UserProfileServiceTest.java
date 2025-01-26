@@ -35,6 +35,8 @@ import static com.b2c.prototype.util.Constant.USER_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -124,7 +126,7 @@ class UserProfileServiceTest {
                 .thenReturn(parameterSupplier);
         when(transformationFunctionService.getTransformationFunction(UserProfile.class, UserProfileDto.class))
                 .thenReturn(transformationFunction);
-        when(userProfileDao.getEntity(parameter))
+        when(userProfileDao.getEntityGraph(anyString(), eq(parameter)))
                 .thenReturn(userProfile);
 
         UserProfileDto result = userProfileService.getUserProfileByUserId(userId);

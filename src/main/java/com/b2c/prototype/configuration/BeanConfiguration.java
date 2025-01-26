@@ -77,8 +77,6 @@ import com.tm.core.processor.finder.manager.EntityMappingManager;
 import com.tm.core.processor.finder.manager.IEntityMappingManager;
 import com.tm.core.processor.finder.scanner.EntityScanner;
 import com.tm.core.processor.finder.scanner.IEntityScanner;
-import com.tm.core.processor.thread.IThreadLocalSessionManager;
-import com.tm.core.processor.thread.ThreadLocalSessionManager;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -123,11 +121,6 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public IThreadLocalSessionManager sessionManager(SessionFactory sessionFactory) {
-        return new ThreadLocalSessionManager(sessionFactory);
-    }
-
-    @Bean
     public IEntityMappingManager entityMappingManager() {
         return new EntityMappingManager();
     }
@@ -140,8 +133,8 @@ public class BeanConfiguration {
 
     @Bean
     @DependsOn({"entityScanner"})
-    public IEntityIdentifierDao entityIdentifierDao(SessionFactory sessionFactory) {
-        return new EntityIdentifierDao(sessionManager(sessionFactory), entityMappingManager());
+    public IEntityIdentifierDao entityIdentifierDao() {
+        return new EntityIdentifierDao(entityMappingManager());
     }
 
     @Bean
@@ -151,7 +144,7 @@ public class BeanConfiguration {
 
     @Bean
     public ISearchWrapper searchWrapper() {
-        return new SearchWrapper(sessionManager(sessionFactory()), entityIdentifierDao(sessionFactory()));
+        return new SearchWrapper(sessionFactory(), entityIdentifierDao());
     }
 
     @Bean

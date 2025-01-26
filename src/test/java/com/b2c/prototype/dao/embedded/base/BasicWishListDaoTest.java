@@ -43,7 +43,7 @@ import com.b2c.prototype.modal.entity.post.Post;
 //    public static void setup() {
 //        IEntityMappingManager entityMappingManager = new EntityMappingManager();
 //        entityMappingManager.addEntityTable(new EntityTable(Wishlist.class, "wishlist"));
-//        entityIdentifierDao = new EntityIdentifierDao(sessionManager, entityMappingManager);
+//        entityIdentifierDao = new EntityIdentifierDao(entityMappingManager);
 //        dao = new BasicWishListDao(sessionFactory, entityIdentifierDao);
 //    }
 //

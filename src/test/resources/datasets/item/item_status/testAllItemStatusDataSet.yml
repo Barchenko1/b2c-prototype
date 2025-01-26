@@ -1,0 +1,7 @@
+item_status:
+  - id: 1
+    value: "Test1"
+    label: "Test1"
+  - id: 2
+    value: "Test2"
+    label: "Test2"

@@ -15,14 +15,14 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AbstractConstantEntity {
+public class AbstractConstantEntity implements IConstant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
     @Column(name = "label", nullable = false)
     private String label;
-    @Column(name = "value", nullable = false)
+    @Column(name = "value", unique = true, nullable = false)
     private String value;
 
 }

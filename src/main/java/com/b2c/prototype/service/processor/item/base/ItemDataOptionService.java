@@ -72,27 +72,27 @@ public class ItemDataOptionService implements IItemDataOptionService {
 
     @Override
     public ResponseItemDataOptionDto getResponseItemDataOptionDto(String articularId) {
-        return entityOperationDao.getEntityDto(
+        return entityOperationDao.getEntityDto("",
                 supplierService.parameterStringSupplier(ARTICULAR_ID, articularId),
                 transformationFunctionService.getTransformationFunction(ItemDataOption.class, ResponseItemDataOptionDto.class));
     }
 
     @Override
     public List<ResponseItemDataOptionDto> getResponseItemDataOptionDtoList() {
-        return entityOperationDao.getEntityDtoList(
+        return entityOperationDao.getEntityDtoList("",
                 transformationFunctionService.getTransformationFunction(ItemDataOption.class, ResponseItemDataOptionDto.class));
 
     }
 
     @Override
     public List<ResponseItemDataOptionDto> getResponseItemDataOptionDtoFiltered() {
-        return entityOperationDao.getEntityDtoList(
+        return entityOperationDao.getEntityDtoList("",
                 transformationFunctionService.getTransformationFunction(ItemDataOption.class, ResponseItemDataOptionDto.class));
     }
 
     @Override
     public List<ResponseItemDataOptionDto> getResponseItemDataOptionDtoSorted(String sortType) {
-        return entityOperationDao.getEntityDtoList(
+        return entityOperationDao.getEntityDtoList("",
                 transformationFunctionService.getTransformationFunction(ItemDataOption.class, ResponseItemDataOptionDto.class));
     }
 }

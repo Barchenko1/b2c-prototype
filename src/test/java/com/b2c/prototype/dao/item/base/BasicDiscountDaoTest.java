@@ -1,6 +1,6 @@
 package com.b2c.prototype.dao.item.base;
 
-import com.b2c.prototype.dao.AbstractSimpleEntityDaoTest;
+import com.b2c.prototype.dao.AbstractConstantEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.price.Currency;
@@ -10,13 +10,13 @@ import com.tm.core.processor.finder.manager.IEntityMappingManager;
 import com.tm.core.processor.finder.table.EntityTable;
 import org.junit.jupiter.api.BeforeAll;
 
-class BasicDiscountDaoTest extends AbstractSimpleEntityDaoTest {
+class BasicDiscountDaoTest extends AbstractConstantEntityDaoTest {
 
     @BeforeAll
     static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(Discount.class, "discount"));
-        entityIdentifierDao = new EntityIdentifierDao(sessionManager, entityMappingManager);
+        entityIdentifierDao = new EntityIdentifierDao(entityMappingManager);
         dao = new BasicDiscountDao(sessionFactory, entityIdentifierDao);
     }
 

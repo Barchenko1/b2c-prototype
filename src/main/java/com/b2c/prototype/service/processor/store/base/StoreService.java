@@ -82,14 +82,14 @@ public class StoreService implements IStoreService {
 
     @Override
     public ResponseStoreDto getStoreResponse(OneFieldEntityDto oneFieldEntityDto) {
-        return entityOperationDao.getEntityDto(
+        return entityOperationDao.getEntityDto("",
                 supplierService.parameterStringSupplier(ARTICULAR_ID, oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(Store.class, ResponseStoreDto.class));
     }
 
     @Override
     public List<ResponseStoreDto> getAllStoreResponse() {
-        return entityOperationDao.getEntityDtoList(
+        return entityOperationDao.getEntityDtoList("",
                 transformationFunctionService.getTransformationFunction(Store.class, ResponseStoreDto.class));
     }
 }

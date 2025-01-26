@@ -26,7 +26,13 @@ enums:
 #  countTypes: LIMITED, UNLIMITED
 #  countryPhoneCodes: +48
 #  countries: POLAND
-#  currencies: USD, PLN, EUR
+  currencies:
+    - value: "USD"
+      label: "USD"
+    - value: "PLN"
+      label: "PLN"
+    - value: "EUR"
+      label: "EUR"
 #  deliveryTypes: IN_POST, COURIER
 #  itemStatuses: NEW, EXIST, COMING_SOON, OUT_OF_STOCK
 #  itemTypes: TECHNIQUE

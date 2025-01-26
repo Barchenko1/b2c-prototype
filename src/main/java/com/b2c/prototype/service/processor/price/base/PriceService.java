@@ -138,7 +138,7 @@ public class PriceService implements IPriceService {
 
     @Override
     public List<PriceDto> getPrices() {
-        return entityOperationDao.getEntityDtoList(
+        return entityOperationDao.getEntityDtoList("",
                 transformationFunctionService.getTransformationFunction(Price.class, PriceDto.class));
     }
 

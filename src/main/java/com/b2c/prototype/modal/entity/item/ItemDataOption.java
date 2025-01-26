@@ -11,6 +11,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
+import jakarta.persistence.NamedSubgraph;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -22,6 +25,20 @@ import static com.b2c.prototype.util.UniqueIdUtil.getUUID;
 
 @Entity
 @Table(name = "item_data_option")
+@NamedEntityGraph(
+        name = "itemDataOption.discount.currency",
+        attributeNodes = {
+                @NamedAttributeNode(value = "discount", subgraph = "discount.subgraph")
+        },
+        subgraphs = {
+                @NamedSubgraph(
+                        name = "discount.subgraph",
+                        attributeNodes = {
+                                @NamedAttributeNode("currency")
+                        }
+                )
+        }
+)
 @Data
 @Builder(toBuilder = true)
 @NoArgsConstructor

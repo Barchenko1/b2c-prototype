@@ -1,27 +1,15 @@
 package com.b2c.prototype.modal.entity.item;
 
-import jakarta.persistence.Column;
+import com.b2c.prototype.modal.base.AbstractNumberConstantEntity;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "rating")
-@Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor
-public class Rating {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false, nullable = false)
-    private long id;
-    @Column(name = "value", nullable = false)
-    private int value;
+public class Rating extends AbstractNumberConstantEntity {
+
 }

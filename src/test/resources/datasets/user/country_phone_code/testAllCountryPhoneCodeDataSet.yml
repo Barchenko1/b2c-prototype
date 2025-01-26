@@ -1,0 +1,7 @@
+country_phone_code:
+  - id: 1
+    value: "+48"
+    label: "+48"
+  - id: 2
+    value: "+11"
+    label: "+11"

@@ -88,7 +88,7 @@ public class EntityOperationDao implements IEntityOperationDao {
     @Override
     public <E> Optional<E> getOptionalEntity(Supplier<Parameter> parameterSupplier) {
         LOGGER.info("Getting entity");
-        return Optional.ofNullable(dao.getEntity(parameterSupplier.get()));
+        return dao.getOptionalEntity(parameterSupplier.get());
     }
 
     @Override
@@ -105,23 +105,21 @@ public class EntityOperationDao implements IEntityOperationDao {
     }
 
     @Override
-    public <R, E> R getEntityDto(Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction) {
+    public <E, R> R getEntityDto(String graphNamedQuery, Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction) {
         LOGGER.info("Getting entity dto");
-        E entity = dao.getEntity(parameterSupplier.get());
-        return Optional.ofNullable(entity)
-                .map(mapToDtoFunction)
-                .orElse(null);
+        E entity = dao.getEntityGraph(graphNamedQuery, parameterSupplier.get());
+        return Optional.ofNullable(entity).map(mapToDtoFunction).orElse(null);
     }
 
     @Override
-    public <R, E> Optional<R> getOptionalEntityDto(Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction) {
+    public <E, R> Optional<R> getOptionalEntityDto(String graphNamedQuery, Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction) {
         LOGGER.info("Getting entity dto");
         E entity = dao.getEntity(parameterSupplier.get());
         return Optional.ofNullable(entity).map(mapToDtoFunction);
     }
 
     @Override
-    public <R, E> List<R> getEntityDtoList(Function<E, R> mapToDtoFunction) {
+    public <E, R> List<R> getEntityDtoList(String graphNamedQuery, Function<E, R> mapToDtoFunction) {
         LOGGER.info("Getting entity dto list");
         List<E> entityList = dao.getEntityList();
         return entityList.stream()
@@ -130,7 +128,7 @@ public class EntityOperationDao implements IEntityOperationDao {
     }
 
     @Override
-    public <R, E> List<R> getSubEntityDtoList(Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction) {
+    public <E, R> List<R> getSubEntityDtoList(String graphNamedQuery, Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction) {
         LOGGER.info("Getting entity dto list");
         List<E> entityList = dao.getEntityList(parameterSupplier.get());
         return entityList.stream()
@@ -138,7 +136,7 @@ public class EntityOperationDao implements IEntityOperationDao {
                 .toList();
     }
 
-    private <R, E> R transformEntityToDto(E entity, Function<E, R> mapToDtoFunction) {
+    private <E, R> R transformEntityToDto(E entity, Function<E, R> mapToDtoFunction) {
         LOGGER.info("Entity: {}", entity);
         R dto = mapToDtoFunction.apply(entity);
         LOGGER.info("Entity Dto: {}", dto);

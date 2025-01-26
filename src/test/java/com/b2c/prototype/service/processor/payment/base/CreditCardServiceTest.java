@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static com.b2c.prototype.util.Constant.ORDER_ID;
@@ -35,6 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
@@ -396,19 +398,22 @@ class CreditCardServiceTest {
         OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto(orderId);
 
         CreditCard creditCard = getTestCreditCard();
+        ResponseCreditCardDto responseCreditCardDto = getTestResponseCardDto();
+
+        Function<CreditCard, ResponseCreditCardDto> function = creditCard1 -> ResponseCreditCardDto.builder()
+                .isActive(creditCard1.isActive())
+                .cardNumber(creditCard1.getCardNumber())
+                .dateOfExpire(creditCard1.getDateOfExpire())
+                .ownerName(creditCard1.getOwnerName())
+                .ownerSecondName(creditCard1.getOwnerSecondName())
+                .build();
 
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(creditCardDao.getEntity(parameter)).thenReturn(creditCard);
+        when(creditCardDao.getEntityGraph(anyString(), eq(parameter))).thenReturn(creditCard);
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
         when(transformationFunctionService.getTransformationFunction(CreditCard.class, ResponseCreditCardDto.class))
-                .thenReturn(creditCard1 -> ResponseCreditCardDto.builder()
-                        .isActive(creditCard1.isActive())
-                        .cardNumber(creditCard1.getCardNumber())
-                        .dateOfExpire(creditCard1.getDateOfExpire())
-                        .ownerName(creditCard1.getOwnerName())
-                        .ownerSecondName(creditCard1.getOwnerSecondName())
-                        .build());
+                .thenReturn(function);
 
         ResponseCreditCardDto result = creditCardService.getCardByOrderId(oneFieldEntityDto);
 

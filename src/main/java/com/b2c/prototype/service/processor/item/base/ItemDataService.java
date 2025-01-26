@@ -60,26 +60,26 @@ public class ItemDataService implements IItemDataService {
 
     @Override
     public ResponseItemDataDto getItemData(OneFieldEntityDto oneFieldEntityDto) {
-        return entityOperationDao.getEntityDto(
+        return entityOperationDao.getEntityDto("",
                 supplierService.parameterStringSupplier(ITEM_ID, oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(ItemData.class, ResponseItemDataDto.class));
     }
 
     @Override
     public List<ResponseItemDataDto> getItemDataList() {
-        return entityOperationDao.getEntityDtoList(
+        return entityOperationDao.getEntityDtoList("",
                 transformationFunctionService.getTransformationFunction(ItemData.class, ResponseItemDataDto.class));
     }
 
     @Override
     public List<ResponseItemDataDto> getItemDataListFiltered() {
-        return entityOperationDao.getEntityDtoList(
+        return entityOperationDao.getEntityDtoList("",
                 transformationFunctionService.getTransformationFunction(ItemData.class, ResponseItemDataDto.class));
     }
 
     @Override
     public List<ResponseItemDataDto> getItemDataListSorted(String sortType) {
-        return entityOperationDao.getEntityDtoList(
+        return entityOperationDao.getEntityDtoList("",
                 transformationFunctionService.getTransformationFunction(ItemData.class, ResponseItemDataDto.class));
     }
 

@@ -34,6 +34,7 @@ import java.util.function.Supplier;
 import static com.b2c.prototype.util.Constant.USER_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -229,14 +230,14 @@ class MessageServiceTest {
         Function<Message, ResponseMessagePayloadDto> transformationFunction = message -> ResponseMessagePayloadDto.builder()
                 .message(message.getMessage())
                 .build();
+        Message testMessage = getMessage();
+        ResponseMessagePayloadDto expectedResponseMessagePayloadDto = getResponseMessagePayloadDto();
 
         when(supplierService.parameterStringSupplier("messageUniqNumber", oneFieldEntityDto.getValue()))
                 .thenReturn(supplier);
         when(transformationFunctionService.getTransformationFunction(Message.class, ResponseMessagePayloadDto.class))
                 .thenReturn(transformationFunction);
-
-        when(messageDao.getEntity(parameter))
-                .thenReturn(getMessage());
+        when(messageDao.getEntityGraph(anyString(), eq(parameter))).thenReturn(testMessage);
 
         ResponseMessagePayloadDto result = messageService.getMessagePayloadDto(oneFieldEntityDto);
 
@@ -253,6 +254,12 @@ class MessageServiceTest {
                 .message("Message Content")
                 .type(messageType)
                 .status(messageStatus)
+                .build();
+    }
+
+    private ResponseMessagePayloadDto getResponseMessagePayloadDto() {
+        return ResponseMessagePayloadDto.builder()
+                .message("Message Content")
                 .build();
     }
 

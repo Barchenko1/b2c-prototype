@@ -91,7 +91,7 @@ public class SingleValueMap implements ISingleValueMap {
         Map<Object, Object> entityMap = classEntityMap.get(clazz);
         return Optional.ofNullable((E) entityMap.get(value))
                 .orElseGet(() -> {
-                    E entityFromDb = (E) searchWrapper.getOptionalEntitySupplier(clazz, createParameter(key, value)).get()
+                    E entityFromDb = (E) searchWrapper.getOptionalEntity(clazz, createParameter(key, value))
                             .orElseThrow(() -> new RuntimeException("Entity not found in cache or DB"));
 
                     Optional.of(entityMap).ifPresent(map -> map.put(value, entityFromDb));
@@ -105,7 +105,7 @@ public class SingleValueMap implements ISingleValueMap {
         Map<Object, Object> entityMap = classEntityMap.get(clazz);
         return (List<E>) Optional.ofNullable(entityMap.get(value))
                 .orElseGet(() -> {
-                    List<E> entityListFromDb = (List<E>) searchWrapper.getEntityListSupplier(clazz, createParameter(key, value)).get();
+                    List<E> entityListFromDb = searchWrapper.getEntityList(clazz, createParameter(key, value));
                     entityListFromDb.forEach(entityFromDb -> {
                         Optional.of(entityMap).ifPresent(map -> map.put(value, entityFromDb));
                     });
@@ -116,7 +116,7 @@ public class SingleValueMap implements ISingleValueMap {
 
     private boolean getIsEntityExistFromMapOrFromDb(Class<?> clazz, String key, Object value) {
         return classEntityMap.getOrDefault(clazz, Map.of()).containsKey(value) ||
-                searchWrapper.getOptionalEntitySupplier(clazz, createParameter(key, value)).get().isPresent();
+                searchWrapper.getOptionalEntity(clazz, createParameter(key, value)).isPresent();
     }
 
     private Parameter createParameter(String key, Object value) {

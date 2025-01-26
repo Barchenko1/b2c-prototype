@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.Set;
+
 @Data
 @SuperBuilder
 @NoArgsConstructor
@@ -14,5 +16,5 @@ public class AbstractDiscountDto {
     private String charSequenceCode;
     private double amount;
     private boolean isActive;
-    private String articularId;
+    private Set<String> articularIdSet;
 }

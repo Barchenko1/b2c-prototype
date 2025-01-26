@@ -16,6 +16,13 @@ public interface ITransformationFunctionService {
     <E, R> Function<E, R> getTransformationFunction(Class<E> classFrom, Class<R> classTo);
     <E, R> Function<E, R> getTransformationFunction(Class<E> classFrom, Class<R> classTo, String sol);
 
+    <E, R> Function<Collection<E>, R> getCollectionTransformationFunction(Class<E> classFrom, Class<R> classTo);
+    <E, R> Function<Collection<E>, R> getCollectionTransformationFunction(Class<E> classFrom, Class<R> classTo, String sol);
+
+    <E, R> Function<Collection<E>, Collection<R>> getCollectionTransformationCollectionFunction(Class<E> classFrom, Class<R> classTo);
+    <E, R> Function<Collection<E>, Collection<R>> getCollectionTransformationCollectionFunction(Class<E> classFrom, Class<R> classTo, String sol);
+
+
     <E, R> void addTransformationFunction(Class<E> classFrom, Class<R> classTo, Function<?, ?> function);
     <E, R> void addTransformationFunction(Class<E> classFrom, Class<R> classTo, String sol, Function<?, ?> function);
 }

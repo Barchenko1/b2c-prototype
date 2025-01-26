@@ -54,14 +54,14 @@ public class UserProfileService implements IUserProfileService {
 
     @Override
     public UserProfileDto getUserProfileByUserId(String userId) {
-        return entityOperationDao.getEntityDto(
+        return entityOperationDao.getEntityDto("",
                 supplierService.parameterStringSupplier(USER_ID, userId),
                 transformationFunctionService.getTransformationFunction(UserProfile.class, UserProfileDto.class));
     }
 
     @Override
     public List<UserProfileDto> getUserProfiles() {
-        return entityOperationDao.getEntityDtoList(
+        return entityOperationDao.getEntityDtoList("",
                 transformationFunctionService.getTransformationFunction(UserProfile.class, UserProfileDto.class));
     }
 

@@ -100,7 +100,7 @@ public class AddressService implements IAddressService {
 
     @Override
     public List<AddressDto> getAddresses() {
-        return entityOperationDao.getEntityDtoList(
+        return entityOperationDao.getEntityDtoList("",
                 transformationFunctionService.getTransformationFunction(Address.class, AddressDto.class));
     }
 

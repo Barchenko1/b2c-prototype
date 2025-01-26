@@ -66,7 +66,7 @@ class BasicOrderItemDataDaoTest extends AbstractCustomEntityDaoTest {
     public static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(OrderItemData.class, "order_item_data"));
-        entityIdentifierDao = new EntityIdentifierDao(sessionManager, entityMappingManager);
+        entityIdentifierDao = new EntityIdentifierDao(entityMappingManager);
         dao = new BasicOrderItemDataDao(sessionFactory, entityIdentifierDao);
     }
 

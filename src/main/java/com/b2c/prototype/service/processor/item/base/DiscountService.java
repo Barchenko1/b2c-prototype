@@ -1,11 +1,8 @@
 package com.b2c.prototype.service.processor.item.base;
 
 import com.b2c.prototype.dao.item.IDiscountDao;
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.payload.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.DiscountStatusDto;
-import com.b2c.prototype.modal.dto.response.ResponseDiscountDto;
-import com.b2c.prototype.modal.dto.searchfield.DiscountSearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.item.ItemDataOption;
 import com.b2c.prototype.service.common.EntityOperationDao;
@@ -20,6 +17,8 @@ import java.util.Optional;
 
 import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 import static com.b2c.prototype.util.Constant.CHAR_SEQUENCE_CODE;
+import static com.b2c.prototype.util.Constant.ITEM_DATA_OPTION_BY_DISCOUNT;
+import static com.b2c.prototype.util.Constant.ITEM_DATA_OPTION_BY_DISCOUNT_CHAR_SEQUENCE_CODE;
 
 public class DiscountService implements IDiscountService {
 
@@ -47,24 +46,41 @@ public class DiscountService implements IDiscountService {
     @Override
     public void updateItemDataDiscount(String articularId, DiscountDto discountDto) {
         entityOperationDao.executeConsumer(session -> {
+            if (discountDto.getCharSequenceCode() == null) {
+                throw new RuntimeException("Discount code is null");
+            }
             ItemDataOption itemDataOption = queryService.getEntity(
                     ItemDataOption.class,
-                    supplierService.parameterStringSupplier(ARTICULAR_ID, articularId));
-            Discount discount = transformationFunctionService.getEntity(
-                    Discount.class,
-                    discountDto);
+                    supplierService.parameterStringSupplier(ARTICULAR_ID, articularId)
+            );
+
+            Discount discount = (Discount) Optional.ofNullable(discountDto.getCharSequenceCode())
+                    .flatMap(code -> entityOperationDao.getOptionalEntity(
+                            supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, code)))
+                    .orElseGet(() -> transformationFunctionService.getEntity(Discount.class, discountDto));
+
+            if (itemDataOption.getDiscount() != null) {
+                discount.setId(itemDataOption.getDiscount().getId());
+            }
 
             itemDataOption.setDiscount(discount);
             session.merge(itemDataOption);
         });
-
     }
+
 
     @Override
     public void updateDiscount(String charSequenceCode, DiscountDto discountDto) {
-        entityOperationDao.updateEntityByParameter(
-                supplierService.getSupplier(Discount.class, discountDto),
-                supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, charSequenceCode));
+        entityOperationDao.executeConsumer(session -> {
+            if (discountDto.getCharSequenceCode() == null) {
+                throw new RuntimeException("Discount code is null");
+            }
+            Discount newDiscount = transformationFunctionService.getEntity(Discount.class, discountDto);
+            Discount oldDiscount = entityOperationDao.getEntity(
+                    supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, charSequenceCode));
+            newDiscount.setId(oldDiscount.getId());
+            session.merge(newDiscount);
+        });
     }
 
     @Override
@@ -79,29 +95,46 @@ public class DiscountService implements IDiscountService {
     }
 
     @Override
-    public void deleteDiscount(OneFieldEntityDto oneFieldEntityDto) {
-        entityOperationDao.deleteEntityByParameter(
-                supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, oneFieldEntityDto.getValue()));
+    public void deleteDiscount(String charSequenceCode) {
+        entityOperationDao.executeConsumer(session -> {
+            List<ItemDataOption> itemDataOptionList = queryService.getEntityList(
+                    ItemDataOption.class,
+                    ITEM_DATA_OPTION_BY_DISCOUNT_CHAR_SEQUENCE_CODE,
+                    supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, charSequenceCode));
+            Discount discount = itemDataOptionList.get(0).getDiscount();
+            itemDataOptionList.forEach(itemDataOption -> {
+                itemDataOption.setDiscount(null);
+                session.merge(itemDataOption);
+            });
+
+            session.remove(session.merge(discount));
+        });
     }
 
     @Override
-    public ResponseDiscountDto getDiscount(String charSequenceCode) {
-        return entityOperationDao.getEntityDto(
+    public DiscountDto getDiscount(String charSequenceCode) {
+        return queryService.getEntityListNamedQueryDto(
+                ItemDataOption.class,
+                ITEM_DATA_OPTION_BY_DISCOUNT_CHAR_SEQUENCE_CODE,
                 supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, charSequenceCode),
-                transformationFunctionService.getTransformationFunction(Discount.class, ResponseDiscountDto.class));
+                transformationFunctionService.getCollectionTransformationFunction(ItemDataOption.class, DiscountDto.class));
     }
 
     @Override
-    public Optional<ResponseDiscountDto> getOptionalDiscount(String charSequenceCode) {
-        return entityOperationDao.getOptionalEntityDto(
+    public Optional<DiscountDto> getOptionalDiscount(String charSequenceCode) {
+        return queryService.getOptionalEntityNamedQueryDto(
+                ItemDataOption.class,
+                ITEM_DATA_OPTION_BY_DISCOUNT_CHAR_SEQUENCE_CODE,
                 supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, charSequenceCode),
-                transformationFunctionService.getTransformationFunction(Discount.class, ResponseDiscountDto.class));
+                transformationFunctionService.getCollectionTransformationFunction(Discount.class, DiscountDto.class));
     }
 
     @Override
     public List<DiscountDto> getDiscounts() {
-        return entityOperationDao.getEntityDtoList(
-                transformationFunctionService.getTransformationFunction(Discount.class, DiscountDto.class));
+        return queryService.getEntityListNamedQueryDtoList(
+                ItemDataOption.class,
+                ITEM_DATA_OPTION_BY_DISCOUNT,
+                transformationFunctionService.getCollectionTransformationCollectionFunction(ItemDataOption.class, DiscountDto.class, "list"));
     }
 
 }

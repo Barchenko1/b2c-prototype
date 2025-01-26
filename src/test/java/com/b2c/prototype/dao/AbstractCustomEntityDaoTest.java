@@ -9,8 +9,6 @@ import com.github.database.rider.junit5.api.DBRider;
 import com.tm.core.dao.common.AbstractEntityDao;
 import com.tm.core.dao.common.IEntityDao;
 import com.tm.core.dao.identifier.IEntityIdentifierDao;
-import com.tm.core.processor.thread.IThreadLocalSessionManager;
-import com.tm.core.processor.thread.ThreadLocalSessionManager;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
@@ -37,7 +35,6 @@ import static com.b2c.prototype.dao.DatabaseQueries.cleanDatabase;
 @DBRider
 public abstract class AbstractCustomEntityDaoTest {
 
-    protected static IThreadLocalSessionManager sessionManager;
     protected static SessionFactory sessionFactory;
 
     protected static IEntityIdentifierDao entityIdentifierDao;
@@ -57,16 +54,11 @@ public abstract class AbstractCustomEntityDaoTest {
         executor = DataSetExecutorImpl.instance("executor-name", connectionHolder);
 
         sessionFactory = getSessionFactory();
-        sessionManager = new ThreadLocalSessionManager(sessionFactory);
     }
 
     @BeforeEach
     public void setUp() {
         try {
-            Field sessionMenagerField = AbstractEntityDao.class.getDeclaredField("sessionManager");
-            sessionMenagerField.setAccessible(true);
-            sessionMenagerField.set(dao, sessionManager);
-
             Field sessionFactoryField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
             sessionFactoryField.setAccessible(true);
             sessionFactoryField.set(dao, sessionFactory);

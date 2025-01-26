@@ -3,11 +3,12 @@ package com.b2c.prototype.configuration.transform;
 import com.b2c.prototype.dao.cashed.ISingleValueMap;
 import com.b2c.prototype.modal.base.AbstractConstantEntity;
 import com.b2c.prototype.modal.constant.MessageStatusEnum;
-import com.b2c.prototype.modal.dto.common.ConstantNumberEntityPayloadDto;
+import com.b2c.prototype.modal.dto.common.NumberConstantPayloadDto;
 import com.b2c.prototype.modal.dto.payload.AddressDto;
 import com.b2c.prototype.modal.dto.payload.BeneficiaryDto;
 import com.b2c.prototype.modal.dto.payload.ContactInfoDto;
 import com.b2c.prototype.modal.dto.payload.ContactPhoneDto;
+import com.b2c.prototype.modal.dto.payload.CountryDto;
 import com.b2c.prototype.modal.dto.payload.CreditCardDto;
 import com.b2c.prototype.modal.dto.payload.DeliveryDto;
 import com.b2c.prototype.modal.dto.payload.DiscountDto;
@@ -22,7 +23,7 @@ import com.b2c.prototype.modal.dto.response.ResponseCreditCardDto;
 import com.b2c.prototype.modal.dto.response.ResponseItemDataDto;
 import com.b2c.prototype.modal.dto.response.ResponseMessageOverviewDto;
 import com.b2c.prototype.modal.dto.response.ResponseMessagePayloadDto;
-import com.b2c.prototype.modal.dto.payload.ConstantEntityPayloadDto;
+import com.b2c.prototype.modal.dto.payload.ConstantPayloadDto;
 import com.b2c.prototype.modal.dto.response.ResponseReviewDto;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
@@ -83,7 +84,6 @@ public class TransformationEntityConfiguration {
         addConstantEntityTransformationFunctions(transformationFunctionService, Brand.class, Brand::new);
         addConstantEntityTransformationFunctions(transformationFunctionService, CountType.class, CountType::new);
         addConstantEntityTransformationFunctions(transformationFunctionService, CountryPhoneCode.class, CountryPhoneCode::new);
-        addConstantEntityTransformationFunctions(transformationFunctionService, Country.class, Country::new);
         addConstantEntityTransformationFunctions(transformationFunctionService, Currency.class, Currency::new);
         addConstantEntityTransformationFunctions(transformationFunctionService, DeliveryType.class, DeliveryType::new);
         addConstantEntityTransformationFunctions(transformationFunctionService, ItemType.class, ItemType::new);
@@ -94,7 +94,10 @@ public class TransformationEntityConfiguration {
         addConstantEntityTransformationFunctions(transformationFunctionService, OrderStatus.class, OrderStatus::new);
         addConstantEntityTransformationFunctions(transformationFunctionService, PaymentMethod.class, PaymentMethod::new);
 
-        transformationFunctionService.addTransformationFunction(ConstantNumberEntityPayloadDto.class, Rating.class,  mapOneIntegerFieldEntityDtoRatingFunction());
+        transformationFunctionService.addTransformationFunction(CountryDto.class, Country.class, mapCountryDtoCountryFunction());
+        transformationFunctionService.addTransformationFunction(Country.class, CountryDto.class, mapCountryEntityCountryDtoFunction());
+
+        transformationFunctionService.addTransformationFunction(NumberConstantPayloadDto.class, Rating.class,  mapOneIntegerFieldEntityDtoRatingFunction());
 
         transformationFunctionService.addTransformationFunction(Address.class, AddressDto.class, mapAddressToAddressDtoFunction());
         transformationFunctionService.addTransformationFunction(AddressDto.class, Address.class, mapAddressDtoToAddressFunction());
@@ -130,20 +133,26 @@ public class TransformationEntityConfiguration {
         transformationFunctionService.addTransformationFunction(OptionItemDto.class, OptionItem.class, "set", mapOptionItemDtoToOptionItemSet());
         transformationFunctionService.addTransformationFunction(OptionItem.class, OptionItemDto.class, mapOptionItemSetToOptionItemDto());
 
+        transformationFunctionService.addTransformationFunction(DiscountDto.class, Discount.class, mapDiscountDtoToDiscountFunction());
+        transformationFunctionService.addTransformationFunction(Discount.class, DiscountDto.class, mapDiscountToDiscountDtoFunction());
+        transformationFunctionService.addTransformationFunction(ItemDataOption.class, DiscountDto.class, mapItemDataOptionListToDiscountDtoFunction());
+        transformationFunctionService.addTransformationFunction(ItemDataOption.class, DiscountDto.class, "list", mapItemDataOptionListToDiscountDtoListFunction());
+
+
         transformationFunctionService.addTransformationFunction(OrderItemData.class, Beneficiary.class, "list", mapOrderItemToContactInfoListFunction());
     }
 
-    private <T extends AbstractConstantEntity> Function<ConstantEntityPayloadDto, T> mapConstantEntityPayloadDtoToConstantEntityFunction(Supplier<T> entitySupplier) {
-        return constantEntityPayloadDto -> {
+    private <T extends AbstractConstantEntity> Function<ConstantPayloadDto, T> mapConstantEntityPayloadDtoToConstantEntityFunction(Supplier<T> entitySupplier) {
+        return constantPayloadDto -> {
             T entity = entitySupplier.get();
-            entity.setLabel(constantEntityPayloadDto.getLabel());
-            entity.setValue(constantEntityPayloadDto.getValue());
+            entity.setLabel(constantPayloadDto.getLabel());
+            entity.setValue(constantPayloadDto.getValue());
             return entity;
         };
     }
 
-    private <T extends AbstractConstantEntity> Function<T, ConstantEntityPayloadDto> mapConstantEntityToConstantEntityPayloadDtoFunction() {
-        return abstractConstantEntity -> ConstantEntityPayloadDto.builder()
+    private <T extends AbstractConstantEntity> Function<T, ConstantPayloadDto> mapConstantEntityToConstantEntityPayloadDtoFunction() {
+        return abstractConstantEntity -> ConstantPayloadDto.builder()
                 .label(abstractConstantEntity.getLabel())
                 .value(abstractConstantEntity.getValue())
                 .build();
@@ -152,202 +161,34 @@ public class TransformationEntityConfiguration {
     private <T extends AbstractConstantEntity> void addConstantEntityTransformationFunctions(ITransformationFunctionService transformationFunctionService,
                                                                                              Class<T> entityClass,
                                                                                              Supplier<T> entitySupplier) {
-        transformationFunctionService.addTransformationFunction(ConstantEntityPayloadDto.class, entityClass, mapConstantEntityPayloadDtoToConstantEntityFunction(entitySupplier));
-        transformationFunctionService.addTransformationFunction(entityClass, ConstantEntityPayloadDto.class, mapConstantEntityToConstantEntityPayloadDtoFunction());
+        transformationFunctionService.addTransformationFunction(ConstantPayloadDto.class, entityClass, mapConstantEntityPayloadDtoToConstantEntityFunction(entitySupplier));
+        transformationFunctionService.addTransformationFunction(entityClass, ConstantPayloadDto.class, mapConstantEntityToConstantEntityPayloadDtoFunction());
     }
 
-
-
-//    private Function<ConstantEntityPayloadDto, Brand> mapConstantEntityPayloadDtoBrandFunction() {
-//        return constantEntityPayloadDto -> Brand.builder()
-//                .label(constantEntityPayloadDto.getLabel())
-//                .value(constantEntityPayloadDto.getValue())
-//                .build();
-//    }
-//
-//    private Function<ConstantEntityPayloadDto, CountType> mapConstantEntityPayloadDtoCountTypeFunction() {
-//        return constantEntityPayloadDto -> CountType.builder()
-//                .label(constantEntityPayloadDto.getLabel())
-//                .value(constantEntityPayloadDto.getValue())
-//                .build();
-//    }
-//
-//    private Function<ConstantEntityPayloadDto, CountryPhoneCode> mapConstantEntityPayloadDtoCountryPhoneCodeFunction() {
-//        return constantEntityPayloadDto -> CountryPhoneCode.builder()
-//                .label(constantEntityPayloadDto.getLabel())
-//                .value(constantEntityPayloadDto.getValue())
-//                .build();
-//    }
-//
-//    private Function<ConstantEntityPayloadDto, Country> mapConstantEntityPayloadDtoCountryFunction() {
-//        return constantEntityPayloadDto -> Country.builder()
-//                .label(constantEntityPayloadDto.getLabel())
-//                .value(constantEntityPayloadDto.getValue())
-//                .build();
-//    }
-//
-//    private Function<ConstantEntityPayloadDto, Currency> mapConstantEntityPayloadDtoCurrencyFunction() {
-//        return constantEntityPayloadDto -> Currency.builder()
-//                .label(constantEntityPayloadDto.getLabel())
-//                .value(constantEntityPayloadDto.getValue())
-//                .build();
-//    }
-//
-//    private Function<ConstantEntityPayloadDto, DeliveryType> mapOneFieldEntityDtoDeliveryTypeFunction() {
-//        return constantEntityPayloadDto -> DeliveryType.builder()
-//                .label(constantEntityPayloadDto.getLabel())
-//                .value(constantEntityPayloadDto.getValue())
-//                .build();
-//    }
-//
-//    private Function<ConstantEntityPayloadDto, ItemStatus> mapOneFieldEntityDtoItemStatusFunction() {
-//        return constantEntityPayloadDto -> ItemStatus.builder()
-//                .label(constantEntityPayloadDto.getLabel())
-//                .value(constantEntityPayloadDto.getValue())
-//                .build();
-//    }
-//
-//    private Function<ConstantEntityPayloadDto, ItemType> mapOneFieldEntityDtoItemTypeFunction() {
-//        return constantEntityPayloadDto -> ItemType.builder()
-//                .label(constantEntityPayloadDto.getLabel())
-//                .value(constantEntityPayloadDto.getValue())
-//                .build();
-//    }
-//
-//    private Function<ConstantEntityPayloadDto, MessageStatus> mapOneFieldEntityDtoMessageStatusFunction() {
-//        return constantEntityPayloadDto -> MessageStatus.builder()
-//                .label(constantEntityPayloadDto.getLabel())
-//                .value(constantEntityPayloadDto.getValue())
-//                .build();
-//    }
-//
-//    private Function<ConstantEntityPayloadDto, MessageType> mapOneFieldEntityDtoMessageTypeFunction() {
-//        return constantEntityPayloadDto -> MessageType.builder()
-//                .label(constantEntityPayloadDto.getLabel())
-//                .value(constantEntityPayloadDto.getValue())
-//                .build();
-//    }
-//
-//    private Function<ConstantEntityPayloadDto, OptionGroup> mapOneFieldEntityDtoOptionGroupFunction() {
-//        return constantEntityPayloadDto -> OptionGroup.builder()
-//                .label(constantEntityPayloadDto.getLabel())
-//                .value(constantEntityPayloadDto.getValue())
-//                .build();
-//    }
-//
-//    private Function<ConstantEntityPayloadDto, OrderStatus> mapOneFieldEntityDtoOrderStatusFunction() {
-//        return constantEntityPayloadDto -> OrderStatus.builder()
-//                .label(constantEntityPayloadDto.getLabel())
-//                .value(constantEntityPayloadDto.getValue())
-//                .build();
-//    }
-//
-//    private Function<ConstantEntityPayloadDto, PaymentMethod> mapOneFieldEntityDtoPaymentMethodFunction() {
-//        return constantEntityPayloadDto -> PaymentMethod.builder()
-//                .label(constantEntityPayloadDto.getLabel())
-//                .value(constantEntityPayloadDto.getValue())
-//                .build();
-//    }
-
-    private Function<ConstantNumberEntityPayloadDto, Rating> mapOneIntegerFieldEntityDtoRatingFunction() {
+    private Function<NumberConstantPayloadDto, Rating> mapOneIntegerFieldEntityDtoRatingFunction() {
         return constantIntegerEntityPayloadDto -> Rating.builder()
                 .value((Integer) constantIntegerEntityPayloadDto.getValue())
                 .build();
     }
 
-    private Function<Brand, ConstantEntityPayloadDto> mapResponseOneFieldEntityDtoBrandFunction() {
-        return entity -> ConstantEntityPayloadDto.builder()
+    private Function<Country, CountryDto> mapCountryEntityCountryDtoFunction() {
+        return entity -> CountryDto.builder()
                 .label(entity.getLabel())
                 .value(entity.getValue())
+                .flagImagePath(entity.getFlagImagePath())
                 .build();
     }
 
-    private Function<CountType, ConstantEntityPayloadDto> mapResponseOneFieldEntityDtoCountTypeFunction() {
-        return entity -> ConstantEntityPayloadDto.builder()
-                .label(entity.getLabel())
-                .value(entity.getValue())
+    private Function<CountryDto, Country> mapCountryDtoCountryFunction() {
+        return countryDto -> Country.builder()
+                .label(countryDto.getLabel())
+                .value(countryDto.getValue())
+                .flagImagePath(countryDto.getFlagImagePath())
                 .build();
     }
 
-    private Function<CountryPhoneCode, ConstantEntityPayloadDto> mapResponseOneFieldEntityDtoCountryPhoneCodeFunction() {
-        return entity -> ConstantEntityPayloadDto.builder()
-                .label(entity.getLabel())
-                .value(entity.getValue())
-                .build();
-    }
-
-    private Function<Country, ConstantEntityPayloadDto> mapResponseOneFieldEntityDtoCountryFunction() {
-        return entity -> ConstantEntityPayloadDto.builder()
-                .label(entity.getLabel())
-                .value(entity.getValue())
-                .build();
-    }
-
-    private Function<Currency, ConstantEntityPayloadDto> mapResponseOneFieldEntityDtoCurrencyFunction() {
-        return entity -> ConstantEntityPayloadDto.builder()
-                .label(entity.getLabel())
-                .value(entity.getValue())
-                .build();
-    }
-
-    private Function<DeliveryType, ConstantEntityPayloadDto> mapResponseOneFieldEntityDtoDeliveryTypeFunction() {
-        return entity -> ConstantEntityPayloadDto.builder()
-                .label(entity.getLabel())
-                .value(entity.getValue())
-                .build();
-    }
-
-    private Function<ItemStatus, ConstantEntityPayloadDto> mapResponseOneFieldEntityDtoItemStatusFunction() {
-        return entity -> ConstantEntityPayloadDto.builder()
-                .label(entity.getLabel())
-                .value(entity.getValue())
-                .build();
-    }
-
-    private Function<MessageStatus, ConstantEntityPayloadDto> mapResponseOneFieldEntityDtoMessageStatusFunction() {
-        return entity -> ConstantEntityPayloadDto.builder()
-                .label(entity.getLabel())
-                .value(entity.getValue())
-                .build();
-    }
-
-    private Function<ItemType, ConstantEntityPayloadDto> mapResponseOneFieldEntityDtoItemTypeFunction() {
-        return entity -> ConstantEntityPayloadDto.builder()
-                .label(entity.getLabel())
-                .value(entity.getValue())
-                .build();
-    }
-
-    private Function<MessageStatus, ConstantEntityPayloadDto> getResponseOneFieldEntityDtoMessageStatusFunction() {
-        return entity -> ConstantEntityPayloadDto.builder()
-                .label(entity.getLabel())
-                .value(entity.getValue())
-                .build();
-    }
-
-    private Function<MessageType, ConstantEntityPayloadDto> mapResponseOneFieldEntityDtoMessageTypeFunction() {
-        return entity -> ConstantEntityPayloadDto.builder()
-                .label(entity.getLabel())
-                .value(entity.getValue())
-                .build();
-    }
-
-    private Function<OptionGroup, ConstantEntityPayloadDto> mapResponseOneFieldEntityDtoOptionGroupFunction() {
-        return entity -> ConstantEntityPayloadDto.builder()
-                .label(entity.getLabel())
-                .value(entity.getValue())
-                .build();
-    }
-
-    private Function<OrderStatus, ConstantEntityPayloadDto> mapResponseOneFieldEntityDtoOrderStatusFunction() {
-        return entity -> ConstantEntityPayloadDto.builder()
-                .label(entity.getLabel())
-                .value(entity.getValue())
-                .build();
-    }
-
-    private Function<PaymentMethod, ConstantEntityPayloadDto> mapResponseOneFieldEntityDtoPaymentMethodFunction() {
-        return entity -> ConstantEntityPayloadDto.builder()
+    private Function<Currency, ConstantPayloadDto> mapResponseOneFieldEntityDtoCurrencyFunction() {
+        return entity -> ConstantPayloadDto.builder()
                 .label(entity.getLabel())
                 .value(entity.getValue())
                 .build();
@@ -566,7 +407,7 @@ public class TransformationEntityConfiguration {
         return review -> ResponseReviewDto.builder()
                 .title(review.getTitle())
                 .message(review.getMessage())
-                .ratingValue(review.getRating().getValue())
+                .ratingValue((Integer) review.getRating().getValue())
                 .dateOfCreate(new Date(System.currentTimeMillis()))
                 .build();
     }
@@ -688,6 +529,53 @@ public class TransformationEntityConfiguration {
                     .isPercent(currency == null)
                     .build();
         };
+    }
+
+    Function<Discount, DiscountDto> mapDiscountToDiscountDtoFunction() {
+        return discount -> DiscountDto.builder()
+                .currency(discount.getCurrency().getValue())
+                .amount(discount.getAmount())
+                .charSequenceCode(discount.getCharSequenceCode())
+                .isActive(discount.isActive())
+                .build();
+    }
+
+    Function<List<ItemDataOption>, DiscountDto> mapItemDataOptionListToDiscountDtoFunction() {
+        return itemDataOptionList -> {
+            Discount discount = itemDataOptionList.get(0).getDiscount();
+            return DiscountDto.builder()
+                    .charSequenceCode(discount.getCharSequenceCode())
+                    .amount(discount.getAmount())
+                    .isActive(discount.isActive())
+                    .currency(discount.getCurrency() != null ? discount.getCurrency().getValue() : null)
+                    .articularIdSet(
+                            itemDataOptionList.stream()
+                                    .map(ItemDataOption::getArticularId)
+                                    .collect(Collectors.toSet())
+                    )
+                    .build();
+        };
+    }
+
+    Function<List<ItemDataOption>, List<DiscountDto>> mapItemDataOptionListToDiscountDtoListFunction() {
+        return itemDataOptionList -> (List<DiscountDto>) itemDataOptionList.stream()
+                .collect(Collectors.groupingBy(ItemDataOption::getDiscount))
+                .entrySet().stream()
+                .map(entry -> {
+                    Discount discount = entry.getKey();
+                    Set<String> articularIdSet = entry.getValue().stream()
+                            .map(ItemDataOption::getArticularId)
+                            .collect(Collectors.toSet());
+
+                    return DiscountDto.builder()
+                            .charSequenceCode(discount.getCharSequenceCode())
+                            .amount(discount.getAmount())
+                            .isActive(discount.isActive())
+                            .currency(discount.getCurrency() != null ? discount.getCurrency().getValue() : null)
+                            .articularIdSet(articularIdSet)
+                            .build();
+                })
+                .toList();
     }
 
     private Function<ItemDataDto, ItemData> mapItemDataDtoToItemDataFunction() {

@@ -1,6 +1,6 @@
 package com.b2c.prototype.dao.address.base;
 
-import com.b2c.prototype.dao.AbstractSimpleEntityDaoTest;
+import com.b2c.prototype.dao.AbstractConstantEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
@@ -8,18 +8,15 @@ import com.tm.core.dao.identifier.EntityIdentifierDao;
 import com.tm.core.processor.finder.manager.EntityMappingManager;
 import com.tm.core.processor.finder.manager.IEntityMappingManager;
 import com.tm.core.processor.finder.table.EntityTable;
-import com.tm.core.processor.thread.IThreadLocalSessionManager;
-import com.tm.core.processor.thread.ThreadLocalSessionManager;
 import org.junit.jupiter.api.BeforeAll;
 
-class BasicAddressDaoTest extends AbstractSimpleEntityDaoTest {
+class BasicAddressDaoTest extends AbstractConstantEntityDaoTest {
 
     @BeforeAll
     public static void setup() {
-        IThreadLocalSessionManager sessionManager = new ThreadLocalSessionManager(sessionFactory);
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(Address.class, "address"));
-        entityIdentifierDao = new EntityIdentifierDao(sessionManager, entityMappingManager);
+        entityIdentifierDao = new EntityIdentifierDao(entityMappingManager);
         dao = new BasicAddressDao(sessionFactory, entityIdentifierDao);
     }
 
