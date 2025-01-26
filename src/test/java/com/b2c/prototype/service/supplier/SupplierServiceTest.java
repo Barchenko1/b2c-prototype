@@ -1,7 +1,7 @@
 package com.b2c.prototype.service.supplier;
 
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.processor.query.IQueryService;
+import com.b2c.prototype.service.query.IQueryService;
 import com.tm.core.processor.finder.factory.IParameterFactory;
 import com.tm.core.processor.finder.parameter.Parameter;
 import org.junit.jupiter.api.BeforeEach;

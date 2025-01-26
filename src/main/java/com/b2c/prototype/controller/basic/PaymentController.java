@@ -1,7 +1,7 @@
 package com.b2c.prototype.controller.basic;
 
 import com.b2c.prototype.modal.dto.payload.PaymentDto;
-import com.b2c.prototype.service.processor.payment.IPaymentService;
+import com.b2c.prototype.service.manager.payment.IPaymentManager;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1")
 public class PaymentController {
 
-    private final IPaymentService paymentService;
+    private final IPaymentManager paymentService;
 
-    public PaymentController(IPaymentService paymentService) {
+    public PaymentController(IPaymentManager paymentService) {
         this.paymentService = paymentService;
     }
 

@@ -1,4 +1,4 @@
-//package com.b2c.prototype.dao.embedded.processor;
+//package com.b2c.prototype.dao.embedded.manager;
 //
 //import com.b2c.prototype.dao.AbstractSingleEntityDaoTest;
 //import com.b2c.prototype.dao.EntityDataSet;
@@ -18,9 +18,9 @@
 //import com.b2c.prototype.modal.entity.price.Price;
 //import com.b2c.prototype.modal.entity.review.Review;
 //import com.tm.core.dao.identifier.EntityIdentifierDao;
-//import com.tm.core.processor.finder.manager.EntityMappingManager;
-//import com.tm.core.processor.finder.manager.IEntityMappingManager;
-//import com.tm.core.processor.finder.table.EntityTable;
+//import com.tm.core.manager.finder.manager.EntityMappingManager;
+//import com.tm.core.manager.finder.manager.IEntityMappingManager;
+//import com.tm.core.manager.finder.table.EntityTable;
 //import org.junit.jupiter.api.BeforeAll;
 //import org.junit.jupiter.api.BeforeEach;
 //

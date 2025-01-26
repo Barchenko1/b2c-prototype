@@ -1,0 +1,17 @@
+package com.b2c.prototype.service.manager.item;
+
+import com.b2c.prototype.modal.dto.payload.ItemDataOptionOneQuantityDto;
+import com.b2c.prototype.modal.dto.payload.ItemDataOptionQuantityDto;
+
+public interface IItemDataOptionQuantityManager {
+    void increaseOneItemDataOptionQuantityCount(ItemDataOptionOneQuantityDto itemDataOptionOneQuantityDto);
+    void decreaseOneItemDataOptionQuantityCount(ItemDataOptionOneQuantityDto itemDataOptionOneQuantityDto);
+    void increaseOneItemDataOptionQuantityCountAndStore(ItemDataOptionOneQuantityDto itemDataOptionOneQuantityDto);
+    void decreaseOneItemDataOptionQuantityCountAndStore(ItemDataOptionOneQuantityDto itemDataOptionOneQuantityDto);
+
+    void increaseItemDataOptionQuantityCount(ItemDataOptionQuantityDto itemDataOptionQuantityDto);
+    void decreaseItemDataOptionQuantityCount(ItemDataOptionQuantityDto itemDataOptionQuantityDto);
+
+    void increaseItemDataOptionQuantityCountAndStore(ItemDataOptionQuantityDto itemDataOptionQuantityDto);
+    void decreaseItemDataOptionQuantityCountAndStore(ItemDataOptionQuantityDto itemDataOptionQuantityDto);
+}

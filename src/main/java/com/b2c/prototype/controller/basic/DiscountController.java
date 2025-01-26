@@ -2,7 +2,7 @@ package com.b2c.prototype.controller.basic;
 
 import com.b2c.prototype.modal.dto.payload.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.DiscountStatusDto;
-import com.b2c.prototype.service.processor.item.IDiscountService;
+import com.b2c.prototype.service.manager.item.IDiscountManager;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +22,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/discount")
 public class DiscountController {
-    private final IDiscountService discountService;
+    private final IDiscountManager discountService;
 
-    public DiscountController(IDiscountService discountService) {
+    public DiscountController(IDiscountManager discountService) {
         this.discountService = discountService;
     }
 

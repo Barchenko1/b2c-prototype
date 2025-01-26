@@ -1,7 +1,7 @@
 import com.b2c.prototype.modal.entity.item.Item;
 import com.b2c.prototype.modal.entity.post.Post;
 
-//package com.b2c.prototype.dao.embedded.processor;
+//package com.b2c.prototype.dao.embedded.manager;
 //
 //import com.b2c.prototype.dao.AbstractSingleEntityDaoTest;
 //import com.b2c.prototype.dao.EntityDataSet;
@@ -26,9 +26,9 @@ import com.b2c.prototype.modal.entity.post.Post;
 //import com.b2c.prototype.modal.entity.wishlist.Wishlist;
 //import com.b2c.prototype.util.CardUtil;
 //import com.tm.core.dao.identifier.EntityIdentifierDao;
-//import com.tm.core.processor.finder.manager.EntityMappingManager;
-//import com.tm.core.processor.finder.manager.IEntityMappingManager;
-//import com.tm.core.processor.finder.table.EntityTable;
+//import com.tm.core.manager.finder.manager.EntityMappingManager;
+//import com.tm.core.manager.finder.manager.IEntityMappingManager;
+//import com.tm.core.manager.finder.table.EntityTable;
 //import org.junit.jupiter.api.BeforeAll;
 //import org.junit.jupiter.api.BeforeEach;
 //

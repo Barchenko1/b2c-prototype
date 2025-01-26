@@ -1,6 +1,6 @@
 package com.b2c.prototype.controller.constant;
 
-import com.b2c.prototype.service.orchestrator.IConstantOrchestratorService;
+import com.b2c.prototype.service.processor.IConstantProcessorService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,9 +20,9 @@ import java.util.Map;
 @RequestMapping("/api/v1/singlevalue")
 public class ConstantController {
 
-    private final IConstantOrchestratorService constantOrchestratorService;
+    private final IConstantProcessorService constantOrchestratorService;
 
-    public ConstantController(IConstantOrchestratorService constantOrchestratorService) {
+    public ConstantController(IConstantProcessorService constantOrchestratorService) {
         this.constantOrchestratorService = constantOrchestratorService;
     }
 
