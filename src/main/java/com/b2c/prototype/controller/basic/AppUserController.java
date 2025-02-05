@@ -1,6 +1,6 @@
 package com.b2c.prototype.controller.basic;
 
-import com.b2c.prototype.service.manager.userprofile.IUserProfileManager;
+import com.b2c.prototype.manager.userprofile.IUserProfileManager;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

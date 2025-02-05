@@ -1,6 +1,5 @@
 package com.b2c.prototype.modal.base;
 
-import com.b2c.prototype.modal.entity.price.Price;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

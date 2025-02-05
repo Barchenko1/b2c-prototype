@@ -28,7 +28,7 @@ class DiscountControllerE2ETest extends BasicE2ETest {
         try (Connection connection = connectionHolder.getConnection()) {
             connection.setAutoCommit(false);
             Statement statement = connection.createStatement();
-            statement.execute("DELETE FROM item_data_option");
+            statement.execute("DELETE FROM articular_item");
             statement.execute("DELETE FROM discount");
             statement.execute("DELETE FROM currency");
             statement.execute("TRUNCATE TABLE discount RESTART IDENTITY CASCADE");

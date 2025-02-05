@@ -58,8 +58,6 @@ class BasicUserProfileDaoTest extends AbstractCustomEntityDaoTest {
         try (Connection connection = connectionHolder.getConnection()) {
             connection.setAutoCommit(false);
             Statement statement = connection.createStatement();
-            statement.execute("DELETE FROM user_profile_credit_card");
-
             statement.execute("TRUNCATE TABLE contact_info RESTART IDENTITY CASCADE");
             statement.execute("TRUNCATE TABLE contact_phone RESTART IDENTITY CASCADE");
             statement.execute("TRUNCATE TABLE address RESTART IDENTITY CASCADE");

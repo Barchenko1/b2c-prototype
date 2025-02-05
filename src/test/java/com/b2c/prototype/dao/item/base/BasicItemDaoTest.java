@@ -64,7 +64,7 @@ class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
             Statement statement = connection.createStatement();
             statement.execute("DELETE FROM item_review");
             statement.execute("DELETE FROM item_post");
-            statement.execute("DELETE FROM item_data_option");
+            statement.execute("DELETE FROM articular_item");
             connection.commit();
         } catch (Exception e) {
             throw new RuntimeException("Failed to clean table: item_option", e);

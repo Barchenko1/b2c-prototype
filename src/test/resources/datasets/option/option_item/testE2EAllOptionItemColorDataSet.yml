@@ -1,0 +1,15 @@
+option_group:
+  - id: 1
+    label: "Color"
+    value: "Color"
+option_item:
+  - label: "Yellow"
+    value: "Yellow"
+    option_group_id: 1
+  - label: "Blue"
+    value: "Blue"
+    option_group_id: 1
+  - label: "Red"
+    value: "Red"
+    option_group_id: 1
+

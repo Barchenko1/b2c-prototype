@@ -1,7 +1,7 @@
 package com.b2c.prototype.controller.basic;
 
 import com.b2c.prototype.modal.dto.payload.PaymentDto;
-import com.b2c.prototype.service.manager.payment.IPaymentManager;
+import com.b2c.prototype.manager.payment.IPaymentManager;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

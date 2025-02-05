@@ -52,7 +52,7 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
         try (Connection connection = connectionHolder.getConnection()) {
             connection.setAutoCommit(false);
             Statement statement = connection.createStatement();
-            statement.execute("DELETE FROM item_data_option");
+            statement.execute("DELETE FROM articular_item");
             connection.commit();
         } catch (Exception e) {
             throw new RuntimeException("Failed to clean table: item_option", e);
@@ -72,15 +72,17 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
     }
 
     public OptionItem prepareToSaveOptionItem() {
+        OptionItem optionItem = OptionItem.builder()
+                .value("L")
+                .label("L")
+                .build();
         OptionGroup optionGroup = OptionGroup.builder()
+                .id(1L)
                 .value("Size")
                 .label("Size")
                 .build();
-
-        return OptionItem.builder()
-                .optionGroup(optionGroup)
-                .optionName("L")
-                .build();
+        optionGroup.addOptionItem(optionItem);
+        return optionGroup.getOptionItems().get(0);
     }
 
     public OptionItem prepareTestOptionItem() {
@@ -92,27 +94,29 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
         return OptionItem.builder()
                 .id(1L)
                 .optionGroup(optionGroup)
-                .optionName("L")
+                .value("L")
+                .label("L")
                 .build();
     }
 
     public OptionItem prepareToUpdateOptionItem() {
         OptionGroup optionGroup = OptionGroup.builder()
                 .id(1L)
-                .value("Color")
-                .label("Color")
+                .value("Size")
+                .label("Size")
                 .build();
 
         return OptionItem.builder()
                 .id(1L)
                 .optionGroup(optionGroup)
-                .optionName("Red")
+                .value("XL")
+                .label("XL")
                 .build();
     }
 
     private void checkOptionItem(OptionItem expectedOptionItem, OptionItem actualOptionItem) {
         assertEquals(expectedOptionItem.getId(), actualOptionItem.getId());
-        assertEquals(expectedOptionItem.getOptionName(), actualOptionItem.getOptionName());
+        assertEquals(expectedOptionItem.getValue(), actualOptionItem.getValue());
 
 //        assertEquals(expectedOptionItem.getOptionGroup().getId(), actualOptionItem.getOptionGroup().getId());
 //        assertEquals(expectedOptionItem.getOptionGroup().getValue(), actualOptionItem.getOptionGroup().getValue());
@@ -141,7 +145,7 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
 
     @Test
     void saveEntity_success() {
-        loadDataSet("/datasets/option/option_item/emptyOptionItemDataSet.yml");
+        loadDataSet("/datasets/option/option_item/emptyOptionItemWithOptionGroupDataSet.yml");
         OptionItem optionItem = prepareToSaveOptionItem();
 
         dao.persistEntity(optionItem);
@@ -152,7 +156,7 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
     void saveEntity_transactionFailure() {
         OptionItem optionItem = new OptionItem();
         optionItem.setId(1L);
-        optionItem.setOptionName("Size");
+        optionItem.setValue("Size");
 
         SessionFactory sessionFactory = mock(SessionFactory.class);
         Session session = mock(Session.class);
@@ -179,10 +183,10 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
 
     @Test
     void saveEntityConsumer_success() {
-        loadDataSet("/datasets/option/option_item/emptyOptionItemDataSet.yml");
+        loadDataSet("/datasets/option/option_item/emptyOptionItemWithOptionGroupDataSet.yml");
         Consumer<Session> consumer = (Session s) -> {
             OptionItem optionItem = prepareToSaveOptionItem();
-            s.persist(optionItem.getOptionGroup());
+//            s.persist(optionItem.getOptionGroup());
             s.persist(optionItem);
         };
 
@@ -232,7 +236,7 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
         Consumer<Session> consumer = (Session s) -> {
             OptionItem optionItemToUpdate = prepareToUpdateOptionItem();
 
-            s.merge(optionItemToUpdate.getOptionGroup());
+//            s.merge(optionItemToUpdate.getOptionGroup());
             s.merge(optionItemToUpdate);
         };
         dao.executeConsumer(consumer);
@@ -269,12 +273,12 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
         loadDataSet("/datasets/option/option_item/testOptionItemDataSet.yml");
         Consumer<Session> consumer = (Session s) -> {
             OptionItem optionItem = prepareTestOptionItem();
-            s.remove(optionItem.getOptionGroup());
+//            s.remove(optionItem.getOptionGroup());
             s.remove(optionItem);
         };
 
         dao.executeConsumer(consumer);
-        verifyExpectedData("/datasets/option/option_item/emptyOptionItemDataSet.yml");
+        verifyExpectedData("/datasets/option/option_item/emptyOptionItemWithOptionGroupDataSet.yml");
     }
 
     @Test

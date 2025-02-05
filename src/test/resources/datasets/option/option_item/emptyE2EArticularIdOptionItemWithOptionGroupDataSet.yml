@@ -1,0 +1,10 @@
+articular_item:
+  - id: 1
+    articular_id: 1234
+    dateOfCreate: 10000
+option_group:
+  - id: 1
+    label: "Size"
+    value: "Size"
+option_item: []
+articular_item_option_item: []

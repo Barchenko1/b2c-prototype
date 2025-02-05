@@ -36,11 +36,11 @@
         <mapping class="com.b2c.prototype.modal.entity.delivery.Delivery" />
         <mapping class="com.b2c.prototype.modal.entity.order.OrderStatus" />
         <mapping class="com.b2c.prototype.modal.entity.user.UserProfile" />
-        <mapping class="com.b2c.prototype.modal.entity.item.ItemDataOptionQuantity" />
-        <mapping class="com.b2c.prototype.modal.entity.item.ItemDataOption" />
+        <mapping class="com.b2c.prototype.modal.entity.item.ArticularItemQuantity" />
+        <mapping class="com.b2c.prototype.modal.entity.item.ArticularItem" />
         <mapping class="com.b2c.prototype.modal.entity.option.OptionItem" />
         <mapping class="com.b2c.prototype.modal.entity.option.OptionGroup" />
-        <mapping class="com.b2c.prototype.modal.embedded.order.TempOrderItem" />
+        <mapping class="com.b2c.prototype.modal.embedded.order.TempOrderArticularItem" />
         <mapping class="com.b2c.prototype.modal.embedded.user.TempUserProfile" />
         <mapping class="com.b2c.prototype.modal.embedded.item.TempItemDataQuantity" />
         <mapping class="com.b2c.prototype.modal.embedded.item.TempItemData" />

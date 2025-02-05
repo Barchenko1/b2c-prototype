@@ -2,6 +2,7 @@ package com.b2c.prototype.e2e.controller.constant;
 
 import com.b2c.prototype.e2e.AbstractConstantControllerE2ETest;
 import com.b2c.prototype.modal.dto.payload.ConstantPayloadDto;
+import com.b2c.prototype.modal.entity.item.Brand;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.MvcResult;
@@ -61,12 +62,12 @@ public class BrandControllerE2ETest extends AbstractConstantControllerE2ETest {
 
     @Test
     public void testGetBrands() {
-        List<ConstantPayloadDto> constantPayloadDtoList = List.of(
-                ConstantPayloadDto.builder()
+        List<Brand> constantPayloadDtoList = List.of(
+                Brand.builder()
                         .label("Apple")
                         .value("Apple")
                         .build(),
-                ConstantPayloadDto.builder()
+                Brand.builder()
                         .label("Android")
                         .value("Android")
                         .build());

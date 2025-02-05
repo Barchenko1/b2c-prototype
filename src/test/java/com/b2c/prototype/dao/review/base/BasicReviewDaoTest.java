@@ -47,6 +47,7 @@ class BasicReviewDaoTest extends AbstractConstantEntityDaoTest {
                 .title("title")
                 .message("message")
                 .rating(rating)
+                .comments(List.of())
                 .build();
         return new EntityDataSet<>(review, "/datasets/review/review/testReviewDataSet.yml");
     }
@@ -57,12 +58,12 @@ class BasicReviewDaoTest extends AbstractConstantEntityDaoTest {
                 .id(5L)
                 .value(5)
                 .build();
-        Item item = preparItem();
         Review review = Review.builder()
                 .dateOfCreate(100)
                 .title("title")
                 .message("message")
                 .rating(rating)
+                .comments(List.of())
                 .build();
         return new EntityDataSet<>(review, "/datasets/review/review/saveReviewDataSet.yml");
     }
@@ -80,6 +81,7 @@ class BasicReviewDaoTest extends AbstractConstantEntityDaoTest {
                 .title("Update title")
                 .message("Update message")
                 .rating(rating)
+                .comments(List.of())
                 .build();
         return new EntityDataSet<>(review, "/datasets/review/review/updateReviewDataSet.yml");
     }

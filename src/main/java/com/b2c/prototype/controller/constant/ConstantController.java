@@ -1,6 +1,6 @@
 package com.b2c.prototype.controller.constant;
 
-import com.b2c.prototype.service.processor.IConstantProcessorService;
+import com.b2c.prototype.processor.constant.IConstantProcessorService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;

@@ -26,11 +26,13 @@ option_group:
     name: "Size"
 option_item:
   - id: 1
-    optionName: "L"
-    optiongroup_id: 1
+    value: "L"
+    label: "L"
+    option_group_id: 1
   - id: 2
-    optionName: "M"
-    optiongroup_id: 1
+    value: "M"
+    label: "M"
+    option_group_id: 1
 category:
   - id: 1
     name: "parent"
@@ -90,7 +92,7 @@ item:
     discount_id: 1
     itemtype_id: 1
     status_id: 1
-item_data_option:
+articular_item:
   - item_id: 1
     option_item_id: 1
   - item_id: 1

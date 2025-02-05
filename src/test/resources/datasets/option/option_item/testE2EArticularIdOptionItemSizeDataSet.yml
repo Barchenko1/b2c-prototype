@@ -1,0 +1,16 @@
+option_group:
+  - id: 1
+    label: "Size"
+    value: "Size"
+option_item:
+  - id: 1
+    label: "M"
+    value: "M"
+    option_group_id: 1
+articular_item:
+  - id: 1
+    articular_id: 1234
+    dateOfCreate: 10000
+articular_item_option_item:
+  - articular_item_id: 1
+    option_item_id: 1

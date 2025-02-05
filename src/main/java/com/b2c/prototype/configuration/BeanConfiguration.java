@@ -3,7 +3,11 @@ package com.b2c.prototype.configuration;
 import com.b2c.prototype.dao.address.ICountryDao;
 import com.b2c.prototype.dao.address.base.BasicCountryDao;
 import com.b2c.prototype.dao.item.IDiscountDao;
+import com.b2c.prototype.dao.item.IItemDataDao;
+import com.b2c.prototype.dao.item.IItemDataOptionDao;
 import com.b2c.prototype.dao.item.base.BasicDiscountDao;
+import com.b2c.prototype.dao.item.base.BasicArticularItemDao;
+import com.b2c.prototype.dao.item.base.BasicItemDataDao;
 import com.b2c.prototype.dao.message.IMessageStatusDao;
 import com.b2c.prototype.dao.message.IMessageTypeDao;
 import com.b2c.prototype.dao.message.basic.BasicMessageStatusDao;
@@ -260,6 +264,16 @@ public class BeanConfiguration {
     @Bean
     public IItemDao itemDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
         return new BasicItemDao(sessionFactory, entityIdentifierDao);
+    }
+
+    @Bean
+    public IItemDataDao itemDataDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicItemDataDao(sessionFactory, entityIdentifierDao);
+    }
+
+    @Bean
+    public IItemDataOptionDao itemDataOptionDao(SessionFactory sessionFactory, IEntityIdentifierDao entityIdentifierDao) {
+        return new BasicArticularItemDao(sessionFactory, entityIdentifierDao);
     }
 
     @Bean

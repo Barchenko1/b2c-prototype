@@ -24,8 +24,13 @@ public class QueryService implements IQueryService {
     }
 
     @Override
-    public <E> E getEntity(Class<?> clazz, String graphNamedQuery, Supplier<Parameter> parameterSupplier) {
-        return searchWrapper.getEntityNamedQuery(clazz, graphNamedQuery, parameterSupplier.get());
+    public <E> E getGraphEntity(Class<?> clazz, String graph, Supplier<Parameter> parameterSupplier) {
+        return searchWrapper.getEntityGraph(clazz, graph, parameterSupplier.get());
+    }
+
+    @Override
+    public <E> E getNamedQueryEntity(Class<?> clazz, String namedQuery, Supplier<Parameter> parameterSupplier) {
+        return searchWrapper.getEntityNamedQuery(clazz, namedQuery, parameterSupplier.get());
     }
 
     @Override
@@ -34,13 +39,18 @@ public class QueryService implements IQueryService {
     }
 
     @Override
+    public <E> Optional<E> getOptionalEntity(Class<?> clazz, String graph, Supplier<Parameter> parameterSupplier) {
+        return searchWrapper.getOptionalEntityGraph(clazz, graph, parameterSupplier.get());
+    }
+
+    @Override
     public <E> List<E> getEntityList(Class<?> clazz) {
         return searchWrapper.getEntityList(clazz);
     }
 
     @Override
-    public <E> List<E> getEntityList(Class<?> clazz, String graphNamedQuery, Supplier<Parameter> parameterSupplier) {
-        return searchWrapper.getEntityNamedQueryList(clazz, graphNamedQuery, parameterSupplier.get());
+    public <E> List<E> getEntityListNamedQuery(Class<?> clazz, String namedQuery, Supplier<Parameter> parameterSupplier) {
+        return searchWrapper.getEntityNamedQueryList(clazz, namedQuery, parameterSupplier.get());
     }
 
     @Override
@@ -153,15 +163,6 @@ public class QueryService implements IQueryService {
     public  <E> E getQueryEntity(Query<E> query, Supplier<Parameter> parameterSupplier) {
         Parameter parameter = parameterSupplier.get();
         query.setParameter(parameter.getName(), parameter.getValue());
-        return query.uniqueResult();
-    }
-
-    @Override
-    public <E> E getQueryEntityParameterArray(Query<E> query, Supplier<Parameter[]> parameterSupplier) {
-        Parameter[] parameters = parameterSupplier.get();
-        for (Parameter parameter : parameters) {
-            query.setParameter(parameter.getName(), parameter.getValue());
-        }
         return query.uniqueResult();
     }
 }

@@ -33,6 +33,14 @@ public class SupplierService implements ISupplierService {
     }
 
     @Override
+    public <E, R> Supplier<R> entityFieldGraphSupplier(Class<E> entityClass,
+                                                       String graph,
+                                                       Supplier<Parameter> parameterSupplier,
+                                                       Function<E, R> fieldExtractor) {
+        return () -> queryService.getEntityGraphDto(entityClass, graph, parameterSupplier, fieldExtractor);
+    }
+
+    @Override
     public <E> Supplier<E> entityFieldSupplier(Class<E> entityClass, Supplier<Parameter> parameterSupplier) {
         return () -> queryService.getEntity(entityClass, parameterSupplier);
     }

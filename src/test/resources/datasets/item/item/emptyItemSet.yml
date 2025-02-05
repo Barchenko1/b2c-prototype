@@ -31,11 +31,13 @@ option_group:
     value: "Size"
 option_item:
   - id: 1
-    optionName: "L"
-    optiongroup_id: 1
+    value: "L"
+    label: "L"
+    option_group_id: 1
   - id: 2
-    optionName: "M"
-    optiongroup_id: 1
+    value: "M"
+    label: "M"
+    option_group_id: 1
 category:
   - id: 1
     name: "parent"
@@ -88,9 +90,8 @@ item_data:
     category_id: 3
     itemtype_id: 1
     status_id: 1
-item_data_option:
+articular_item:
   - id: 1
     articular_id: 1
     dateOfCreate: 10000
-    optionitem_id: 1
 item: []

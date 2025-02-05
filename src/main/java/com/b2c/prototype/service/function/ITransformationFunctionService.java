@@ -7,9 +7,6 @@ public interface ITransformationFunctionService {
     <E, R> R getEntity(Class<R> classTo, E dataEntity);
     <E, R> R getEntity(Class<R> classTo, E dataEntity, String sol);
 
-    <E, R> Collection<R> getEntityCollection(Class<R> classTo, E dataEntity);
-    <E, R> Collection<R> getEntityCollection(Class<R> classTo, E dataEntity, String sol);
-
     <E, R> Function<E, Collection<R>> getTransformationCollectionFunction(Class<E> classFrom, Class<R> classTo);
     <E, R> Function<E, Collection<R>> getTransformationCollectionFunction(Class<E> classFrom, Class<R> classTo, String sol);
 

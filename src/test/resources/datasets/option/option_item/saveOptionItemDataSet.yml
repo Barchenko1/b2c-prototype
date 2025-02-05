@@ -1,5 +1,6 @@
-item: []
 option_group:
   - value: "Size"
+    label: "Size"
 option_item:
-  - optionName: "L"
+  - label: "L"
+    value: "L"

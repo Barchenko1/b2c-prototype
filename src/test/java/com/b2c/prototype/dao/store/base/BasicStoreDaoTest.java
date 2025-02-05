@@ -5,7 +5,7 @@ import com.b2c.prototype.dao.EntityDataSet;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.ItemData;
-import com.b2c.prototype.modal.entity.item.ItemDataOption;
+import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.ItemStatus;
 import com.b2c.prototype.modal.entity.item.ItemType;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
@@ -21,6 +21,7 @@ import com.tm.core.processor.finder.table.EntityTable;
 import org.junit.jupiter.api.BeforeAll;
 
 import java.util.List;
+import java.util.Set;
 
 class BasicStoreDaoTest extends AbstractConstantEntityDaoTest {
 
@@ -46,7 +47,7 @@ class BasicStoreDaoTest extends AbstractConstantEntityDaoTest {
                 .build();
         Store store = Store.builder()
                 .id(1L)
-                .itemDataOption(prepareTestItemDataOption())
+                .articularItem(prepareTestItemDataOption())
                 .countType(countType)
                 .count(10)
                 .build();
@@ -61,7 +62,7 @@ class BasicStoreDaoTest extends AbstractConstantEntityDaoTest {
                 .label("limited")
                 .build();
         Store store = Store.builder()
-                .itemDataOption(prepareTestItemDataOption())
+                .articularItem(prepareTestItemDataOption())
                 .countType(countType)
                 .count(10)
                 .build();
@@ -78,7 +79,7 @@ class BasicStoreDaoTest extends AbstractConstantEntityDaoTest {
         Store store = Store.builder()
                 .id(1L)
                 .countType(countType)
-                .itemDataOption(prepareTestItemDataOption())
+                .articularItem(prepareTestItemDataOption())
                 .count(9)
                 .build();
         return new EntityDataSet<>(store, "/datasets/store/store/updateStoreDataSet.yml");
@@ -107,7 +108,7 @@ class BasicStoreDaoTest extends AbstractConstantEntityDaoTest {
         return child;
     }
 
-    private ItemDataOption prepareTestItemDataOption() {
+    private ArticularItem prepareTestItemDataOption() {
         Brand brand = Brand.builder()
                 .id(1L)
                 .value("Hermes")
@@ -129,16 +130,17 @@ class BasicStoreDaoTest extends AbstractConstantEntityDaoTest {
                 .value("Clothes")
                 .label("Clothes")
                 .build();
+        OptionItem optionItem = OptionItem.builder()
+                .id(1L)
+                .value("L")
+                .label("L")
+                .build();
         OptionGroup optionGroup = OptionGroup.builder()
                 .id(1L)
                 .value("Size")
                 .label("Size")
                 .build();
-        OptionItem optionItem = OptionItem.builder()
-                .id(1L)
-                .optionName("L")
-                .optionGroup(optionGroup)
-                .build();
+        optionGroup.addOptionItem(optionItem);
         Price price = Price.builder()
                 .id(1L)
                 .amount(100)
@@ -152,14 +154,14 @@ class BasicStoreDaoTest extends AbstractConstantEntityDaoTest {
                 .status(itemStatus)
                 .itemType(itemType)
                 .build();
-
-        return ItemDataOption.builder()
+        ArticularItem articularItem = ArticularItem.builder()
                 .id(1L)
                 .articularId("1")
                 .dateOfCreate(10000)
-                .optionItem(optionItem)
                 .articularId("1")
                 .build();
-    }
+        articularItem.addOptionItem(optionItem);
 
+        return articularItem;
+    }
 }

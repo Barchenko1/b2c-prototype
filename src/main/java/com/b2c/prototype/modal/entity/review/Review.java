@@ -9,6 +9,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
@@ -18,6 +19,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.b2c.prototype.util.UniqueIdUtil.getUUID;
@@ -42,8 +44,9 @@ public class Review {
     private UserProfile userProfile;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private Rating rating;
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
-    private List<Comment> comments;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "review_id")
+    private List<Comment> comments = new ArrayList<>();
 
     @PrePersist
     protected void onPrePersist() {

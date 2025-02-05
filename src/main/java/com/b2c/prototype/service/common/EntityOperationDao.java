@@ -105,21 +105,21 @@ public class EntityOperationDao implements IEntityOperationDao {
     }
 
     @Override
-    public <E, R> R getEntityDto(String graphNamedQuery, Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction) {
+    public <E, R> R getEntityGraphDto(String graph, Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction) {
         LOGGER.info("Getting entity dto");
-        E entity = dao.getEntityGraph(graphNamedQuery, parameterSupplier.get());
+        E entity = dao.getEntityGraph(graph, parameterSupplier.get());
         return Optional.ofNullable(entity).map(mapToDtoFunction).orElse(null);
     }
 
     @Override
-    public <E, R> Optional<R> getOptionalEntityDto(String graphNamedQuery, Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction) {
+    public <E, R> Optional<R> getOptionalEntityGraphDto(String graph, Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction) {
         LOGGER.info("Getting entity dto");
-        E entity = dao.getEntity(parameterSupplier.get());
+        E entity = dao.getEntityGraph(graph, parameterSupplier.get());
         return Optional.ofNullable(entity).map(mapToDtoFunction);
     }
 
     @Override
-    public <E, R> List<R> getEntityDtoList(String graphNamedQuery, Function<E, R> mapToDtoFunction) {
+    public <E, R> List<R> getEntityGraphDtoList(String graph, Function<E, R> mapToDtoFunction) {
         LOGGER.info("Getting entity dto list");
         List<E> entityList = dao.getEntityList();
         return entityList.stream()
@@ -128,7 +128,7 @@ public class EntityOperationDao implements IEntityOperationDao {
     }
 
     @Override
-    public <E, R> List<R> getSubEntityDtoList(String graphNamedQuery, Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction) {
+    public <E, R> List<R> getSubEntityGraphDtoList(String graphNamedQuery, Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction) {
         LOGGER.info("Getting entity dto list");
         List<E> entityList = dao.getEntityList(parameterSupplier.get());
         return entityList.stream()

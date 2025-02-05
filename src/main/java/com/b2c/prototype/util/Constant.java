@@ -9,7 +9,6 @@ public interface Constant {
     String CHAR_SEQUENCE_CODE = "charSequenceCode";
     String VALUE = "value";
 
-
     // serviceId
     String BRAND_SERVICE_ID = "brand";
     String COUNT_TYPE_SERVICE_ID = "countType";
@@ -27,7 +26,8 @@ public interface Constant {
     String RATING_SERVICE_ID = "rating";
 
     //graph
-    String ITEM_DATA_OPTION_BY_DISCOUNT_CHAR_SEQUENCE_CODE = "ItemDataOption.findByDiscountCharSequenceCode";
-    String ITEM_DATA_OPTION_BY_DISCOUNT = "ItemDataOption.findByDiscountNotNull";
+    String ITEM_DATA_OPTION_BY_DISCOUNT_CHAR_SEQUENCE_CODE = "ArticularItem.findByDiscountCharSequenceCode";
+    String ITEM_DATA_OPTION_BY_DISCOUNT = "ArticularItem.findByDiscountNotNull";
+    String ITEM_DATA_OPTION_FULL = "articularItem.full";
 
 }

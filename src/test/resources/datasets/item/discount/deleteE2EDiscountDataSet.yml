@@ -9,7 +9,7 @@ discount:
     isActive: true
     isPercent: false
     currency_id: 1
-item_data_option:
+articular_item:
   - id: 1
     articular_id: 123
     dateOfCreate: 10000

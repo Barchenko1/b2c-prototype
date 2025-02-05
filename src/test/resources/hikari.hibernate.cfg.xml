@@ -24,7 +24,7 @@
         <property name="hibernate.connection.provider_class">org.hibernate.hikaricp.internal.HikariCPConnectionProvider</property>
         <property name="hibernate.connection.isolation">2</property>
         <!-- add annotated resources here -->
-        <mapping class="com.b2c.prototype.modal.entity.order.OrderItemData" />
+        <mapping class="com.b2c.prototype.modal.entity.order.OrderArticularItem" />
         <mapping class="com.b2c.prototype.modal.entity.order.OrderStatus" />
 
         <mapping class="com.b2c.prototype.modal.entity.payment.PaymentMethod" />
@@ -55,9 +55,9 @@
         <mapping class="com.b2c.prototype.modal.entity.option.OptionItem" />
 
         <mapping class="com.b2c.prototype.modal.entity.item.ItemData" />
-        <mapping class="com.b2c.prototype.modal.entity.item.ItemDataOption" />
+        <mapping class="com.b2c.prototype.modal.entity.item.ArticularItem" />
         <mapping class="com.b2c.prototype.modal.entity.item.Item" />
-        <mapping class="com.b2c.prototype.modal.entity.item.ItemDataOptionQuantity" />
+        <mapping class="com.b2c.prototype.modal.entity.item.ArticularItemQuantity" />
 
         <mapping class="com.b2c.prototype.modal.entity.message.MessageType" />
         <mapping class="com.b2c.prototype.modal.entity.message.MessageStatus" />

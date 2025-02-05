@@ -11,7 +11,6 @@ import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -28,18 +27,18 @@ import lombok.experimental.SuperBuilder;
 )
 @NamedQueries({
         @NamedQuery(
-                name = "ItemDataOption.findByDiscountCharSequenceCode",
-                query = "SELECT i FROM ItemDataOption i " +
-                        "LEFT JOIN FETCH i.discount d " +
+                name = "ArticularItem.findByDiscountCharSequenceCode",
+                query = "SELECT ai FROM ArticularItem ai " +
+                        "LEFT JOIN FETCH ai.discount d " +
                         "LEFT JOIN FETCH d.currency " +
                         "WHERE d.charSequenceCode = :charSequenceCode"
         ),
         @NamedQuery(
-                name = "ItemDataOption.findByDiscountNotNull",
-                query = "SELECT i FROM ItemDataOption i " +
-                        "LEFT JOIN FETCH i.discount d " +
+                name = "ArticularItem.findByDiscountNotNull",
+                query = "SELECT ai FROM ArticularItem ai " +
+                        "LEFT JOIN FETCH ai.discount d " +
                         "LEFT JOIN FETCH d.currency " +
-                        "WHERE i.discount IS NOT NULL"
+                        "WHERE ai.discount IS NOT NULL"
         )
 })
 @Data

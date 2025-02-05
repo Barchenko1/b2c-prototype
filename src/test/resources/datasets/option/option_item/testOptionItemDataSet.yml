@@ -1,9 +1,10 @@
-item: []
+articular_item: []
 option_group:
   - id: 1
     label: "Size"
     value: "Size"
 option_item:
   - id: 1
-    optionName: "L"
-    optiongroup_id: 1
+    label: "L"
+    value: "L"
+    option_group_id: 1

@@ -81,12 +81,12 @@
 //                .build();
 //        OptionItem optionItem1 = OptionItem.builder()
 //                .id(1L)
-//                .optionName("L")
+//                .value("L")
 //                .optionGroup(optionGroup)
 //                .build();
 //        OptionItem optionItem2 = OptionItem.builder()
 //                .id(2L)
-//                .optionName("M")
+//                .value("M")
 //                .optionGroup(optionGroup)
 //                .build();
 //        Price price = Price.builder()

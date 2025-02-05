@@ -68,20 +68,6 @@ public class TransformationFunctionService implements ITransformationFunctionSer
     }
 
     @Override
-    public <E, R> Collection<R> getEntityCollection(Class<R> classTo, E dataEntity) {
-        @SuppressWarnings("unchecked")
-        Class<E> classFrom = (Class<E>) dataEntity.getClass();
-        return mapToCollectionFunction(classFrom, classTo, null).apply(dataEntity);
-    }
-
-    @Override
-    public <E, R> Collection<R> getEntityCollection(Class<R> classTo, E dataEntity, String sol) {
-        @SuppressWarnings("unchecked")
-        Class<E> classFrom = (Class<E>) dataEntity.getClass();
-        return mapToCollectionFunction(classFrom, classTo, null).apply(dataEntity);
-    }
-
-    @Override
     public <E, R> void addTransformationFunction(Class<E> classFrom, Class<R> classTo, Function<?, ?> function) {
         this.functionMap.put(createKey(classFrom, classTo, null), function);
     }

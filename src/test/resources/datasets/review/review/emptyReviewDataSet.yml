@@ -31,11 +31,13 @@ option_group:
     value: "Size"
 option_item:
   - id: 1
-    optionName: "L"
-    optiongroup_id: 1
+    value: "L"
+    label: "L"
+    option_group_id: 1
   - id: 2
-    optionName: "M"
-    optiongroup_id: 1
+    value: "M"
+    label: "M"
+    option_group_id: 1
 category:
   - id: 1
     name: "parent"

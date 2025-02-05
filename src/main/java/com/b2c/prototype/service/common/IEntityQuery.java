@@ -13,8 +13,8 @@ public interface IEntityQuery {
     <E> List<E> getEntityList();
     <E> List<E> getSubEntityList(Supplier<Parameter[]> parameterSupplier);
 
-    <E, R> R getEntityDto(String graphNamedQuery, Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction);
-    <E, R> Optional<R> getOptionalEntityDto(String graphNamedQuery, Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction);
-    <E, R> List<R> getEntityDtoList(String graphNamedQuery, Function<E, R> mapToDtoFunction);
-    <E, R> List<R> getSubEntityDtoList(String graphNamedQuery, Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction);
+    <E, R> R getEntityGraphDto(String graph, Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction);
+    <E, R> Optional<R> getOptionalEntityGraphDto(String graph, Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction);
+    <E, R> List<R> getEntityGraphDtoList(String graph, Function<E, R> mapToDtoFunction);
+    <E, R> List<R> getSubEntityGraphDtoList(String graph, Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction);
 }

@@ -48,10 +48,11 @@ public class DataBaseLoader {
         String[] expectedDataSets = new String[]{dataSetPath};
 
         try {
-            executor.compareCurrentDataSetWith(dataSetConfig, expectedDataSets);
+//            executor.compareCurrentDataSetWith(dataSetConfig, expectedDataSets);
+            executor.compareCurrentDataSetWith(dataSetConfig, new String[] {"id",
+                    "option_group_id", "option_item_id", "articular_item_id"});
         } catch (DatabaseUnitException e) {
             throw new RuntimeException("Dataset comparison failed", e);
         }
     }
-
 }

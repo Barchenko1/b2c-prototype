@@ -1,13 +1,8 @@
 package com.b2c.prototype.localization;
 
 import com.b2c.prototype.configuration.LocalizationInterpreter;
-import com.b2c.prototype.dao.cashed.ISingleValueMap;
-import com.b2c.prototype.modal.entity.delivery.DeliveryType;
-import com.b2c.prototype.modal.entity.item.Brand;
+import com.b2c.prototype.service.scope.IConstantsScope;
 import org.springframework.stereotype.Service;
-
-import java.util.Locale;
-import java.util.Map;
 
 @Service
 public class LocalizationHelper {
@@ -23,11 +18,11 @@ public class LocalizationHelper {
 //    private final Map<Integer, Rating> ratingMap;
 //    private final Map<String, OptionGroup> optionGroupMap;
 
-    private final ISingleValueMap singleValueMap;
+//    private final IConstantsScope singleValueMap;
 
-    public LocalizationHelper(LocalizationInterpreter localizationInterpreter, ISingleValueMap singleValueMap) {
+    public LocalizationHelper(LocalizationInterpreter localizationInterpreter, IConstantsScope singleValueMap) {
         this.localizationInterpreter = localizationInterpreter;
-        this.singleValueMap = singleValueMap;
+//        this.singleValueMap = singleValueMap;
     }
 
 //    public LocalizationHelper(LocalizationInterpreter localizationInterpreter,
@@ -56,11 +51,11 @@ public class LocalizationHelper {
 //    }
 
 
-    public String getLocalizeDeliveryTypeName(String deliveryTypeConfigName, Locale locale) {
-        Map<Object, Object> deliveryTypeMap = singleValueMap.getEntityMap(DeliveryType.class);
-        DeliveryType deliveryType = (DeliveryType) deliveryTypeMap.get(deliveryTypeConfigName);
-        return localizationInterpreter.interpret("delivery.type", deliveryType.getValue(), locale);
-    }
+//    public String getLocalizeDeliveryTypeName(String deliveryTypeConfigName, Locale locale) {
+//        Map<Object, Object> deliveryTypeMap = singleValueMap.getEntityMap(DeliveryType.class);
+//        DeliveryType deliveryType = (DeliveryType) deliveryTypeMap.get(deliveryTypeConfigName);
+//        return localizationInterpreter.interpret("delivery.type", deliveryType.getValue(), locale);
+//    }
 
 //    public List<String> getLocalizeDeliveryTypeNameList(Locale locale) {
 //        return deliveryTypeMap.values().stream()
@@ -90,10 +85,10 @@ public class LocalizationHelper {
 //                .collect(Collectors.toList());
 //    }
 
-    public String getLocalizeBrandName(String brandConfigName, Locale locale) {
-        Brand brand = singleValueMap.getEntity(Brand.class, "value",brandConfigName);
-        return localizationInterpreter.interpret("brand", brand.getValue(), locale);
-    }
+//    public String getLocalizeBrandName(String brandConfigName, Locale locale) {
+//        Brand brand = singleValueMap.getEntity(Brand.class, "value",brandConfigName);
+//        return localizationInterpreter.interpret("brand", brand.getValue(), locale);
+//    }
 
 //    public List<String> getLocalizeBrandNameList(Locale locale) {
 //        return brandMap.values().stream()
