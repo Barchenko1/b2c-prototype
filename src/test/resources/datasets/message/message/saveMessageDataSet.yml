@@ -14,7 +14,7 @@ message:
     sender: "sender@email.com"
     subscribe: "system"
     sendSystem: "system"
-    status_id: 1
+    
     type_id: 1
 message_receivers:
   - receiver_email: "receiver1@email.com"

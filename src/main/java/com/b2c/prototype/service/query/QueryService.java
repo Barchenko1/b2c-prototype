@@ -1,7 +1,7 @@
 package com.b2c.prototype.service.query;
 
-import com.tm.core.dao.query.ISearchWrapper;
-import com.tm.core.processor.finder.parameter.Parameter;
+import com.tm.core.dao.query.ISearchHandler;
+import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.query.Query;
 
 import java.util.Collection;
@@ -12,69 +12,68 @@ import java.util.function.Supplier;
 
 public class QueryService implements IQueryService {
 
-    private final ISearchWrapper searchWrapper;
+    private final ISearchHandler searchHandler;
 
-    public QueryService(ISearchWrapper searchWrapper) {
-        this.searchWrapper = searchWrapper;
+    public QueryService(ISearchHandler searchHandler) {
+        this.searchHandler = searchHandler;
     }
 
     @Override
     public <E> E getEntity(Class<?> clazz, Supplier<Parameter> parameterSupplier) {
-        return searchWrapper.getEntity(clazz, parameterSupplier.get());
+        return searchHandler.getEntity(clazz, parameterSupplier.get());
     }
 
     @Override
     public <E> E getGraphEntity(Class<?> clazz, String graph, Supplier<Parameter> parameterSupplier) {
-        return searchWrapper.getEntityGraph(clazz, graph, parameterSupplier.get());
+        return searchHandler.getEntityGraph(clazz, graph, parameterSupplier.get());
     }
 
     @Override
     public <E> E getNamedQueryEntity(Class<?> clazz, String namedQuery, Supplier<Parameter> parameterSupplier) {
-        return searchWrapper.getEntityNamedQuery(clazz, namedQuery, parameterSupplier.get());
+        return searchHandler.getEntityNamedQuery(clazz, namedQuery, parameterSupplier.get());
     }
 
     @Override
     public <E> Optional<E> getOptionalEntity(Class<?> clazz, Supplier<Parameter> parameterSupplier) {
-        return Optional.ofNullable(searchWrapper.getEntity(clazz, parameterSupplier.get()));
+        return Optional.ofNullable(searchHandler.getEntity(clazz, parameterSupplier.get()));
     }
 
     @Override
-    public <E> Optional<E> getOptionalEntity(Class<?> clazz, String graph, Supplier<Parameter> parameterSupplier) {
-        return searchWrapper.getOptionalEntityGraph(clazz, graph, parameterSupplier.get());
+    public <E> Optional<E> getOptionalEntityGraph(Class<?> clazz, String graph, Supplier<Parameter> parameterSupplier) {
+        return searchHandler.getOptionalEntityGraph(clazz, graph, parameterSupplier.get());
+    }
+
+    @Override
+    public <E> Optional<E> getOptionalEntityNamedQuery(Class<?> clazz, String namedQuery, Supplier<Parameter> parameterSupplier) {
+        return searchHandler.getOptionalEntityNamedQuery(clazz, namedQuery, parameterSupplier.get());
     }
 
     @Override
     public <E> List<E> getEntityList(Class<?> clazz) {
-        return searchWrapper.getEntityList(clazz);
+        return searchHandler.getEntityList(clazz);
     }
 
     @Override
     public <E> List<E> getEntityListNamedQuery(Class<?> clazz, String namedQuery, Supplier<Parameter> parameterSupplier) {
-        return searchWrapper.getEntityNamedQueryList(clazz, namedQuery, parameterSupplier.get());
+        return searchHandler.getEntityNamedQueryList(clazz, namedQuery, parameterSupplier.get());
     }
 
     @Override
     public <E> List<E> getSubEntityList(Class<?> clazz, Supplier<Parameter> parameterSupplier) {
-        return searchWrapper.getEntityList(clazz, parameterSupplier.get());
+        return searchHandler.getEntityList(clazz, parameterSupplier.get());
     }
 
     @Override
     public <R, E> R getEntityDto(Class<?> clazz, Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction) {
-        E entity = searchWrapper.getEntity(clazz, parameterSupplier.get());
+        E entity = searchHandler.getEntity(clazz, parameterSupplier.get());
         return Optional.ofNullable(entity)
                 .map(mapToDtoFunction)
                 .orElse(null);
     }
 
     @Override
-    public <R, E> Optional<R> getOptionalEntityDto(Class<?> clazz, Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction) {
-        E entity = searchWrapper.getEntity(clazz, parameterSupplier.get());
-        return Optional.ofNullable(entity).map(mapToDtoFunction);
-    }
-
-    @Override
     public <R, E> List<R> getEntityDtoList(Class<?> clazz, Function<E, R> mapToDtoFunction) {
-        List<E> entityList = searchWrapper.getEntityList(clazz);
+        List<E> entityList = searchHandler.getEntityList(clazz);
         return entityList.stream()
                 .map(mapToDtoFunction)
                 .toList();
@@ -82,7 +81,7 @@ public class QueryService implements IQueryService {
 
     @Override
     public <R, E> List<R> getSubEntityDtoList(Class<?> clazz, Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction) {
-        List<E> subList = searchWrapper.getEntityList(clazz, parameterSupplier.get());
+        List<E> subList = searchHandler.getEntityList(clazz, parameterSupplier.get());
         return subList.stream()
                 .map(mapToDtoFunction)
                 .toList();
@@ -90,7 +89,7 @@ public class QueryService implements IQueryService {
 
     @Override
     public <R, E> R getEntityGraphDto(Class<?> clazz, String graphName, Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction) {
-        E entity = searchWrapper.getEntityGraph(clazz, graphName, parameterSupplier.get());
+        E entity = searchHandler.getEntityGraph(clazz, graphName, parameterSupplier.get());
         return Optional.ofNullable(entity)
                 .map(mapToDtoFunction)
                 .orElse(null);
@@ -98,13 +97,13 @@ public class QueryService implements IQueryService {
 
     @Override
     public <R, E> Optional<R> getOptionalEntityGraphDto(Class<?> clazz, String graphName, Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction) {
-        E entity = searchWrapper.getEntityGraph(clazz, graphName, parameterSupplier.get());
+        E entity = searchHandler.getEntityGraph(clazz, graphName, parameterSupplier.get());
         return Optional.ofNullable(entity).map(mapToDtoFunction);
     }
 
     @Override
     public <R, E> List<R> getEntityGraphDtoList(Class<?> clazz, String graphName, Function<E, R> mapToDtoFunction) {
-        List<E> entityList = searchWrapper.getEntityListGraph(clazz, graphName);
+        List<E> entityList = searchHandler.getEntityListGraph(clazz, graphName);
         return entityList.stream()
                 .map(mapToDtoFunction)
                 .toList();
@@ -112,7 +111,7 @@ public class QueryService implements IQueryService {
 
     @Override
     public <R, E> List<R> getSubEntityGraphDtoList(Class<?> clazz, String graphName, Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction) {
-        List<E> subList = searchWrapper.getEntityListGraph(clazz, graphName, parameterSupplier.get());
+        List<E> subList = searchHandler.getEntityListGraph(clazz, graphName, parameterSupplier.get());
         return subList.stream()
                 .map(mapToDtoFunction)
                 .toList();
@@ -120,7 +119,7 @@ public class QueryService implements IQueryService {
 
     @Override
     public <R, E> R getEntityNamedQueryDto(Class<?> clazz, String namedQuery, Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction) {
-        E entity = searchWrapper.getEntityNamedQuery(clazz, namedQuery, parameterSupplier.get());
+        E entity = searchHandler.getEntityNamedQuery(clazz, namedQuery, parameterSupplier.get());
         return Optional.ofNullable(entity)
                 .map(mapToDtoFunction)
                 .orElse(null);
@@ -128,26 +127,26 @@ public class QueryService implements IQueryService {
 
     @Override
     public <R, E> List<R> getEntityListNamedQueryDtoList(Class<?> clazz, String namedQuery, Function<Collection<E>, Collection<R>> mapToDtoFunction) {
-        List<E> entityList = searchWrapper.getEntityNamedQueryList(clazz, namedQuery);
+        List<E> entityList = searchHandler.getEntityNamedQueryList(clazz, namedQuery);
         return (List<R>) mapToDtoFunction.apply(entityList);
     }
 
     @Override
     public <R, E> R getEntityListNamedQueryDto(Class<?> clazz, String namedQuery, Supplier<Parameter> parameterSupplier, Function<Collection<E>, R> mapToDtoFunction) {
-        List<E> entityList = searchWrapper.getEntityNamedQueryList(clazz, namedQuery, parameterSupplier.get());
+        List<E> entityList = searchHandler.getEntityNamedQueryList(clazz, namedQuery, parameterSupplier.get());
         return mapToDtoFunction.apply(entityList);
     }
 
     @Override
     public <R, E> Optional<R> getOptionalEntityNamedQueryDto(Class<?> clazz, String namedQuery, Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction) {
-        E entity = searchWrapper.getEntityNamedQuery(clazz, namedQuery, parameterSupplier.get());
+        E entity = searchHandler.getEntityNamedQuery(clazz, namedQuery, parameterSupplier.get());
         return Optional.ofNullable(entity)
                 .map(mapToDtoFunction);
     }
 
     @Override
     public <R, E> List<R> getSubEntityNamedQueryDtoList(Class<?> clazz, String namedQuery, Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction) {
-        List<E> subList = searchWrapper.getEntityNamedQueryList(clazz, namedQuery, parameterSupplier.get());
+        List<E> subList = searchHandler.getEntityNamedQueryList(clazz, namedQuery, parameterSupplier.get());
         return subList.stream()
                 .map(mapToDtoFunction)
                 .toList();

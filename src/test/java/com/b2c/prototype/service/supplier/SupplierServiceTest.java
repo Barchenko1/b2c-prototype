@@ -2,8 +2,8 @@ package com.b2c.prototype.service.supplier;
 
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.query.IQueryService;
-import com.tm.core.processor.finder.factory.IParameterFactory;
-import com.tm.core.processor.finder.parameter.Parameter;
+import com.tm.core.finder.factory.IParameterFactory;
+import com.tm.core.finder.parameter.Parameter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

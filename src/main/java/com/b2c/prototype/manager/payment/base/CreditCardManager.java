@@ -12,8 +12,8 @@ import com.b2c.prototype.modal.entity.payment.Payment;
 import com.b2c.prototype.modal.entity.user.UserProfile;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.payment.ICreditCardManager;
-import com.b2c.prototype.service.common.EntityOperationDao;
-import com.b2c.prototype.service.common.IEntityOperationDao;
+import com.b2c.prototype.service.common.EntityOperationManager;
+import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.query.IQueryService;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import org.slf4j.Logger;
@@ -29,7 +29,7 @@ public class CreditCardManager implements ICreditCardManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CreditCardManager.class);
 
-    private final IEntityOperationDao entityOperationDao;
+    private final IEntityOperationManager entityOperationDao;
     private final IQueryService queryService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
@@ -38,7 +38,7 @@ public class CreditCardManager implements ICreditCardManager {
                              IQueryService queryService,
                              ITransformationFunctionService transformationFunctionService,
                              ISupplierService supplierService) {
-        this.entityOperationDao = new EntityOperationDao(creditCardDao);
+        this.entityOperationDao = new EntityOperationManager(creditCardDao);
         this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;

@@ -6,9 +6,9 @@ import com.b2c.prototype.modal.entity.message.Message;
 import com.b2c.prototype.modal.entity.message.MessageStatus;
 import com.b2c.prototype.modal.entity.message.MessageType;
 import com.tm.core.dao.identifier.EntityIdentifierDao;
-import com.tm.core.processor.finder.manager.EntityMappingManager;
-import com.tm.core.processor.finder.manager.IEntityMappingManager;
-import com.tm.core.processor.finder.table.EntityTable;
+import com.tm.core.finder.manager.EntityMappingManager;
+import com.tm.core.finder.manager.IEntityMappingManager;
+import com.tm.core.finder.table.EntityTable;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 

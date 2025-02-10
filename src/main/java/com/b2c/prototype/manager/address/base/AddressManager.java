@@ -8,11 +8,11 @@ import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
 import com.b2c.prototype.modal.entity.order.OrderArticularItem;
 import com.b2c.prototype.modal.entity.user.UserProfile;
-import com.b2c.prototype.service.common.IEntityOperationDao;
+import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.address.IAddressManager;
 import com.b2c.prototype.service.query.IQueryService;
-import com.b2c.prototype.service.common.EntityOperationDao;
+import com.b2c.prototype.service.common.EntityOperationManager;
 import com.b2c.prototype.service.supplier.ISupplierService;
 
 import java.util.List;
@@ -22,7 +22,7 @@ import static com.b2c.prototype.util.Constant.USER_ID;
 
 public class AddressManager implements IAddressManager {
 
-    private final IEntityOperationDao entityOperationDao;
+    private final IEntityOperationManager entityOperationDao;
     private final IQueryService queryService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
@@ -31,7 +31,7 @@ public class AddressManager implements IAddressManager {
                           IQueryService queryService,
                           ITransformationFunctionService transformationFunctionService,
                           ISupplierService supplierService) {
-        this.entityOperationDao = new EntityOperationDao(addressDao);
+        this.entityOperationDao = new EntityOperationManager(addressDao);
         this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;

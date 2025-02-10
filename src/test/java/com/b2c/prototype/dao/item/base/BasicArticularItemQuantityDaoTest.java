@@ -10,9 +10,9 @@ import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
 import com.tm.core.dao.identifier.EntityIdentifierDao;
-import com.tm.core.processor.finder.manager.EntityMappingManager;
-import com.tm.core.processor.finder.manager.IEntityMappingManager;
-import com.tm.core.processor.finder.table.EntityTable;
+import com.tm.core.finder.manager.EntityMappingManager;
+import com.tm.core.finder.manager.IEntityMappingManager;
+import com.tm.core.finder.table.EntityTable;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 

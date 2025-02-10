@@ -1,22 +1,22 @@
 package com.b2c.prototype.processor.item;
 
-import com.b2c.prototype.modal.dto.payload.ItemDataOptionDto;
+import com.b2c.prototype.modal.dto.payload.ArticularItemDto;
 import com.b2c.prototype.modal.dto.response.ResponseItemDataOptionDto;
-import com.b2c.prototype.manager.item.IItemDataOptionManager;
+import com.b2c.prototype.manager.item.IArticularItemManager;
 
 import java.util.List;
 
-public class ItemDataOptionProcessor implements IItemDataOptionProcessor {
+public class ArticularItemProcessor implements IArticularItemProcessor {
 
-    private final IItemDataOptionManager itemDataOptionManager;
+    private final IArticularItemManager itemDataOptionManager;
 
-    public ItemDataOptionProcessor(IItemDataOptionManager itemDataOptionManager) {
+    public ArticularItemProcessor(IArticularItemManager itemDataOptionManager) {
         this.itemDataOptionManager = itemDataOptionManager;
     }
 
     @Override
-    public void saveUpdateItemDataOption(String itemId, List<ItemDataOptionDto> itemDataOptionDtoList) {
-        itemDataOptionManager.saveUpdateItemDataOption(itemId, itemDataOptionDtoList);
+    public void saveUpdateItemDataOption(String itemId, List<ArticularItemDto> articularItemDtoList) {
+        itemDataOptionManager.saveUpdateItemDataOption(itemId, articularItemDtoList);
     }
 
     @Override

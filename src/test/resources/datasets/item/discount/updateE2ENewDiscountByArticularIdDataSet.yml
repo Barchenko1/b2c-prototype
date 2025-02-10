@@ -4,18 +4,6 @@ currency:
     label: "USD"
 discount:
   - id: 1
-    amount: 10
-    charSequenceCode: "abc"
-    isActive: true
-    isPercent: false
-    currency_id: 1
-  - id: 2
-    amount: 10
-    charSequenceCode: "abc1"
-    isActive: true
-    isPercent: false
-    currency_id: 1
-  - id: 3
     amount: 20
     charSequenceCode: "newDiscount"
     isActive: true
@@ -25,16 +13,13 @@ articular_item:
   - id: 1
     articular_id: 123
     dateOfCreate: 10000
-    discount_id: 1
   - id: 2
     articular_id: 111
     dateOfCreate: 10000
-    discount_id: 2
   - id: 3
     articular_id: 122
     dateOfCreate: 10000
-    discount_id: 2
   - id: 4
     articular_id: "noDiscount"
     dateOfCreate: 10000
-    discount_id: 3
+    discount_id: 1

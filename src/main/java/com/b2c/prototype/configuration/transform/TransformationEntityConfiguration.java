@@ -1,7 +1,12 @@
 package com.b2c.prototype.configuration.transform;
 
+import com.b2c.prototype.modal.dto.payload.InitDiscountDto;
+import com.b2c.prototype.modal.dto.payload.OptionGroupDto;
+import com.b2c.prototype.modal.dto.payload.OptionGroupOptionItemSetDto;
+import com.b2c.prototype.modal.dto.payload.OptionItemDto;
 import com.b2c.prototype.modal.dto.payload.SingleOptionItemDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
+import com.b2c.prototype.modal.entity.item.ArticularStatus;
 import com.b2c.prototype.service.scope.IConstantsScope;
 import com.b2c.prototype.modal.base.AbstractConstantEntity;
 import com.b2c.prototype.modal.constant.MessageStatusEnum;
@@ -16,7 +21,6 @@ import com.b2c.prototype.modal.dto.payload.DeliveryDto;
 import com.b2c.prototype.modal.dto.payload.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.ItemDataDto;
 import com.b2c.prototype.modal.dto.payload.MessageDto;
-import com.b2c.prototype.modal.dto.payload.OptionItemDto;
 import com.b2c.prototype.modal.dto.payload.PriceDto;
 import com.b2c.prototype.modal.dto.payload.RegistrationUserProfileDto;
 import com.b2c.prototype.modal.dto.payload.ReviewDto;
@@ -25,7 +29,7 @@ import com.b2c.prototype.modal.dto.response.ResponseCreditCardDto;
 import com.b2c.prototype.modal.dto.response.ResponseItemDataDto;
 import com.b2c.prototype.modal.dto.response.ResponseMessageOverviewDto;
 import com.b2c.prototype.modal.dto.response.ResponseMessagePayloadDto;
-import com.b2c.prototype.modal.dto.payload.ConstantPayloadDto;
+import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.dto.response.ResponseReviewDto;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
@@ -35,7 +39,6 @@ import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.item.ItemData;
-import com.b2c.prototype.modal.entity.item.ItemStatus;
 import com.b2c.prototype.modal.entity.item.ItemType;
 import com.b2c.prototype.modal.entity.item.Rating;
 import com.b2c.prototype.modal.entity.message.Message;
@@ -59,6 +62,9 @@ import com.b2c.prototype.modal.entity.user.UserProfile;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.help.calculate.IPriceCalculationService;
 import com.b2c.prototype.util.CardUtil;
+import com.tm.core.dao.identifier.IEntityIdentifierDao;
+import com.tm.core.dao.transaction.ITransactionHandler;
+import com.tm.core.util.helper.IEntityFieldHelper;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Date;
@@ -70,18 +76,25 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static com.b2c.prototype.util.Constant.VALUE;
-import static com.b2c.prototype.util.UniqueIdUtil.getUUID;
+import static com.b2c.prototype.util.Util.getCurrentTimeMillis;
+import static com.b2c.prototype.util.Util.getUUID;
 
 @Configuration
 public class TransformationEntityConfiguration {
 
     private final IConstantsScope constantsScope;
+    private final ITransactionHandler transactionHandler;
+    private final IEntityIdentifierDao entityIdentifierDao;
     private final IPriceCalculationService priceCalculationService;
 
     public TransformationEntityConfiguration(ITransformationFunctionService transformationFunctionService,
                                              IConstantsScope constantsScope,
+                                             ITransactionHandler transactionHandler,
+                                             IEntityIdentifierDao entityIdentifierDao,
                                              IPriceCalculationService priceCalculationService) {
         this.constantsScope = constantsScope;
+        this.transactionHandler = transactionHandler;
+        this.entityIdentifierDao = entityIdentifierDao;
         this.priceCalculationService = priceCalculationService;
         addConstantEntityTransformationFunctions(transformationFunctionService, Brand.class, Brand::new);
         addConstantEntityTransformationFunctions(transformationFunctionService, CountType.class, CountType::new);
@@ -89,7 +102,7 @@ public class TransformationEntityConfiguration {
         addConstantEntityTransformationFunctions(transformationFunctionService, Currency.class, Currency::new);
         addConstantEntityTransformationFunctions(transformationFunctionService, DeliveryType.class, DeliveryType::new);
         addConstantEntityTransformationFunctions(transformationFunctionService, ItemType.class, ItemType::new);
-        addConstantEntityTransformationFunctions(transformationFunctionService, ItemStatus.class, ItemStatus::new);
+        addConstantEntityTransformationFunctions(transformationFunctionService, ArticularStatus.class, ArticularStatus::new);
         addConstantEntityTransformationFunctions(transformationFunctionService, MessageStatus.class, MessageStatus::new);
         addConstantEntityTransformationFunctions(transformationFunctionService, MessageType.class, MessageType::new);
         addConstantEntityTransformationFunctions(transformationFunctionService, OptionGroup.class, OptionGroup::new);
@@ -133,6 +146,7 @@ public class TransformationEntityConfiguration {
         transformationFunctionService.addTransformationFunction(ArticularItem.class, PriceDto.class, "totalPrice", mapItemDataOptionToTotalPriceDtoFunction());
 
         loadOptionItemFunctions(transformationFunctionService);
+        loadItemDataFunctions(transformationFunctionService);
 
         transformationFunctionService.addTransformationFunction(DiscountDto.class, Discount.class, mapDiscountDtoToDiscountFunction());
         transformationFunctionService.addTransformationFunction(Discount.class, DiscountDto.class, mapDiscountToDiscountDtoFunction());
@@ -143,12 +157,16 @@ public class TransformationEntityConfiguration {
         transformationFunctionService.addTransformationFunction(OrderArticularItem.class, Beneficiary.class, "list", mapOrderItemToContactInfoListFunction());
     }
 
+    private void loadItemDataFunctions(ITransformationFunctionService transformationFunctionService) {
+        transformationFunctionService.addTransformationFunction(ItemDataDto.class, ItemData.class, mapItemDataDtoToItemDataFunction());
+    }
+
     private void loadOptionItemFunctions(ITransformationFunctionService transformationFunctionService) {
-        transformationFunctionService.addTransformationFunction(OptionItemDto.class, OptionGroup.class, mapOptionItemDtoToOptionGroup());
-        transformationFunctionService.addTransformationFunction(OptionItemDto.class, OptionGroup.class, "set", mapOptionItemDtoListToOptionGroupSet());
+        transformationFunctionService.addTransformationFunction(OptionGroupOptionItemSetDto.class, OptionGroup.class, mapOptionItemDtoToOptionGroup());
+        transformationFunctionService.addTransformationFunction(OptionGroupOptionItemSetDto.class, OptionGroup.class, "set", mapOptionGroupOptionItemSetDtoListToOptionGroupSet());
         transformationFunctionService.addTransformationFunction(ArticularItem.class, OptionItem.class, mapItemDataOptionToOptionItemFunction());
-        transformationFunctionService.addTransformationFunction(OptionGroup.class, OptionItemDto.class, mapOptionGroupToOptionItemDto());
-        transformationFunctionService.addTransformationFunction(ArticularItem.class, OptionItemDto.class, "list", mapArticularItemToOptionItemDtoList());
+        transformationFunctionService.addTransformationFunction(OptionGroup.class, OptionGroupOptionItemSetDto.class, mapOptionGroupToOptionItemDto());
+        transformationFunctionService.addTransformationFunction(ArticularItem.class, OptionGroupOptionItemSetDto.class, "list", mapArticularItemToOptionItemDtoList());
 
         transformationFunctionService.addTransformationFunction(SingleOptionItemDto.class, OptionGroup.class, mapSingleOptionItemDtoToOptionGroup());
     }
@@ -285,7 +303,7 @@ public class TransformationEntityConfiguration {
                     .title(messageDto.getTitle())
                     .message(messageDto.getMessage())
                     .messageUniqNumber(getUUID())
-                    .dateOfSend(System.currentTimeMillis())
+                    .dateOfSend(getCurrentTimeMillis())
                     .receivers(messageDto.getReceivers())
                     .subscribe("subscribe")
                     .type(messageType)
@@ -386,7 +404,7 @@ public class TransformationEntityConfiguration {
         return registrationUserProfileDto -> UserProfile.builder()
                 .username(registrationUserProfileDto.getUsername())
                 .email(registrationUserProfileDto.getEmail())
-                .dateOfCreate(System.currentTimeMillis())
+                .dateOfCreate(getCurrentTimeMillis())
                 .build();
     }
 
@@ -410,7 +428,7 @@ public class TransformationEntityConfiguration {
         return reviewDto -> Review.builder()
                 .title(reviewDto.getTitle())
                 .message(reviewDto.getMessage())
-                .dateOfCreate(System.currentTimeMillis())
+                .dateOfCreate(getCurrentTimeMillis())
                 .build();
     }
 
@@ -419,7 +437,7 @@ public class TransformationEntityConfiguration {
                 .title(review.getTitle())
                 .message(review.getMessage())
                 .ratingValue(review.getRating().getValue())
-                .dateOfCreate(new Date(System.currentTimeMillis()))
+                .dateOfCreate(new Date(getCurrentTimeMillis()))
                 .build();
     }
 
@@ -503,10 +521,10 @@ public class TransformationEntityConfiguration {
         return ArticularItem::getOptionItems;
     }
 
-    Function<List<OptionItemDto>, Set<OptionGroup>> mapOptionItemDtoListToOptionGroupSet() {
+    Function<List<OptionGroupOptionItemSetDto>, Set<OptionGroup>> mapOptionGroupOptionItemListDtoListToOptionGroupSet() {
         return optionItemDtoList -> optionItemDtoList.stream()
                 .map(optionItemDto -> constantsScope.getOptionalEntityGraph(
-                        OptionGroup.class, "optionGroup.withOptionItems", VALUE, optionItemDto.getOptionGroup().getValue()
+                        OptionGroup.class, "optionGroup.withOptionItemsAndArticularItems", VALUE, optionItemDto.getOptionGroup().getValue()
                 ).map(existingOG -> {
                     optionItemDto.getOptionItems().stream()
                             .filter(oi -> existingOG.getOptionItems().stream()
@@ -537,7 +555,44 @@ public class TransformationEntityConfiguration {
                 .collect(Collectors.toSet());
     }
 
-    Function<OptionItemDto, OptionGroup> mapOptionItemDtoToOptionGroup() {
+    Function<Set<OptionGroupOptionItemSetDto>, Set<OptionGroup>> mapOptionGroupOptionItemSetDtoListToOptionGroupSet() {
+        return optionItemDtoList -> optionItemDtoList.stream()
+                .map(optionItemDto ->
+                        constantsScope.getOptionalEntityGraph(OptionGroup.class,
+                                "optionGroup.withOptionItemsAndArticularItems", VALUE, optionItemDto.getOptionGroup().getValue()
+//                        constantsScope.getOptionalEntityNamedQuery(OptionGroup.class,
+//                                "optionGroup.withOptionItemsAndArticularItems", VALUE, optionItemDto.getOptionGroup().getValue()
+                ).map(existingOG -> {
+                    optionItemDto.getOptionItems().stream()
+                            .filter(oi -> existingOG.getOptionItems().stream()
+                                    .noneMatch(v -> v.getValue().equals(oi.getValue())))
+                            .forEach(newOption -> existingOG.addOptionItem(
+                                    OptionItem.builder()
+                                            .label(newOption.getLabel())
+                                            .value(newOption.getValue())
+                                            .build()
+                            ));
+
+                    return existingOG;
+                }).orElseGet(() -> {
+                    OptionGroup newOG = OptionGroup.builder()
+                            .label(optionItemDto.getOptionGroup().getLabel())
+                            .value(optionItemDto.getOptionGroup().getValue())
+                            .build();
+
+                    optionItemDto.getOptionItems().stream()
+                            .map(item -> OptionItem.builder()
+                                    .label(item.getLabel())
+                                    .value(item.getValue())
+                                    .build())
+                            .forEach(newOG::addOptionItem);
+
+                    return newOG;
+                }))
+                .collect(Collectors.toSet());
+    }
+
+    Function<OptionGroupOptionItemSetDto, OptionGroup> mapOptionItemDtoToOptionGroup() {
         return optionItemDto -> {
             Optional<OptionGroup> optionalResult = constantsScope.getOptionalEntityGraph(
                     OptionGroup.class, "optionGroup.withOptionItems", VALUE, optionItemDto.getOptionGroup().getValue());
@@ -571,36 +626,36 @@ public class TransformationEntityConfiguration {
         };
     };
 
-    Function<OptionGroup, OptionItemDto> mapOptionGroupToOptionItemDto() {
+    Function<OptionGroup, OptionGroupOptionItemSetDto> mapOptionGroupToOptionItemDto() {
         return optionGroup -> {
-            ConstantPayloadDto cpDto = ConstantPayloadDto.builder()
+            OptionGroupDto optionGroupDto = OptionGroupDto.builder()
                     .label(optionGroup.getLabel())
                     .value(optionGroup.getValue())
                     .build();
 
-            Set<ConstantPayloadDto> constantPayloadDtoList = optionGroup.getOptionItems().stream()
-                    .map(item -> ConstantPayloadDto.builder()
+            Set<OptionItemDto> constantPayloadDtoList = optionGroup.getOptionItems().stream()
+                    .map(item -> OptionItemDto.builder()
                             .label(item.getLabel())
                             .value(item.getValue())
                             .build())
                     .collect(Collectors.toSet());
 
 
-            return OptionItemDto.builder()
-                    .optionGroup(cpDto)
+            return OptionGroupOptionItemSetDto.builder()
+                    .optionGroup(optionGroupDto)
                     .optionItems(constantPayloadDtoList)
                     .build();
         };
     }
 
-    private Function<ArticularItem, List<OptionItemDto>> mapArticularItemToOptionItemDtoList() {
+    private Function<ArticularItem, List<OptionGroupOptionItemSetDto>> mapArticularItemToOptionItemDtoList() {
         return articularItem -> articularItem.getOptionItems().stream()
-                .map(optionItem -> OptionItemDto.builder()
-                        .optionGroup(ConstantPayloadDto.builder()
+                .map(optionItem -> OptionGroupOptionItemSetDto.builder()
+                        .optionGroup(OptionGroupDto.builder()
                                 .label(optionItem.getOptionGroup().getLabel())
                                 .value(optionItem.getOptionGroup().getValue())
                                 .build())
-                        .optionItems(Set.of(ConstantPayloadDto.builder()
+                        .optionItems(Set.of(OptionItemDto.builder()
                                 .label(optionItem.getLabel())
                                 .value(optionItem.getValue())
                                 .build()))
@@ -622,6 +677,22 @@ public class TransformationEntityConfiguration {
         };
     }
 
+    private Function<InitDiscountDto, Discount> mapInitDiscountDtoToDiscount() {
+        return initDiscountDto -> {
+            Currency currency = constantsScope.getEntity(
+                    Currency.class,
+                    "value",
+                    initDiscountDto.getCurrency());
+            return Discount.builder()
+                    .currency(currency)
+                    .amount(initDiscountDto.getAmount())
+                    .charSequenceCode(initDiscountDto.getCharSequenceCode())
+                    .isActive(initDiscountDto.getIsActive())
+                    .isPercent(currency == null)
+                    .build();
+        };
+    }
+
     private Function<DiscountDto, Discount> mapDiscountDtoToDiscountFunction() {
         return discountDto -> {
             Currency currency = constantsScope.getEntity(
@@ -632,7 +703,7 @@ public class TransformationEntityConfiguration {
                     .currency(currency)
                     .amount(discountDto.getAmount())
                     .charSequenceCode(discountDto.getCharSequenceCode())
-                    .isActive(discountDto.isActive())
+                    .isActive(discountDto.getIsActive())
                     .isPercent(currency == null)
                     .build();
         };
@@ -690,23 +761,74 @@ public class TransformationEntityConfiguration {
             Category category = constantsScope.getEntity(Category.class, "name", itemDataDto.getCategory());
             Brand brand = constantsScope.getEntity(Brand.class, "value", itemDataDto.getBrand());
             ItemType itemType = constantsScope.getEntity(ItemType.class, "value", itemDataDto.getItemType());
-            ItemStatus itemStatus = constantsScope.getEntity(ItemStatus.class, "value", itemDataDto.getItemStatus());
+
+            Set<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoList = itemDataDto.getArticularItemSet().stream()
+                    .flatMap(articularItem -> articularItem.getOptions().stream())
+                    .collect(Collectors.groupingBy(
+                            SingleOptionItemDto::getOptionGroup,
+                            Collectors.mapping(
+                                    SingleOptionItemDto::getOptionItem,
+                                    Collectors.toSet()
+                            )
+                    ))
+                    .entrySet().stream()
+                    .map(entry -> new OptionGroupOptionItemSetDto(
+                            new OptionGroupDto(entry.getKey().getValue(), entry.getKey().getLabel()), // Convert OptionGroup to OptionGroupDto
+                            entry.getValue().stream()
+                                    .map(optionItem -> new OptionItemDto(optionItem.getValue(), optionItem.getLabel())) // Convert OptionItem to OptionItemDto
+                                    .collect(Collectors.toSet())
+                    ))
+                    .collect(Collectors.toSet());
+
+            Set<OptionGroup> optionGroups = mapOptionGroupOptionItemSetDtoListToOptionGroupSet().apply(optionGroupOptionItemSetDtoList);
+            Set<OptionItem> optionItems = optionGroups.stream()
+                    .flatMap(og -> og.getOptionItems().stream())
+                    .collect(Collectors.toSet());
+            Set<ArticularItem> articularItemList = itemDataDto.getArticularItemSet().stream()
+                    .map(articularItemDto -> {
+                        Discount discount = (articularItemDto != null && articularItemDto.getDiscount() != null)
+                                ? mapInitDiscountDtoToDiscount().apply(articularItemDto.getDiscount())
+                                : constantsScope.getEntity(Discount.class, "charSequenceCode", articularItemDto.getDiscount().getCharSequenceCode());
+                        ArticularStatus articularStatus = constantsScope.getEntity(ArticularStatus.class, "value", articularItemDto.getStatus());
+
+                        ArticularItem articularItem = ArticularItem.builder()
+                                .dateOfCreate(getCurrentTimeMillis())
+                                .articularId(getUUID())
+                                .productName(articularItemDto.getProductName())
+                                .status(articularStatus)
+                                .fullPrice(mapPriceDtoToPriceFunction().apply(articularItemDto.getFullPrice()))
+                                .totalPrice(mapPriceDtoToPriceFunction().apply(articularItemDto.getTotalPrice()))
+                                .discount(discount)
+                                .build();
+
+                        articularItemDto.getOptions().stream()
+                                .flatMap(soi -> optionItems.stream()
+                                        .filter(optionItem -> optionItem.getValue().equals(soi.getOptionItem().getValue()))
+                                )
+                                .forEach(articularItem::addOptionItem);
+
+                        return articularItem;
+                    })
+                    .collect(Collectors.toSet());
+
             return ItemData.builder()
+                    .itemId(getUUID())
+                    .description(itemDataDto.getDescription())
                     .category(category)
                     .brand(brand)
                     .itemType(itemType)
-                    .status(itemStatus)
+                    .articularItemSet(articularItemList)
                     .build();
         };
     }
+
 
     private Function<ItemData, ResponseItemDataDto> mapItemDataToItemDataDtoFunction() {
         return itemData -> ResponseItemDataDto.builder()
                 .brandName(itemData.getBrand().getValue())
                 .categoryName(itemData.getCategory().getName())
                 .itemTypeName(itemData.getItemType().getValue())
-                .itemStatus(itemData.getStatus().getValue())
-//                    .description(itemData.ge)
+                .description(itemData.getDescription())
                 .build();
     }
 

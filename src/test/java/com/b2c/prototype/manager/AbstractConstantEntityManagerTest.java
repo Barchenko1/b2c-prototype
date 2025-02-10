@@ -1,11 +1,11 @@
 package com.b2c.prototype.manager;
 
 import com.b2c.prototype.service.scope.IConstantsScope;
-import com.b2c.prototype.modal.dto.payload.ConstantPayloadDto;
+import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.tm.core.dao.common.IEntityDao;
-import com.tm.core.processor.finder.factory.IParameterFactory;
-import com.tm.core.processor.finder.parameter.Parameter;
+import com.tm.core.finder.factory.IParameterFactory;
+import com.tm.core.finder.parameter.Parameter;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;

@@ -5,13 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class SingleOptionItemDto {
-    private ConstantPayloadDto optionGroup;
-    private ConstantPayloadDto optionItem;
+    private OptionGroupDto optionGroup;
+    private OptionItemDto optionItem;
 }

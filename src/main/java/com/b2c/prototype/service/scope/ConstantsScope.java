@@ -1,9 +1,9 @@
 package com.b2c.prototype.service.scope;
 
-import com.tm.core.dao.query.ISearchWrapper;
-import com.tm.core.processor.finder.factory.IParameterFactory;
-import com.tm.core.processor.finder.factory.ParameterFactory;
-import com.tm.core.processor.finder.parameter.Parameter;
+import com.tm.core.dao.query.ISearchHandler;
+import com.tm.core.finder.factory.IParameterFactory;
+import com.tm.core.finder.factory.ParameterFactory;
+import com.tm.core.finder.parameter.Parameter;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,16 +15,16 @@ import java.util.function.BiFunction;
 public class ConstantsScope implements IConstantsScope {
 
     private final Map<Class<?>, Map<Object, Object>> classEntityMap;
-    private final ISearchWrapper searchWrapper;
+    private final ISearchHandler searchHandler;
     private final IParameterFactory parameterFactory;
     private final Map<Class<?>, BiFunction<String, Object, Parameter>> typeMap;
 
     public ConstantsScope(Map<Class<?>, Map<?, ?>> entityMap,
-                          ISearchWrapper searchWrapper) {
+                          ISearchHandler searchHandler) {
 //        this.classEntityMap = castMap(entityMap);
         this.classEntityMap = new ConcurrentHashMap<>();
         entityMap.forEach((key, value) -> this.classEntityMap.put(key, new ConcurrentHashMap<>(value)));
-        this.searchWrapper = searchWrapper;
+        this.searchHandler = searchHandler;
         this.parameterFactory = new ParameterFactory();
         this.typeMap = new HashMap<>(){{
             put(Integer.class, (key, value) -> parameterFactory.createIntegerParameter(key, (Integer) value));
@@ -58,6 +58,11 @@ public class ConstantsScope implements IConstantsScope {
     @Override
     public <E> Optional<E> getOptionalEntityGraph(Class<E> clazz, String graph, String key, Object value) {
         return getEntityGraphFromMapOrFromDb(clazz, graph, key, value);
+    }
+
+    @Override
+    public <E> Optional<E> getOptionalEntityNamedQuery(Class<E> clazz, String namedQuery, String key, Object value) {
+        return getEntityNamedQueryFromMapOrFromDb(clazz, namedQuery, key, value);
     }
 
     @Override
@@ -100,7 +105,7 @@ public class ConstantsScope implements IConstantsScope {
 
         return Optional.ofNullable((E) entityMap.get(value))
                 .or(() -> {
-                    Optional<E> entityFromDb = searchWrapper.getOptionalEntity(clazz, createParameter(key, value));
+                    Optional<E> entityFromDb = searchHandler.getOptionalEntity(clazz, createParameter(key, value));
 
                     entityFromDb.ifPresent(entity -> entityMap.put(value, entity));
 
@@ -115,7 +120,7 @@ public class ConstantsScope implements IConstantsScope {
 
         return Optional.ofNullable((E) entityMap.get(value))
                 .or(() -> {
-                    Optional<E> entityFromDb = searchWrapper.getOptionalEntityGraph(clazz, graph, createParameter(key, value));
+                    Optional<E> entityFromDb = searchHandler.getOptionalEntityGraph(clazz, graph, createParameter(key, value));
 
                     entityFromDb.ifPresent(entity -> entityMap.put(value, entity));
 
@@ -124,7 +129,11 @@ public class ConstantsScope implements IConstantsScope {
     }
 
     private <E> Optional<E> getEntityGraphFromMapOrFromDb(Class<E> clazz, String graph, String key, Object value) {
-        return searchWrapper.getOptionalEntityGraph(clazz, graph, createParameter(key, value));
+        return searchHandler.getOptionalEntityGraph(clazz, graph, createParameter(key, value));
+    }
+
+    private <E> Optional<E> getEntityNamedQueryFromMapOrFromDb(Class<E> clazz, String namedQuery, String key, Object value) {
+        return searchHandler.getOptionalEntityNamedQuery(clazz, namedQuery, createParameter(key, value));
     }
 
     @SuppressWarnings("unchecked")
@@ -132,7 +141,7 @@ public class ConstantsScope implements IConstantsScope {
         Map<Object, Object> entityMap = classEntityMap.get(clazz);
         return (List<E>) Optional.ofNullable(entityMap.get(value))
                 .orElseGet(() -> {
-                    List<E> entityListFromDb = searchWrapper.getEntityList(clazz, createParameter(key, value));
+                    List<E> entityListFromDb = searchHandler.getEntityList(clazz, createParameter(key, value));
                     entityListFromDb.forEach(entityFromDb -> {
                         Optional.of(entityMap).ifPresent(map -> map.put(value, entityFromDb));
                     });
@@ -143,7 +152,7 @@ public class ConstantsScope implements IConstantsScope {
 
     private boolean getIsEntityExistFromMapOrFromDb(Class<?> clazz, String key, Object value) {
         return classEntityMap.getOrDefault(clazz, Map.of()).containsKey(value) ||
-                searchWrapper.getOptionalEntity(clazz, createParameter(key, value)).isPresent();
+                searchHandler.getOptionalEntity(clazz, createParameter(key, value)).isPresent();
     }
 
     private Parameter createParameter(String key, Object value) {

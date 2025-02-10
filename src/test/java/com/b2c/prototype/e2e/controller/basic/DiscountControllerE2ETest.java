@@ -13,11 +13,18 @@ import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class DiscountControllerE2ETest extends BasicE2ETest {
 
@@ -66,9 +73,9 @@ class DiscountControllerE2ETest extends BasicE2ETest {
                 .build();
 
         try {
-            mockMvc.perform(put(URL_TEMPLATE + "/articular")
+            mockMvc.perform(put(URL_TEMPLATE)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .param("articularId", "111")
+                            .params(getMultiValueMap(Map.of("articularId", "111")))
                             .content(objectMapper.writeValueAsString(expectedDto)))
                     .andExpect(status().isOk());
         } catch (Exception e) {
@@ -80,7 +87,7 @@ class DiscountControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPutCreateNewDiscountByArticularId() {
-        loadDataSet("/datasets/item/discount/testE2EDiscountDataSet.yml");
+        loadDataSet("/datasets/item/discount/testE2ENewDiscountDataSet.yml");
         DiscountDto expectedDto = DiscountDto.builder()
                 .charSequenceCode("newDiscount")
                 .amount(20)
@@ -89,9 +96,9 @@ class DiscountControllerE2ETest extends BasicE2ETest {
                 .build();
 
         try {
-            mockMvc.perform(put(URL_TEMPLATE + "/articular")
+            mockMvc.perform(put(URL_TEMPLATE)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .param("articularId", "noDiscount")
+                            .params(getMultiValueMap(Map.of("articularId", "noDiscount")))
                             .content(objectMapper.writeValueAsString(expectedDto)))
                     .andExpect(status().isOk());
         } catch (Exception e) {
@@ -109,9 +116,9 @@ class DiscountControllerE2ETest extends BasicE2ETest {
                 .build();
 
         try {
-            mockMvc.perform(put(URL_TEMPLATE + "/articular")
+            mockMvc.perform(put(URL_TEMPLATE)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .param("articularId", "noDiscount")
+                            .params(getMultiValueMap(Map.of("articularId", "noDiscount")))
                             .content(objectMapper.writeValueAsString(expectedDto)))
                     .andExpect(status().isOk());
         } catch (Exception e) {
@@ -132,9 +139,9 @@ class DiscountControllerE2ETest extends BasicE2ETest {
                 .build();
 
         try {
-            mockMvc.perform(patch(URL_TEMPLATE + "/articular")
+            mockMvc.perform(patch(URL_TEMPLATE)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .param("articularId", "111")
+                            .params(getMultiValueMap(Map.of("articularId", "111")))
                             .content(objectMapper.writeValueAsString(expectedDto)))
                     .andExpect(status().isOk());
         } catch (Exception e) {
@@ -146,7 +153,7 @@ class DiscountControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPatchCreateNewDiscountByArticularId() {
-        loadDataSet("/datasets/item/discount/testE2EDiscountDataSet.yml");
+        loadDataSet("/datasets/item/discount/testE2ENewDiscountDataSet.yml");
         DiscountDto expectedDto = DiscountDto.builder()
                 .charSequenceCode("newDiscount")
                 .amount(20)
@@ -155,9 +162,9 @@ class DiscountControllerE2ETest extends BasicE2ETest {
                 .build();
 
         try {
-            mockMvc.perform(patch(URL_TEMPLATE + "/articular")
+            mockMvc.perform(patch(URL_TEMPLATE)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .param("articularId", "noDiscount")
+                            .params(getMultiValueMap(Map.of("articularId", "noDiscount")))
                             .content(objectMapper.writeValueAsString(expectedDto)))
                     .andExpect(status().isOk());
         } catch (Exception e) {
@@ -175,9 +182,9 @@ class DiscountControllerE2ETest extends BasicE2ETest {
                 .build();
 
         try {
-            mockMvc.perform(patch(URL_TEMPLATE + "/articular")
+            mockMvc.perform(patch(URL_TEMPLATE)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .param("articularId", "noDiscount")
+                            .params(getMultiValueMap(Map.of("articularId", "noDiscount")))
                             .content(objectMapper.writeValueAsString(expectedDto)))
                     .andExpect(status().isOk());
         } catch (Exception e) {
@@ -253,7 +260,7 @@ class DiscountControllerE2ETest extends BasicE2ETest {
             assertEquals(expectedDto.getAmount(), actual.getAmount());
             assertEquals(expectedDto.getCurrency(), actual.getCurrency());
             assertEquals(expectedDto.getCharSequenceCode(), actual.getCharSequenceCode());
-            assertEquals(expectedDto.isActive(), actual.isActive());
+            assertEquals(expectedDto.getIsActive(), actual.getIsActive());
         } catch (JsonProcessingException | UnsupportedEncodingException e) {
             throw new RuntimeException("Error processing the JSON response", e);
         }
@@ -270,9 +277,9 @@ class DiscountControllerE2ETest extends BasicE2ETest {
                 .build();
 
         try {
-            mockMvc.perform(put(URL_TEMPLATE + "/sequence")
+            mockMvc.perform(put(URL_TEMPLATE)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .param("charSequenceCode", "abc1")
+                            .params(getMultiValueMap(Map.of("charSequenceCode", "abc1")))
                             .content(objectMapper.writeValueAsString(expectedDto)))
                     .andExpect(status().isOk());
         } catch (Exception e) {
@@ -293,9 +300,9 @@ class DiscountControllerE2ETest extends BasicE2ETest {
                 .build();
 
         try {
-            mockMvc.perform(patch(URL_TEMPLATE + "/sequence")
+            mockMvc.perform(patch(URL_TEMPLATE)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .param("charSequenceCode", "abc1")
+                            .params(getMultiValueMap(Map.of("charSequenceCode", "abc1")))
                             .content(objectMapper.writeValueAsString(expectedDto)))
                     .andExpect(status().isOk());
         } catch (Exception e) {
@@ -313,9 +320,9 @@ class DiscountControllerE2ETest extends BasicE2ETest {
                 .build();
 
         try {
-            mockMvc.perform(put(URL_TEMPLATE + "/sequence")
+            mockMvc.perform(put(URL_TEMPLATE)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .param("charSequenceCode", "abc1")
+                            .params(getMultiValueMap(Map.of("charSequenceCode", "abc1")))
                             .content(objectMapper.writeValueAsString(expectedDto)))
                     .andExpect(status().is5xxServerError());
         } catch (Exception e) {
@@ -333,9 +340,9 @@ class DiscountControllerE2ETest extends BasicE2ETest {
                 .build();
 
         try {
-            mockMvc.perform(patch(URL_TEMPLATE + "/sequence")
+            mockMvc.perform(patch(URL_TEMPLATE)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .param("charSequenceCode", "abc1")
+                            .params(getMultiValueMap(Map.of("charSequenceCode", "abc1")))
                             .content(objectMapper.writeValueAsString(expectedDto)))
                     .andExpect(status().is5xxServerError());
         } catch (Exception e) {
@@ -353,9 +360,9 @@ class DiscountControllerE2ETest extends BasicE2ETest {
                 .build();
 
         try {
-            mockMvc.perform(patch(URL_TEMPLATE + "/sequence")
+            mockMvc.perform(patch(URL_TEMPLATE)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .param("charSequenceCode", "noValue")
+                            .params(getMultiValueMap(Map.of("charSequenceCode", "noValue")))
                             .content(objectMapper.writeValueAsString(expectedDto)))
                     .andExpect(status().is5xxServerError());
         } catch (Exception e) {
@@ -373,9 +380,9 @@ class DiscountControllerE2ETest extends BasicE2ETest {
                 .build();
 
         try {
-            mockMvc.perform(patch(URL_TEMPLATE + "/articular")
+            mockMvc.perform(patch(URL_TEMPLATE)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .param("articularId", "111")
+                            .params(getMultiValueMap(Map.of("articularId", "111")))
                             .content(objectMapper.writeValueAsString(expectedDto)))
                     .andExpect(status().is5xxServerError());
         } catch (Exception e) {

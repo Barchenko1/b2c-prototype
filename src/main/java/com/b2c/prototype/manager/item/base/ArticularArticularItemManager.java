@@ -1,14 +1,14 @@
 package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.dao.item.IItemDataOptionDao;
-import com.b2c.prototype.modal.dto.payload.ItemDataOptionDto;
+import com.b2c.prototype.modal.dto.payload.ArticularItemDto;
 import com.b2c.prototype.modal.dto.response.ResponseItemDataOptionDto;
 import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
-import com.b2c.prototype.service.common.EntityOperationDao;
-import com.b2c.prototype.service.common.IEntityOperationDao;
+import com.b2c.prototype.service.common.EntityOperationManager;
+import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.manager.item.IItemDataOptionManager;
+import com.b2c.prototype.manager.item.IArticularItemManager;
 import com.b2c.prototype.service.query.IQueryService;
 import com.b2c.prototype.service.supplier.ISupplierService;
 
@@ -21,33 +21,33 @@ import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 import static com.b2c.prototype.util.Constant.ITEM_DATA_OPTION_FULL;
 import static com.b2c.prototype.util.Constant.ITEM_ID;
 
-public class ItemDataOptionManager implements IItemDataOptionManager {
+public class ArticularArticularItemManager implements IArticularItemManager {
 
-    private final IEntityOperationDao entityOperationDao;
+    private final IEntityOperationManager entityOperationDao;
     private final IQueryService queryService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
 
-    public ItemDataOptionManager(IItemDataOptionDao itemDataOptionDao,
-                                 IQueryService queryService,
-                                 ITransformationFunctionService transformationFunctionService,
-                                 ISupplierService supplierService) {
-        this.entityOperationDao = new EntityOperationDao(itemDataOptionDao);
+    public ArticularArticularItemManager(IItemDataOptionDao itemDataOptionDao,
+                                         IQueryService queryService,
+                                         ITransformationFunctionService transformationFunctionService,
+                                         ISupplierService supplierService) {
+        this.entityOperationDao = new EntityOperationManager(itemDataOptionDao);
         this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
     }
 
     @Override
-    public void saveUpdateItemDataOption(String itemId, List<ItemDataOptionDto> itemDataOptionDtoList) {
+    public void saveUpdateItemDataOption(String itemId, List<ArticularItemDto> articularItemDtoList) {
         entityOperationDao.executeConsumer(session -> {
             ItemData itemData = queryService.getEntity(
                     ItemData.class,
                     supplierService.parameterStringSupplier(ITEM_ID, itemId));
-            Map<String, ArticularItem> articularItemDataOptionMap = itemData.getArticularItemList().stream()
+            Map<String, ArticularItem> articularItemDataOptionMap = itemData.getArticularItemSet().stream()
                     .collect(Collectors.toMap(ArticularItem::getArticularId,
                             itemDataOption -> itemDataOption));
-            itemDataOptionDtoList.stream()
+            articularItemDtoList.stream()
                     .map(itemDataOptionDto -> {
                         ArticularItem newArticularItem =
                                 transformationFunctionService.getEntity(ArticularItem.class, itemDataOptionDto);

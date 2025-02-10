@@ -7,8 +7,8 @@ import com.b2c.prototype.modal.dto.payload.BeneficiaryDto;
 import com.b2c.prototype.modal.dto.searchfield.BeneficiarySearchFieldOrderNumberDto;
 import com.b2c.prototype.modal.entity.order.OrderArticularItem;
 import com.b2c.prototype.modal.entity.order.Beneficiary;
-import com.b2c.prototype.service.common.EntityOperationDao;
-import com.b2c.prototype.service.common.IEntityOperationDao;
+import com.b2c.prototype.service.common.EntityOperationManager;
+import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.order.IBeneficiaryManager;
 import com.b2c.prototype.service.query.IQueryService;
@@ -27,7 +27,7 @@ public class BeneficiaryManager implements IBeneficiaryManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BeneficiaryManager.class);
 
-    private final IEntityOperationDao entityOperationDao;
+    private final IEntityOperationManager entityOperationDao;
     private final IQueryService queryService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
@@ -36,7 +36,7 @@ public class BeneficiaryManager implements IBeneficiaryManager {
                               IQueryService queryService,
                               ITransformationFunctionService transformationFunctionService,
                               ISupplierService supplierService) {
-        this.entityOperationDao = new EntityOperationDao(beneficiaryDao);
+        this.entityOperationDao = new EntityOperationManager(beneficiaryDao);
         this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;

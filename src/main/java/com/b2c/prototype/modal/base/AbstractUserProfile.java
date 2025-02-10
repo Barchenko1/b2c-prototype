@@ -10,11 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.GenericGenerator;
 
-import java.util.UUID;
-
-import static com.b2c.prototype.util.UniqueIdUtil.getUUID;
+import static com.b2c.prototype.util.Util.getUUID;
 
 @MappedSuperclass
 @Data

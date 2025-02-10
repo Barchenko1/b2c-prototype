@@ -1,7 +1,7 @@
 //package com.b2c.prototype.e2e.controller.constant;
 //
 //import com.b2c.prototype.e2e.BasicE2ETest;
-//import com.b2c.prototype.modal.dto.payload.ConstantPayloadDto;
+//import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 //import org.junit.jupiter.api.Test;
 //import org.springframework.http.MediaType;
 //

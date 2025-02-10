@@ -6,8 +6,8 @@ import com.b2c.prototype.modal.dto.payload.DeliveryDto;
 import com.b2c.prototype.modal.dto.searchfield.DeliverySearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
 import com.b2c.prototype.modal.entity.order.OrderArticularItem;
-import com.b2c.prototype.service.common.EntityOperationDao;
-import com.b2c.prototype.service.common.IEntityOperationDao;
+import com.b2c.prototype.service.common.EntityOperationManager;
+import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.delivery.IDeliveryManager;
 import com.b2c.prototype.service.query.IQueryService;
@@ -21,7 +21,7 @@ import static com.b2c.prototype.util.Constant.ORDER_ID;
 @Slf4j
 public class DeliveryManager implements IDeliveryManager {
 
-    private final IEntityOperationDao entityOperationDao;
+    private final IEntityOperationManager entityOperationDao;
     private final IQueryService queryService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
@@ -30,7 +30,7 @@ public class DeliveryManager implements IDeliveryManager {
                            IQueryService queryService,
                            ITransformationFunctionService transformationFunctionService,
                            ISupplierService supplierService) {
-        this.entityOperationDao = new EntityOperationDao(deliveryDao);
+        this.entityOperationDao = new EntityOperationManager(deliveryDao);
         this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;

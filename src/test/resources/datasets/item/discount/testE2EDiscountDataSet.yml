@@ -3,12 +3,14 @@ currency:
     value: "USD"
     label: "USD"
 discount:
-  - amount: 10
+  - id: 1
+    amount: 10
     charSequenceCode: "abc"
     isActive: true
     isPercent: false
     currency_id: 1
-  - amount: 10
+  - id: 2
+    amount: 10
     charSequenceCode: "abc1"
     isActive: true
     isPercent: false

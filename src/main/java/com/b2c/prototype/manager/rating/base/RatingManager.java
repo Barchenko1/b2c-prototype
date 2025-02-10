@@ -7,7 +7,7 @@ import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.AbstractIntegerConstantEntityManager;
 import com.b2c.prototype.manager.rating.IRatingManager;
 import com.tm.core.dao.common.IEntityDao;
-import com.tm.core.processor.finder.factory.IParameterFactory;
+import com.tm.core.finder.factory.IParameterFactory;
 
 public class RatingManager extends AbstractIntegerConstantEntityManager<NumberConstantPayloadDto, Rating> implements IRatingManager {
 

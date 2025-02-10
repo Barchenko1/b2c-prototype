@@ -1,13 +1,13 @@
 package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.service.scope.IConstantsScope;
-import com.b2c.prototype.modal.dto.payload.ConstantPayloadDto;
+import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.AbstractConstantEntityManager;
 import com.b2c.prototype.manager.item.IBrandManager;
 import com.tm.core.dao.common.IEntityDao;
-import com.tm.core.processor.finder.factory.IParameterFactory;
+import com.tm.core.finder.factory.IParameterFactory;
 
 public class BrandManager extends AbstractConstantEntityManager<ConstantPayloadDto, Brand> implements IBrandManager {
 

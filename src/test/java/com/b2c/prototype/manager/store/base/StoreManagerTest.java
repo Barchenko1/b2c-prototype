@@ -12,7 +12,7 @@ import com.b2c.prototype.modal.entity.store.Store;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.query.IQueryService;
 import com.b2c.prototype.service.supplier.ISupplierService;
-import com.tm.core.processor.finder.parameter.Parameter;
+import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 import org.junit.jupiter.api.BeforeEach;

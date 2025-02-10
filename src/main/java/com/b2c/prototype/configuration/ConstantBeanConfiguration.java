@@ -9,6 +9,7 @@ import com.b2c.prototype.dao.price.ICurrencyDao;
 import com.b2c.prototype.dao.user.ICountryPhoneCodeDao;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
+import com.b2c.prototype.modal.entity.item.ArticularStatus;
 import com.b2c.prototype.modal.entity.message.MessageStatus;
 import com.b2c.prototype.modal.entity.message.MessageType;
 import com.b2c.prototype.modal.entity.payment.PaymentMethod;
@@ -16,7 +17,6 @@ import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.order.OrderStatus;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
-import com.b2c.prototype.modal.entity.item.ItemStatus;
 import com.b2c.prototype.modal.entity.item.ItemType;
 import com.b2c.prototype.modal.entity.item.Rating;
 import com.b2c.prototype.dao.option.IOptionGroupDao;
@@ -92,10 +92,10 @@ public class ConstantBeanConfiguration {
     }
 
     @Bean
-    public Map<String, ItemStatus> itemStatusMap(IItemStatusDao itemStatusDao) {
-        List<ItemStatus> itemStatusList = itemStatusDao.getEntityList();
-        return itemStatusList.stream()
-                .collect(Collectors.toMap(ItemStatus::getValue, itemStatus -> itemStatus, (existing, replacement) -> existing));
+    public Map<String, ArticularStatus> itemStatusMap(IItemStatusDao itemStatusDao) {
+        List<ArticularStatus> articularStatusList = itemStatusDao.getEntityList();
+        return articularStatusList.stream()
+                .collect(Collectors.toMap(ArticularStatus::getValue, itemStatus -> itemStatus, (existing, replacement) -> existing));
     }
 
     @Bean
@@ -164,7 +164,7 @@ public class ConstantBeanConfiguration {
             put(ItemType.class, itemTypeMap(itemTypeDao));
             put(Brand.class, brandMap(brandDao));
             put(Rating.class, ratingMap(ratingDao));
-            put(ItemStatus.class, itemStatusMap(itemStatusDao));
+            put(ArticularStatus.class, itemStatusMap(itemStatusDao));
             put(OptionGroup.class, optionGroupMap(optionGroupDao));
             put(Country.class, countryMap(countryDao));
             put(Currency.class, currencyMap(currencyDao));

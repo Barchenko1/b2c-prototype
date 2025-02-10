@@ -6,6 +6,8 @@ import com.b2c.prototype.modal.embedded.wishlist.Wishlist;
 import com.tm.core.dao.common.IEntityDao;
 import lombok.extern.slf4j.Slf4j;
 
+import static com.b2c.prototype.util.Util.getCurrentTimeMillis;
+
 @Slf4j
 public class WishListManager implements IWishListManager {
     private final IEntityDao wishListDao;
@@ -17,7 +19,7 @@ public class WishListManager implements IWishListManager {
     @Override
     public void addToWishList(WishListDto requestItemBucketDto) {
         Wishlist wishlist = Wishlist.builder()
-                .dateOfUpdate(System.currentTimeMillis())
+                .dateOfUpdate(getCurrentTimeMillis())
 //                .userProfile(null)
 //                .item(null)
                 .build();

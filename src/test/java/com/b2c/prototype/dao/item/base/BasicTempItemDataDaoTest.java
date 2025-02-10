@@ -4,9 +4,9 @@ import com.b2c.prototype.dao.AbstractTempEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
 import com.b2c.prototype.modal.embedded.item.TempItemData;
 import com.tm.core.dao.identifier.EntityIdentifierDao;
-import com.tm.core.processor.finder.manager.EntityMappingManager;
-import com.tm.core.processor.finder.manager.IEntityMappingManager;
-import com.tm.core.processor.finder.table.EntityTable;
+import com.tm.core.finder.manager.EntityMappingManager;
+import com.tm.core.finder.manager.IEntityMappingManager;
+import com.tm.core.finder.table.EntityTable;
 import org.junit.jupiter.api.BeforeAll;
 
 class BasicTempItemDataDaoTest extends AbstractTempEntityDaoTest {

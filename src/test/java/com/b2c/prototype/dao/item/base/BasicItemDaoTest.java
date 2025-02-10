@@ -1,12 +1,12 @@
 package com.b2c.prototype.dao.item.base;
 
 import com.b2c.prototype.dao.AbstractCustomEntityDaoTest;
+import com.b2c.prototype.modal.entity.item.ArticularStatus;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.item.Item;
 import com.b2c.prototype.modal.entity.item.ItemData;
-import com.b2c.prototype.modal.entity.item.ItemStatus;
 import com.b2c.prototype.modal.entity.item.ItemType;
 import com.b2c.prototype.modal.entity.item.Rating;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
@@ -17,10 +17,10 @@ import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.modal.entity.review.Review;
 import com.tm.core.dao.common.AbstractEntityDao;
 import com.tm.core.dao.identifier.EntityIdentifierDao;
-import com.tm.core.processor.finder.manager.EntityMappingManager;
-import com.tm.core.processor.finder.manager.IEntityMappingManager;
-import com.tm.core.processor.finder.parameter.Parameter;
-import com.tm.core.processor.finder.table.EntityTable;
+import com.tm.core.finder.manager.EntityMappingManager;
+import com.tm.core.finder.manager.IEntityMappingManager;
+import com.tm.core.finder.parameter.Parameter;
+import com.tm.core.finder.table.EntityTable;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -75,14 +75,14 @@ class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
         EntityTable brandEntityTable = new EntityTable(Brand.class, "brand");
         EntityTable categoryEntityTable = new EntityTable(Category.class, "category");
         EntityTable discountEntityTable = new EntityTable(Discount.class, "discount");
-        EntityTable itemStatusEntityTable = new EntityTable(ItemStatus.class, "item_status");
+        EntityTable itemStatusEntityTable = new EntityTable(ArticularStatus.class, "articular_status");
         EntityTable itemTypeEntityTable = new EntityTable(ItemType.class, "item_type");
         EntityTable optionGroupEntityTable = new EntityTable(OptionGroup.class, "option_group");
         EntityTable optionItemEntityTable = new EntityTable(OptionItem.class, "option_item");
         EntityTable currencyEntityTable = new EntityTable(Currency.class, "currency");
         EntityTable priceEntityTable = new EntityTable(Price.class, "price");
         EntityTable ratingEntityTable = new EntityTable(Rating.class, "rating");
-        EntityTable reviewEntityTable = new EntityTable(ItemStatus.class, "review");
+        EntityTable reviewEntityTable = new EntityTable(ArticularStatus.class, "review");
         EntityTable postEntityTable = new EntityTable(ItemType.class, "post");
 
         EntityTable itemEntityTable = new EntityTable(Item.class, "item");
@@ -188,7 +188,7 @@ class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
                 .label("USD")
                 .value("USD")
                 .build();
-        ItemStatus itemStatus = ItemStatus.builder()
+        ArticularStatus articularStatus = ArticularStatus.builder()
                 .id(1L)
                 .value("NEW")
                 .label("NEW")
@@ -202,7 +202,6 @@ class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
                 .id(1L)
                 .category(category)
                 .brand(brand)
-                .status(itemStatus)
                 .itemType(itemType)
                 .build();
 
@@ -222,7 +221,7 @@ class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
                 .label("Hermes")
                 .build();
         Category category = prepareCategories();
-        ItemStatus itemStatus = ItemStatus.builder()
+        ArticularStatus articularStatus = ArticularStatus.builder()
                 .id(1L)
                 .value("NEW")
                 .label("NEW")
@@ -237,7 +236,6 @@ class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
                 .id(1L)
                 .category(category)
                 .brand(brand)
-                .status(itemStatus)
                 .itemType(itemType)
                 .build();
 
@@ -258,7 +256,7 @@ class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
                 .label("Hermes")
                 .build();
         Category category = prepareCategories();
-        ItemStatus itemStatus = ItemStatus.builder()
+        ArticularStatus articularStatus = ArticularStatus.builder()
                 .id(1L)
                 .value("NEW")
                 .label("NEW")
@@ -274,7 +272,6 @@ class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
                 .category(category)
                 .itemId("123")
                 .brand(brand)
-                .status(itemStatus)
                 .itemType(itemType)
                 .build();
 

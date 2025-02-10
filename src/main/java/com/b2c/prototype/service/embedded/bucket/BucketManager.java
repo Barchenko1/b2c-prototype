@@ -17,7 +17,7 @@ public class BucketManager implements IBucketManager {
     @Override
     public void addItemToBucket(ItemBucketDto itemBucketDto) {
         Bucket bucket = Bucket.builder()
-//                .dateOfAdded(System.currentTimeMillis())
+//                .dateOfAdded(getCurrentTimeMillis())
 //                .item(null)
 //                .userProfile(null)
                 .build();

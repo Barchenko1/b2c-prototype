@@ -1,12 +1,9 @@
 package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.dao.item.IItemDataOptionDao;
-import com.b2c.prototype.manager.item.base.ItemDataOptionManager;
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
-import com.b2c.prototype.modal.dto.payload.DiscountDto;
-import com.b2c.prototype.modal.dto.payload.ItemDataDto;
-import com.b2c.prototype.modal.dto.payload.ItemDataOptionDto;
-import com.b2c.prototype.modal.dto.payload.OptionItemDto;
+import com.b2c.prototype.modal.dto.payload.InitDiscountDto;
+import com.b2c.prototype.modal.dto.payload.ArticularItemDto;
+import com.b2c.prototype.modal.dto.payload.OptionGroupOptionItemSetDto;
 import com.b2c.prototype.modal.dto.payload.PriceDto;
 import com.b2c.prototype.modal.dto.response.ResponseItemDataOptionDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
@@ -14,7 +11,6 @@ import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.item.ItemData;
-import com.b2c.prototype.modal.entity.item.ItemStatus;
 import com.b2c.prototype.modal.entity.item.ItemType;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
@@ -23,7 +19,7 @@ import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.query.IQueryService;
 import com.b2c.prototype.service.supplier.ISupplierService;
-import com.tm.core.processor.finder.parameter.Parameter;
+import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,9 +28,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -62,7 +57,7 @@ class ArticularItemManagerTest {
     @Mock
     private ISupplierService supplierService;
     @InjectMocks
-    private ItemDataOptionManager itemDataOptionManager;
+    private ArticularArticularItemManager articularItemManager;
 
     @BeforeEach
     void setUp() {
@@ -72,8 +67,8 @@ class ArticularItemManagerTest {
     @Test
     void updateItemDataOption_ShouldUpdateEntity() {
         String itemId = "itemId";
-        ItemDataOptionDto itemDataOptionDto = getItemDataOptionDto();
-        List<ItemDataOptionDto> itemDataOptionDtoList = List.of(itemDataOptionDto);
+        ArticularItemDto articularItemDto = getItemDataOptionDto();
+        List<ArticularItemDto> articularItemDtoList = List.of(articularItemDto);
         ItemData itemData = getItemData();
         ArticularItem newArticularItem = updateItemDataOption();
 
@@ -84,7 +79,7 @@ class ArticularItemManagerTest {
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(ItemData.class, parameterSupplier))
                 .thenReturn(itemData);
-        when(transformationFunctionService.getEntity(ArticularItem.class, itemDataOptionDto))
+        when(transformationFunctionService.getEntity(ArticularItem.class, articularItemDto))
                 .thenReturn(newArticularItem);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -94,7 +89,7 @@ class ArticularItemManagerTest {
             return null;
         }).when(itemDataOptionDao).executeConsumer(any(Consumer.class));
 
-        itemDataOptionManager.saveUpdateItemDataOption(itemId, itemDataOptionDtoList);
+        articularItemManager.saveUpdateItemDataOption(itemId, articularItemDtoList);
 
         verify(itemDataOptionDao).executeConsumer(any(Consumer.class));
     }
@@ -102,10 +97,10 @@ class ArticularItemManagerTest {
     @Test
     void updateItemDataOption_ShouldUpdateEntityNoExisingItemDataOptions() {
         String itemId = "itemId";
-        ItemDataOptionDto itemDataOptionDto = getItemDataOptionDto();
-        List<ItemDataOptionDto> itemDataOptionDtoList = List.of(itemDataOptionDto);
+        ArticularItemDto articularItemDto = getItemDataOptionDto();
+        List<ArticularItemDto> articularItemDtoList = List.of(articularItemDto);
         ItemData itemData = getItemData();
-        itemData.setArticularItemList(new ArrayList<>());
+        itemData.setArticularItemSet(new HashSet<>());
         ArticularItem newArticularItem = updateItemDataOption();
 
         Parameter parameter = mock(Parameter.class);
@@ -115,7 +110,7 @@ class ArticularItemManagerTest {
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(ItemData.class, parameterSupplier))
                 .thenReturn(itemData);
-        when(transformationFunctionService.getEntity(ArticularItem.class, itemDataOptionDto))
+        when(transformationFunctionService.getEntity(ArticularItem.class, articularItemDto))
                 .thenReturn(newArticularItem);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -125,7 +120,7 @@ class ArticularItemManagerTest {
             return null;
         }).when(itemDataOptionDao).executeConsumer(any(Consumer.class));
 
-        itemDataOptionManager.saveUpdateItemDataOption(itemId, itemDataOptionDtoList);
+        articularItemManager.saveUpdateItemDataOption(itemId, articularItemDtoList);
 
         verify(itemDataOptionDao).executeConsumer(any(Consumer.class));
     }
@@ -138,7 +133,7 @@ class ArticularItemManagerTest {
         when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
                 .thenReturn(parameterSupplier);
 
-        itemDataOptionManager.deleteItemDataOption(articularId);
+        articularItemManager.deleteItemDataOption(articularId);
 
         verify(itemDataOptionDao).findEntityAndDelete(parameter);
     }
@@ -159,7 +154,7 @@ class ArticularItemManagerTest {
                 .thenReturn(function);
         when(function.apply(articularItem)).thenReturn(responseDto);
 
-        ResponseItemDataOptionDto result = itemDataOptionManager.getResponseItemDataOptionDto(value);
+        ResponseItemDataOptionDto result = articularItemManager.getResponseItemDataOptionDto(value);
 
         assertEquals(responseDto, result);
     }
@@ -175,7 +170,7 @@ class ArticularItemManagerTest {
         when(itemDataOptionDao.getEntityList()).thenReturn(List.of(getItemDataOption()));
         when(function.apply(articularItem)).thenReturn(responseDto);
 
-        List<ResponseItemDataOptionDto> result = itemDataOptionManager.getResponseItemDataOptionDtoList();
+        List<ResponseItemDataOptionDto> result = articularItemManager.getResponseItemDataOptionDtoList();
 
         assertEquals(responseDtoList, result);
     }
@@ -191,7 +186,7 @@ class ArticularItemManagerTest {
         when(itemDataOptionDao.getEntityList()).thenReturn(List.of(getItemDataOption()));
         when(function.apply(articularItem)).thenReturn(responseDto);
 
-        List<ResponseItemDataOptionDto> result = itemDataOptionManager.getResponseItemDataOptionDtoFiltered();
+        List<ResponseItemDataOptionDto> result = articularItemManager.getResponseItemDataOptionDtoFiltered();
 
         assertEquals(responseDtoList, result);
     }
@@ -208,46 +203,34 @@ class ArticularItemManagerTest {
         when(itemDataOptionDao.getEntityList()).thenReturn(List.of(articularItem));
         when(function.apply(articularItem)).thenReturn(responseDto);
 
-        List<ResponseItemDataOptionDto> result = itemDataOptionManager.getResponseItemDataOptionDtoSorted(sortType);
+        List<ResponseItemDataOptionDto> result = articularItemManager.getResponseItemDataOptionDtoSorted(sortType);
 
         assertEquals(responseDtoList, result);
     }
 
-    private ItemDataOptionDto getItemDataOptionDto() {
-        Map<OneFieldEntityDto, OneFieldEntityDto> map = new HashMap<>(){{
-            put(new OneFieldEntityDto("Size"), new OneFieldEntityDto("L"));
-        }};
-        ItemDataDto itemDataDto = ItemDataDto.builder()
-                .category("categoryNameValue")
-                .itemType("itemTypeNameValue")
-                .brand("brandNameValue")
-                .itemStatus("itemStatusValue")
-                .build();
-        DiscountDto discountDto = DiscountDto.builder()
+    private ArticularItemDto getItemDataOptionDto() {
+        InitDiscountDto discountDto = InitDiscountDto.builder()
                 .amount(200)
                 .currency("EUR")
                 .charSequenceCode("CODE124")
                 .build();
-        OptionItemDto optionItemDto = null;
-        return ItemDataOptionDto.builder()
+        OptionGroupOptionItemSetDto optionGroupOptionItemSetDto = null;
+        return ArticularItemDto.builder()
                 .fullPrice(getPriceDto(10))
                 .totalPrice(getPriceDto(8))
                 .discount(discountDto)
-                .optionItem(optionItemDto)
+                .options(null)
                 .build();
     }
 
     private ResponseItemDataOptionDto responseItemDataOptionDto() {
-        Map<OneFieldEntityDto, Set<OneFieldEntityDto>> map = new HashMap<>(){{
-            put(new OneFieldEntityDto("Size"), Set.of(new OneFieldEntityDto("L")));
-        }};
         return ResponseItemDataOptionDto.builder()
                 .articularId("articularId")
                 .dateOfCreate(100)
                 .fullPrice(getPriceDto(10))
                 .currentPrice(getPriceDto(8))
                 .discountPrice(getPriceDto(2))
-                .optionGroupOptionItemMap(map)
+//                .optionGroupOptionItemMap(map)
                 .build();
     }
 
@@ -282,8 +265,7 @@ class ArticularItemManagerTest {
                 .category(Category.builder().name("categoryNameValue").build())
                 .itemType(ItemType.builder().value("itemTypeNameValue").build())
                 .brand(Brand.builder().value("brandNameValue").build())
-                .status(ItemStatus.builder().value("itemStatusValue").build())
-                .articularItemList(List.of(getItemDataOption()))
+                .articularItemSet(Set.of(getItemDataOption()))
                 .build();
     }
 

@@ -37,9 +37,9 @@ import com.b2c.prototype.service.parallel.IAsyncProcessor;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.function.TransformationFunctionService;
 import com.b2c.prototype.manager.item.IItemDataManager;
-import com.b2c.prototype.manager.item.IItemDataOptionManager;
+import com.b2c.prototype.manager.item.IArticularItemManager;
 import com.b2c.prototype.manager.item.base.ItemDataManager;
-import com.b2c.prototype.manager.item.base.ItemDataOptionManager;
+import com.b2c.prototype.manager.item.base.ArticularArticularItemManager;
 import com.b2c.prototype.processor.constant.ConstantProcessorService;
 import com.b2c.prototype.processor.constant.IConstantProcessorService;
 import com.b2c.prototype.manager.address.base.AddressManager;
@@ -76,12 +76,12 @@ import com.b2c.prototype.manager.price.base.CurrencyManager;
 import com.b2c.prototype.manager.price.ICurrencyManager;
 import com.b2c.prototype.processor.discount.DiscountProcess;
 import com.b2c.prototype.processor.discount.IDiscountProcess;
-import com.b2c.prototype.processor.item.IItemDataOptionProcessor;
+import com.b2c.prototype.processor.item.IArticularItemProcessor;
 import com.b2c.prototype.processor.item.IItemDataProcessor;
 import com.b2c.prototype.processor.option.IOptionItemProcessor;
 import com.b2c.prototype.processor.option.OptionItemProcessor;
 import com.b2c.prototype.processor.order.IOrderProcessor;
-import com.b2c.prototype.processor.item.ItemDataOptionProcessor;
+import com.b2c.prototype.processor.item.ArticularItemProcessor;
 import com.b2c.prototype.processor.item.ItemDataProcessor;
 import com.b2c.prototype.processor.order.OrderProcessor;
 import com.b2c.prototype.service.query.IQueryService;
@@ -115,9 +115,9 @@ import com.b2c.prototype.gateway.IRestClient;
 import com.b2c.prototype.gateway.RestClient;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import com.b2c.prototype.service.supplier.SupplierService;
-import com.tm.core.dao.query.ISearchWrapper;
-import com.tm.core.processor.finder.factory.IParameterFactory;
-import com.tm.core.processor.finder.factory.ParameterFactory;
+import com.tm.core.dao.query.ISearchHandler;
+import com.tm.core.finder.factory.IParameterFactory;
+import com.tm.core.finder.factory.ParameterFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -148,8 +148,8 @@ public class ServiceBeanConfiguration {
 
     @Bean
     public IConstantsScope singleValueMap(Map<Class<?>, Map<?, ?>> classEntityMap,
-                                          ISearchWrapper searchWrapper) {
-        return new ConstantsScope(classEntityMap, searchWrapper);
+                                          ISearchHandler searchHandler) {
+        return new ConstantsScope(classEntityMap, searchHandler);
     }
 
     @Bean
@@ -307,17 +307,18 @@ public class ServiceBeanConfiguration {
 
     @Bean
     public IItemDataManager itemDataManager(IItemDataDao itemDataDao,
+                                            IQueryService queryService,
                                             ITransformationFunctionService transformationFunctionService,
                                             ISupplierService supplierService) {
-        return new ItemDataManager(itemDataDao, transformationFunctionService, supplierService);
+        return new ItemDataManager(itemDataDao, queryService, transformationFunctionService, supplierService);
     }
 
     @Bean
-    public IItemDataOptionManager itemDataOptionManager(IItemDataOptionDao itemDataOptionDao,
-                                                        IQueryService queryService,
-                                                        ITransformationFunctionService transformationFunctionService,
-                                                        ISupplierService supplierService) {
-        return new ItemDataOptionManager(itemDataOptionDao, queryService, transformationFunctionService, supplierService);
+    public IArticularItemManager itemDataOptionManager(IItemDataOptionDao itemDataOptionDao,
+                                                       IQueryService queryService,
+                                                       ITransformationFunctionService transformationFunctionService,
+                                                       ISupplierService supplierService) {
+        return new ArticularArticularItemManager(itemDataOptionDao, queryService, transformationFunctionService, supplierService);
     }
 
     @Bean
@@ -432,8 +433,8 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public IItemDataOptionProcessor itemDataOptionProcessor(IItemDataOptionManager itemDataOptionManager) {
-        return new ItemDataOptionProcessor(itemDataOptionManager);
+    public IArticularItemProcessor itemDataOptionProcessor(IArticularItemManager itemDataOptionManager) {
+        return new ArticularItemProcessor(itemDataOptionManager);
     }
 
     @Bean

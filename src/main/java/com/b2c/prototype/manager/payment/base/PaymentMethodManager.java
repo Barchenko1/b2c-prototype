@@ -1,13 +1,13 @@
 package com.b2c.prototype.manager.payment.base;
 
 import com.b2c.prototype.service.scope.IConstantsScope;
-import com.b2c.prototype.modal.dto.payload.ConstantPayloadDto;
+import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.entity.payment.PaymentMethod;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.AbstractConstantEntityManager;
 import com.b2c.prototype.manager.payment.IPaymentMethodManager;
 import com.tm.core.dao.common.IEntityDao;
-import com.tm.core.processor.finder.factory.IParameterFactory;
+import com.tm.core.finder.factory.IParameterFactory;
 
 public class PaymentMethodManager extends AbstractConstantEntityManager<ConstantPayloadDto, PaymentMethod> implements IPaymentMethodManager {
 

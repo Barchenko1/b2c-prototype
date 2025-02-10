@@ -10,7 +10,7 @@ import com.b2c.prototype.modal.entity.post.Post;
 //import com.b2c.prototype.modal.entity.item.Brand;
 //import com.b2c.prototype.modal.entity.item.Category;
 //import com.b2c.prototype.modal.entity.item.Item;
-//import com.b2c.prototype.modal.entity.item.ItemStatus;
+//import com.b2c.prototype.modal.entity.item.ArticularStatus;
 //import com.b2c.prototype.modal.entity.item.ItemType;
 //import com.b2c.prototype.modal.entity.item.Rating;
 //import com.b2c.prototype.modal.entity.option.OptionGroup;
@@ -164,7 +164,7 @@ import com.b2c.prototype.modal.entity.post.Post;
 //                .charSequenceCode("abc")
 //                .currency(currency)
 //                .build();
-//        ItemStatus itemStatus = ItemStatus.builder()
+//        ArticularStatus itemStatus = ArticularStatus.builder()
 //                .id(1L)
 //                .name("NEW")
 //                .build();

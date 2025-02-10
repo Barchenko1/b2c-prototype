@@ -40,7 +40,6 @@ class ArticularItemControllerE2ETest extends BasicE2ETest {
     @Test
     void testCreateArticularItem() {
         ItemDataDto itemDataDto = getItemDataDto();
-        itemDataDto.setName("Test Item");
 
         loadDataSet("/datasets/item/item_data/emptyItemDataSet.yml");
 
@@ -61,7 +60,6 @@ class ArticularItemControllerE2ETest extends BasicE2ETest {
         loadDataSet("/datasets/item/item_data/testItemDataSet.yml");
 
         ItemDataDto updateDto = getItemDataDto();
-        updateDto.setName("Updated Item");
 
         try {
             mockMvc.perform(put(URL_TEMPLATE + "/{id}", 1)
@@ -108,9 +106,7 @@ class ArticularItemControllerE2ETest extends BasicE2ETest {
             ItemDataDto actual = objectMapper.readValue(jsonResponse, ItemDataDto.class);
 
             ItemDataDto expected = getItemDataDto();
-            expected.setName("Test Item");
 
-            assertEquals(expected.getName(), actual.getName());
             assertEquals(expected.getDescription(), actual.getDescription());
         } catch (JsonProcessingException | UnsupportedEncodingException e) {
             throw new RuntimeException("Error processing the JSON response", e);
@@ -137,10 +133,8 @@ class ArticularItemControllerE2ETest extends BasicE2ETest {
 
             List<ItemDataDto> expectedList = List.of(
                     ItemDataDto.builder()
-                            .name("1")
                             .build(),
                     ItemDataDto.builder()
-                            .name("2")
                             .build()
             );
 
@@ -152,11 +146,9 @@ class ArticularItemControllerE2ETest extends BasicE2ETest {
 
     private ItemDataDto getItemDataDto() {
         return ItemDataDto.builder()
-                .name("Test Item")
                 .category("categoryNameValue")
                 .itemType("itemTypeNameValue")
                 .brand("brandNameValue")
-                .itemStatus("itemStatusValue")
 
                 .build();
     }

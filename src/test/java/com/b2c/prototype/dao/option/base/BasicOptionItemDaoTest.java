@@ -7,10 +7,10 @@ import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.modal.entity.order.Beneficiary;
 import com.tm.core.dao.common.AbstractEntityDao;
 import com.tm.core.dao.identifier.EntityIdentifierDao;
-import com.tm.core.processor.finder.manager.EntityMappingManager;
-import com.tm.core.processor.finder.manager.IEntityMappingManager;
-import com.tm.core.processor.finder.parameter.Parameter;
-import com.tm.core.processor.finder.table.EntityTable;
+import com.tm.core.finder.manager.EntityMappingManager;
+import com.tm.core.finder.manager.IEntityMappingManager;
+import com.tm.core.finder.parameter.Parameter;
+import com.tm.core.finder.table.EntityTable;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -186,7 +186,6 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
         loadDataSet("/datasets/option/option_item/emptyOptionItemWithOptionGroupDataSet.yml");
         Consumer<Session> consumer = (Session s) -> {
             OptionItem optionItem = prepareToSaveOptionItem();
-//            s.persist(optionItem.getOptionGroup());
             s.persist(optionItem);
         };
 

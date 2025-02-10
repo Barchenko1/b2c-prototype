@@ -6,12 +6,12 @@ import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
+import com.b2c.prototype.modal.entity.item.ArticularStatus;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
-import com.b2c.prototype.modal.entity.item.ItemStatus;
 import com.b2c.prototype.modal.entity.item.ItemType;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
@@ -30,10 +30,10 @@ import com.b2c.prototype.modal.entity.user.UserProfile;
 import com.b2c.prototype.util.CardUtil;
 import com.tm.core.dao.common.AbstractEntityDao;
 import com.tm.core.dao.identifier.EntityIdentifierDao;
-import com.tm.core.processor.finder.manager.EntityMappingManager;
-import com.tm.core.processor.finder.manager.IEntityMappingManager;
-import com.tm.core.processor.finder.parameter.Parameter;
-import com.tm.core.processor.finder.table.EntityTable;
+import com.tm.core.finder.manager.EntityMappingManager;
+import com.tm.core.finder.manager.IEntityMappingManager;
+import com.tm.core.finder.parameter.Parameter;
+import com.tm.core.finder.table.EntityTable;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -49,7 +49,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -236,7 +235,7 @@ class BasicOrderArticularItemDaoTest extends AbstractCustomEntityDaoTest {
                 .label("Hermes")
                 .build();
         Category category = prepareCategories();
-        ItemStatus itemStatus = ItemStatus.builder()
+        ArticularStatus articularStatus = ArticularStatus.builder()
                 .id(1L)
                 .value("NEW")
                 .label("NEW")
@@ -251,7 +250,6 @@ class BasicOrderArticularItemDaoTest extends AbstractCustomEntityDaoTest {
                 .id(1L)
                 .category(category)
                 .brand(brand)
-                .status(itemStatus)
                 .itemType(itemType)
                 .build();
 

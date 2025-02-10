@@ -2,7 +2,7 @@
 package com.b2c.prototype.e2e.controller.constant;
 
 import com.b2c.prototype.e2e.AbstractConstantControllerE2ETest;
-import com.b2c.prototype.modal.dto.payload.ConstantPayloadDto;
+import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.MvcResult;

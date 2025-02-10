@@ -1,8 +1,8 @@
 package com.b2c.prototype.service.scope;
 
-import com.tm.core.dao.query.ISearchWrapper;
-import com.tm.core.processor.finder.factory.IParameterFactory;
-import com.tm.core.processor.finder.parameter.Parameter;
+import com.tm.core.dao.query.ISearchHandler;
+import com.tm.core.finder.factory.IParameterFactory;
+import com.tm.core.finder.parameter.Parameter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -28,7 +28,7 @@ import static org.mockito.Mockito.when;
 class ConstantsScopeTest {
 
     @Mock
-    private ISearchWrapper searchWrapper;
+    private ISearchHandler searchHandler;
 
     @Mock
     private IParameterFactory parameterFactory;
@@ -42,7 +42,7 @@ class ConstantsScopeTest {
         MockitoAnnotations.openMocks(this);
         initEntityMap = new HashMap<>();
         classEntityMap = new HashMap<>();
-        constantsScope = new ConstantsScope(initEntityMap, searchWrapper);
+        constantsScope = new ConstantsScope(initEntityMap, searchHandler);
         try {
             Field entityIdentifierDaoField = ConstantsScope.class.getDeclaredField("classEntityMap");
             entityIdentifierDaoField.setAccessible(true);
@@ -70,14 +70,14 @@ class ConstantsScopeTest {
         Object entity = new Object();
         entityMap.put(value, entity);
         classEntityMap.put(Object.class, entityMap);
-        when(searchWrapper.getOptionalEntity(eq(Object.class), any(Parameter.class)))
+        when(searchHandler.getOptionalEntity(eq(Object.class), any(Parameter.class)))
                 .thenReturn(Optional.of(entity));
 
         Optional<Object> result = constantsScope.getOptionalEntity(Object.class, key, value);
 
         assertTrue(result.isPresent());
         assertEquals(entity, result.get());
-        verify(searchWrapper, never()).getOptionalEntity(any(), any());
+        verify(searchHandler, never()).getOptionalEntity(any(), any());
     }
 
     @Test
@@ -92,19 +92,19 @@ class ConstantsScopeTest {
         Object result = constantsScope.getEntity(Object.class, key, value);
 
         assertEquals(entity, result);
-        verify(searchWrapper, never()).getOptionalEntity(any(), any());
+        verify(searchHandler, never()).getOptionalEntity(any(), any());
     }
 
     @Test
     void testGetEntityFromDbIfNotInMap_shouldRetrieveFromDbAndThrowIfNotFound() {
         Map<Object, Object> entityMap = new HashMap<>();
         classEntityMap.put(Object.class, entityMap);
-        when(searchWrapper.getOptionalEntity(eq(Object.class), any(Parameter.class)))
+        when(searchHandler.getOptionalEntity(eq(Object.class), any(Parameter.class)))
                 .thenReturn(Optional.empty());
 
         assertThrows(RuntimeException.class, () -> constantsScope.getEntity(Object.class, "id", 1L));
 
-        verify(searchWrapper, times(1)).getOptionalEntity(eq(Object.class), any(Parameter.class));
+        verify(searchHandler, times(1)).getOptionalEntity(eq(Object.class), any(Parameter.class));
     }
 
     @Test
@@ -112,13 +112,13 @@ class ConstantsScopeTest {
         Map<Object, Object> entityMap = new HashMap<>();
         classEntityMap.put(Object.class, entityMap);
         Object entity = new Object();
-        when(searchWrapper.getOptionalEntity(eq(Object.class), any(Parameter.class)))
+        when(searchHandler.getOptionalEntity(eq(Object.class), any(Parameter.class)))
                 .thenReturn(Optional.of(entity));
 
         Object result = constantsScope.getEntity(Object.class, "str", "str");
 
         assertEquals(entity, result);
-        verify(searchWrapper, times(1)).getOptionalEntity(eq(Object.class), any(Parameter.class));
+        verify(searchHandler, times(1)).getOptionalEntity(eq(Object.class), any(Parameter.class));
     }
 
     @Test
@@ -127,13 +127,13 @@ class ConstantsScopeTest {
         classEntityMap.put(Object.class, entityMap);
         Object entity = new Object();
 
-        when(searchWrapper.getOptionalEntity(eq(Object.class), any(Parameter.class)))
+        when(searchHandler.getOptionalEntity(eq(Object.class), any(Parameter.class)))
                 .thenReturn(Optional.of(entity));
 
         boolean result = constantsScope.isEntityExist(Object.class, "key", "dbValue");
 
         assertTrue(result);
-        verify(searchWrapper, times(1)).getOptionalEntity(eq(Object.class), any(Parameter.class));
+        verify(searchHandler, times(1)).getOptionalEntity(eq(Object.class), any(Parameter.class));
     }
 
     @Test
@@ -141,20 +141,20 @@ class ConstantsScopeTest {
         Map<Object, Object> entityMap = new HashMap<>();
         classEntityMap.put(Object.class, entityMap);
         Object entity = new Object();
-        when(searchWrapper.getOptionalEntity(eq(Object.class), any(Parameter.class)))
+        when(searchHandler.getOptionalEntity(eq(Object.class), any(Parameter.class)))
                 .thenReturn(Optional.of(entity));
 
         boolean result = constantsScope.isEntityExist(Object.class, "str", "str");
 
         assertTrue(result);
-        verify(searchWrapper, times(1)).getOptionalEntity(eq(Object.class), any(Parameter.class));
+        verify(searchHandler, times(1)).getOptionalEntity(eq(Object.class), any(Parameter.class));
     }
 
     @Test
     void testGetEntityFromDb_shouldReturnEntityFromDbLongValue() {
         Map<Object, Object> entityMap = new HashMap<>();
         classEntityMap.put(Object.class, entityMap);
-        when(searchWrapper.getOptionalEntity(eq(Object.class), any(Parameter.class)))
+        when(searchHandler.getOptionalEntity(eq(Object.class), any(Parameter.class)))
                 .thenReturn(Optional.empty());
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
@@ -169,13 +169,13 @@ class ConstantsScopeTest {
         Map<Object, Object> entityMap = new HashMap<>();
         classEntityMap.put(Object.class, entityMap);
         Object entity = new Object();
-        when(searchWrapper.getOptionalEntity(eq(Object.class), any(Parameter.class)))
+        when(searchHandler.getOptionalEntity(eq(Object.class), any(Parameter.class)))
                 .thenReturn(Optional.of(entity));
 
         Object result = constantsScope.getEntity(Object.class, "boolean", true);
 
         assertEquals(entity, result);
-        verify(searchWrapper, times(1)).getOptionalEntity(eq(Object.class), any(Parameter.class));
+        verify(searchHandler, times(1)).getOptionalEntity(eq(Object.class), any(Parameter.class));
     }
 
     @Test
@@ -183,13 +183,13 @@ class ConstantsScopeTest {
         Map<Object, Object> entityMap = new HashMap<>();
         classEntityMap.put(Object.class, entityMap);
         Object entity = new Object();
-        when(searchWrapper.getOptionalEntity(eq(Object.class), any(Parameter.class)))
+        when(searchHandler.getOptionalEntity(eq(Object.class), any(Parameter.class)))
                 .thenReturn(Optional.of(entity));
 
         Object result = constantsScope.getEntity(Object.class, "double", 2.5);
 
         assertEquals(entity, result);
-        verify(searchWrapper, times(1)).getOptionalEntity(eq(Object.class), any(Parameter.class));
+        verify(searchHandler, times(1)).getOptionalEntity(eq(Object.class), any(Parameter.class));
     }
 
     @Test

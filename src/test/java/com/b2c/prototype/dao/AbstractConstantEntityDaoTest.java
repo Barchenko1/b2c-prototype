@@ -5,7 +5,7 @@ import com.github.database.rider.core.api.connection.ConnectionHolder;
 import com.github.database.rider.core.api.dataset.DataSetExecutor;
 import com.tm.core.dao.common.AbstractEntityDao;
 import com.tm.core.dao.common.IEntityDao;
-import com.tm.core.processor.finder.parameter.Parameter;
+import com.tm.core.finder.parameter.Parameter;
 import com.github.database.rider.core.dataset.DataSetExecutorImpl;
 import com.github.database.rider.junit5.api.DBRider;
 import com.tm.core.dao.identifier.IEntityIdentifierDao;

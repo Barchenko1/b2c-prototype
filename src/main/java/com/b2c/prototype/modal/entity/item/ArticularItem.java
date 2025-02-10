@@ -30,7 +30,7 @@ import lombok.NoArgsConstructor;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.b2c.prototype.util.UniqueIdUtil.getUUID;
+import static com.b2c.prototype.util.Util.getUUID;
 
 @Entity
 @Table(name = "articular_item")
@@ -81,7 +81,8 @@ import static com.b2c.prototype.util.UniqueIdUtil.getUUID;
                         @NamedSubgraph(
                                 name = "optionItem.subgraph",
                                 attributeNodes = {
-                                        @NamedAttributeNode("optionGroup")
+                                        @NamedAttributeNode("optionGroup"),
+//                                        @NamedAttributeNode("articularItems")
                                 }
                         ),
                         @NamedSubgraph(
@@ -99,7 +100,7 @@ import static com.b2c.prototype.util.UniqueIdUtil.getUUID;
                 query = "SELECT ai FROM ArticularItem ai " +
                         "JOIN FETCH ai.optionItems oi " +
                         "JOIN FETCH oi.optionGroup og " +
-                        "JOIN FETCH og.optionItems " +  // Ensure optionItemList is fetched eagerly
+                        "JOIN FETCH og.optionItems " +
                         "WHERE ai.articularId = :articularId"
         )
 })
@@ -115,19 +116,21 @@ public class ArticularItem {
     @Column(name = "articular_id", unique = true, nullable = false)
     private String articularId;
     private long dateOfCreate;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private String productName;
+    @ManyToMany(cascade = {CascadeType.MERGE})
     @JoinTable(
             name = "articular_item_option_item",
             joinColumns = {@JoinColumn(name = "articular_item_id")},
             inverseJoinColumns = {@JoinColumn(name = "option_item_id")}
     )
-    @Builder.Default
-    @EqualsAndHashCode.Exclude
     private Set<OptionItem> optionItems = new HashSet<>();
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Price fullPrice;
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Price totalPrice;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "status_id")
+    private ArticularStatus status;
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "discount_id")
     private Discount discount;

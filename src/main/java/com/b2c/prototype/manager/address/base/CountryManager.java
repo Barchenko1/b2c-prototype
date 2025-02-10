@@ -7,7 +7,7 @@ import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.AbstractConstantEntityManager;
 import com.b2c.prototype.manager.address.ICountryManager;
 import com.tm.core.dao.common.IEntityDao;
-import com.tm.core.processor.finder.factory.IParameterFactory;
+import com.tm.core.finder.factory.IParameterFactory;
 
 public class CountryManager extends AbstractConstantEntityManager<CountryDto, Country> implements ICountryManager {
     public CountryManager(IParameterFactory parameterFactory,

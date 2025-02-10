@@ -19,9 +19,9 @@ import com.b2c.prototype.dao.store.ICountTypeDao;
 import com.b2c.prototype.dao.user.ICountryPhoneCodeDao;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
+import com.b2c.prototype.modal.entity.item.ArticularStatus;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
-import com.b2c.prototype.modal.entity.item.ItemStatus;
 import com.b2c.prototype.modal.entity.item.ItemType;
 import com.b2c.prototype.modal.entity.item.Rating;
 import com.b2c.prototype.modal.entity.message.MessageStatus;
@@ -33,7 +33,7 @@ import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.store.CountType;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.util.CategoryUtil;
-import com.tm.core.dao.transaction.ITransactionWrapper;
+import com.tm.core.dao.transaction.ITransactionHandler;
 import jakarta.annotation.PostConstruct;
 import org.hibernate.Session;
 import org.springframework.context.annotation.Configuration;
@@ -54,7 +54,7 @@ public class InitializeConstantDbConfiguration {
     private final LocalizationInterpreter localizationInterpreter;
     private final Set<Locale> availableLocales;
     private final ApplicationPropertyConfiguration applicationPropertyConfiguration;
-    private final ITransactionWrapper transactionWrapper;
+    private final ITransactionHandler transactionHandler;
     private final IBrandDao brandDao;
     private final ICountTypeDao countTypeDao;
     private final ICountryPhoneCodeDao countryPhoneCodeDao;
@@ -75,7 +75,7 @@ public class InitializeConstantDbConfiguration {
     public InitializeConstantDbConfiguration(LocalizationInterpreter localizationInterpreter,
                                              Set<Locale> availableLocales,
                                              ApplicationPropertyConfiguration applicationPropertyConfiguration,
-                                             ITransactionWrapper transactionWrapper,
+                                             ITransactionHandler transactionHandler,
                                              IBrandDao brandDao,
                                              ICountTypeDao countTypeDao,
                                              ICountryPhoneCodeDao countryPhoneCodeDao,
@@ -94,7 +94,7 @@ public class InitializeConstantDbConfiguration {
         this.localizationInterpreter = localizationInterpreter;
         this.availableLocales = availableLocales;
         this.applicationPropertyConfiguration = applicationPropertyConfiguration;
-        this.transactionWrapper = transactionWrapper;
+        this.transactionHandler = transactionHandler;
         this.brandDao = brandDao;
         this.countTypeDao = countTypeDao;
         this.countryPhoneCodeDao = countryPhoneCodeDao;
@@ -272,13 +272,13 @@ public class InitializeConstantDbConfiguration {
 
     private void initializeItemStatusEntities(Locale defaultLocale) {
         Set<ApplicationProperty> itemStatuses = applicationPropertyConfiguration.getItemStatuses();
-        List<ItemStatus> existItemStatus = itemStatusDao.getEntityList();
+        List<ArticularStatus> existArticularStatuses = itemStatusDao.getEntityList();
 
         if (itemStatuses != null) {
             itemStatuses.stream()
-                    .filter(ap -> existItemStatus.stream()
+                    .filter(ap -> existArticularStatuses.stream()
                             .noneMatch(itemStatus -> itemStatus.getValue().equals(ap.getValue().toLowerCase())))
-                    .map(ap -> ItemStatus.builder()
+                    .map(ap -> ArticularStatus.builder()
                             .label(localizationInterpreter.interpret("item.status", ap.getValue().toLowerCase(), defaultLocale))
                             .value(ap.getValue())
                             .build())
@@ -294,7 +294,7 @@ public class InitializeConstantDbConfiguration {
             itemTypeSet.stream()
                     .filter(ap -> existItemTypes.stream()
                             .noneMatch(itemStatus -> itemStatus.getValue().equals(ap.getValue().toLowerCase())))
-                    .map(ap -> ItemStatus.builder()
+                    .map(ap -> ArticularStatus.builder()
                             .label(localizationInterpreter.interpret("item.type", ap.getValue().toLowerCase(), defaultLocale))
                             .value(ap.getValue())
                             .build())
@@ -310,7 +310,7 @@ public class InitializeConstantDbConfiguration {
             messageStatuses.stream()
                     .filter(ap -> existingMessageStatuses.stream()
                             .noneMatch(messageStatus -> messageStatus.getValue().equals(ap.getValue().toLowerCase())))
-                    .map(ap -> ItemStatus.builder()
+                    .map(ap -> ArticularStatus.builder()
                             .label(localizationInterpreter.interpret("message.status", ap.getValue().toLowerCase(), defaultLocale))
                             .value(ap.getValue())
                             .build())
@@ -326,7 +326,7 @@ public class InitializeConstantDbConfiguration {
             messageTypes.stream()
                     .filter(ap -> existingMessageTypes.stream()
                             .noneMatch(messageStatus -> messageStatus.getValue().equals(ap.getValue().toLowerCase())))
-                    .map(ap -> ItemStatus.builder()
+                    .map(ap -> ArticularStatus.builder()
                             .label(localizationInterpreter.interpret("message.type", ap.getValue().toLowerCase(), defaultLocale))
                             .value(ap.getValue())
                             .build())
@@ -342,7 +342,7 @@ public class InitializeConstantDbConfiguration {
             optionGroupSet.stream()
                     .filter(ap -> existOptionGroupList.stream()
                             .noneMatch(og -> og.getValue().equals(ap.getValue().toLowerCase())))
-                    .map(ap -> ItemStatus.builder()
+                    .map(ap -> ArticularStatus.builder()
                             .label(localizationInterpreter.interpret("option.group", ap.getValue().toLowerCase(), defaultLocale))
                             .value(ap.getValue())
                             .build())
@@ -393,7 +393,7 @@ public class InitializeConstantDbConfiguration {
                 };
                 //not work
 //                categoryDao.saveEntityTree(newCategory);
-                transactionWrapper.executeConsumer(consumer);
+                transactionHandler.executeConsumer(consumer);
             });
         });
     }

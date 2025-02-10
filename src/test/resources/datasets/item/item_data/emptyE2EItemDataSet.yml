@@ -1,0 +1,44 @@
+brand:
+  - id: 1
+    value: "TechBrand"
+    label: "TechBrand"
+item_type:
+  - id: 1
+    value: "Electronic"
+    label: "Electronic"
+currency:
+  - id: 1
+    value: "USD"
+    label: "USD"
+price:
+  - amount: 1000
+    currency_id: 1
+discount:
+  - amount: 100
+    charSequenceCode: "xxx"
+    isActive: true
+    isPercent: false
+    currency_id: 1
+option_group:
+  - label: "Size"
+    value: "Size"
+option_item:
+  - value: "L"
+    label: "L"
+    option_group_id: 1
+  - value: "M"
+    label: "M"
+    option_group_id: 1
+category:
+  - id: 1
+    name: "Electronic"
+  - id: 2
+    category_id: 1
+    name: "Laptop"
+articular_status:
+  - id: 1
+    value: "NEW"
+    label: "NEW"
+item_data: []
+articular_item: []
+articular_item_option_item: []

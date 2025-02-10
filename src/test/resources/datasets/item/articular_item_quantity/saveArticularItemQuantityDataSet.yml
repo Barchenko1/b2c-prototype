@@ -2,10 +2,7 @@ brand:
   - id: 1
     value: "Hermes"
     label: "Hermes"
-item_status:
-  - id: 1
-    value: "NEW"
-    label: "NEW"
+
 item_type:
   - id: 1
     value: "Clothes"
@@ -56,7 +53,7 @@ item_data:
     brand_id: 1
     category_id: 3
     itemtype_id: 1
-    status_id: 1
+    
 articular_item:
   - id: 1
     articular_id: 1

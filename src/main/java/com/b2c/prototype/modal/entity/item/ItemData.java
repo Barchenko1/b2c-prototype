@@ -1,6 +1,6 @@
 package com.b2c.prototype.modal.entity.item;
 
-import com.b2c.prototype.service.converter.MapToJsonConverter;
+import com.b2c.prototype.service.converter.ItemDataDescriptionConverter;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -25,27 +25,52 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import static com.b2c.prototype.util.UniqueIdUtil.getUUID;
+import static com.b2c.prototype.util.Util.getUUID;
 
 @Entity
 @Table(name = "item_data")
 @NamedEntityGraph(
-        name = "ItemData.full",
+        name = "itemData.full",
         attributeNodes = {
                 @NamedAttributeNode(value = "category"),
                 @NamedAttributeNode(value = "itemType"),
                 @NamedAttributeNode(value = "brand"),
-                @NamedAttributeNode(value = "status"),
-                @NamedAttributeNode(value = "articularItemList", subgraph = "itemDataOptionListSubgraph")
+                @NamedAttributeNode(value = "articularItemSet", subgraph = "articularItem.subgraph")
         },
         subgraphs = {
                 @NamedSubgraph(
-                        name = "itemDataOptionListSubgraph",
+                        name = "articularItem.subgraph",
                         attributeNodes = {
-//                                @NamedAttributeNode("someAttributeInItemDataOption") // Replace with actual attributes of ArticularItem
+                                @NamedAttributeNode(value = "optionItems", subgraph = "optionItem.subgraph"),
+                                @NamedAttributeNode(value = "fullPrice", subgraph = "price.subgraph"),
+                                @NamedAttributeNode(value = "totalPrice", subgraph = "price.subgraph"),
+                                @NamedAttributeNode(value = "status"),
+                                @NamedAttributeNode(value ="discount", subgraph = "discount.subgraph")
+                        }
+                ),
+                @NamedSubgraph(
+                        name = "price.subgraph",
+                        attributeNodes = {
+                                @NamedAttributeNode("currency")
+                        }
+                ),
+                @NamedSubgraph(
+                        name = "optionItem.subgraph",
+                        attributeNodes = {
+                                @NamedAttributeNode("optionGroup"),
+//                                @NamedAttributeNode("articularItems")
+                        }
+                ),
+                @NamedSubgraph(
+                        name = "discount.subgraph",
+                        attributeNodes = {
+                                @NamedAttributeNode("currency")
                         }
                 )
         }
@@ -62,8 +87,9 @@ public class ItemData {
     @Column(name = "item_id", unique = true, nullable = false)
     private String itemId;
     @Column(name = "description", columnDefinition = "TEXT")
-    @Convert(converter = MapToJsonConverter.class)
-    private Map<String, String> description;
+    @Convert(converter = ItemDataDescriptionConverter.class)
+    @Builder.Default
+    private Map<String, String> description = new LinkedHashMap<>();
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "category_id")
     @EqualsAndHashCode.Exclude
@@ -73,13 +99,11 @@ public class ItemData {
     private ItemType itemType;
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Brand brand;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private ItemStatus status;
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
-    @JoinColumn(name = "articular_item_id")
-    @Builder.Default
+    @JoinColumn(name = "item_data_id")
     @EqualsAndHashCode.Exclude
-    private List<ArticularItem> articularItemList = new ArrayList<>();
+    @Builder.Default
+    private Set<ArticularItem> articularItemSet = new HashSet<>();
 
     @PrePersist
     protected void onPrePersist() {

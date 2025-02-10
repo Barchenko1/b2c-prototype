@@ -5,9 +5,9 @@ import com.b2c.prototype.dao.EntityDataSet;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
 import com.b2c.prototype.util.CardUtil;
 import com.tm.core.dao.identifier.EntityIdentifierDao;
-import com.tm.core.processor.finder.manager.EntityMappingManager;
-import com.tm.core.processor.finder.manager.IEntityMappingManager;
-import com.tm.core.processor.finder.table.EntityTable;
+import com.tm.core.finder.manager.EntityMappingManager;
+import com.tm.core.finder.manager.IEntityMappingManager;
+import com.tm.core.finder.table.EntityTable;
 import org.junit.jupiter.api.BeforeAll;
 
 class BasicCreditCardDaoTest extends AbstractConstantEntityDaoTest {

@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Entity
-@Table(name = "item_status")
+@Table(name = "articular_status")
 @SuperBuilder
 @NoArgsConstructor
-public class ItemStatus extends AbstractConstantEntity {
+public class ArticularStatus extends AbstractConstantEntity {
 
 }

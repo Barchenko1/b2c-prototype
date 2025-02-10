@@ -1,6 +1,6 @@
 package com.b2c.prototype.service.query;
 
-import com.tm.core.processor.finder.parameter.Parameter;
+import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.query.Query;
 
 import java.util.Collection;
@@ -14,14 +14,14 @@ public interface IQueryService {
     <E> E getGraphEntity(Class<?> clazz, String graph, Supplier<Parameter> parameterSupplier);
     <E> E getNamedQueryEntity(Class<?> clazz, String namedQuery, Supplier<Parameter> parameterSupplier);
     <E> Optional<E> getOptionalEntity(Class<?> clazz, Supplier<Parameter> parameterSupplier);
-    <E> Optional<E> getOptionalEntity(Class<?> clazz, String graph, Supplier<Parameter> parameterSupplier);
+    <E> Optional<E> getOptionalEntityGraph(Class<?> clazz, String graph, Supplier<Parameter> parameterSupplier);
+    <E> Optional<E> getOptionalEntityNamedQuery(Class<?> clazz, String namedQuery, Supplier<Parameter> parameterSupplier);
     <E> List<E> getEntityList(Class<?> clazz);
     <E> List<E> getEntityListNamedQuery(Class<?> clazz, String namedQuery, Supplier<Parameter> parameterSupplier);
     <E> List<E> getSubEntityList(Class<?> clazz, Supplier<Parameter> parameterSupplier);
 
     //replace soon
     <R, E> R getEntityDto(Class<?> clazz, Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction);
-    <R, E> Optional<R> getOptionalEntityDto(Class<?> clazz, Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction);
     <R, E> List<R> getEntityDtoList(Class<?> clazz, Function<E, R> mapToDtoFunction);
     <R, E> List<R> getSubEntityDtoList(Class<?> clazz, Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction);
 

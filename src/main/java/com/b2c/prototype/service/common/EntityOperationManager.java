@@ -1,7 +1,7 @@
 package com.b2c.prototype.service.common;
 
 import com.tm.core.dao.common.IEntityDao;
-import com.tm.core.processor.finder.parameter.Parameter;
+import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,12 +12,12 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class EntityOperationDao implements IEntityOperationDao {
-    private static final Logger LOGGER = LoggerFactory.getLogger(EntityOperationDao.class);
+public class EntityOperationManager implements IEntityOperationManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(EntityOperationManager.class);
 
     private final IEntityDao dao;
 
-    public EntityOperationDao(IEntityDao dao) {
+    public EntityOperationManager(IEntityDao dao) {
         this.dao = dao;
     }
 
@@ -43,11 +43,6 @@ public class EntityOperationDao implements IEntityOperationDao {
     public void executeConsumer(Consumer<Session> consumer) {
         LOGGER.info("Saving entity");
         dao.executeConsumer(consumer);
-    }
-
-    @Override
-    public <E> void updateEntityByParameter(Supplier<E> entitySupplier, Supplier<Parameter> parameterSupplier) {
-        dao.findEntityAndUpdate(entitySupplier.get(), parameterSupplier.get());
     }
 
     @Override
@@ -98,10 +93,39 @@ public class EntityOperationDao implements IEntityOperationDao {
     }
 
     @Override
-    public <E> List<E> getSubEntityList(Supplier<Parameter[]> parameterSupplier) {
+    public <E> E getEntityGraph(String graph, Supplier<Parameter> parameterSupplier) {
+        LOGGER.info("Getting entity");
+        return dao.getEntityGraph(graph, parameterSupplier.get());
+    }
+
+    @Override
+    public <E> Optional<E> getOptionalEntityGraph(String graph, Supplier<Parameter> parameterSupplier) {
+        LOGGER.info("Getting entity");
+        return dao.getOptionalEntityGraph(graph, parameterSupplier.get());
+    }
+
+    @Override
+    public <E> List<E> getEntityGraphList(String graph) {
         LOGGER.info("Getting entity list");
-        Parameter[] parametersArray = parameterSupplier.get();
-        return dao.getEntityList(parametersArray);
+        return dao.getEntityGraphList(graph);
+    }
+
+    @Override
+    public <E> E getEntityNamedQuery(String namedQuery, Supplier<Parameter> parameterSupplier) {
+        LOGGER.info("Getting entity");
+        return dao.getEntityNamedQuery(namedQuery, parameterSupplier.get());
+    }
+
+    @Override
+    public <E> Optional<E> getOptionalEntityNamedQuery(String namedQuery, Supplier<Parameter> parameterSupplier) {
+        LOGGER.info("Getting entity");
+        return dao.getOptionalEntityNamedQuery(namedQuery, parameterSupplier.get());
+    }
+
+    @Override
+    public <E> List<E> getEntityNamedQueryList(String namedQuery) {
+        LOGGER.info("Getting entity list");
+        return dao.getEntityNamedQueryList(namedQuery);
     }
 
     @Override

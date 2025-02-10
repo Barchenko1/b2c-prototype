@@ -41,6 +41,7 @@
         <mapping class="com.b2c.prototype.modal.embedded.user.TempUserProfile" />
         <mapping class="com.b2c.prototype.modal.entity.option.OptionGroup" />
         <mapping class="com.b2c.prototype.modal.entity.option.OptionItem" />
+        <mapping class="com.b2c.prototype.modal.entity.item.ArticularStatus" />
         <mapping class="com.b2c.prototype.modal.entity.item.ArticularItem" />
         <mapping class="com.b2c.prototype.modal.entity.item.ArticularItemQuantity" />
         <mapping class="com.b2c.prototype.modal.embedded.item.TempItemDataQuantity" />

@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/discount")
@@ -29,36 +29,23 @@ public class DiscountController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> saveDiscount(@RequestBody final DiscountDto discountDto) {
-        discountProcess.saveDiscount(discountDto);
+    public ResponseEntity<Void> saveDiscount(@RequestParam final Map<String, String> requestParams,
+                                             @RequestBody final DiscountDto discountDto) {
+        discountProcess.saveDiscount(requestParams, discountDto);
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping(value = "/articular", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> putDiscountByArticularId(@RequestBody final DiscountDto discountDto,
-                                                         @RequestParam(value = "articularId") final String articularId) {
-        discountProcess.updateItemDataDiscount(articularId, discountDto);
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> putDiscount(@RequestParam final Map<String, String> requestParams,
+                                            @RequestBody final DiscountDto discountDto) {
+        discountProcess.updateDiscount(requestParams, discountDto);
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping(value = "/sequence", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> putDiscountByCharSequenceCode(@RequestBody final DiscountDto discountDto,
-                                                              @RequestParam(value = "charSequenceCode") final String charSequenceCode) {
-        discountProcess.updateDiscount(charSequenceCode, discountDto);
-        return ResponseEntity.ok().build();
-    }
-
-    @PatchMapping(value = "/articular", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> patchDiscountByArticularId(@RequestBody final DiscountDto discountDto,
-                                                           @RequestParam(value = "articularId") final String articularId) {
-        discountProcess.updateItemDataDiscount(articularId, discountDto);
-        return ResponseEntity.ok().build();
-    }
-
-    @PatchMapping(value = "/sequence", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> patchDiscountByCharSequenceCode(@RequestBody final DiscountDto discountDto,
-                                                                @RequestParam(value = "charSequenceCode") final String charSequenceCode) {
-        discountProcess.updateDiscount(charSequenceCode, discountDto);
+    @PatchMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> patchDiscount(@RequestParam final Map<String, String> requestParams,
+                                              @RequestBody final DiscountDto discountDto) {
+        discountProcess.updateDiscount(requestParams, discountDto);
         return ResponseEntity.ok().build();
     }
 
@@ -68,23 +55,26 @@ public class DiscountController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping(produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<Void> deleteDiscount(@RequestParam(value = "charSequenceCode") final String charSequenceCode) {
-
-        discountProcess.deleteDiscount(charSequenceCode);
+    @PatchMapping(value = "/status", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> changeDiscountStatus(@RequestParam final Map<String, String> requestParams,
+                                                     @RequestBody Map<String, Object> updates) {
+        discountProcess.changeDiscountStatus(requestParams, updates);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @RequestMapping("/all")
-    public List<DiscountDto> getDiscounts(@RequestHeader(name = "Accept-Language", defaultValue = "en") String location) {
+    @DeleteMapping(produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity<Void> deleteDiscount(@RequestParam final Map<String, String> requestParams) {
+        discountProcess.deleteDiscount(requestParams);
+        return ResponseEntity.ok().build();
+    }
 
-        return discountProcess.getDiscounts();
+    @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<DiscountDto> getDiscounts(@RequestParam final Map<String, String> requestParams) {
+        return discountProcess.getDiscounts(requestParams);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DiscountDto> getDiscount(@RequestHeader(name = "Accept-Language", defaultValue = "en") String location,
-                                                   @RequestParam(value = "charSequenceCode") final String charSequenceCode) {
-        return new ResponseEntity<>(discountProcess.getDiscount(charSequenceCode), HttpStatus.OK);
+    public ResponseEntity<DiscountDto> getDiscount(@RequestParam final Map<String, String> requestParams) {
+        return new ResponseEntity<>(discountProcess.getDiscount(requestParams), HttpStatus.OK);
     }
 }

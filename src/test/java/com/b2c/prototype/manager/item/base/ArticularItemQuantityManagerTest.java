@@ -1,7 +1,6 @@
 package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.dao.item.IItemDataOptionQuantityDao;
-import com.b2c.prototype.manager.item.base.ItemDataOptionQuantityManager;
 import com.b2c.prototype.modal.dto.payload.ItemDataOptionOneQuantityDto;
 import com.b2c.prototype.modal.dto.payload.ItemDataOptionQuantityDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
@@ -16,7 +15,7 @@ import com.b2c.prototype.modal.entity.store.CountType;
 import com.b2c.prototype.modal.entity.store.Store;
 import com.b2c.prototype.service.query.IQueryService;
 import com.b2c.prototype.service.supplier.ISupplierService;
-import com.tm.core.processor.finder.parameter.Parameter;
+import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,7 +50,7 @@ class ArticularItemQuantityManagerTest {
     @Mock
     private ISupplierService supplierService;
     @InjectMocks
-    private ItemDataOptionQuantityManager itemDataOptionQuantityManager;
+    private ArticularItemQuantityManager articularItemQuantityManager;
 
     @BeforeEach
     void setUp() {
@@ -83,7 +82,7 @@ class ArticularItemQuantityManagerTest {
             return null;
         }).when(itemDataOptionQuantityDao).executeConsumer(any(Consumer.class));
 
-        itemDataOptionQuantityManager.increaseOneItemDataOptionQuantityCount(dto);
+        articularItemQuantityManager.increaseOneItemDataOptionQuantityCount(dto);
 
         verify(itemDataOptionQuantityDao).executeConsumer(any(Consumer.class));
         assertEquals(6, articularItemQuantity.getQuantity());
@@ -114,7 +113,7 @@ class ArticularItemQuantityManagerTest {
             return null;
         }).when(itemDataOptionQuantityDao).executeConsumer(any(Consumer.class));
 
-        itemDataOptionQuantityManager.decreaseOneItemDataOptionQuantityCount(dto);
+        articularItemQuantityManager.decreaseOneItemDataOptionQuantityCount(dto);
 
         verify(itemDataOptionQuantityDao).executeConsumer(any(Consumer.class));
         assertEquals(4, articularItemQuantity.getQuantity());
@@ -154,7 +153,7 @@ class ArticularItemQuantityManagerTest {
             return null;
         }).when(itemDataOptionQuantityDao).executeConsumer(any(Consumer.class));
 
-        itemDataOptionQuantityManager.increaseOneItemDataOptionQuantityCountAndStore(dto);
+        articularItemQuantityManager.increaseOneItemDataOptionQuantityCountAndStore(dto);
 
         assertEquals(9, store.getCount());
         assertEquals(6, articularItemQuantity.getQuantity());
@@ -194,7 +193,7 @@ class ArticularItemQuantityManagerTest {
             return null;
         }).when(itemDataOptionQuantityDao).executeConsumer(any(Consumer.class));
 
-        itemDataOptionQuantityManager.decreaseOneItemDataOptionQuantityCountAndStore(dto);
+        articularItemQuantityManager.decreaseOneItemDataOptionQuantityCountAndStore(dto);
 
         assertEquals(11, store.getCount());
         assertEquals(4, articularItemQuantity.getQuantity());
@@ -225,7 +224,7 @@ class ArticularItemQuantityManagerTest {
             return null;
         }).when(itemDataOptionQuantityDao).executeConsumer(any(Consumer.class));
 
-        itemDataOptionQuantityManager.increaseItemDataOptionQuantityCount(dto);
+        articularItemQuantityManager.increaseItemDataOptionQuantityCount(dto);
 
         verify(itemDataOptionQuantityDao).executeConsumer(any(Consumer.class));
         assertEquals(8, articularItemQuantity.getQuantity());
@@ -256,7 +255,7 @@ class ArticularItemQuantityManagerTest {
             return null;
         }).when(itemDataOptionQuantityDao).executeConsumer(any(Consumer.class));
 
-        itemDataOptionQuantityManager.decreaseItemDataOptionQuantityCount(dto);
+        articularItemQuantityManager.decreaseItemDataOptionQuantityCount(dto);
 
         verify(itemDataOptionQuantityDao).executeConsumer(any(Consumer.class));
         assertEquals(2, articularItemQuantity.getQuantity());
@@ -296,7 +295,7 @@ class ArticularItemQuantityManagerTest {
             return null;
         }).when(itemDataOptionQuantityDao).executeConsumer(any(Consumer.class));
 
-        itemDataOptionQuantityManager.increaseItemDataOptionQuantityCountAndStore(dto);
+        articularItemQuantityManager.increaseItemDataOptionQuantityCountAndStore(dto);
 
         assertEquals(2, store.getCount());
         assertEquals(8, articularItemQuantity.getQuantity());
@@ -336,7 +335,7 @@ class ArticularItemQuantityManagerTest {
             return null;
         }).when(itemDataOptionQuantityDao).executeConsumer(any(Consumer.class));
 
-        itemDataOptionQuantityManager.decreaseItemDataOptionQuantityCountAndStore(dto);
+        articularItemQuantityManager.decreaseItemDataOptionQuantityCountAndStore(dto);
 
         assertEquals(12, store.getCount());
         assertEquals(2, articularItemQuantity.getQuantity());
@@ -377,7 +376,7 @@ class ArticularItemQuantityManagerTest {
         }).when(itemDataOptionQuantityDao).executeConsumer(any(Consumer.class));
 
         assertThrows(RuntimeException.class,
-                () -> itemDataOptionQuantityManager.increaseItemDataOptionQuantityCountAndStore(dto));
+                () -> articularItemQuantityManager.increaseItemDataOptionQuantityCountAndStore(dto));
     }
 
     private ItemDataOptionQuantityDto getItemDataOptionQuantityDto() {

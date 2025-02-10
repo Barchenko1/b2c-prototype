@@ -1,15 +1,15 @@
 package com.b2c.prototype.controller.basic;
 
-import com.b2c.prototype.processor.item.IItemDataOptionProcessor;
+import com.b2c.prototype.processor.item.IArticularItemProcessor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/articular")
 public class ArticularItemController {
-    private final IItemDataOptionProcessor itemDataOptionProcessor;
+    private final IArticularItemProcessor itemDataOptionProcessor;
 
-    public ArticularItemController(IItemDataOptionProcessor itemDataOptionProcessor) {
+    public ArticularItemController(IArticularItemProcessor itemDataOptionProcessor) {
         this.itemDataOptionProcessor = itemDataOptionProcessor;
     }
 

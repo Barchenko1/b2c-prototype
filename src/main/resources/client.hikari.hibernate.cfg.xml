@@ -48,7 +48,7 @@
         <mapping class="com.b2c.prototype.modal.entity.item.Brand" />
         <mapping class="com.b2c.prototype.modal.entity.item.Category" />
         <mapping class="com.b2c.prototype.modal.entity.item.ItemType" />
-        <mapping class="com.b2c.prototype.modal.entity.item.ItemStatus" />
+        <mapping class="com.b2c.prototype.modal.entity.item.ArticularStatus" />
 
         <mapping class="com.b2c.prototype.modal.entity.post.Post" />
 

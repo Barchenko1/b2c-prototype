@@ -5,8 +5,8 @@ import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.searchfield.ItemSearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.item.Item;
 import com.b2c.prototype.modal.entity.item.ItemData;
-import com.b2c.prototype.service.common.EntityOperationDao;
-import com.b2c.prototype.service.common.IEntityOperationDao;
+import com.b2c.prototype.service.common.EntityOperationManager;
+import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.item.IItemManager;
 import com.b2c.prototype.service.query.IQueryService;
@@ -20,7 +20,7 @@ import static com.b2c.prototype.util.Constant.ITEM_ID;
 @Slf4j
 public class ItemManager implements IItemManager {
 
-    private final IEntityOperationDao entityOperationDao;
+    private final IEntityOperationManager entityOperationDao;
     private final IQueryService queryService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
@@ -29,7 +29,7 @@ public class ItemManager implements IItemManager {
                        IQueryService queryService,
                        ITransformationFunctionService transformationFunctionService,
                        ISupplierService supplierService) {
-        this.entityOperationDao = new EntityOperationDao(itemDao);
+        this.entityOperationDao = new EntityOperationManager(itemDao);
         this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;

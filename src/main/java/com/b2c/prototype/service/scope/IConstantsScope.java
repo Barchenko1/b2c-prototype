@@ -11,6 +11,7 @@ public interface IConstantsScope {
     boolean isEntityExist(Class<?> clazz, String key, Object value);
     <E> Optional<E> getOptionalEntity(Class<E> clazz, String key, Object value);
     <E> Optional<E> getOptionalEntityGraph(Class<E> clazz, String graph, String key, Object value);
+    <E> Optional<E> getOptionalEntityNamedQuery(Class<E> clazz, String namedQuery, String key, Object value);
     <E> List<E> getEntityList(Class<E> clazz, String key, Object value);
     <E> List<E> getEntityList(Class<E> clazz, String key, List<Object> values);
 

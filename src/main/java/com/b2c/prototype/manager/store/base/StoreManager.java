@@ -8,8 +8,8 @@ import com.b2c.prototype.modal.dto.payload.StoreDto;
 import com.b2c.prototype.modal.dto.response.ResponseStoreDto;
 import com.b2c.prototype.modal.entity.store.CountType;
 import com.b2c.prototype.modal.entity.store.Store;
-import com.b2c.prototype.service.common.EntityOperationDao;
-import com.b2c.prototype.service.common.IEntityOperationDao;
+import com.b2c.prototype.service.common.EntityOperationManager;
+import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.query.IQueryService;
 import com.b2c.prototype.manager.store.IStoreManager;
@@ -23,7 +23,7 @@ import static com.b2c.prototype.util.Query.SELECT_STORE_BY_ARTICULAR_ID;
 
 public class StoreManager implements IStoreManager {
 
-    private final IEntityOperationDao entityOperationDao;
+    private final IEntityOperationManager entityOperationDao;
     private final IQueryService queryService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
@@ -34,7 +34,7 @@ public class StoreManager implements IStoreManager {
                         ITransformationFunctionService transformationFunctionService,
                         ISupplierService supplierService,
                         IConstantsScope singleValueMap) {
-        this.entityOperationDao = new EntityOperationDao(storeDao);
+        this.entityOperationDao = new EntityOperationManager(storeDao);
         this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;

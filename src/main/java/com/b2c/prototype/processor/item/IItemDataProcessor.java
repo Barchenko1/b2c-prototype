@@ -4,14 +4,13 @@ import com.b2c.prototype.modal.dto.payload.ItemDataDto;
 import com.b2c.prototype.modal.dto.response.ResponseItemDataDto;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IItemDataProcessor {
-    void saveItemData(ItemDataDto itemDataDto);
-    void updateItemData(String itemId, ItemDataDto itemDataDto);
-    void deleteItemData(String itemId);
+    void saveItemData(Map<String, String> requestParams, ItemDataDto itemDataDto);
+    void updateItemData(Map<String, String> requestParams, ItemDataDto itemDataDto);
+    void deleteItemData(Map<String, String> requestParams);
 
-    ResponseItemDataDto getItemData(String itemId);
-    List<ResponseItemDataDto> getItemDataList();
-    List<ResponseItemDataDto> getItemDataListFiltered();
-    List<ResponseItemDataDto> getItemDataListSorted(String sortType);
+    ResponseItemDataDto getItemData(Map<String, String> requestParams);
+    List<ResponseItemDataDto> getItemDataList(Map<String, String> requestParams);
 }

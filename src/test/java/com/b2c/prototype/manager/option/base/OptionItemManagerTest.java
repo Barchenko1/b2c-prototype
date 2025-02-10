@@ -1,16 +1,15 @@
 package com.b2c.prototype.manager.option.base;
 
+import com.b2c.prototype.modal.dto.payload.OptionGroupOptionItemSetDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.service.scope.IConstantsScope;
 import com.b2c.prototype.dao.option.IOptionItemDao;
-import com.b2c.prototype.manager.option.base.OptionItemManager;
-import com.b2c.prototype.modal.dto.payload.OptionItemDto;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.query.IQueryService;
 import com.b2c.prototype.service.supplier.ISupplierService;
-import com.tm.core.processor.finder.parameter.Parameter;
+import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,7 +57,7 @@ class OptionItemManagerTest {
     @Test
     void testSaveUpdateOptionItemByArticularId() {
         String articularId = "searchField";
-        OptionItemDto optionItemDto = getOptionItemDto();
+        OptionGroupOptionItemSetDto optionGroupOptionItemSetDto = getOptionItemDto();
         OptionItem optionItem = getOptionItem();
         ArticularItem articularItem = mock(ArticularItem.class);
         when(articularItem.getOptionItems()).thenReturn(Set.of(optionItem));
@@ -66,7 +65,7 @@ class OptionItemManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-        when(transformationFunctionService.getEntity(OptionItem.class, optionItemDto))
+        when(transformationFunctionService.getEntity(OptionItem.class, optionGroupOptionItemSetDto))
                 .thenReturn(optionItem);
         when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
                 .thenReturn(parameterSupplier);
@@ -88,11 +87,11 @@ class OptionItemManagerTest {
 
     @Test
     void testSaveUpdateOptionItemSetByOptionGroupName() {
-        OptionItemDto optionItemDto = getOptionItemDto();
+        OptionGroupOptionItemSetDto optionGroupOptionItemSetDto = getOptionItemDto();
         OptionItem newOptionItem = mock(OptionItem.class);
-        List<OptionItemDto> optionItemDtoList = List.of(optionItemDto);
+        List<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoList = List.of(optionGroupOptionItemSetDto);
 
-//        when(transformationFunctionService.getEntityCollection(OptionItem.class, optionItemDto))
+//        when(transformationFunctionService.getEntityCollection(OptionItem.class, optionGroupOptionItemSetDto))
 //                .thenReturn(Set.of(newOptionItem));
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -102,7 +101,7 @@ class OptionItemManagerTest {
             return null;
         }).when(optionItemDao).executeConsumer(any(Consumer.class));
 
-//        optionItemManager.saveOptionItemSet("", optionItemDtoList);
+//        optionItemManager.saveOptionItemSet("", optionGroupOptionItemSetDtoList);
 
 //        verify(singleValueMap).putEntity(OptionGroup.class, "value", newOptionItem.getOptionGroup());
         verify(singleValueMap).putEntity(OptionItem.class, "optionName", newOptionItem);
@@ -166,30 +165,30 @@ class OptionItemManagerTest {
     void testGetOptionItemByItemArticularId() {
         String articularId = "123";
         ArticularItem articularItem = mock(ArticularItem.class);
-        OptionItemDto optionItemDto = getOptionItemDto();
+        OptionGroupOptionItemSetDto optionGroupOptionItemSetDto = getOptionItemDto();
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
         when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
                 .thenReturn(parameterSupplier);
-        Function<ArticularItem, OptionItemDto> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(ArticularItem.class, OptionItemDto.class))
+        Function<ArticularItem, OptionGroupOptionItemSetDto> function = mock(Function.class);
+        when(transformationFunctionService.getTransformationFunction(ArticularItem.class, OptionGroupOptionItemSetDto.class))
                 .thenReturn(function);
-        when(function.apply(articularItem)).thenReturn(optionItemDto);
+        when(function.apply(articularItem)).thenReturn(optionGroupOptionItemSetDto);
         when(queryService.getEntityDto(ArticularItem.class, parameterSupplier, function))
-                .thenReturn(optionItemDto);
+                .thenReturn(optionGroupOptionItemSetDto);
 
-        List<OptionItemDto> result = optionItemManager.getOptionItemByItemArticularId(articularId);
+        List<OptionGroupOptionItemSetDto> result = optionItemManager.getOptionItemByItemArticularId(articularId);
 
-        assertEquals(optionItemDto, result);
+        assertEquals(optionGroupOptionItemSetDto, result);
     }
 
     @Test
     void testGetOptionItemListByOptionGroup() {
         String optionGroupName = "Size";
         OptionItem optionItem = getOptionItem();
-        OptionItemDto optionItemDto = getOptionItemDto();
+        OptionGroupOptionItemSetDto optionGroupOptionItemSetDto = getOptionItemDto();
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
@@ -198,25 +197,25 @@ class OptionItemManagerTest {
                 .thenReturn(parameterSupplier);
         when(queryService.getSubEntityList(OptionItem.class, parameterSupplier))
                 .thenReturn(List.of(optionItem));
-        Function<OptionItem, OptionItemDto> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(OptionItem.class, OptionItemDto.class))
+        Function<OptionItem, OptionGroupOptionItemSetDto> function = mock(Function.class);
+        when(transformationFunctionService.getTransformationFunction(OptionItem.class, OptionGroupOptionItemSetDto.class))
                 .thenReturn(function);
-        when(function.apply(optionItem)).thenReturn(optionItemDto);
-        OptionItemDto result = optionItemManager.getOptionItemListByOptionGroup(optionGroupName);
+        when(function.apply(optionItem)).thenReturn(optionGroupOptionItemSetDto);
+        OptionGroupOptionItemSetDto result = optionItemManager.getOptionItemListByOptionGroup(optionGroupName);
 
 //        assertEquals(1, result.getOptionGroupOptionItemsMap().size());
-//        assertEquals(optionItemDto, result.getOptionGroupOptionItemsMap().get(0));
+//        assertEquals(optionGroupOptionItemSetDto, result.getOptionGroupOptionItemsMap().get(0));
     }
 
     @Test
     void testGetOptionItemList() {
-        OptionItemDto dto = mock(OptionItemDto.class);
-        Function<OptionItem, OptionItemDto> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(OptionItem.class, OptionItemDto.class, "set"))
+        OptionGroupOptionItemSetDto dto = mock(OptionGroupOptionItemSetDto.class);
+        Function<OptionItem, OptionGroupOptionItemSetDto> function = mock(Function.class);
+        when(transformationFunctionService.getTransformationFunction(OptionItem.class, OptionGroupOptionItemSetDto.class, "set"))
                 .thenReturn(function);
         when(queryService.getEntityDtoList(OptionItem.class, function)).thenReturn(List.of(dto));
 
-        List<OptionItemDto> list = optionItemManager.getOptionItemList();
+        List<OptionGroupOptionItemSetDto> list = optionItemManager.getOptionItemList();
 
         assertEquals(1, list.size());
         assertEquals(dto, list.get(0));
@@ -237,8 +236,8 @@ class OptionItemManagerTest {
                 .build();
     }
 
-    private OptionItemDto getOptionItemDto() {
-        return OptionItemDto.builder()
+    private OptionGroupOptionItemSetDto getOptionItemDto() {
+        return OptionGroupOptionItemSetDto.builder()
 //                .optionGroupOptionItemsMap(new HashMap<>() {{
 //                    put("Size", Set.of("L", "XL", "XXL"));
 //                }})

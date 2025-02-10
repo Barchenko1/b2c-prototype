@@ -12,7 +12,7 @@ public class LocalizationHelper {
 //    private final Map<String, PaymentMethod> paymenMethodMap;
 //    private final Map<String, OrderStatus> orderStatusMap;
 //    private final Map<String, Brand> brandMap;
-//    private final Map<String, ItemStatus> itemStatusMap;
+//    private final Map<String, ArticularStatus> itemStatusMap;
 //    private final Map<String, ItemType> itemTypeMap;
 //    private final Map<String, Category> categoryMap;
 //    private final Map<Integer, Rating> ratingMap;
@@ -30,7 +30,7 @@ public class LocalizationHelper {
 //                              Map<String, PaymentMethod> paymenMethodMap,
 //                              Map<String, OrderStatus> orderStatusMap,
 //                              Map<String, Brand> brandMap,
-//                              Map<String, ItemStatus> itemStatusMap,
+//                              Map<String, ArticularStatus> itemStatusMap,
 //                              Map<String, ItemType> itemTypeMap,
 //                              Map<String, Category> categoryMap,
 //                              Map<Integer, Rating> ratingMap,
@@ -97,7 +97,7 @@ public class LocalizationHelper {
 //    }
 //
 //    public String getLocalizeItemStatusName(String itemStatusConfigName, Locale locale) {
-//        ItemStatus itemStatus = itemStatusMap.get(itemStatusConfigName);
+//        ArticularStatus itemStatus = itemStatusMap.get(itemStatusConfigName);
 //        return localizationInterpreter.interpret("item.status", itemStatus.getValue(), locale);
 //    }
 //

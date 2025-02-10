@@ -6,7 +6,7 @@ import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
-import com.b2c.prototype.modal.entity.item.ItemStatus;
+import com.b2c.prototype.modal.entity.item.ArticularStatus;
 import com.b2c.prototype.modal.entity.item.ItemType;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
@@ -15,13 +15,12 @@ import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.modal.entity.store.CountType;
 import com.b2c.prototype.modal.entity.store.Store;
 import com.tm.core.dao.identifier.EntityIdentifierDao;
-import com.tm.core.processor.finder.manager.EntityMappingManager;
-import com.tm.core.processor.finder.manager.IEntityMappingManager;
-import com.tm.core.processor.finder.table.EntityTable;
+import com.tm.core.finder.manager.EntityMappingManager;
+import com.tm.core.finder.manager.IEntityMappingManager;
+import com.tm.core.finder.table.EntityTable;
 import org.junit.jupiter.api.BeforeAll;
 
 import java.util.List;
-import java.util.Set;
 
 class BasicStoreDaoTest extends AbstractConstantEntityDaoTest {
 
@@ -120,7 +119,7 @@ class BasicStoreDaoTest extends AbstractConstantEntityDaoTest {
                 .label("USD")
                 .value("USD")
                 .build();
-        ItemStatus itemStatus = ItemStatus.builder()
+        ArticularStatus articularStatus = ArticularStatus.builder()
                 .id(1L)
                 .value("NEW")
                 .label("NEW")
@@ -151,7 +150,6 @@ class BasicStoreDaoTest extends AbstractConstantEntityDaoTest {
                 .id(1L)
                 .category(category)
                 .brand(brand)
-                .status(itemStatus)
                 .itemType(itemType)
                 .build();
         ArticularItem articularItem = ArticularItem.builder()

@@ -1,16 +1,15 @@
 package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.dao.item.IItemDao;
-import com.b2c.prototype.manager.item.base.ItemManager;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.payload.ItemDto;
 import com.b2c.prototype.modal.dto.searchfield.ItemSearchFieldEntityDto;
+import com.b2c.prototype.modal.entity.item.ArticularStatus;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.item.Item;
 import com.b2c.prototype.modal.entity.item.ItemData;
-import com.b2c.prototype.modal.entity.item.ItemStatus;
 import com.b2c.prototype.modal.entity.item.ItemType;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
@@ -19,7 +18,7 @@ import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.query.IQueryService;
 import com.b2c.prototype.service.supplier.ISupplierService;
-import com.tm.core.processor.finder.parameter.Parameter;
+import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -196,7 +195,7 @@ class ItemManagerTest {
                 .isActive(true)
                 .currency(currency)
                 .build();
-        ItemStatus itemStatus = ItemStatus.builder()
+        ArticularStatus articularStatus = ArticularStatus.builder()
                 .id(1L)
                 .value("NEW")
                 .build();
@@ -229,7 +228,6 @@ class ItemManagerTest {
                 .id(1L)
                 .category(category)
                 .brand(brand)
-                .status(itemStatus)
                 .itemType(itemType)
                 .build();
     }

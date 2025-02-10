@@ -5,7 +5,7 @@ import com.b2c.prototype.modal.dto.payload.DiscountStatusDto;
 import com.b2c.prototype.manager.item.IDiscountManager;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 public class DiscountProcess implements IDiscountProcess {
 
@@ -15,20 +15,24 @@ public class DiscountProcess implements IDiscountProcess {
         this.discountManager = discountManager;
     }
 
-
     @Override
-    public void saveDiscount(DiscountDto discountDto) {
+    public void saveDiscount(Map<String, String> requestParams, DiscountDto discountDto) {
         discountManager.saveDiscount(discountDto);
     }
 
     @Override
-    public void updateItemDataDiscount(String articularId, DiscountDto discountDto) {
-        discountManager.updateItemDataDiscount(articularId, discountDto);
-    }
-
-    @Override
-    public void updateDiscount(String charSequenceCode, DiscountDto discountDto) {
-        discountManager.updateDiscount(charSequenceCode, discountDto);
+    public void updateDiscount(Map<String, String> requestParams, DiscountDto discountDto) {
+        String articularId = requestParams.get("articularId");
+        String charSequenceCode = requestParams.get("charSequenceCode");
+        if (articularId != null && charSequenceCode != null) {
+            throw new RuntimeException("Only one of 'articularId' or 'charSequenceCode' can be provided");
+        }
+        if (articularId != null) {
+            discountManager.updateItemDataDiscount(articularId, discountDto);
+        }
+        if (charSequenceCode != null) {
+            discountManager.updateDiscount(charSequenceCode, discountDto);
+        }
     }
 
     @Override
@@ -37,22 +41,24 @@ public class DiscountProcess implements IDiscountProcess {
     }
 
     @Override
-    public void deleteDiscount(String charSequenceCode) {
+    public void changeDiscountStatus(Map<String, String> requestParams, Map<String, Object> updates) {
+        discountManager.changeDiscountStatus(null);
+    }
+
+    @Override
+    public void deleteDiscount(Map<String, String> requestParams) {
+        String charSequenceCode = requestParams.get("charSequenceCode");
         discountManager.deleteDiscount(charSequenceCode);
     }
 
     @Override
-    public DiscountDto getDiscount(String charSequenceCode) {
+    public DiscountDto getDiscount(Map<String, String> requestParams) {
+        String charSequenceCode = requestParams.get("charSequenceCode");
         return discountManager.getDiscount(charSequenceCode);
     }
 
     @Override
-    public Optional<DiscountDto> getOptionalDiscount(String charSequenceCode) {
-        return discountManager.getOptionalDiscount(charSequenceCode);
-    }
-
-    @Override
-    public List<DiscountDto> getDiscounts() {
+    public List<DiscountDto> getDiscounts(Map<String, String> requestParam) {
         return discountManager.getDiscounts();
     }
 }

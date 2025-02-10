@@ -1,6 +1,6 @@
 package com.b2c.prototype.service.supplier;
 
-import com.tm.core.processor.finder.parameter.Parameter;
+import com.tm.core.finder.parameter.Parameter;
 
 import java.util.function.Function;
 import java.util.function.Supplier;

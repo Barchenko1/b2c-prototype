@@ -132,4 +132,24 @@ public class AbstractConstantControllerE2ETest extends BasicE2ETest {
         }
     }
 
+    protected <T> void assertMvcResult(MvcResult mvcResult, T expected) {
+        try {
+            String jsonResponse = mvcResult.getResponse().getContentAsString();
+            T actual = (T) objectMapper.readValue(jsonResponse, expected.getClass());
+            assertEquals(expected, actual);
+        } catch (JsonProcessingException | UnsupportedEncodingException e) {
+            throw new RuntimeException("Error processing the JSON response", e);
+        }
+    }
+
+    protected <T> void assertMvcListResult(MvcResult mvcResult, List<T> expectedList, TypeReference<List<T>> typeReference) {
+        try {
+            String jsonResponse = mvcResult.getResponse().getContentAsString();
+            List<T> actualList = objectMapper.readValue(jsonResponse, typeReference);
+            assertEquals(expectedList, actualList);
+        } catch (JsonProcessingException | UnsupportedEncodingException e) {
+            throw new RuntimeException("Error processing the JSON response", e);
+        }
+    }
+
 }

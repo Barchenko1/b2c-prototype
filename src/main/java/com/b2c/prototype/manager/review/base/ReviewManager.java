@@ -11,8 +11,8 @@ import com.b2c.prototype.modal.entity.review.Review;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.query.IQueryService;
 import com.b2c.prototype.manager.review.IReviewManager;
-import com.b2c.prototype.service.common.EntityOperationDao;
-import com.b2c.prototype.service.common.IEntityOperationDao;
+import com.b2c.prototype.service.common.EntityOperationManager;
+import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import org.hibernate.query.NativeQuery;
 
@@ -23,7 +23,7 @@ import static com.b2c.prototype.util.Query.SELECT_ITEM_BY_ITEM_ID;
 
 public class ReviewManager implements IReviewManager {
 
-    private final IEntityOperationDao entityOperationDao;
+    private final IEntityOperationManager entityOperationDao;
     private final IQueryService queryService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
@@ -32,7 +32,7 @@ public class ReviewManager implements IReviewManager {
                          IQueryService queryService,
                          ITransformationFunctionService transformationFunctionService,
                          ISupplierService supplierService) {
-        this.entityOperationDao = new EntityOperationDao(reviewDao);
+        this.entityOperationDao = new EntityOperationManager(reviewDao);
         this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;

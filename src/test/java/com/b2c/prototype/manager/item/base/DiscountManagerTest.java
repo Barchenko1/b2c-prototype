@@ -11,7 +11,7 @@ import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.query.IQueryService;
 import com.b2c.prototype.service.supplier.ISupplierService;
-import com.tm.core.processor.finder.parameter.Parameter;
+import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -224,7 +224,7 @@ class DiscountManagerTest {
         assertEquals(expectedDto.getCurrency(), result.getCurrency());
         assertEquals(expectedDto.getArticularIdSet(), result.getArticularIdSet());
         assertEquals(expectedDto.getAmount(), result.getAmount());
-        assertEquals(expectedDto.isActive(), result.isActive());
+        assertEquals(expectedDto.getIsActive(), result.getIsActive());
     }
 
     @Test
@@ -254,7 +254,7 @@ class DiscountManagerTest {
         assertEquals(expectedDto.getCurrency(), result.getCurrency());
         assertEquals(expectedDto.getArticularIdSet(), result.getArticularIdSet());
         assertEquals(expectedDto.getAmount(), result.getAmount());
-        assertEquals(expectedDto.isActive(), result.isActive());
+        assertEquals(expectedDto.getIsActive(), result.getIsActive());
     }
 
     @Test

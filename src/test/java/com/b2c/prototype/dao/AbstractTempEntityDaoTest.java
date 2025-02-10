@@ -9,7 +9,7 @@ import com.github.database.rider.junit5.api.DBRider;
 import com.tm.core.dao.common.AbstractEntityDao;
 import com.tm.core.dao.common.IEntityDao;
 import com.tm.core.dao.identifier.IEntityIdentifierDao;
-import com.tm.core.processor.finder.parameter.Parameter;
+import com.tm.core.finder.parameter.Parameter;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;

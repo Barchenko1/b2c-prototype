@@ -9,7 +9,7 @@ import com.b2c.prototype.manager.AbstractTransitiveSelfEntityManager;
 import com.b2c.prototype.manager.item.ICategoryManager;
 import com.tm.core.dao.transitive.ITransitiveSelfEntityDao;
 import com.tm.core.modal.TransitiveSelfEntity;
-import com.tm.core.processor.finder.parameter.Parameter;
+import com.tm.core.finder.parameter.Parameter;
 import com.tm.core.util.TransitiveSelfEnum;
 import lombok.extern.slf4j.Slf4j;
 

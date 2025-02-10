@@ -6,8 +6,8 @@ import com.b2c.prototype.modal.dto.payload.PaymentDto;
 import com.b2c.prototype.modal.dto.searchfield.PaymentSearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.order.OrderArticularItem;
 import com.b2c.prototype.modal.entity.payment.Payment;
-import com.b2c.prototype.service.common.EntityOperationDao;
-import com.b2c.prototype.service.common.IEntityOperationDao;
+import com.b2c.prototype.service.common.EntityOperationManager;
+import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.payment.IPaymentManager;
 import com.b2c.prototype.service.query.IQueryService;
@@ -17,11 +17,11 @@ import java.util.List;
 
 import static com.b2c.prototype.util.Constant.ORDER_ID;
 import static com.b2c.prototype.util.Constant.PAYMENT_ID;
-import static com.b2c.prototype.util.UniqueIdUtil.getUUID;
+import static com.b2c.prototype.util.Util.getUUID;
 
 public class PaymentManager implements IPaymentManager {
 
-    private final IEntityOperationDao entityOperationDao;
+    private final IEntityOperationManager entityOperationDao;
     private final ITransformationFunctionService transformationFunctionService;
     private final IQueryService queryService;
     private final ISupplierService supplierService;
@@ -30,7 +30,7 @@ public class PaymentManager implements IPaymentManager {
                           IQueryService queryService,
                           ITransformationFunctionService transformationFunctionService,
                           ISupplierService supplierService) {
-        this.entityOperationDao = new EntityOperationDao(paymentDao);
+        this.entityOperationDao = new EntityOperationManager(paymentDao);
         this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;

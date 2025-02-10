@@ -31,15 +31,35 @@ import java.util.List;
                 attributeNodes = {
                         @NamedAttributeNode(value = "optionItems")
                 }
+        ),
+        @NamedEntityGraph(
+                name = "optionGroup.withOptionItemsAndArticularItems",
+                attributeNodes = {
+                        @NamedAttributeNode(value = "optionItems", subgraph = "optionItem.articularItems")
+                },
+                subgraphs = {
+                        @NamedSubgraph(
+                                name = "optionItem.articularItems",
+                                attributeNodes = {
+                                        @NamedAttributeNode(value = "articularItems", subgraph = "articularItem.optionItems")
+                                }
+                        ),
+                        @NamedSubgraph(
+                                name = "articularItem.optionItems",
+                                attributeNodes = {
+                                        @NamedAttributeNode(value = "optionItems")
+                                }
+                        )
+                }
         )
 })
 @NamedQueries({
         @NamedQuery(
                 name = "optionGroup.withOptionItemsAndArticularItems",
-                query = "SELECT og FROM OptionGroup og " +
-                        "JOIN FETCH og.optionItems oi " +
-                        "JOIN FETCH oi.articularItems ai " +
-                        "JOIN FETCH ai.optionItems " +
+                query = "SELECT DISTINCT og FROM OptionGroup og " +
+                        "LEFT JOIN FETCH og.optionItems oi " +
+                        "LEFT JOIN FETCH oi.articularItems ai " +
+                        "LEFT JOIN FETCH ai.optionItems " +
                         "WHERE og.value = :value"
         )
 })

@@ -1,19 +1,18 @@
 package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.dao.item.IItemDataDao;
-import com.b2c.prototype.manager.item.base.ItemDataManager;
 import com.b2c.prototype.modal.dto.payload.ItemDataDto;
 import com.b2c.prototype.modal.dto.response.ResponseItemDataDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
+import com.b2c.prototype.modal.entity.item.ArticularStatus;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.ItemData;
-import com.b2c.prototype.modal.entity.item.ItemStatus;
 import com.b2c.prototype.modal.entity.item.ItemType;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.query.IQueryService;
 import com.b2c.prototype.service.supplier.ISupplierService;
-import com.tm.core.processor.finder.parameter.Parameter;
+import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -152,41 +151,6 @@ class ItemDataManagerTest {
         assertEquals(responseDtoList, result);
     }
 
-    @Test
-    void testGetItemDataListFiltered() {
-        List<ResponseItemDataDto> responseDtoList = List.of(getResponseItemDataDto());
-        ItemData itemData = getItemData();
-        ResponseItemDataDto responseDto = getResponseItemDataDto();
-
-        Function<ItemData, ResponseItemDataDto> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(ItemData.class, ResponseItemDataDto.class))
-                .thenReturn(function);
-        when(itemDataDao.getEntityList()).thenReturn(List.of(itemData));
-        when(function.apply(itemData)).thenReturn(responseDto);
-
-        List<ResponseItemDataDto> result = itemDataManager.getItemDataListFiltered();
-
-        assertEquals(responseDtoList, result);
-    }
-
-    @Test
-    void testGetItemDataListSorted() {
-        String sortType = "asc";
-        ResponseItemDataDto responseDto = getResponseItemDataDto();
-        List<ResponseItemDataDto> responseDtoList = List.of(responseDto);
-        ItemData itemData = getItemData();
-
-        Function<ItemData, ResponseItemDataDto> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(ItemData.class, ResponseItemDataDto.class))
-                .thenReturn(function);
-        when(itemDataDao.getEntityList()).thenReturn(List.of(itemData));
-        when(function.apply(itemData)).thenReturn(responseDto);
-
-        List<ResponseItemDataDto> result = itemDataManager.getItemDataListSorted(sortType);
-
-        assertEquals(responseDtoList, result);
-    }
-
     private ResponseItemDataDto getResponseItemDataDto() {
         return ResponseItemDataDto.builder()
                 .categoryName("categoryNameValue")
@@ -202,7 +166,6 @@ class ItemDataManagerTest {
                 .category(Category.builder().name("categoryNameValue").build())
                 .itemType(ItemType.builder().value("itemTypeNameValue").build())
                 .brand(Brand.builder().value("brandNameValue").build())
-                .status(ItemStatus.builder().value("itemStatusValue").build())
                 .build();
     }
 
@@ -211,7 +174,6 @@ class ItemDataManagerTest {
                 .category("categoryNameValue")
                 .itemType("itemTypeNameValue")
                 .brand("brandNameValue")
-                .itemStatus("itemStatusValue")
                 .build();
     }
 

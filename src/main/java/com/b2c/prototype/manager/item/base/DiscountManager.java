@@ -5,8 +5,8 @@ import com.b2c.prototype.modal.dto.payload.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.DiscountStatusDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.Discount;
-import com.b2c.prototype.service.common.EntityOperationDao;
-import com.b2c.prototype.service.common.IEntityOperationDao;
+import com.b2c.prototype.service.common.EntityOperationManager;
+import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.item.IDiscountManager;
 import com.b2c.prototype.service.query.IQueryService;
@@ -22,7 +22,7 @@ import static com.b2c.prototype.util.Constant.ITEM_DATA_OPTION_BY_DISCOUNT_CHAR_
 
 public class DiscountManager implements IDiscountManager {
 
-    private final IEntityOperationDao entityOperationDao;
+    private final IEntityOperationManager entityOperationDao;
     private final IQueryService queryService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
@@ -31,7 +31,7 @@ public class DiscountManager implements IDiscountManager {
                            IQueryService queryService,
                            ITransformationFunctionService transformationFunctionService,
                            ISupplierService supplierService) {
-        this.entityOperationDao = new EntityOperationDao(discountDao);
+        this.entityOperationDao = new EntityOperationManager(discountDao);
         this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
@@ -67,7 +67,6 @@ public class DiscountManager implements IDiscountManager {
             session.merge(articularItem);
         });
     }
-
 
     @Override
     public void updateDiscount(String charSequenceCode, DiscountDto discountDto) {

@@ -1,6 +1,5 @@
-package com.b2c.prototype.modal.dto.payload;
+package com.b2c.prototype.modal.dto.common;
 
-import com.b2c.prototype.modal.dto.common.AbstractConstantDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

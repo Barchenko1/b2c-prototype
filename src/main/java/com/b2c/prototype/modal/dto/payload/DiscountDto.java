@@ -6,10 +6,13 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.Set;
+
 @EqualsAndHashCode(callSuper = true)
 @Data
 @SuperBuilder
 @NoArgsConstructor
 public class DiscountDto extends AbstractDiscountDto {
     private String currency;
+    private Set<String> articularIdSet;
 }

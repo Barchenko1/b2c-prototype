@@ -1,7 +1,7 @@
 package com.b2c.prototype.processor.option;
 
 import com.b2c.prototype.manager.option.IOptionItemManager;
-import com.b2c.prototype.modal.dto.payload.OptionItemDto;
+import com.b2c.prototype.modal.dto.payload.OptionGroupOptionItemSetDto;
 import com.b2c.prototype.modal.dto.payload.SingleOptionItemDto;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public class OptionItemProcessor implements IOptionItemProcessor {
     }
 
     @Override
-    public void saveUpdateOptionItem(SingleOptionItemDto singleOptionItemDto, Map<String, String> requestParams) {
+    public void saveUpdateOptionItem(Map<String, String> requestParams, SingleOptionItemDto singleOptionItemDto) {
         String articularId = requestParams.get("articularId");
         String optionGroupValue = requestParams.get("optionGroup");
         String optionItemValue = requestParams.get("optionItem");
@@ -29,8 +29,8 @@ public class OptionItemProcessor implements IOptionItemProcessor {
     }
 
     @Override
-    public void saveOptionItemSet(List<OptionItemDto> optionItemDtoList, Map<String, String> requestParams) {
-        optionItemManager.saveOptionItemSet(optionItemDtoList);
+    public void saveOptionItemSet(Map<String, String> requestParams, List<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoList) {
+        optionItemManager.saveOptionItemSet(optionGroupOptionItemSetDtoList);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class OptionItemProcessor implements IOptionItemProcessor {
     }
 
     @Override
-    public OptionItemDto getOptionItemDto(Map<String, String> requestParams) {
+    public OptionGroupOptionItemSetDto getOptionItemDto(Map<String, String> requestParams) {
         String optionGroup = requestParams.get("optionGroup");
         if (optionGroup != null) {
             return optionItemManager.getOptionItemListByOptionGroup(optionGroup);
@@ -56,7 +56,7 @@ public class OptionItemProcessor implements IOptionItemProcessor {
     }
 
     @Override
-    public List<OptionItemDto> getOptionItemDtoList(Map<String, String> requestParams) {
+    public List<OptionGroupOptionItemSetDto> getOptionItemDtoList(Map<String, String> requestParams) {
         String articularId = requestParams.get("articularId");
         if (articularId != null) {
             return optionItemManager.getOptionItemByItemArticularId(articularId);

@@ -6,10 +6,10 @@ import com.b2c.prototype.modal.dto.payload.ItemDataOptionQuantityDto;
 import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
 import com.b2c.prototype.modal.entity.order.OrderArticularItem;
 import com.b2c.prototype.modal.entity.store.Store;
-import com.b2c.prototype.service.common.EntityOperationDao;
-import com.b2c.prototype.service.common.IEntityOperationDao;
+import com.b2c.prototype.service.common.EntityOperationManager;
+import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.manager.item.IItemDataOptionQuantityManager;
+import com.b2c.prototype.manager.item.IArticularItemQuantityManager;
 import com.b2c.prototype.service.query.IQueryService;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import org.hibernate.Session;
@@ -20,18 +20,18 @@ import static com.b2c.prototype.util.Constant.ORDER_ID;
 import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 import static com.b2c.prototype.util.Query.SELECT_STORE_BY_ARTICULAR_ID;
 
-public class ItemDataOptionQuantityManager implements IItemDataOptionQuantityManager {
+public class ArticularItemQuantityManager implements IArticularItemQuantityManager {
 
-    private final IEntityOperationDao entityOperationDao;
+    private final IEntityOperationManager entityOperationDao;
     private final IQueryService queryService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
 
-    public ItemDataOptionQuantityManager(IItemDataOptionQuantityDao itemDataOptionQuantityDao,
-                                         IQueryService queryService,
-                                         ITransformationFunctionService transformationFunctionService,
-                                         ISupplierService supplierService) {
-        this.entityOperationDao = new EntityOperationDao(itemDataOptionQuantityDao);
+    public ArticularItemQuantityManager(IItemDataOptionQuantityDao itemDataOptionQuantityDao,
+                                        IQueryService queryService,
+                                        ITransformationFunctionService transformationFunctionService,
+                                        ISupplierService supplierService) {
+        this.entityOperationDao = new EntityOperationManager(itemDataOptionQuantityDao);
         this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;

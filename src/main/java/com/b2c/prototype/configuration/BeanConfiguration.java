@@ -73,14 +73,14 @@ import com.tm.core.configuration.manager.ISessionFactoryManager;
 import com.tm.core.configuration.manager.SessionFactoryManager;
 import com.tm.core.dao.identifier.EntityIdentifierDao;
 import com.tm.core.dao.identifier.IEntityIdentifierDao;
-import com.tm.core.dao.query.ISearchWrapper;
-import com.tm.core.dao.query.SearchWrapper;
-import com.tm.core.dao.transaction.ITransactionWrapper;
-import com.tm.core.dao.transaction.TransactionWrapper;
-import com.tm.core.processor.finder.manager.EntityMappingManager;
-import com.tm.core.processor.finder.manager.IEntityMappingManager;
-import com.tm.core.processor.finder.scanner.EntityScanner;
-import com.tm.core.processor.finder.scanner.IEntityScanner;
+import com.tm.core.dao.query.ISearchHandler;
+import com.tm.core.dao.query.SearchHandler;
+import com.tm.core.dao.transaction.ITransactionHandler;
+import com.tm.core.dao.transaction.TransactionHandler;
+import com.tm.core.finder.manager.EntityMappingManager;
+import com.tm.core.finder.manager.IEntityMappingManager;
+import com.tm.core.finder.scanner.EntityScanner;
+import com.tm.core.finder.scanner.IEntityScanner;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -142,18 +142,18 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public ITransactionWrapper transactionWrapper() {
-        return new TransactionWrapper(sessionFactory());
+    public ITransactionHandler transactionHandler() {
+        return new TransactionHandler(sessionFactory());
     }
 
     @Bean
-    public ISearchWrapper searchWrapper() {
-        return new SearchWrapper(sessionFactory(), entityIdentifierDao());
+    public ISearchHandler searchHandler() {
+        return new SearchHandler(sessionFactory(), entityIdentifierDao());
     }
 
     @Bean
-    public IQueryService queryService(ISearchWrapper searchWrapper) {
-        return new QueryService(searchWrapper);
+    public IQueryService queryService(ISearchHandler searchHandler) {
+        return new QueryService(searchHandler);
     }
 
     @Bean

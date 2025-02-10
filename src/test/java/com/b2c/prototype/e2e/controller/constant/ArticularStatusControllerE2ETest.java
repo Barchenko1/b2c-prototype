@@ -1,7 +1,7 @@
 package com.b2c.prototype.e2e.controller.constant;
 
 import com.b2c.prototype.e2e.AbstractConstantControllerE2ETest;
-import com.b2c.prototype.modal.dto.payload.ConstantPayloadDto;
+import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.MvcResult;
@@ -10,7 +10,7 @@ import java.util.List;
 
 import static com.b2c.prototype.util.Constant.ITEM_STATUS_SERVICE_ID;
 
-public class ItemStatusControllerE2ETest extends AbstractConstantControllerE2ETest {
+public class ArticularStatusControllerE2ETest extends AbstractConstantControllerE2ETest {
 
     @Test
     public void testCreateConstantEntity() {
@@ -21,8 +21,8 @@ public class ItemStatusControllerE2ETest extends AbstractConstantControllerE2ETe
 
         postConstantEntity(constantPayloadDto,
                 ITEM_STATUS_SERVICE_ID,
-                "/datasets/item/item_status/emptyItemStatusDataSet.yml",
-                "/datasets/item/item_status/saveItemStatusDataSet.yml");
+                "/datasets/item/articular_status/emptyArticularStatusDataSet.yml",
+                "/datasets/item/articular_status/saveArticularStatusDataSet.yml");
     }
 
     @Test
@@ -35,8 +35,8 @@ public class ItemStatusControllerE2ETest extends AbstractConstantControllerE2ETe
         putConstantEntity(constantPayloadDto,
                 ITEM_STATUS_SERVICE_ID,
                 "Test",
-                "/datasets/item/item_status/testItemStatusDataSet.yml",
-                "/datasets/item/item_status/updateItemStatusDataSet.yml");
+                "/datasets/item/articular_status/testArticularStatusDataSet.yml",
+                "/datasets/item/articular_status/updateArticularStatusDataSet.yml");
     }
 
     @Test
@@ -49,8 +49,8 @@ public class ItemStatusControllerE2ETest extends AbstractConstantControllerE2ETe
         patchConstantEntity(constantPayloadDto,
                 ITEM_STATUS_SERVICE_ID,
                 "Test",
-                "/datasets/item/item_status/testItemStatusDataSet.yml",
-                "/datasets/item/item_status/updateItemStatusDataSet.yml");
+                "/datasets/item/articular_status/testArticularStatusDataSet.yml",
+                "/datasets/item/articular_status/updateArticularStatusDataSet.yml");
     }
 
     @Test
@@ -58,8 +58,8 @@ public class ItemStatusControllerE2ETest extends AbstractConstantControllerE2ETe
         deleteConstantEntity(
                 ITEM_STATUS_SERVICE_ID,
                 "Test",
-                "/datasets/item/item_status/testItemStatusDataSet.yml",
-                "/datasets/item/item_status/emptyItemStatusDataSet.yml");
+                "/datasets/item/articular_status/testArticularStatusDataSet.yml",
+                "/datasets/item/articular_status/emptyArticularStatusDataSet.yml");
     }
 
     @Test
@@ -75,7 +75,7 @@ public class ItemStatusControllerE2ETest extends AbstractConstantControllerE2ETe
                         .build());
 
         MvcResult mvcResult = getConstantEntities(ITEM_STATUS_SERVICE_ID,
-                "/datasets/item/item_status/testAllItemStatusDataSet.yml");
+                "/datasets/item/articular_status/testAllArticularStatusDataSet.yml");
         assertMvcListResult(mvcResult, constantPayloadDtoList, new TypeReference<>() {});
     }
 
@@ -88,7 +88,7 @@ public class ItemStatusControllerE2ETest extends AbstractConstantControllerE2ETe
 
         MvcResult mvcResult = getConstantEntity(ITEM_STATUS_SERVICE_ID,
                 "Test",
-                "/datasets/item/item_status/testItemStatusDataSet.yml");
+                "/datasets/item/articular_status/testArticularStatusDataSet.yml");
         assertMvcResult(mvcResult, dto);
     }
 

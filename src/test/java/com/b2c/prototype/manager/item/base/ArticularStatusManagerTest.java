@@ -1,9 +1,9 @@
 package com.b2c.prototype.manager.item.base;
 
-import com.b2c.prototype.modal.dto.payload.ConstantPayloadDto;
-import com.b2c.prototype.modal.entity.item.ItemStatus;
+import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
+import com.b2c.prototype.modal.entity.item.ArticularStatus;
 import com.b2c.prototype.manager.AbstractConstantEntityManagerTest;
-import com.tm.core.processor.finder.parameter.Parameter;
+import com.tm.core.finder.parameter.Parameter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -16,19 +16,19 @@ import static com.b2c.prototype.util.Constant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
-class ItemStatusManagerTest extends AbstractConstantEntityManagerTest<ItemStatus> {
+class ArticularStatusManagerTest extends AbstractConstantEntityManagerTest<ArticularStatus> {
 
     @Mock
-    private Function<ItemStatus, ConstantPayloadDto> mapEntityToDtoFunction;
+    private Function<ArticularStatus, ConstantPayloadDto> mapEntityToDtoFunction;
     @Mock
-    private Function<ConstantPayloadDto, ItemStatus> mapDtoToEntityFunction;
+    private Function<ConstantPayloadDto, ArticularStatus> mapDtoToEntityFunction;
     private ItemStatusManager itemStatusManager;
 
     @BeforeEach
     void setUp() {
-        when(transformationFunctionService.getTransformationFunction(ConstantPayloadDto.class, ItemStatus.class))
+        when(transformationFunctionService.getTransformationFunction(ConstantPayloadDto.class, ArticularStatus.class))
                 .thenReturn(mapDtoToEntityFunction);
-        when(transformationFunctionService.getTransformationFunction(ItemStatus.class, ConstantPayloadDto.class))
+        when(transformationFunctionService.getTransformationFunction(ArticularStatus.class, ConstantPayloadDto.class))
                 .thenReturn(mapEntityToDtoFunction);
 
         itemStatusManager = new ItemStatusManager(
@@ -45,10 +45,10 @@ class ItemStatusManagerTest extends AbstractConstantEntityManagerTest<ItemStatus
                 .label("testLabel")
                 .value("testValue")
                 .build();
-        ItemStatus testValue = createTestValue();
+        ArticularStatus testValue = createTestValue();
 
         when(mapDtoToEntityFunction.apply(dto)).thenReturn(testValue);
-        when(dao.getEntityClass()).thenAnswer(invocation -> ItemStatus.class);
+        when(dao.getEntityClass()).thenAnswer(invocation -> ArticularStatus.class);
 
         itemStatusManager.saveEntity(dto);
 
@@ -62,12 +62,12 @@ class ItemStatusManagerTest extends AbstractConstantEntityManagerTest<ItemStatus
                 .value("newValue")
                 .build();
 
-        ItemStatus testValue = ItemStatus.builder()
+        ArticularStatus testValue = ArticularStatus.builder()
                 .value("newValue")
                 .build();
 
         when(mapDtoToEntityFunction.apply(newDto)).thenReturn(testValue);
-        when(dao.getEntityClass()).thenAnswer(invocation -> ItemStatus.class);
+        when(dao.getEntityClass()).thenAnswer(invocation -> ArticularStatus.class);
 
         itemStatusManager.updateEntity("testValue", newDto);
 
@@ -85,7 +85,7 @@ class ItemStatusManagerTest extends AbstractConstantEntityManagerTest<ItemStatus
     public void testGetEntity() {
         
         Parameter parameter = parameterFactory.createStringParameter(VALUE, "testValue");
-        ItemStatus testValue = createTestValue();
+        ArticularStatus testValue = createTestValue();
         ConstantPayloadDto constantPayloadDto = getResponseOneFieldEntityDto();
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
@@ -101,7 +101,7 @@ class ItemStatusManagerTest extends AbstractConstantEntityManagerTest<ItemStatus
     public void testGetEntityOptional() {
         
         Parameter parameter = parameterFactory.createStringParameter(VALUE, "testValue");
-        ItemStatus testValue = createTestValue();
+        ArticularStatus testValue = createTestValue();
         ConstantPayloadDto constantPayloadDto = getResponseOneFieldEntityDto();
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
@@ -115,7 +115,7 @@ class ItemStatusManagerTest extends AbstractConstantEntityManagerTest<ItemStatus
 
     @Test
     public void testGetEntities() {
-        ItemStatus testValue = createTestValue();
+        ArticularStatus testValue = createTestValue();
         ConstantPayloadDto constantPayloadDto = getResponseOneFieldEntityDto();
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
@@ -127,8 +127,8 @@ class ItemStatusManagerTest extends AbstractConstantEntityManagerTest<ItemStatus
         assertEquals(constantPayloadDto, list.get(0));
     }
 
-    private ItemStatus createTestValue() {
-        return ItemStatus.builder()
+    private ArticularStatus createTestValue() {
+        return ArticularStatus.builder()
                 .value("testValue")
                 .build();
     }

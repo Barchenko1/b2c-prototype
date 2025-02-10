@@ -8,7 +8,7 @@
 //import com.b2c.prototype.modal.entity.item.Item;
 //import com.b2c.prototype.modal.entity.item.ItemData;
 //import com.b2c.prototype.modal.entity.item.ItemQuantity;
-//import com.b2c.prototype.modal.entity.item.ItemStatus;
+//import com.b2c.prototype.modal.entity.item.ArticularStatus;
 //import com.b2c.prototype.modal.entity.item.ItemType;
 //import com.b2c.prototype.modal.entity.item.Rating;
 //import com.b2c.prototype.modal.entity.option.OptionGroup;
@@ -67,7 +67,7 @@
 //                .charSequenceCode("abc")
 //                .currency(currency)
 //                .build();
-//        ItemStatus itemStatus = ItemStatus.builder()
+//        ArticularStatus itemStatus = ArticularStatus.builder()
 //                .id(1L)
 //                .name("NEW")
 //                .build();

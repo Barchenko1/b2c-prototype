@@ -13,8 +13,8 @@ import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.price.IPriceManager;
 import com.b2c.prototype.service.query.IQueryService;
-import com.b2c.prototype.service.common.EntityOperationDao;
-import com.b2c.prototype.service.common.IEntityOperationDao;
+import com.b2c.prototype.service.common.EntityOperationManager;
+import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.supplier.ISupplierService;
 
 import java.util.List;
@@ -24,7 +24,7 @@ import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 
 public class PriceManager implements IPriceManager {
 
-    private final IEntityOperationDao entityOperationDao;
+    private final IEntityOperationManager entityOperationDao;
     private final IQueryService queryService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
@@ -33,7 +33,7 @@ public class PriceManager implements IPriceManager {
                         IQueryService queryService,
                         ITransformationFunctionService transformationFunctionService,
                         ISupplierService supplierService) {
-        this.entityOperationDao = new EntityOperationDao(priceDao);
+        this.entityOperationDao = new EntityOperationManager(priceDao);
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
         this.queryService = queryService;

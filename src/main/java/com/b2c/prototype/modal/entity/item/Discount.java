@@ -46,6 +46,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 public class Discount extends AbstractDiscount {
     private boolean isPercent;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Currency currency;
 }

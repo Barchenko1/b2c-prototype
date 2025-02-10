@@ -1,5 +1,6 @@
 package com.b2c.prototype.modal.entity.price;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -25,6 +26,6 @@ public class Price {
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
     private double amount;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Currency currency;
 }

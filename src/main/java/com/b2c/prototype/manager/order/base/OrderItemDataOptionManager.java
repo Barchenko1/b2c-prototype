@@ -6,8 +6,8 @@ import com.b2c.prototype.modal.dto.payload.OrderItemDataDto;
 import com.b2c.prototype.modal.dto.response.ResponseOrderItemDataDto;
 import com.b2c.prototype.modal.dto.searchfield.OrderItemDataSearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.order.OrderArticularItem;
-import com.b2c.prototype.service.common.EntityOperationDao;
-import com.b2c.prototype.service.common.IEntityOperationDao;
+import com.b2c.prototype.service.common.EntityOperationManager;
+import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.order.IOrderItemDataOptionManager;
 import com.b2c.prototype.service.supplier.ISupplierService;
@@ -18,14 +18,14 @@ import static com.b2c.prototype.util.Constant.ORDER_ID;
 
 public class OrderItemDataOptionManager implements IOrderItemDataOptionManager {
 
-    private final IEntityOperationDao entityOperationDao;
+    private final IEntityOperationManager entityOperationDao;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
 
     public OrderItemDataOptionManager(IOrderItemDataDao orderItemDao,
                                       ITransformationFunctionService transformationFunctionService,
                                       ISupplierService supplierService) {
-        this.entityOperationDao = new EntityOperationDao(orderItemDao);
+        this.entityOperationDao = new EntityOperationManager(orderItemDao);
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
     }

@@ -1,7 +1,8 @@
 package com.b2c.prototype.e2e.controller.basic;
 
 import com.b2c.prototype.e2e.BasicE2ETest;
-import com.b2c.prototype.modal.dto.payload.ConstantPayloadDto;
+import com.b2c.prototype.modal.dto.payload.OptionGroupDto;
+import com.b2c.prototype.modal.dto.payload.OptionGroupOptionItemSetDto;
 import com.b2c.prototype.modal.dto.payload.OptionItemDto;
 import com.b2c.prototype.modal.dto.payload.SingleOptionItemDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -10,8 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
@@ -84,13 +83,13 @@ public class OptionItemControllerE2ETest extends BasicE2ETest {
     @Test
     public void testSaveOptionItemByOptionGroup() {
         loadDataSet("/datasets/option/option_item/emptyE2EOptionItemWithOptionGroupDataSet.yml");
-        OptionItemDto optionItemDto = getOptionItemSizeGroupDto();
-        List<OptionItemDto> optionItemDtoList = List.of(optionItemDto);
+        OptionGroupOptionItemSetDto optionGroupOptionItemSetDto = getOptionItemSizeGroupDto();
+        List<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoList = List.of(optionGroupOptionItemSetDto);
 
         try {
             mockMvc.perform(post(URL_TEMPLATE + "/group")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(optionItemDtoList)))
+                            .content(objectMapper.writeValueAsString(optionGroupOptionItemSetDtoList)))
                     .andExpect(status().isOk());
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -101,13 +100,13 @@ public class OptionItemControllerE2ETest extends BasicE2ETest {
     @Test
     public void testSaveOptionItemByOptionGroupWithOutOptionGroup() {
         loadDataSet("/datasets/option/option_item/emptyE2EOptionItemWithoutOptionGroupDataSet.yml");
-        OptionItemDto optionItemDto = getOptionItemColorGroupDto();
-        List<OptionItemDto> optionItemDtoList = List.of(optionItemDto);
+        OptionGroupOptionItemSetDto optionGroupOptionItemSetDto = getOptionItemColorGroupDto();
+        List<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoList = List.of(optionGroupOptionItemSetDto);
 
         try {
             mockMvc.perform(post(URL_TEMPLATE + "/group")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(optionItemDtoList)))
+                            .content(objectMapper.writeValueAsString(optionGroupOptionItemSetDtoList)))
                     .andExpect(status().isOk());
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -119,11 +118,11 @@ public class OptionItemControllerE2ETest extends BasicE2ETest {
     public void testUpdateOptionItemByGroup() {
         loadDataSet("/datasets/option/option_item/testE2EAllOptionItemColorDataSet.yml");
         SingleOptionItemDto singleOptionItemDto = SingleOptionItemDto.builder()
-                .optionGroup(ConstantPayloadDto.builder()
+                .optionGroup(OptionGroupDto.builder()
                         .value("Color")
                         .label("Color")
                         .build())
-                .optionItem(ConstantPayloadDto.builder()
+                .optionItem(OptionItemDto.builder()
                         .value("Orange")
                         .label("Orange")
                         .build())
@@ -213,7 +212,7 @@ public class OptionItemControllerE2ETest extends BasicE2ETest {
 
         try {
             String jsonResponse = mvcResult.getResponse().getContentAsString();
-            List<OptionItemDto> list = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
+            List<OptionGroupOptionItemSetDto> list = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
             list.forEach(optionItemDto -> {
                 assertEquals(expectedDto.getOptionGroup().getValue(), optionItemDto.getOptionGroup().getValue());
                 assertEquals(expectedDto.getOptionGroup().getLabel(), optionItemDto.getOptionGroup().getLabel());
@@ -228,7 +227,16 @@ public class OptionItemControllerE2ETest extends BasicE2ETest {
     @Test
     public void testGetOptionItemList() {
         loadDataSet("/datasets/option/option_item/testE2EArticularIdOptionItemSizeDataSet.yml");
-        SingleOptionItemDto expectedDto = getSingleOptionItemSizeGroupDto();
+        OptionGroupOptionItemSetDto expectedDto = OptionGroupOptionItemSetDto.builder()
+                .optionGroup(OptionGroupDto.builder()
+                        .label("Size")
+                        .value("Size")
+                        .build())
+                .optionItems(Set.of(OptionItemDto.builder()
+                        .value("M")
+                        .label("M")
+                        .build()))
+                .build();
 
         MvcResult mvcResult;
         try {
@@ -242,12 +250,11 @@ public class OptionItemControllerE2ETest extends BasicE2ETest {
 
         try {
             String jsonResponse = mvcResult.getResponse().getContentAsString();
-            List<OptionItemDto> list = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
+            List<OptionGroupOptionItemSetDto> list = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
             list.forEach(optionItemDto -> {
                 assertEquals(expectedDto.getOptionGroup().getValue(), optionItemDto.getOptionGroup().getValue());
                 assertEquals(expectedDto.getOptionGroup().getLabel(), optionItemDto.getOptionGroup().getLabel());
-                assertEquals(expectedDto.getOptionItem().getValue(), optionItemDto.getOptionItems().stream().toList().get(0).getValue());
-                assertEquals(expectedDto.getOptionItem().getLabel(), optionItemDto.getOptionItems().stream().toList().get(0).getLabel());
+                assertEquals(expectedDto.getOptionItems(), optionItemDto.getOptionItems());
             });
         } catch (JsonProcessingException | UnsupportedEncodingException e) {
             throw new RuntimeException("Error processing the JSON response", e);
@@ -257,7 +264,7 @@ public class OptionItemControllerE2ETest extends BasicE2ETest {
     @Test
     public void testGetOptionItemListByGroup() {
         loadDataSet("/datasets/option/option_item/testE2EAllOptionItemSizeDataSet.yml");
-        SingleOptionItemDto expectedDto = getSingleOptionItemSizeGroupDto();
+        OptionGroupOptionItemSetDto expectedDto = getOptionItemSizeGroupDto();
         Map<String, String> requestParams = Map.of("optionGroup", "Size");
 
         MvcResult mvcResult;
@@ -273,69 +280,61 @@ public class OptionItemControllerE2ETest extends BasicE2ETest {
 
         try {
             String jsonResponse = mvcResult.getResponse().getContentAsString();
-            OptionItemDto actualDto = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
+            OptionGroupOptionItemSetDto actualDto = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
             assertEquals(expectedDto.getOptionGroup().getValue(), actualDto.getOptionGroup().getValue());
             assertEquals(expectedDto.getOptionGroup().getLabel(), actualDto.getOptionGroup().getLabel());
-            assertEquals(expectedDto.getOptionItem().getValue(), actualDto.getOptionItems().stream().toList().get(0).getValue());
-            assertEquals(expectedDto.getOptionItem().getLabel(), actualDto.getOptionItems().stream().toList().get(0).getLabel());
+            assertEquals(expectedDto.getOptionItems(), actualDto.getOptionItems());
         } catch (JsonProcessingException | UnsupportedEncodingException e) {
             throw new RuntimeException("Error processing the JSON response", e);
         }
 
     }
 
-    private MultiValueMap<String, String> getMultiValueMap(Map<String, String> requestParams) {
-        MultiValueMap<String, String> multiValueMap =  new LinkedMultiValueMap<>();
-        requestParams.forEach(multiValueMap::add);
-        return multiValueMap;
-    }
-
-    private OptionItemDto getOptionItemSizeGroupDto() {
-        return OptionItemDto.builder()
-                .optionGroup(getConstantPayloadDto("Size"))
-                .optionItems(Set.of(getConstantPayloadDto("XL"),
-                                getConstantPayloadDto("L"),
-                                getConstantPayloadDto("M"),
-                                getConstantPayloadDto("S")))
+    private OptionGroupOptionItemSetDto getOptionItemSizeGroupDto() {
+        return OptionGroupOptionItemSetDto.builder()
+                .optionGroup(getOptionGroupDto("Size"))
+                .optionItems(Set.of(getOptionItemDto("M"),
+                        getOptionItemDto("L"),
+                        getOptionItemDto("XL"),
+                        getOptionItemDto("S")))
                 .build();
     }
 
     private SingleOptionItemDto getSingleOptionItemSizeGroupDto() {
         return SingleOptionItemDto.builder()
-                .optionGroup(getConstantPayloadDto("Size"))
-                .optionItem(getConstantPayloadDto("M"))
+                .optionGroup(getOptionGroupDto("Size"))
+                .optionItem(getOptionItemDto("M"))
                 .build();
     }
 
     private SingleOptionItemDto getUpdateSingleOptionItemSizeGroupDto() {
         return SingleOptionItemDto.builder()
-                .optionGroup(getConstantPayloadDto("USize"))
-                .optionItem(getConstantPayloadDto("UXL"))
+                .optionGroup(getOptionGroupDto("USize"))
+                .optionItem(getOptionItemDto("UXL"))
                 .build();
     }
 
-    private ConstantPayloadDto getConstantPayloadDto(String value) {
-        return ConstantPayloadDto.builder()
+    private OptionGroupDto getOptionGroupDto(String value) {
+        return OptionGroupDto.builder()
                 .label(value)
                 .value(value)
                 .build();
     }
 
-    private OptionItemDto getOptionItemColorGroupDto() {
+    private OptionItemDto getOptionItemDto(String value) {
         return OptionItemDto.builder()
-                .optionGroup(getConstantPayloadDto("Color"))
-                .optionItems(
-                        Set.of(getConstantPayloadDto("Red"),
-                        getConstantPayloadDto("Blue"),
-                        getConstantPayloadDto("Yellow")))
+                .label(value)
+                .value(value)
                 .build();
     }
 
-    private OptionItemDto getOneOptionItemColorGroupDto() {
-        return OptionItemDto.builder()
-                .optionGroup(getConstantPayloadDto("Color"))
+    private OptionGroupOptionItemSetDto getOptionItemColorGroupDto() {
+        return OptionGroupOptionItemSetDto.builder()
+                .optionGroup(getOptionGroupDto("Color"))
                 .optionItems(
-                        Set.of(getConstantPayloadDto("Red")))
+                        Set.of(getOptionItemDto("Red"),
+                                getOptionItemDto("Blue"),
+                                getOptionItemDto("Yellow")))
                 .build();
     }
 }

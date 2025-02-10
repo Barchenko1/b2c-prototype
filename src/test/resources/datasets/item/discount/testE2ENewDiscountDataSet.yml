@@ -1,0 +1,18 @@
+currency:
+  - id: 1
+    value: "USD"
+    label: "USD"
+discount: []
+articular_item:
+  - id: 1
+    articular_id: 123
+    dateOfCreate: 10000
+  - id: 2
+    articular_id: 111
+    dateOfCreate: 10000
+  - id: 3
+    articular_id: 122
+    dateOfCreate: 10000
+  - id: 4
+    articular_id: noDiscount
+    dateOfCreate: 10000

@@ -7,7 +7,7 @@ import com.b2c.prototype.dao.post.IPostDao;
 import com.b2c.prototype.manager.post.IPostManager;
 import com.b2c.prototype.manager.AbstractTransitiveSelfEntityManager;
 import com.tm.core.dao.transitive.ITransitiveSelfEntityDao;
-import com.tm.core.processor.finder.parameter.Parameter;
+import com.tm.core.finder.parameter.Parameter;
 import com.tm.core.util.TransitiveSelfEnum;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,7 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.b2c.prototype.util.UniqueIdUtil.getUUID;
+import static com.b2c.prototype.util.Util.getCurrentTimeMillis;
+import static com.b2c.prototype.util.Util.getUUID;
 
 @Slf4j
 public class PostManager extends AbstractTransitiveSelfEntityManager implements IPostManager {
@@ -116,7 +117,7 @@ public class PostManager extends AbstractTransitiveSelfEntityManager implements 
                 .message(requestPostDto.getMessage())
                 .parent(parentPost)
                 .uniquePostId(uniquePostId)
-                .dateOfCreate(System.currentTimeMillis())
+                .dateOfCreate(getCurrentTimeMillis())
                 .build();
 
         post.setChildNodeList(null);

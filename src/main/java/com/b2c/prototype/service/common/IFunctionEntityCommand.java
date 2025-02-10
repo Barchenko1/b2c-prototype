@@ -1,6 +1,6 @@
 package com.b2c.prototype.service.common;
 
-import com.tm.core.processor.finder.parameter.Parameter;
+import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
 
 import java.util.function.Consumer;
@@ -13,6 +13,5 @@ public interface IFunctionEntityCommand {
 
     void executeConsumer(Consumer<Session> consumer);
 
-    <E> void updateEntityByParameter(Supplier<E> entitySupplier, Supplier<Parameter> parameterSupplier);
     void deleteEntityByParameter(Supplier<Parameter> parameterSupplier);
 }

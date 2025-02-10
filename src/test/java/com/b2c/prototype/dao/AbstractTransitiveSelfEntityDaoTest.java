@@ -10,7 +10,7 @@ import com.tm.core.dao.identifier.IEntityIdentifierDao;
 import com.tm.core.dao.transitive.AbstractTransitiveSelfEntityDao;
 import com.tm.core.dao.transitive.ITransitiveSelfEntityDao;
 import com.tm.core.modal.TransitiveSelfEntity;
-import com.tm.core.processor.finder.parameter.Parameter;
+import com.tm.core.finder.parameter.Parameter;
 import com.tm.core.util.TransitiveSelfEnum;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;

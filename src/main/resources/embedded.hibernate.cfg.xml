@@ -36,6 +36,7 @@
         <mapping class="com.b2c.prototype.modal.entity.delivery.Delivery" />
         <mapping class="com.b2c.prototype.modal.entity.order.OrderStatus" />
         <mapping class="com.b2c.prototype.modal.entity.user.UserProfile" />
+        <mapping class="com.b2c.prototype.modal.entity.item.ArticularStatus" />
         <mapping class="com.b2c.prototype.modal.entity.item.ArticularItemQuantity" />
         <mapping class="com.b2c.prototype.modal.entity.item.ArticularItem" />
         <mapping class="com.b2c.prototype.modal.entity.option.OptionItem" />

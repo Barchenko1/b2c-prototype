@@ -5,8 +5,8 @@ import com.b2c.prototype.modal.dto.payload.UserProfileDto;
 import com.b2c.prototype.modal.entity.user.UserProfile;
 import com.b2c.prototype.dao.user.IUserProfileDao;
 
-import com.b2c.prototype.service.common.EntityOperationDao;
-import com.b2c.prototype.service.common.IEntityOperationDao;
+import com.b2c.prototype.service.common.EntityOperationManager;
+import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.userprofile.IUserProfileManager;
 import com.b2c.prototype.service.supplier.ISupplierService;
@@ -17,14 +17,14 @@ import static com.b2c.prototype.util.Constant.USER_ID;
 
 public class UserProfileManager implements IUserProfileManager {
 
-    private final IEntityOperationDao entityOperationDao;
+    private final IEntityOperationManager entityOperationDao;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
 
     public UserProfileManager(IUserProfileDao userProfileDao,
                               ITransformationFunctionService transformationFunctionService,
                               ISupplierService supplierService) {
-        this.entityOperationDao = new EntityOperationDao(userProfileDao);
+        this.entityOperationDao = new EntityOperationManager(userProfileDao);
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
     }

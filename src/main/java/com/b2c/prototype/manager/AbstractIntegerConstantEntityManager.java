@@ -4,8 +4,8 @@ import com.b2c.prototype.service.scope.IConstantsScope;
 import com.b2c.prototype.modal.base.AbstractNumberConstantEntity;
 import com.b2c.prototype.modal.dto.common.NumberConstantPayloadDto;
 import com.tm.core.dao.common.IEntityDao;
-import com.tm.core.processor.finder.factory.IParameterFactory;
-import com.tm.core.processor.finder.parameter.Parameter;
+import com.tm.core.finder.factory.IParameterFactory;
+import com.tm.core.finder.parameter.Parameter;
 
 import java.util.List;
 import java.util.Optional;

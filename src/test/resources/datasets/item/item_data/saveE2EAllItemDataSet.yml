@@ -1,0 +1,115 @@
+brand:
+  - id: 1
+    value: "TechBrand"
+    label: "TechBrand"
+item_type:
+  - id: 1
+    value: "Electronic"
+    label: "Electronic"
+currency:
+  - id: 1
+    value: "USD"
+    label: "USD"
+price:
+  - id: 1
+    amount: 1000
+    currency_id: 1
+  - id: 2
+    amount: 1200
+    currency_id: 1
+  - id: 3
+    amount: 1100
+    currency_id: 1
+  - id: 4
+    amount: 1200
+    currency_id: 1
+  - id: 5
+    amount: 1100
+    currency_id: 1
+discount:
+  - id: 1
+    amount: 100
+    charSequenceCode: "xxx"
+    isActive: true
+    isPercent: false
+    currency_id: 1
+  - id: 2
+    amount: 100
+    charSequenceCode: "abc1"
+    isActive: true
+    isPercent: false
+    currency_id: 1
+  - id: 3
+    amount: 100
+    charSequenceCode: "abc2"
+    isActive: true
+    isPercent: false
+    currency_id: 1
+option_group:
+  - id: 1
+    label: "Size"
+    value: "Size"
+  - id: 2
+    label: "Color"
+    value: "Color"
+option_item:
+  - value: "L"
+    label: "L"
+    option_group_id: 1
+  - value: "M"
+    label: "M"
+    option_group_id: 1
+  - value: "16"
+    label: "16"
+    option_group_id: 1
+  - value: "Red"
+    label: "Red"
+    option_group_id: 2
+  - value: "Blue"
+    label: "Blue"
+    option_group_id: 2
+category:
+  - id: 1
+    name: "Electronic"
+  - id: 2
+    category_id: 1
+    name: "Laptop"
+articular_status:
+  - id: 1
+    value: "NEW"
+    label: "NEW"
+item_data:
+  - id: 1
+    item_id: 123
+    description: "{\"par1\":\"desc1\",\"par2\":\"desc2\",\"par3\":\"desc3\"}"
+    brand_id: 1
+    category_id: 2
+    itemtype_id: 1
+articular_item:
+  - id: 1
+    articular_id: 1
+    dateOfCreate: 10000
+    discount_id: 2
+    fullprice_id: 2
+    totalprice_id: 3
+    item_data_id: 1
+    status_id: 1
+    productname: "Laptop 1"
+  - id: 2
+    articular_id: 1
+    dateOfCreate: 10000
+    discount_id: 3
+    fullprice_id: 4
+    totalprice_id: 5
+    item_data_id: 1
+    status_id: 1
+    productname: "Laptop 2"
+articular_item_option_item:
+  - articular_item_id: 1
+    option_item_id: 4
+  - articular_item_id: 1
+    option_item_id: 3
+  - articular_item_id: 2
+    option_item_id: 5
+  - articular_item_id: 2
+    option_item_id: 3

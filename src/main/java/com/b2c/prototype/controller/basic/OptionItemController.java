@@ -1,6 +1,6 @@
 package com.b2c.prototype.controller.basic;
 
-import com.b2c.prototype.modal.dto.payload.OptionItemDto;
+import com.b2c.prototype.modal.dto.payload.OptionGroupOptionItemSetDto;
 import com.b2c.prototype.modal.dto.payload.SingleOptionItemDto;
 import com.b2c.prototype.processor.option.IOptionItemProcessor;
 import org.springframework.http.MediaType;
@@ -29,14 +29,14 @@ public class OptionItemController {
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> saveUpdateOptionItem(@RequestParam final Map<String, String> requestParams,
                                                      @RequestBody final SingleOptionItemDto singleOptionItemDto) {
-        optionItemProcessor.saveUpdateOptionItem(singleOptionItemDto, requestParams);
+        optionItemProcessor.saveUpdateOptionItem(requestParams, singleOptionItemDto);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping(value = "/group", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> saveUpdateOptionItemSet(@RequestParam final Map<String, String> requestParams,
-                                                        @RequestBody final List<OptionItemDto> optionItemDtoList) {
-        optionItemProcessor.saveOptionItemSet(optionItemDtoList, requestParams);
+                                                        @RequestBody final List<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoList) {
+        optionItemProcessor.saveOptionItemSet(requestParams, optionGroupOptionItemSetDtoList);
         return ResponseEntity.ok().build();
     }
 
@@ -47,13 +47,13 @@ public class OptionItemController {
     }
 
     @GetMapping(value = "/group", produces = MediaType.APPLICATION_JSON_VALUE)
-    public OptionItemDto getOptionItem(@RequestParam final Map<String, String> requestParams) {
+    public OptionGroupOptionItemSetDto getOptionItem(@RequestParam final Map<String, String> requestParams) {
 
         return optionItemProcessor.getOptionItemDto(requestParams);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<OptionItemDto> getOptionItemList(@RequestParam final Map<String, String> requestParams) {
+    public List<OptionGroupOptionItemSetDto> getOptionItemList(@RequestParam final Map<String, String> requestParams) {
 
         return optionItemProcessor.getOptionItemDtoList(requestParams);
     }

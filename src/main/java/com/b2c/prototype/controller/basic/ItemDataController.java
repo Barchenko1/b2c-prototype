@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/itemdata")
@@ -29,42 +29,40 @@ public class ItemDataController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> saveDiscount(@RequestBody final ItemDataDto itemDataDto) {
-        itemDataProcessor.saveItemData(itemDataDto);
+    public ResponseEntity<Void> saveItemData(@RequestParam final Map<String, String> requestParams,
+                                             @RequestBody final ItemDataDto itemDataDto) {
+        itemDataProcessor.saveItemData(requestParams, itemDataDto);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> putDiscountByCharSequenceCode(@RequestBody final ItemDataDto itemDataDto,
-                                                              @RequestParam(value = "itemId") final String itemId) {
-        itemDataProcessor.updateItemData(itemId, itemDataDto);
+    public ResponseEntity<Void> putItemData(@RequestParam final Map<String, String> requestParams,
+                                            @RequestBody final ItemDataDto itemDataDto) {
+        itemDataProcessor.updateItemData(requestParams, itemDataDto);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> patchDiscountByArticularId(@RequestBody final ItemDataDto itemDataDto,
-                                                           @RequestParam(value = "itemId") final String itemId) {
-        itemDataProcessor.updateItemData(itemId, itemDataDto);
+    public ResponseEntity<Void> patchItemData(@RequestParam final Map<String, String> requestParams,
+                                              @RequestBody final ItemDataDto itemDataDto) {
+        itemDataProcessor.updateItemData(requestParams, itemDataDto);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<Void> deleteDiscount(@RequestParam(value = "itemId") final String itemId) {
-
-        itemDataProcessor.deleteItemData(itemId);
+    public ResponseEntity<Void> deleteDiscount(@RequestParam final Map<String, String> requestParams) {
+        itemDataProcessor.deleteItemData(requestParams);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @RequestMapping("/all")
-    public List<ResponseItemDataDto> getItemDataList(@RequestHeader(name = "Accept-Language", defaultValue = "en") String location) {
+    @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<ResponseItemDataDto> getItemDataList(@RequestParam final Map<String, String> requestParams) {
 
-        return itemDataProcessor.getItemDataList();
+        return itemDataProcessor.getItemDataList(requestParams);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseItemDataDto> getItemData(@RequestHeader(name = "Accept-Language", defaultValue = "en") String location,
-                                                           @RequestParam(value = "itemId") final String itemId) {
-        return new ResponseEntity<>(itemDataProcessor.getItemData(itemId), HttpStatus.OK);
+    public ResponseEntity<ResponseItemDataDto> getItemData(@RequestParam final Map<String, String> requestParams) {
+        return new ResponseEntity<>(itemDataProcessor.getItemData(requestParams), HttpStatus.OK);
     }
 }
