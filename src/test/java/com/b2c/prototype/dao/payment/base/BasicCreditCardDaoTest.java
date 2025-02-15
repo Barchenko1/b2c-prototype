@@ -4,7 +4,7 @@ import com.b2c.prototype.dao.AbstractConstantEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
 import com.b2c.prototype.util.CardUtil;
-import com.tm.core.dao.identifier.EntityIdentifierDao;
+import com.tm.core.process.dao.identifier.QueryService;
 import com.tm.core.finder.manager.EntityMappingManager;
 import com.tm.core.finder.manager.IEntityMappingManager;
 import com.tm.core.finder.table.EntityTable;
@@ -16,8 +16,8 @@ class BasicCreditCardDaoTest extends AbstractConstantEntityDaoTest {
     public static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(CreditCard.class, "credit_card"));
-        entityIdentifierDao = new EntityIdentifierDao(entityMappingManager);
-        dao = new BasicCreditCardDao(sessionFactory, entityIdentifierDao);
+        queryService = new QueryService(entityMappingManager);
+        dao = new BasicCreditCardDao(sessionFactory, queryService);
     }
 
     @Override

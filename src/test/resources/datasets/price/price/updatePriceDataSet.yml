@@ -5,3 +5,4 @@ currency:
 price:
   - id: 1
     amount: 20
+    currency_id: 1

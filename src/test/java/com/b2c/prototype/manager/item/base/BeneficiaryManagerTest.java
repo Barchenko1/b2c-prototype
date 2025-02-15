@@ -12,7 +12,7 @@ import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.order.base.BeneficiaryManager;
-import com.b2c.prototype.service.query.IQueryService;
+import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
@@ -42,7 +42,7 @@ class BeneficiaryManagerTest {
     @Mock
     private IBeneficiaryDao beneficiaryDao;
     @Mock
-    private IQueryService queryService;
+    private ISearchService queryService;
     @Mock
     private ITransformationFunctionService transformationFunctionService;
     @Mock

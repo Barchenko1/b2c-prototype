@@ -3,7 +3,7 @@ package com.b2c.prototype.dao.delivery.base;
 import com.b2c.prototype.dao.AbstractConstantEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
-import com.tm.core.dao.identifier.EntityIdentifierDao;
+import com.tm.core.process.dao.identifier.QueryService;
 import com.tm.core.finder.manager.EntityMappingManager;
 import com.tm.core.finder.manager.IEntityMappingManager;
 import com.tm.core.finder.table.EntityTable;
@@ -15,8 +15,8 @@ class BasicDeliveryTypeDaoTest extends AbstractConstantEntityDaoTest {
     public static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(DeliveryType.class, "delivery_type"));
-        entityIdentifierDao = new EntityIdentifierDao(entityMappingManager);
-        dao = new BasicDeliveryTypeDao(sessionFactory, entityIdentifierDao);
+queryService = new QueryService(entityMappingManager);
+        dao = new BasicDeliveryTypeDao(sessionFactory, queryService);
     }
 
     @Override

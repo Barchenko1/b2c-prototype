@@ -3,7 +3,7 @@ package com.b2c.prototype.dao.review.base;
 import com.b2c.prototype.dao.AbstractTransitiveSelfEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
 import com.b2c.prototype.modal.entity.review.Comment;
-import com.tm.core.dao.identifier.EntityIdentifierDao;
+import com.tm.core.process.dao.identifier.QueryService;
 import com.tm.core.modal.TransitiveSelfEntity;
 import com.tm.core.finder.manager.EntityMappingManager;
 import com.tm.core.finder.manager.IEntityMappingManager;
@@ -16,8 +16,8 @@ class BasicCommentDaoTest extends AbstractTransitiveSelfEntityDaoTest {
     public static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(Comment.class, "comment"));
-        entityIdentifierDao = new EntityIdentifierDao(entityMappingManager);
-        dao = new BasicCommentDao(sessionFactory, entityIdentifierDao);
+queryService = new QueryService(entityMappingManager);
+        dao = new BasicCommentDao(sessionFactory, queryService);
     }
 
     @Override

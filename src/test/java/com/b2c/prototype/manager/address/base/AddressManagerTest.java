@@ -1,7 +1,6 @@
 package com.b2c.prototype.manager.address.base;
 
 import com.b2c.prototype.dao.address.IAddressDao;
-import com.b2c.prototype.manager.address.base.AddressManager;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.payload.AddressDto;
 import com.b2c.prototype.modal.dto.searchfield.AddressSearchFieldEntityDto;
@@ -11,7 +10,7 @@ import com.b2c.prototype.modal.entity.delivery.Delivery;
 import com.b2c.prototype.modal.entity.order.OrderArticularItem;
 import com.b2c.prototype.modal.entity.user.UserProfile;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.query.IQueryService;
+import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
@@ -45,7 +44,7 @@ class AddressManagerTest {
     @Mock
     private IAddressDao addressDao;
     @Mock
-    private IQueryService queryService;
+    private ISearchService queryService;
     @Mock
     private ITransformationFunctionService transformationFunctionService;
     @Mock

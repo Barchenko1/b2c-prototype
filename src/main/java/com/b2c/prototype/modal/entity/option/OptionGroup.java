@@ -68,7 +68,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OptionGroup extends AbstractConstantEntity {
-    @OneToMany(mappedBy = "optionGroup", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
+    @OneToMany(mappedBy = "optionGroup", fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
     @Builder.Default
     private List<OptionItem> optionItems = new ArrayList<>();
 

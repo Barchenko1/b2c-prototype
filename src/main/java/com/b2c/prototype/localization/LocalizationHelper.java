@@ -1,7 +1,7 @@
 package com.b2c.prototype.localization;
 
 import com.b2c.prototype.configuration.LocalizationInterpreter;
-import com.b2c.prototype.service.scope.IConstantsScope;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,7 +20,7 @@ public class LocalizationHelper {
 
 //    private final IConstantsScope singleValueMap;
 
-    public LocalizationHelper(LocalizationInterpreter localizationInterpreter, IConstantsScope singleValueMap) {
+    public LocalizationHelper(LocalizationInterpreter localizationInterpreter) {
         this.localizationInterpreter = localizationInterpreter;
 //        this.singleValueMap = singleValueMap;
     }

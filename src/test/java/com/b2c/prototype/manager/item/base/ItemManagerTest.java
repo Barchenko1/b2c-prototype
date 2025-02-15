@@ -16,7 +16,7 @@ import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.query.IQueryService;
+import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
@@ -40,7 +40,7 @@ class ItemManagerTest {
     @Mock
     private IItemDao itemDao;
     @Mock
-    private IQueryService queryService;
+    private ISearchService queryService;
     @Mock
     private ITransformationFunctionService transformationFunctionService;
     @Mock

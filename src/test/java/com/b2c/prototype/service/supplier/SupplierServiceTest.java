@@ -1,7 +1,7 @@
 package com.b2c.prototype.service.supplier;
 
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.query.IQueryService;
+import com.b2c.prototype.service.query.ISearchService;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.finder.parameter.Parameter;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +23,7 @@ class SupplierServiceTest {
     @Mock
     private IParameterFactory parameterFactory;
     @Mock
-    private IQueryService queryService;
+    private ISearchService queryService;
     @Mock
     private ITransformationFunctionService transformationFunctionService;
     @InjectMocks

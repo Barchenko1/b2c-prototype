@@ -1,9 +1,9 @@
 package com.b2c.prototype.manager;
 
-import com.b2c.prototype.service.scope.IConstantsScope;
+
 import com.b2c.prototype.modal.base.AbstractNumberConstantEntity;
 import com.b2c.prototype.modal.dto.common.NumberConstantPayloadDto;
-import com.tm.core.dao.common.IEntityDao;
+import com.tm.core.process.dao.common.IEntityDao;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.finder.parameter.Parameter;
 
@@ -18,18 +18,15 @@ public abstract class AbstractIntegerConstantEntityManager<T, E extends Abstract
 
     private final IParameterFactory parameterFactory;
     private final IEntityDao dao;
-    private final IConstantsScope singleValueMap;
     private final Function<T, E> mapDtoToEntityFunction;
     private final Function<E, T> mapEntityToDtoFunction;
 
     public AbstractIntegerConstantEntityManager(IParameterFactory parameterFactory,
                                                 IEntityDao dao,
-                                                IConstantsScope singleValueMap,
                                                 Function<T, E> mapDtoToEntityFunction,
                                                 Function<E, T> mapEntityToDtoFunction) {
         this.parameterFactory = parameterFactory;
         this.dao = dao;
-        this.singleValueMap = singleValueMap;
         this.mapDtoToEntityFunction = mapDtoToEntityFunction;
         this.mapEntityToDtoFunction = mapEntityToDtoFunction;
     }
@@ -38,7 +35,6 @@ public abstract class AbstractIntegerConstantEntityManager<T, E extends Abstract
     public void saveEntity(NumberConstantPayloadDto numberConstantPayloadDto) {
         E entity = mapDtoToEntityFunction.apply((T) numberConstantPayloadDto);
         dao.persistEntity(entity);
-        singleValueMap.putEntity(dao.getEntityClass(), VALUE, entity);
     }
 
     @Override
@@ -46,18 +42,12 @@ public abstract class AbstractIntegerConstantEntityManager<T, E extends Abstract
         E entity = mapDtoToEntityFunction.apply((T) numberConstantPayloadDto);
         Parameter parameter = parameterFactory.createIntegerParameter(VALUE, searchValue);
         dao.findEntityAndUpdate(entity, parameter);
-        singleValueMap.putRemoveEntity(
-                entity.getClass(),
-                searchValue,
-                entity.getValue(),
-                entity);
     }
 
     @Override
     public void deleteEntity(int ratingValue) {
         Parameter parameter = parameterFactory.createNumberParameter(VALUE, ratingValue);
         dao.findEntityAndDelete(parameter);
-        singleValueMap.removeEntity(dao.getEntityClass(), ratingValue);
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.b2c.prototype.modal.dto.payload.SingleOptionItemDto;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class OptionItemProcessor implements IOptionItemProcessor {
 
@@ -29,7 +30,7 @@ public class OptionItemProcessor implements IOptionItemProcessor {
     }
 
     @Override
-    public void saveOptionItemSet(Map<String, String> requestParams, List<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoList) {
+    public void saveOptionItemSet(Map<String, String> requestParams, Set<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoList) {
         optionItemManager.saveOptionItemSet(optionGroupOptionItemSetDtoList);
     }
 

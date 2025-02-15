@@ -9,7 +9,7 @@ import com.b2c.prototype.modal.entity.user.UserProfile;
 import com.b2c.prototype.service.common.EntityOperationManager;
 import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.query.IQueryService;
+import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.manager.userprofile.IContactInfoManager;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import org.slf4j.Logger;
@@ -22,16 +22,16 @@ public class ContactInfoManager implements IContactInfoManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(ContactInfoManager.class);
 
     private final IEntityOperationManager entityOperationDao;
-    private final IQueryService queryService;
+    private final ISearchService searchService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
 
     public ContactInfoManager(IContactInfoDao contactInfoDao,
-                              IQueryService queryService,
+                              ISearchService searchService,
                               ITransformationFunctionService transformationFunctionService,
                               ISupplierService supplierService) {
         this.entityOperationDao = new EntityOperationManager(contactInfoDao);
-        this.queryService = queryService;
+        this.searchService = searchService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
     }
@@ -39,7 +39,7 @@ public class ContactInfoManager implements IContactInfoManager {
     @Override
     public void saveUpdateContactInfoByUserId(ContactInfoSearchFieldEntityDto contactInfoSearchFieldEntityDto) {
         entityOperationDao.executeConsumer(session -> {
-            UserProfile userProfile = queryService.getEntity(
+            UserProfile userProfile = searchService.getEntity(
                     UserProfile.class,
                     supplierService.parameterStringSupplier(USER_ID, contactInfoSearchFieldEntityDto.getSearchField()));
             ContactInfo newContactInfo = transformationFunctionService
@@ -65,7 +65,7 @@ public class ContactInfoManager implements IContactInfoManager {
 
     @Override
     public ContactInfoDto getContactInfoByUserId(OneFieldEntityDto oneFieldEntityDto) {
-        return queryService.getEntityDto(
+        return searchService.getEntityDto(
                 UserProfile.class,
                 supplierService.parameterStringSupplier(USER_ID, oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(UserProfile.class, ContactInfoDto.class));

@@ -13,7 +13,7 @@ import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.modal.entity.store.CountType;
 import com.b2c.prototype.modal.entity.store.Store;
-import com.b2c.prototype.service.query.IQueryService;
+import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
@@ -46,7 +46,7 @@ class ArticularItemQuantityManagerTest {
     @Mock
     private IItemDataOptionQuantityDao itemDataOptionQuantityDao;
     @Mock
-    private IQueryService queryService;
+    private ISearchService queryService;
     @Mock
     private ISupplierService supplierService;
     @InjectMocks

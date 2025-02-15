@@ -34,10 +34,10 @@ public class Payment extends AbstractPayment {
     @ManyToOne(fetch = FetchType.LAZY, cascade =  CascadeType.MERGE)
     private Discount discount;
 
-    @PrePersist
-    protected void onPrePersist() {
-        if (this.paymentId == null) {
-            this.paymentId = getUUID();
-        }
-    }
+//    @PrePersist
+//    protected void onPrePersist() {
+//        if (this.paymentId == null) {
+//            this.paymentId = getUUID();
+//        }
+//    }
 }

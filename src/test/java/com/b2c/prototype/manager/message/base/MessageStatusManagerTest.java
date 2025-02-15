@@ -34,9 +34,7 @@ class MessageStatusManagerTest extends AbstractConstantEntityManagerTest<Message
         messageStatusManager = new MessageStatusManager(
                 parameterFactory,
                 dao,
-                transformationFunctionService,
-                singleValueMap
-        );
+                transformationFunctionService);
     }
 
     @Test

@@ -33,7 +33,7 @@ import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.store.CountType;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.util.CategoryUtil;
-import com.tm.core.dao.transaction.ITransactionHandler;
+import com.tm.core.process.dao.transaction.ITransactionHandler;
 import jakarta.annotation.PostConstruct;
 import org.hibernate.Session;
 import org.springframework.context.annotation.Configuration;

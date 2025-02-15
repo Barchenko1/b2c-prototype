@@ -1,6 +1,6 @@
 package com.b2c.prototype.manager;
 
-import com.tm.core.dao.transitive.ITransitiveSelfEntityDao;
+import com.tm.core.process.dao.transitive.ITransitiveSelfEntityDao;
 import com.tm.core.modal.TransitiveSelfEntity;
 import com.tm.core.finder.factory.ParameterFactory;
 import com.tm.core.finder.parameter.Parameter;

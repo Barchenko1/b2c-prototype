@@ -10,7 +10,7 @@ import com.b2c.prototype.service.common.EntityOperationManager;
 import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.payment.IPaymentManager;
-import com.b2c.prototype.service.query.IQueryService;
+import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
 
 import java.util.List;
@@ -23,15 +23,15 @@ public class PaymentManager implements IPaymentManager {
 
     private final IEntityOperationManager entityOperationDao;
     private final ITransformationFunctionService transformationFunctionService;
-    private final IQueryService queryService;
+    private final ISearchService searchService;
     private final ISupplierService supplierService;
 
     public PaymentManager(IPaymentDao paymentDao,
-                          IQueryService queryService,
+                          ISearchService searchService,
                           ITransformationFunctionService transformationFunctionService,
                           ISupplierService supplierService) {
         this.entityOperationDao = new EntityOperationManager(paymentDao);
-        this.queryService = queryService;
+        this.searchService = searchService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
     }
@@ -39,7 +39,7 @@ public class PaymentManager implements IPaymentManager {
     @Override
     public void saveUpdatePayment(PaymentSearchFieldEntityDto paymentSearchFieldEntityDto) {
         entityOperationDao.executeConsumer(session -> {
-            OrderArticularItem orderItemDataOption = queryService.getEntity(
+            OrderArticularItem orderItemDataOption = searchService.getEntity(
                     OrderArticularItem.class,
                     supplierService.parameterStringSupplier(ORDER_ID, paymentSearchFieldEntityDto.getSearchField()));
             PaymentDto paymentDto = paymentSearchFieldEntityDto.getNewEntity();
@@ -76,7 +76,7 @@ public class PaymentManager implements IPaymentManager {
 
     @Override
     public PaymentDto getPaymentByOrderId(OneFieldEntityDto oneFieldEntityDto) {
-        return queryService.getEntityDto(
+        return searchService.getEntityDto(
                 OrderArticularItem.class,
                 supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(OrderArticularItem.class, PaymentDto.class));

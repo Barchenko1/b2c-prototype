@@ -1,7 +1,6 @@
 package com.b2c.prototype.manager.userprofile.basic;
 
 import com.b2c.prototype.dao.user.IContactInfoDao;
-import com.b2c.prototype.manager.userprofile.basic.ContactInfoManager;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.payload.ContactInfoDto;
 import com.b2c.prototype.modal.dto.searchfield.ContactInfoSearchFieldEntityDto;
@@ -11,7 +10,7 @@ import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.modal.entity.user.UserProfile;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.query.IQueryService;
+import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
@@ -38,7 +37,7 @@ class ContactInfoManagerTest {
     @Mock
     private IContactInfoDao contactInfoDao;
     @Mock
-    private IQueryService queryService;
+    private ISearchService queryService;
     @Mock
     private ITransformationFunctionService transformationFunctionService;
     @Mock

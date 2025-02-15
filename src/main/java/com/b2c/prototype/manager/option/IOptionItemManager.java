@@ -4,11 +4,12 @@ import com.b2c.prototype.modal.dto.payload.OptionGroupOptionItemSetDto;
 import com.b2c.prototype.modal.dto.payload.SingleOptionItemDto;
 
 import java.util.List;
+import java.util.Set;
 
 public interface IOptionItemManager {
     void saveUpdateOptionItemByArticularId(String articularId, String optionItemValue, SingleOptionItemDto singleOptionItemDto);
     void saveUpdateOptionItemByOptionGroup(String optionGroupValue, String optionItemValue, SingleOptionItemDto singleOptionItemDto);
-    void saveOptionItemSet(List<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoList);
+    void saveOptionItemSet(Set<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoList);
 
     void deleteOptionItemByArticularId(String articularId, String optionValue);
     void deleteOptionItemByOptionGroup(String optionGroup, String optionValue);

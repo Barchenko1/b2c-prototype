@@ -17,7 +17,7 @@
 //import com.b2c.prototype.modal.entity.price.Currency;
 //import com.b2c.prototype.modal.entity.price.Price;
 //import com.b2c.prototype.modal.entity.review.Review;
-//import com.tm.core.dao.identifier.EntityIdentifierDao;
+//import com.tm.core.process.dao.identifier.QueryService;
 //import com.tm.core.manager.finder.manager.EntityMappingManager;
 //import com.tm.core.manager.finder.manager.IEntityMappingManager;
 //import com.tm.core.manager.finder.table.EntityTable;
@@ -35,8 +35,8 @@
 //    public static void setup() {
 //        IEntityMappingManager entityMappingManager = new EntityMappingManager();
 //        entityMappingManager.addEntityTable(new EntityTable(Bucket.class, "bucket"));
-//        entityIdentifierDao = new EntityIdentifierDao(entityMappingManager);
-//        dao = new BasicBucketDao(sessionFactory, entityIdentifierDao);
+//queryService = new QueryService(entityMappingManager);
+//        dao = new BasicBucketDao(sessionFactory, queryService);
 //    }
 //
 //    @BeforeEach

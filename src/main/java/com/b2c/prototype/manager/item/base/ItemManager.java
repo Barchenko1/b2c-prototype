@@ -9,7 +9,7 @@ import com.b2c.prototype.service.common.EntityOperationManager;
 import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.item.IItemManager;
-import com.b2c.prototype.service.query.IQueryService;
+import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,16 +21,16 @@ import static com.b2c.prototype.util.Constant.ITEM_ID;
 public class ItemManager implements IItemManager {
 
     private final IEntityOperationManager entityOperationDao;
-    private final IQueryService queryService;
+    private final ISearchService searchService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
 
     public ItemManager(IItemDao itemDao,
-                       IQueryService queryService,
+                       ISearchService searchService,
                        ITransformationFunctionService transformationFunctionService,
                        ISupplierService supplierService) {
         this.entityOperationDao = new EntityOperationManager(itemDao);
-        this.queryService = queryService;
+        this.searchService = searchService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
     }
@@ -38,7 +38,7 @@ public class ItemManager implements IItemManager {
     @Override
     public void saveUpdateItem(ItemSearchFieldEntityDto itemSearchFieldEntityDto) {
         entityOperationDao.executeConsumer(session -> {
-            ItemData itemData = queryService.getEntity(
+            ItemData itemData = searchService.getEntity(
                     ItemData.class,
                     supplierService.parameterStringSupplier(ITEM_ID, itemSearchFieldEntityDto.getSearchField()));
             Item item = transformationFunctionService.getEntity(Item.class, itemSearchFieldEntityDto.getNewEntity());
@@ -58,7 +58,7 @@ public class ItemManager implements IItemManager {
 
     @Override
     public Item getItemByItemId(OneFieldEntityDto oneFieldEntityDto) {
-        return queryService.getEntityDto(
+        return searchService.getEntityDto(
                 ItemData.class,
                 supplierService.parameterStringSupplier(ITEM_ID, oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(ItemData.class, Item.class)
@@ -67,7 +67,7 @@ public class ItemManager implements IItemManager {
 
     @Override
     public List<Item> getItemListByCategory(OneFieldEntityDto oneFieldEntityDto) {
-        return queryService.getSubEntityDtoList(
+        return searchService.getSubEntityDtoList(
                 ItemData.class,
                 supplierService.parameterStringSupplier(ITEM_ID, oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(ItemData.class, Item.class));
@@ -75,7 +75,7 @@ public class ItemManager implements IItemManager {
 
     @Override
     public List<Item> getItemListByItemType(OneFieldEntityDto oneFieldEntityDto) {
-        return queryService.getSubEntityDtoList(
+        return searchService.getSubEntityDtoList(
                 ItemData.class,
                 supplierService.parameterStringSupplier(ITEM_ID, oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(ItemData.class, Item.class));

@@ -34,9 +34,7 @@ class PaymentMethodManagerTest extends AbstractConstantEntityManagerTest<Payment
         paymentMethodManager = new PaymentMethodManager(
                 parameterFactory,
                 dao,
-                transformationFunctionService,
-                singleValueMap
-        );
+                transformationFunctionService);
     }
 
     @Test

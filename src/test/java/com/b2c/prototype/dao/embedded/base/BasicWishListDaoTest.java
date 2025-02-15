@@ -25,7 +25,7 @@ import com.b2c.prototype.modal.entity.post.Post;
 //import com.b2c.prototype.modal.entity.user.UserProfile;
 //import com.b2c.prototype.modal.entity.wishlist.Wishlist;
 //import com.b2c.prototype.util.CardUtil;
-//import com.tm.core.dao.identifier.EntityIdentifierDao;
+//import com.tm.core.process.dao.identifier.QueryService;
 //import com.tm.core.manager.finder.manager.EntityMappingManager;
 //import com.tm.core.manager.finder.manager.IEntityMappingManager;
 //import com.tm.core.manager.finder.table.EntityTable;
@@ -43,8 +43,8 @@ import com.b2c.prototype.modal.entity.post.Post;
 //    public static void setup() {
 //        IEntityMappingManager entityMappingManager = new EntityMappingManager();
 //        entityMappingManager.addEntityTable(new EntityTable(Wishlist.class, "wishlist"));
-//        entityIdentifierDao = new EntityIdentifierDao(entityMappingManager);
-//        dao = new BasicWishListDao(sessionFactory, entityIdentifierDao);
+//queryService = new QueryService(entityMappingManager);
+//        dao = new BasicWishListDao(sessionFactory, queryService);
 //    }
 //
 //    @BeforeEach

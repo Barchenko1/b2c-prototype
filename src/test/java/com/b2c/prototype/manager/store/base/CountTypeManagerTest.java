@@ -34,9 +34,7 @@ public class CountTypeManagerTest extends AbstractConstantEntityManagerTest<Coun
         countTypeManager = new CountTypeManager(
                 parameterFactory,
                 dao,
-                transformationFunctionService,
-                singleValueMap
-        );
+                transformationFunctionService);
     }
 
     @Test

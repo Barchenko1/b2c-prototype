@@ -1,6 +1,6 @@
 package com.b2c.prototype.service.common;
 
-import com.tm.core.dao.common.IEntityDao;
+import com.tm.core.process.dao.common.IEntityDao;
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
 import org.slf4j.Logger;

@@ -34,9 +34,7 @@ class CurrencyManagerTest extends AbstractConstantEntityManagerTest<Currency> {
         currencyManager = new CurrencyManager(
                 parameterFactory,
                 dao,
-                transformationFunctionService,
-                singleValueMap
-        );
+                transformationFunctionService);
     }
 
     @Test

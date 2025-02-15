@@ -2,12 +2,12 @@ package com.b2c.prototype.manager.option.base;
 
 import com.b2c.prototype.modal.dto.payload.OptionGroupOptionItemSetDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
-import com.b2c.prototype.service.scope.IConstantsScope;
+
 import com.b2c.prototype.dao.option.IOptionItemDao;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.query.IQueryService;
+import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
@@ -39,13 +39,11 @@ class OptionItemManagerTest {
     @Mock
     private IOptionItemDao optionItemDao;
     @Mock
-    private IQueryService queryService;
+    private ISearchService queryService;
     @Mock
     private ITransformationFunctionService transformationFunctionService;
     @Mock
     private ISupplierService supplierService;
-    @Mock
-    private IConstantsScope singleValueMap;
     @InjectMocks
     private OptionItemManager optionItemManager;
 
@@ -81,8 +79,6 @@ class OptionItemManagerTest {
 
         optionItemManager.saveUpdateOptionItemByArticularId(articularId, "", null);
 
-//        verify(singleValueMap).putEntity(OptionGroup.class, "value", optionItem.getOptionGroup());
-        verify(singleValueMap).putEntity(OptionItem.class, "value", optionItem.getValue());
     }
 
     @Test
@@ -103,8 +99,6 @@ class OptionItemManagerTest {
 
 //        optionItemManager.saveOptionItemSet("", optionGroupOptionItemSetDtoList);
 
-//        verify(singleValueMap).putEntity(OptionGroup.class, "value", newOptionItem.getOptionGroup());
-        verify(singleValueMap).putEntity(OptionItem.class, "optionName", newOptionItem);
     }
 
     @Test

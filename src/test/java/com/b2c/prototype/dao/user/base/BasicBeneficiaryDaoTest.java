@@ -5,8 +5,8 @@ import com.b2c.prototype.dao.order.base.BasicBeneficiaryDao;
 import com.b2c.prototype.modal.entity.order.Beneficiary;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
-import com.tm.core.dao.common.AbstractEntityDao;
-import com.tm.core.dao.identifier.EntityIdentifierDao;
+import com.tm.core.process.dao.common.AbstractEntityDao;
+import com.tm.core.process.dao.identifier.QueryService;
 import com.tm.core.finder.manager.EntityMappingManager;
 import com.tm.core.finder.manager.IEntityMappingManager;
 import com.tm.core.finder.parameter.Parameter;
@@ -45,8 +45,8 @@ class BasicBeneficiaryDaoTest extends AbstractCustomEntityDaoTest {
     public static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(Beneficiary.class, "beneficiary"));
-        entityIdentifierDao = new EntityIdentifierDao(entityMappingManager);
-        dao = new BasicBeneficiaryDao(sessionFactory, entityIdentifierDao);
+        queryService = new QueryService(entityMappingManager);
+        dao = new BasicBeneficiaryDao(sessionFactory, queryService);
     }
 
     @BeforeEach

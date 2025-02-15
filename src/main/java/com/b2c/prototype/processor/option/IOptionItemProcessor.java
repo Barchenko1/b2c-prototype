@@ -5,10 +5,11 @@ import com.b2c.prototype.modal.dto.payload.SingleOptionItemDto;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface IOptionItemProcessor {
     void saveUpdateOptionItem(Map<String, String> requestParams, SingleOptionItemDto optionItemDto);
-    void saveOptionItemSet(Map<String, String> requestParams, List<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDto);
+    void saveOptionItemSet(Map<String, String> requestParams, Set<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDto);
 
     void deleteOptionItem(Map<String, String> requestParams);
 

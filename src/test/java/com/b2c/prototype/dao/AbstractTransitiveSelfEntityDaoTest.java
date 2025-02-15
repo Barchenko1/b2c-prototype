@@ -6,9 +6,9 @@ import com.github.database.rider.core.api.dataset.YamlDataSet;
 import com.github.database.rider.core.configuration.DataSetConfig;
 import com.github.database.rider.core.dataset.DataSetExecutorImpl;
 import com.github.database.rider.junit5.api.DBRider;
-import com.tm.core.dao.identifier.IEntityIdentifierDao;
-import com.tm.core.dao.transitive.AbstractTransitiveSelfEntityDao;
-import com.tm.core.dao.transitive.ITransitiveSelfEntityDao;
+import com.tm.core.process.dao.identifier.IQueryService;
+import com.tm.core.process.dao.transitive.AbstractTransitiveSelfEntityDao;
+import com.tm.core.process.dao.transitive.ITransitiveSelfEntityDao;
 import com.tm.core.modal.TransitiveSelfEntity;
 import com.tm.core.finder.parameter.Parameter;
 import com.tm.core.util.TransitiveSelfEnum;
@@ -57,7 +57,7 @@ public abstract class AbstractTransitiveSelfEntityDaoTest {
 
     protected static SessionFactory sessionFactory;
 
-    protected static IEntityIdentifierDao entityIdentifierDao;
+    protected static IQueryService queryService;
 
     private static ConnectionHolder connectionHolder;
     private static DataSetExecutor executor;
@@ -91,7 +91,7 @@ public abstract class AbstractTransitiveSelfEntityDaoTest {
         try {
             Field entityIdentifierDaoField = AbstractTransitiveSelfEntityDao.class.getDeclaredField("entityIdentifierDao");
             entityIdentifierDaoField.setAccessible(true);
-            entityIdentifierDaoField.set(dao, entityIdentifierDao);
+            entityIdentifierDaoField.set(dao, queryService);
 
             Field sessionFactoryField = AbstractTransitiveSelfEntityDao.class.getDeclaredField("sessionFactory");
             sessionFactoryField.setAccessible(true);

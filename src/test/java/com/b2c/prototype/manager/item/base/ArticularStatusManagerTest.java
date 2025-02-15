@@ -34,8 +34,7 @@ class ArticularStatusManagerTest extends AbstractConstantEntityManagerTest<Artic
         itemStatusManager = new ItemStatusManager(
                 parameterFactory,
                 dao,
-                transformationFunctionService,
-                singleValueMap
+                transformationFunctionService
         );
     }
 

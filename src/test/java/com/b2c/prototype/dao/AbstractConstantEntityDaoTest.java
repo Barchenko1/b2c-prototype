@@ -3,12 +3,12 @@ package com.b2c.prototype.dao;
 import com.b2c.prototype.DataBaseLoader;
 import com.github.database.rider.core.api.connection.ConnectionHolder;
 import com.github.database.rider.core.api.dataset.DataSetExecutor;
-import com.tm.core.dao.common.AbstractEntityDao;
-import com.tm.core.dao.common.IEntityDao;
+import com.tm.core.process.dao.common.AbstractEntityDao;
+import com.tm.core.process.dao.common.IEntityDao;
 import com.tm.core.finder.parameter.Parameter;
 import com.github.database.rider.core.dataset.DataSetExecutorImpl;
 import com.github.database.rider.junit5.api.DBRider;
-import com.tm.core.dao.identifier.IEntityIdentifierDao;
+import com.tm.core.process.dao.identifier.IQueryService;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -46,7 +46,7 @@ public abstract class AbstractConstantEntityDaoTest extends DataBaseLoader {
 
     protected static SessionFactory sessionFactory;
 
-    protected static IEntityIdentifierDao entityIdentifierDao;
+    protected static IQueryService queryService;
     protected static ConnectionHolder connectionHolder;
     private static DataSetExecutor executor;
 

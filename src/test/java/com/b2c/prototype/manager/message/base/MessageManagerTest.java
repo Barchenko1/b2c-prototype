@@ -1,8 +1,7 @@
 package com.b2c.prototype.manager.message.base;
 
-import com.b2c.prototype.service.scope.IConstantsScope;
+
 import com.b2c.prototype.dao.message.IMessageDao;
-import com.b2c.prototype.manager.message.base.MessageManager;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.delete.MultipleFieldsSearchDtoDelete;
 import com.b2c.prototype.modal.dto.payload.MessageDto;
@@ -14,7 +13,7 @@ import com.b2c.prototype.modal.entity.message.MessageBox;
 import com.b2c.prototype.modal.entity.message.MessageStatus;
 import com.b2c.prototype.modal.entity.message.MessageType;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.query.IQueryService;
+import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
@@ -47,13 +46,11 @@ class MessageManagerTest {
     @Mock
     private IMessageDao messageDao;
     @Mock
-    private IQueryService queryService;
+    private ISearchService queryService;
     @Mock
     private ITransformationFunctionService transformationFunctionService;
     @Mock
     private ISupplierService supplierService;
-    @Mock
-    private IConstantsScope singleValueMap;
     @InjectMocks
     private MessageManager messageManager;
 

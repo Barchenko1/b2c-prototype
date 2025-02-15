@@ -7,8 +7,8 @@ import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.modal.entity.item.ItemType;
 import com.b2c.prototype.modal.entity.price.Currency;
-import com.tm.core.dao.common.AbstractEntityDao;
-import com.tm.core.dao.identifier.EntityIdentifierDao;
+import com.tm.core.process.dao.common.AbstractEntityDao;
+import com.tm.core.process.dao.identifier.QueryService;
 import com.tm.core.finder.manager.EntityMappingManager;
 import com.tm.core.finder.manager.IEntityMappingManager;
 import com.tm.core.finder.parameter.Parameter;
@@ -47,8 +47,8 @@ class BasicItemDataDaoTest extends AbstractCustomEntityDaoTest {
     static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(ItemData.class, "item_data"));
-        entityIdentifierDao = new EntityIdentifierDao(entityMappingManager);
-        dao = new BasicItemDataDao(sessionFactory, entityIdentifierDao);
+queryService = new QueryService(entityMappingManager);
+        dao = new BasicItemDataDao(sessionFactory, queryService);
     }
 
     @BeforeEach

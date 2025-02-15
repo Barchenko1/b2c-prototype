@@ -1,8 +1,7 @@
 package com.b2c.prototype.manager.userprofile.basic;
 
-import com.b2c.prototype.service.scope.IConstantsScope;
+
 import com.b2c.prototype.dao.user.IContactPhoneDao;
-import com.b2c.prototype.manager.userprofile.basic.ContactPhoneManager;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.searchfield.BeneficiarySearchFieldOrderNumberDto;
 import com.b2c.prototype.modal.dto.payload.ContactPhoneDto;
@@ -14,7 +13,7 @@ import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.modal.entity.user.UserProfile;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.query.IQueryService;
+import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
@@ -44,13 +43,11 @@ class ContactPhoneManagerTest {
     @Mock
     private IContactPhoneDao contactPhoneDao;
     @Mock
-    private IQueryService queryService;
+    private ISearchService queryService;
     @Mock
     private ITransformationFunctionService transformationFunctionService;
     @Mock
     private ISupplierService supplierService;
-    @Mock
-    private IConstantsScope singleValueMap;
     @InjectMocks
     private ContactPhoneManager contactPhoneManager;
 
@@ -76,7 +73,6 @@ class ContactPhoneManagerTest {
         UserProfile userProfile = mock(UserProfile.class);
         ContactInfo contactInfo = mock(ContactInfo.class);
 
-        when(singleValueMap.getEntity(CountryPhoneCode.class, "code", "US")).thenReturn(getCountryPhoneCode());
         when(queryService.getEntity(eq(UserProfile.class), any(Supplier.class)))
                 .thenReturn(userProfile);
         when(transformationFunctionService.getEntity(
@@ -119,7 +115,6 @@ class ContactPhoneManagerTest {
         Beneficiary beneficiary = mock(Beneficiary.class);
         List<Beneficiary> orderItemList = List.of(beneficiary);
 
-        when(singleValueMap.getEntity(CountryPhoneCode.class, "code", "US")).thenReturn(getCountryPhoneCode());
         when(queryService.getEntity(eq(OrderArticularItem.class), any(Supplier.class)))
                 .thenReturn(orderItemDataOption);
         when(transformationFunctionService.getEntity(

@@ -39,8 +39,9 @@ public class OptionItem extends AbstractConstantEntity {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private OptionGroup optionGroup;
-    @ManyToMany(mappedBy = "optionItems", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToMany(mappedBy = "optionItems", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @Builder.Default
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<ArticularItem> articularItems = new HashSet<>();
 }

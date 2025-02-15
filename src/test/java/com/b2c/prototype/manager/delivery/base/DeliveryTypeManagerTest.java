@@ -34,9 +34,7 @@ class DeliveryTypeManagerTest extends AbstractConstantEntityManagerTest<Delivery
         deliveryTypeManager = new DeliveryTypeManager(
                 parameterFactory,
                 dao,
-                transformationFunctionService,
-                singleValueMap
-        );
+                transformationFunctionService);
     }
 
     @Test

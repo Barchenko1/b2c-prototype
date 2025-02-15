@@ -9,7 +9,7 @@ import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
-import com.tm.core.dao.identifier.EntityIdentifierDao;
+import com.tm.core.process.dao.identifier.QueryService;
 import com.tm.core.finder.manager.EntityMappingManager;
 import com.tm.core.finder.manager.IEntityMappingManager;
 import com.tm.core.finder.table.EntityTable;
@@ -26,8 +26,8 @@ class BasicArticularItemQuantityDaoTest extends AbstractConstantEntityDaoTest {
     public static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(ArticularItemQuantity.class, "articular_item_quantity"));
-        entityIdentifierDao = new EntityIdentifierDao(entityMappingManager);
-        dao = new BasicItemDataOptionQuantityDao(sessionFactory, entityIdentifierDao);
+        queryService = new QueryService(entityMappingManager);
+        dao = new BasicItemDataOptionQuantityDao(sessionFactory, queryService);
     }
 
     @BeforeEach
@@ -90,12 +90,18 @@ class BasicArticularItemQuantityDaoTest extends AbstractConstantEntityDaoTest {
                 .value("Size")
                 .label("Size")
                 .build();
-        OptionItem optionItem = OptionItem.builder()
+        OptionItem optionItem1 = OptionItem.builder()
                 .id(1L)
                 .value("L")
                 .label("L")
-                .optionGroup(optionGroup)
                 .build();
+        OptionItem optionItem2 = OptionItem.builder()
+                .id(2L)
+                .value("M")
+                .label("M")
+                .build();
+        optionGroup.addOptionItem(optionItem1);
+        optionGroup.addOptionItem(optionItem2);
         Price price1 = Price.builder()
                 .id(1L)
                 .amount(100)
@@ -115,15 +121,18 @@ class BasicArticularItemQuantityDaoTest extends AbstractConstantEntityDaoTest {
                 .currency(currency)
                 .build();
 
-        return ArticularItem.builder()
+        ArticularItem articularItem = ArticularItem.builder()
                 .id(1L)
                 .articularId("1")
                 .dateOfCreate(10000)
-                .optionItems(Set.of(optionItem))
                 .articularId("1")
                 .fullPrice(price1)
                 .discount(discount)
                 .totalPrice(price2)
                 .build();
+
+        articularItem.addOptionItem(optionItem1);
+        articularItem.addOptionItem(optionItem2);
+        return articularItem;
     }
 }

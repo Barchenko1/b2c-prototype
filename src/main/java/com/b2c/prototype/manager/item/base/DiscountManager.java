@@ -9,8 +9,9 @@ import com.b2c.prototype.service.common.EntityOperationManager;
 import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.item.IDiscountManager;
-import com.b2c.prototype.service.query.IQueryService;
+import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
+import com.tm.core.process.dao.identifier.IQueryService;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,15 +24,18 @@ import static com.b2c.prototype.util.Constant.ITEM_DATA_OPTION_BY_DISCOUNT_CHAR_
 public class DiscountManager implements IDiscountManager {
 
     private final IEntityOperationManager entityOperationDao;
+    private final ISearchService searchService;
     private final IQueryService queryService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
 
     public DiscountManager(IDiscountDao discountDao,
+                           ISearchService searchService,
                            IQueryService queryService,
                            ITransformationFunctionService transformationFunctionService,
                            ISupplierService supplierService) {
         this.entityOperationDao = new EntityOperationManager(discountDao);
+        this.searchService = searchService;
         this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
@@ -39,8 +43,10 @@ public class DiscountManager implements IDiscountManager {
 
     @Override
     public void saveDiscount(DiscountDto discountDto) {
-        entityOperationDao.saveEntity(
-                supplierService.getSupplier(Discount.class, discountDto));
+        entityOperationDao.executeConsumer(session -> {
+            Discount discount = transformationFunctionService.getEntity(session, Discount.class, discountDto);
+            session.merge(discount);
+        });
     }
 
     @Override
@@ -50,14 +56,14 @@ public class DiscountManager implements IDiscountManager {
                 throw new RuntimeException("Discount code is null");
             }
             ArticularItem articularItem = queryService.getEntity(
+                    session,
                     ArticularItem.class,
-                    supplierService.parameterStringSupplier(ARTICULAR_ID, articularId)
-            );
+                    supplierService.parameterStringSupplier(ARTICULAR_ID, articularId).get());
 
             Discount discount = (Discount) Optional.ofNullable(discountDto.getCharSequenceCode())
                     .flatMap(code -> entityOperationDao.getOptionalEntity(
                             supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, code)))
-                    .orElseGet(() -> transformationFunctionService.getEntity(Discount.class, discountDto));
+                    .orElseGet(() -> transformationFunctionService.getEntity(session, Discount.class, discountDto));
 
             if (articularItem.getDiscount() != null) {
                 discount.setId(articularItem.getDiscount().getId());
@@ -74,7 +80,7 @@ public class DiscountManager implements IDiscountManager {
             if (discountDto.getCharSequenceCode() == null) {
                 throw new RuntimeException("Discount code is null");
             }
-            Discount newDiscount = transformationFunctionService.getEntity(Discount.class, discountDto);
+            Discount newDiscount = transformationFunctionService.getEntity(session, Discount.class, discountDto);
             Discount oldDiscount = entityOperationDao.getEntity(
                     supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, charSequenceCode));
             newDiscount.setId(oldDiscount.getId());
@@ -85,7 +91,7 @@ public class DiscountManager implements IDiscountManager {
     @Override
     public void changeDiscountStatus(DiscountStatusDto discountStatusDto) {
         entityOperationDao.executeConsumer(session -> {
-            Discount currencyDiscount = queryService.getEntity(
+            Discount currencyDiscount = searchService.getEntity(
                     Discount.class,
                     supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, discountStatusDto.getCharSequenceCode()));
             currencyDiscount.setActive(discountStatusDto.isActive());
@@ -96,7 +102,7 @@ public class DiscountManager implements IDiscountManager {
     @Override
     public void deleteDiscount(String charSequenceCode) {
         entityOperationDao.executeConsumer(session -> {
-            List<ArticularItem> articularItemList = queryService.getEntityListNamedQuery(
+            List<ArticularItem> articularItemList = searchService.getEntityListNamedQuery(
                     ArticularItem.class,
                     ITEM_DATA_OPTION_BY_DISCOUNT_CHAR_SEQUENCE_CODE,
                     supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, charSequenceCode));
@@ -111,7 +117,7 @@ public class DiscountManager implements IDiscountManager {
 
     @Override
     public DiscountDto getDiscount(String charSequenceCode) {
-        return queryService.getEntityListNamedQueryDto(
+        return searchService.getEntityListNamedQueryDto(
                 ArticularItem.class,
                 ITEM_DATA_OPTION_BY_DISCOUNT_CHAR_SEQUENCE_CODE,
                 supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, charSequenceCode),
@@ -120,7 +126,7 @@ public class DiscountManager implements IDiscountManager {
 
     @Override
     public Optional<DiscountDto> getOptionalDiscount(String charSequenceCode) {
-        return queryService.getOptionalEntityNamedQueryDto(
+        return searchService.getOptionalEntityNamedQueryDto(
                 ArticularItem.class,
                 ITEM_DATA_OPTION_BY_DISCOUNT_CHAR_SEQUENCE_CODE,
                 supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, charSequenceCode),
@@ -129,7 +135,7 @@ public class DiscountManager implements IDiscountManager {
 
     @Override
     public List<DiscountDto> getDiscounts() {
-        return queryService.getEntityListNamedQueryDtoList(
+        return searchService.getEntityListNamedQueryDtoList(
                 ArticularItem.class,
                 ITEM_DATA_OPTION_BY_DISCOUNT,
                 transformationFunctionService.getCollectionTransformationCollectionFunction(ArticularItem.class, DiscountDto.class, "list"));

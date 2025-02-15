@@ -7,8 +7,8 @@ import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
-import com.tm.core.dao.common.AbstractEntityDao;
-import com.tm.core.dao.identifier.EntityIdentifierDao;
+import com.tm.core.process.dao.common.AbstractEntityDao;
+import com.tm.core.process.dao.identifier.QueryService;
 import com.tm.core.finder.manager.EntityMappingManager;
 import com.tm.core.finder.manager.IEntityMappingManager;
 import com.tm.core.finder.parameter.Parameter;
@@ -48,8 +48,8 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
     static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(ArticularItem.class, "articular_item"));
-        entityIdentifierDao = new EntityIdentifierDao(entityMappingManager);
-        dao = new BasicArticularItemDao(sessionFactory, entityIdentifierDao);
+        queryService = new QueryService(entityMappingManager);
+        dao = new BasicArticularItemDao(sessionFactory, queryService);
     }
 
     @BeforeEach
@@ -58,8 +58,8 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
             connection.setAutoCommit(false);
             Statement statement = connection.createStatement();
             statement.execute("DELETE FROM articular_item_option_item");
-            statement.execute("DELETE FROM articular_item");
             statement.execute("DELETE FROM option_item");
+            statement.execute("DELETE FROM articular_item");
             connection.commit();
         } catch (Exception e) {
             throw new RuntimeException("Failed to clean table: articular_item", e);
@@ -125,12 +125,18 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
                 .value("Size")
                 .label("Size")
                 .build();
-        OptionItem optionItem = OptionItem.builder()
+        OptionItem optionItem1 = OptionItem.builder()
                 .id(1L)
                 .value("L")
                 .label("L")
-                .optionGroup(optionGroup)
                 .build();
+        OptionItem optionItem2 = OptionItem.builder()
+                .id(2L)
+                .value("M")
+                .label("M")
+                .build();
+        optionGroup.addOptionItem(optionItem1);
+        optionGroup.addOptionItem(optionItem2);
         Price price1 = Price.builder()
                 .id(1L)
                 .amount(100)
@@ -150,14 +156,17 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
                 .currency(currency)
                 .build();
 
-        return ArticularItem.builder()
+        ArticularItem articularItem = ArticularItem.builder()
                 .articularId("1")
                 .dateOfCreate(10000)
-                .optionItems(Set.of(optionItem))
                 .fullPrice(price1)
                 .discount(discount)
                 .totalPrice(price2)
                 .build();
+        articularItem.addOptionItem(optionItem1);
+        articularItem.addOptionItem(optionItem2);
+
+        return articularItem;
     }
 
     private ArticularItem prepareToUpdateItemDataOption() {
@@ -171,12 +180,20 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
                 .value("Size")
                 .label("Size")
                 .build();
-        OptionItem optionItem = OptionItem.builder()
+        OptionItem optionItem1 = OptionItem.builder()
                 .id(1L)
                 .value("L")
                 .label("L")
                 .optionGroup(optionGroup)
                 .build();
+        OptionItem optionItem2 = OptionItem.builder()
+                .id(2L)
+                .value("M")
+                .label("M")
+                .optionGroup(optionGroup)
+                .build();
+        optionGroup.addOptionItem(optionItem1);
+        optionGroup.addOptionItem(optionItem2);
         Price price1 = Price.builder()
                 .id(1L)
                 .amount(100)
@@ -196,16 +213,19 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
                 .currency(currency)
                 .build();
 
-        return ArticularItem.builder()
+        ArticularItem articularItem = ArticularItem.builder()
                 .id(1L)
                 .articularId("1")
                 .dateOfCreate(10000)
-                .optionItems(Set.of(optionItem))
                 .articularId("1")
                 .fullPrice(price1)
                 .discount(discount)
                 .totalPrice(price2)
                 .build();
+
+        articularItem.addOptionItem(optionItem1);
+        articularItem.addOptionItem(optionItem2);
+        return articularItem;
     }
 
     void checkItem(ArticularItem expectedArticularItem, ArticularItem actualArticularItem) {

@@ -34,9 +34,7 @@ class ItemTypeManagerTest extends AbstractConstantEntityManagerTest<ItemType> {
         itemTypeManager = new ItemTypeManager(
                 parameterFactory,
                 dao,
-                transformationFunctionService,
-                singleValueMap
-        );
+                transformationFunctionService);
     }
 
     @Test

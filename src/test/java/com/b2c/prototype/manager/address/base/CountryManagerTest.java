@@ -35,9 +35,7 @@ class CountryManagerTest extends AbstractConstantEntityManagerTest<Country> {
         countryManager = new CountryManager(
                 parameterFactory,
                 dao,
-                transformationFunctionService,
-                singleValueMap
-        );
+                transformationFunctionService);
     }
 
     @Test

@@ -4,9 +4,8 @@ import com.b2c.prototype.dao.AbstractCustomEntityDaoTest;
 import com.b2c.prototype.modal.entity.item.Item;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
-import com.b2c.prototype.modal.entity.order.Beneficiary;
-import com.tm.core.dao.common.AbstractEntityDao;
-import com.tm.core.dao.identifier.EntityIdentifierDao;
+import com.tm.core.process.dao.common.AbstractEntityDao;
+import com.tm.core.process.dao.identifier.QueryService;
 import com.tm.core.finder.manager.EntityMappingManager;
 import com.tm.core.finder.manager.IEntityMappingManager;
 import com.tm.core.finder.parameter.Parameter;
@@ -43,8 +42,8 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
 
     @BeforeAll
     public static void setup() {
-        entityIdentifierDao = new EntityIdentifierDao(getEntityMappingManager());
-        dao = new BasicOptionItemDao(sessionFactory, entityIdentifierDao);
+        queryService = new QueryService(getEntityMappingManager());
+        dao = new BasicOptionItemDao(sessionFactory, queryService);
     }
 
     @BeforeEach
@@ -106,12 +105,13 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
                 .label("Size")
                 .build();
 
-        return OptionItem.builder()
+        OptionItem optionItem = OptionItem.builder()
                 .id(1L)
-                .optionGroup(optionGroup)
                 .value("XL")
                 .label("XL")
                 .build();
+        optionGroup.addOptionItem(optionItem);
+        return optionGroup.getOptionItems().get(0);
     }
 
     private void checkOptionItem(OptionItem expectedOptionItem, OptionItem actualOptionItem) {
@@ -148,7 +148,7 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
         loadDataSet("/datasets/option/option_item/emptyOptionItemWithOptionGroupDataSet.yml");
         OptionItem optionItem = prepareToSaveOptionItem();
 
-        dao.persistEntity(optionItem);
+        dao.mergeEntity(optionItem);
         verifyExpectedData("/datasets/option/option_item/saveOptionItemDataSet.yml");
     }
 
@@ -186,7 +186,7 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
         loadDataSet("/datasets/option/option_item/emptyOptionItemWithOptionGroupDataSet.yml");
         Consumer<Session> consumer = (Session s) -> {
             OptionItem optionItem = prepareToSaveOptionItem();
-            s.persist(optionItem);
+            s.merge(optionItem);
         };
 
         dao.executeConsumer(consumer);

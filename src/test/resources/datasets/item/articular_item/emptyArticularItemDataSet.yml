@@ -2,7 +2,6 @@ brand:
   - id: 1
     value: "Hermes"
     label: "Hermes"
-
 item_type:
   - id: 1
     value: "Clothes"
@@ -43,5 +42,4 @@ item_data:
     item_id: 123
     brand_id: 1
     itemtype_id: 1
-    
 articular_item: []

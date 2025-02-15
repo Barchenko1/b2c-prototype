@@ -1,9 +1,9 @@
 package com.b2c.prototype.manager;
 
-import com.b2c.prototype.service.scope.IConstantsScope;
+
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.tm.core.dao.common.IEntityDao;
+import com.tm.core.process.dao.common.IEntityDao;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.finder.parameter.Parameter;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,8 +24,6 @@ public abstract class AbstractConstantEntityManagerTest<E> {
     @Mock
     protected IEntityDao dao;
     @Mock
-    protected IConstantsScope singleValueMap;
-    @Mock
     protected ITransformationFunctionService transformationFunctionService;
 
     @BeforeEach
@@ -35,24 +33,16 @@ public abstract class AbstractConstantEntityManagerTest<E> {
 
     protected void verifySaveEntity(E entity) {
         verify(dao).persistEntity(entity);
-        verify(singleValueMap).putEntity(entity.getClass(), VALUE, entity);
     }
 
     protected void verifyUpdateEntity(E entity, String newValue) {
         Parameter parameter = parameterFactory.createStringParameter(VALUE, "testValue");
         verify(dao).findEntityAndUpdate(entity, parameter);
-        verify(singleValueMap).putRemoveEntity(
-                entity.getClass(),
-                "testValue",
-                newValue,
-                entity
-        );
     }
 
     protected void verifyDeleteEntity(String value) {
         Parameter parameter = parameterFactory.createStringParameter(VALUE, value);
         verify(dao).findEntityAndDelete(parameter);
-        verify(singleValueMap).removeEntity(any(), eq(value));
     }
 
     protected ConstantPayloadDto getResponseOneFieldEntityDto() {

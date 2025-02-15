@@ -1,16 +1,15 @@
 package com.b2c.prototype.manager.store.base;
 
 import com.b2c.prototype.modal.entity.item.ArticularItem;
-import com.b2c.prototype.service.scope.IConstantsScope;
+
 import com.b2c.prototype.dao.store.IStoreDao;
-import com.b2c.prototype.manager.store.base.StoreManager;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.payload.StoreDto;
 import com.b2c.prototype.modal.dto.response.ResponseStoreDto;
 import com.b2c.prototype.modal.entity.store.CountType;
 import com.b2c.prototype.modal.entity.store.Store;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.query.IQueryService;
+import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
@@ -43,13 +42,11 @@ class StoreManagerTest {
     @Mock
     private IStoreDao storeDao;
     @Mock
-    private IQueryService queryService;
+    private ISearchService queryService;
     @Mock
     private ITransformationFunctionService transformationFunctionService;
     @Mock
     private ISupplierService supplierService;
-    @Mock
-    private IConstantsScope singleValueMap;
     @InjectMocks
     private StoreManager storeManager;
 
@@ -72,8 +69,6 @@ class StoreManagerTest {
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(ArticularItem.class, parameterSupplier))
                 .thenReturn(articularItem);
-        when(singleValueMap.getEntity(CountType.class, "value", storeDto.getCountType()))
-                .thenReturn(getCountType());
 
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -105,8 +100,6 @@ class StoreManagerTest {
                 .thenReturn(parameterSupplier);
         when(queryService.getQueryEntity(query, parameterSupplier))
                 .thenReturn(store);
-        when(singleValueMap.getEntity(CountType.class, "value", storeDto.getCountType()))
-                .thenReturn(getCountType());
 
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);

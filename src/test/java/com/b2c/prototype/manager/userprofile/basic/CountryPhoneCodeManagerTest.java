@@ -33,9 +33,7 @@ class CountryPhoneCodeManagerTest extends AbstractConstantEntityManagerTest<Coun
         countryPhoneCodeManager = new CountryPhoneCodeManager(
                 parameterFactory,
                 dao,
-                transformationFunctionService,
-                singleValueMap
-        );
+                transformationFunctionService);
     }
 
     @Test

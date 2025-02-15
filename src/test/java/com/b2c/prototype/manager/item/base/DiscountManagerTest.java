@@ -1,7 +1,6 @@
 package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.dao.item.IDiscountDao;
-import com.b2c.prototype.manager.item.base.DiscountManager;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.payload.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.DiscountStatusDto;
@@ -9,7 +8,7 @@ import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.query.IQueryService;
+import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
@@ -47,7 +46,7 @@ class DiscountManagerTest {
     @Mock
     private IDiscountDao discountDao;
     @Mock
-    private IQueryService queryService;
+    private ISearchService queryService;
     @Mock
     private ITransformationFunctionService transformationFunctionService;
     @Mock
@@ -181,11 +180,11 @@ class DiscountManagerTest {
         Supplier<Parameter> parameterSupplier = () -> mockParameter;
         when(supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, dto.getCharSequenceCode()))
                 .thenReturn(parameterSupplier);
-        when(queryService.getNamedQueryEntity(
-                eq(ArticularItem.class),
-                anyString(),
-                eq(parameterSupplier))
-        ).thenReturn(List.of(mockArticularItem));
+//        when(queryService.getNamedQueryEntity(
+//                eq(ArticularItem.class),
+//                anyString(),
+//                eq(parameterSupplier))
+//        ).thenReturn(List.of(mockArticularItem));
         when(mockArticularItem.getDiscount()).thenReturn(discount);
 
         doAnswer(invocation -> {

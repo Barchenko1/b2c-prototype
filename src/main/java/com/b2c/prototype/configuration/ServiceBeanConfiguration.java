@@ -1,8 +1,6 @@
 package com.b2c.prototype.configuration;
 
 import com.b2c.prototype.dao.address.ICountryDao;
-import com.b2c.prototype.service.scope.ConstantsScope;
-import com.b2c.prototype.service.scope.IConstantsScope;
 import com.b2c.prototype.dao.delivery.IDeliveryTypeDao;
 import com.b2c.prototype.dao.item.IBrandDao;
 import com.b2c.prototype.dao.item.IDiscountDao;
@@ -84,7 +82,7 @@ import com.b2c.prototype.processor.order.IOrderProcessor;
 import com.b2c.prototype.processor.item.ArticularItemProcessor;
 import com.b2c.prototype.processor.item.ItemDataProcessor;
 import com.b2c.prototype.processor.order.OrderProcessor;
-import com.b2c.prototype.service.query.IQueryService;
+import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.manager.rating.IRatingManager;
 import com.b2c.prototype.manager.rating.base.RatingManager;
 import com.b2c.prototype.manager.store.base.CountTypeManager;
@@ -115,14 +113,12 @@ import com.b2c.prototype.gateway.IRestClient;
 import com.b2c.prototype.gateway.RestClient;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import com.b2c.prototype.service.supplier.SupplierService;
-import com.tm.core.dao.query.ISearchHandler;
+import com.tm.core.process.dao.identifier.IQueryService;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.finder.factory.ParameterFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.Map;
 
 @Configuration
 public class ServiceBeanConfiguration {
@@ -147,21 +143,15 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public IConstantsScope singleValueMap(Map<Class<?>, Map<?, ?>> classEntityMap,
-                                          ISearchHandler searchHandler) {
-        return new ConstantsScope(classEntityMap, searchHandler);
-    }
-
-    @Bean
     public ITransformationFunctionService transformationFunctionService() {
         return new TransformationFunctionService();
     }
 
     @Bean
     public ISupplierService supplierService(IParameterFactory parameterFactory,
-                                            IQueryService queryService,
+                                            ISearchService searchService,
                                             ITransformationFunctionService transformationFunctionService) {
-        return new SupplierService(parameterFactory, queryService, transformationFunctionService);
+        return new SupplierService(parameterFactory, searchService, transformationFunctionService);
     }
 
     @Bean
@@ -173,100 +163,86 @@ public class ServiceBeanConfiguration {
 
     @Bean
     public IBrandManager brandManager(IBrandDao brandDao,
-                                      ITransformationFunctionService transformationFunctionService,
-                                      IConstantsScope singleValueMap) {
-        return new BrandManager(parameterFactory(), brandDao, transformationFunctionService, singleValueMap);
+                                      ITransformationFunctionService transformationFunctionService) {
+        return new BrandManager(parameterFactory(), brandDao, transformationFunctionService);
     }
 
     @Bean
     public ICountTypeManager countTypeManager(ICountTypeDao countTypeDao,
-                                              ITransformationFunctionService transformationFunctionService,
-                                              IConstantsScope singleValueMap) {
-        return new CountTypeManager(parameterFactory(), countTypeDao, transformationFunctionService, singleValueMap);
+                                              ITransformationFunctionService transformationFunctionService) {
+        return new CountTypeManager(parameterFactory(), countTypeDao, transformationFunctionService);
     }
 
     @Bean
     public ICountryPhoneCodeManager countryPhoneCodeManager(ICountryPhoneCodeDao countryPhoneCodeDao,
-                                                            ITransformationFunctionService transformationFunctionService,
-                                                            IConstantsScope singleValueMap) {
-        return new CountryPhoneCodeManager(parameterFactory(), countryPhoneCodeDao, transformationFunctionService, singleValueMap);
+                                                            ITransformationFunctionService transformationFunctionService) {
+        return new CountryPhoneCodeManager(parameterFactory(), countryPhoneCodeDao, transformationFunctionService);
     }
 
     @Bean
     public ICountryManager countryManager(ICountryDao countryDao,
-                                          ITransformationFunctionService transformationFunctionService,
-                                          IConstantsScope singleValueMap) {
-        return new CountryManager(parameterFactory(), countryDao, transformationFunctionService, singleValueMap);
+                                          ITransformationFunctionService transformationFunctionService) {
+        return new CountryManager(parameterFactory(), countryDao, transformationFunctionService);
     }
 
     @Bean
     public ICurrencyManager currencyManager(ICurrencyDao currencyDao,
-                                            ITransformationFunctionService transformationFunctionService,
-                                            IConstantsScope singleValueMap) {
-        return new CurrencyManager(parameterFactory(), currencyDao, transformationFunctionService, singleValueMap);
+                                            ITransformationFunctionService transformationFunctionService) {
+        return new CurrencyManager(parameterFactory(), currencyDao, transformationFunctionService);
     }
 
     @Bean
     public IDeliveryTypeManager deliveryTypeManager(IDeliveryTypeDao deliveryTypeDao,
-                                                    ITransformationFunctionService transformationFunctionService,
-                                                    IConstantsScope singleValueMap) {
-        return new DeliveryTypeManager(parameterFactory(), deliveryTypeDao, transformationFunctionService, singleValueMap);
+                                                    ITransformationFunctionService transformationFunctionService) {
+        return new DeliveryTypeManager(parameterFactory(), deliveryTypeDao, transformationFunctionService);
     }
 
     @Bean
     public IItemStatusManager itemStatusManager(IItemStatusDao itemStatusDao,
-                                                ITransformationFunctionService transformationFunctionService,
-                                                IConstantsScope singleValueMap) {
-        return new ItemStatusManager(parameterFactory(), itemStatusDao, transformationFunctionService, singleValueMap);
+                                                ITransformationFunctionService transformationFunctionService) {
+        return new ItemStatusManager(parameterFactory(), itemStatusDao, transformationFunctionService);
     }
 
     @Bean
     public IItemTypeManager itemTypeManager(IItemTypeDao itemTypeDao,
-                                            ITransformationFunctionService transformationFunctionService,
-                                            IConstantsScope singleValueMap) {
-        return new ItemTypeManager(parameterFactory(), itemTypeDao, transformationFunctionService, singleValueMap);
+                                            ITransformationFunctionService transformationFunctionService) {
+        return new ItemTypeManager(parameterFactory(), itemTypeDao, transformationFunctionService);
     }
 
     @Bean
     public IMessageStatusManager messageStatusManager(IMessageStatusDao messageStatusDao,
-                                                      ITransformationFunctionService transformationFunctionService,
-                                                      IConstantsScope constantsScope) {
-        return new MessageStatusManager(parameterFactory(), messageStatusDao, transformationFunctionService, constantsScope);
+                                                      ITransformationFunctionService transformationFunctionService) {
+        return new MessageStatusManager(parameterFactory(), messageStatusDao, transformationFunctionService);
     }
 
     @Bean
     public IMessageTypeManager messageTypeManager(IMessageTypeDao messageTypeDao,
-                                                  ITransformationFunctionService transformationFunctionService,
-                                                  IConstantsScope singleValueMap) {
-        return new MessageTypeManager(parameterFactory(), messageTypeDao, transformationFunctionService, singleValueMap);
+                                                  ITransformationFunctionService transformationFunctionService) {
+        return new MessageTypeManager(parameterFactory(), messageTypeDao, transformationFunctionService);
     }
 
     @Bean
     public IOptionGroupManager optionGroupManager(IOptionGroupDao optionGroupDao,
-                                                  ITransformationFunctionService transformationFunctionService,
-                                                  IConstantsScope singleValueMap) {
-        return new OptionGroupManager(parameterFactory(), optionGroupDao, transformationFunctionService, singleValueMap);
+                                                  ITransformationFunctionService transformationFunctionService) {
+        return new OptionGroupManager(parameterFactory(), optionGroupDao, transformationFunctionService);
     }
 
     @Bean
     public IOrderStatusManager orderStatusManager(IOrderStatusDao orderStatusDao,
-                                                  ITransformationFunctionService transformationFunctionService,
-                                                  IConstantsScope constantsScope) {
-        return new OrderStatusManager(parameterFactory(), orderStatusDao, transformationFunctionService, constantsScope);
+                                                  ITransformationFunctionService transformationFunctionService) {
+        return new OrderStatusManager(parameterFactory(), orderStatusDao, transformationFunctionService);
     }
 
     @Bean
     public IPaymentMethodManager paymentMethodManager(IPaymentMethodDao paymentMethodDao,
-                                                      ITransformationFunctionService transformationFunctionService,
-                                                      IConstantsScope singleValueMap) {
-        return new PaymentMethodManager(parameterFactory(), paymentMethodDao, transformationFunctionService, singleValueMap);
+                                                      ITransformationFunctionService transformationFunctionService) {
+        return new PaymentMethodManager(parameterFactory(), paymentMethodDao, transformationFunctionService);
     }
 
     @Bean
     public IRatingManager ratingManager(IRatingDao ratingDao,
-                                        ITransformationFunctionService transformationFunctionService,
-                                        IConstantsScope singleValueMap) {
-        return new RatingManager(parameterFactory(), ratingDao, transformationFunctionService, singleValueMap);
+                                        ITransformationFunctionService transformationFunctionService) {
+        return new RatingManager(parameterFactory(), ratingDao, transformationFunctionService);
     }
 
     @Bean
@@ -283,82 +259,84 @@ public class ServiceBeanConfiguration {
 
     @Bean
     public IContactInfoManager contactInfoManager(IContactInfoDao contactInfoDao,
-                                                  IQueryService queryService,
+                                                  ISearchService searchService,
                                                   ITransformationFunctionService transformationFunctionService,
                                                   ISupplierService supplierService) {
-        return new ContactInfoManager(contactInfoDao, queryService, transformationFunctionService, supplierService);
+        return new ContactInfoManager(contactInfoDao, searchService, transformationFunctionService, supplierService);
     }
 
     @Bean
     public IDiscountManager discountManager(IDiscountDao discountDao,
+                                            ISearchService searchService,
                                             IQueryService queryService,
                                             ITransformationFunctionService transformationFunctionService,
                                             ISupplierService supplierService) {
-        return new DiscountManager(discountDao, queryService, transformationFunctionService, supplierService);
+        return new DiscountManager(discountDao, searchService, queryService, transformationFunctionService, supplierService);
     }
 
     @Bean
     public IItemManager itemManager(IItemDao itemDao,
-                                    IQueryService queryService,
+                                    ISearchService searchService,
                                     ITransformationFunctionService transformationFunctionService,
                                     ISupplierService supplierService) {
-        return new ItemManager(itemDao, queryService, transformationFunctionService, supplierService);
+        return new ItemManager(itemDao, searchService, transformationFunctionService, supplierService);
     }
 
     @Bean
     public IItemDataManager itemDataManager(IItemDataDao itemDataDao,
                                             IQueryService queryService,
+                                            ISearchService searchService,
                                             ITransformationFunctionService transformationFunctionService,
                                             ISupplierService supplierService) {
-        return new ItemDataManager(itemDataDao, queryService, transformationFunctionService, supplierService);
+        return new ItemDataManager(itemDataDao, queryService, searchService, transformationFunctionService, supplierService);
     }
 
     @Bean
     public IArticularItemManager itemDataOptionManager(IItemDataOptionDao itemDataOptionDao,
-                                                       IQueryService queryService,
+                                                       ISearchService searchService,
                                                        ITransformationFunctionService transformationFunctionService,
                                                        ISupplierService supplierService) {
-        return new ArticularArticularItemManager(itemDataOptionDao, queryService, transformationFunctionService, supplierService);
+        return new ArticularArticularItemManager(itemDataOptionDao, searchService, transformationFunctionService, supplierService);
     }
 
     @Bean
     public IOptionItemManager optionItemManager(IOptionItemDao optionItemDao,
-                                                IQueryService queryService,
+                                                ISearchService searchService,
                                                 ITransformationFunctionService transformationFunctionService,
                                                 ISupplierService supplierService) {
-        return new OptionItemManager(optionItemDao, queryService, transformationFunctionService, supplierService);
+        return new OptionItemManager(optionItemDao, searchService, transformationFunctionService, supplierService);
     }
 
     @Bean
     public ICreditCardManager creditCardManager(ICreditCardDao cardDao,
-                                          IQueryService queryService,
+                                          ISearchService searchService,
                                           ITransformationFunctionService transformationFunctionService,
                                           ISupplierService supplierService) {
-        return new CreditCardManager(cardDao, queryService, transformationFunctionService, supplierService);
+        return new CreditCardManager(cardDao, searchService, transformationFunctionService, supplierService);
     }
 
     @Bean
     public IPaymentManager paymentManager(IPaymentDao paymentDao,
-                                          IQueryService queryService,
+                                          ISearchService searchService,
                                           ITransformationFunctionService transformationFunctionService,
                                           ISupplierService supplierService) {
-        return new PaymentManager(paymentDao, queryService, transformationFunctionService, supplierService);
+        return new PaymentManager(paymentDao, searchService, transformationFunctionService, supplierService);
     }
 
     @Bean
     public IAddressManager addressManager(IAddressDao addressDao,
-                                          IQueryService queryService,
+                                          ISearchService searchService,
                                           ITransformationFunctionService transformationFunctionService,
                                           ISupplierService supplierService) {
-        return new AddressManager(addressDao, queryService, transformationFunctionService, supplierService);
+        return new AddressManager(addressDao, searchService, transformationFunctionService, supplierService);
     }
 
     @Bean
     public IDeliveryManager deliveryManager(IDeliveryDao deliveryDao,
-                                            IQueryService queryService,
+                                            ISearchService searchService,
                                             ITransformationFunctionService transformationFunctionService,
                                             ISupplierService supplierService) {
-        return new DeliveryManager(deliveryDao, queryService, transformationFunctionService, supplierService);
+        return new DeliveryManager(deliveryDao, searchService, transformationFunctionService, supplierService);
     }
 
     @Bean
@@ -374,9 +352,8 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public ICategoryManager categoryManager(ICategoryDao categoryDao,
-                                            IConstantsScope singleValueMap) {
-        return new CategoryManager(categoryDao, singleValueMap);
+    public ICategoryManager categoryManager(ICategoryDao categoryDao) {
+        return new CategoryManager(categoryDao);
     }
 
     @Bean

@@ -17,14 +17,9 @@ import org.dbunit.dataset.SortedTable;
 import org.dbunit.dataset.filter.DefaultColumnFilter;
 import org.dbunit.operation.DatabaseOperation;
 
-import javax.sql.DataSource;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.Map;
 
 public class DataBaseLoader {
 
@@ -73,31 +68,5 @@ public class DataBaseLoader {
             throw new RuntimeException("Dataset comparison failed", e);
         }
     }
-
-//    protected void verifyExpectedDataDiscount(String dataSetPath) {
-//        DataSetConfig dataSetConfig = new DataSetConfig(dataSetPath);
-//        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(dataSetPath)) {
-//            IDataSet expectedDataSet = new YamlDataSet(inputStream);
-//
-//            ITable expectedTable = new SortedTable(expectedDataSet.getTable("DISCOUNT"), new String[]{"charSequenceCode"});
-//            ITable actualTable = new SortedTable(fetchActualTableFromDb("DISCOUNT"), new String[]{"charSequenceCode"});
-//
-//            Assertion.assertEquals(expectedTable, actualTable);
-//        } catch (Exception e) {
-//            throw new RuntimeException("Dataset comparison failed", e);
-//        }
-//    }
-//
-//    private ITable fetchActualTableFromDb(String tableName) {
-//        String query = "SELECT * FROM " + tableName + " ORDER BY id";
-//        try {
-//            IDatabaseConnection dbUnitConnection = executor.getRiderDataSource().getDBUnitConnection();
-//
-//            return dbUnitConnection.createQueryTable(tableName, query);
-//        } catch (SQLException | DataSetException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
 
 }

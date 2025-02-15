@@ -1,7 +1,6 @@
 package com.b2c.prototype.manager.review.base;
 
 import com.b2c.prototype.dao.review.IReviewDao;
-import com.b2c.prototype.manager.review.base.ReviewManager;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.payload.ReviewDto;
 import com.b2c.prototype.modal.dto.response.ResponseReviewDto;
@@ -11,7 +10,7 @@ import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.modal.entity.item.Rating;
 import com.b2c.prototype.modal.entity.review.Review;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.query.IQueryService;
+import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
@@ -45,7 +44,7 @@ class ReviewManagerTest {
     @Mock
     private IReviewDao reviewDao;
     @Mock
-    private IQueryService queryService;
+    private ISearchService queryService;
     @Mock
     private ITransformationFunctionService transformationFunctionService;
     @Mock

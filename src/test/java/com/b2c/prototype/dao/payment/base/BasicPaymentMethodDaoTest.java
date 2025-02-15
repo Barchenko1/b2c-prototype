@@ -3,7 +3,7 @@ package com.b2c.prototype.dao.payment.base;
 import com.b2c.prototype.dao.AbstractConstantEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
 import com.b2c.prototype.modal.entity.payment.PaymentMethod;
-import com.tm.core.dao.identifier.EntityIdentifierDao;
+import com.tm.core.process.dao.identifier.QueryService;
 import com.tm.core.finder.manager.EntityMappingManager;
 import com.tm.core.finder.manager.IEntityMappingManager;
 import com.tm.core.finder.table.EntityTable;
@@ -15,8 +15,8 @@ class BasicPaymentMethodDaoTest extends AbstractConstantEntityDaoTest {
     public static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(PaymentMethod.class, "payment_method"));
-        entityIdentifierDao = new EntityIdentifierDao(entityMappingManager);
-        dao = new BasicPaymentMethodDao(sessionFactory, entityIdentifierDao);
+        queryService = new QueryService(entityMappingManager);
+        dao = new BasicPaymentMethodDao(sessionFactory, queryService);
     }
 
     @Override

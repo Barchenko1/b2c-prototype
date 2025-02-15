@@ -1,7 +1,6 @@
 package com.b2c.prototype.manager.payment.base;
 
 import com.b2c.prototype.dao.payment.IPaymentDao;
-import com.b2c.prototype.manager.payment.base.PaymentManager;
 import com.b2c.prototype.modal.constant.PaymentMethodEnum;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.payload.CreditCardDto;
@@ -17,7 +16,7 @@ import com.b2c.prototype.modal.entity.payment.PaymentMethod;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.query.IQueryService;
+import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
@@ -49,7 +48,7 @@ class PaymentManagerTest {
     @Mock
     private IPaymentDao paymentDao;
     @Mock
-    private IQueryService queryService;
+    private ISearchService queryService;
     @Mock
     private ITransformationFunctionService transformationFunctionService;
     @Mock

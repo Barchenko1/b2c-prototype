@@ -58,10 +58,10 @@ public class Message {
     @ManyToOne(fetch = FetchType.LAZY)
     private MessageType type;
 
-    @PrePersist
-    protected void onPrePersist() {
-        if (this.messageUniqNumber == null) {
-            this.messageUniqNumber = getUUID();
-        }
-    }
+//    @PrePersist
+//    protected void onPrePersist() {
+//        if (this.messageUniqNumber == null) {
+//            this.messageUniqNumber = getUUID();
+//        }
+//    }
 }

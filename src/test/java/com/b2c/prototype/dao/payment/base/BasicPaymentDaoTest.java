@@ -8,8 +8,8 @@ import com.b2c.prototype.modal.entity.payment.PaymentMethod;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.util.CardUtil;
-import com.tm.core.dao.common.AbstractEntityDao;
-import com.tm.core.dao.identifier.EntityIdentifierDao;
+import com.tm.core.process.dao.common.AbstractEntityDao;
+import com.tm.core.process.dao.identifier.QueryService;
 import com.tm.core.finder.manager.EntityMappingManager;
 import com.tm.core.finder.manager.IEntityMappingManager;
 import com.tm.core.finder.parameter.Parameter;
@@ -43,8 +43,8 @@ class BasicPaymentDaoTest extends AbstractCustomEntityDaoTest {
 
     @BeforeAll
     public static void setup() {
-        entityIdentifierDao = new EntityIdentifierDao(getEntityMappingManager());
-        dao = new BasicPaymentDao(sessionFactory, entityIdentifierDao);
+        queryService = new QueryService(getEntityMappingManager());
+        dao = new BasicPaymentDao(sessionFactory, queryService);
     }
 
     private static IEntityMappingManager getEntityMappingManager() {

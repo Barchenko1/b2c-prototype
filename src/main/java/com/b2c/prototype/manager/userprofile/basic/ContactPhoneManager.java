@@ -11,7 +11,7 @@ import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.UserProfile;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.query.IQueryService;
+import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.manager.userprofile.IContactPhoneManager;
 import com.b2c.prototype.service.common.EntityOperationManager;
 import com.b2c.prototype.service.common.IEntityOperationManager;
@@ -25,24 +25,24 @@ import static com.b2c.prototype.util.Constant.USER_ID;
 public class ContactPhoneManager implements IContactPhoneManager {
 
     private final IEntityOperationManager entityOperationDao;
-    private final IQueryService queryService;
+    private final ISearchService searchService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
 
     public ContactPhoneManager(IContactPhoneDao contactPhoneDao,
-                               IQueryService queryService,
+                               ISearchService searchService,
                                ITransformationFunctionService transformationFunctionService,
                                ISupplierService supplierService) {
         this.entityOperationDao = new EntityOperationManager(contactPhoneDao);
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
-        this.queryService = queryService;
+        this.searchService = searchService;
     }
 
     @Override
     public void saveUpdateContactPhoneByUserId(ContactPhoneSearchFieldEntityDto contactPhoneSearchFieldEntityDto) {
         entityOperationDao.executeConsumer(session -> {
-            UserProfile userProfile = queryService.getEntity(
+            UserProfile userProfile = searchService.getEntity(
                     UserProfile.class,
                     supplierService.parameterStringSupplier(USER_ID, contactPhoneSearchFieldEntityDto.getSearchField()));
             ContactPhone newContactPhone = transformationFunctionService.getEntity(
@@ -57,7 +57,7 @@ public class ContactPhoneManager implements IContactPhoneManager {
     @Override
     public void saveUpdateContactPhoneByOrderId(ContactPhoneSearchFieldEntityDto contactPhoneSearchFieldEntityDto) {
         entityOperationDao.executeConsumer(session -> {
-            OrderArticularItem orderItemDataOption = queryService.getEntity(
+            OrderArticularItem orderItemDataOption = searchService.getEntity(
                     OrderArticularItem.class,
                     supplierService.parameterStringSupplier(ORDER_ID, contactPhoneSearchFieldEntityDto.getSearchField()));
             ContactPhone newContactPhone = transformationFunctionService
@@ -81,7 +81,7 @@ public class ContactPhoneManager implements IContactPhoneManager {
     @Override
     public void deleteContactPhoneByOrderId(BeneficiarySearchFieldOrderNumberDto beneficiarySearchFieldOrderNumberDto) {
         entityOperationDao.executeConsumer(session -> {
-            OrderArticularItem orderItemDataOption = queryService.getEntity(OrderArticularItem.class,
+            OrderArticularItem orderItemDataOption = searchService.getEntity(OrderArticularItem.class,
                     supplierService.parameterStringSupplier(ORDER_ID, beneficiarySearchFieldOrderNumberDto.getValue()));
             List<Beneficiary> beneficiaryList = orderItemDataOption.getBeneficiaries();
             ContactPhone contactPhone =
@@ -92,7 +92,7 @@ public class ContactPhoneManager implements IContactPhoneManager {
 
     @Override
     public ContactPhoneDto getContactPhoneByUserId(OneFieldEntityDto oneFieldEntityDto) {
-        return queryService.getEntityDto(
+        return searchService.getEntityDto(
                 UserProfile.class,
                 supplierService.parameterStringSupplier(USER_ID, oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(UserProfile.class, ContactPhoneDto.class));
@@ -100,7 +100,7 @@ public class ContactPhoneManager implements IContactPhoneManager {
 
     @Override
     public List<ContactPhoneDto> getContactPhoneByOrderId(OneFieldEntityDto oneFieldEntityDto) {
-        return queryService.getSubEntityDtoList(
+        return searchService.getSubEntityDtoList(
                 OrderArticularItem.class,
                 supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(OrderArticularItem.class, ContactPhoneDto.class, "list"));

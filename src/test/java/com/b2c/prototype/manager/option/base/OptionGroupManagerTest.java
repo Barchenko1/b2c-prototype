@@ -34,9 +34,7 @@ class OptionGroupManagerTest extends AbstractConstantEntityManagerTest<OptionGro
         optionGroupManager = new OptionGroupManager(
                 parameterFactory,
                 dao,
-                transformationFunctionService,
-                singleValueMap
-        );
+                transformationFunctionService);
     }
 
     @Test

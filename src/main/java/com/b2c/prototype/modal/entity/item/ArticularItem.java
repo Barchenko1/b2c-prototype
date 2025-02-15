@@ -26,6 +26,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -117,30 +118,33 @@ public class ArticularItem {
     private String articularId;
     private long dateOfCreate;
     private String productName;
-    @ManyToMany(cascade = {CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
             name = "articular_item_option_item",
             joinColumns = {@JoinColumn(name = "articular_item_id")},
             inverseJoinColumns = {@JoinColumn(name = "option_item_id")}
     )
+    @Builder.Default
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<OptionItem> optionItems = new HashSet<>();
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private Price fullPrice;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private Price totalPrice;
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "status_id")
     private ArticularStatus status;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "discount_id")
     private Discount discount;
 
-    @PrePersist
-    protected void onPrePersist() {
-        if (this.articularId == null) {
-            this.articularId = getUUID();
-        }
-    }
+//    @PrePersist
+//    protected void onPrePersist() {
+//        if (this.articularId == null) {
+//            this.articularId = getUUID();
+//        }
+//    }
 
     public void addOptionItem(OptionItem optionItem) {
         this.optionItems.add(optionItem);

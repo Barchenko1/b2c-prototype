@@ -2,41 +2,43 @@ package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.dao.item.IItemDataDao;
 import com.b2c.prototype.modal.dto.payload.ItemDataDto;
-import com.b2c.prototype.modal.dto.payload.OptionItemDto;
 import com.b2c.prototype.modal.dto.response.ResponseItemDataDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
+import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.item.ItemData;
-import com.b2c.prototype.modal.entity.option.OptionGroup;
-import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.item.IItemDataManager;
 import com.b2c.prototype.service.common.EntityOperationManager;
 import com.b2c.prototype.service.common.IEntityOperationManager;
-import com.b2c.prototype.service.query.IQueryService;
+import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
-import org.jetbrains.annotations.NotNull;
+import com.tm.core.process.dao.identifier.IQueryService;
+import com.tm.core.finder.parameter.Parameter;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.b2c.prototype.util.Constant.ITEM_ID;
-import static com.b2c.prototype.util.Constant.VALUE;
+import static com.b2c.prototype.util.Util.getUUID;
 
 public class ItemDataManager implements IItemDataManager {
 
     private final IEntityOperationManager entityOperationDao;
     private final IQueryService queryService;
+    private final ISearchService searchService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
 
-    public ItemDataManager(IItemDataDao itemDataDao,
+    public ItemDataManager(IItemDataDao itemDataDao, 
                            IQueryService queryService,
+                           ISearchService searchService,
                            ITransformationFunctionService transformationFunctionService,
                            ISupplierService supplierService) {
         this.entityOperationDao = new EntityOperationManager(itemDataDao);
         this.queryService = queryService;
+        this.searchService = searchService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
     }
@@ -44,7 +46,10 @@ public class ItemDataManager implements IItemDataManager {
     @Override
     public void saveItemData(ItemDataDto itemDataDto) {
         entityOperationDao.executeConsumer(session -> {
-            ItemData itemData = transformationFunctionService.getEntity(ItemData.class, itemDataDto);
+            ItemData itemData = transformationFunctionService.getEntity(session, ItemData.class, itemDataDto);
+            itemData.setItemId(getUUID());
+            itemData.getArticularItemSet().forEach(articularItem ->
+                    articularItem.setArticularId(getUUID()));
             session.merge(itemData);
         });
     }
@@ -52,32 +57,24 @@ public class ItemDataManager implements IItemDataManager {
     @Override
     public void updateItemData(String itemId, ItemDataDto itemDataDto) {
         entityOperationDao.executeConsumer(session -> {
-            ItemData existingItemData = entityOperationDao.getEntityGraph(
+            ItemData existingItemData = queryService.getEntityGraph(
+                    session,
+                    ItemData.class,
                     "itemData.full",
-                    supplierService.parameterStringSupplier("itemId", itemId));
+                    new Parameter("itemId", itemId));
             ItemData itemData = transformationFunctionService.getEntity(
+                    session,
                     ItemData.class,
                     itemDataDto);
 
-            itemData.setId(existingItemData.getId());
-            itemData.setItemId(existingItemData.getItemId());
+            existingItemData.setDescription(itemData.getDescription());
+            existingItemData.setCategory(itemData.getCategory());
+            existingItemData.setItemType(itemData.getItemType());
+            existingItemData.setBrand(itemData.getBrand());
 
-            itemData.getArticularItemSet().forEach(articularItem -> {
-                if (articularItem.getFullPrice() != null) {
-                    articularItem.getFullPrice().setCurrency(session.merge(articularItem.getFullPrice().getCurrency()));
-                }
-                if (articularItem.getTotalPrice() != null) {
-                    articularItem.getTotalPrice().setCurrency(session.merge(articularItem.getTotalPrice().getCurrency()));
-                }
-                if (articularItem.getDiscount() != null) {
-                    articularItem.getDiscount().setCurrency(session.merge(articularItem.getDiscount().getCurrency()));
-                }
-                if (articularItem.getStatus() != null) {
-                    articularItem.setStatus(session.merge(articularItem.getStatus()));
-                }
-            });
-
-            session.merge(itemData);
+            List<ArticularItem> result = mergeArticularItems(existingItemData.getArticularItemSet(), itemData.getArticularItemSet());
+            existingItemData.setArticularItemSet(new HashSet<>(result));
+            session.merge(existingItemData);
         });
     }
 
@@ -101,5 +98,83 @@ public class ItemDataManager implements IItemDataManager {
                 "",
                 transformationFunctionService.getTransformationFunction(ItemData.class, ResponseItemDataDto.class));
     }
+
+    private List<ArticularItem> mergeArticularItems(Set<ArticularItem> aSet, Set<ArticularItem> bSet) {
+        List<ArticularItem> a = aSet.stream().toList();
+        List<ArticularItem> b = bSet.stream().toList();
+        List<ArticularItem> articularItemList = new ArrayList<>();
+        int i = 0;
+        if (a.size() >= b.size()) {
+            for (; i < b.size(); i++) {
+                ArticularItem articularItem = copyArticularItemValues(a.get(i), b.get(i));
+                articularItemList.add(articularItem);
+            }
+            for (; i < a.size(); i++) {
+                ArticularItem articularItem = createArticularItem(a.get(i));
+                articularItemList.add(articularItem);
+            }
+        } else {
+            for (i = 0; i < a.size(); i++) {
+                ArticularItem articularItem = copyArticularItemValues(b.get(i), a.get(i));
+                articularItemList.add(articularItem);
+            }
+            for (; i < b.size(); i++) {
+                ArticularItem articularItem = createArticularItem(b.get(i));
+                articularItemList.add(articularItem);
+            }
+        }
+
+
+        return articularItemList;
+    }
+
+    private ArticularItem copyArticularItemValues(ArticularItem target, ArticularItem source) {
+        if (target.getArticularId() == null) {
+            target.setArticularId(source.getArticularId());
+        }
+        target.setDateOfCreate(source.getDateOfCreate());
+        target.setProductName(source.getProductName());
+
+        target.getFullPrice().setAmount(source.getFullPrice().getAmount());
+        target.getFullPrice().setCurrency(source.getFullPrice().getCurrency());
+        target.getTotalPrice().setAmount(source.getTotalPrice().getAmount());
+        target.getTotalPrice().setCurrency(source.getTotalPrice().getCurrency());
+
+        target.setStatus(source.getStatus());
+
+        // Update discount fields without replacing the identifier
+        if (target.getDiscount() != null && source.getDiscount() != null) {
+            target.getDiscount().setAmount(source.getDiscount().getAmount());
+            target.getDiscount().setCurrency(source.getDiscount().getCurrency());
+            target.getDiscount().setPercent(source.getDiscount().isPercent());
+            target.getDiscount().setActive(source.getDiscount().isActive());
+            // Only update charSequenceCode if needed, but ensure uniqueness check if required
+            if (!target.getDiscount().getCharSequenceCode().equals(source.getDiscount().getCharSequenceCode())) {
+                target.getDiscount().setCharSequenceCode(source.getDiscount().getCharSequenceCode());
+            }
+        } else if (source.getDiscount() != null) {
+            target.setDiscount(source.getDiscount());
+        }
+
+        new HashSet<>(target.getOptionItems()).forEach(source::removeOptionItem);
+        source.getOptionItems().forEach(source::addOptionItem);
+        return target;
+    }
+
+    private ArticularItem createArticularItem(ArticularItem sourceItem) {
+        ArticularItem articularItem = ArticularItem.builder()
+                .articularId(sourceItem.getArticularId())
+                .dateOfCreate(sourceItem.getDateOfCreate())
+                .productName(sourceItem.getProductName())
+                .fullPrice(sourceItem.getFullPrice())
+                .totalPrice(sourceItem.getTotalPrice())
+                .status(sourceItem.getStatus())
+                .discount(sourceItem.getDiscount())
+                .build();
+        sourceItem.getOptionItems().forEach(articularItem::addOptionItem);
+        return articularItem;
+    }
+
+
 
 }

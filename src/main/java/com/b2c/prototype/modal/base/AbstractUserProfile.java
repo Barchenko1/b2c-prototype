@@ -32,10 +32,10 @@ public class AbstractUserProfile {
     private long dateOfCreate;
     private boolean isActive;
 
-    @PrePersist
-    protected void onPrePersist() {
-        if (this.user_id == null) {
-            this.user_id = getUUID();
-        }
-    }
+//    @PrePersist
+//    protected void onPrePersist() {
+//        if (this.user_id == null) {
+//            this.user_id = getUUID();
+//        }
+//    }
 }

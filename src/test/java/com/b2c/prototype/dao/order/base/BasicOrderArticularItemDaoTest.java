@@ -28,8 +28,8 @@ import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.modal.entity.user.UserProfile;
 import com.b2c.prototype.util.CardUtil;
-import com.tm.core.dao.common.AbstractEntityDao;
-import com.tm.core.dao.identifier.EntityIdentifierDao;
+import com.tm.core.process.dao.common.AbstractEntityDao;
+import com.tm.core.process.dao.identifier.QueryService;
 import com.tm.core.finder.manager.EntityMappingManager;
 import com.tm.core.finder.manager.IEntityMappingManager;
 import com.tm.core.finder.parameter.Parameter;
@@ -66,8 +66,8 @@ class BasicOrderArticularItemDaoTest extends AbstractCustomEntityDaoTest {
     public static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(OrderArticularItem.class, "order_articular_item"));
-        entityIdentifierDao = new EntityIdentifierDao(entityMappingManager);
-        dao = new BasicOrderItemDataDao(sessionFactory, entityIdentifierDao);
+        queryService = new QueryService(entityMappingManager);
+        dao = new BasicOrderItemDataDao(sessionFactory, queryService);
     }
 
     @BeforeEach
@@ -81,6 +81,7 @@ class BasicOrderArticularItemDaoTest extends AbstractCustomEntityDaoTest {
             statement.execute("DELETE FROM item_review");
             statement.execute("DELETE FROM articular_item_option_item");
             statement.execute("DELETE FROM articular_item");
+            statement.execute("DELETE FROM option_item");
             statement.execute("DELETE FROM item");
             statement.execute("DELETE FROM item_data");
             statement.execute("DELETE FROM payment");

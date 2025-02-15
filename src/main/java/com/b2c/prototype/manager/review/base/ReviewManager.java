@@ -9,7 +9,7 @@ import com.b2c.prototype.modal.entity.item.Item;
 import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.modal.entity.review.Review;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.query.IQueryService;
+import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.manager.review.IReviewManager;
 import com.b2c.prototype.service.common.EntityOperationManager;
 import com.b2c.prototype.service.common.IEntityOperationManager;
@@ -24,16 +24,16 @@ import static com.b2c.prototype.util.Query.SELECT_ITEM_BY_ITEM_ID;
 public class ReviewManager implements IReviewManager {
 
     private final IEntityOperationManager entityOperationDao;
-    private final IQueryService queryService;
+    private final ISearchService searchService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
 
     public ReviewManager(IReviewDao reviewDao,
-                         IQueryService queryService,
+                         ISearchService searchService,
                          ITransformationFunctionService transformationFunctionService,
                          ISupplierService supplierService) {
         this.entityOperationDao = new EntityOperationManager(reviewDao);
-        this.queryService = queryService;
+        this.searchService = searchService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
     }
@@ -42,7 +42,7 @@ public class ReviewManager implements IReviewManager {
     public void saveUpdateReview(ReviewSearchFieldEntityDto reviewSearchFieldEntityDto) {
         entityOperationDao.executeConsumer(session -> {
             NativeQuery<Item> query = session.createNativeQuery(SELECT_ITEM_BY_ITEM_ID, Item.class);
-            Item item = queryService.getQueryEntity(
+            Item item = searchService.getQueryEntity(
                     query,
                     supplierService.parameterStringSupplier(ITEM_ID, reviewSearchFieldEntityDto.getSearchField()));
             ReviewDto reviewDto = reviewSearchFieldEntityDto.getNewEntity();
@@ -72,7 +72,7 @@ public class ReviewManager implements IReviewManager {
 
     @Override
     public List<ResponseReviewDto> getReviewListByItemId(OneFieldEntityDto oneFieldEntityDto) {
-        return (List<ResponseReviewDto>) queryService.getEntityDto(
+        return (List<ResponseReviewDto>) searchService.getEntityDto(
                 Review.class,
                 supplierService.parameterStringSupplier(ITEM_ID, oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationCollectionFunction(Review.class, ResponseReviewDto.class));

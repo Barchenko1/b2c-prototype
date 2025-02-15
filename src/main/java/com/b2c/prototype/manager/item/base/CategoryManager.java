@@ -1,14 +1,12 @@
 package com.b2c.prototype.manager.item.base;
 
-import com.b2c.prototype.service.scope.IConstantsScope;
 import com.b2c.prototype.dao.item.ICategoryDao;
 import com.b2c.prototype.modal.dto.payload.CategoryDto;
 import com.b2c.prototype.modal.dto.update.CategoryDtoUpdate;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.manager.AbstractTransitiveSelfEntityManager;
 import com.b2c.prototype.manager.item.ICategoryManager;
-import com.tm.core.dao.transitive.ITransitiveSelfEntityDao;
-import com.tm.core.modal.TransitiveSelfEntity;
+import com.tm.core.process.dao.transitive.ITransitiveSelfEntityDao;
 import com.tm.core.finder.parameter.Parameter;
 import com.tm.core.util.TransitiveSelfEnum;
 import lombok.extern.slf4j.Slf4j;
@@ -22,12 +20,9 @@ import java.util.Optional;
 public class CategoryManager extends AbstractTransitiveSelfEntityManager implements ICategoryManager {
 
     private final ICategoryDao categoryDao;
-    private final IConstantsScope singleValueMap;
 
-    public CategoryManager(ICategoryDao categoryDao,
-                           IConstantsScope singleValueMap) {
+    public CategoryManager(ICategoryDao categoryDao) {
         this.categoryDao = categoryDao;
-        this.singleValueMap = singleValueMap;
     }
 
     @Override
@@ -40,7 +35,6 @@ public class CategoryManager extends AbstractTransitiveSelfEntityManager impleme
         Category newCategory = buildCategory(categoryDto);
 
         super.saveEntityTree(newCategory);
-        addNewEntityTreeToMap(singleValueMap, newCategory);
     }
 
     @Override
@@ -52,7 +46,6 @@ public class CategoryManager extends AbstractTransitiveSelfEntityManager impleme
         Parameter parameter =
                 parameterFactory.createStringParameter("name", oldCategoryDto.getName());
         categoryDao.updateEntityTreeOldMain(newCategory, parameter);
-        updateEntityTreeOldMainMap(singleValueMap, oldCategory, newCategory);
     }
 
     @Override
@@ -62,7 +55,6 @@ public class CategoryManager extends AbstractTransitiveSelfEntityManager impleme
         Parameter parameter =
                 parameterFactory.createStringParameter("name", categoryDto.getName());
         categoryDao.deleteEntityTree(parameter);
-        deleteEntityFromMap(singleValueMap, oldCategory);
     }
 
     @Override
@@ -115,47 +107,6 @@ public class CategoryManager extends AbstractTransitiveSelfEntityManager impleme
         }
 
         return category;
-    }
-
-    private <E extends TransitiveSelfEntity> void deleteEntityFromMap(IConstantsScope singleValueMap, E entity) {
-        singleValueMap.removeEntity(Category.class, entity.getRootField());
-        if (entity.getChildNodeList() != null) {
-            entity.getChildNodeList().forEach(childNode ->
-                    singleValueMap.removeEntity(Category.class, childNode.getRootField()));
-        }
-    }
-
-    private <E extends TransitiveSelfEntity> void addNewEntityTreeToMap(IConstantsScope entityMapWrapper, E entity) {
-        if (entity.getParent() != null) {
-            entityMapWrapper.putEntity(Category.class, entity.getParent().getRootField(), entity.getParent());
-        }
-        entityMapWrapper.putEntity(Category.class, entity.getRootField(), entity);
-        if (entity.getChildNodeList() != null) {
-            entity.getChildNodeList().forEach(childNode ->
-                    entityMapWrapper.putEntity(Category.class, childNode.getRootField(), (E) childNode));
-        }
-    }
-
-    private <E extends TransitiveSelfEntity> void updateEntityTreeOldMainMap(IConstantsScope entityMapWrapper, E oldEntity, E newEntity) {
-        if (oldEntity.getParent() != null) {
-            entityMapWrapper.putRemoveEntity(
-                    Category.class,
-                    oldEntity.getParent().getRootField(),
-                    newEntity.getParent().getRootField(),
-                    newEntity.getParent());
-        }
-
-        entityMapWrapper.removeEntity(Category.class, oldEntity.getRootField());
-        entityMapWrapper.putEntity(Category.class, newEntity.getRootField(), newEntity);
-
-        List<E> oldChildList = oldEntity.getChildNodeList();
-        List<E> newChildList = newEntity.getChildNodeList();
-        if (oldEntity.getChildNodeList() != null) {
-            for (int i = 0; i < oldChildList.size(); i++) {
-                entityMapWrapper.removeEntity(Category.class, oldChildList.get(i).getRootField());
-                entityMapWrapper.putEntity(Category.class, newChildList.get(i).getRootField(), (E) newEntity.getChildNodeList().get(i));
-            }
-        }
     }
 
 }

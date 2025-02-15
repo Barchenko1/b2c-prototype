@@ -11,7 +11,7 @@ import com.b2c.prototype.modal.entity.user.UserProfile;
 import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.address.IAddressManager;
-import com.b2c.prototype.service.query.IQueryService;
+import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.common.EntityOperationManager;
 import com.b2c.prototype.service.supplier.ISupplierService;
 
@@ -23,16 +23,16 @@ import static com.b2c.prototype.util.Constant.USER_ID;
 public class AddressManager implements IAddressManager {
 
     private final IEntityOperationManager entityOperationDao;
-    private final IQueryService queryService;
+    private final ISearchService searchService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
 
     public AddressManager(IAddressDao addressDao,
-                          IQueryService queryService,
+                          ISearchService searchService,
                           ITransformationFunctionService transformationFunctionService,
                           ISupplierService supplierService) {
         this.entityOperationDao = new EntityOperationManager(addressDao);
-        this.queryService = queryService;
+        this.searchService = searchService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
     }
@@ -40,7 +40,7 @@ public class AddressManager implements IAddressManager {
     @Override
     public void saveUpdateAppUserAddress(AddressSearchFieldEntityDto addressSearchFieldEntityDto) {
         entityOperationDao.executeConsumer(session -> {
-            UserProfile userProfile = queryService.getEntity(
+            UserProfile userProfile = searchService.getEntity(
                     UserProfile.class,
                     supplierService.parameterStringSupplier(USER_ID, addressSearchFieldEntityDto.getSearchField()));
             Address newAddress = transformationFunctionService
@@ -53,7 +53,7 @@ public class AddressManager implements IAddressManager {
     @Override
     public void saveUpdateDeliveryAddress(AddressSearchFieldEntityDto addressSearchFieldEntityDto) {
         entityOperationDao.executeConsumer(session -> {
-            OrderArticularItem orderItemDataOption = queryService.getEntity(
+            OrderArticularItem orderItemDataOption = searchService.getEntity(
                     OrderArticularItem.class,
                     supplierService.parameterStringSupplier(ORDER_ID, addressSearchFieldEntityDto.getSearchField()));
             Address newAddress = transformationFunctionService
@@ -84,7 +84,7 @@ public class AddressManager implements IAddressManager {
 
     @Override
     public AddressDto getAddressByUserId(OneFieldEntityDto oneFieldEntityDto) {
-        return queryService.getEntityDto(
+        return searchService.getEntityDto(
                 UserProfile.class,
                 supplierService.parameterStringSupplier(USER_ID, oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(UserProfile.class, AddressDto.class));
@@ -92,7 +92,7 @@ public class AddressManager implements IAddressManager {
 
     @Override
     public AddressDto getAddressByOrderId(OneFieldEntityDto oneFieldEntityDto) {
-        return queryService.getEntityDto(
+        return searchService.getEntityDto(
                 OrderArticularItem.class,
                 supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(OrderArticularItem.class, AddressDto.class));

@@ -34,9 +34,7 @@ class BrandManagerTest extends AbstractConstantEntityManagerTest<Brand> {
         brandManager = new BrandManager(
                 parameterFactory,
                 dao,
-                transformationFunctionService,
-                singleValueMap
-        );
+                transformationFunctionService);
     }
 
     @Test

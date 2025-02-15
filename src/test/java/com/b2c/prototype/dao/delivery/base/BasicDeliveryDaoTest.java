@@ -5,8 +5,8 @@ import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
-import com.tm.core.dao.common.AbstractEntityDao;
-import com.tm.core.dao.identifier.EntityIdentifierDao;
+import com.tm.core.process.dao.common.AbstractEntityDao;
+import com.tm.core.process.dao.identifier.QueryService;
 import com.tm.core.finder.manager.EntityMappingManager;
 import com.tm.core.finder.manager.IEntityMappingManager;
 import com.tm.core.finder.parameter.Parameter;
@@ -40,8 +40,8 @@ class BasicDeliveryDaoTest extends AbstractCustomEntityDaoTest {
 
     @BeforeAll
     public static void setup() {
-        entityIdentifierDao = new EntityIdentifierDao(getEntityMappingManager());
-        dao = new BasicDeliveryDao(sessionFactory, entityIdentifierDao);
+        queryService = new QueryService(getEntityMappingManager());
+        dao = new BasicDeliveryDao(sessionFactory, queryService);
     }
 
     private static IEntityMappingManager getEntityMappingManager() {

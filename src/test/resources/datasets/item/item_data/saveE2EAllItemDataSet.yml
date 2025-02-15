@@ -79,7 +79,7 @@ articular_status:
     value: "NEW"
     label: "NEW"
 item_data:
-  - id: 1
+  - id: 3
     item_id: 123
     description: "{\"par1\":\"desc1\",\"par2\":\"desc2\",\"par3\":\"desc3\"}"
     brand_id: 1
@@ -92,7 +92,7 @@ articular_item:
     discount_id: 2
     fullprice_id: 2
     totalprice_id: 3
-    item_data_id: 1
+    item_data_id: 3
     status_id: 1
     productname: "Laptop 1"
   - id: 2
@@ -101,7 +101,7 @@ articular_item:
     discount_id: 3
     fullprice_id: 4
     totalprice_id: 5
-    item_data_id: 1
+    item_data_id: 3
     status_id: 1
     productname: "Laptop 2"
 articular_item_option_item:

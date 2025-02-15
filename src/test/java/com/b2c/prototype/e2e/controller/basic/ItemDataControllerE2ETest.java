@@ -44,11 +44,12 @@ class ItemDataControllerE2ETest extends BasicE2ETest {
             statement.execute("DELETE FROM articular_item");
             statement.execute("DELETE FROM discount");
             statement.execute("DELETE FROM item_data");
-            statement.execute("TRUNCATE TABLE discount RESTART IDENTITY CASCADE");
+
             statement.execute("ALTER SEQUENCE discount_id_seq RESTART WITH 4");
             statement.execute("ALTER SEQUENCE price_id_seq RESTART WITH 6");
             statement.execute("ALTER SEQUENCE articular_item_id_seq RESTART WITH 4");
             statement.execute("ALTER SEQUENCE option_item_id_seq RESTART WITH 6");
+            statement.execute("ALTER SEQUENCE item_data_id_seq RESTART WITH 3");
             connection.commit();
         } catch (Exception e) {
             throw new RuntimeException("Failed to clean table: item_data", e);
@@ -90,7 +91,7 @@ class ItemDataControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/item/item_data/saveE2EAllItemDataSet.yml",
+        verifyExpectedData("/datasets/item/item_data/updateE2EAllItemDataSet.yml",
                 new String[] {"id", "option_group_id", "option_item_id", "articular_item_id", "item_id", "articular_id", "dateOfCreate", "DISCOUNT_ID", "FULLPRICE_ID", "TOTALPRICE_ID"},
                 new String[] {"label", "value", "productname", "charSequenceCode"}
         );

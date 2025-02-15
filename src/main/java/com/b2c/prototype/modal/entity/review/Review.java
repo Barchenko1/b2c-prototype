@@ -48,10 +48,10 @@ public class Review {
     @JoinColumn(name = "review_id")
     private List<Comment> comments = new ArrayList<>();
 
-    @PrePersist
-    protected void onPrePersist() {
-        if (this.uniqueId == null) {
-            this.uniqueId = getUUID();
-        }
-    }
+//    @PrePersist
+//    protected void onPrePersist() {
+//        if (this.uniqueId == null) {
+//            this.uniqueId = getUUID();
+//        }
+//    }
 }

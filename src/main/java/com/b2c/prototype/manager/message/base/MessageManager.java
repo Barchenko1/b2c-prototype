@@ -12,7 +12,7 @@ import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.message.IMessageManager;
 import com.b2c.prototype.service.common.EntityOperationManager;
 import com.b2c.prototype.service.common.IEntityOperationManager;
-import com.b2c.prototype.service.query.IQueryService;
+import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import org.hibernate.query.NativeQuery;
 import org.slf4j.Logger;
@@ -28,16 +28,16 @@ public class MessageManager implements IMessageManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageManager.class);
 
     private final IEntityOperationManager entityOperationDao;
-    private final IQueryService queryService;
+    private final ISearchService searchService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
 
     public MessageManager(IMessageDao messageDao,
-                          IQueryService queryService,
+                          ISearchService searchService,
                           ITransformationFunctionService transformationFunctionService,
                           ISupplierService supplierService) {
         this.entityOperationDao = new EntityOperationManager(messageDao);
-        this.queryService = queryService;
+        this.searchService = searchService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
     }
@@ -46,7 +46,7 @@ public class MessageManager implements IMessageManager {
     public void saveUpdateMessage(MessageDtoUpdate messageDtoUpdate) {
         entityOperationDao.executeConsumer(session -> {
             NativeQuery<MessageBox> query = session.createNativeQuery(SELECT_MESSAGEBOX_BY_USER_ID, MessageBox.class);
-            MessageBox messageBox = queryService.getQueryEntity(
+            MessageBox messageBox = searchService.getQueryEntity(
                     query,
                     supplierService.parameterStringSupplier(USER_ID, messageDtoUpdate.getMainSearchField()));
             Message existingMessage = getExistingMessage(messageBox, messageDtoUpdate.getInnerSearchField());
@@ -64,7 +64,7 @@ public class MessageManager implements IMessageManager {
     public void deleteMessage(MultipleFieldsSearchDtoDelete multipleFieldsSearchDtoDelete) {
         entityOperationDao.executeConsumer(session -> {
             NativeQuery<MessageBox> query = session.createNativeQuery(SELECT_MESSAGEBOX_BY_USER_ID, MessageBox.class);
-            MessageBox messageBox = queryService.getQueryEntity(
+            MessageBox messageBox = searchService.getQueryEntity(
                     query,
                     supplierService.parameterStringSupplier(USER_ID, multipleFieldsSearchDtoDelete.getMainSearchField()));
             Message existingMessage = getExistingMessage(messageBox, multipleFieldsSearchDtoDelete.getInnerSearchField());
@@ -77,7 +77,7 @@ public class MessageManager implements IMessageManager {
     public void cleanUpMessagesByUserId(OneFieldEntityDto oneFieldEntityDto) {
         entityOperationDao.executeConsumer(session -> {
             NativeQuery<MessageBox> query = session.createNativeQuery(SELECT_MESSAGEBOX_BY_USER_ID, MessageBox.class);
-            MessageBox messageBox = queryService.getQueryEntity(
+            MessageBox messageBox = searchService.getQueryEntity(
                     query,
                     supplierService.parameterStringSupplier(USER_ID, oneFieldEntityDto.getValue()));
             messageBox.getMessages().forEach(message -> {

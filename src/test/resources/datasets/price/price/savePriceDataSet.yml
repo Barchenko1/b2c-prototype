@@ -4,3 +4,4 @@ currency:
     label: "USD"
 price:
   - amount: 10
+    currency_id: 1

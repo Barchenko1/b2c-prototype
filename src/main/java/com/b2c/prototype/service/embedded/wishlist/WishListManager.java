@@ -3,7 +3,7 @@ package com.b2c.prototype.service.embedded.wishlist;
 import com.b2c.prototype.dao.embedded.IWishListDao;
 import com.b2c.prototype.modal.dto.payload.WishListDto;
 import com.b2c.prototype.modal.embedded.wishlist.Wishlist;
-import com.tm.core.dao.common.IEntityDao;
+import com.tm.core.process.dao.common.IEntityDao;
 import lombok.extern.slf4j.Slf4j;
 
 import static com.b2c.prototype.util.Util.getCurrentTimeMillis;

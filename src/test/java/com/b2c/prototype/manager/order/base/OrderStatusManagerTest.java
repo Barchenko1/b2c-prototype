@@ -34,9 +34,7 @@ class OrderStatusManagerTest extends AbstractConstantEntityManagerTest<OrderStat
         orderStatusManager = new OrderStatusManager(
                 parameterFactory,
                 dao,
-                transformationFunctionService,
-                singleValueMap
-        );
+                transformationFunctionService);
     }
 
     @Test

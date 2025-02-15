@@ -33,9 +33,7 @@ class MessageTypeManagerTest extends AbstractConstantEntityManagerTest<MessageTy
         messageTypeManager = new MessageTypeManager(
                 parameterFactory,
                 dao,
-                transformationFunctionService,
-                singleValueMap
-        );
+                transformationFunctionService);
     }
 
     @Test

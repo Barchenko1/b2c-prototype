@@ -2,7 +2,6 @@ brand:
   - id: 1
     value: "Hermes"
     label: "Hermes"
-
 item_type:
   - id: 1
     value: "Clothes"
@@ -30,10 +29,6 @@ option_item:
   - id: 1
     value: "L"
     label: "L"
-    option_group_id: 1
-  - id: 2
-    value: "M"
-    label: "M"
     option_group_id: 1
 category:
   - id: 1

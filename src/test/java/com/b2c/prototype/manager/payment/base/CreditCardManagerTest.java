@@ -1,7 +1,6 @@
 package com.b2c.prototype.manager.payment.base;
 
 import com.b2c.prototype.dao.payment.ICreditCardDao;
-import com.b2c.prototype.manager.payment.base.CreditCardManager;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.delete.MultipleFieldsSearchDtoDelete;
 import com.b2c.prototype.modal.dto.payload.CreditCardDto;
@@ -13,7 +12,7 @@ import com.b2c.prototype.modal.entity.payment.CreditCard;
 import com.b2c.prototype.modal.entity.payment.Payment;
 import com.b2c.prototype.modal.entity.user.UserProfile;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.query.IQueryService;
+import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
@@ -49,7 +48,7 @@ class CreditCardManagerTest {
     @Mock
     private ICreditCardDao creditCardDao;
     @Mock
-    private IQueryService queryService;
+    private ISearchService queryService;
     @Mock
     private ITransformationFunctionService transformationFunctionService;
     @Mock

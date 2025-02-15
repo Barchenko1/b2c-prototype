@@ -10,7 +10,7 @@ import com.b2c.prototype.service.common.EntityOperationManager;
 import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.delivery.IDeliveryManager;
-import com.b2c.prototype.service.query.IQueryService;
+import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,16 +22,16 @@ import static com.b2c.prototype.util.Constant.ORDER_ID;
 public class DeliveryManager implements IDeliveryManager {
 
     private final IEntityOperationManager entityOperationDao;
-    private final IQueryService queryService;
+    private final ISearchService searchService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
 
     public DeliveryManager(IDeliveryDao deliveryDao,
-                           IQueryService queryService,
+                           ISearchService searchService,
                            ITransformationFunctionService transformationFunctionService,
                            ISupplierService supplierService) {
         this.entityOperationDao = new EntityOperationManager(deliveryDao);
-        this.queryService = queryService;
+        this.searchService = searchService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
     }
@@ -39,7 +39,7 @@ public class DeliveryManager implements IDeliveryManager {
     @Override
     public void saveUpdateDelivery(DeliverySearchFieldEntityDto deliverySearchFieldEntityDto) {
         entityOperationDao.executeConsumer(session -> {
-            OrderArticularItem orderItemDataOption = queryService.getEntity(
+            OrderArticularItem orderItemDataOption = searchService.getEntity(
                     OrderArticularItem.class,
                     supplierService.parameterStringSupplier(ORDER_ID, deliverySearchFieldEntityDto.getSearchField()));
             DeliveryDto deliveryDto = deliverySearchFieldEntityDto.getNewEntity();
@@ -64,7 +64,7 @@ public class DeliveryManager implements IDeliveryManager {
 
     @Override
     public DeliveryDto getDelivery(OneFieldEntityDto oneFieldEntityDto) {
-        return queryService.getEntityDto(
+        return searchService.getEntityDto(
                 OrderArticularItem.class,
                 supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(OrderArticularItem.class, DeliveryDto.class));

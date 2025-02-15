@@ -14,8 +14,8 @@ import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.modal.entity.user.UserProfile;
 import com.b2c.prototype.util.CardUtil;
-import com.tm.core.dao.common.AbstractEntityDao;
-import com.tm.core.dao.identifier.EntityIdentifierDao;
+import com.tm.core.process.dao.common.AbstractEntityDao;
+import com.tm.core.process.dao.identifier.QueryService;
 import com.tm.core.finder.manager.EntityMappingManager;
 import com.tm.core.finder.manager.IEntityMappingManager;
 import com.tm.core.finder.parameter.Parameter;
@@ -56,8 +56,8 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
         entityMappingManager.addEntityTable(new EntityTable(MessageBox.class, "message_box"));
         entityMappingManager.addEntityTable(new EntityTable(Message.class, "message"));
 
-        entityIdentifierDao = new EntityIdentifierDao(entityMappingManager);
-        dao = new BasicMessageBoxDao(sessionFactory, entityIdentifierDao);
+        queryService = new QueryService(entityMappingManager);
+        dao = new BasicMessageBoxDao(sessionFactory, queryService);
     }
 
     @BeforeEach
@@ -364,7 +364,7 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
         Message newMessage = prepareNewMessage();
         Supplier<MessageBox> messageBoxSupplier = () -> {
             Parameter parameter = new Parameter("id", 1L);
-            MessageBox oldMessageBox = entityIdentifierDao.getEntity(sessionFactory.openSession(), MessageBox.class, parameter);
+            MessageBox oldMessageBox = queryService.getEntity(sessionFactory.openSession(), MessageBox.class, parameter);
             newMessage.setId(2L);
             oldMessageBox.addMessage(newMessage);
             return oldMessageBox;

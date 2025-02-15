@@ -9,7 +9,7 @@ import com.b2c.prototype.service.common.EntityOperationManager;
 import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.item.IArticularItemManager;
-import com.b2c.prototype.service.query.IQueryService;
+import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
 
 import java.util.List;
@@ -24,16 +24,16 @@ import static com.b2c.prototype.util.Constant.ITEM_ID;
 public class ArticularArticularItemManager implements IArticularItemManager {
 
     private final IEntityOperationManager entityOperationDao;
-    private final IQueryService queryService;
+    private final ISearchService searchService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
 
     public ArticularArticularItemManager(IItemDataOptionDao itemDataOptionDao,
-                                         IQueryService queryService,
+                                         ISearchService searchService,
                                          ITransformationFunctionService transformationFunctionService,
                                          ISupplierService supplierService) {
         this.entityOperationDao = new EntityOperationManager(itemDataOptionDao);
-        this.queryService = queryService;
+        this.searchService = searchService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
     }
@@ -41,7 +41,7 @@ public class ArticularArticularItemManager implements IArticularItemManager {
     @Override
     public void saveUpdateItemDataOption(String itemId, List<ArticularItemDto> articularItemDtoList) {
         entityOperationDao.executeConsumer(session -> {
-            ItemData itemData = queryService.getEntity(
+            ItemData itemData = searchService.getEntity(
                     ItemData.class,
                     supplierService.parameterStringSupplier(ITEM_ID, itemId));
             Map<String, ArticularItem> articularItemDataOptionMap = itemData.getArticularItemSet().stream()

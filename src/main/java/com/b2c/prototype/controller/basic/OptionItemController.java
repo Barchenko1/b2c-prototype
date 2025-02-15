@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/option")
@@ -35,7 +36,7 @@ public class OptionItemController {
 
     @PostMapping(value = "/group", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> saveUpdateOptionItemSet(@RequestParam final Map<String, String> requestParams,
-                                                        @RequestBody final List<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoList) {
+                                                        @RequestBody final Set<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoList) {
         optionItemProcessor.saveOptionItemSet(requestParams, optionGroupOptionItemSetDtoList);
         return ResponseEntity.ok().build();
     }

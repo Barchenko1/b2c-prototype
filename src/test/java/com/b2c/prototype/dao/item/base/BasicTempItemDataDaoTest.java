@@ -3,7 +3,7 @@ package com.b2c.prototype.dao.item.base;
 import com.b2c.prototype.dao.AbstractTempEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
 import com.b2c.prototype.modal.embedded.item.TempItemData;
-import com.tm.core.dao.identifier.EntityIdentifierDao;
+import com.tm.core.process.dao.identifier.QueryService;
 import com.tm.core.finder.manager.EntityMappingManager;
 import com.tm.core.finder.manager.IEntityMappingManager;
 import com.tm.core.finder.table.EntityTable;
@@ -15,8 +15,8 @@ class BasicTempItemDataDaoTest extends AbstractTempEntityDaoTest {
     static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(TempItemData.class, "temp_item_data"));
-        entityIdentifierDao = new EntityIdentifierDao(entityMappingManager);
-        dao = new BasicTempItemDataDao(sessionFactory, entityIdentifierDao);
+queryService = new QueryService(entityMappingManager);
+        dao = new BasicTempItemDataDao(sessionFactory, queryService);
     }
 
     @Override
