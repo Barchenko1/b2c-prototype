@@ -14,5 +14,6 @@ import java.util.Set;
 @NoArgsConstructor
 public class DiscountDto extends AbstractDiscountDto {
     private String currency;
+    private boolean isPercent;
     private Set<String> articularIdSet;
 }

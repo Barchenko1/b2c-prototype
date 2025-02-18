@@ -32,26 +32,6 @@ import java.util.List;
                         @NamedAttributeNode(value = "optionItems")
                 }
         ),
-        @NamedEntityGraph(
-                name = "optionGroup.withOptionItemsAndArticularItems",
-                attributeNodes = {
-                        @NamedAttributeNode(value = "optionItems", subgraph = "optionItem.articularItems")
-                },
-                subgraphs = {
-                        @NamedSubgraph(
-                                name = "optionItem.articularItems",
-                                attributeNodes = {
-                                        @NamedAttributeNode(value = "articularItems", subgraph = "articularItem.optionItems")
-                                }
-                        ),
-                        @NamedSubgraph(
-                                name = "articularItem.optionItems",
-                                attributeNodes = {
-                                        @NamedAttributeNode(value = "optionItems")
-                                }
-                        )
-                }
-        )
 })
 @NamedQueries({
         @NamedQuery(
@@ -59,7 +39,7 @@ import java.util.List;
                 query = "SELECT DISTINCT og FROM OptionGroup og " +
                         "LEFT JOIN FETCH og.optionItems oi " +
                         "LEFT JOIN FETCH oi.articularItems ai " +
-                        "LEFT JOIN FETCH ai.optionItems " +
+                        "LEFT JOIN FETCH ai.optionItems ao " +
                         "WHERE og.value = :value"
         )
 })
@@ -68,7 +48,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OptionGroup extends AbstractConstantEntity {
-    @OneToMany(mappedBy = "optionGroup", fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
+    @OneToMany(mappedBy = "optionGroup", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<OptionItem> optionItems = new ArrayList<>();
 

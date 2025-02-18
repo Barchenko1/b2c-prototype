@@ -261,9 +261,17 @@ class ArticularItemManagerTest {
 
     private ItemData getItemData() {
         return ItemData.builder()
-                .category(Category.builder().name("categoryNameValue").build())
-                .itemType(ItemType.builder().value("itemTypeNameValue").build())
-                .brand(Brand.builder().value("brandNameValue").build())
+                .category(Category.builder()
+                        .label("categoryLabel")
+                        .value("categoryValue").build())
+                .itemType(ItemType.builder()
+                        .label("itemTypeLabel")
+                        .value("itemTypeValue")
+                        .build())
+                .brand(Brand.builder()
+                        .label("brandLabel")
+                        .value("brandValue")
+                        .build())
                 .articularItemSet(Set.of(getItemDataOption()))
                 .build();
     }

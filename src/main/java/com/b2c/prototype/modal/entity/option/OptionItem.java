@@ -30,7 +30,9 @@ import java.util.Set;
 @NamedQueries({
         @NamedQuery(
                 name = "ArticularItem.findByOptionItemValue",
-                query = "SELECT ai FROM ArticularItem ai JOIN FETCH ai.optionItems oi WHERE oi.value = :value"
+                query = "SELECT ai FROM ArticularItem ai " +
+                        "JOIN FETCH ai.optionItems oi " +
+                        "WHERE oi.value = :value"
         )
 })
 public class OptionItem extends AbstractConstantEntity {
@@ -39,9 +41,19 @@ public class OptionItem extends AbstractConstantEntity {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private OptionGroup optionGroup;
-    @ManyToMany(mappedBy = "optionItems", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToMany(mappedBy = "optionItems")
     @Builder.Default
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<ArticularItem> articularItems = new HashSet<>();
+
+    public void addArticularItem(ArticularItem articularItem) {
+        this.articularItems.add(articularItem);
+        articularItem.getOptionItems().add(this);
+    }
+
+    public void removeArticularItem(ArticularItem articularItem) {
+        this.articularItems.remove(articularItem);
+        articularItem.getOptionItems().remove(this);
+    }
 }

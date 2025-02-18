@@ -1,7 +1,7 @@
 package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.dao.item.ICategoryDao;
-import com.b2c.prototype.modal.dto.payload.CategoryDto;
+import com.b2c.prototype.modal.dto.payload.constant.CategoryDto;
 import com.b2c.prototype.modal.dto.update.CategoryDtoUpdate;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.manager.AbstractTransitiveSelfEntityManager;
@@ -44,7 +44,7 @@ public class CategoryManager extends AbstractTransitiveSelfEntityManager impleme
 
         CategoryDto oldCategoryDto = categoryDtoUpdate.getOldEntity();
         Parameter parameter =
-                parameterFactory.createStringParameter("name", oldCategoryDto.getName());
+                parameterFactory.createStringParameter("name", oldCategoryDto.getRoot().getValue());
         categoryDao.updateEntityTreeOldMain(newCategory, parameter);
     }
 
@@ -53,7 +53,7 @@ public class CategoryManager extends AbstractTransitiveSelfEntityManager impleme
         Category oldCategory = buildCategory(categoryDto);
 
         Parameter parameter =
-                parameterFactory.createStringParameter("name", categoryDto.getName());
+                parameterFactory.createStringParameter("name", categoryDto.getRoot().getValue());
         categoryDao.deleteEntityTree(parameter);
     }
 
@@ -84,13 +84,13 @@ public class CategoryManager extends AbstractTransitiveSelfEntityManager impleme
         Category parentCategory = null;
         if (categoryDto.getParent() != null) {
             parentCategory = Category.builder()
-                    .name(categoryDto.getParent().getName())
+                    .value(categoryDto.getParent().getRoot().getValue())
                     .parent(null)
                     .build();
         }
 
         Category category = Category.builder()
-                .name(categoryDto.getName())
+                .value(categoryDto.getRoot().getValue())
                 .parent(parentCategory)
                 .build();
 
@@ -98,7 +98,7 @@ public class CategoryManager extends AbstractTransitiveSelfEntityManager impleme
             List<Category> childCategory = new ArrayList<>();
             for (CategoryDto childRequest : categoryDto.getChildNodeList()) {
                 Category childCategoryEntity = Category.builder()
-                        .name(childRequest.getName())
+                        .value(childRequest.getRoot().getValue())
                         .parent(category)
                         .build();
                 childCategory.add(childCategoryEntity);

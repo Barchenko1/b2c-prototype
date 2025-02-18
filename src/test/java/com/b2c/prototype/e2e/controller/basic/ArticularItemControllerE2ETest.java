@@ -2,6 +2,9 @@ package com.b2c.prototype.e2e.controller.basic;
 
 import com.b2c.prototype.e2e.BasicE2ETest;
 import com.b2c.prototype.modal.dto.payload.ItemDataDto;
+import com.b2c.prototype.modal.dto.payload.constant.BrandDto;
+import com.b2c.prototype.modal.dto.payload.constant.CategoryValueDto;
+import com.b2c.prototype.modal.dto.payload.constant.ItemTypeDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.BeforeEach;
@@ -146,10 +149,19 @@ class ArticularItemControllerE2ETest extends BasicE2ETest {
 
     private ItemDataDto getItemDataDto() {
         return ItemDataDto.builder()
-                .category("categoryNameValue")
-                .itemType("itemTypeNameValue")
-                .brand("brandNameValue")
-
+                .category(CategoryValueDto.builder()
+                        .label("categoryLabel")
+                        .value("categoryValue")
+                        .build())
+                .itemType(ItemTypeDto.builder()
+                        .label("itemTypeLabel")
+                        .value("itemTypeValue")
+                        .build())
+                .brand(BrandDto.builder()
+                        .label("brandLabel")
+                        .value("brandValue")
+                        .build())
+//                .description()
                 .build();
     }
 }

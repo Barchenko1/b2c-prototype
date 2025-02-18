@@ -44,7 +44,7 @@ public class TempItemDataQuantity {
     private Set<TempItemData> tempItemDataSet = new HashSet<>();
     private int quantity;
 
-    @ManyToMany(mappedBy = "tempItemDataQuantitySet", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToMany(mappedBy = "tempItemDataQuantitySet")
     @Builder.Default
     @ToString.Exclude
     private Set<Bucket> bucketSet = new HashSet<>();

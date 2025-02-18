@@ -65,7 +65,6 @@ import static com.b2c.prototype.util.Util.getUUID;
                         name = "optionItem.subgraph",
                         attributeNodes = {
                                 @NamedAttributeNode("optionGroup"),
-//                                @NamedAttributeNode("articularItems")
                         }
                 ),
                 @NamedSubgraph(
@@ -100,16 +99,9 @@ public class ItemData {
     private ItemType itemType;
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Brand brand;
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     @JoinColumn(name = "item_data_id")
     @EqualsAndHashCode.Exclude
     @Builder.Default
     private Set<ArticularItem> articularItemSet = new HashSet<>();
-
-//    @PrePersist
-//    protected void onPrePersist() {
-//        if (this.itemId == null) {
-//            this.itemId = getUUID();
-//        }
-//    }
 }

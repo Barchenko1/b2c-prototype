@@ -12,6 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ArticularItemDto {
+    private String articularId;
     private String productName;
     private Set<SingleOptionItemDto> options;
     private PriceDto fullPrice;

@@ -1,7 +1,7 @@
 package com.b2c.prototype.modal.dto.update;
 
 import com.b2c.prototype.modal.dto.common.AbstractEntityDtoUpdate;
-import com.b2c.prototype.modal.dto.payload.CategoryDto;
+import com.b2c.prototype.modal.dto.payload.constant.CategoryDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;

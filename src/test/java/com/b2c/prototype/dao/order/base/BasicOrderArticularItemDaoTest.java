@@ -183,16 +183,16 @@ class BasicOrderArticularItemDaoTest extends AbstractCustomEntityDaoTest {
     private Category prepareCategories() {
         Category parent = Category.builder()
                 .id(1L)
-                .name("parent")
+                .value("parent")
                 .build();
         Category root = Category.builder()
                 .id(2L)
-                .name("root")
+                .value("root")
                 .parent(parent)
                 .build();
         Category child = Category.builder()
                 .id(3L)
-                .name("child")
+                .value("child")
                 .build();
 
         parent.setChildNodeList(List.of(root));

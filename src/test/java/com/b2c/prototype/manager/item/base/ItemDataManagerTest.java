@@ -2,6 +2,9 @@ package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.dao.item.IItemDataDao;
 import com.b2c.prototype.modal.dto.payload.ItemDataDto;
+import com.b2c.prototype.modal.dto.payload.constant.BrandDto;
+import com.b2c.prototype.modal.dto.payload.constant.CategoryValueDto;
+import com.b2c.prototype.modal.dto.payload.constant.ItemTypeDto;
 import com.b2c.prototype.modal.dto.response.ResponseItemDataDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.Brand;
@@ -152,27 +155,53 @@ class ItemDataManagerTest {
 
     private ResponseItemDataDto getResponseItemDataDto() {
         return ResponseItemDataDto.builder()
-                .categoryName("categoryNameValue")
-                .itemTypeName("itemTypeNameValue")
-                .brandName("brandNameValue")
-                .itemStatus("itemStatusValue")
+                .category(CategoryValueDto.builder()
+                        .label("categoryLabel")
+                        .value("categoryValue")
+                        .build())
+                .itemType(ItemTypeDto.builder()
+                        .label("itemTypeLabel")
+                        .value("itemTypeValue")
+                        .build())
+                .brand(BrandDto.builder()
+                        .label("brandLabel")
+                        .value("brandValue")
+                        .build())
 //                .description()
                 .build();
     }
 
     private ItemData getItemData() {
         return ItemData.builder()
-                .category(Category.builder().name("categoryNameValue").build())
-                .itemType(ItemType.builder().value("itemTypeNameValue").build())
-                .brand(Brand.builder().value("brandNameValue").build())
+                .category(Category.builder()
+                        .label("categoryLabel")
+                        .value("categoryValue")
+                        .build())
+                .itemType(ItemType.builder()
+                        .label("itemTypeLabel")
+                        .value("itemTypeValue")
+                        .build())
+                .brand(Brand.builder()
+                        .label("brandLabel")
+                        .value("brandValue")
+                        .build())
                 .build();
     }
 
     private ItemDataDto getItemDataDto() {
         return ItemDataDto.builder()
-                .category("categoryNameValue")
-                .itemType("itemTypeNameValue")
-                .brand("brandNameValue")
+                .category(CategoryValueDto.builder()
+                        .label("categoryLabel")
+                        .value("categoryValue")
+                        .build())
+                .itemType(ItemTypeDto.builder()
+                        .label("itemTypeLabel")
+                        .value("itemTypeValue")
+                        .build())
+                .brand(BrandDto.builder()
+                        .label("brandLabel")
+                        .value("brandValue")
+                        .build())
                 .build();
     }
 

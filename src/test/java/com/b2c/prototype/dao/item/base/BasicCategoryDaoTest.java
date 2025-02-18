@@ -29,16 +29,19 @@ queryService = new QueryService(entityMappingManager);
     protected EntityDataSet<? extends TransitiveSelfEntity> getTestDataSet() {
         Category parent = Category.builder()
                 .id(1L)
-                .name("parent")
+                .label("parent")
+                .value("parent")
                 .build();
         Category root = Category.builder()
                 .id(2L)
-                .name("root")
+                .label("root")
+                .value("root")
                 .parent(parent)
                 .build();
         Category child = Category.builder()
                 .id(3L)
-                .name("child")
+                .label("child")
+                .value("child")
                 .build();
 
         parent.addChildTransitiveEntity(root);
@@ -49,14 +52,17 @@ queryService = new QueryService(entityMappingManager);
     @Override
     protected EntityDataSet<? extends TransitiveSelfEntity> getSaveDataSet() {
         Category parent = Category.builder()
-                .name("parent")
+                .label("parent")
+                .value("parent")
                 .build();
         Category root = Category.builder()
-                .name("root")
+                .label("Update root")
+                .value("Update root")
                 .parent(parent)
                 .build();
         Category child = Category.builder()
-                .name("child")
+                .label("child")
+                .value("child")
                 .build();
 
         parent.addChildTransitiveEntity(root);
@@ -67,14 +73,17 @@ queryService = new QueryService(entityMappingManager);
     @Override
     protected EntityDataSet<? extends TransitiveSelfEntity> getUpdateDataSet() {
         Category parent = Category.builder()
-                .name("parent")
+                .label("parent")
+                .value("parent")
                 .build();
         Category root = Category.builder()
-                .name("Update root")
+                .label("Update root")
+                .value("Update root")
                 .parent(parent)
                 .build();
         Category child = Category.builder()
-                .name("child")
+                .label("child")
+                .value("child")
                 .build();
 
         parent.addChildTransitiveEntity(root);
@@ -86,7 +95,8 @@ queryService = new QueryService(entityMappingManager);
     protected EntityDataSet<? extends TransitiveSelfEntity> getDeleteDataSet() {
         Category parent = Category.builder()
                 .id(1L)
-                .name("parent")
+                .label("parent")
+                .value("parent")
                 .build();
 
         return new EntityDataSet<>(parent,

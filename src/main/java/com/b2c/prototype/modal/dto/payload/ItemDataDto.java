@@ -1,5 +1,8 @@
 package com.b2c.prototype.modal.dto.payload;
 
+import com.b2c.prototype.modal.dto.payload.constant.BrandDto;
+import com.b2c.prototype.modal.dto.payload.constant.CategoryValueDto;
+import com.b2c.prototype.modal.dto.payload.constant.ItemTypeDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,8 +17,8 @@ import java.util.Set;
 @NoArgsConstructor
 public class ItemDataDto {
     private Map<String, String> description;
-    private String category;
-    private String itemType;
-    private String brand;
+    private CategoryValueDto category;
+    private ItemTypeDto itemType;
+    private BrandDto brand;
     private Set<ArticularItemDto> articularItemSet;
 }

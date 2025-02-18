@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public final class CategoryUtil {
     public static Category buildCategory(TransitiveSelfYaml transitiveSelfYaml) {
         Category category = Category.builder()
-                .name(transitiveSelfYaml.getName())
+                .value(transitiveSelfYaml.getName())
                 .build();
 
         if (transitiveSelfYaml.getSub() != null) {
@@ -82,7 +82,7 @@ public final class CategoryUtil {
             if (yamlCategory.getSub() != null && !yamlCategory.getSub().isEmpty()) {
                 newSubcategories = yamlCategory.getSub().stream()
                         .filter(subName -> existingParentCategory.getChildNodeList().stream()
-                                .noneMatch(child -> child.getName().equals(subName.getName())))
+                                .noneMatch(child -> child.getValue().equals(subName.getName())))
                         .collect(Collectors.toList());
 
                 if (!newSubcategories.isEmpty()) {

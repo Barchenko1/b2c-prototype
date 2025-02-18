@@ -145,16 +145,16 @@ public class EntityOperationManager implements IEntityOperationManager {
     @Override
     public <E, R> List<R> getEntityGraphDtoList(String graph, Function<E, R> mapToDtoFunction) {
         LOGGER.info("Getting entity dto list");
-        List<E> entityList = dao.getEntityList();
+        List<E> entityList = dao.getEntityGraphList(graph);
         return entityList.stream()
                 .map(entity -> transformEntityToDto(entity, mapToDtoFunction))
                 .toList();
     }
 
     @Override
-    public <E, R> List<R> getSubEntityGraphDtoList(String graphNamedQuery, Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction) {
+    public <E, R> List<R> getSubEntityGraphDtoList(String graph, Supplier<Parameter> parameterSupplier, Function<E, R> mapToDtoFunction) {
         LOGGER.info("Getting entity dto list");
-        List<E> entityList = dao.getEntityList(parameterSupplier.get());
+        List<E> entityList = dao.getEntityGraphList(graph, parameterSupplier.get());
         return entityList.stream()
                 .map(entity -> transformEntityToDto(entity, mapToDtoFunction))
                 .toList();

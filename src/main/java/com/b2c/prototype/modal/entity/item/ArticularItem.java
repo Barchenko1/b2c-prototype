@@ -29,6 +29,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import static com.b2c.prototype.util.Util.getUUID;
@@ -102,6 +103,7 @@ import static com.b2c.prototype.util.Util.getUUID;
                         "JOIN FETCH ai.optionItems oi " +
                         "JOIN FETCH oi.optionGroup og " +
                         "JOIN FETCH og.optionItems " +
+                        "JOIN FETCH oi.articularItems " +
                         "WHERE ai.articularId = :articularId"
         )
 })
@@ -135,16 +137,9 @@ public class ArticularItem {
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "status_id")
     private ArticularStatus status;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "discount_id")
     private Discount discount;
-
-//    @PrePersist
-//    protected void onPrePersist() {
-//        if (this.articularId == null) {
-//            this.articularId = getUUID();
-//        }
-//    }
 
     public void addOptionItem(OptionItem optionItem) {
         this.optionItems.add(optionItem);

@@ -89,7 +89,7 @@ public abstract class AbstractTransitiveSelfEntityDaoTest {
     @BeforeEach
     public void setUp() {
         try {
-            Field entityIdentifierDaoField = AbstractTransitiveSelfEntityDao.class.getDeclaredField("entityIdentifierDao");
+            Field entityIdentifierDaoField = AbstractTransitiveSelfEntityDao.class.getDeclaredField("queryService");
             entityIdentifierDaoField.setAccessible(true);
             entityIdentifierDaoField.set(dao, queryService);
 

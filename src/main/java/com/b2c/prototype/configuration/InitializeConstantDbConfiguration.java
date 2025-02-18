@@ -138,7 +138,7 @@ public class InitializeConstantDbConfiguration {
         initializeOptionGroupEntities(defaultLocale);
         initializeRatingEntities();
 
-        initializeCategory(defaultLocale);
+//        initializeCategory(defaultLocale);
 
     }
 

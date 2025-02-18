@@ -33,8 +33,10 @@ public class Category extends TransitiveSelfEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Column(name = "label", nullable = false)
+    private String label;
+    @Column(name = "value", nullable = false)
+    private String value;
     @ManyToOne
     @JoinColumn(name = "category_id")
     @ToString.Exclude
@@ -52,7 +54,7 @@ public class Category extends TransitiveSelfEntity {
 
     @Override
     public String getRootField() {
-        return name;
+        return value;
     }
 
     @Override

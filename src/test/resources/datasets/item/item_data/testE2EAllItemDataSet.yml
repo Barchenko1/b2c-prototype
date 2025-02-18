@@ -2,10 +2,16 @@ brand:
   - id: 1
     value: "TechBrand"
     label: "TechBrand"
+  - id: 2
+    value: "Update TechBrand"
+    label: "Update TechBrand"
 item_type:
   - id: 1
     value: "Electronic"
     label: "Electronic"
+  - id: 2
+    value: "Update Electronic"
+    label: "Update Electronic"
 currency:
   - id: 1
     value: "USD"
@@ -18,12 +24,6 @@ price:
     amount: 1200
     currency_id: 1
   - id: 3
-    amount: 1100
-    currency_id: 1
-  - id: 4
-    amount: 1200
-    currency_id: 1
-  - id: 5
     amount: 1100
     currency_id: 1
 discount:
@@ -75,10 +75,19 @@ option_item:
     option_group_id: 2
 category:
   - id: 1
-    name: "Electronic"
+    label: "Electronic"
+    value: "Electronic"
   - id: 2
     category_id: 1
-    name: "Laptop"
+    label: "Laptop"
+    value: "Laptop"
+  - id: 3
+    label: "Update Electronic"
+    value: "Update Electronic"
+  - id: 4
+    category_id: 3
+    label: "Update Laptop"
+    value: "Update Laptop"
 articular_status:
   - id: 1
     value: "NEW"
@@ -105,7 +114,7 @@ articular_item:
     dateOfCreate: 10000
     discount_id: 1
     fullprice_id: 1
-    totalprice_id: 2
+    totalprice_id: 1
     item_data_id: 1
     status_id: 1
     productname: "Mob 1"
@@ -113,8 +122,8 @@ articular_item:
     articular_id: 2
     dateOfCreate: 10000
     discount_id: 2
-    fullprice_id: 1
-    totalprice_id: 2
+    fullprice_id: 2
+    totalprice_id: 3
     item_data_id: 2
     status_id: 1
     productname: "Laptop 1"
@@ -122,8 +131,8 @@ articular_item:
     articular_id: 3
     dateOfCreate: 10000
     discount_id: 3
-    fullprice_id: 3
-    totalprice_id: 4
+    fullprice_id: 2
+    totalprice_id: 3
     item_data_id: 2
     status_id: 1
     productname: "Laptop 2"

@@ -49,7 +49,7 @@ public class Message {
     private String message;
     private String sendSystem;
     private String subscribe;
-    @ManyToMany(mappedBy = "messages", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToMany(mappedBy = "messages")
     @Builder.Default
     @ToString.Exclude
     private Set<MessageBox> boxes = new HashSet<>();

@@ -14,4 +14,5 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public class InitDiscountDto extends AbstractDiscountDto {
     private String currency;
+    private boolean isPercent;
 }
