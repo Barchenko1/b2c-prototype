@@ -2,7 +2,6 @@ brand:
   - id: 1
     value: "Hermes"
     label: "Hermes"
-
 item_type:
   - id: 1
     value: "Clothes"
@@ -11,20 +10,8 @@ currency:
   - id: 1
     value: "USD"
     label: "USD"
-price:
-  - id: 1
-    amount: 100
-    currency_id: 1
-  - id: 2
-    amount: 20
-    currency_id: 1
-discount:
-  - id: 1
-    amount: 5
-    charSequenceCode: "abc"
-    isActive: true
-    isPercent: false
-    currency_id: 1
+price: []
+discount: []
 option_group:
   - id: 1
     label: "Size"
@@ -50,12 +37,4 @@ item_data:
     item_id: 123
     brand_id: 1
     itemtype_id: 1
-articular_item:
-  - id: 1
-    articular_id: 1
-    dateOfCreate: 10000
-    discount_id: 1
-    fullprice_id: 1
-    totalprice_id: 2
-    status_id: 2
-    productname: "Mob 2"
+articular_item: []

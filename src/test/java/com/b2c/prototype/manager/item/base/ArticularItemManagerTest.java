@@ -5,7 +5,7 @@ import com.b2c.prototype.modal.dto.payload.InitDiscountDto;
 import com.b2c.prototype.modal.dto.payload.ArticularItemDto;
 import com.b2c.prototype.modal.dto.payload.OptionGroupOptionItemSetDto;
 import com.b2c.prototype.modal.dto.payload.PriceDto;
-import com.b2c.prototype.modal.dto.response.ResponseItemDataOptionDto;
+import com.b2c.prototype.modal.dto.response.ResponseArticularItemDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
@@ -88,7 +88,7 @@ class ArticularItemManagerTest {
             return null;
         }).when(itemDataOptionDao).executeConsumer(any(Consumer.class));
 
-        articularItemManager.saveUpdateItemDataOption(itemId, articularItemDtoList);
+        articularItemManager.saveArticularItem(itemId, articularItemDtoList);
 
         verify(itemDataOptionDao).executeConsumer(any(Consumer.class));
     }
@@ -119,7 +119,7 @@ class ArticularItemManagerTest {
             return null;
         }).when(itemDataOptionDao).executeConsumer(any(Consumer.class));
 
-        articularItemManager.saveUpdateItemDataOption(itemId, articularItemDtoList);
+        articularItemManager.updateArticularItem(itemId, articularItemDtoList);
 
         verify(itemDataOptionDao).executeConsumer(any(Consumer.class));
     }
@@ -132,7 +132,7 @@ class ArticularItemManagerTest {
         when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
                 .thenReturn(parameterSupplier);
 
-        articularItemManager.deleteItemDataOption(articularId);
+        articularItemManager.deleteArticularItem(articularId);
 
         verify(itemDataOptionDao).findEntityAndDelete(parameter);
     }
@@ -141,19 +141,19 @@ class ArticularItemManagerTest {
     void getResponseItemDataOptionDto_ShouldReturnDto() {
         String value = "testValue";
         ArticularItem articularItem = getItemDataOption();
-        ResponseItemDataOptionDto responseDto = responseItemDataOptionDto();
+        ResponseArticularItemDto responseDto = responseItemDataOptionDto();
 
-        Function<ArticularItem, ResponseItemDataOptionDto> function = mock(Function.class);
+        Function<ArticularItem, ResponseArticularItemDto> function = mock(Function.class);
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
         when(supplierService.parameterStringSupplier(ARTICULAR_ID, value))
                 .thenReturn(parameterSupplier);
         when(itemDataOptionDao.getEntityGraph(anyString(), eq(parameter))).thenReturn(articularItem);
-        when(transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseItemDataOptionDto.class))
+        when(transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class))
                 .thenReturn(function);
         when(function.apply(articularItem)).thenReturn(responseDto);
 
-        ResponseItemDataOptionDto result = articularItemManager.getResponseItemDataOptionDto(value);
+        ResponseArticularItemDto result = articularItemManager.getResponseArticularItemDto(value);
 
         assertEquals(responseDto, result);
     }
@@ -161,15 +161,15 @@ class ArticularItemManagerTest {
     @Test
     void getResponseItemDataOptionDtoList_ShouldReturnDtoList() {
         ArticularItem articularItem = getItemDataOption();
-        ResponseItemDataOptionDto responseDto = responseItemDataOptionDto();
-        List<ResponseItemDataOptionDto> responseDtoList = List.of(responseDto);
-        Function<ArticularItem, ResponseItemDataOptionDto> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseItemDataOptionDto.class))
+        ResponseArticularItemDto responseDto = responseItemDataOptionDto();
+        List<ResponseArticularItemDto> responseDtoList = List.of(responseDto);
+        Function<ArticularItem, ResponseArticularItemDto> function = mock(Function.class);
+        when(transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class))
                 .thenReturn(function);
         when(itemDataOptionDao.getEntityList()).thenReturn(List.of(getItemDataOption()));
         when(function.apply(articularItem)).thenReturn(responseDto);
 
-        List<ResponseItemDataOptionDto> result = articularItemManager.getResponseItemDataOptionDtoList();
+        List<ResponseArticularItemDto> result = articularItemManager.getResponseArticularItemDtoList();
 
         assertEquals(responseDtoList, result);
     }
@@ -177,15 +177,15 @@ class ArticularItemManagerTest {
     @Test
     void getResponseItemDataOptionDtoFiltered_ShouldReturnDtoList() {
         ArticularItem articularItem = getItemDataOption();
-        ResponseItemDataOptionDto responseDto = responseItemDataOptionDto();
-        List<ResponseItemDataOptionDto> responseDtoList = List.of(responseDto);
-        Function<ArticularItem, ResponseItemDataOptionDto> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseItemDataOptionDto.class))
+        ResponseArticularItemDto responseDto = responseItemDataOptionDto();
+        List<ResponseArticularItemDto> responseDtoList = List.of(responseDto);
+        Function<ArticularItem, ResponseArticularItemDto> function = mock(Function.class);
+        when(transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class))
                 .thenReturn(function);
         when(itemDataOptionDao.getEntityList()).thenReturn(List.of(getItemDataOption()));
         when(function.apply(articularItem)).thenReturn(responseDto);
 
-        List<ResponseItemDataOptionDto> result = articularItemManager.getResponseItemDataOptionDtoFiltered();
+        List<ResponseArticularItemDto> result = articularItemManager.getResponseArticularItemDtoFiltered();
 
         assertEquals(responseDtoList, result);
     }
@@ -194,15 +194,15 @@ class ArticularItemManagerTest {
     void getResponseItemDataOptionDtoSorted_ShouldReturnSortedList() {
         String sortType = "asc";
         ArticularItem articularItem = getItemDataOption();
-        ResponseItemDataOptionDto responseDto = responseItemDataOptionDto();
-        List<ResponseItemDataOptionDto> responseDtoList = List.of(responseDto);
-        Function<ArticularItem, ResponseItemDataOptionDto> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseItemDataOptionDto.class))
+        ResponseArticularItemDto responseDto = responseItemDataOptionDto();
+        List<ResponseArticularItemDto> responseDtoList = List.of(responseDto);
+        Function<ArticularItem, ResponseArticularItemDto> function = mock(Function.class);
+        when(transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class))
                 .thenReturn(function);
         when(itemDataOptionDao.getEntityList()).thenReturn(List.of(articularItem));
         when(function.apply(articularItem)).thenReturn(responseDto);
 
-        List<ResponseItemDataOptionDto> result = articularItemManager.getResponseItemDataOptionDtoSorted(sortType);
+        List<ResponseArticularItemDto> result = articularItemManager.getResponseArticularItemDtoSorted(sortType);
 
         assertEquals(responseDtoList, result);
     }
@@ -222,8 +222,8 @@ class ArticularItemManagerTest {
                 .build();
     }
 
-    private ResponseItemDataOptionDto responseItemDataOptionDto() {
-        return ResponseItemDataOptionDto.builder()
+    private ResponseArticularItemDto responseItemDataOptionDto() {
+        return ResponseArticularItemDto.builder()
                 .articularId("articularId")
                 .dateOfCreate(100)
                 .fullPrice(getPriceDto(10))

@@ -2,6 +2,7 @@ package com.b2c.prototype.dao.item.base;
 
 import com.b2c.prototype.dao.AbstractCustomEntityDaoTest;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
+import com.b2c.prototype.modal.entity.item.ArticularStatus;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
@@ -60,6 +61,8 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
             statement.execute("DELETE FROM articular_item_option_item");
             statement.execute("DELETE FROM option_item");
             statement.execute("DELETE FROM articular_item");
+
+            statement.execute("ALTER SEQUENCE articular_item_id_seq RESTART WITH 1");
             connection.commit();
         } catch (Exception e) {
             throw new RuntimeException("Failed to clean table: articular_item", e);
@@ -155,6 +158,11 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
                 .isPercent(false)
                 .currency(currency)
                 .build();
+        ArticularStatus status = ArticularStatus.builder()
+                .id(1L)
+                .label("NEW")
+                .value("NEW")
+                .build();
 
         ArticularItem articularItem = ArticularItem.builder()
                 .articularId("1")
@@ -162,6 +170,8 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
                 .fullPrice(price1)
                 .discount(discount)
                 .totalPrice(price2)
+                .status(status)
+                .productName("Mob 1")
                 .build();
         articularItem.addOptionItem(optionItem1);
         articularItem.addOptionItem(optionItem2);
@@ -212,6 +222,11 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
                 .isPercent(false)
                 .currency(currency)
                 .build();
+        ArticularStatus status = ArticularStatus.builder()
+                .id(2L)
+                .label("COMMON")
+                .value("COMMON")
+                .build();
 
         ArticularItem articularItem = ArticularItem.builder()
                 .id(1L)
@@ -221,6 +236,8 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
                 .fullPrice(price1)
                 .discount(discount)
                 .totalPrice(price2)
+                .status(status)
+                .productName("Mob 2")
                 .build();
 
         articularItem.addOptionItem(optionItem1);
@@ -379,7 +396,7 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id", 1);
 
         dao.findEntityAndDelete(parameter);
-        verifyExpectedData("/datasets/item/articular_item/emptyArticularItemDataSet.yml");
+        verifyExpectedData("/datasets/item/articular_item/deleteArticularItemDataSet.yml");
     }
 
     @Test
@@ -391,7 +408,7 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
         };
 
         dao.executeConsumer(consumer);
-        verifyExpectedData("/datasets/item/articular_item/emptyArticularItemDataSet.yml");
+        verifyExpectedData("/datasets/item/articular_item/deleteArticularItemDataSet.yml");
     }
 
     @Test
@@ -414,7 +431,7 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
         ArticularItem articularItem = prepareTestItemDataOption();
 
         dao.deleteEntity(articularItem);
-        verifyExpectedData("/datasets/item/articular_item/emptyArticularItemDataSet.yml");
+        verifyExpectedData("/datasets/item/articular_item/deleteArticularItemDataSet.yml");
     }
 
     @Test

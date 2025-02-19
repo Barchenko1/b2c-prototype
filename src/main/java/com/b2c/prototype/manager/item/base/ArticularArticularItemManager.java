@@ -2,7 +2,7 @@ package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.dao.item.IItemDataOptionDao;
 import com.b2c.prototype.modal.dto.payload.ArticularItemDto;
-import com.b2c.prototype.modal.dto.response.ResponseItemDataOptionDto;
+import com.b2c.prototype.modal.dto.response.ResponseArticularItemDto;
 import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.service.common.EntityOperationManager;
@@ -39,7 +39,7 @@ public class ArticularArticularItemManager implements IArticularItemManager {
     }
 
     @Override
-    public void saveUpdateItemDataOption(String itemId, List<ArticularItemDto> articularItemDtoList) {
+    public void saveArticularItem(String itemId, List<ArticularItemDto> articularItemDtoList) {
         entityOperationDao.executeConsumer(session -> {
             ItemData itemData = searchService.getEntity(
                     ItemData.class,
@@ -64,38 +64,43 @@ public class ArticularArticularItemManager implements IArticularItemManager {
     }
 
     @Override
-    public void deleteItemDataOption(String articularId) {
+    public void updateArticularItem(String itemId, List<ArticularItemDto> articularItemDtoList) {
+
+    }
+
+    @Override
+    public void deleteArticularItem(String articularId) {
         entityOperationDao.deleteEntityByParameter(
                 supplierService.parameterStringSupplier(ARTICULAR_ID, articularId));
     }
 
     @Override
-    public ResponseItemDataOptionDto getResponseItemDataOptionDto(String articularId) {
+    public ResponseArticularItemDto getResponseArticularItemDto(String articularId) {
         return entityOperationDao.getEntityGraphDto(
                 ITEM_DATA_OPTION_FULL,
                 supplierService.parameterStringSupplier(ARTICULAR_ID, articularId),
-                transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseItemDataOptionDto.class));
+                transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class));
     }
 
     @Override
-    public List<ResponseItemDataOptionDto> getResponseItemDataOptionDtoList() {
+    public List<ResponseArticularItemDto> getResponseArticularItemDtoList() {
         return entityOperationDao.getEntityGraphDtoList(
                 ITEM_DATA_OPTION_FULL,
-                transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseItemDataOptionDto.class));
+                transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class));
 
     }
 
     @Override
-    public List<ResponseItemDataOptionDto> getResponseItemDataOptionDtoFiltered() {
+    public List<ResponseArticularItemDto> getResponseArticularItemDtoFiltered() {
         return entityOperationDao.getEntityGraphDtoList(
                 ITEM_DATA_OPTION_FULL,
-                transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseItemDataOptionDto.class));
+                transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class));
     }
 
     @Override
-    public List<ResponseItemDataOptionDto> getResponseItemDataOptionDtoSorted(String sortType) {
+    public List<ResponseArticularItemDto> getResponseArticularItemDtoSorted(String sortType) {
         return entityOperationDao.getEntityGraphDtoList(
                 ITEM_DATA_OPTION_FULL,
-                transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseItemDataOptionDto.class));
+                transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class));
     }
 }

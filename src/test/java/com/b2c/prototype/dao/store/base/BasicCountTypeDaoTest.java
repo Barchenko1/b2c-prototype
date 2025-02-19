@@ -15,7 +15,7 @@ class BasicCountTypeDaoTest extends AbstractConstantEntityDaoTest {
     public static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(CountType.class, "count_type"));
-queryService = new QueryService(entityMappingManager);
+        queryService = new QueryService(entityMappingManager);
         dao = new BasicCountTypeDao(sessionFactory, queryService);
     }
 

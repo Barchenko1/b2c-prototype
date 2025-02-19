@@ -37,6 +37,13 @@ option_item:
     value: "M"
     label: "M"
     option_group_id: 1
+articular_status:
+  - id: 1
+    value: "NEW"
+    label: "NEW"
+  - id: 2
+    value: "COMMON"
+    label: "COMMON"
 item_data:
   - id: 1
     item_id: 123

@@ -23,8 +23,8 @@ public class AbstractUserProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
-    @Column(nullable = false, unique = true, updatable = false)
-    private String user_id;
+    @Column(name = "user_id", nullable = false, unique = true, updatable = false)
+    private String userId;
     @Column(nullable = false, unique = true)
     private String username;
     @Column(nullable = false, unique = true)

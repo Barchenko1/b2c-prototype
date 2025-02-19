@@ -1,5 +1,0 @@
-temp_user_profile:
-  - id: 1
-    sessionId: "abc"
-    email: "abc@mail.com"
-    username: "abc"

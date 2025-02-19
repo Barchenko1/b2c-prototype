@@ -59,6 +59,7 @@ class BasicReviewDaoTest extends AbstractConstantEntityDaoTest {
                 .value(5)
                 .build();
         Review review = Review.builder()
+                .uniqueId("123")
                 .dateOfCreate(100)
                 .title("title")
                 .message("message")

@@ -28,7 +28,7 @@ class BasicStoreDaoTest extends AbstractConstantEntityDaoTest {
     public static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(Store.class, "store"));
-queryService = new QueryService(entityMappingManager);
+        queryService = new QueryService(entityMappingManager);
         dao = new BasicStoreDao(sessionFactory, queryService);
     }
 

@@ -1,16 +1,17 @@
 package com.b2c.prototype.processor.item;
 
 import com.b2c.prototype.modal.dto.payload.ArticularItemDto;
-import com.b2c.prototype.modal.dto.response.ResponseItemDataOptionDto;
+import com.b2c.prototype.modal.dto.response.ResponseArticularItemDto;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IArticularItemProcessor {
-    void saveUpdateItemDataOption(String itemId, List<ArticularItemDto> itemDataOptions);
-    void deleteItemDataOption(String articularId);
+    void saveUpdateArticularItemList(Map<String, String> requestParams, List<ArticularItemDto> articularItemDtoList);
+    void deleteArticularItem(Map<String, String> requestParams);
 
-    ResponseItemDataOptionDto getResponseItemDataOptionDto(String articularId);
-    List<ResponseItemDataOptionDto> getResponseItemDataOptionDtoList();
-    List<ResponseItemDataOptionDto> getResponseItemDataOptionDtoFiltered();
-    List<ResponseItemDataOptionDto> getResponseItemDataOptionDtoSorted(String sortType);
+    ResponseArticularItemDto getResponseArticularItemDto(Map<String, String> requestParams);
+    List<ResponseArticularItemDto> getResponseArticularItemDtoList(Map<String, String> requestParams);
+    List<ResponseArticularItemDto> getResponseArticularItemDtoFiltered(Map<String, String> requestParams);
+    List<ResponseArticularItemDto> getResponseArticularItemDtoSorted(Map<String, String> requestParams);
 }

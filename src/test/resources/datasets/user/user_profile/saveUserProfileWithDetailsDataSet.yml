@@ -34,7 +34,8 @@ credit_card:
     ownerSecondName: "secondName"
     isActive: true
 user_profile:
-  - username: "username"
+  - user_id: "123"
+    username: "username"
     email: "email"
     dateOfCreate: 100
     isActive: true

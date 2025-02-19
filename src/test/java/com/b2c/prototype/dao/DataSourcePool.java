@@ -16,7 +16,6 @@ public final class DataSourcePool {
     private static final long MAX_LIFETIME = 1800000; // 30 minutes
 
     private static final String SQLITE_DRIVER = "org.sqlite.JDBC";
-    private static final String SQLITE_DB_URL = "jdbc:sqlite:data/cachetestdb.sqlite";
 
     private static HikariDataSource postgresDataSource;
     private static HikariDataSource sqliteDataSource;
@@ -42,24 +41,5 @@ public final class DataSourcePool {
             return postgresDataSource;
         }
     }
-
-    public static HikariDataSource getSqliteDataSource() {
-        synchronized (DataSourcePool.class) {
-            if (sqliteDataSource == null) {
-                sqliteDataSource = new HikariDataSource();
-                sqliteDataSource.setJdbcUrl(SQLITE_DB_URL);
-                sqliteDataSource.setDriverClassName(SQLITE_DRIVER);
-
-                sqliteDataSource.setMaximumPoolSize(MAX_POOL_SIZE);
-                sqliteDataSource.setMinimumIdle(MIN_IDLE);
-                sqliteDataSource.setConnectionTimeout(CONNECTION_TIMEOUT);
-                sqliteDataSource.setIdleTimeout(IDLE_TIMEOUT);
-                sqliteDataSource.setMaxLifetime(MAX_LIFETIME);
-            }
-
-            return sqliteDataSource;
-        }
-    }
-
 
 }

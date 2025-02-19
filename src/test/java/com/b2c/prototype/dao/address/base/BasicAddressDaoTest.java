@@ -16,7 +16,7 @@ class BasicAddressDaoTest extends AbstractConstantEntityDaoTest {
     public static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(Address.class, "address"));
-queryService = new QueryService(entityMappingManager);
+        queryService = new QueryService(entityMappingManager);
         dao = new BasicAddressDao(sessionFactory, queryService);
     }
 

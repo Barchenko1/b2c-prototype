@@ -187,6 +187,7 @@ class BasicUserProfileDaoTest extends AbstractCustomEntityDaoTest {
                 .build();
 
         return UserProfile.builder()
+                .userId("123")
                 .username("username")
                 .email("email")
                 .dateOfCreate(100)
@@ -249,6 +250,7 @@ class BasicUserProfileDaoTest extends AbstractCustomEntityDaoTest {
 
         return UserProfile.builder()
                 .id(1L)
+                .userId("123")
                 .username("Update username")
                 .email("Update email")
                 .dateOfCreate(200)

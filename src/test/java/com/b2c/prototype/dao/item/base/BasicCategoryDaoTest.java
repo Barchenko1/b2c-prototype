@@ -16,7 +16,7 @@ class BasicCategoryDaoTest extends AbstractTransitiveSelfEntityDaoTest {
     static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(Category.class, "category"));
-queryService = new QueryService(entityMappingManager);
+        queryService = new QueryService(entityMappingManager);
         dao = new BasicCategoryDao(sessionFactory, queryService);
     }
 
@@ -56,8 +56,8 @@ queryService = new QueryService(entityMappingManager);
                 .value("parent")
                 .build();
         Category root = Category.builder()
-                .label("Update root")
-                .value("Update root")
+                .label("root")
+                .value("root")
                 .parent(parent)
                 .build();
         Category child = Category.builder()

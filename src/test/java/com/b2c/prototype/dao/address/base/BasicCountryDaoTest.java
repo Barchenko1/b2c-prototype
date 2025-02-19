@@ -15,7 +15,7 @@ public class BasicCountryDaoTest extends AbstractConstantEntityDaoTest {
     public static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(Country.class, "country"));
-queryService = new QueryService(entityMappingManager);
+        queryService = new QueryService(entityMappingManager);
         dao = new BasicCountryDao(sessionFactory, queryService);
     }
 

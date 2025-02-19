@@ -15,7 +15,7 @@ class BasicBrandDaoTest extends AbstractConstantEntityDaoTest {
     public static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(Brand.class, "brand"));
-queryService = new QueryService(entityMappingManager);
+        queryService = new QueryService(entityMappingManager);
         dao = new BasicBrandDao(sessionFactory, queryService);
     }
 

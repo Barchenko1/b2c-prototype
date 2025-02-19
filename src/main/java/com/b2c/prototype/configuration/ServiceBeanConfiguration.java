@@ -20,13 +20,11 @@ import com.b2c.prototype.dao.price.ICurrencyDao;
 import com.b2c.prototype.dao.rating.IRatingDao;
 import com.b2c.prototype.dao.store.ICountTypeDao;
 import com.b2c.prototype.dao.user.IContactInfoDao;
-import com.b2c.prototype.dao.embedded.IBucketDao;
 import com.b2c.prototype.dao.address.IAddressDao;
 import com.b2c.prototype.dao.delivery.IDeliveryDao;
 import com.b2c.prototype.dao.payment.ICreditCardDao;
 import com.b2c.prototype.dao.payment.IPaymentDao;
 import com.b2c.prototype.dao.item.ICategoryDao;
-import com.b2c.prototype.dao.embedded.IWishListDao;
 import com.b2c.prototype.dao.user.ICountryPhoneCodeDao;
 import com.b2c.prototype.manager.option.IOptionItemManager;
 import com.b2c.prototype.manager.option.base.OptionItemManager;
@@ -92,8 +90,6 @@ import com.b2c.prototype.manager.userprofile.ICountryPhoneCodeManager;
 import com.b2c.prototype.manager.userprofile.IUserProfileManager;
 import com.b2c.prototype.manager.userprofile.basic.CountryPhoneCodeManager;
 import com.b2c.prototype.manager.userprofile.basic.UserProfileManager;
-import com.b2c.prototype.service.embedded.bucket.BucketManager;
-import com.b2c.prototype.service.embedded.bucket.IBucketManager;
 import com.b2c.prototype.manager.payment.base.CreditCardManager;
 import com.b2c.prototype.manager.payment.ICreditCardManager;
 import com.b2c.prototype.manager.item.ICategoryManager;
@@ -107,8 +103,6 @@ import com.b2c.prototype.manager.item.base.ItemManager;
 import com.b2c.prototype.dao.post.IPostDao;
 import com.b2c.prototype.dao.user.IUserProfileDao;
 import com.b2c.prototype.manager.userprofile.basic.ContactInfoManager;
-import com.b2c.prototype.service.embedded.wishlist.IWishListManager;
-import com.b2c.prototype.service.embedded.wishlist.WishListManager;
 import com.b2c.prototype.gateway.IRestClient;
 import com.b2c.prototype.gateway.RestClient;
 import com.b2c.prototype.service.supplier.ISupplierService;
@@ -253,11 +247,6 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public IBucketManager bucketManager(IBucketDao bucketDao) {
-        return new BucketManager(bucketDao);
-    }
-
-    @Bean
     public IContactInfoManager contactInfoManager(IContactInfoDao contactInfoDao,
                                                   ISearchService searchService,
                                                   ITransformationFunctionService transformationFunctionService,
@@ -344,11 +333,6 @@ public class ServiceBeanConfiguration {
                                                             ITransformationFunctionService transformationFunctionService,
                                                             ISupplierService supplierService) {
         return new OrderItemDataOptionManager(orderItemDao, transformationFunctionService, supplierService);
-    }
-
-    @Bean
-    public IWishListManager wishListManager(IWishListDao wishListDao) {
-        return new WishListManager(wishListDao);
     }
 
     @Bean

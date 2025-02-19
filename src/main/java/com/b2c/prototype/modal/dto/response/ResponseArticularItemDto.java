@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Data
 @Builder
-public class ResponseItemDataOptionDto {
+public class ResponseArticularItemDto {
     private String articularId;
     private long dateOfCreate;
     private PriceDto fullPrice;

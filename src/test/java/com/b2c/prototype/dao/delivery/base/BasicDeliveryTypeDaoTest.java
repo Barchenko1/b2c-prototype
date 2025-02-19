@@ -15,7 +15,7 @@ class BasicDeliveryTypeDaoTest extends AbstractConstantEntityDaoTest {
     public static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(DeliveryType.class, "delivery_type"));
-queryService = new QueryService(entityMappingManager);
+        queryService = new QueryService(entityMappingManager);
         dao = new BasicDeliveryTypeDao(sessionFactory, queryService);
     }
 

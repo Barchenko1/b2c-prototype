@@ -1,4 +1,7 @@
 category:
-  - name: "parent"
-  - name: "root"
-  - name: "child"
+  - value: "parent"
+    label: "parent"
+  - value: "root"
+    label: "root"
+  - value: "child"
+    label: "child"

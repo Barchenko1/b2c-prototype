@@ -16,7 +16,7 @@ class BasicDiscountDaoTest extends AbstractConstantEntityDaoTest {
     static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(Discount.class, "discount"));
-queryService = new QueryService(entityMappingManager);
+        queryService = new QueryService(entityMappingManager);
         dao = new BasicDiscountDao(sessionFactory, queryService);
     }
 

@@ -1,6 +1,8 @@
 category:
   - id: 1
-    name: "parent"
+    label: "parent"
+    value: "parent"
   - id: 2
     category_id: 1
-    name: "root"
+    label: "root"
+    value: "root"

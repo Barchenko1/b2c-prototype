@@ -34,7 +34,6 @@ import com.b2c.prototype.dao.payment.IPaymentMethodDao;
 import com.b2c.prototype.dao.item.ICategoryDao;
 import com.b2c.prototype.dao.user.base.BasicUserProfileDao;
 import com.b2c.prototype.dao.item.base.BasicBrandDao;
-import com.b2c.prototype.dao.embedded.base.BasicBucketDao;
 import com.b2c.prototype.dao.payment.base.BasicCreditCardDao;
 import com.b2c.prototype.dao.option.base.BasicOptionItemDao;
 import com.b2c.prototype.dao.option.base.BasicOptionGroupDao;
@@ -47,8 +46,6 @@ import com.b2c.prototype.dao.item.base.BasicItemStatusDao;
 import com.b2c.prototype.dao.item.base.BasicItemTypeDao;
 import com.b2c.prototype.dao.rating.base.BasicRatingDao;
 import com.b2c.prototype.dao.review.base.BasicReviewDao;
-import com.b2c.prototype.dao.embedded.base.BasicWishListDao;
-import com.b2c.prototype.dao.embedded.IBucketDao;
 import com.b2c.prototype.dao.option.IOptionItemDao;
 import com.b2c.prototype.dao.option.IOptionGroupDao;
 import com.b2c.prototype.dao.order.IOrderItemDataDao;
@@ -63,7 +60,6 @@ import com.b2c.prototype.dao.item.IItemTypeDao;
 import com.b2c.prototype.dao.rating.IRatingDao;
 import com.b2c.prototype.dao.review.IReviewDao;
 import com.b2c.prototype.dao.user.IUserProfileDao;
-import com.b2c.prototype.dao.embedded.IWishListDao;
 import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.query.SearchService;
 import com.tm.core.configuration.manager.DatabaseConfigurationAnnotationClass;
@@ -95,14 +91,13 @@ public class BeanConfiguration {
     @Value("${entity.package.path}")
     private String entityPackagePath;
     private static final String MAIN_WRITE_DATABASE_CONFIG = "hikari.hibernate.cfg.xml";
-    private static final String CACHE_DATABASE_CONFIG = "embedded.hibernate.cfg.xml";
+    private static final String CACHE_DATABASE_CONFIG = "";
     private static final String MAIN_READ_DATABASE_CONFIG = "";
 
     public DatabaseTypeConfiguration getDatabaseTypeConfiguration() {
         DatabaseConfigurationAnnotationClass[] databaseConfigurationAnnotationClass =
                 new DatabaseConfigurationAnnotationClass[] {
                         new DatabaseConfigurationAnnotationClass("hikari.hibernate.cfg.xml"),
-                        new DatabaseConfigurationAnnotationClass("embedded.hibernate.cfg.xml")
                 };
 
         return new DatabaseTypeConfiguration(DatabaseType.WRITE, databaseConfigurationAnnotationClass);
@@ -256,16 +251,6 @@ public class BeanConfiguration {
     @Bean
     public IOptionItemDao optionItemDao(SessionFactory sessionFactory, IQueryService queryService) {
         return new BasicOptionItemDao(sessionFactory, queryService);
-    }
-
-    @Bean
-    public IBucketDao bucketDao(SessionFactory sessionFactory, IQueryService queryService) {
-        return new BasicBucketDao(sessionFactory, queryService);
-    }
-
-    @Bean
-    public IWishListDao wishListDao(SessionFactory sessionFactory, IQueryService queryService) {
-        return new BasicWishListDao(sessionFactory, queryService);
     }
 
     @Bean

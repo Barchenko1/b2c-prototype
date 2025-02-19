@@ -47,7 +47,7 @@ class BasicItemDataDaoTest extends AbstractCustomEntityDaoTest {
     static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(new EntityTable(ItemData.class, "item_data"));
-queryService = new QueryService(entityMappingManager);
+        queryService = new QueryService(entityMappingManager);
         dao = new BasicItemDataDao(sessionFactory, queryService);
     }
 

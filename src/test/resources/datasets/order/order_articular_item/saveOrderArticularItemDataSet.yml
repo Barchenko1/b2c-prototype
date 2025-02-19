@@ -37,13 +37,16 @@ option_item:
     option_group_id: 1
 category:
   - id: 1
-    name: "parent"
+    label: "parent"
+    value: "parent"
   - id: 2
     category_id: 1
-    name: "root"
+    label: "root"
+    value: "root"
   - id: 3
     category_id: 2
-    name: "child"
+    label: "child"
+    value: "child"
 item_data:
   - id: 1
     item_id: 123
