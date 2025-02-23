@@ -1,0 +1,193 @@
+[
+  {
+    "itemId": "122",
+    "description": {
+      "par1": "desc1",
+      "par2": "desc2",
+      "par3": "desc3"
+    },
+    "category": {
+      "label": "Laptop",
+      "value": "Laptop"
+    },
+    "itemType": {
+      "label": "Electronic",
+      "value": "Electronic"
+    },
+    "brand": {
+      "label": "TechBrand",
+      "value": "TechBrand"
+    },
+    "articularItems": [
+      {
+        "articularId": "1",
+        "productName": "Mob 1",
+        "fullPrice": {
+          "amount": 1000.0,
+          "currency": "USD"
+        },
+        "totalPrice": {
+          "amount": 1000.0,
+          "currency": "USD"
+        },
+        "status": {
+          "label": "NEW",
+          "value": "NEW"
+        },
+        "discount": {
+          "charSequenceCode": "xxx",
+          "amount": 100.0,
+          "currency": "USD",
+          "isPercent": false,
+          "isActive": true
+        },
+        "options": [
+          {
+            "optionGroup": {
+              "label": "Color",
+              "value": "Color"
+            },
+            "optionItems": [
+              {
+                "label": "Red",
+                "value": "Red"
+              }
+            ]
+          },
+          {
+            "optionGroup": {
+              "label": "Size",
+              "value": "Size"
+            },
+            "optionItems": [
+              {
+                "label": "16",
+                "value": "16"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "itemId": "123",
+    "description": {
+      "par1": "desc1",
+      "par2": "desc2",
+      "par3": "desc3"
+    },
+    "category": {
+      "label": "Laptop",
+      "value": "Laptop"
+    },
+    "itemType": {
+      "label": "Electronic",
+      "value": "Electronic"
+    },
+    "brand": {
+      "label": "TechBrand",
+      "value": "TechBrand"
+    },
+    "articularItems": [
+      {
+        "articularId": "2",
+        "productName": "Laptop 1",
+        "fullPrice": {
+          "amount": 1200.0,
+          "currency": "USD"
+        },
+        "totalPrice": {
+          "amount": 1100.0,
+          "currency": "USD"
+        },
+        "status": {
+          "label": "NEW",
+          "value": "NEW"
+        },
+        "discount": {
+          "charSequenceCode": "abc1",
+          "amount": 100.0,
+          "currency": "USD",
+          "isPercent": false,
+          "isActive": true
+        },
+        "options": [
+          {
+            "optionGroup": {
+              "label": "Color",
+              "value": "Color"
+            },
+            "optionItems": [
+              {
+                "label": "Red",
+                "value": "Red"
+              }
+            ]
+          },
+          {
+            "optionGroup": {
+              "label": "Size",
+              "value": "Size"
+            },
+            "optionItems": [
+              {
+                "label": "16",
+                "value": "16"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "articularId": "3",
+        "productName": "Laptop 2",
+        "fullPrice": {
+          "amount": 1200.0,
+          "currency": "USD"
+        },
+        "totalPrice": {
+          "amount": 1100.0,
+          "currency": "USD"
+        },
+        "status": {
+          "label": "NEW",
+          "value": "NEW"
+        },
+        "discount": {
+          "charSequenceCode": "abc2",
+          "amount": 100.0,
+          "currency": "USD",
+          "isPercent": false,
+          "isActive": true
+        },
+        "options": [
+          {
+            "optionGroup": {
+              "label": "Color",
+              "value": "Color"
+            },
+            "optionItems": [
+              {
+                "label": "Blue",
+                "value": "Blue"
+              }
+            ]
+          },
+          {
+            "optionGroup": {
+              "label": "Size",
+              "value": "Size"
+            },
+            "optionItems": [
+              {
+                "label": "16",
+                "value": "16"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

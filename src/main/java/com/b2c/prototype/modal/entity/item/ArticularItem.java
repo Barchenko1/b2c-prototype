@@ -13,12 +13,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.NamedAttributeNode;
 import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.NamedEntityGraphs;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.NamedSubgraph;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -71,6 +73,7 @@ import static com.b2c.prototype.util.Util.getUUID;
                         @NamedAttributeNode(value = "optionItems", subgraph = "optionItem.subgraph"),
                         @NamedAttributeNode(value = "fullPrice", subgraph = "price.subgraph"),
                         @NamedAttributeNode(value = "totalPrice", subgraph = "price.subgraph"),
+                        @NamedAttributeNode(value = "status"),
                         @NamedAttributeNode(value = "discount", subgraph = "discount.subgraph")
                 },
                 subgraphs = {
@@ -84,7 +87,6 @@ import static com.b2c.prototype.util.Util.getUUID;
                                 name = "optionItem.subgraph",
                                 attributeNodes = {
                                         @NamedAttributeNode("optionGroup"),
-//                                        @NamedAttributeNode("articularItems")
                                 }
                         ),
                         @NamedSubgraph(
@@ -97,6 +99,28 @@ import static com.b2c.prototype.util.Util.getUUID;
         )
 })
 @NamedQueries({
+        @NamedQuery(
+                name = "ArticularItem.full",
+                query = "SELECT ai FROM ArticularItem ai " +
+                        "LEFT JOIN FETCH ai.optionItems oi " +
+                        "LEFT JOIN FETCH ai.fullPrice fp " +
+                        "LEFT JOIN FETCH ai.totalPrice tp " +
+                        "LEFT JOIN FETCH ai.discount d " +
+                        "LEFT JOIN FETCH fp.currency " +
+                        "LEFT JOIN FETCH tp.currency " +
+                        "LEFT JOIN FETCH d.currency " +
+                        "LEFT JOIN FETCH oi.optionGroup og"
+        ),
+        @NamedQuery(
+                name = "ArticularItem.findItemDataByArticularId",
+                query = "SELECT DISTINCT id FROM ItemData id " +
+                        "LEFT JOIN FETCH id.articularItemSet ai " +
+                        "LEFT JOIN FETCH ai.fullPrice fp " +
+                        "LEFT JOIN FETCH fp.currency " +
+                        "LEFT JOIN FETCH ai.totalPrice tp " +
+                        "LEFT JOIN FETCH tp.currency " +
+                        "WHERE :articularId IN (SELECT a.articularId FROM id.articularItemSet a)"
+        ),
         @NamedQuery(
                 name = "ArticularItem.findByOptionItemValueAndGroup",
                 query = "SELECT ai FROM ArticularItem ai " +
@@ -130,9 +154,9 @@ public class ArticularItem {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<OptionItem> optionItems = new HashSet<>();
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Price fullPrice;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Price totalPrice;
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "status_id")

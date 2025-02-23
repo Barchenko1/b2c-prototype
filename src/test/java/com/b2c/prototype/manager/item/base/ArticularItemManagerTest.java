@@ -56,7 +56,7 @@ class ArticularItemManagerTest {
     @Mock
     private ISupplierService supplierService;
     @InjectMocks
-    private ArticularArticularItemManager articularItemManager;
+    private ArticularItemManager articularItemManager;
 
     @BeforeEach
     void setUp() {
@@ -88,7 +88,7 @@ class ArticularItemManagerTest {
             return null;
         }).when(itemDataOptionDao).executeConsumer(any(Consumer.class));
 
-        articularItemManager.saveArticularItem(itemId, articularItemDtoList);
+        articularItemManager.saveUpdateArticularItem(itemId, articularItemDtoList);
 
         verify(itemDataOptionDao).executeConsumer(any(Consumer.class));
     }
@@ -119,7 +119,7 @@ class ArticularItemManagerTest {
             return null;
         }).when(itemDataOptionDao).executeConsumer(any(Consumer.class));
 
-        articularItemManager.updateArticularItem(itemId, articularItemDtoList);
+        articularItemManager.saveUpdateArticularItem(itemId, articularItemDtoList);
 
         verify(itemDataOptionDao).executeConsumer(any(Consumer.class));
     }
@@ -227,8 +227,7 @@ class ArticularItemManagerTest {
                 .articularId("articularId")
                 .dateOfCreate(100)
                 .fullPrice(getPriceDto(10))
-                .currentPrice(getPriceDto(8))
-                .discountPrice(getPriceDto(2))
+                .totalPrice(getPriceDto(8))
 //                .optionGroupOptionItemMap(map)
                 .build();
     }

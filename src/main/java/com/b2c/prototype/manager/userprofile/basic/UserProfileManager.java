@@ -10,6 +10,7 @@ import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.userprofile.IUserProfileManager;
 import com.b2c.prototype.service.supplier.ISupplierService;
+import com.tm.core.finder.factory.IParameterFactory;
 
 import java.util.List;
 
@@ -20,13 +21,16 @@ public class UserProfileManager implements IUserProfileManager {
     private final IEntityOperationManager entityOperationDao;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
+    private final IParameterFactory parameterFactory;
 
     public UserProfileManager(IUserProfileDao userProfileDao,
                               ITransformationFunctionService transformationFunctionService,
-                              ISupplierService supplierService) {
+                              ISupplierService supplierService,
+                              IParameterFactory parameterFactory) {
         this.entityOperationDao = new EntityOperationManager(userProfileDao);
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
+        this.parameterFactory = parameterFactory;
     }
 
     @Override
@@ -40,7 +44,7 @@ public class UserProfileManager implements IUserProfileManager {
     public void updateUserStatusByUserId(String userId, boolean isActive) {
         entityOperationDao.executeConsumer(session -> {
             UserProfile existingUser = entityOperationDao.getEntity(
-                    supplierService.parameterStringSupplier(USER_ID, userId));
+                    parameterFactory.createStringParameter(USER_ID, userId));
             existingUser.setActive(isActive);
             session.merge(existingUser);
         });
@@ -54,8 +58,9 @@ public class UserProfileManager implements IUserProfileManager {
 
     @Override
     public UserProfileDto getUserProfileByUserId(String userId) {
-        return entityOperationDao.getEntityGraphDto("",
-                supplierService.parameterStringSupplier(USER_ID, userId),
+        return entityOperationDao.getEntityGraphDto(
+                "",
+                parameterFactory.createStringParameter(USER_ID, userId),
                 transformationFunctionService.getTransformationFunction(UserProfile.class, UserProfileDto.class));
     }
 

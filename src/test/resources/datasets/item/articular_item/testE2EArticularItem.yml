@@ -2,10 +2,16 @@ brand:
   - id: 1
     value: "TechBrand"
     label: "TechBrand"
+  - id: 2
+    value: "Update TechBrand"
+    label: "Update TechBrand"
 item_type:
   - id: 1
     value: "Electronic"
     label: "Electronic"
+  - id: 2
+    value: "Update Electronic"
+    label: "Update Electronic"
 currency:
   - id: 1
     value: "USD"
@@ -53,19 +59,24 @@ option_group:
     label: "Color"
     value: "Color"
 option_item:
-  - value: "L"
+  - id: 1
+    value: "L"
     label: "L"
     option_group_id: 1
-  - value: "M"
+  - id: 2
+    value: "M"
     label: "M"
     option_group_id: 1
-  - value: "16"
+  - id: 3
+    value: "16"
     label: "16"
     option_group_id: 1
-  - value: "Red"
+  - id: 4
+    value: "Red"
     label: "Red"
     option_group_id: 2
-  - value: "Blue"
+  - id: 5
+    value: "Blue"
     label: "Blue"
     option_group_id: 2
 category:
@@ -76,19 +87,23 @@ category:
     category_id: 1
     label: "Laptop"
     value: "Laptop"
+  - id: 3
+    label: "Update Electronic"
+    value: "Update Electronic"
+  - id: 4
+    category_id: 3
+    label: "Update Laptop"
+    value: "Update Laptop"
 articular_status:
   - id: 1
     value: "NEW"
     label: "NEW"
+  - id: 2
+    value: "COMMON"
+    label: "COMMON"
 item_data:
   - id: 1
     item_id: 123
-    description: "{\"par1\":\"desc1\",\"par2\":\"desc2\",\"par3\":\"desc3\"}"
-    brand_id: 1
-    category_id: 2
-    itemtype_id: 1
-  - id: 3
-    item_id: 1
     description: "{\"par1\":\"desc1\",\"par2\":\"desc2\",\"par3\":\"desc3\"}"
     brand_id: 1
     category_id: 2
@@ -109,7 +124,7 @@ articular_item:
     discount_id: 2
     fullprice_id: 2
     totalprice_id: 3
-    item_data_id: 3
+    item_data_id: 1
     status_id: 1
     productname: "Laptop 1"
   - id: 3
@@ -118,7 +133,7 @@ articular_item:
     discount_id: 3
     fullprice_id: 4
     totalprice_id: 5
-    item_data_id: 3
+    item_data_id: 1
     status_id: 1
     productname: "Laptop 2"
 articular_item_option_item:
@@ -127,6 +142,10 @@ articular_item_option_item:
   - articular_item_id: 1
     option_item_id: 3
   - articular_item_id: 2
-    option_item_id: 5
+    option_item_id: 4
   - articular_item_id: 2
+    option_item_id: 3
+  - articular_item_id: 3
+    option_item_id: 5
+  - articular_item_id: 3
     option_item_id: 3

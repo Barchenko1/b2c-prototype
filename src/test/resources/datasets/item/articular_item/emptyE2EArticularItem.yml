@@ -1,0 +1,66 @@
+brand:
+  - id: 1
+    value: "TechBrand"
+    label: "TechBrand"
+item_type:
+  - id: 1
+    value: "Electronic"
+    label: "Electronic"
+currency:
+  - id: 1
+    value: "USD"
+    label: "USD"
+price:
+  - id: 1
+    amount: 1000
+    currency_id: 1
+discount:
+  - id: 1
+    amount: 100
+    charSequenceCode: "xxx"
+    isActive: true
+    isPercent: false
+    currency_id: 1
+option_group:
+  - id: 1
+    label: "Size"
+    value: "Size"
+option_item:
+  - id: 1
+    value: "L"
+    label: "L"
+    option_group_id: 1
+  - id: 2
+    value: "M"
+    label: "M"
+    option_group_id: 1
+category:
+  - id: 1
+    label: "Electronic"
+    value: "Electronic"
+  - id: 2
+    category_id: 1
+    label: "Laptop"
+    value: "Laptop"
+articular_status:
+  - id: 1
+    value: "NEW"
+    label: "NEW"
+item_data:
+  - id: 1
+    item_id: 123
+    description: "{\"par1\":\"desc1\",\"par2\":\"desc2\",\"par3\":\"desc3\"}"
+    brand_id: 1
+    category_id: 2
+    itemtype_id: 1
+articular_item:
+  - id: 1
+    articular_id: 1
+    dateOfCreate: 10000
+    discount_id: 1
+    fullprice_id: 1
+    totalprice_id: 1
+    item_data_id: 1
+    status_id: 1
+    productname: "Mob 1"
+articular_item_option_item: []

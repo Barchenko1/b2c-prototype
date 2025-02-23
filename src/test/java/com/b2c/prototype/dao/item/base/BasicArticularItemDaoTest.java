@@ -253,7 +253,7 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
 
     @Test
     void getEntityList_success() {
-        loadDataSet("/datasets/item/articular_item/testArticularItemDataSet.yml");
+        loadDataSet("/datasets/item/articular_item/testArticularItem.yml");
         Parameter parameter = new Parameter("id", 1L);
         ArticularItem articularItem = prepareTestItemDataOption();
         List<ArticularItem> resultList = dao.getEntityList(parameter);
@@ -275,19 +275,19 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
 
     @Test
     void saveEntity_success() {
-        loadDataSet("/datasets/item/articular_item/emptyArticularItemDataSet.yml");
+        loadDataSet("/datasets/item/articular_item/emptyArticularItem.yml");
         ArticularItem articularItem = prepareToSaveItemDataOption();
 
         dao.mergeEntity(articularItem);
-        verifyExpectedData("/datasets/item/articular_item/saveArticularItemDataSet.yml");
+        verifyExpectedData("/datasets/item/articular_item/saveArticularItem.yml");
     }
 
     @Test
     void saveEntityWithDependencies_success() {
-        loadDataSet("/datasets/item/articular_item/emptyArticularItemDataSet.yml");
+        loadDataSet("/datasets/item/articular_item/emptyArticularItem.yml");
         ArticularItem articularItem = prepareToSaveItemDataOption();
         dao.mergeEntity(articularItem);
-        verifyExpectedData("/datasets/item/articular_item/saveArticularItemDataSet.yml");
+        verifyExpectedData("/datasets/item/articular_item/saveArticularItem.yml");
     }
 
     @Test
@@ -319,19 +319,19 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
 
     @Test
     void saveEntityConsumer_success() {
-        loadDataSet("/datasets/item/articular_item/emptyArticularItemDataSet.yml");
+        loadDataSet("/datasets/item/articular_item/emptyArticularItem.yml");
         Consumer<Session> consumer = (Session s) -> {
             ArticularItem articularItem = prepareToSaveItemDataOption();
             s.merge(articularItem);
         };
 
         dao.executeConsumer(consumer);
-        verifyExpectedData("/datasets/item/articular_item/saveArticularItemDataSet.yml");
+        verifyExpectedData("/datasets/item/articular_item/saveArticularItem.yml");
     }
 
     @Test
     void saveEntityConsumer_transactionFailure() {
-        loadDataSet("/datasets/item/articular_item/emptyArticularItemDataSet.yml");
+        loadDataSet("/datasets/item/articular_item/emptyArticularItem.yml");
         Consumer<Session> consumer = (Session s) -> {
             throw new RuntimeException();
         };
@@ -341,15 +341,15 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
-        verifyExpectedData("/datasets/item/articular_item/emptyArticularItemDataSet.yml");
+        verifyExpectedData("/datasets/item/articular_item/emptyArticularItem.yml");
     }
 
     @Test
     void updateEntity_success() {
-        loadDataSet("/datasets/item/articular_item/testArticularItemDataSet.yml");
+        loadDataSet("/datasets/item/articular_item/testArticularItem.yml");
         Supplier<ArticularItem> itemSupplier = this::prepareToUpdateItemDataOption;
         dao.updateEntity(itemSupplier);
-        verifyExpectedData("/datasets/item/articular_item/updateArticularItemDataSet.yml");
+        verifyExpectedData("/datasets/item/articular_item/updateArticularItem.yml");
     }
 
     @Test
@@ -367,18 +367,18 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
 
     @Test
     void updateEntityConsumer_success() {
-        loadDataSet("/datasets/item/articular_item/testArticularItemDataSet.yml");
+        loadDataSet("/datasets/item/articular_item/testArticularItem.yml");
         Consumer<Session> consumer = (Session s) -> {
             ArticularItem itemToUpdate = prepareToUpdateItemDataOption();
             s.merge(itemToUpdate);
         };
         dao.executeConsumer(consumer);
-        verifyExpectedData("/datasets/item/articular_item/updateArticularItemDataSet.yml");
+        verifyExpectedData("/datasets/item/articular_item/updateArticularItem.yml");
     }
 
     @Test
     void updateEntityConsumer_transactionFailure() {
-        loadDataSet("/datasets/item/articular_item/testArticularItemDataSet.yml");
+        loadDataSet("/datasets/item/articular_item/testArticularItem.yml");
         Consumer<Session> itemConsumer = (Session s) -> {
             throw new RuntimeException();
         };
@@ -392,28 +392,28 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
 
     @Test
     void deleteEntity_success() {
-        loadDataSet("/datasets/item/articular_item/testArticularItemDataSet.yml");
+        loadDataSet("/datasets/item/articular_item/testArticularItem.yml");
         Parameter parameter = new Parameter("id", 1);
 
         dao.findEntityAndDelete(parameter);
-        verifyExpectedData("/datasets/item/articular_item/deleteArticularItemDataSet.yml");
+        verifyExpectedData("/datasets/item/articular_item/deleteArticularItem.yml");
     }
 
     @Test
     void deleteEntityByConsumer_success() {
-        loadDataSet("/datasets/item/articular_item/testArticularItemDataSet.yml");
+        loadDataSet("/datasets/item/articular_item/testArticularItem.yml");
         Consumer<Session> consumer = (Session s) -> {
             ArticularItem articularItem = prepareTestItemDataOption();
             s.remove(articularItem);
         };
 
         dao.executeConsumer(consumer);
-        verifyExpectedData("/datasets/item/articular_item/deleteArticularItemDataSet.yml");
+        verifyExpectedData("/datasets/item/articular_item/deleteArticularItem.yml");
     }
 
     @Test
     void deleteEntityByConsumer_transactionFailure() {
-        loadDataSet("/datasets/item/articular_item/testArticularItemDataSet.yml");
+        loadDataSet("/datasets/item/articular_item/testArticularItem.yml");
         Consumer<Session> consumer = (Session s) -> {
             throw new RuntimeException();
         };
@@ -427,16 +427,16 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
 
     @Test
     void deleteEntityByGeneralEntity_success() {
-        loadDataSet("/datasets/item/articular_item/testArticularItemDataSet.yml");
+        loadDataSet("/datasets/item/articular_item/testArticularItem.yml");
         ArticularItem articularItem = prepareTestItemDataOption();
 
         dao.deleteEntity(articularItem);
-        verifyExpectedData("/datasets/item/articular_item/deleteArticularItemDataSet.yml");
+        verifyExpectedData("/datasets/item/articular_item/deleteArticularItem.yml");
     }
 
     @Test
     void deleteEntityByGeneralEntity_transactionFailure() {
-        loadDataSet("/datasets/item/articular_item/testArticularItemDataSet.yml");
+        loadDataSet("/datasets/item/articular_item/testArticularItem.yml");
         SessionFactory sessionFactory = mock(SessionFactory.class);
         Session session = mock(Session.class);
         Transaction transaction = mock(Transaction.class);
@@ -464,7 +464,7 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
 
     @Test
     void deleteEntity_transactionFailure() {
-        loadDataSet("/datasets/item/articular_item/testArticularItemDataSet.yml");
+        loadDataSet("/datasets/item/articular_item/testArticularItem.yml");
         ArticularItem articularItem = prepareTestItemDataOption();
         Parameter parameter = new Parameter("id", 1L);
 
@@ -499,7 +499,7 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
 
     @Test
     void getOptionalEntityWithDependencies_success() {
-        loadDataSet("/datasets/item/articular_item/testArticularItemDataSet.yml");
+        loadDataSet("/datasets/item/articular_item/testArticularItem.yml");
         Parameter parameter = new Parameter("id", 1L);
         ArticularItem articularItem = prepareTestItemDataOption();
         Optional<ArticularItem> resultOptional =
@@ -522,7 +522,7 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
 
     @Test
     void getEntityWithDependencies_success() {
-        loadDataSet("/datasets/item/articular_item/testArticularItemDataSet.yml");
+        loadDataSet("/datasets/item/articular_item/testArticularItem.yml");
         Parameter parameter = new Parameter("id", 1L);
 
         ArticularItem articularItem = prepareTestItemDataOption();

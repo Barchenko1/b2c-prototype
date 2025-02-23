@@ -6,8 +6,7 @@ import com.b2c.prototype.modal.dto.response.ResponseArticularItemDto;
 import java.util.List;
 
 public interface IArticularItemManager {
-    void saveArticularItem(String itemId, List<ArticularItemDto> articularItemDtoList);
-    void updateArticularItem(String itemId, List<ArticularItemDto> articularItemDtoList);
+    void saveUpdateArticularItem(String itemId, List<ArticularItemDto> articularItemDtoList);
     void deleteArticularItem(String articularId);
 
     ResponseArticularItemDto getResponseArticularItemDto(String articularId);

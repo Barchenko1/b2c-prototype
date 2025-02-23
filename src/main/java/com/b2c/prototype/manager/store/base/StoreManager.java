@@ -14,6 +14,7 @@ import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.manager.store.IStoreManager;
 import com.b2c.prototype.service.supplier.ISupplierService;
+import com.tm.core.finder.factory.IParameterFactory;
 import org.hibernate.query.NativeQuery;
 
 import java.util.List;
@@ -27,15 +28,18 @@ public class StoreManager implements IStoreManager {
     private final ISearchService searchService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
+    private final IParameterFactory parameterFactory;
 
     public StoreManager(IStoreDao storeDao,
                         ISearchService searchService,
                         ITransformationFunctionService transformationFunctionService,
-                        ISupplierService supplierService) {
+                        ISupplierService supplierService,
+                        IParameterFactory parameterFactory) {
         this.entityOperationDao = new EntityOperationManager(storeDao);
         this.searchService = searchService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
+        this.parameterFactory = parameterFactory;
     }
 
     @Override
@@ -79,8 +83,9 @@ public class StoreManager implements IStoreManager {
 
     @Override
     public ResponseStoreDto getStoreResponse(OneFieldEntityDto oneFieldEntityDto) {
-        return entityOperationDao.getEntityGraphDto("",
-                supplierService.parameterStringSupplier(ARTICULAR_ID, oneFieldEntityDto.getValue()),
+        return entityOperationDao.getEntityGraphDto(
+                "",
+                parameterFactory.createStringParameter(ARTICULAR_ID, oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(Store.class, ResponseStoreDto.class));
     }
 

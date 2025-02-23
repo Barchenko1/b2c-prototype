@@ -1,7 +1,5 @@
 package com.b2c.prototype.modal.dto.response;
 
-import com.b2c.prototype.modal.dto.payload.ArticularItemDto;
-import com.b2c.prototype.modal.dto.payload.ItemDataDto;
 import com.b2c.prototype.modal.dto.payload.constant.BrandDto;
 import com.b2c.prototype.modal.dto.payload.constant.CategoryValueDto;
 import com.b2c.prototype.modal.dto.payload.constant.ItemTypeDto;
@@ -23,5 +21,5 @@ public class ResponseItemDataDto {
     private CategoryValueDto category;
     private ItemTypeDto itemType;
     private BrandDto brand;
-    private Set<ResponseArticularDto> articularItemSet;
+    private Set<ResponseArticularItemDto> articularItems;
 }

@@ -3,7 +3,7 @@ package com.b2c.prototype.util;
 public interface Constant {
     String USER_ID = "user_id";
     String ORDER_ID = "order_id";
-    String ARTICULAR_ID = "articular_id";
+    String ARTICULAR_ID = "articularId";
     String PAYMENT_ID = "upayment_id";
     String ITEM_ID = "itemId";
     String CHAR_SEQUENCE_CODE = "charSequenceCode";
@@ -26,8 +26,8 @@ public interface Constant {
     String RATING_SERVICE_ID = "rating";
 
     //graph
-    String ITEM_DATA_OPTION_BY_DISCOUNT_CHAR_SEQUENCE_CODE = "ArticularItem.findByDiscountCharSequenceCode";
-    String ITEM_DATA_OPTION_BY_DISCOUNT = "ArticularItem.findByDiscountNotNull";
-    String ITEM_DATA_OPTION_FULL = "articularItem.full";
+    String ARTICULAR_ITEM_FIND_BY_DISCOUNT_CHAR_SEQUENCE_CODE = "ArticularItem.findByDiscountCharSequenceCode";
+    String ARTICULAR_ITEM_FIND_BY_DISCOUNT_NOT_NULL = "ArticularItem.findByDiscountNotNull";
+    String ARTICULAR_ITEM_FULL = "articularItem.full";
 
 }

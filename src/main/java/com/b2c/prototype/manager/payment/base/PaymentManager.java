@@ -12,6 +12,7 @@ import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.payment.IPaymentManager;
 import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
+import com.tm.core.finder.factory.IParameterFactory;
 
 import java.util.List;
 
@@ -25,15 +26,18 @@ public class PaymentManager implements IPaymentManager {
     private final ITransformationFunctionService transformationFunctionService;
     private final ISearchService searchService;
     private final ISupplierService supplierService;
+    private final IParameterFactory parameterFactory;
 
     public PaymentManager(IPaymentDao paymentDao,
                           ISearchService searchService,
                           ITransformationFunctionService transformationFunctionService,
-                          ISupplierService supplierService) {
+                          ISupplierService supplierService,
+                          IParameterFactory parameterFactory) {
         this.entityOperationDao = new EntityOperationManager(paymentDao);
         this.searchService = searchService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
+        this.parameterFactory = parameterFactory;
     }
 
     @Override
@@ -84,14 +88,16 @@ public class PaymentManager implements IPaymentManager {
 
     @Override
     public PaymentDto getPaymentByPaymentId(OneFieldEntityDto oneFieldEntityDto) {
-        return entityOperationDao.getEntityGraphDto("",
-                supplierService.parameterStringSupplier(PAYMENT_ID, oneFieldEntityDto.getValue()),
+        return entityOperationDao.getEntityGraphDto(
+                "",
+                parameterFactory.createStringParameter(PAYMENT_ID, oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(Payment.class, PaymentDto.class));
     }
 
     @Override
     public List<PaymentDto> getAllPayments() {
-        return entityOperationDao.getEntityGraphDtoList("",
+        return entityOperationDao.getEntityGraphDtoList(
+                "",
                 transformationFunctionService.getTransformationFunction(Payment.class, PaymentDto.class));
     }
 }

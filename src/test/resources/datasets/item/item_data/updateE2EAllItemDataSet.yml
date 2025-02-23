@@ -26,6 +26,12 @@ price:
   - id: 3
     amount: 1200
     currency_id: 1
+  - id: 4
+    amount: 1300
+    currency_id: 1
+  - id: 5
+    amount: 1200
+    currency_id: 1
 discount:
   - id: 1
     amount: 100
@@ -126,8 +132,8 @@ articular_item:
     articular_id: 2
     dateOfCreate: 10000
     discount_id: 2
-    fullprice_id: 1
-    totalprice_id: 2
+    fullprice_id: 2
+    totalprice_id: 3
     item_data_id: 2
     status_id: 2
     productname: "Update Laptop 1"
@@ -135,8 +141,8 @@ articular_item:
     articular_id: 3
     dateOfCreate: 10000
     discount_id: 3
-    fullprice_id: 3
-    totalprice_id: 4
+    fullprice_id: 4
+    totalprice_id: 5
     item_data_id: 2
     status_id: 2
     productname: "Update Laptop 2"

@@ -1,6 +1,7 @@
 package com.b2c.prototype.dao.item.base;
 
 import com.b2c.prototype.dao.AbstractCustomEntityDaoTest;
+import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.ArticularStatus;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
@@ -62,6 +63,7 @@ class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
         try (Connection connection = connectionHolder.getConnection()) {
             connection.setAutoCommit(false);
             Statement statement = connection.createStatement();
+            statement.execute("DELETE FROM item");
             statement.execute("DELETE FROM item_review");
             statement.execute("DELETE FROM item_post");
             statement.execute("DELETE FROM articular_item");
@@ -207,9 +209,10 @@ class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
                 .brand(brand)
                 .itemType(itemType)
                 .build();
+        ArticularItem articularItem = ArticularItem.builder().build();
 
         Item item = Item.builder()
-                .itemData(itemData)
+                .articularItem(articularItem)
                 .build();
         addReview(item);
         addPosts(item);
@@ -241,10 +244,13 @@ class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
                 .brand(brand)
                 .itemType(itemType)
                 .build();
+        ArticularItem articularItem = ArticularItem.builder()
+
+                .build();
 
         Item item = Item.builder()
                 .id(1L)
-                .itemData(itemData)
+                .articularItem(articularItem)
                 .build();
         addReview(item);
         addPosts(item);
@@ -277,10 +283,11 @@ class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
                 .brand(brand)
                 .itemType(itemType)
                 .build();
+        ArticularItem articularItem = ArticularItem.builder().build();
 
         Item item = Item.builder()
                 .id(1L)
-                .itemData(itemData)
+                .articularItem(articularItem)
                 .build();
         addReview(item);
         addPosts(item);
@@ -291,7 +298,7 @@ class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
     void checkItem(Item expectedItem, Item actualItem) {
         assertEquals(expectedItem.getId(), actualItem.getId());
 
-        ItemData actualItemData = actualItem.getItemData();
+        ArticularItem actualItemData = actualItem.getArticularItem();
 //        assertEquals(expectedItem.getItemData().getId(), actualItemData.getId());
 //        assertEquals(expectedItem.getItemData().getName(), actualItemData.getName());
 //        assertEquals(expectedItem.getItemData().getArticularId(), actualItemData.getArticularId());

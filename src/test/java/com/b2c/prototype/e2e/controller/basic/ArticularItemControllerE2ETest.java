@@ -1,10 +1,8 @@
 package com.b2c.prototype.e2e.controller.basic;
 
 import com.b2c.prototype.e2e.BasicE2ETest;
-import com.b2c.prototype.modal.dto.payload.ItemDataDto;
-import com.b2c.prototype.modal.dto.payload.constant.BrandDto;
-import com.b2c.prototype.modal.dto.payload.constant.CategoryValueDto;
-import com.b2c.prototype.modal.dto.payload.constant.ItemTypeDto;
+import com.b2c.prototype.e2e.util.TestUtil;
+import com.b2c.prototype.modal.dto.response.ResponseArticularItemDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,14 +10,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,70 +34,103 @@ class ArticularItemControllerE2ETest extends BasicE2ETest {
         try (Connection connection = connectionHolder.getConnection()) {
             connection.setAutoCommit(false);
             Statement statement = connection.createStatement();
+            statement.execute("DELETE FROM articular_item_option_item");
+            statement.execute("DELETE FROM articular_item");
+            statement.execute("DELETE FROM discount");
 
+            statement.execute("ALTER SEQUENCE discount_id_seq RESTART WITH 2");
+            statement.execute("ALTER SEQUENCE price_id_seq RESTART WITH 2");
+            statement.execute("ALTER SEQUENCE articular_item_id_seq RESTART WITH 2");
+            statement.execute("ALTER SEQUENCE option_group_id_seq RESTART WITH 2");
+            statement.execute("ALTER SEQUENCE option_item_id_seq RESTART WITH 6");
             connection.commit();
         } catch (Exception e) {
-            throw new RuntimeException("Failed to clean table: item_data", e);
+            throw new RuntimeException("Failed to clean table: articular_item", e);
         }
     }
 
     @Test
-    void testCreateArticularItem() {
-        ItemDataDto itemDataDto = getItemDataDto();
-
-        loadDataSet("/datasets/item/item_data/emptyItemDataSet.yml");
-
+    void testCreateItemData() {
+        loadDataSet("/datasets/item/articular_item/emptyE2EArticularItem.yml");
         try {
             mockMvc.perform(post(URL_TEMPLATE)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(itemDataDto)))
+                            .params(getMultiValueMap(getRequestParams()))
+                            .content(TestUtil.readFile("json/articularitem/input/ArticularItemDtoList.json")))
                     .andExpect(status().isOk());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/item/item_data/saveItemDataSet.yml");
+        verifyExpectedData("/datasets/item/articular_item/saveE2EArticularItem.yml",
+                new String[] {"id", "option_group_id", "option_item_id", "articular_item_id", "articular_id", "dateOfCreate", "discount_id", "fullprice_id", "totalprice_id"},
+                new String[] {"label", "value", "productname", "charSequenceCode"}
+        );
+
     }
 
     @Test
-    void testUpdateArticularItem() {
-        loadDataSet("/datasets/item/item_data/testItemDataSet.yml");
-
-        ItemDataDto updateDto = getItemDataDto();
+    void testPutItemData() {
+        loadDataSet("/datasets/item/articular_item/testE2EArticularItem.yml");
 
         try {
-            mockMvc.perform(put(URL_TEMPLATE + "/{id}", 1)
+            mockMvc.perform(put(URL_TEMPLATE)
+                            .params(getMultiValueMap(getRequestParams()))
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(updateDto)))
+                            .content(TestUtil.readFile("json/articularitem/input/UpdateArticularItemDtoList.json")))
                     .andExpect(status().isOk());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/item/item_data/updatedItemDataSet.yml");
+        verifyExpectedData("/datasets/item/articular_item/updateE2EArticularItem.yml",
+                new String[] {"id", "option_group_id", "option_item_id", "articular_item_id", "articular_id", "dateOfCreate", "DISCOUNT_ID", "FULLPRICE_ID", "TOTALPRICE_ID"},
+                new String[] {"label", "value", "productname", "charSequenceCode"}
+        );
     }
 
     @Test
-    void testDeleteArticularItem() {
-        loadDataSet("/datasets/item/item_data/testItemDataSet.yml");
+    void testPatchItemData() {
+        loadDataSet("/datasets/item/articular_item/testE2EArticularItem.yml");
 
         try {
-            mockMvc.perform(delete(URL_TEMPLATE + "/{id}", 1))
+            mockMvc.perform(patch(URL_TEMPLATE)
+                            .params(getMultiValueMap(getRequestParams()))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(TestUtil.readFile("json/articularitem/input/UpdateArticularItemDtoList.json")))
                     .andExpect(status().isOk());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/item/item_data/deletedItemDataSet.yml");
+        verifyExpectedData("/datasets/item/articular_item/updateE2EArticularItem.yml",
+                new String[] {"id", "option_group_id", "option_item_id", "articular_item_id", "articular_id", "dateOfCreate", "DISCOUNT_ID", "FULLPRICE_ID", "TOTALPRICE_ID"},
+                new String[] {"label", "value", "productname", "charSequenceCode"}
+        );
     }
 
     @Test
-    void testGetArticularItem() {
-        loadDataSet("/datasets/item/item_data/testItemDataSet.yml");
+    void testDeleteItemData() {
+        loadDataSet("/datasets/item/articular_item/testE2EArticularItem.yml");
 
+        try {
+            mockMvc.perform(delete(URL_TEMPLATE)
+                            .params(getMultiValueMap(Map.of("articularId", "3"))))
+                    .andExpect(status().isOk());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        verifyExpectedData("/datasets/item/articular_item/deleteE2EArticularItem.yml");
+    }
+
+    @Test
+    void testGetItemData() {
+        loadDataSet("/datasets/item/articular_item/testE2EArticularItem.yml");
         MvcResult mvcResult;
         try {
-            mvcResult = mockMvc.perform(get(URL_TEMPLATE + "/{id}", 1)
+            mvcResult = mockMvc.perform(get(URL_TEMPLATE)
+                            .params(getMultiValueMap(Map.of("articularId", "3")))
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andReturn();
@@ -106,19 +140,22 @@ class ArticularItemControllerE2ETest extends BasicE2ETest {
 
         try {
             String jsonResponse = mvcResult.getResponse().getContentAsString();
-            ItemDataDto actual = objectMapper.readValue(jsonResponse, ItemDataDto.class);
+            ResponseArticularItemDto actual = objectMapper.readValue(jsonResponse, ResponseArticularItemDto.class);
 
-            ItemDataDto expected = getItemDataDto();
+            String expectedResultStr = TestUtil.readFile("json/articularitem/output/ResponseArticularItemDto.json");
+            ResponseArticularItemDto expected = objectMapper.readValue(expectedResultStr, ResponseArticularItemDto.class);
 
-            assertEquals(expected.getDescription(), actual.getDescription());
+            assertEquals(expected, actual);
         } catch (JsonProcessingException | UnsupportedEncodingException e) {
             throw new RuntimeException("Error processing the JSON response", e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
     @Test
-    void testGetAllArticularItem() {
-        loadDataSet("/datasets/item/item_data/testE2EAllItemDataSet.yml");
+    void testGetAllItemData() {
+        loadDataSet("/datasets/item/articular_item/testE2EArticularItem.yml");
 
         MvcResult mvcResult;
         try {
@@ -132,36 +169,31 @@ class ArticularItemControllerE2ETest extends BasicE2ETest {
 
         try {
             String jsonResponse = mvcResult.getResponse().getContentAsString();
-            List<ItemDataDto> actualList = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
-
-            List<ItemDataDto> expectedList = List.of(
-                    ItemDataDto.builder()
-                            .build(),
-                    ItemDataDto.builder()
-                            .build()
-            );
-
+            List<ResponseArticularItemDto> actualList = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
+            String expectedResultStr = TestUtil.readFile("json/articularitem/output/ResponseArticularItemDtoList.json");
+            List<ResponseArticularItemDto> expectedList = objectMapper.readValue(expectedResultStr, new TypeReference<>() {});
             assertEquals(expectedList, actualList);
         } catch (JsonProcessingException | UnsupportedEncodingException e) {
             throw new RuntimeException("Error processing the JSON response", e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    private ItemDataDto getItemDataDto() {
-        return ItemDataDto.builder()
-                .category(CategoryValueDto.builder()
-                        .label("categoryLabel")
-                        .value("categoryValue")
-                        .build())
-                .itemType(ItemTypeDto.builder()
-                        .label("itemTypeLabel")
-                        .value("itemTypeValue")
-                        .build())
-                .brand(BrandDto.builder()
-                        .label("brandLabel")
-                        .value("brandValue")
-                        .build())
-//                .description()
-                .build();
+    private Map<String, String> getRequestParams() {
+        return Map.of("itemId", "123");
     }
+
+    private void checkResponseArticularItemByIndex(List<ResponseArticularItemDto> expectedResponseArticularItemList, List<ResponseArticularItemDto> actualResponseArticularItemList, int index) {
+        assertEquals(expectedResponseArticularItemList.size(), actualResponseArticularItemList.size());
+        assertEquals(expectedResponseArticularItemList.get(index).getArticularId(), actualResponseArticularItemList.get(index).getArticularId());
+        assertEquals(expectedResponseArticularItemList.get(index).getProductName(), actualResponseArticularItemList.get(index).getProductName());
+        assertEquals(expectedResponseArticularItemList.get(index).getFullPrice(), actualResponseArticularItemList.get(index).getFullPrice());
+        assertEquals(expectedResponseArticularItemList.get(index).getTotalPrice(), actualResponseArticularItemList.get(index).getTotalPrice());
+        assertEquals(expectedResponseArticularItemList.get(index).getStatus().getLabel(), actualResponseArticularItemList.get(index).getStatus().getLabel());
+        assertEquals(expectedResponseArticularItemList.get(index).getStatus().getValue(), actualResponseArticularItemList.get(index).getStatus().getValue());
+        assertEquals(expectedResponseArticularItemList.get(index).getDiscount(), actualResponseArticularItemList.get(index).getDiscount());
+        assertEquals(expectedResponseArticularItemList.get(index).getOptions(), actualResponseArticularItemList.get(index).getOptions());
+    }
+
 }

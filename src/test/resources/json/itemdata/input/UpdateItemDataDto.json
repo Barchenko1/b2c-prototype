@@ -1,0 +1,105 @@
+{
+  "description": {
+    "Update par1": "Update desc1",
+    "Update par2": "Update desc2",
+    "Update par3": "Update desc3"
+  },
+  "category": {
+    "label": "Update Laptop",
+    "value": "Update Laptop"
+  },
+  "itemType": {
+    "label": "Update Electronic",
+    "value": "Update Electronic"
+  },
+  "brand": {
+    "label": "Update TechBrand",
+    "value": "Update TechBrand"
+  },
+  "articularItemSet": [
+    {
+      "articularId": "2",
+      "productName": "Update Laptop 1",
+      "status": "COMMON",
+      "options": [
+        {
+          "optionGroup": {
+            "label": "Color",
+            "value": "Color"
+          },
+          "optionItem": {
+            "label": "Red",
+            "value": "Red"
+          }
+        },
+        {
+          "optionGroup": {
+            "label": "Size",
+            "value": "Size"
+          },
+          "optionItem": {
+            "label": "15",
+            "value": "15"
+          }
+        }
+      ],
+      "fullPrice": {
+        "amount": 1300.0,
+        "currency": "USD"
+      },
+      "totalPrice": {
+        "amount": 1200.0,
+        "currency": "USD"
+      },
+      "discount": {
+        "charSequenceCode": "Update abc1",
+        "amount": 100.0,
+        "currency": "USD",
+        "isPercent": false,
+        "isActive": true
+      }
+    },
+    {
+      "articularId": "3",
+      "productName": "Update Laptop 2",
+      "status": "COMMON",
+      "options": [
+        {
+          "optionGroup": {
+            "label": "Color",
+            "value": "Color"
+          },
+          "optionItem": {
+            "label": "Red",
+            "value": "Red"
+          }
+        },
+        {
+          "optionGroup": {
+            "label": "Size",
+            "value": "Size"
+          },
+          "optionItem": {
+            "label": "15",
+            "value": "15"
+          }
+        }
+      ],
+      "fullPrice": {
+        "amount": 1300.0,
+        "currency": "USD"
+      },
+      "totalPrice": {
+        "amount": 1200.0,
+        "currency": "USD"
+      },
+      "discount": {
+        "charSequenceCode": "Update abc2",
+        "amount": 100.0,
+        "currency": "USD",
+        "isPercent": false,
+        "isActive": true
+      }
+    }
+  ]
+}

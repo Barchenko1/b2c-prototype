@@ -3,6 +3,7 @@ package com.b2c.prototype.manager.item.base;
 import com.b2c.prototype.dao.item.IItemDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.searchfield.ItemSearchFieldEntityDto;
+import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.Item;
 import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.service.common.EntityOperationManager;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
+import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 import static com.b2c.prototype.util.Constant.ITEM_ID;
 
 @Slf4j
@@ -38,11 +40,11 @@ public class ItemManager implements IItemManager {
     @Override
     public void saveUpdateItem(ItemSearchFieldEntityDto itemSearchFieldEntityDto) {
         entityOperationDao.executeConsumer(session -> {
-            ItemData itemData = searchService.getEntity(
-                    ItemData.class,
-                    supplierService.parameterStringSupplier(ITEM_ID, itemSearchFieldEntityDto.getSearchField()));
+            ArticularItem articularItem = searchService.getEntity(
+                    ArticularItem.class,
+                    supplierService.parameterStringSupplier(ARTICULAR_ID, itemSearchFieldEntityDto.getSearchField()));
             Item item = transformationFunctionService.getEntity(Item.class, itemSearchFieldEntityDto.getNewEntity());
-            item.setItemData(itemData);
+            item.setArticularItem(articularItem);
             session.merge(item);
         });
     }

@@ -11,6 +11,7 @@ import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.item.IDiscountManager;
 import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
+import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.dao.identifier.IQueryService;
 
 import java.util.List;
@@ -18,8 +19,8 @@ import java.util.Optional;
 
 import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 import static com.b2c.prototype.util.Constant.CHAR_SEQUENCE_CODE;
-import static com.b2c.prototype.util.Constant.ITEM_DATA_OPTION_BY_DISCOUNT;
-import static com.b2c.prototype.util.Constant.ITEM_DATA_OPTION_BY_DISCOUNT_CHAR_SEQUENCE_CODE;
+import static com.b2c.prototype.util.Constant.ARTICULAR_ITEM_FIND_BY_DISCOUNT_NOT_NULL;
+import static com.b2c.prototype.util.Constant.ARTICULAR_ITEM_FIND_BY_DISCOUNT_CHAR_SEQUENCE_CODE;
 
 public class DiscountManager implements IDiscountManager {
 
@@ -28,17 +29,19 @@ public class DiscountManager implements IDiscountManager {
     private final IQueryService queryService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
+    private final IParameterFactory parameterFactory;
 
     public DiscountManager(IDiscountDao discountDao,
                            ISearchService searchService,
                            IQueryService queryService,
                            ITransformationFunctionService transformationFunctionService,
-                           ISupplierService supplierService) {
+                           ISupplierService supplierService, IParameterFactory parameterFactory) {
         this.entityOperationDao = new EntityOperationManager(discountDao);
         this.searchService = searchService;
         this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
+        this.parameterFactory = parameterFactory;
     }
 
     @Override
@@ -55,14 +58,15 @@ public class DiscountManager implements IDiscountManager {
             if (discountDto.getCharSequenceCode() == null) {
                 throw new RuntimeException("Discount code is null");
             }
-            ArticularItem articularItem = queryService.getEntity(
+            ArticularItem articularItem = queryService.getEntityGraph(
                     session,
                     ArticularItem.class,
-                    supplierService.parameterStringSupplier(ARTICULAR_ID, articularId).get());
+                    "articularItem.discount.currency",
+                    parameterFactory.createStringParameter(ARTICULAR_ID, articularId));
 
             Discount discount = (Discount) Optional.ofNullable(discountDto.getCharSequenceCode())
                     .flatMap(code -> entityOperationDao.getOptionalEntity(
-                            supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, code)))
+                            parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, code)))
                     .orElseGet(() -> transformationFunctionService.getEntity(session, Discount.class, discountDto));
 
             if (articularItem.getDiscount() != null) {
@@ -82,7 +86,7 @@ public class DiscountManager implements IDiscountManager {
             }
             Discount newDiscount = transformationFunctionService.getEntity(session, Discount.class, discountDto);
             Discount oldDiscount = entityOperationDao.getEntity(
-                    supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, charSequenceCode));
+                    parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, charSequenceCode));
             newDiscount.setId(oldDiscount.getId());
             session.merge(newDiscount);
         });
@@ -104,7 +108,7 @@ public class DiscountManager implements IDiscountManager {
         entityOperationDao.executeConsumer(session -> {
             List<ArticularItem> articularItemList = searchService.getEntityListNamedQuery(
                     ArticularItem.class,
-                    ITEM_DATA_OPTION_BY_DISCOUNT_CHAR_SEQUENCE_CODE,
+                    ARTICULAR_ITEM_FIND_BY_DISCOUNT_CHAR_SEQUENCE_CODE,
                     supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, charSequenceCode));
             Discount discount = articularItemList.get(0).getDiscount();
             articularItemList.forEach(itemDataOption -> {
@@ -119,7 +123,7 @@ public class DiscountManager implements IDiscountManager {
     public DiscountDto getDiscount(String charSequenceCode) {
         return searchService.getEntityListNamedQueryDto(
                 ArticularItem.class,
-                ITEM_DATA_OPTION_BY_DISCOUNT_CHAR_SEQUENCE_CODE,
+                ARTICULAR_ITEM_FIND_BY_DISCOUNT_CHAR_SEQUENCE_CODE,
                 supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, charSequenceCode),
                 transformationFunctionService.getCollectionTransformationFunction(ArticularItem.class, DiscountDto.class));
     }
@@ -128,7 +132,7 @@ public class DiscountManager implements IDiscountManager {
     public Optional<DiscountDto> getOptionalDiscount(String charSequenceCode) {
         return searchService.getOptionalEntityNamedQueryDto(
                 ArticularItem.class,
-                ITEM_DATA_OPTION_BY_DISCOUNT_CHAR_SEQUENCE_CODE,
+                ARTICULAR_ITEM_FIND_BY_DISCOUNT_CHAR_SEQUENCE_CODE,
                 supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, charSequenceCode),
                 transformationFunctionService.getCollectionTransformationFunction(Discount.class, DiscountDto.class));
     }
@@ -137,7 +141,7 @@ public class DiscountManager implements IDiscountManager {
     public List<DiscountDto> getDiscounts() {
         return searchService.getEntityListNamedQueryDtoList(
                 ArticularItem.class,
-                ITEM_DATA_OPTION_BY_DISCOUNT,
+                ARTICULAR_ITEM_FIND_BY_DISCOUNT_NOT_NULL,
                 transformationFunctionService.getCollectionTransformationCollectionFunction(ArticularItem.class, DiscountDto.class, "list"));
     }
 

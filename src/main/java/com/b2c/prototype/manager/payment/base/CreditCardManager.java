@@ -16,6 +16,7 @@ import com.b2c.prototype.service.common.EntityOperationManager;
 import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
+import com.tm.core.finder.factory.IParameterFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,15 +34,18 @@ public class CreditCardManager implements ICreditCardManager {
     private final ISearchService searchService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
+    private final IParameterFactory parameterFactory;
 
     public CreditCardManager(ICreditCardDao creditCardDao,
                              ISearchService searchService,
                              ITransformationFunctionService transformationFunctionService,
-                             ISupplierService supplierService) {
+                             ISupplierService supplierService,
+                             IParameterFactory parameterFactory) {
         this.entityOperationDao = new EntityOperationManager(creditCardDao);
         this.searchService = searchService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
+        this.parameterFactory = parameterFactory;
     }
 
     @Override
@@ -146,15 +150,17 @@ public class CreditCardManager implements ICreditCardManager {
 
     @Override
     public List<ResponseCreditCardDto> getCardListByUserId(OneFieldEntityDto oneFieldEntityDto) {
-        return entityOperationDao.getSubEntityGraphDtoList("",
-                supplierService.parameterStringSupplier(USER_ID, oneFieldEntityDto.getValue()),
+        return entityOperationDao.getSubEntityGraphDtoList(
+                "",
+                parameterFactory.createStringParameter(USER_ID, oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(CreditCard.class, ResponseCreditCardDto.class));
     }
 
     @Override
     public ResponseCreditCardDto getCardByOrderId(OneFieldEntityDto oneFieldEntityDto) {
-        return entityOperationDao.getEntityGraphDto("",
-                supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()),
+        return entityOperationDao.getEntityGraphDto(
+                "",
+                parameterFactory.createStringParameter(ORDER_ID, oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(CreditCard.class, ResponseCreditCardDto.class));
     }
 

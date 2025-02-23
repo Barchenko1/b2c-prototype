@@ -88,10 +88,9 @@ item_data:
     brand_id: 1
     category_id: 3
     itemtype_id: 1
-    
 articular_item:
   - id: 1
     articular_id: 1
     dateOfCreate: 10000
 item:
-  - itemdata_id: 1
+  - articular_item_id: 1

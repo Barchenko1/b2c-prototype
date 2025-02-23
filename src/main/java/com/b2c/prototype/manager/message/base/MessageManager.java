@@ -14,6 +14,7 @@ import com.b2c.prototype.service.common.EntityOperationManager;
 import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
+import com.tm.core.finder.factory.IParameterFactory;
 import org.hibernate.query.NativeQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,15 +32,18 @@ public class MessageManager implements IMessageManager {
     private final ISearchService searchService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
+    private final IParameterFactory parameterFactory;
 
     public MessageManager(IMessageDao messageDao,
                           ISearchService searchService,
                           ITransformationFunctionService transformationFunctionService,
-                          ISupplierService supplierService) {
+                          ISupplierService supplierService,
+                          IParameterFactory parameterFactory) {
         this.entityOperationDao = new EntityOperationManager(messageDao);
         this.searchService = searchService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
+        this.parameterFactory = parameterFactory;
     }
 
     @Override
@@ -90,22 +94,25 @@ public class MessageManager implements IMessageManager {
 
     @Override
     public List<ResponseMessageOverviewDto> getMessageOverviewBySenderEmail(OneFieldEntityDto oneFieldEntityDto) {
-        return entityOperationDao.getSubEntityGraphDtoList("",
-                supplierService.parameterStringSupplier("sender", oneFieldEntityDto.getValue()),
+        return entityOperationDao.getSubEntityGraphDtoList(
+                "",
+                parameterFactory.createStringParameter("sender", oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class));
     }
 
     @Override
     public List<ResponseMessageOverviewDto> getMessageOverviewByReceiverEmail(OneFieldEntityDto oneFieldEntityDto) {
-        return entityOperationDao.getSubEntityGraphDtoList("",
-                supplierService.parameterStringSupplier("receiver", oneFieldEntityDto.getValue()),
+        return entityOperationDao.getSubEntityGraphDtoList(
+                "",
+                parameterFactory.createStringParameter("receiver", oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class));
     }
 
     @Override
     public ResponseMessagePayloadDto getMessagePayloadDto(OneFieldEntityDto oneFieldEntityDto) {
-        return entityOperationDao.getEntityGraphDto("",
-                supplierService.parameterStringSupplier("messageUniqNumber", oneFieldEntityDto.getValue()),
+        return entityOperationDao.getEntityGraphDto(
+                "",
+                parameterFactory.createStringParameter("messageUniqNumber", oneFieldEntityDto.getValue()),
                 transformationFunctionService.getTransformationFunction(Message.class, ResponseMessagePayloadDto.class)
         );
     }

@@ -4,6 +4,7 @@ import com.b2c.prototype.dao.item.IItemDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.payload.ItemDto;
 import com.b2c.prototype.modal.dto.searchfield.ItemSearchFieldEntityDto;
+import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.ArticularStatus;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
@@ -149,7 +150,7 @@ class ItemManagerTest {
     private Item getItem() {
         return Item.builder()
                 .id(1L)
-                .itemData(prepareToItemData())
+                .articularItem(prepareArticularItem())
                 .build();
     }
 
@@ -232,6 +233,12 @@ class ItemManagerTest {
                 .category(category)
                 .brand(brand)
                 .itemType(itemType)
+                .build();
+    }
+
+    private ArticularItem prepareArticularItem() {
+        return ArticularItem.builder()
+
                 .build();
     }
 }

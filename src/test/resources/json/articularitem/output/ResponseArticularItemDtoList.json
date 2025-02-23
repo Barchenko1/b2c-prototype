@@ -1,0 +1,127 @@
+[ {
+  "articularId" : "1",
+  "dateOfCreate" : 0,
+  "productName" : "Mob 1",
+  "options" : [ {
+    "optionGroup" : {
+      "label" : "Color",
+      "value" : "Color"
+    },
+    "optionItems" : [ {
+      "label" : "Red",
+      "value" : "Red"
+    } ]
+  }, {
+    "optionGroup" : {
+      "label" : "Size",
+      "value" : "Size"
+    },
+    "optionItems" : [ {
+      "label" : "16",
+      "value" : "16"
+    } ]
+  } ],
+  "fullPrice" : {
+    "amount" : 1000.0,
+    "currency" : "USD"
+  },
+  "totalPrice" : {
+    "amount" : 1000.0,
+    "currency" : "USD"
+  },
+  "status" : {
+    "label" : "NEW",
+    "value" : "NEW"
+  },
+  "discount" : {
+    "charSequenceCode" : "xxx",
+    "amount" : 100.0,
+    "isActive" : true,
+    "currency" : "USD",
+    "isPercent" : false
+  }
+}, {
+  "articularId" : "2",
+  "dateOfCreate" : 0,
+  "productName" : "Laptop 1",
+  "options" : [ {
+    "optionGroup" : {
+      "label" : "Color",
+      "value" : "Color"
+    },
+    "optionItems" : [ {
+      "label" : "Red",
+      "value" : "Red"
+    } ]
+  }, {
+    "optionGroup" : {
+      "label" : "Size",
+      "value" : "Size"
+    },
+    "optionItems" : [ {
+      "label" : "16",
+      "value" : "16"
+    } ]
+  } ],
+  "fullPrice" : {
+    "amount" : 1200.0,
+    "currency" : "USD"
+  },
+  "totalPrice" : {
+    "amount" : 1100.0,
+    "currency" : "USD"
+  },
+  "status" : {
+    "label" : "NEW",
+    "value" : "NEW"
+  },
+  "discount" : {
+    "charSequenceCode" : "abc1",
+    "amount" : 100.0,
+    "isActive" : true,
+    "currency" : "USD",
+    "isPercent" : false
+  }
+}, {
+  "articularId" : "3",
+  "dateOfCreate" : 0,
+  "productName" : "Laptop 2",
+  "options" : [ {
+    "optionGroup" : {
+      "label" : "Color",
+      "value" : "Color"
+    },
+    "optionItems" : [ {
+      "label" : "Blue",
+      "value" : "Blue"
+    } ]
+  }, {
+    "optionGroup" : {
+      "label" : "Size",
+      "value" : "Size"
+    },
+    "optionItems" : [ {
+      "label" : "16",
+      "value" : "16"
+    } ]
+  } ],
+  "fullPrice" : {
+    "amount" : 1200.0,
+    "currency" : "USD"
+  },
+  "totalPrice" : {
+    "amount" : 1100.0,
+    "currency" : "USD"
+  },
+  "status" : {
+    "label" : "NEW",
+    "value" : "NEW"
+  },
+  "discount" : {
+    "charSequenceCode" : "abc2",
+    "amount" : 100.0,
+    "isActive" : true,
+    "currency" : "USD",
+    "isPercent" : false
+  }
+} ]

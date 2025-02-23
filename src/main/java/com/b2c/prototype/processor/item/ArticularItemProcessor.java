@@ -18,7 +18,7 @@ public class ArticularItemProcessor implements IArticularItemProcessor {
     @Override
     public void saveUpdateArticularItemList(Map<String, String> requestParams, List<ArticularItemDto> articularItemDtoList) {
         String itemId = requestParams.get("itemId");
-        articularItemManager.updateArticularItem(itemId, articularItemDtoList);
+        articularItemManager.saveUpdateArticularItem(itemId, articularItemDtoList);
     }
 
     @Override

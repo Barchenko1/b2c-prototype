@@ -51,6 +51,7 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
         try (Connection connection = connectionHolder.getConnection()) {
             connection.setAutoCommit(false);
             Statement statement = connection.createStatement();
+            statement.execute("DELETE FROM item");
             statement.execute("DELETE FROM articular_item");
             connection.commit();
         } catch (Exception e) {
