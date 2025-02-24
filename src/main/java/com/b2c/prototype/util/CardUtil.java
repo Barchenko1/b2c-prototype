@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.Date;
 
 public final class CardUtil {
@@ -36,23 +38,32 @@ public final class CardUtil {
         return sum % 10 == 0;
     }
 
-    public static boolean isCardActive(String monthYear) {
-        Date expireDate = transformMonthYearToDate(monthYear);
-        if (expireDate.before(new Date())) {
-            LOGGER.error("error credit_card is expired");
+    public static boolean isCardActive(int monthOfExpire, int yearOfExpire) {
+        YearMonth expireDate = transformMonthYearToDate(monthOfExpire, yearOfExpire);
+
+        if (expireDate.isBefore(YearMonth.now())) {
+            LOGGER.error("Error: Credit card is expired");
             throw new RuntimeException("Card expired");
         }
         return true;
     }
 
-    private static Date transformMonthYearToDate(String monthYear) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/yy");
-        dateFormat.setLenient(false);
+    private static YearMonth transformMonthYearToDate(int monthOfExpire, int yearOfExpire) {
         try {
-            return dateFormat.parse(monthYear);
-        } catch (ParseException e) {
-            LOGGER.error("error transformation Month/Year to Date");
-            throw new RuntimeException(e);
+            // Ensure month is valid (1-12)
+            if (monthOfExpire < 1 || monthOfExpire > 12) {
+                throw new IllegalArgumentException("Invalid month: " + monthOfExpire);
+            }
+
+            // Ensure year is valid (not in the past)
+            if (yearOfExpire < LocalDate.now().getYear() % 100) { // Handling two-digit year format
+                throw new IllegalArgumentException("Invalid year: " + yearOfExpire);
+            }
+
+            return YearMonth.of(2000 + yearOfExpire, monthOfExpire); // Assuming year format is YY (e.g., 24 -> 2024)
+        } catch (Exception e) {
+            LOGGER.error("Error: Invalid expiration date (Month: {}, Year: {})", monthOfExpire, yearOfExpire);
+            throw new RuntimeException("Invalid expiration date", e);
         }
     }
 }

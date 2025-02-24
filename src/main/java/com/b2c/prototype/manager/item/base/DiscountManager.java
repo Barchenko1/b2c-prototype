@@ -109,7 +109,7 @@ public class DiscountManager implements IDiscountManager {
             List<ArticularItem> articularItemList = searchService.getEntityListNamedQuery(
                     ArticularItem.class,
                     ARTICULAR_ITEM_FIND_BY_DISCOUNT_CHAR_SEQUENCE_CODE,
-                    supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, charSequenceCode));
+                    parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, charSequenceCode));
             Discount discount = articularItemList.get(0).getDiscount();
             articularItemList.forEach(itemDataOption -> {
                 itemDataOption.setDiscount(null);
@@ -124,17 +124,8 @@ public class DiscountManager implements IDiscountManager {
         return searchService.getEntityListNamedQueryDto(
                 ArticularItem.class,
                 ARTICULAR_ITEM_FIND_BY_DISCOUNT_CHAR_SEQUENCE_CODE,
-                supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, charSequenceCode),
+                parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, charSequenceCode),
                 transformationFunctionService.getCollectionTransformationFunction(ArticularItem.class, DiscountDto.class));
-    }
-
-    @Override
-    public Optional<DiscountDto> getOptionalDiscount(String charSequenceCode) {
-        return searchService.getOptionalEntityNamedQueryDto(
-                ArticularItem.class,
-                ARTICULAR_ITEM_FIND_BY_DISCOUNT_CHAR_SEQUENCE_CODE,
-                supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, charSequenceCode),
-                transformationFunctionService.getCollectionTransformationFunction(Discount.class, DiscountDto.class));
     }
 
     @Override

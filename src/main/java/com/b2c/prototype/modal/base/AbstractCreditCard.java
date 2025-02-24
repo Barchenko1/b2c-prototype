@@ -21,7 +21,8 @@ public class AbstractCreditCard {
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
     private String cardNumber;
-    private String dateOfExpire;
+    private int monthOfExpire;
+    private int yearOfExpire;
     private String cvv;
     private boolean isActive;
     private String ownerName;

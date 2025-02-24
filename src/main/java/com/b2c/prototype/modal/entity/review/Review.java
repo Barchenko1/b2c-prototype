@@ -12,7 +12,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,11 +46,4 @@ public class Review {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "review_id")
     private List<Comment> comments = new ArrayList<>();
-
-//    @PrePersist
-//    protected void onPrePersist() {
-//        if (this.uniqueId == null) {
-//            this.uniqueId = getUUID();
-//        }
-//    }
 }

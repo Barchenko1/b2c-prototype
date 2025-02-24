@@ -1,9 +1,7 @@
 package com.b2c.prototype.manager.address.base;
 
 import com.b2c.prototype.dao.address.IAddressDao;
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.payload.AddressDto;
-import com.b2c.prototype.modal.dto.searchfield.AddressSearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
@@ -59,11 +57,12 @@ class AddressManagerTest {
 
     @Test
     void testSaveUpdateAppUserAddress() {
-        AddressSearchFieldEntityDto addressSearchFieldEntityDto = getAddressSearchFieldDto();
+        String userId = "123";
+        AddressDto addressDto = getAddressDto();
         UserProfile userProfile = mock(UserProfile.class);
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(USER_ID, addressSearchFieldEntityDto.getSearchField()))
+        when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(UserProfile.class, parameterSupplier))
                 .thenReturn(userProfile);
@@ -75,21 +74,22 @@ class AddressManagerTest {
             return null;
         }).when(addressDao).executeConsumer(any(Consumer.class));
 
-        addressManager.saveUpdateAppUserAddress(addressSearchFieldEntityDto);
+        addressManager.saveUpdateAppUserAddress(userId, addressDto);
 
         verify(addressDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
     void testSaveUpdateDeliveryAddress() {
-        AddressSearchFieldEntityDto addressSearchFieldEntityDto = getAddressSearchFieldDto();
+        String orderId = "123";
+        AddressDto addressDto = getAddressDto();
         OrderArticularItem orderItemDataOption = mock(OrderArticularItem.class);
         Delivery delivery = mock(Delivery.class);
         when(orderItemDataOption.getDelivery()).thenReturn(delivery);
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(ORDER_ID, addressSearchFieldEntityDto.getSearchField()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
                 .thenReturn(orderItemDataOption);
@@ -101,14 +101,14 @@ class AddressManagerTest {
             return null;
         }).when(addressDao).executeConsumer(any(Consumer.class));
 
-        addressManager.saveUpdateDeliveryAddress(addressSearchFieldEntityDto);
+        addressManager.saveUpdateDeliveryAddress(orderId, addressDto);
 
         verify(addressDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
     void testDeleteAppUserAddress() {
-        OneFieldEntityDto dto = new OneFieldEntityDto("userId");
+        String userId = "userId";
         UserProfile userProfile = mock(UserProfile.class);
         Address address = mock(Address.class);
 
@@ -116,7 +116,7 @@ class AddressManagerTest {
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(USER_ID, dto.getValue()))
+        when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(parameterSupplier);
         Supplier<Address> addressSupplier = () -> address;
         Function<UserProfile, Address> function = mock(Function.class);
@@ -128,7 +128,7 @@ class AddressManagerTest {
                 function
         )).thenReturn(addressSupplier);
 
-        addressManager.deleteAppUserAddress(dto);
+        addressManager.deleteAppUserAddress(userId);
 
         verify(addressDao).deleteEntity(any(Supplier.class));
     }
@@ -148,14 +148,14 @@ class AddressManagerTest {
 
     @Test
     void testDeleteDeliveryAddress() {
-        OneFieldEntityDto dto = new OneFieldEntityDto("123");
+        String orderId = "123";
         OrderArticularItem orderItemDataOption = mock(OrderArticularItem.class);
         Delivery delivery = mock(Delivery.class);
         Address address = getAddress();
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(ORDER_ID, dto.getValue()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
         when(orderItemDataOption.getDelivery()).thenReturn(delivery);
         when(delivery.getAddress()).thenReturn(address);
@@ -169,7 +169,7 @@ class AddressManagerTest {
                 function
         )).thenReturn(addressSupplier);
 
-        addressManager.deleteDeliveryAddress(dto);
+        addressManager.deleteDeliveryAddress(orderId);
 
         verify(addressDao).deleteEntity(any(Supplier.class));
     }
@@ -179,7 +179,6 @@ class AddressManagerTest {
         String userId = "123";
         UserProfile userProfile = mock(UserProfile.class);
         Address address = getAddress();
-        OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto(userId);
         Parameter parameter = mock(Parameter.class);
 
         Supplier<Parameter> parameterSupplier = () -> parameter;
@@ -199,7 +198,7 @@ class AddressManagerTest {
 
         when(userProfile.getAddress()).thenReturn(address);
 
-        AddressDto addressDto = addressManager.getAddressByUserId(oneFieldEntityDto);
+        AddressDto addressDto = addressManager.getAddressByUserId(userId);
         AddressDto expectedAddressDto = getAddressDto();
         assertEquals(expectedAddressDto, addressDto);
     }
@@ -210,7 +209,6 @@ class AddressManagerTest {
         OrderArticularItem orderItemDataOption = mock(OrderArticularItem.class);
         Delivery delivery = mock(Delivery.class);
         Address address = getAddress();
-        OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto(orderId);
         Parameter parameter = mock(Parameter.class);
 
         Supplier<Parameter> parameterSupplier = () -> parameter;
@@ -230,7 +228,7 @@ class AddressManagerTest {
         when(orderItemDataOption.getDelivery()).thenReturn(delivery);
         when(delivery.getAddress()).thenReturn(address);
 
-        AddressDto addressDto = addressManager.getAddressByOrderId(oneFieldEntityDto);
+        AddressDto addressDto = addressManager.getAddressByOrderId(orderId);
         AddressDto expectedAddressDto = getAddressDto();
         assertEquals(expectedAddressDto, addressDto);
     }
@@ -300,22 +298,6 @@ class AddressManagerTest {
                 .florNumber(9)
                 .apartmentNumber(101)
                 .zipCode("91000")
-                .build();
-    }
-
-    private AddressSearchFieldEntityDto getAddressSearchFieldDto() {
-        return AddressSearchFieldEntityDto.builder()
-                .searchField("123")
-                .newEntity(AddressDto.builder()
-                        .country("USA")
-                        .city("city")
-                        .street("street")
-                        .street2("street2")
-                        .buildingNumber(1)
-                        .florNumber(9)
-                        .apartmentNumber(101)
-                        .zipCode("91000")
-                        .build())
                 .build();
     }
 

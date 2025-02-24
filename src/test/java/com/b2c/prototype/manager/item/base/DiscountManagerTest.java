@@ -204,17 +204,14 @@ class DiscountManagerTest {
     void getDiscount_shouldReturnDiscount() {
         String code = "CODE123";
         Parameter mockParameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> mockParameter;
         Function<Collection<ArticularItem>, DiscountDto> function = mock(Function.class);
         DiscountDto expectedDto = createTestDto();
         when(queryService.getEntityListNamedQueryDto(
                 eq(ArticularItem.class),
                 anyString(),
-                eq(parameterSupplier),
+                eq(mockParameter),
                 eq(function)
         )).thenReturn(expectedDto);
-        when(supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, code))
-                .thenReturn(parameterSupplier);
         when(transformationFunctionService.getCollectionTransformationFunction(ArticularItem.class, DiscountDto.class))
                 .thenReturn(function);
         when(function.apply(anyList())).thenReturn(expectedDto);
@@ -224,56 +221,6 @@ class DiscountManagerTest {
         assertEquals(expectedDto.getArticularIdSet(), result.getArticularIdSet());
         assertEquals(expectedDto.getAmount(), result.getAmount());
         assertEquals(expectedDto.getIsActive(), result.getIsActive());
-    }
-
-    @Test
-    void getOptionalDiscount_shouldReturnOptionalDiscount() {
-        String code = "CODE123";
-        Parameter mockParameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> mockParameter;
-        Function<Collection<Discount>, DiscountDto> function = mock(Function.class);
-        Discount entity = createTestDiscount();
-        DiscountDto expectedDto = createTestDto();
-        List<Discount> discounts = Arrays.asList(entity);
-        when(queryService.getOptionalEntityNamedQueryDto(
-                eq(ArticularItem.class),
-                anyString(),
-                eq(parameterSupplier),
-                eq(function)
-        )).thenReturn(Optional.of(expectedDto));
-        when(supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, code))
-                .thenReturn(parameterSupplier);
-        when(transformationFunctionService.getCollectionTransformationFunction(Discount.class, DiscountDto.class))
-                .thenReturn(function);
-        when(function.apply(discounts)).thenReturn(expectedDto);
-        Optional<DiscountDto> optional = discountManager.getOptionalDiscount(code);
-
-        assertTrue(optional.isPresent());
-        DiscountDto result = optional.get();
-        assertEquals(expectedDto.getCurrency(), result.getCurrency());
-        assertEquals(expectedDto.getArticularIdSet(), result.getArticularIdSet());
-        assertEquals(expectedDto.getAmount(), result.getAmount());
-        assertEquals(expectedDto.getIsActive(), result.getIsActive());
-    }
-
-    @Test
-    void getOptionalDiscount_ShouldReturnEmptyOptional() {
-        String code = "CODE123";
-        Parameter mockParameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> mockParameter;
-        Function<Discount, DiscountDto> mapFunction = discount -> DiscountDto.builder()
-                .amount(discount.getAmount())
-                .isActive(discount.isActive())
-                .currency(discount.getCurrency().getValue())
-                .build();
-        when(discountDao.getEntity(mockParameter)).thenReturn(null);
-        when(supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, code))
-                .thenReturn(parameterSupplier);
-        when(transformationFunctionService.getTransformationFunction(Discount.class, DiscountDto.class))
-                .thenReturn(mapFunction);
-        Optional<DiscountDto> result = discountManager.getOptionalDiscount(code);
-
-        assertFalse(result.isPresent());
     }
 
     @Test

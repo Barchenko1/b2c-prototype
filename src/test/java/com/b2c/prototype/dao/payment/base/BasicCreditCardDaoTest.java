@@ -30,10 +30,11 @@ class BasicCreditCardDaoTest extends AbstractConstantEntityDaoTest {
         CreditCard creditCard = CreditCard.builder()
                 .id(1L)
                 .cardNumber("4444-1111-2222-3333")
-                .dateOfExpire("06/28")
+                .monthOfExpire(6)
+                .yearOfExpire(28)
                 .ownerName("name")
                 .ownerSecondName("secondName")
-                .isActive(CardUtil.isCardActive("06/28"))
+                .isActive(CardUtil.isCardActive(6, 28))
                 .cvv("818")
                 .build();
         return new EntityDataSet<>(creditCard, "/datasets/payment/credit_card/testCreditCardDataSet.yml");
@@ -43,10 +44,11 @@ class BasicCreditCardDaoTest extends AbstractConstantEntityDaoTest {
     protected EntityDataSet<?> getSaveDataSet() {
         CreditCard creditCard = CreditCard.builder()
                 .cardNumber("4444-1111-2222-3333")
-                .dateOfExpire("06/28")
+                .monthOfExpire(6)
+                .yearOfExpire(28)
                 .ownerName("name")
                 .ownerSecondName("secondName")
-                .isActive(CardUtil.isCardActive("06/28"))
+                .isActive(CardUtil.isCardActive(6, 28))
                 .cvv("818")
                 .build();
         return new EntityDataSet<>(creditCard, "/datasets/payment/credit_card/saveCreditCardDataSet.yml");
@@ -55,12 +57,12 @@ class BasicCreditCardDaoTest extends AbstractConstantEntityDaoTest {
     @Override
     protected EntityDataSet<?> getUpdateDataSet() {
         CreditCard creditCard = CreditCard.builder()
-                .id(1L)
                 .cardNumber("4444-1111-2222-3333")
-                .dateOfExpire("06/28")
-                .ownerName("Update Name")
+                .monthOfExpire(6)
+                .yearOfExpire(28)
+                .ownerName("name")
                 .ownerSecondName("secondName")
-                .isActive(CardUtil.isCardActive("06/28"))
+                .isActive(CardUtil.isCardActive(6, 28))
                 .cvv("818")
                 .build();
         return new EntityDataSet<>(creditCard, "/datasets/payment/credit_card/updateCreditCardDataSet.yml");

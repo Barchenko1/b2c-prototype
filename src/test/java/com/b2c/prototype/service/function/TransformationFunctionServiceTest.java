@@ -1,6 +1,5 @@
 package com.b2c.prototype.service.function;
 
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

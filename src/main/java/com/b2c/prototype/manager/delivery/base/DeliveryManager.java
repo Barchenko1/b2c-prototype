@@ -1,9 +1,7 @@
 package com.b2c.prototype.manager.delivery.base;
 
 import com.b2c.prototype.dao.delivery.IDeliveryDao;
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.payload.DeliveryDto;
-import com.b2c.prototype.modal.dto.searchfield.DeliverySearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
 import com.b2c.prototype.modal.entity.order.OrderArticularItem;
 import com.b2c.prototype.service.common.EntityOperationManager;
@@ -37,12 +35,11 @@ public class DeliveryManager implements IDeliveryManager {
     }
 
     @Override
-    public void saveUpdateDelivery(DeliverySearchFieldEntityDto deliverySearchFieldEntityDto) {
+    public void saveUpdateDelivery(String orderId, DeliveryDto deliveryDto) {
         entityOperationDao.executeConsumer(session -> {
             OrderArticularItem orderItemDataOption = searchService.getEntity(
                     OrderArticularItem.class,
-                    supplierService.parameterStringSupplier(ORDER_ID, deliverySearchFieldEntityDto.getSearchField()));
-            DeliveryDto deliveryDto = deliverySearchFieldEntityDto.getNewEntity();
+                    supplierService.parameterStringSupplier(ORDER_ID, orderId));
             Delivery newDelivery = transformationFunctionService.getEntity(Delivery.class, deliveryDto);
             Delivery delivery = orderItemDataOption.getDelivery();
             if (delivery != null) {
@@ -54,19 +51,19 @@ public class DeliveryManager implements IDeliveryManager {
     }
 
     @Override
-    public void deleteDelivery(OneFieldEntityDto oneFieldEntityDto) {
+    public void deleteDelivery(String orderId) {
         entityOperationDao.deleteEntity(
                 supplierService.entityFieldSupplier(
                         OrderArticularItem.class,
-                        supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()),
+                        supplierService.parameterStringSupplier(ORDER_ID, orderId),
                         transformationFunctionService.getTransformationFunction(OrderArticularItem.class, Delivery.class)));
     }
 
     @Override
-    public DeliveryDto getDelivery(OneFieldEntityDto oneFieldEntityDto) {
+    public DeliveryDto getDelivery(String orderId) {
         return searchService.getEntityDto(
                 OrderArticularItem.class,
-                supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()),
+                supplierService.parameterStringSupplier(ORDER_ID, orderId),
                 transformationFunctionService.getTransformationFunction(OrderArticularItem.class, DeliveryDto.class));
     }
 

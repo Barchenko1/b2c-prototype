@@ -1,7 +1,9 @@
 package com.b2c.prototype.e2e.controller.basic;
 
 import com.b2c.prototype.e2e.BasicE2ETest;
+import com.b2c.prototype.e2e.util.TestUtil;
 import com.b2c.prototype.modal.dto.payload.DiscountDto;
+import com.b2c.prototype.modal.dto.response.ResponseArticularItemDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,9 +11,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.Statement;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -49,11 +53,11 @@ class DiscountControllerE2ETest extends BasicE2ETest {
     @Test
     void testSaveDiscount() {
         DiscountDto discountDto = discountDto();
-        loadDataSet("/datasets/item/discount/emptyE2EDiscountDataSet.yml");
+        loadDataSet("/datasets/item/discount/emptyDiscountDataSet.yml");
         try {
             mockMvc.perform(post(URL_TEMPLATE)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(discountDto)))
+                            .content(TestUtil.readFile("json/discount/input/InitDiscountDto.json")))
                     .andExpect(status().isOk());
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -194,28 +198,9 @@ class DiscountControllerE2ETest extends BasicE2ETest {
         verifyExpectedData("/datasets/item/discount/updateE2EWithExistingDiscountByArticularIdDataSet.yml");
     }
 
-
-
     @Test
     void testGetDiscounts() {
         loadDataSet("/datasets/item/discount/testE2EDiscountDataSet.yml");
-        List<DiscountDto> expectedList = List.of(
-                DiscountDto.builder()
-                        .charSequenceCode("abc")
-                        .amount(10)
-                        .currency("USD")
-                        .isActive(true)
-                        .articularIdSet(Set.of("123"))
-                        .build(),
-                DiscountDto.builder()
-                        .charSequenceCode("abc1")
-                        .amount(10)
-                        .currency("USD")
-                        .isActive(true)
-                        .articularIdSet(Set.of("111", "122"))
-                        .build()
-        );
-
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(get(URL_TEMPLATE + "/all"))
@@ -230,24 +215,29 @@ class DiscountControllerE2ETest extends BasicE2ETest {
         try {
             String jsonResponse = mvcResult.getResponse().getContentAsString();
             List<DiscountDto> actualList = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
+            String expectedResultStr = TestUtil.readFile("json/discount/output/DiscountDtoList.json");
+            List<DiscountDto> expectedList = objectMapper.readValue(expectedResultStr, new TypeReference<>() {});
+            actualList.sort(Comparator.comparing(DiscountDto::getCharSequenceCode));
+            expectedList.sort(Comparator.comparing(DiscountDto::getCharSequenceCode));
             assertEquals(expectedList, actualList);
         } catch (JsonProcessingException | UnsupportedEncodingException e) {
             throw new RuntimeException("Error processing the JSON response", e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
     }
 
     @Test
     void testGetDiscount() {
-        DiscountDto expectedDto = discountDto();
         loadDataSet("/datasets/item/discount/testE2EDiscountDataSet.yml");
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(get(URL_TEMPLATE)
-                            .param("charSequenceCode", expectedDto.getCharSequenceCode())
+                            .param("charSequenceCode", "abc")
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.charSequenceCode").value(expectedDto.getCharSequenceCode()))
+                    .andExpect(jsonPath("$.charSequenceCode").value("abc"))
                     .andReturn();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -256,13 +246,13 @@ class DiscountControllerE2ETest extends BasicE2ETest {
         try {
             String jsonResponse = mvcResult.getResponse().getContentAsString();
             DiscountDto actual = objectMapper.readValue(jsonResponse, DiscountDto.class);
-            assertEquals(expectedDto.getArticularIdSet(), actual.getArticularIdSet());
-            assertEquals(expectedDto.getAmount(), actual.getAmount());
-            assertEquals(expectedDto.getCurrency(), actual.getCurrency());
-            assertEquals(expectedDto.getCharSequenceCode(), actual.getCharSequenceCode());
-            assertEquals(expectedDto.getIsActive(), actual.getIsActive());
+            String expectedResultStr = TestUtil.readFile("json/discount/output/DiscountDto.json");
+            DiscountDto expected = objectMapper.readValue(expectedResultStr, DiscountDto.class);
+            assertEquals(expected, actual);
         } catch (JsonProcessingException | UnsupportedEncodingException e) {
             throw new RuntimeException("Error processing the JSON response", e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

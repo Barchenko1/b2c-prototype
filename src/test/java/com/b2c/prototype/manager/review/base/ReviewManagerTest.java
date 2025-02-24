@@ -4,7 +4,6 @@ import com.b2c.prototype.dao.review.IReviewDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.payload.ReviewDto;
 import com.b2c.prototype.modal.dto.response.ResponseReviewDto;
-import com.b2c.prototype.modal.dto.searchfield.ReviewSearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.item.Item;
 import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.modal.entity.item.Rating;
@@ -29,6 +28,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 import static com.b2c.prototype.util.Constant.ITEM_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.any;
@@ -61,10 +61,7 @@ class ReviewManagerTest {
     void testSaveUpdateReview_addsNewReview() {
         Session session = mock(Session.class);
         ReviewDto reviewDto = getReviewDto();
-        ReviewSearchFieldEntityDto searchFieldDto = ReviewSearchFieldEntityDto.builder()
-                .searchField("searchField")
-                .newEntity(reviewDto)
-                .build();
+        String articularId = "articularId";
 
         Item item = mock(Item.class);
         Review review = getReview();
@@ -73,7 +70,7 @@ class ReviewManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-        when(supplierService.parameterStringSupplier(ITEM_ID, searchFieldDto.getSearchField()))
+        when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
                 .thenReturn(parameterSupplier);
         NativeQuery<Item> query = mock(NativeQuery.class);
         when(session.createNativeQuery(anyString(), eq(Item.class))).thenReturn(query);
@@ -86,7 +83,7 @@ class ReviewManagerTest {
             return null;
         }).when(reviewDao).executeConsumer(any(Consumer.class));
 
-        reviewManager.saveUpdateReview(searchFieldDto);
+        reviewManager.saveUpdateReview(articularId, reviewDto);
 
         verify(reviewDao).executeConsumer(any(Consumer.class));
     }
@@ -94,12 +91,9 @@ class ReviewManagerTest {
     @Test
     void testSaveUpdateReview_updatesExistingReview() {
         Session session = mock(Session.class);
+        String articularId = "articularId";
         ReviewDto reviewDto = getReviewDto();
         reviewDto.setReviewId(null);
-        ReviewSearchFieldEntityDto searchFieldDto = ReviewSearchFieldEntityDto.builder()
-                .searchField("searchField")
-                .newEntity(reviewDto)
-                .build();
 
         Item item = mock(Item.class);
         Review review = getReview();
@@ -108,7 +102,7 @@ class ReviewManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-        when(supplierService.parameterStringSupplier(ITEM_ID, searchFieldDto.getSearchField()))
+        when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
                 .thenReturn(parameterSupplier);
         NativeQuery<Item> query = mock(NativeQuery.class);
         when(session.createNativeQuery(anyString(), eq(Item.class))).thenReturn(query);
@@ -121,21 +115,21 @@ class ReviewManagerTest {
             return null;
         }).when(reviewDao).executeConsumer(any(Consumer.class));
 
-        reviewManager.saveUpdateReview(searchFieldDto);
+        reviewManager.saveUpdateReview(articularId, reviewDto);
 
         verify(reviewDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
     void testDeleteReview_removesReviewFromEntity() {
-        OneFieldEntityDto dto = new OneFieldEntityDto("123");
+        String articularId = "123";
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
         Review review = getReview();
         Supplier<Review> reviewSupplier = () -> review;
 
-        when(supplierService.parameterStringSupplier(ITEM_ID, dto.getValue()))
+        when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
                 .thenReturn(parameterSupplier);
         Function<ItemData, Review> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(ItemData.class, Review.class))
@@ -146,14 +140,14 @@ class ReviewManagerTest {
                 function
         )).thenReturn(reviewSupplier);
 
-        reviewManager.deleteReview(dto);
+        reviewManager.deleteReview(articularId);
 
         verify(reviewDao).deleteEntity(reviewSupplier);
     }
 
     @Test
     void testGetReviewListByItemId_returnsListOfReviews() {
-        OneFieldEntityDto dto = new OneFieldEntityDto("item-123");
+        String articularId = "articularId";
         Review review = getReview();
         ResponseReviewDto responseReviewDto = getResponseReviewDto();
 
@@ -161,7 +155,7 @@ class ReviewManagerTest {
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
         List<ResponseReviewDto> expectedResponse = List.of(responseReviewDto);
-        when(supplierService.parameterStringSupplier(ITEM_ID, dto.getValue()))
+        when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
                 .thenReturn(parameterSupplier);
         Function<Review, Collection<ResponseReviewDto>> function = mock(Function.class);
         when(transformationFunctionService.getTransformationCollectionFunction(Review.class, ResponseReviewDto.class))
@@ -169,7 +163,7 @@ class ReviewManagerTest {
         when(function.apply(review)).thenReturn(expectedResponse);
         when(queryService.getEntityDto(Review.class, parameterSupplier, function)).thenReturn(expectedResponse);
 
-        List<ResponseReviewDto> actualResponse = reviewManager.getReviewListByItemId(dto);
+        List<ResponseReviewDto> actualResponse = reviewManager.getReviewListByArticularId(articularId);
 
         assertEquals(1, actualResponse.size());
         assertEquals(responseReviewDto, actualResponse.get(0));

@@ -1,12 +1,14 @@
 package com.b2c.prototype.modal.dto.payload;
 
-import lombok.Builder;
+import com.b2c.prototype.modal.dto.common.AbstractContactInfoDto;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.SuperBuilder;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-@Builder
-public class ContactInfoDto {
-    private String firstName;
-    private String lastName;
-    private ContactPhoneDto contactPhone;
+@SuperBuilder
+@AllArgsConstructor
+public class ContactInfoDto extends AbstractContactInfoDto {
 }

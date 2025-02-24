@@ -1,0 +1,93 @@
+brand:
+  - id: 1
+    value: "Hermes"
+    label: "Hermes"
+item_type:
+  - id: 1
+    value: "Clothes"
+    label: "Clothes"
+currency:
+  - id: 1
+    value: "USD"
+    label: "USD"
+discount:
+  - id: 1
+    amount: 5
+    charSequenceCode: "abc"
+    isActive: true
+    isPercent: false
+    currency_id: 1
+option_group:
+  - id: 1
+    label: "Size"
+    value: "Size"
+option_item:
+  - id: 1
+    value: "L"
+    label: "L"
+    option_group_id: 1
+  - id: 2
+    value: "M"
+    label: "M"
+    option_group_id: 1
+category:
+  - id: 1
+    label: "parent"
+    value: "parent"
+  - id: 2
+    category_id: 1
+    label: "root"
+    value: "root"
+  - id: 3
+    category_id: 2
+    label: "child"
+    value: "child"
+item_data:
+  - id: 1
+    item_id: 123
+    brand_id: 1
+    category_id: 3
+    itemtype_id: 1
+    
+articular_item:
+  - id: 1
+    articular_id: 1
+    dateOfCreate: 10000
+delivery_type:
+  - id: 1
+    value: "Post"
+    label: "Post"
+country:
+  - id: 1
+    label: "USA"
+    value: "USA"
+order_status:
+  - id: 1
+    value: "Pending"
+    label: "Pending"
+payment_method:
+  - id: 1
+    value: "Card"
+    label: "Card"
+  - id: 2
+    value: "Blik"
+    label: "Blik"
+country_phone_code:
+  - id: 1
+    value: "+11"
+    label: "+11"
+contact_phone: []
+beneficiary: []
+contact_info:
+  - id: 1
+    firstName: "Wolter"
+    lastName: "White"
+user_profile:
+  - id: 1
+    username: "username"
+    user_id: "123"
+    email: "email"
+    dateOfCreate: 100
+    isActive: true
+    contactinfo_id: 1
+order_articular_item: []

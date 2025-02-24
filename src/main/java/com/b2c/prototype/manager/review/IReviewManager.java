@@ -1,15 +1,14 @@
 package com.b2c.prototype.manager.review;
 
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
+import com.b2c.prototype.modal.dto.payload.ReviewDto;
 import com.b2c.prototype.modal.dto.response.ResponseReviewDto;
-import com.b2c.prototype.modal.dto.searchfield.ReviewSearchFieldEntityDto;
 
 import java.util.List;
 
 public interface IReviewManager {
-    void saveUpdateReview(ReviewSearchFieldEntityDto reviewSearchFieldEntityDto);
-    void deleteReview(OneFieldEntityDto oneFieldEntityDto);
+    void saveUpdateReview(String articularId, ReviewDto reviewDto);
+    void deleteReview(String articularId);
 
-    List<ResponseReviewDto> getReviewListByItemId(OneFieldEntityDto oneFieldEntityDto);
+    List<ResponseReviewDto> getReviewListByArticularId(String articularId);
 
 }

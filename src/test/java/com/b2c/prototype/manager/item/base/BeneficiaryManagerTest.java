@@ -1,10 +1,7 @@
 package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.dao.order.IBeneficiaryDao;
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
-import com.b2c.prototype.modal.dto.searchfield.BeneficiaryArrayDtoSearchField;
 import com.b2c.prototype.modal.dto.payload.BeneficiaryDto;
-import com.b2c.prototype.modal.dto.searchfield.BeneficiarySearchFieldOrderNumberDto;
 import com.b2c.prototype.modal.dto.payload.ContactPhoneDto;
 import com.b2c.prototype.modal.entity.order.OrderArticularItem;
 import com.b2c.prototype.modal.entity.order.Beneficiary;
@@ -57,18 +54,15 @@ class BeneficiaryManagerTest {
 
     @Test
     void testSaveUpdateContactInfoByOrderId() {
-        BeneficiaryDto[] beneficiaryDtoArray = new BeneficiaryDto[] {getBeneficiaryDto()};
-        BeneficiaryArrayDtoSearchField beneficiaryArrayDtoSearchField = BeneficiaryArrayDtoSearchField.builder()
-                .searchField("123")
-                .newEntityArray(beneficiaryDtoArray)
-                .build();
+        String orderId = "123";
+        List<BeneficiaryDto> beneficiaryDtoList = List.of(getBeneficiaryDto());
         OrderArticularItem orderItemDataOption = mock(OrderArticularItem.class);
         Beneficiary beneficiary = mock(Beneficiary.class);
         when(orderItemDataOption.getBeneficiaries())
                 .thenReturn(List.of(beneficiary));
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier("order_id", beneficiaryArrayDtoSearchField.getSearchField()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
                 .thenReturn(orderItemDataOption);
@@ -82,18 +76,15 @@ class BeneficiaryManagerTest {
             return null;
         }).when(beneficiaryDao).executeConsumer(any(Consumer.class));
 
-        beneficiaryManager.saveUpdateContactInfoByOrderId(beneficiaryArrayDtoSearchField);
+        beneficiaryManager.saveUpdateContactInfoByOrderId(orderId, beneficiaryDtoList);
 
         verify(beneficiaryDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
     void testSaveUpdateContactInfoListByOrderId() {
-        BeneficiaryDto[] beneficiaryDtoArray = new BeneficiaryDto[] {getBeneficiaryDto()};
-        BeneficiaryArrayDtoSearchField beneficiaryArrayDtoSearchField = BeneficiaryArrayDtoSearchField.builder()
-                .searchField("123")
-                .newEntityArray(beneficiaryDtoArray)
-                .build();
+        String orderId = "123";
+        List<BeneficiaryDto> beneficiaryDtoList = List.of(getBeneficiaryDto());
         OrderArticularItem orderItemDataOption = mock(OrderArticularItem.class);
         Beneficiary beneficiary = mock(Beneficiary.class);
         List<Beneficiary> expectedBeneficiaryList = new ArrayList<>(){{
@@ -104,7 +95,7 @@ class BeneficiaryManagerTest {
                 .thenReturn(expectedBeneficiaryList);
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(ORDER_ID, beneficiaryArrayDtoSearchField.getSearchField()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
                 .thenReturn(orderItemDataOption);
@@ -118,24 +109,21 @@ class BeneficiaryManagerTest {
             return null;
         }).when(beneficiaryDao).executeConsumer(any(Consumer.class));
 
-        beneficiaryManager.saveUpdateContactInfoByOrderId(beneficiaryArrayDtoSearchField);
+        beneficiaryManager.saveUpdateContactInfoByOrderId(orderId, beneficiaryDtoList);
 
         verify(beneficiaryDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
     void testDeleteContactInfoByOrderId() {
-        BeneficiarySearchFieldOrderNumberDto beneficiarySearchFieldOrderNumberDto = BeneficiarySearchFieldOrderNumberDto.builder()
-                .orderNumber(0)
-                .value("123")
-                .build();
+        String orderId = "123";
         OrderArticularItem orderItemDataOption = mock(OrderArticularItem.class);
         Beneficiary beneficiary = getBeneficiary();
         when(orderItemDataOption.getBeneficiaries()).thenReturn(List.of(beneficiary));
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(ORDER_ID, beneficiarySearchFieldOrderNumberDto.getValue()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(eq(OrderArticularItem.class), any(Supplier.class)))
                 .thenReturn(orderItemDataOption);
@@ -147,7 +135,7 @@ class BeneficiaryManagerTest {
             return null;
         }).when(beneficiaryDao).executeConsumer(any(Consumer.class));
 
-        beneficiaryManager.deleteContactInfoByOrderId(beneficiarySearchFieldOrderNumberDto);
+        beneficiaryManager.deleteContactInfoByOrderId(orderId, 0);
 
         verify(beneficiaryDao).executeConsumer(any(Consumer.class));
     }
@@ -157,8 +145,6 @@ class BeneficiaryManagerTest {
         String orderId = "123";
         OrderArticularItem orderItemDataOption = mock(OrderArticularItem.class);
         Beneficiary beneficiary = getBeneficiary();
-//        BeneficiaryDto beneficiaryDto = getBeneficiaryDto();
-        OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto(orderId);
         Parameter parameter = mock(Parameter.class);
 
         Supplier<Parameter> parameterSupplier = () -> parameter;
@@ -179,7 +165,7 @@ class BeneficiaryManagerTest {
         when(transformationFunctionService.getTransformationFunction(OrderArticularItem.class, BeneficiaryDto.class))
                 .thenReturn(transformationFunction);
 
-        when(queryService.getSubEntityDtoList(eq(OrderArticularItem.class), any(Supplier.class), any(Function.class)))
+        when(queryService.getSubEntityDtoList(eq(OrderArticularItem.class), any(Parameter.class), any(Function.class)))
                 .thenAnswer(invocation -> {
                     Supplier<Parameter> supplierArg = invocation.getArgument(1);
                     Function<OrderArticularItem, BeneficiaryDto> functionArg = invocation.getArgument(2);
@@ -189,7 +175,7 @@ class BeneficiaryManagerTest {
 
         when(orderItemDataOption.getBeneficiaries()).thenReturn(List.of(beneficiary));
 
-        List<BeneficiaryDto> contactInfoDtoList = beneficiaryManager.getContactInfoListByOrderId(oneFieldEntityDto);
+        List<BeneficiaryDto> contactInfoDtoList = beneficiaryManager.getContactInfoListByOrderId(orderId);
         BeneficiaryDto beneficiaryDto = getBeneficiaryDto();
         assertEquals(1, contactInfoDtoList.size());
         contactInfoDtoList.forEach(result ->  {

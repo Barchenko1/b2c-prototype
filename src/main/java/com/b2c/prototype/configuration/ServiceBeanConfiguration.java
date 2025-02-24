@@ -61,9 +61,9 @@ import com.b2c.prototype.manager.message.base.MessageStatusManager;
 import com.b2c.prototype.manager.message.base.MessageTypeManager;
 import com.b2c.prototype.manager.option.IOptionGroupManager;
 import com.b2c.prototype.manager.option.base.OptionGroupManager;
-import com.b2c.prototype.manager.order.IOrderItemDataOptionManager;
+import com.b2c.prototype.manager.order.IOrderArticularItemQuantityManager;
 import com.b2c.prototype.manager.order.IOrderStatusManager;
-import com.b2c.prototype.manager.order.base.OrderItemDataOptionManager;
+import com.b2c.prototype.manager.order.base.OrderArticularItemQuantityManager;
 import com.b2c.prototype.manager.order.base.OrderStatusManager;
 import com.b2c.prototype.manager.payment.IPaymentMethodManager;
 import com.b2c.prototype.manager.payment.base.PaymentMethodManager;
@@ -269,8 +269,9 @@ public class ServiceBeanConfiguration {
     public IItemManager itemManager(IItemDao itemDao,
                                     ISearchService searchService,
                                     ITransformationFunctionService transformationFunctionService,
-                                    ISupplierService supplierService) {
-        return new ItemManager(itemDao, searchService, transformationFunctionService, supplierService);
+                                    ISupplierService supplierService,
+                                    IParameterFactory parameterFactory) {
+        return new ItemManager(itemDao, searchService, transformationFunctionService, supplierService, parameterFactory);
     }
 
     @Bean
@@ -294,8 +295,9 @@ public class ServiceBeanConfiguration {
     public IOptionItemManager optionItemManager(IOptionItemDao optionItemDao,
                                                 ISearchService searchService,
                                                 ITransformationFunctionService transformationFunctionService,
-                                                ISupplierService supplierService) {
-        return new OptionItemManager(optionItemDao, searchService, transformationFunctionService, supplierService);
+                                                ISupplierService supplierService,
+                                                IParameterFactory parameterFactory) {
+        return new OptionItemManager(optionItemDao, searchService, transformationFunctionService, supplierService, parameterFactory);
     }
 
     @Bean
@@ -333,11 +335,11 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public IOrderItemDataOptionManager orderItemDataManager(IOrderItemDataDao orderItemDao,
-                                                            ITransformationFunctionService transformationFunctionService,
-                                                            ISupplierService supplierService,
-                                                            IParameterFactory parameterFactory) {
-        return new OrderItemDataOptionManager(orderItemDao, transformationFunctionService, supplierService, parameterFactory);
+    public IOrderArticularItemQuantityManager orderItemDataManager(IOrderItemDataDao orderItemDao,
+                                                                   ITransformationFunctionService transformationFunctionService,
+                                                                   ISupplierService supplierService,
+                                                                   IParameterFactory parameterFactory) {
+        return new OrderArticularItemQuantityManager(orderItemDao, transformationFunctionService, supplierService, parameterFactory);
     }
 
     @Bean
@@ -409,7 +411,7 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public IOrderProcessor orderProcessor(IOrderItemDataOptionManager orderItemDataOptionManager) {
+    public IOrderProcessor orderProcessor(IOrderArticularItemQuantityManager orderItemDataOptionManager) {
         return new OrderProcessor(orderItemDataOptionManager);
     }
 }

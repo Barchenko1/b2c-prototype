@@ -3,7 +3,6 @@ package com.b2c.prototype.manager.item.base;
 import com.b2c.prototype.dao.item.IItemDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.payload.ItemDto;
-import com.b2c.prototype.modal.dto.searchfield.ItemSearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.ArticularStatus;
 import com.b2c.prototype.modal.entity.item.Brand;
@@ -32,8 +31,9 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static com.b2c.prototype.util.Constant.ITEM_ID;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 class ItemManagerTest {
@@ -59,19 +59,16 @@ class ItemManagerTest {
         Item item = mock(Item.class);
         ItemDto itemDto = mock(ItemDto.class);
         ItemData itemData = mock(ItemData.class);
-        ItemSearchFieldEntityDto itemSearchFieldEntityDto = ItemSearchFieldEntityDto.builder()
-                .searchField("test-item-id")
-                .newEntity(itemDto)
-                .build();
+        String articularId = "articularId";
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-        when(supplierService.parameterStringSupplier(ITEM_ID, itemSearchFieldEntityDto.getSearchField()))
+        when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(ItemData.class, parameterSupplier))
                 .thenReturn(itemData);
-        when(transformationFunctionService.getEntity(Item.class, itemSearchFieldEntityDto.getNewEntity()))
+        when(transformationFunctionService.getEntity(Item.class, itemDto))
                 .thenReturn(item);
 
         doAnswer(invocation -> {
@@ -82,7 +79,7 @@ class ItemManagerTest {
             return null;
         }).when(itemDao).executeConsumer(any(Consumer.class));
 
-        itemManager.saveUpdateItem(itemSearchFieldEntityDto);
+        itemManager.saveUpdateItem(articularId, itemDto);
 
         verify(itemDao).executeConsumer(any(Consumer.class));
     }
@@ -91,13 +88,12 @@ class ItemManagerTest {
     void deleteItem_shouldDeleteItem() {
         Item item = mock(Item.class);
         Supplier<Item> itemSupplier = () -> item;
-        OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto();
-        oneFieldEntityDto.setValue("test-item-id");
+        String articularId = "test-articular-id";
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-        when(supplierService.parameterStringSupplier(ITEM_ID, oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
                 .thenReturn(parameterSupplier);
         Function<ItemData, Item> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(ItemData.class, Item.class))
@@ -107,21 +103,20 @@ class ItemManagerTest {
                 parameterSupplier,
                 function
         )).thenReturn(itemSupplier);
-        itemManager.deleteItem(oneFieldEntityDto);
+        itemManager.deleteItem(articularId);
 
         verify(itemDao).deleteEntity(itemSupplier);
     }
 
     @Test
     void getItemByItemId_shouldReturnItem() {
-        OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto();
-        oneFieldEntityDto.setValue("test-item-id");
+        String articularId = "test-articular-id";
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
         Item item = mock(Item.class);
-        when(supplierService.parameterStringSupplier(ITEM_ID, oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
                 .thenReturn(parameterSupplier);
         Function<ItemData, Item> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(ItemData.class, Item.class))
@@ -131,7 +126,7 @@ class ItemManagerTest {
                 parameterSupplier,
                 function)).thenReturn(item);
 
-        Item result = itemManager.getItemByItemId(oneFieldEntityDto);
+        Item result = itemManager.getItemByItemId(articularId);
 
         assertNotNull(result);
         assertEquals(item, result);

@@ -21,7 +21,6 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.NamedSubgraph;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -119,6 +118,9 @@ import static com.b2c.prototype.util.Util.getUUID;
                         "LEFT JOIN FETCH fp.currency " +
                         "LEFT JOIN FETCH ai.totalPrice tp " +
                         "LEFT JOIN FETCH tp.currency " +
+                        "LEFT JOIN FETCH ai.discount d " +
+                        "LEFT JOIN FETCH d.currency " +
+                        "LEFT JOIN FETCH d.articularItemList da " +
                         "WHERE :articularId IN (SELECT a.articularId FROM id.articularItemSet a)"
         ),
         @NamedQuery(

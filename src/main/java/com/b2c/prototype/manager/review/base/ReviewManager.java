@@ -1,12 +1,10 @@
 package com.b2c.prototype.manager.review.base;
 
 import com.b2c.prototype.dao.review.IReviewDao;
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.payload.ReviewDto;
 import com.b2c.prototype.modal.dto.response.ResponseReviewDto;
-import com.b2c.prototype.modal.dto.searchfield.ReviewSearchFieldEntityDto;
+import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.Item;
-import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.modal.entity.review.Review;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.query.ISearchService;
@@ -18,6 +16,7 @@ import org.hibernate.query.NativeQuery;
 
 import java.util.List;
 
+import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 import static com.b2c.prototype.util.Constant.ITEM_ID;
 import static com.b2c.prototype.util.Query.SELECT_ITEM_BY_ITEM_ID;
 
@@ -39,13 +38,12 @@ public class ReviewManager implements IReviewManager {
     }
 
     @Override
-    public void saveUpdateReview(ReviewSearchFieldEntityDto reviewSearchFieldEntityDto) {
+    public void saveUpdateReview(String articularId, ReviewDto reviewDto) {
         entityOperationDao.executeConsumer(session -> {
             NativeQuery<Item> query = session.createNativeQuery(SELECT_ITEM_BY_ITEM_ID, Item.class);
             Item item = searchService.getQueryEntity(
                     query,
-                    supplierService.parameterStringSupplier(ITEM_ID, reviewSearchFieldEntityDto.getSearchField()));
-            ReviewDto reviewDto = reviewSearchFieldEntityDto.getNewEntity();
+                    supplierService.parameterStringSupplier(ARTICULAR_ID, articularId));
             Review newReview = transformationFunctionService.getEntity(Review.class, reviewDto);
             Review existingReview = item.getReviews().stream()
                     .filter(reviewEntity -> reviewEntity.getUniqueId().equals(reviewDto.getReviewId()))
@@ -62,19 +60,19 @@ public class ReviewManager implements IReviewManager {
     }
 
     @Override
-    public void deleteReview(OneFieldEntityDto oneFieldEntityDto) {
+    public void deleteReview(String articularId) {
         entityOperationDao.deleteEntity(
                 supplierService.entityFieldSupplier(
-                        ItemData.class,
-                        supplierService.parameterStringSupplier(ITEM_ID, oneFieldEntityDto.getValue()),
-                        transformationFunctionService.getTransformationFunction(ItemData.class, Review.class)));
+                        ArticularItem.class,
+                        supplierService.parameterStringSupplier(ARTICULAR_ID, articularId),
+                        transformationFunctionService.getTransformationFunction(ArticularItem.class, Review.class)));
     }
 
     @Override
-    public List<ResponseReviewDto> getReviewListByItemId(OneFieldEntityDto oneFieldEntityDto) {
+    public List<ResponseReviewDto> getReviewListByArticularId(String articularId) {
         return (List<ResponseReviewDto>) searchService.getEntityDto(
                 Review.class,
-                supplierService.parameterStringSupplier(ITEM_ID, oneFieldEntityDto.getValue()),
+                supplierService.parameterStringSupplier(ARTICULAR_ID, articularId),
                 transformationFunctionService.getTransformationCollectionFunction(Review.class, ResponseReviewDto.class));
     }
 

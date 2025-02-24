@@ -16,7 +16,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -50,7 +49,7 @@ public class AbstractOrderArticularItem {
     @Builder.Default
     @EqualsAndHashCode.Exclude
     private List<ArticularItemQuantity> articularItemQuantityList = new ArrayList<>();
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -65,11 +64,4 @@ public class AbstractOrderArticularItem {
     @JoinColumn(name = "payment_id")
     private Payment payment;
     private String note;
-
-    @PrePersist
-    protected void onPrePersist() {
-        if (this.orderId == null) {
-            this.orderId = getUUID();
-        }
-    }
 }

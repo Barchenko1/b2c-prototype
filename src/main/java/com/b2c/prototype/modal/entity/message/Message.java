@@ -12,7 +12,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -57,11 +56,4 @@ public class Message {
     private MessageStatus status;
     @ManyToOne(fetch = FetchType.LAZY)
     private MessageType type;
-
-//    @PrePersist
-//    protected void onPrePersist() {
-//        if (this.messageUniqNumber == null) {
-//            this.messageUniqNumber = getUUID();
-//        }
-//    }
 }

@@ -175,7 +175,8 @@ class UserProfileManagerTest {
                         .build())
                 .creditCards(List.of(ResponseCreditCardDto.builder()
                         .cardNumber("4444-1111-2222-3333")
-                        .dateOfExpire("06/28")
+                        .monthOfExpire(6)
+                        .yearOfExpire(28)
                         .ownerName("name")
                         .ownerSecondName("secondName")
                         .build()))
@@ -217,10 +218,11 @@ class UserProfileManagerTest {
         CreditCard creditCard = CreditCard.builder()
                 .id(1L)
                 .cardNumber("4444-1111-2222-3333")
-                .dateOfExpire("06/28")
+                .monthOfExpire(6)
+                .yearOfExpire(28)
                 .ownerName("name")
                 .ownerSecondName("secondName")
-                .isActive(CardUtil.isCardActive("06/28"))
+                .isActive(CardUtil.isCardActive(6, 28))
                 .cvv("818")
                 .build();
         return UserProfile.builder()
@@ -259,7 +261,8 @@ class UserProfileManagerTest {
         CreditCard creditCard = userProfile.getCreditCardList().get(0);
         ResponseCreditCardDto creditCardDto = ResponseCreditCardDto.builder()
                 .cardNumber(creditCard.getCardNumber())
-                .dateOfExpire(creditCard.getDateOfExpire())
+                .monthOfExpire(creditCard.getMonthOfExpire())
+                .yearOfExpire(creditCard.getYearOfExpire())
                 .ownerSecondName(creditCard.getOwnerSecondName())
                 .ownerName(creditCard.getOwnerName())
                 .build();

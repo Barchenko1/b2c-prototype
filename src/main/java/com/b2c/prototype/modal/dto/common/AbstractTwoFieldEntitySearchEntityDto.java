@@ -5,7 +5,7 @@ import lombok.experimental.SuperBuilder;
 
 @Data
 @SuperBuilder
-public class AbstractTwoFieldEntitySearchEntityDto<T> {
+public abstract class AbstractTwoFieldEntitySearchEntityDto<T> {
     private String mainSearchField;
     private String innerSearchField;
     private T newEntity;

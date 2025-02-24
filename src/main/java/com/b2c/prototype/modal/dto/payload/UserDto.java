@@ -7,10 +7,9 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class CountryDto {
-    private String label;
-    private String value;
-    private String flagImagePath;
+@AllArgsConstructor
+public class UserDto {
+    private String email;
+    private String userId;
 }

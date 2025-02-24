@@ -1,11 +1,8 @@
 package com.b2c.prototype.manager.userprofile.basic;
 
-
 import com.b2c.prototype.dao.user.IContactPhoneDao;
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
-import com.b2c.prototype.modal.dto.searchfield.BeneficiarySearchFieldOrderNumberDto;
+import com.b2c.prototype.modal.dto.payload.BeneficiaryDto;
 import com.b2c.prototype.modal.dto.payload.ContactPhoneDto;
-import com.b2c.prototype.modal.dto.searchfield.ContactPhoneSearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.order.OrderArticularItem;
 import com.b2c.prototype.modal.entity.order.Beneficiary;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
@@ -58,14 +55,8 @@ class ContactPhoneManagerTest {
 
     @Test
     void testSaveUpdateContactPhoneByUserId() {
-        ContactPhoneSearchFieldEntityDto contactPhoneSearchFieldEntityDto = ContactPhoneSearchFieldEntityDto.builder()
-                .newEntity(ContactPhoneDto.builder()
-                        .phoneNumber("48")
-                        .countryPhoneCode("US")
-                        .phoneNumber("1234567890")
-                        .build())
-                .searchField("code")
-                .build();
+        String userId = "code";
+        ContactPhoneDto contactPhoneDto = getContactPhoneDto();
 
         ContactPhone contactPhone = getTestContactPhone();
         Parameter mockParameter = mock(Parameter.class);
@@ -77,8 +68,8 @@ class ContactPhoneManagerTest {
                 .thenReturn(userProfile);
         when(transformationFunctionService.getEntity(
                 ContactPhone.class,
-                contactPhoneSearchFieldEntityDto.getNewEntity())).thenReturn(contactPhone);
-        when(supplierService.parameterStringSupplier(USER_ID, contactPhoneSearchFieldEntityDto.getSearchField()))
+                contactPhoneDto)).thenReturn(contactPhone);
+        when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(parameterSupplier);
         when(userProfile.getContactInfo()).thenReturn(contactInfo);
         when(contactInfo.getContactPhone()).thenReturn(contactPhone);
@@ -91,23 +82,15 @@ class ContactPhoneManagerTest {
             return null;
         }).when(contactPhoneDao).executeConsumer(any(Consumer.class));
 
-        contactPhoneManager.saveUpdateContactPhoneByUserId(contactPhoneSearchFieldEntityDto);
+        contactPhoneManager.saveUpdateContactPhoneByUserId(userId, contactPhoneDto);
 
         verify(contactPhoneDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
     void testSaveUpdateContactPhoneByOrderId() {
-        ContactPhoneSearchFieldEntityDto contactPhoneSearchFieldEntityDto = ContactPhoneSearchFieldEntityDto.builder()
-                .orderNumber(0)
-                .newEntity(ContactPhoneDto.builder()
-                        .phoneNumber("48")
-                        .countryPhoneCode("US")
-                        .phoneNumber("1234567890")
-                        .build())
-                .searchField("code")
-                .build();
-
+        String orderId = "code";
+        BeneficiaryDto beneficiaryDto = getBeneficiaryDto();
         ContactPhone contactPhone = getTestContactPhone();
         Parameter mockParameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> mockParameter;
@@ -119,8 +102,8 @@ class ContactPhoneManagerTest {
                 .thenReturn(orderItemDataOption);
         when(transformationFunctionService.getEntity(
                 ContactPhone.class,
-                contactPhoneSearchFieldEntityDto.getNewEntity())).thenReturn(contactPhone);
-        when(supplierService.parameterStringSupplier(ORDER_ID, contactPhoneSearchFieldEntityDto.getSearchField()))
+                beneficiaryDto)).thenReturn(contactPhone);
+        when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
         when(orderItemDataOption.getBeneficiaries()).thenReturn(orderItemList);
         when(beneficiary.getContactPhone()).thenReturn(contactPhone);
@@ -133,7 +116,7 @@ class ContactPhoneManagerTest {
             return null;
         }).when(contactPhoneDao).executeConsumer(any(Consumer.class));
 
-        contactPhoneManager.saveUpdateContactPhoneByOrderId(contactPhoneSearchFieldEntityDto);
+        contactPhoneManager.saveUpdateContactPhoneByOrderId(orderId, beneficiaryDto);
 
         verify(contactPhoneDao).executeConsumer(any(Consumer.class));
     }
@@ -142,7 +125,6 @@ class ContactPhoneManagerTest {
     void testDeleteContactPhoneByUserId() {
         String userId = "123";
         Parameter mockParameter = mock(Parameter.class);
-        OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto(userId);
         UserProfile userProfile = mock(UserProfile.class);
         ContactInfo contactInfo = mock(ContactInfo.class);
         ContactPhone contactPhone = getTestContactPhone();
@@ -159,7 +141,7 @@ class ContactPhoneManagerTest {
         when(userProfile.getContactInfo()).thenReturn(contactInfo);
         when(contactInfo.getContactPhone()).thenReturn(getTestContactPhone());
 
-        contactPhoneManager.deleteContactPhoneByUserId(oneFieldEntityDto);
+        contactPhoneManager.deleteContactPhoneByUserId(userId);
 
         verify(contactPhoneDao).deleteEntity(any(Supplier.class));
     }
@@ -168,11 +150,6 @@ class ContactPhoneManagerTest {
     void testDeleteContactPhoneByOrderId() {
         String orderId = "123";
         Parameter mockParameter = mock(Parameter.class);
-        BeneficiarySearchFieldOrderNumberDto beneficiarySearchFieldOrderNumberDto =
-                BeneficiarySearchFieldOrderNumberDto.builder()
-                        .orderNumber(0)
-                        .value(orderId)
-                        .build();
         OrderArticularItem orderItemDataOption = mock(OrderArticularItem.class);
         Beneficiary beneficiary = mock(Beneficiary.class);
         ContactPhone contactPhone = getTestContactPhone();
@@ -193,7 +170,7 @@ class ContactPhoneManagerTest {
             return null;
         }).when(contactPhoneDao).executeConsumer(any(Consumer.class));
 
-        contactPhoneManager.deleteContactPhoneByOrderId(beneficiarySearchFieldOrderNumberDto);
+        contactPhoneManager.deleteContactPhoneByOrderId(orderId, 0);
 
         verify(contactPhoneDao).executeConsumer(any(Consumer.class));
     }
@@ -201,7 +178,6 @@ class ContactPhoneManagerTest {
     @Test
     void testGetContactPhoneByUserId() {
         String userId = "123";
-        OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto(userId);
         ContactPhoneDto contactPhoneDto = createContactPhoneDto();
         Parameter mockParameter = mock(Parameter.class);
         UserProfile userProfile = mock(UserProfile.class);
@@ -211,7 +187,7 @@ class ContactPhoneManagerTest {
         Supplier<Parameter> parameterSupplier = () -> mockParameter;
         Function<UserProfile, ContactPhoneDto> mapFunction = profile -> contactPhoneDto;
 
-        when(supplierService.parameterStringSupplier(USER_ID, oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(parameterSupplier);
         when(transformationFunctionService.getTransformationFunction(UserProfile.class, ContactPhoneDto.class))
                 .thenReturn(mapFunction);
@@ -225,7 +201,7 @@ class ContactPhoneManagerTest {
         when(userProfile.getContactInfo()).thenReturn(contactInfo);
         when(contactInfo.getContactPhone()).thenReturn(contactPhone);
 
-        ContactPhoneDto result = contactPhoneManager.getContactPhoneByUserId(oneFieldEntityDto);
+        ContactPhoneDto result = contactPhoneManager.getContactPhoneByUserId(userId);
 
         assertEquals(contactPhoneDto.getPhoneNumber(), result.getPhoneNumber());
         assertEquals(contactPhoneDto.getCountryPhoneCode(), result.getCountryPhoneCode());
@@ -234,7 +210,6 @@ class ContactPhoneManagerTest {
     @Test
     void testGetContactPhoneByOrderId() {
         String orderId = "123";
-        OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto(orderId);
         ContactPhoneDto contactPhoneDto = createContactPhoneDto();
         Parameter mockParameter = mock(Parameter.class);
         OrderArticularItem orderItemDataOption = mock(OrderArticularItem.class);
@@ -244,12 +219,12 @@ class ContactPhoneManagerTest {
         Supplier<Parameter> parameterSupplier = () -> mockParameter;
         Function<OrderArticularItem, ContactPhoneDto> mapFunction = profile -> contactPhoneDto;
 
-        when(supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
         when(transformationFunctionService.getTransformationFunction(OrderArticularItem.class, ContactPhoneDto.class, "list"))
                 .thenReturn(mapFunction);
 
-        when(queryService.getSubEntityDtoList(eq(OrderArticularItem.class), any(Supplier.class), any(Function.class)))
+        when(queryService.getSubEntityDtoList(eq(OrderArticularItem.class), any(Parameter.class), any(Function.class)))
                 .thenAnswer(invocation -> {
                     Supplier<Parameter> paramSupplier = invocation.getArgument(1);
                     Function<OrderArticularItem, ContactPhoneDto> mappingFunction = invocation.getArgument(2);
@@ -259,7 +234,7 @@ class ContactPhoneManagerTest {
         when(orderItemDataOption.getBeneficiaries()).thenReturn(List.of(beneficiary));
         when(beneficiary.getContactPhone()).thenReturn(contactPhone);
 
-        List<ContactPhoneDto> resultList = contactPhoneManager.getContactPhoneByOrderId(oneFieldEntityDto);
+        List<ContactPhoneDto> resultList = contactPhoneManager.getContactPhoneByOrderId(orderId);
         assertEquals(1, resultList.size());
         resultList.forEach(result -> {
             assertEquals(contactPhoneDto.getPhoneNumber(), result.getPhoneNumber());
@@ -311,6 +286,24 @@ class ContactPhoneManagerTest {
     private CountryPhoneCode getCountryPhoneCode() {
         return CountryPhoneCode.builder()
                 .value("US")
+                .build();
+    }
+
+    private ContactPhoneDto getContactPhoneDto() {
+        return ContactPhoneDto.builder()
+                .phoneNumber("48")
+                .countryPhoneCode("US")
+                .phoneNumber("1234567890")
+                .build();
+    }
+
+    private BeneficiaryDto getBeneficiaryDto() {
+        return BeneficiaryDto.builder()
+                .orderNumber(0)
+                .contactPhone(getContactPhoneDto())
+                .email("email@email.com")
+                .firstName("firstName")
+                .lastName("lastName")
                 .build();
     }
 }

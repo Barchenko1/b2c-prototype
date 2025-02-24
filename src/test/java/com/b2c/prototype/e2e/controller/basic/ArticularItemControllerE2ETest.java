@@ -141,10 +141,8 @@ class ArticularItemControllerE2ETest extends BasicE2ETest {
         try {
             String jsonResponse = mvcResult.getResponse().getContentAsString();
             ResponseArticularItemDto actual = objectMapper.readValue(jsonResponse, ResponseArticularItemDto.class);
-
             String expectedResultStr = TestUtil.readFile("json/articularitem/output/ResponseArticularItemDto.json");
             ResponseArticularItemDto expected = objectMapper.readValue(expectedResultStr, ResponseArticularItemDto.class);
-
             assertEquals(expected, actual);
         } catch (JsonProcessingException | UnsupportedEncodingException e) {
             throw new RuntimeException("Error processing the JSON response", e);
@@ -182,18 +180,6 @@ class ArticularItemControllerE2ETest extends BasicE2ETest {
 
     private Map<String, String> getRequestParams() {
         return Map.of("itemId", "123");
-    }
-
-    private void checkResponseArticularItemByIndex(List<ResponseArticularItemDto> expectedResponseArticularItemList, List<ResponseArticularItemDto> actualResponseArticularItemList, int index) {
-        assertEquals(expectedResponseArticularItemList.size(), actualResponseArticularItemList.size());
-        assertEquals(expectedResponseArticularItemList.get(index).getArticularId(), actualResponseArticularItemList.get(index).getArticularId());
-        assertEquals(expectedResponseArticularItemList.get(index).getProductName(), actualResponseArticularItemList.get(index).getProductName());
-        assertEquals(expectedResponseArticularItemList.get(index).getFullPrice(), actualResponseArticularItemList.get(index).getFullPrice());
-        assertEquals(expectedResponseArticularItemList.get(index).getTotalPrice(), actualResponseArticularItemList.get(index).getTotalPrice());
-        assertEquals(expectedResponseArticularItemList.get(index).getStatus().getLabel(), actualResponseArticularItemList.get(index).getStatus().getLabel());
-        assertEquals(expectedResponseArticularItemList.get(index).getStatus().getValue(), actualResponseArticularItemList.get(index).getStatus().getValue());
-        assertEquals(expectedResponseArticularItemList.get(index).getDiscount(), actualResponseArticularItemList.get(index).getDiscount());
-        assertEquals(expectedResponseArticularItemList.get(index).getOptions(), actualResponseArticularItemList.get(index).getOptions());
     }
 
 }

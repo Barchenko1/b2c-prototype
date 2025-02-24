@@ -30,4 +30,5 @@ public class AbstractContactInfo {
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     @JoinColumn(name = "contact_phone_id")
     private ContactPhone contactPhone;
+    private String email;
 }

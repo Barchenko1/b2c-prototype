@@ -2,12 +2,10 @@ package com.b2c.prototype.manager.payment.base;
 
 import com.b2c.prototype.dao.payment.IPaymentDao;
 import com.b2c.prototype.modal.constant.PaymentMethodEnum;
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.payload.CreditCardDto;
 import com.b2c.prototype.modal.dto.payload.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.PaymentDto;
 import com.b2c.prototype.modal.dto.payload.PriceDto;
-import com.b2c.prototype.modal.dto.searchfield.PaymentSearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.order.OrderArticularItem;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
@@ -64,10 +62,7 @@ class PaymentManagerTest {
     @Test
     void testSaveUpdatePayment() {
         PaymentDto paymentDto = getPaymentDto();
-        PaymentSearchFieldEntityDto paymentSearchFieldEntityDto = PaymentSearchFieldEntityDto.builder()
-                .searchField("123")
-                .newEntity(paymentDto)
-                .build();
+        String orderId = "123";
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
@@ -75,7 +70,7 @@ class PaymentManagerTest {
         Payment payment = mock(Payment.class);
         Payment newPayment = getPayment();
 
-        when(supplierService.parameterStringSupplier(ORDER_ID, paymentSearchFieldEntityDto.getSearchField()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
                 .thenReturn(orderItemDataOption);
@@ -90,7 +85,7 @@ class PaymentManagerTest {
             return null;
         }).when(paymentDao).executeConsumer(any(Consumer.class));
 
-        paymentManager.saveUpdatePayment(paymentSearchFieldEntityDto);
+        paymentManager.saveUpdatePayment(orderId, paymentDto);
 
         verify(orderItemDataOption).setPayment(newPayment);
         verify(paymentDao).executeConsumer(any(Consumer.class));
@@ -99,10 +94,7 @@ class PaymentManagerTest {
     @Test
     void testSaveUpdatePaymentNull() {
         PaymentDto paymentDto = getPaymentDto();
-        PaymentSearchFieldEntityDto paymentSearchFieldEntityDto = PaymentSearchFieldEntityDto.builder()
-                .searchField("123")
-                .newEntity(paymentDto)
-                .build();
+        String orderId = "123";
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
@@ -110,7 +102,7 @@ class PaymentManagerTest {
         Payment payment = null;
         Payment newPayment = getPayment();
 
-        when(supplierService.parameterStringSupplier(ORDER_ID, paymentSearchFieldEntityDto.getSearchField()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
                 .thenReturn(orderItemDataOption);
@@ -125,7 +117,7 @@ class PaymentManagerTest {
             return null;
         }).when(paymentDao).executeConsumer(any(Consumer.class));
 
-        paymentManager.saveUpdatePayment(paymentSearchFieldEntityDto);
+        paymentManager.saveUpdatePayment(orderId, paymentDto);
 
         verify(orderItemDataOption).setPayment(newPayment);
         verify(paymentDao).executeConsumer(any());
@@ -133,13 +125,12 @@ class PaymentManagerTest {
 
     @Test
     void testDeletePaymentByOrderId() {
-        OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto();
-        oneFieldEntityDto.setValue("123");
+        String orderId = "123";
         Payment payment = getPayment();
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
         Supplier<Payment> paymentSupplier = () -> payment;
         Function<OrderArticularItem, Payment> function = mock(Function.class);
@@ -151,63 +142,60 @@ class PaymentManagerTest {
                 function)
         ).thenReturn(paymentSupplier);
 
-        paymentManager.deletePaymentByOrderId(oneFieldEntityDto);
+        paymentManager.deletePaymentByOrderId(orderId);
 
         verify(paymentDao).deleteEntity(paymentSupplier);
     }
 
     @Test
     void testDeletePaymentByPaymentId() {
-        OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto();
-        oneFieldEntityDto.setValue("123");
+        String paymentId = "123";
         Payment payment = getPayment();
         Supplier<Payment> paymentSupplier = () -> payment;
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-        when(supplierService.parameterStringSupplier(PAYMENT_ID, oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier(PAYMENT_ID, paymentId))
                 .thenReturn(parameterSupplier);
         when(supplierService.entityFieldSupplier(Payment.class, parameterSupplier))
                 .thenReturn(paymentSupplier);
 
-        paymentManager.deletePaymentByPaymentId(oneFieldEntityDto);
+        paymentManager.deletePaymentByPaymentId(paymentId);
 
         verify(paymentDao).deleteEntity(paymentSupplier);
     }
 
     @Test
     void testGetPaymentByOrderId() {
-        OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto();
-        oneFieldEntityDto.setValue("123");
+        String orderId = "123";
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
         Function<OrderArticularItem, PaymentDto> function = mock(Function.class);
 
         PaymentDto paymentDto = getPaymentDto();
-        when(supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
         when(transformationFunctionService.getTransformationFunction(eq(OrderArticularItem.class), eq(PaymentDto.class)))
                 .thenReturn(function);
         when(queryService.getEntityDto(OrderArticularItem.class, parameterSupplier, function))
                 .thenReturn(paymentDto);
 
-        PaymentDto result = paymentManager.getPaymentByOrderId(oneFieldEntityDto);
+        PaymentDto result = paymentManager.getPaymentByOrderId(orderId);
 
         assertNotNull(result);
     }
 
     @Test
     void testGetPaymentByPaymentId() {
-        OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto();
-        oneFieldEntityDto.setValue("123");
+        String paymentId = "123";
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
         Function<Payment, PaymentDto> function = mock(Function.class);
 
         Payment payment = getPayment();
         PaymentDto paymentDto = getPaymentDto();
-        when(supplierService.parameterStringSupplier(PAYMENT_ID, oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier(PAYMENT_ID, paymentId))
                 .thenReturn(parameterSupplier);
         when(transformationFunctionService.getTransformationFunction(eq(Payment.class), eq(PaymentDto.class)))
                 .thenReturn(function);
@@ -215,7 +203,7 @@ class PaymentManagerTest {
                 .thenReturn(payment);
         when(function.apply(payment)).thenReturn(paymentDto);
 
-        PaymentDto result = paymentManager.getPaymentByPaymentId(oneFieldEntityDto);
+        PaymentDto result = paymentManager.getPaymentByPaymentId(paymentId);
 
         assertNotNull(result);
     }
@@ -259,7 +247,8 @@ class PaymentManagerTest {
     private CreditCardDto getCreditCardDto() {
         return CreditCardDto.builder()
                 .cardNumber("1234-5678-9012-3456")
-                .dateOfExpire("06/28")
+                .monthOfExpire(6)
+                .yearOfExpire(28)
                 .cvv("123")
                 .ownerName("John")
                 .ownerSecondName("Doe")
@@ -270,7 +259,8 @@ class PaymentManagerTest {
         return CreditCard.builder()
                 .id(1L)
                 .cardNumber("1234-5678-9012-3456")
-                .dateOfExpire("06/28")
+                .monthOfExpire(6)
+                .yearOfExpire(28)
                 .cvv("123")
                 .ownerName("John")
                 .ownerSecondName("Doe")
@@ -317,7 +307,6 @@ class PaymentManagerTest {
 
     private PaymentDto getPaymentDto() {
         return PaymentDto.builder()
-                .orderId("123")
                 .paymentMethod(PaymentMethodEnum.CARD.getValue())
                 .creditCard(getCreditCardDto())
                 .fullPrice(getPriceDto(120))

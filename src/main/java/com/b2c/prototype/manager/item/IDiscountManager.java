@@ -15,6 +15,5 @@ public interface IDiscountManager {
 
 
     DiscountDto getDiscount(String charSequenceCode);
-    Optional<DiscountDto> getOptionalDiscount(String charSequenceCode);
     List<DiscountDto> getDiscounts();
 }

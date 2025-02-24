@@ -1,0 +1,16 @@
+[
+  {
+    "charSequenceCode": "abc1",
+    "amount": 10,
+    "currency": "USD",
+    "isActive": true,
+    "articularIdSet": ["111", "122"]
+  },
+  {
+    "charSequenceCode": "abc",
+    "amount": 10,
+    "currency": "USD",
+    "isActive": true,
+    "articularIdSet": ["123"]
+  }
+]

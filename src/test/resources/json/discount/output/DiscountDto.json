@@ -1,0 +1,7 @@
+{
+  "charSequenceCode": "abc",
+  "amount": 10,
+  "currency": "USD",
+  "isActive": true,
+  "articularIdSet": ["123"]
+}

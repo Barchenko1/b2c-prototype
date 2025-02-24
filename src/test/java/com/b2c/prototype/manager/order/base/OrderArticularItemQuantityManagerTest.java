@@ -1,9 +1,7 @@
 package com.b2c.prototype.manager.order.base;
 
 import com.b2c.prototype.dao.order.IOrderItemDataDao;
-import com.b2c.prototype.manager.order.base.OrderItemDataOptionManager;
 import com.b2c.prototype.modal.constant.PaymentMethodEnum;
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.payload.AddressDto;
 import com.b2c.prototype.modal.dto.payload.BeneficiaryDto;
 import com.b2c.prototype.modal.dto.payload.ContactInfoDto;
@@ -11,14 +9,13 @@ import com.b2c.prototype.modal.dto.payload.ContactPhoneDto;
 import com.b2c.prototype.modal.dto.payload.CreditCardDto;
 import com.b2c.prototype.modal.dto.payload.DeliveryDto;
 import com.b2c.prototype.modal.dto.payload.DiscountDto;
-import com.b2c.prototype.modal.dto.payload.ItemDataOptionQuantityDto;
-import com.b2c.prototype.modal.dto.payload.OrderItemDataDto;
+import com.b2c.prototype.modal.dto.payload.ArticularItemQuantityDto;
+import com.b2c.prototype.modal.dto.payload.OrderArticularItemQuantityDto;
 import com.b2c.prototype.modal.dto.payload.PaymentDto;
 import com.b2c.prototype.modal.dto.payload.PriceDto;
 import com.b2c.prototype.modal.dto.payload.UserProfileDto;
 import com.b2c.prototype.modal.dto.response.ResponseCreditCardDto;
-import com.b2c.prototype.modal.dto.response.ResponseOrderItemDataDto;
-import com.b2c.prototype.modal.dto.searchfield.OrderItemDataSearchFieldEntityDto;
+import com.b2c.prototype.modal.dto.response.ResponseOrderDetails;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
@@ -69,7 +66,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class OrderArticularItemManagerTest {
+class OrderArticularItemQuantityManagerTest {
 
     @Mock
     private IOrderItemDataDao orderItemDataDao;
@@ -78,7 +75,7 @@ class OrderArticularItemManagerTest {
     @Mock
     private ISupplierService supplierService;
     @InjectMocks
-    private OrderItemDataOptionManager orderItemDataOptionManager;
+    private OrderArticularItemQuantityManager orderArticularItemQuantityManager;
 
     @BeforeEach
     void setUp() {
@@ -86,8 +83,8 @@ class OrderArticularItemManagerTest {
     }
 
     @Test
-    void saveOrderItemData_shouldSaveEntity() {
-        OrderItemDataDto dto = getOrderItemDataDto();
+    void saveOrderItemData_shouldSaveEntityArticular() {
+        OrderArticularItemQuantityDto dto = getOrderArticularItemQuantityDto();
         OrderArticularItem entity = getOrderItemData();
         when(transformationFunctionService.getEntity(OrderArticularItem.class, dto))
                 .thenReturn(entity);
@@ -99,27 +96,25 @@ class OrderArticularItemManagerTest {
             return null;
         }).when(orderItemDataDao).executeConsumer(any(Consumer.class));
 
-        orderItemDataOptionManager.saveOrderItemData(dto);
+        orderArticularItemQuantityManager.saveOrderArticularItemQuantity(dto);
 
         verify(orderItemDataDao).executeConsumer(any(Consumer.class));
         assertNotNull(entity.getOrderId());
     }
 
     @Test
-    void updateOrderItemData_shouldUpdateEntity() {
-        OrderItemDataSearchFieldEntityDto dtoUpdate = OrderItemDataSearchFieldEntityDto.builder()
-                .searchField("searchField")
-                .newEntity(getOrderItemDataDto())
-                .build();
+    void updateOrderItemData_shouldUpdateEntityArticular() {
+        String orderId = "orderId";
+        OrderArticularItemQuantityDto orderArticularItemQuantityDto = getOrderArticularItemQuantityDto();
         OrderArticularItem existingEntity = getOrderItemData();
         OrderArticularItem newEntity = getOrderItemData();
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(ORDER_ID, dtoUpdate.getSearchField()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
         when(orderItemDataDao.getEntity(parameter)).thenReturn(existingEntity);
-        when(transformationFunctionService.getEntity(OrderArticularItem.class, dtoUpdate.getNewEntity()))
+        when(transformationFunctionService.getEntity(OrderArticularItem.class, orderArticularItemQuantityDto))
                 .thenReturn(newEntity);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -129,7 +124,7 @@ class OrderArticularItemManagerTest {
             return null;
         }).when(orderItemDataDao).executeConsumer(any(Consumer.class));
 
-        orderItemDataOptionManager.updateOrderItemData(dtoUpdate);
+        orderArticularItemQuantityManager.updateOrderArticularItemQuantity(orderId, orderArticularItemQuantityDto);
 
         verify(orderItemDataDao).executeConsumer(any(Consumer.class));
         assertEquals(existingEntity.getOrderId(), newEntity.getOrderId());
@@ -137,55 +132,53 @@ class OrderArticularItemManagerTest {
 
     @Test
     void deleteOrderItemData_shouldDeleteEntity() {
-        OneFieldEntityDto dto = new OneFieldEntityDto();
-        dto.setValue("test-order-id");
+        String orderId = "test-order-id";
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(ORDER_ID, dto.getValue()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
 
-        orderItemDataOptionManager.deleteOrderItemData(dto);
+        orderArticularItemQuantityManager.deleteOrder(orderId);
 
         verify(orderItemDataDao).findEntityAndDelete(parameter);
     }
 
     @Test
     void getOrderItemData_shouldReturnDto() {
-        OneFieldEntityDto dto = new OneFieldEntityDto();
-        dto.setValue("test-order-id");
+        String orderId = "test-order-id";
         OrderArticularItem entity = getOrderItemData();
-        ResponseOrderItemDataDto responseOrderItemDataDto = getResponseOrderItemDataDto();
+        ResponseOrderDetails responseOrderDetails = getResponseOrderDetailsDto();
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-        Function<OrderArticularItem, ResponseOrderItemDataDto> function = mock(Function.class);
+        Function<OrderArticularItem, ResponseOrderDetails> function = mock(Function.class);
         when(orderItemDataDao.getEntityGraph(anyString(), eq(parameter)))
                 .thenReturn(entity);
-        when(supplierService.parameterStringSupplier(ORDER_ID, dto.getValue()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-        when(transformationFunctionService.getTransformationFunction(OrderArticularItem.class, ResponseOrderItemDataDto.class))
+        when(transformationFunctionService.getTransformationFunction(OrderArticularItem.class, ResponseOrderDetails.class))
                 .thenReturn(function);
-        when(function.apply(entity)).thenReturn(responseOrderItemDataDto);
+        when(function.apply(entity)).thenReturn(responseOrderDetails);
 
-        ResponseOrderItemDataDto result = orderItemDataOptionManager.getResponseOrderItemData(dto);
+        ResponseOrderDetails result = orderArticularItemQuantityManager.getResponseOrderDetails(orderId);
 
-        assertEquals(responseOrderItemDataDto, result);
+        assertEquals(responseOrderDetails, result);
     }
 
     @Test
     void getOrderItemListData_shouldReturnDtoList() {
-        ResponseOrderItemDataDto responseOrderItemDataDto = getResponseOrderItemDataDto();
+        ResponseOrderDetails responseOrderDetails = getResponseOrderDetailsDto();
         OrderArticularItem orderItemDataOption = getOrderItemData();
         when(orderItemDataDao.getEntityList()).thenReturn(List.of(orderItemDataOption));
-        Function<OrderArticularItem, ResponseOrderItemDataDto> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(OrderArticularItem.class, ResponseOrderItemDataDto.class))
+        Function<OrderArticularItem, ResponseOrderDetails> function = mock(Function.class);
+        when(transformationFunctionService.getTransformationFunction(OrderArticularItem.class, ResponseOrderDetails.class))
                 .thenReturn(function);
-        when(function.apply(orderItemDataOption)).thenReturn(responseOrderItemDataDto);
-        List<ResponseOrderItemDataDto> list = orderItemDataOptionManager.getResponseOrderItemDataList();
+        when(function.apply(orderItemDataOption)).thenReturn(responseOrderDetails);
+        List<ResponseOrderDetails> list = orderArticularItemQuantityManager.getResponseOrderDetailsList();
 
         list.forEach(result -> {
-            assertEquals(responseOrderItemDataDto, result);
+            assertEquals(responseOrderDetails, result);
         });
     }
 
@@ -262,10 +255,11 @@ class OrderArticularItemManagerTest {
         CreditCard creditCard = CreditCard.builder()
                 .id(1L)
                 .cardNumber("4444-1111-2222-3333")
-                .dateOfExpire("06/28")
+                .monthOfExpire(6)
+                .yearOfExpire(28)
                 .ownerName("name")
                 .ownerSecondName("secondName")
-                .isActive(CardUtil.isCardActive("06/28"))
+                .isActive(CardUtil.isCardActive(6, 28))
                 .cvv("818")
                 .build();
         PaymentMethod paymentMethod = PaymentMethod.builder()
@@ -335,10 +329,11 @@ class OrderArticularItemManagerTest {
         return CreditCard.builder()
                 .id(1L)
                 .cardNumber("4444-1111-2222-3333")
-                .dateOfExpire("06/28")
+                .monthOfExpire(6)
+                .yearOfExpire(28)
                 .ownerName("name")
                 .ownerSecondName("secondName")
-                .isActive(CardUtil.isCardActive("06/28"))
+                .isActive(CardUtil.isCardActive(6, 28))
                 .cvv("818")
                 .build();
     }
@@ -428,7 +423,8 @@ class OrderArticularItemManagerTest {
     private CreditCardDto getCreditCardDto() {
         return CreditCardDto.builder()
                 .cardNumber("1234-5678-9012-3456")
-                .dateOfExpire("06/28")
+                .monthOfExpire(6)
+                .yearOfExpire(29)
                 .cvv("123")
                 .ownerName("John")
                 .ownerSecondName("Doe")
@@ -438,7 +434,8 @@ class OrderArticularItemManagerTest {
     private ResponseCreditCardDto getResponseCreditCardDto() {
         return ResponseCreditCardDto.builder()
                 .cardNumber("1234-5678-9012-3456")
-                .dateOfExpire("06/28")
+                .monthOfExpire(6)
+                .yearOfExpire(28)
                 .isActive(true)
                 .ownerName("John")
                 .ownerSecondName("Doe")
@@ -447,7 +444,6 @@ class OrderArticularItemManagerTest {
 
     private PaymentDto getPaymentDto() {
         return PaymentDto.builder()
-                .orderId("123")
                 .paymentMethod(PaymentMethodEnum.CARD.getValue())
                 .creditCard(getCreditCardDto())
                 .fullPrice(getPriceDto(120))
@@ -485,28 +481,27 @@ class OrderArticularItemManagerTest {
                 .build();
     }
 
-    private ItemDataOptionQuantityDto getItemDataOptionQuantityDto() {
-        return ItemDataOptionQuantityDto.builder()
-                .orderId("orderId")
+    private ArticularItemQuantityDto getItemDataOptionQuantityDto() {
+        return ArticularItemQuantityDto.builder()
                 .articularId("articularId")
                 .quantity(1)
                 .build();
     }
 
 
-    private OrderItemDataDto getOrderItemDataDto() {
-        return OrderItemDataDto.builder()
+    private OrderArticularItemQuantityDto getOrderArticularItemQuantityDto() {
+        return OrderArticularItemQuantityDto.builder()
                 .beneficiaries(List.of(getBeneficiaryDto()))
                 .payment(getPaymentDto())
                 .delivery(getDeliveryDto())
-                .itemDataOptionQuantities(Set.of(getItemDataOptionQuantityDto()))
-                .userProfile(getUserProfileDto())
+                .itemDataOptionQuantities(List.of(getItemDataOptionQuantityDto()))
+                .user(null)
                 .note("note")
                 .build();
     }
 
-    private ResponseOrderItemDataDto getResponseOrderItemDataDto() {
-        return ResponseOrderItemDataDto.builder()
+    private ResponseOrderDetails getResponseOrderDetailsDto() {
+        return ResponseOrderDetails.builder()
                 .beneficiaries(List.of(getBeneficiaryDto()))
                 .payment(getPaymentDto())
                 .delivery(getDeliveryDto())

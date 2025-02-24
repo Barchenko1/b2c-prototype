@@ -66,7 +66,7 @@ public class ArticularItemManager implements IArticularItemManager {
             ItemData itemData = searchService.getNamedQueryEntity(
                     ItemData.class,
                     "ArticularItem.findItemDataByArticularId",
-                    supplierService.parameterStringSupplier(ARTICULAR_ID, articularId));
+                    parameterFactory.createStringParameter(ARTICULAR_ID, articularId));
             itemData.getArticularItemSet().stream()
                     .filter(ai -> ai.getArticularId().equals(articularId))
                     .findFirst()
@@ -75,8 +75,9 @@ public class ArticularItemManager implements IArticularItemManager {
                         articularItem.setDiscount(null);
                         itemData.getArticularItemSet().remove(articularItem);
                         session.remove(articularItem);
-                        session.flush();
-                        if (discount != null && !isDiscountShared(session, discount)) {
+                        if (discount != null &&
+                            discount.getArticularItemList().size() == 1 &&
+                            discount.getArticularItemList().get(0).getArticularId().equals(articularId)) {
                             session.remove(discount);
                         }
                     });
@@ -113,23 +114,4 @@ public class ArticularItemManager implements IArticularItemManager {
                 transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class));
     }
 
-    private boolean isDiscountShared(Session session, Discount discount, ArticularItem currentArticularItem) {
-        Long count = session.createQuery(
-                        "SELECT COUNT(ai) FROM ArticularItem ai " +
-                                "WHERE ai.discount = :discount " +
-                                "AND ai.id <> :articularItemId", Long.class)
-                .setParameter("discount", discount)
-                .setParameter("articularItemId", currentArticularItem.getId())
-                .getSingleResult();
-        return count > 0;
-    }
-
-    private boolean isDiscountShared(Session session, Discount discount) {
-        Long count = session.createQuery(
-                        "SELECT COUNT(ai) FROM ArticularItem ai WHERE ai.discount = :discount", Long.class)
-                .setParameter("discount", discount)
-                .getSingleResult();
-
-        return count > 0; // If count > 0, the Discount is still used by another ArticularItem
-    }
 }

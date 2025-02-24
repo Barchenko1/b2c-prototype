@@ -1,10 +1,7 @@
 package com.b2c.prototype.manager.order.base;
 
 import com.b2c.prototype.dao.order.IBeneficiaryDao;
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
-import com.b2c.prototype.modal.dto.searchfield.BeneficiaryArrayDtoSearchField;
 import com.b2c.prototype.modal.dto.payload.BeneficiaryDto;
-import com.b2c.prototype.modal.dto.searchfield.BeneficiarySearchFieldOrderNumberDto;
 import com.b2c.prototype.modal.entity.order.OrderArticularItem;
 import com.b2c.prototype.modal.entity.order.Beneficiary;
 import com.b2c.prototype.service.common.EntityOperationManager;
@@ -13,6 +10,7 @@ import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.order.IBeneficiaryManager;
 import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
+import com.tm.core.finder.factory.IParameterFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +19,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static com.b2c.prototype.util.Constant.ITEM_ID;
 import static com.b2c.prototype.util.Constant.ORDER_ID;
 
 public class BeneficiaryManager implements IBeneficiaryManager {
@@ -31,26 +30,29 @@ public class BeneficiaryManager implements IBeneficiaryManager {
     private final ISearchService searchService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
+    private final IParameterFactory parameterFactory;
 
     public BeneficiaryManager(IBeneficiaryDao beneficiaryDao,
                               ISearchService searchService,
                               ITransformationFunctionService transformationFunctionService,
-                              ISupplierService supplierService) {
+                              ISupplierService supplierService,
+                              IParameterFactory parameterFactory) {
         this.entityOperationDao = new EntityOperationManager(beneficiaryDao);
         this.searchService = searchService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
+        this.parameterFactory = parameterFactory;
     }
 
     @Override
-    public void saveUpdateContactInfoByOrderId(BeneficiaryArrayDtoSearchField contactInfoArrayDtoSearchField) {
+    public void saveUpdateContactInfoByOrderId(String orderId, List<BeneficiaryDto> beneficiaryDtoList) {
         entityOperationDao.executeConsumer(session -> {
             OrderArticularItem orderItemDataOption = searchService.getEntity(
                     OrderArticularItem.class,
-                    supplierService.parameterStringSupplier(ORDER_ID, contactInfoArrayDtoSearchField.getSearchField()));
+                    supplierService.parameterStringSupplier(ORDER_ID, orderId));
 
             List<Beneficiary> existingBenefits = orderItemDataOption.getBeneficiaries();
-            List<Beneficiary> newBeneficiaryList = Arrays.stream(contactInfoArrayDtoSearchField.getNewEntityArray())
+            List<Beneficiary> newBeneficiaryList = beneficiaryDtoList.stream()
                     .map(contactInfoDto ->
                             transformationFunctionService.getEntity(Beneficiary.class, contactInfoDto))
                     .toList();
@@ -69,22 +71,22 @@ public class BeneficiaryManager implements IBeneficiaryManager {
     }
 
     @Override
-    public void deleteContactInfoByOrderId(BeneficiarySearchFieldOrderNumberDto beneficiarySearchFieldOrderNumberDto) {
+    public void deleteContactInfoByOrderId(String orderId, int beneficiaryNumber) {
         entityOperationDao.executeConsumer(session -> {
             OrderArticularItem orderItemDataOption = searchService.getEntity(
                     OrderArticularItem.class,
-                    supplierService.parameterStringSupplier(ORDER_ID, beneficiarySearchFieldOrderNumberDto.getValue()));
+                    supplierService.parameterStringSupplier(ORDER_ID, orderId));
             Beneficiary beneficiary = orderItemDataOption.getBeneficiaries()
-                    .get(beneficiarySearchFieldOrderNumberDto.getOrderNumber());
+                    .get(beneficiaryNumber);
             session.remove(beneficiary);
         });
     }
 
     @Override
-    public List<BeneficiaryDto> getContactInfoListByOrderId(OneFieldEntityDto oneFieldEntityDto) {
+    public List<BeneficiaryDto> getContactInfoListByOrderId(String orderId) {
         return searchService.getSubEntityDtoList(
                 OrderArticularItem.class,
-                supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()),
+                parameterFactory.createStringParameter(ORDER_ID, orderId),
                 transformationFunctionService.getTransformationFunction(OrderArticularItem.class, BeneficiaryDto.class));
     }
 }

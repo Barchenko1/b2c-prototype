@@ -1,15 +1,15 @@
 package com.b2c.prototype.modal.dto.payload;
 
-import lombok.Builder;
+import com.b2c.prototype.modal.dto.common.AbstractPaymentDto;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-@Builder
-public class PaymentDto {
-    private String orderId;
-    private String paymentMethod;
-    private CreditCardDto creditCard;
-    private PriceDto fullPrice;
-    private PriceDto totalPrice;
-    private DiscountDto discount;
+@SuperBuilder
+@NoArgsConstructor
+public class PaymentDto extends AbstractPaymentDto {
 }

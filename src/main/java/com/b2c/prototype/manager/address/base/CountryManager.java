@@ -1,7 +1,7 @@
 package com.b2c.prototype.manager.address.base;
 
 
-import com.b2c.prototype.modal.dto.payload.CountryDto;
+import com.b2c.prototype.modal.dto.payload.constant.CountryDto;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.AbstractConstantEntityManager;

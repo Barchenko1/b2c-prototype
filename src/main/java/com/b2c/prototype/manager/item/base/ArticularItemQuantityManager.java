@@ -2,7 +2,7 @@ package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.dao.item.IItemDataOptionQuantityDao;
 import com.b2c.prototype.modal.dto.payload.ItemDataOptionOneQuantityDto;
-import com.b2c.prototype.modal.dto.payload.ItemDataOptionQuantityDto;
+import com.b2c.prototype.modal.dto.payload.ArticularItemQuantityDto;
 import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
 import com.b2c.prototype.modal.entity.order.OrderArticularItem;
 import com.b2c.prototype.modal.entity.store.Store;
@@ -83,26 +83,26 @@ public class ArticularItemQuantityManager implements IArticularItemQuantityManag
     }
 
     @Override
-    public void increaseItemDataOptionQuantityCount(ItemDataOptionQuantityDto itemDataOptionQuantityDto) {
+    public void increaseItemDataOptionQuantityCount(ArticularItemQuantityDto articularItemQuantityDto) {
         entityOperationDao.executeConsumer(session -> {
-            ArticularItemQuantity articularItemQuantity = updateCounter(itemDataOptionQuantityDto, true);
+            ArticularItemQuantity articularItemQuantity = updateCounter(articularItemQuantityDto, true);
             session.merge(articularItemQuantity);
         });
     }
 
     @Override
-    public void decreaseItemDataOptionQuantityCount(ItemDataOptionQuantityDto itemDataOptionQuantityDto) {
+    public void decreaseItemDataOptionQuantityCount(ArticularItemQuantityDto articularItemQuantityDto) {
         entityOperationDao.executeConsumer(session -> {
-            ArticularItemQuantity articularItemQuantity = updateCounter(itemDataOptionQuantityDto, false);
+            ArticularItemQuantity articularItemQuantity = updateCounter(articularItemQuantityDto, false);
             session.merge(articularItemQuantity);
         });
     }
 
     @Override
-    public void increaseItemDataOptionQuantityCountAndStore(ItemDataOptionQuantityDto itemDataOptionQuantityDto) {
+    public void increaseItemDataOptionQuantityCountAndStore(ArticularItemQuantityDto articularItemQuantityDto) {
         entityOperationDao.executeConsumer(session -> {
-            ArticularItemQuantity articularItemQuantity = updateCounter(itemDataOptionQuantityDto, true);
-            Store store = getStore(session, itemDataOptionQuantityDto.getArticularId(), itemDataOptionQuantityDto.getQuantity());
+            ArticularItemQuantity articularItemQuantity = updateCounter(articularItemQuantityDto, true);
+            Store store = getStore(session, articularItemQuantityDto.getArticularId(), articularItemQuantityDto.getQuantity());
             int storeCount = store.getCount();
             if (LIMITED.getValue().equalsIgnoreCase(store.getCountType().getValue())) {
                 store.setCount(storeCount - articularItemQuantity.getQuantity());
@@ -113,13 +113,13 @@ public class ArticularItemQuantityManager implements IArticularItemQuantityManag
     }
 
     @Override
-    public void decreaseItemDataOptionQuantityCountAndStore(ItemDataOptionQuantityDto itemDataOptionQuantityDto) {
+    public void decreaseItemDataOptionQuantityCountAndStore(ArticularItemQuantityDto articularItemQuantityDto) {
         entityOperationDao.executeConsumer(session -> {
-            ArticularItemQuantity articularItemQuantity = updateCounter(itemDataOptionQuantityDto, false);
+            ArticularItemQuantity articularItemQuantity = updateCounter(articularItemQuantityDto, false);
             NativeQuery<Store> query = session.createNativeQuery(SELECT_STORE_BY_ARTICULAR_ID, Store.class);
             Store store = searchService.getQueryEntity(
                     query,
-                    supplierService.parameterStringSupplier(ARTICULAR_ID, itemDataOptionQuantityDto.getArticularId()));
+                    supplierService.parameterStringSupplier(ARTICULAR_ID, articularItemQuantityDto.getArticularId()));
             int storeCount = store.getCount();
             store.setCount(storeCount + articularItemQuantity.getQuantity());
             session.merge(articularItemQuantity);
@@ -158,19 +158,19 @@ public class ArticularItemQuantityManager implements IArticularItemQuantityManag
         return existingArticularItemQuantity;
     }
 
-    private ArticularItemQuantity updateCounter(ItemDataOptionQuantityDto itemDataOptionQuantityDto, boolean increase) {
+    private ArticularItemQuantity updateCounter(ArticularItemQuantityDto articularItemQuantityDto, boolean increase) {
         OrderArticularItem orderItemDataOption = searchService.getEntity(
                 OrderArticularItem.class,
-                supplierService.parameterStringSupplier(ORDER_ID, itemDataOptionQuantityDto.getOrderId()));
+                supplierService.parameterStringSupplier(ORDER_ID, null));
         ArticularItemQuantity existingArticularItemQuantity = orderItemDataOption.getArticularItemQuantityList().stream()
                 .filter(idq ->
-                        idq.getArticularItem().getArticularId().equals(itemDataOptionQuantityDto.getArticularId()))
+                        idq.getArticularItem().getArticularId().equals(articularItemQuantityDto.getArticularId()))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException());
         int existingItemDataQuantityQuantityCount = existingArticularItemQuantity.getQuantity();
         int counter = increase
-                ? existingItemDataQuantityQuantityCount + itemDataOptionQuantityDto.getQuantity()
-                : existingItemDataQuantityQuantityCount - itemDataOptionQuantityDto.getQuantity();
+                ? existingItemDataQuantityQuantityCount + articularItemQuantityDto.getQuantity()
+                : existingItemDataQuantityQuantityCount - articularItemQuantityDto.getQuantity();
         existingArticularItemQuantity.setQuantity(counter);
         return existingArticularItemQuantity;
     }

@@ -15,19 +15,16 @@ class CreditCardUtilTest {
 
     @Test
     void testIsCardActive_validCard_shouldReturnTrue() {
-        String validMonthYear = "12/25";
         assertDoesNotThrow(() -> {
-            boolean isActive = CardUtil.isCardActive(validMonthYear);
+            boolean isActive = CardUtil.isCardActive(12, 25);
             assertTrue(isActive);
         });
     }
 
     @Test
     void testIsCardActive_expiredCard_shouldThrowException() {
-        String expiredMonthYear = "01/20";
-
         RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
-            CardUtil.isCardActive(expiredMonthYear);
+            CardUtil.isCardActive(1, 20);
         });
 
         assertEquals("Card expired", thrown.getMessage());
@@ -35,10 +32,8 @@ class CreditCardUtilTest {
 
     @Test
     void testIsCardActive_invalidMonthYearFormat_shouldThrowException() {
-        String invalidMonthYear = "13/99";
-
         RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
-            CardUtil.isCardActive(invalidMonthYear);
+            CardUtil.isCardActive(13, 99);
         });
 
         assertNotNull(thrown.getMessage());
@@ -46,10 +41,8 @@ class CreditCardUtilTest {
 
     @Test
     void testIsCardActive_invalidDateFormat_shouldThrowParseException() {
-        String invalidMonthYear = "invalidFormat";
-
         RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
-            CardUtil.isCardActive(invalidMonthYear);
+            CardUtil.isCardActive(3, 101);
         });
 
         assertInstanceOf(ParseException.class, thrown.getCause());

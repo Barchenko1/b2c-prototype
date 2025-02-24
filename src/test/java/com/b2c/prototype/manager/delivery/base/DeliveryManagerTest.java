@@ -4,7 +4,6 @@ import com.b2c.prototype.dao.delivery.IDeliveryDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.payload.AddressDto;
 import com.b2c.prototype.modal.dto.payload.DeliveryDto;
-import com.b2c.prototype.modal.dto.searchfield.DeliverySearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
@@ -57,11 +56,7 @@ class DeliveryManagerTest {
     @Test
     void testSaveUpdateDelivery() {
         DeliveryDto deliveryDto = getDeliveryDto();
-        DeliverySearchFieldEntityDto deliverySearchFieldEntityDto = DeliverySearchFieldEntityDto.builder()
-                .searchField("searchField")
-                .newEntity(deliveryDto)
-                .build();
-
+        String orderId = "searchField";
         OrderArticularItem orderItemDataOption = mock(OrderArticularItem.class);
         Delivery existingDelivery = getDelivery();
         Delivery newDelivery = getDelivery();
@@ -70,7 +65,7 @@ class DeliveryManagerTest {
 
 
         when(orderItemDataOption.getDelivery()).thenReturn(existingDelivery);
-        when(supplierService.parameterStringSupplier(ORDER_ID, deliverySearchFieldEntityDto.getSearchField()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
                 .thenReturn(orderItemDataOption);
@@ -84,7 +79,7 @@ class DeliveryManagerTest {
             return null;
         }).when(deliveryDao).executeConsumer(any(Consumer.class));
 
-        deliveryManager.saveUpdateDelivery(deliverySearchFieldEntityDto);
+        deliveryManager.saveUpdateDelivery(orderId, deliveryDto);
 
         verify(deliveryDao).executeConsumer(any(Consumer.class));
         assertEquals(existingDelivery.getId(), newDelivery.getId());
@@ -93,10 +88,7 @@ class DeliveryManagerTest {
     @Test
     void testSaveUpdateDeliveryNull() {
         DeliveryDto deliveryDto = getDeliveryDto();
-        DeliverySearchFieldEntityDto deliverySearchFieldEntityDto = DeliverySearchFieldEntityDto.builder()
-                .searchField("searchField")
-                .newEntity(deliveryDto)
-                .build();
+        String orderId = "searchField";
 
         OrderArticularItem orderItemDataOption = mock(OrderArticularItem.class);
         Delivery existingDelivery = null;
@@ -105,7 +97,7 @@ class DeliveryManagerTest {
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
         when(orderItemDataOption.getDelivery()).thenReturn(existingDelivery);
-        when(supplierService.parameterStringSupplier(ORDER_ID, deliverySearchFieldEntityDto.getSearchField()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
                 .thenReturn(orderItemDataOption);
@@ -119,15 +111,14 @@ class DeliveryManagerTest {
             return null;
         }).when(deliveryDao).executeConsumer(any(Consumer.class));
 
-        deliveryManager.saveUpdateDelivery(deliverySearchFieldEntityDto);
+        deliveryManager.saveUpdateDelivery(orderId, deliveryDto);
 
         verify(deliveryDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
     void testDeleteDelivery() {
-        OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto();
-        oneFieldEntityDto.setValue("123");
+        String orderId = "123";
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
         Delivery delivery = getDelivery();
@@ -136,7 +127,7 @@ class DeliveryManagerTest {
         Function<OrderArticularItem, Delivery> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(OrderArticularItem.class, Delivery.class))
                 .thenReturn(function);
-        when(supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
         when(supplierService.entityFieldSupplier(
                 OrderArticularItem.class,
@@ -144,20 +135,19 @@ class DeliveryManagerTest {
                 function
         )).thenReturn(deliverySupplier);
 
-        deliveryManager.deleteDelivery(oneFieldEntityDto);
+        deliveryManager.deleteDelivery(orderId);
 
         verify(deliveryDao).deleteEntity(deliverySupplier);
     }
 
     @Test
     void testGetDelivery() {
-        OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto();
-        oneFieldEntityDto.setValue("123");
+        String orderId = "123";
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
         DeliveryDto deliveryDto =  getDeliveryDto();
-        when(supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
         Function<OrderArticularItem, DeliveryDto> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(OrderArticularItem.class, DeliveryDto.class))
@@ -165,7 +155,7 @@ class DeliveryManagerTest {
         when(queryService.getEntityDto(OrderArticularItem.class, parameterSupplier, function))
                 .thenReturn(deliveryDto);
 
-        DeliveryDto result = deliveryManager.getDelivery(oneFieldEntityDto);
+        DeliveryDto result = deliveryManager.getDelivery(orderId);
 
         assertNotNull(result);
     }

@@ -185,11 +185,8 @@ class OptionItemManagerTest {
         OptionGroupOptionItemSetDto optionGroupOptionItemSetDto = getOptionItemDto();
 
         Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
 
-        when(supplierService.parameterStringSupplier("value", optionGroupName))
-                .thenReturn(parameterSupplier);
-        when(queryService.getSubEntityList(OptionItem.class, parameterSupplier))
+        when(queryService.getSubEntityList(OptionItem.class, parameter))
                 .thenReturn(List.of(optionItem));
         Function<OptionItem, OptionGroupOptionItemSetDto> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(OptionItem.class, OptionGroupOptionItemSetDto.class))
@@ -207,7 +204,6 @@ class OptionItemManagerTest {
         Function<OptionItem, OptionGroupOptionItemSetDto> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(OptionItem.class, OptionGroupOptionItemSetDto.class, "set"))
                 .thenReturn(function);
-        when(queryService.getEntityDtoList(OptionItem.class, function)).thenReturn(List.of(dto));
 
         List<OptionGroupOptionItemSetDto> list = optionItemManager.getOptionItemList();
 

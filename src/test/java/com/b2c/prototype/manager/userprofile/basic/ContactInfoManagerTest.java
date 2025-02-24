@@ -1,9 +1,7 @@
 package com.b2c.prototype.manager.userprofile.basic;
 
 import com.b2c.prototype.dao.user.IContactInfoDao;
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.payload.ContactInfoDto;
-import com.b2c.prototype.modal.dto.searchfield.ContactInfoSearchFieldEntityDto;
 import com.b2c.prototype.modal.dto.payload.ContactPhoneDto;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
@@ -52,20 +50,18 @@ class ContactInfoManagerTest {
 
     @Test
     void testSaveUpdateAppUserAddress() {
-        ContactInfoSearchFieldEntityDto contactInfoSearchFieldEntityDto = ContactInfoSearchFieldEntityDto.builder()
-                .searchField("123")
-                .newEntity(getContactInfoDto())
-                .build();
+        String userId = "123";
+        ContactInfoDto contactInfoDto = getContactInfoDto();
         UserProfile userProfile = mock(UserProfile.class);
         ContactInfo contactInfo = mock(ContactInfo.class);
         when(userProfile.getContactInfo()).thenReturn(contactInfo);
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(USER_ID, contactInfoSearchFieldEntityDto.getSearchField()))
+        when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(UserProfile.class, parameterSupplier))
                 .thenReturn(userProfile);
-        when(transformationFunctionService.getEntity(ContactInfo.class, contactInfoSearchFieldEntityDto.getNewEntity()))
+        when(transformationFunctionService.getEntity(ContactInfo.class, contactInfoDto))
                 .thenReturn(contactInfo);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -75,27 +71,25 @@ class ContactInfoManagerTest {
             return null;
         }).when(contactInfoDao).executeConsumer(any(Consumer.class));
 
-        contactInfoManager.saveUpdateContactInfoByUserId(contactInfoSearchFieldEntityDto);
+        contactInfoManager.saveUpdateContactInfoByUserId(userId, contactInfoDto);
 
         verify(contactInfoDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
     void testSaveUpdateAppUserAddressContactInfoNull() {
-        ContactInfoSearchFieldEntityDto contactInfoSearchFieldEntityDto = ContactInfoSearchFieldEntityDto.builder()
-                .searchField("123")
-                .newEntity(getContactInfoDto())
-                .build();
+        String userId = "123";
+        ContactInfoDto contactInfoDto = getContactInfoDto();
         UserProfile userProfile = mock(UserProfile.class);
         ContactInfo contactInfo = mock(ContactInfo.class);
         when(userProfile.getContactInfo()).thenReturn(null);
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(USER_ID, contactInfoSearchFieldEntityDto.getSearchField()))
+        when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(UserProfile.class, parameterSupplier))
                 .thenReturn(userProfile);
-        when(transformationFunctionService.getEntity(ContactInfo.class, contactInfoSearchFieldEntityDto.getNewEntity()))
+        when(transformationFunctionService.getEntity(ContactInfo.class, contactInfoDto))
                 .thenReturn(contactInfo);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -105,14 +99,14 @@ class ContactInfoManagerTest {
             return null;
         }).when(contactInfoDao).executeConsumer(any(Consumer.class));
 
-        contactInfoManager.saveUpdateContactInfoByUserId(contactInfoSearchFieldEntityDto);
+        contactInfoManager.saveUpdateContactInfoByUserId(userId, contactInfoDto);
 
         verify(contactInfoDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
     void testDeleteContactInfoByUserId() {
-        OneFieldEntityDto dto = new OneFieldEntityDto("123");
+        String userId = "123";
         UserProfile userProfile = mock(UserProfile.class);
         ContactInfo contactInfo = getContactInfo();
         when(userProfile.getContactInfo()).thenReturn(contactInfo);
@@ -120,7 +114,7 @@ class ContactInfoManagerTest {
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(USER_ID, dto.getValue()))
+        when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(parameterSupplier);
 
         Function<UserProfile, ContactInfo> function = mock(Function.class);
@@ -132,7 +126,7 @@ class ContactInfoManagerTest {
                 function
         )).thenReturn(supplier);
 
-        contactInfoManager.deleteContactInfoByUserId(dto);
+        contactInfoManager.deleteContactInfoByUserId(userId);
 
         verify(contactInfoDao).deleteEntity(any(Supplier.class));
     }
@@ -143,7 +137,6 @@ class ContactInfoManagerTest {
         UserProfile userProfile = mock(UserProfile.class);
         ContactInfo contactInfo = getContactInfo();
         ContactInfoDto contactInfoDto = getContactInfoDto();
-        OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto(userId);
         Parameter parameter = mock(Parameter.class);
 
         Supplier<Parameter> parameterSupplier = () -> parameter;
@@ -163,7 +156,7 @@ class ContactInfoManagerTest {
 
         when(userProfile.getContactInfo()).thenReturn(contactInfo);
 
-        ContactInfoDto contactInfoResult = contactInfoManager.getContactInfoByUserId(oneFieldEntityDto);
+        ContactInfoDto contactInfoResult = contactInfoManager.getContactInfoByUserId(userId);
         ContactInfoDto expectedContactInfoDto = getContactInfoDto();
         assertEquals(expectedContactInfoDto, contactInfoResult);
     }

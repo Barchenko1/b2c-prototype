@@ -4,9 +4,7 @@ import com.b2c.prototype.dao.payment.ICreditCardDao;
 import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.delete.MultipleFieldsSearchDtoDelete;
 import com.b2c.prototype.modal.dto.payload.CreditCardDto;
-import com.b2c.prototype.modal.dto.searchfield.CreditCardSearchFieldEntityDto;
 import com.b2c.prototype.modal.dto.response.ResponseCreditCardDto;
-import com.b2c.prototype.modal.dto.update.CreditCardSearchFieldEntityUpdateDto;
 import com.b2c.prototype.modal.entity.order.OrderArticularItem;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
 import com.b2c.prototype.modal.entity.payment.Payment;
@@ -63,10 +61,8 @@ class CreditCardManagerTest {
 
     @Test
     void saveCreditCardByUserId_shouldSaveCreditCreditCard() {
-        CreditCardSearchFieldEntityDto creditCardSearchFieldEntityDto = CreditCardSearchFieldEntityDto.builder()
-                .newEntity(getTestCreditCardDto())
-                .searchField("abc")
-                .build();
+        CreditCardDto creditCardDto = getTestCreditCardDto();
+        String userId = "abc";
 
         UserProfile userProfile = mock(UserProfile.class);
         CreditCard newCreditCard = mock(CreditCard.class);
@@ -74,11 +70,11 @@ class CreditCardManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> supplier = () -> parameter;
 
-        when(supplierService.parameterStringSupplier(USER_ID, creditCardSearchFieldEntityDto.getSearchField()))
+        when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(supplier);
         when(queryService.getEntity(UserProfile.class, supplier))
                 .thenReturn(userProfile);
-        when(transformationFunctionService.getEntity(CreditCard.class, creditCardSearchFieldEntityDto.getNewEntity()))
+        when(transformationFunctionService.getEntity(CreditCard.class, creditCardDto))
                 .thenReturn(newCreditCard);
         when(userProfile.getCreditCardList()).thenReturn(existingCreditCards);
         doAnswer(invocation -> {
@@ -89,17 +85,15 @@ class CreditCardManagerTest {
             return null;
         }).when(creditCardDao).executeConsumer(any(Consumer.class));
 
-        creditCardManager.saveCreditCardByUserId(creditCardSearchFieldEntityDto);
+        creditCardManager.saveCreditCardByUserId(userId, creditCardDto);
 
         verify(creditCardDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
     void saveCreditCardByUserId_shouldThrowException() {
-        CreditCardSearchFieldEntityDto creditCardSearchFieldEntityDto = CreditCardSearchFieldEntityDto.builder()
-                .newEntity(getTestCreditCardDto())
-                .searchField("abc")
-                .build();
+        CreditCardDto creditCardDto = getTestCreditCardDto();
+        String userId = "abc";
 
         UserProfile userProfile = mock(UserProfile.class);
         CreditCard newCreditCard = mock(CreditCard.class);
@@ -109,11 +103,11 @@ class CreditCardManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> supplier = () -> parameter;
 
-        when(supplierService.parameterStringSupplier(USER_ID, creditCardSearchFieldEntityDto.getSearchField()))
+        when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(supplier);
         when(queryService.getEntity(UserProfile.class, supplier))
                 .thenReturn(userProfile);
-        when(transformationFunctionService.getEntity(CreditCard.class, creditCardSearchFieldEntityDto.getNewEntity()))
+        when(transformationFunctionService.getEntity(CreditCard.class, creditCardDto))
                 .thenReturn(newCreditCard);
         when(userProfile.getCreditCardList()).thenReturn(existingCreditCards);
         doAnswer(invocation -> {
@@ -124,17 +118,15 @@ class CreditCardManagerTest {
             return null;
         }).when(creditCardDao).executeConsumer(any(Consumer.class));
 
-        assertThrows(RuntimeException.class, () -> creditCardManager.saveCreditCardByUserId(creditCardSearchFieldEntityDto));
+        assertThrows(RuntimeException.class, () -> creditCardManager.saveCreditCardByUserId(userId, creditCardDto));
 
         verify(creditCardDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
     void saveCreditCardByOrderId_shouldSaveCreditCreditCard() {
-        CreditCardSearchFieldEntityDto creditCardSearchFieldEntityDto = CreditCardSearchFieldEntityDto.builder()
-                .newEntity(getTestCreditCardDto())
-                .searchField("abc")
-                .build();
+        CreditCardDto creditCardDto = getTestCreditCardDto();
+        String orderId = "abc";
 
         OrderArticularItem orderItemDataOption = mock(OrderArticularItem.class);
         Payment payment = mock(Payment.class);
@@ -142,11 +134,11 @@ class CreditCardManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> supplier = () -> parameter;
 
-        when(supplierService.parameterStringSupplier(ORDER_ID, creditCardSearchFieldEntityDto.getSearchField()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(supplier);
         when(queryService.getEntity(OrderArticularItem.class, supplier))
                 .thenReturn(orderItemDataOption);
-        when(transformationFunctionService.getEntity(CreditCard.class, creditCardSearchFieldEntityDto.getNewEntity()))
+        when(transformationFunctionService.getEntity(CreditCard.class, creditCardDto))
                 .thenReturn(creditCard);
         when(orderItemDataOption.getPayment()).thenReturn(payment);
         when(payment.getCreditCard()).thenReturn(creditCard);
@@ -158,23 +150,24 @@ class CreditCardManagerTest {
             return null;
         }).when(creditCardDao).executeConsumer(any(Consumer.class));
 
-        creditCardManager.saveCreditCardByOrderId(creditCardSearchFieldEntityDto);
+        creditCardManager.saveCreditCardByOrderId(orderId, creditCardDto);
 
         verify(creditCardDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
     void updateCreditCardByUserId_shouldUpdateCreditCreditCard() {
-        CreditCardSearchFieldEntityUpdateDto creditCardSearchFieldEntityUpdateDto = createTestCreditCardDtoUpdate();
+        String userId = "abc";
+        CreditCardDto creditCardDto = getTestCreditCardDto();
         UserProfile userProfile = mock(UserProfile.class);
         CreditCard creditCard = getTestCreditCard();
         List<CreditCard> creditCardList = List.of(creditCard);
         Supplier<Parameter> parameterSupplier = mock(Supplier.class);
-        when(supplierService.parameterStringSupplier(USER_ID, creditCardSearchFieldEntityUpdateDto.getSearchField()))
+        when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(eq(UserProfile.class), any(Supplier.class)))
                 .thenReturn(userProfile);
-        when(transformationFunctionService.getEntity(CreditCard.class, creditCardSearchFieldEntityUpdateDto.getNewEntity()))
+        when(transformationFunctionService.getEntity(CreditCard.class, creditCardDto))
                 .thenReturn(creditCard);
         when(userProfile.getCreditCardList()).thenReturn(creditCardList);
 
@@ -186,23 +179,24 @@ class CreditCardManagerTest {
             return null;
         }).when(creditCardDao).executeConsumer(any(Consumer.class));
 
-        creditCardManager.updateCreditCardByUserId(creditCardSearchFieldEntityUpdateDto);
+        creditCardManager.updateCreditCardByUserId(userId, creditCardDto);
 
         verify(creditCardDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
     void updateCreditCardByOrderId_shouldUpdateCreditCreditCard() {
-        CreditCardSearchFieldEntityUpdateDto creditCardSearchFieldEntityUpdateDto = createTestCreditCardDtoUpdate();
+        String orderId = "abc";
+        CreditCardDto creditCardDto = getTestCreditCardDto();
         OrderArticularItem orderItemDataOption = mock(OrderArticularItem.class);
         Payment payment = mock(Payment.class);
         CreditCard creditCard = getTestCreditCard();
         Supplier<Parameter> parameterSupplier = mock(Supplier.class);
-        when(supplierService.parameterStringSupplier(ORDER_ID, creditCardSearchFieldEntityUpdateDto.getSearchField()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(eq(OrderArticularItem.class), any(Supplier.class)))
                 .thenReturn(orderItemDataOption);
-        when(transformationFunctionService.getEntity(CreditCard.class, creditCardSearchFieldEntityUpdateDto.getNewEntity()))
+        when(transformationFunctionService.getEntity(CreditCard.class, creditCardDto))
                 .thenReturn(creditCard);
         when(orderItemDataOption.getPayment()).thenReturn(payment);
         when(payment.getCreditCard()).thenReturn(creditCard);
@@ -215,23 +209,24 @@ class CreditCardManagerTest {
             return null;
         }).when(creditCardDao).executeConsumer(any(Consumer.class));
 
-        creditCardManager.updateCreditCardByOrderId(creditCardSearchFieldEntityUpdateDto);
+        creditCardManager.updateCreditCardByOrderId(orderId, creditCardDto);
 
         verify(creditCardDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
     void updateCreditCardByOrderId_shouldThrowException() {
-        CreditCardSearchFieldEntityUpdateDto creditCardSearchFieldEntityUpdateDto = createTestCreditCardDtoUpdate();
+        String orderId = "abc";
+        CreditCardDto creditCardDto = getTestCreditCardDto();
         OrderArticularItem orderItemDataOption = mock(OrderArticularItem.class);
         Payment payment = mock(Payment.class);
         CreditCard creditCard = getTestCreditCard();
         Supplier<Parameter> parameterSupplier = mock(Supplier.class);
-        when(supplierService.parameterStringSupplier(ORDER_ID, creditCardSearchFieldEntityUpdateDto.getSearchField()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
         when(queryService.getEntity(eq(OrderArticularItem.class), any(Supplier.class)))
                 .thenReturn(orderItemDataOption);
-        when(transformationFunctionService.getEntity(CreditCard.class, creditCardSearchFieldEntityUpdateDto.getNewEntity()))
+        when(transformationFunctionService.getEntity(CreditCard.class, creditCardDto))
                 .thenReturn(creditCard);
         when(orderItemDataOption.getPayment()).thenReturn(payment);
         when(payment.getCreditCard()).thenReturn(CreditCard.builder()
@@ -246,7 +241,7 @@ class CreditCardManagerTest {
             return null;
         }).when(creditCardDao).executeConsumer(any(Consumer.class));
 
-        assertThrows(RuntimeException.class, () -> creditCardManager.updateCreditCardByOrderId(creditCardSearchFieldEntityUpdateDto));
+        assertThrows(RuntimeException.class, () -> creditCardManager.updateCreditCardByOrderId(orderId, creditCardDto));
 
         verify(creditCardDao).executeConsumer(any(Consumer.class));
     }
@@ -324,9 +319,6 @@ class CreditCardManagerTest {
     @Test
     void getCardListByUserId_shouldReturnResponseCardDtoList() {
         String userId = "123";
-        OneFieldEntityDto oneFieldEntityDto = OneFieldEntityDto.builder()
-                .value(userId)
-                .build();
         CreditCard creditCard = getTestCreditCard();
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
@@ -339,17 +331,19 @@ class CreditCardManagerTest {
                 .thenReturn(creditCard1 -> ResponseCreditCardDto.builder()
                         .isActive(creditCard1.isActive())
                         .cardNumber(creditCard1.getCardNumber())
-                        .dateOfExpire(creditCard1.getDateOfExpire())
+                        .monthOfExpire(creditCard1.getMonthOfExpire())
+                        .yearOfExpire(creditCard1.getYearOfExpire())
                         .ownerName(creditCard1.getOwnerName())
                         .ownerSecondName(creditCard1.getOwnerSecondName())
                         .build());
 
-        List<ResponseCreditCardDto> responseCreditCardDtoList = creditCardManager.getCardListByUserId(oneFieldEntityDto);
+        List<ResponseCreditCardDto> responseCreditCardDtoList = creditCardManager.getCardListByUserId(userId);
 
         assertEquals(1, responseCreditCardDtoList.size());
         responseCreditCardDtoList.forEach(result -> {
             assertEquals(creditCard.getCardNumber(), result.getCardNumber());
-            assertEquals(creditCard.getDateOfExpire(), result.getDateOfExpire());
+            assertEquals(creditCard.getMonthOfExpire(), result.getMonthOfExpire());
+            assertEquals(creditCard.getYearOfExpire(), result.getYearOfExpire());
             assertTrue(result.isActive());
             assertEquals(creditCard.getOwnerName(), result.getOwnerName());
             assertEquals(creditCard.getOwnerSecondName(), result.getOwnerSecondName());
@@ -403,7 +397,8 @@ class CreditCardManagerTest {
         Function<CreditCard, ResponseCreditCardDto> function = creditCard1 -> ResponseCreditCardDto.builder()
                 .isActive(creditCard1.isActive())
                 .cardNumber(creditCard1.getCardNumber())
-                .dateOfExpire(creditCard1.getDateOfExpire())
+                .monthOfExpire(creditCard1.getMonthOfExpire())
+                .yearOfExpire(creditCard1.getYearOfExpire())
                 .ownerName(creditCard1.getOwnerName())
                 .ownerSecondName(creditCard1.getOwnerSecondName())
                 .build();
@@ -415,11 +410,12 @@ class CreditCardManagerTest {
         when(transformationFunctionService.getTransformationFunction(CreditCard.class, ResponseCreditCardDto.class))
                 .thenReturn(function);
 
-        ResponseCreditCardDto result = creditCardManager.getCardByOrderId(oneFieldEntityDto);
+        ResponseCreditCardDto result = creditCardManager.getCardByOrderId(orderId);
 
         assertNotNull(result);
         assertEquals(creditCard.getCardNumber(), result.getCardNumber());
-        assertEquals(creditCard.getDateOfExpire(), result.getDateOfExpire());
+        assertEquals(creditCard.getMonthOfExpire(), result.getMonthOfExpire());
+        assertEquals(creditCard.getYearOfExpire(), result.getYearOfExpire());
         assertTrue(result.isActive());
         assertEquals(creditCard.getOwnerName(), result.getOwnerName());
         assertEquals(creditCard.getOwnerSecondName(), result.getOwnerSecondName());
@@ -428,21 +424,22 @@ class CreditCardManagerTest {
     @Test
     void getCardByOrderId_shouldReturnNull() {
         Parameter parameter = mock(Parameter.class);
-        OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto("nonexistent");
+        String orderId = "nonexistent";
 
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(ORDER_ID, oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
         when(creditCardDao.getOptionalEntity(parameter)).thenReturn(Optional.empty());
         when(transformationFunctionService.getTransformationFunction(CreditCard.class, ResponseCreditCardDto.class))
                 .thenReturn(creditCard1 -> ResponseCreditCardDto.builder()
                         .isActive(creditCard1.isActive())
                         .cardNumber(creditCard1.getCardNumber())
-                        .dateOfExpire(creditCard1.getDateOfExpire())
+                        .monthOfExpire(creditCard1.getMonthOfExpire())
+                        .yearOfExpire(creditCard1.getYearOfExpire())
                         .ownerName(creditCard1.getOwnerName())
                         .ownerSecondName(creditCard1.getOwnerSecondName())
                         .build());
-        assertTrue(() -> creditCardManager.getCardByOrderId(oneFieldEntityDto) == null);
+        assertTrue(() -> creditCardManager.getCardByOrderId(orderId) == null);
     }
 
     @Test
@@ -458,7 +455,8 @@ class CreditCardManagerTest {
                 .thenReturn(creditCard1 -> ResponseCreditCardDto.builder()
                         .isActive(creditCard1.isActive())
                         .cardNumber(creditCard1.getCardNumber())
-                        .dateOfExpire(creditCard1.getDateOfExpire())
+                        .monthOfExpire(creditCard1.getMonthOfExpire())
+                        .yearOfExpire(creditCard1.getYearOfExpire())
                         .ownerName(creditCard1.getOwnerName())
                         .ownerSecondName(creditCard1.getOwnerSecondName())
                         .build());
@@ -468,7 +466,8 @@ class CreditCardManagerTest {
         assertEquals(1, responseCreditCardDtoList.size());
         responseCreditCardDtoList.forEach(result -> {
             assertEquals(creditCard.getCardNumber(), result.getCardNumber());
-            assertEquals(creditCard.getDateOfExpire(), result.getDateOfExpire());
+            assertEquals(creditCard.getMonthOfExpire(), result.getMonthOfExpire());
+            assertEquals(creditCard.getYearOfExpire(), result.getYearOfExpire());
             assertTrue(result.isActive());
             assertEquals(creditCard.getOwnerName(), result.getOwnerName());
             assertEquals(creditCard.getOwnerSecondName(), result.getOwnerSecondName());
@@ -478,7 +477,8 @@ class CreditCardManagerTest {
     private ResponseCreditCardDto getTestResponseCardDto() {
         return ResponseCreditCardDto.builder()
                 .cardNumber("1234567890123456")
-                .dateOfExpire("06/28")
+                .monthOfExpire(6)
+                .yearOfExpire(28)
                 .isActive(true)
                 .ownerName("John")
                 .ownerSecondName("Doe")
@@ -488,7 +488,8 @@ class CreditCardManagerTest {
     private CreditCardDto getTestCreditCardDto() {
         return CreditCardDto.builder()
                 .cardNumber("1234567890123456")
-                .dateOfExpire("06/28")
+                .monthOfExpire(6)
+                .yearOfExpire(28)
                 .cvv("123")
                 .ownerName("John")
                 .ownerSecondName("Doe")
@@ -499,7 +500,8 @@ class CreditCardManagerTest {
         return CreditCard.builder()
                 .id(1L)
                 .cardNumber("1234567890123456")
-                .dateOfExpire("06/28")
+                .monthOfExpire(6)
+                .yearOfExpire(28)
                 .cvv("123")
                 .ownerName("John")
                 .ownerSecondName("Doe")
@@ -507,23 +509,4 @@ class CreditCardManagerTest {
                 .build();
     }
 
-    private CreditCardSearchFieldEntityUpdateDto createTestCreditCardDtoUpdate() {
-        return CreditCardSearchFieldEntityUpdateDto.builder()
-                .oldEntity(CreditCardDto.builder()
-                        .cardNumber("1234567890123456")
-                        .dateOfExpire("06/29")
-                        .cvv("789")
-                        .ownerName("John")
-                        .ownerSecondName("Doe")
-                        .build())
-                .searchField("search")
-                .newEntity(CreditCardDto.builder()
-                        .cardNumber("0123456789012345")
-                        .dateOfExpire("06/29")
-                        .cvv("789")
-                        .ownerName("John")
-                        .ownerSecondName("Doe")
-                        .build())
-                .build();
-    }
 }

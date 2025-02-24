@@ -1,18 +1,16 @@
 package com.b2c.prototype.manager.userprofile;
 
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
-import com.b2c.prototype.modal.dto.searchfield.BeneficiarySearchFieldOrderNumberDto;
+import com.b2c.prototype.modal.dto.payload.BeneficiaryDto;
 import com.b2c.prototype.modal.dto.payload.ContactPhoneDto;
-import com.b2c.prototype.modal.dto.searchfield.ContactPhoneSearchFieldEntityDto;
 
 import java.util.List;
 
 public interface IContactPhoneManager {
-    void saveUpdateContactPhoneByUserId(ContactPhoneSearchFieldEntityDto contactPhoneSearchFieldEntityDto);
-    void saveUpdateContactPhoneByOrderId(ContactPhoneSearchFieldEntityDto contactPhoneSearchFieldEntityDto);
-    void deleteContactPhoneByUserId(OneFieldEntityDto oneFieldEntityDto);
-    void deleteContactPhoneByOrderId(BeneficiarySearchFieldOrderNumberDto beneficiarySearchFieldOrderNumberDto);
-    ContactPhoneDto getContactPhoneByUserId(OneFieldEntityDto oneFieldEntityDto);
-    List<ContactPhoneDto> getContactPhoneByOrderId(OneFieldEntityDto oneFieldEntityDto);
+    void saveUpdateContactPhoneByUserId(String userId, ContactPhoneDto contactPhoneDto);
+    void saveUpdateContactPhoneByOrderId(String orderId, BeneficiaryDto beneficiaryDto);
+    void deleteContactPhoneByUserId(String userId);
+    void deleteContactPhoneByOrderId(String orderId, int beneficiaryNumber);
+    ContactPhoneDto getContactPhoneByUserId(String userId);
+    List<ContactPhoneDto> getContactPhoneByOrderId(String orderId);
     List<ContactPhoneDto> getContactPhoneList();
 }

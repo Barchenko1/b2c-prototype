@@ -8,10 +8,13 @@ import com.b2c.prototype.modal.dto.common.SearchFieldUpdateCollectionEntityDto;
 import com.b2c.prototype.modal.dto.common.SearchFieldUpdateEntityDto;
 import com.b2c.prototype.modal.dto.payload.AddressDto;
 import com.b2c.prototype.modal.dto.payload.ArticularItemDto;
+import com.b2c.prototype.modal.dto.payload.ArticularItemQuantityDto;
 import com.b2c.prototype.modal.dto.payload.BeneficiaryDto;
 import com.b2c.prototype.modal.dto.payload.ContactInfoDto;
 import com.b2c.prototype.modal.dto.payload.ContactPhoneDto;
-import com.b2c.prototype.modal.dto.payload.CountryDto;
+import com.b2c.prototype.modal.dto.payload.OrderArticularItemQuantityDto;
+import com.b2c.prototype.modal.dto.payload.PaymentDto;
+import com.b2c.prototype.modal.dto.payload.constant.CountryDto;
 import com.b2c.prototype.modal.dto.payload.CreditCardDto;
 import com.b2c.prototype.modal.dto.payload.DeliveryDto;
 import com.b2c.prototype.modal.dto.payload.DiscountDto;
@@ -40,6 +43,7 @@ import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
+import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
 import com.b2c.prototype.modal.entity.item.ArticularStatus;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
@@ -56,7 +60,9 @@ import com.b2c.prototype.modal.entity.order.Beneficiary;
 import com.b2c.prototype.modal.entity.order.OrderArticularItem;
 import com.b2c.prototype.modal.entity.order.OrderStatus;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
+import com.b2c.prototype.modal.entity.payment.Payment;
 import com.b2c.prototype.modal.entity.payment.PaymentMethod;
+import com.b2c.prototype.modal.entity.payment.PaymentStatus;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.modal.entity.review.Review;
@@ -75,7 +81,6 @@ import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -90,6 +95,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.b2c.prototype.util.Constant.USER_ID;
 import static com.b2c.prototype.util.Constant.VALUE;
 import static com.b2c.prototype.util.Util.getCurrentTimeMillis;
 import static com.b2c.prototype.util.Util.getUUID;
@@ -161,6 +167,7 @@ public class TransformationEntityConfiguration {
         loadItemDataFunctions(transformationFunctionService);
         loadArticularItemFunctions(transformationFunctionService);
         loadDiscountFunctions(transformationFunctionService);
+        loadOrderFunctions(transformationFunctionService);
 
         transformationFunctionService.addTransformationFunction(OrderArticularItem.class, Beneficiary.class, "list", mapOrderItemToContactInfoListFunction());
     }
@@ -191,6 +198,10 @@ public class TransformationEntityConfiguration {
         transformationFunctionService.addTransformationFunction(ArticularItem.class, OptionGroupOptionItemSetDto.class, "list", mapArticularItemToOptionItemDtoList());
 
         transformationFunctionService.addTransformationFunction(SingleOptionItemDto.class, OptionGroup.class, mapSingleOptionItemDtoToOptionGroup());
+    }
+
+    private void loadOrderFunctions(ITransformationFunctionService transformationFunctionService) {
+        transformationFunctionService.addTransformationFunction(OrderArticularItemQuantityDto.class, OrderArticularItem.class, mapOrderArticularItemQuantityToOrderArticularItem());
     }
 
     private <T extends AbstractConstantEntity> Function<ConstantPayloadDto, T> mapConstantEntityPayloadDtoToConstantEntityFunction(Supplier<T> entitySupplier) {
@@ -291,8 +302,9 @@ public class TransformationEntityConfiguration {
     private Function<CreditCardDto, CreditCard> mapCreditCardDtoToCreditCardFunction() {
         return creditCardDto -> CreditCard.builder()
                 .cardNumber(creditCardDto.getCardNumber())
-                .dateOfExpire(creditCardDto.getDateOfExpire())
-                .isActive(CardUtil.isCardActive(creditCardDto.getDateOfExpire()))
+                .monthOfExpire(creditCardDto.getMonthOfExpire())
+                .yearOfExpire(creditCardDto.getYearOfExpire())
+                .isActive(CardUtil.isCardActive(creditCardDto.getMonthOfExpire(), creditCardDto.getYearOfExpire()))
                 .cvv(creditCardDto.getCvv())
                 .ownerName(creditCardDto.getOwnerName())
                 .ownerSecondName(creditCardDto.getOwnerSecondName())
@@ -302,8 +314,9 @@ public class TransformationEntityConfiguration {
     private Function<CreditCard, ResponseCreditCardDto> mapCreditCardToResponseCardDtoFunction() {
         return creditCard -> ResponseCreditCardDto.builder()
                 .cardNumber(creditCard.getCardNumber())
-                .dateOfExpire(creditCard.getDateOfExpire())
-                .isActive(CardUtil.isCardActive(creditCard.getDateOfExpire()))
+                .monthOfExpire(creditCard.getMonthOfExpire())
+                .yearOfExpire(creditCard.getYearOfExpire())
+                .isActive(CardUtil.isCardActive(creditCard.getMonthOfExpire(), creditCard.getYearOfExpire()))
                 .ownerName(creditCard.getOwnerName())
                 .ownerSecondName(creditCard.getOwnerSecondName())
                 .build();
@@ -672,7 +685,6 @@ public class TransformationEntityConfiguration {
                     itemDataDto.getArticularItemSet(),
                     optionItems,
                     Collections.emptyMap());
-//            setSharedPrices(articularItemSet);
 
             return ItemData.builder()
                     .description(itemDataDto.getDescription())
@@ -716,7 +728,6 @@ public class TransformationEntityConfiguration {
                     .toList();
             Set<ArticularItem> mergedArticularItemSet = Stream.concat(articularItemSet.stream(), nonUpdatedArticularList.stream())
                             .collect(Collectors.toSet());
-//            setSharedPrices(mergedArticularItemSet);
 
             return ItemData.builder()
                     .id(existingItemData.getId())
@@ -772,8 +783,6 @@ public class TransformationEntityConfiguration {
                     itemDataDto.getArticularItemSet(),
                     optionItems,
                     existingArticularItemMap);
-
-//            setSharedPrices(articularItemSet);
 
             return ItemData.builder()
                     .id(existingItemData.getId())
@@ -838,31 +847,88 @@ public class TransformationEntityConfiguration {
                 .collect(Collectors.toSet());
     }
 
-    private void setSharedPrices(Set<ArticularItem> articularItems) {
-        Map<String, Price> fullPriceMap = new HashMap<>();
-        Map<String, Price> totalPriceMap = new HashMap<>();
-
-        for (ArticularItem articularItem : articularItems) {
-            if (articularItem.getFullPrice() != null) {
-                String fullPriceKey = articularItem.getFullPrice().getAmount() + "-" + articularItem.getFullPrice().getCurrency().getId();
-                Price existingFullPrice = fullPriceMap.get(fullPriceKey);
-                if (existingFullPrice == null) {
-                    fullPriceMap.put(fullPriceKey, articularItem.getFullPrice());
-                } else {
-                    articularItem.setFullPrice(existingFullPrice);
-                }
+    private BiFunction<Session, OrderArticularItemQuantityDto, OrderArticularItem> mapOrderArticularItemQuantityToOrderArticularItem() {
+        return (session, orderArticularItemQuantityDto) -> {
+            UserProfile userProfile = null;
+            if (orderArticularItemQuantityDto.getUser().getUserId() != null) {
+                userProfile = queryService.getEntity(
+                        session,
+                        UserProfile.class,
+                        parameterFactory.createStringParameter(USER_ID, orderArticularItemQuantityDto.getUser().getUserId()));
             }
+            OrderStatus orderStatus = queryService.getEntity(
+                    session,
+                    OrderStatus.class,
+                    parameterFactory.createStringParameter(VALUE, "COMMON"));
 
-            if (articularItem.getTotalPrice() != null) {
-                String totalPriceKey = articularItem.getTotalPrice().getAmount() + "-" + articularItem.getTotalPrice().getCurrency().getId();
-                Price existingTotalPrice = totalPriceMap.get(totalPriceKey);
-                if (existingTotalPrice == null) {
-                    totalPriceMap.put(totalPriceKey, articularItem.getTotalPrice());
-                } else {
-                    articularItem.setTotalPrice(existingTotalPrice);
-                }
-            }
-        }
+            return OrderArticularItem.builder()
+                    .userProfile(userProfile)
+                    .dateOfCreate(getCurrentTimeMillis())
+                    .orderId(getUUID())
+                    .articularItemQuantityList(mapArticularItemQuantityDtoToArticularItemQuantity()
+                            .apply(session, orderArticularItemQuantityDto.getItemDataOptionQuantities()))
+                    .delivery(mapDeliveryDtoToDelivery().apply(session, orderArticularItemQuantityDto.getDelivery()))
+                    .beneficiaries(mapBeneficiariesDtoToBeneficiaries().apply(session, orderArticularItemQuantityDto.getBeneficiaries()))
+                    .payment(mapPaymentDtoToPayment().apply(session, orderArticularItemQuantityDto.getPayment()))
+                    .orderStatus(orderStatus)
+                    .note(orderArticularItemQuantityDto.getNote())
+                    .build();
+        };
+    }
+
+    private BiFunction<Session, DeliveryDto, Delivery> mapDeliveryDtoToDelivery() {
+        return (session, deliveryDto) -> {
+            return Delivery.builder()
+                    .build();
+        };
+    }
+
+    private BiFunction<Session, List<BeneficiaryDto>, List<Beneficiary>> mapBeneficiariesDtoToBeneficiaries() {
+        return (session, beneficiaryDtos) -> beneficiaryDtos.stream()
+                .map(beneficiaryDto -> mapBeneficiaryDtoToBeneficiary().apply(session, beneficiaryDto))
+                .toList();
+    }
+
+    private BiFunction<Session, BeneficiaryDto, Beneficiary> mapBeneficiaryDtoToBeneficiary() {
+        return (session, beneficiaryDto) -> {
+            return Beneficiary.builder()
+                    .orderNumber(beneficiaryDto.getOrderNumber())
+                    .build();
+        };
+    }
+
+    private BiFunction<Session, List<ArticularItemQuantityDto>, List<ArticularItemQuantity>> mapArticularItemQuantityDtoToArticularItemQuantity() {
+        return (session, articularItemQuantityDtos) -> {
+            return articularItemQuantityDtos.stream()
+                    .map(articularItemQuantityDto -> {
+                        ArticularItem articularItem = fetchArticularItem(session, articularItemQuantityDto.getArticularId());
+                        return ArticularItemQuantity.builder()
+                                .articularItem(articularItem)
+                                .quantity(articularItemQuantityDto.getQuantity())
+                                .totalPrice(articularItem.getTotalPrice())
+                                .build();
+                    })
+                    .toList();
+        };
+    }
+
+    private BiFunction<Session, PaymentDto, Payment> mapPaymentDtoToPayment() {
+        return (session, paymentDto) -> {
+
+            return Payment.builder()
+                    .paymentId(getUUID())
+                    .paymentMethod(fetchPaymentMethod(session, paymentDto.getPaymentMethod()))
+                    .paymentStatus(fetchPaymentStatus(session, "NEW"))
+                    .creditCard(paymentDto.getCreditCard() != null
+                            ? mapCreditCardDtoToCreditCardFunction().apply(paymentDto.getCreditCard())
+                            : null)
+                    .discount(paymentDto.getDiscount() != null
+                            ? mapDiscountDtoToDiscountFunction().apply(session, paymentDto.getDiscount())
+                            : null)
+                    .fullPrice(mapPriceDtoToPriceFunction().apply(session, paymentDto.getFullPrice()))
+                    .totalPrice(mapPriceDtoToPriceFunction().apply(session, paymentDto.getTotalPrice()))
+                    .build();
+        };
     }
 
     private BiFunction<Session, InitDiscountDto, Discount> mapInitDiscountDtoToDiscount() {
@@ -1062,6 +1128,20 @@ public class TransformationEntityConfiguration {
         };
     }
 
+    private PaymentMethod fetchPaymentMethod(Session session, String value) {
+        return queryService.getEntity(
+                session,
+                PaymentMethod.class,
+                parameterFactory.createStringParameter(VALUE, value));
+    }
+
+    private PaymentStatus fetchPaymentStatus(Session session, String value) {
+        return queryService.getEntity(
+                session,
+                PaymentStatus.class,
+                parameterFactory.createStringParameter(VALUE, value));
+    }
+
     private Currency fetchCurrency(Session session, String value) {
         return queryService.getEntity(
                 session,
@@ -1096,6 +1176,13 @@ public class TransformationEntityConfiguration {
                 OptionGroup.class,
                 namedQuery,
                 parameterFactory.createStringParameter(VALUE, value));
+    }
+
+    private ArticularItem fetchArticularItem(Session session, String articularId) {
+        return queryService.getEntity(
+                session,
+                ArticularItem.class,
+                parameterFactory.createStringParameter(VALUE, articularId));
     }
 
 }

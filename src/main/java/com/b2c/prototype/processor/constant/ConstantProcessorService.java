@@ -2,7 +2,7 @@ package com.b2c.prototype.processor.constant;
 
 import com.b2c.prototype.modal.dto.common.NumberConstantPayloadDto;
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
-import com.b2c.prototype.modal.dto.payload.CountryDto;
+import com.b2c.prototype.modal.dto.payload.constant.CountryDto;
 import com.b2c.prototype.manager.IConstantEntityManager;
 import com.b2c.prototype.manager.address.ICountryManager;
 import com.b2c.prototype.manager.delivery.IDeliveryTypeManager;

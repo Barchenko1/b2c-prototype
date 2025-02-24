@@ -1,10 +1,8 @@
 package com.b2c.prototype.manager.payment.base;
 
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.delete.MultipleFieldsSearchDtoDelete;
-import com.b2c.prototype.modal.dto.searchfield.CreditCardSearchFieldEntityDto;
+import com.b2c.prototype.modal.dto.payload.CreditCardDto;
 import com.b2c.prototype.modal.dto.response.ResponseCreditCardDto;
-import com.b2c.prototype.modal.dto.update.CreditCardSearchFieldEntityUpdateDto;
 import com.b2c.prototype.modal.entity.order.OrderArticularItem;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
 import com.b2c.prototype.dao.payment.ICreditCardDao;
@@ -49,14 +47,14 @@ public class CreditCardManager implements ICreditCardManager {
     }
 
     @Override
-    public void saveCreditCardByUserId(CreditCardSearchFieldEntityDto creditCardSearchFieldEntityDto) {
+    public void saveCreditCardByUserId(String userId, CreditCardDto creditCardDto) {
         entityOperationDao.executeConsumer(session -> {
             UserProfile userProfile = searchService.getEntity(
                     UserProfile.class,
-                    supplierService.parameterStringSupplier(USER_ID, creditCardSearchFieldEntityDto.getSearchField()));
+                    supplierService.parameterStringSupplier(USER_ID, userId));
             CreditCard creditCard = transformationFunctionService.getEntity(
                     CreditCard.class,
-                    creditCardSearchFieldEntityDto.getNewEntity());
+                    creditCardDto);
             List<CreditCard> creditCardList = Optional.ofNullable(userProfile.getCreditCardList())
                     .orElseThrow(() -> new RuntimeException("User has no credit card list"));
             if (creditCardList.contains(creditCard)) {
@@ -68,16 +66,16 @@ public class CreditCardManager implements ICreditCardManager {
     }
 
     @Override
-    public void updateCreditCardByUserId(CreditCardSearchFieldEntityUpdateDto creditCardSearchFieldEntityUpdateDto) {
+    public void updateCreditCardByUserId(String userId, CreditCardDto creditCardDto) {
         entityOperationDao.executeConsumer(session -> {
             UserProfile userProfile = searchService.getEntity(
                     UserProfile.class,
-                    supplierService.parameterStringSupplier(USER_ID, creditCardSearchFieldEntityUpdateDto.getSearchField()));
+                    supplierService.parameterStringSupplier(USER_ID, userId));
             CreditCard newCreditCard = transformationFunctionService.getEntity(
                     CreditCard.class,
-                    creditCardSearchFieldEntityUpdateDto.getNewEntity());
+                    creditCardDto);
             CreditCard existingCreditCard = userProfile.getCreditCardList().stream()
-                    .filter(card -> card.getCardNumber().equals(creditCardSearchFieldEntityUpdateDto.getOldEntity().getCardNumber()))
+                    .filter(card -> card.getCardNumber().equals(creditCardDto.getCardNumber()))
                     .findFirst()
                     .orElseThrow();
             newCreditCard.setId(existingCreditCard.getId());
@@ -86,14 +84,14 @@ public class CreditCardManager implements ICreditCardManager {
     }
 
     @Override
-    public void saveCreditCardByOrderId(CreditCardSearchFieldEntityDto creditCardSearchFieldEntityDto) {
+    public void saveCreditCardByOrderId(String orderId, CreditCardDto creditCardDto) {
         entityOperationDao.executeConsumer(session -> {
             OrderArticularItem orderItemDataOption = searchService.getEntity(
                     OrderArticularItem.class,
-                    supplierService.parameterStringSupplier(ORDER_ID, creditCardSearchFieldEntityDto.getSearchField()));
+                    supplierService.parameterStringSupplier(ORDER_ID, orderId));
             CreditCard newCreditCard = transformationFunctionService.getEntity(
                     CreditCard.class,
-                    creditCardSearchFieldEntityDto.getNewEntity());
+                    creditCardDto);
             Payment payment = orderItemDataOption.getPayment();
             payment.setCreditCard(newCreditCard);
             session.merge(payment);
@@ -101,14 +99,14 @@ public class CreditCardManager implements ICreditCardManager {
     }
 
     @Override
-    public void updateCreditCardByOrderId(CreditCardSearchFieldEntityUpdateDto creditCardSearchFieldEntityUpdateDto) {
+    public void updateCreditCardByOrderId(String orderId, CreditCardDto creditCardDto) {
         entityOperationDao.executeConsumer(session -> {
             OrderArticularItem orderItemDataOption = searchService.getEntity(
                     OrderArticularItem.class,
-                    supplierService.parameterStringSupplier(ORDER_ID, creditCardSearchFieldEntityUpdateDto.getSearchField()));
+                    supplierService.parameterStringSupplier(ORDER_ID, orderId));
             CreditCard newCreditCard = transformationFunctionService.getEntity(
                     CreditCard.class,
-                    creditCardSearchFieldEntityUpdateDto.getNewEntity());
+                    creditCardDto);
             Payment payment = orderItemDataOption.getPayment();
             CreditCard existingCreditCard = payment.getCreditCard();
             if (!existingCreditCard.getCardNumber().equals(newCreditCard.getCardNumber())) {
@@ -149,18 +147,18 @@ public class CreditCardManager implements ICreditCardManager {
     }
 
     @Override
-    public List<ResponseCreditCardDto> getCardListByUserId(OneFieldEntityDto oneFieldEntityDto) {
+    public List<ResponseCreditCardDto> getCardListByUserId(String userId) {
         return entityOperationDao.getSubEntityGraphDtoList(
                 "",
-                parameterFactory.createStringParameter(USER_ID, oneFieldEntityDto.getValue()),
+                parameterFactory.createStringParameter(USER_ID, userId),
                 transformationFunctionService.getTransformationFunction(CreditCard.class, ResponseCreditCardDto.class));
     }
 
     @Override
-    public ResponseCreditCardDto getCardByOrderId(OneFieldEntityDto oneFieldEntityDto) {
+    public ResponseCreditCardDto getCardByOrderId(String orderId) {
         return entityOperationDao.getEntityGraphDto(
                 "",
-                parameterFactory.createStringParameter(ORDER_ID, oneFieldEntityDto.getValue()),
+                parameterFactory.createStringParameter(ORDER_ID, orderId),
                 transformationFunctionService.getTransformationFunction(CreditCard.class, ResponseCreditCardDto.class));
     }
 

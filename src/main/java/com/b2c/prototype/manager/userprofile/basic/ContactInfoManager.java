@@ -1,9 +1,7 @@
 package com.b2c.prototype.manager.userprofile.basic;
 
 import com.b2c.prototype.dao.user.IContactInfoDao;
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.payload.ContactInfoDto;
-import com.b2c.prototype.modal.dto.searchfield.ContactInfoSearchFieldEntityDto;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.UserProfile;
 import com.b2c.prototype.service.common.EntityOperationManager;
@@ -37,13 +35,13 @@ public class ContactInfoManager implements IContactInfoManager {
     }
 
     @Override
-    public void saveUpdateContactInfoByUserId(ContactInfoSearchFieldEntityDto contactInfoSearchFieldEntityDto) {
+    public void saveUpdateContactInfoByUserId(String userId, ContactInfoDto contactInfoDto) {
         entityOperationDao.executeConsumer(session -> {
             UserProfile userProfile = searchService.getEntity(
                     UserProfile.class,
-                    supplierService.parameterStringSupplier(USER_ID, contactInfoSearchFieldEntityDto.getSearchField()));
+                    supplierService.parameterStringSupplier(USER_ID, userId));
             ContactInfo newContactInfo = transformationFunctionService
-                    .getEntity(ContactInfo.class, contactInfoSearchFieldEntityDto.getNewEntity());
+                    .getEntity(ContactInfo.class, contactInfoDto);
             ContactInfo contactInfo = userProfile.getContactInfo();
             if (contactInfo != null) {
                 newContactInfo.setId(contactInfo.getId());
@@ -54,20 +52,20 @@ public class ContactInfoManager implements IContactInfoManager {
     }
 
     @Override
-    public void deleteContactInfoByUserId(OneFieldEntityDto oneFieldEntityDto) {
+    public void deleteContactInfoByUserId(String userId) {
         entityOperationDao.deleteEntity(
                 supplierService.entityFieldSupplier(
                         UserProfile.class,
-                        supplierService.parameterStringSupplier(USER_ID, oneFieldEntityDto.getValue()),
+                        supplierService.parameterStringSupplier(USER_ID, userId),
                         transformationFunctionService.getTransformationFunction(UserProfile.class, ContactInfo.class))
         );
     }
 
     @Override
-    public ContactInfoDto getContactInfoByUserId(OneFieldEntityDto oneFieldEntityDto) {
+    public ContactInfoDto getContactInfoByUserId(String userId) {
         return searchService.getEntityDto(
                 UserProfile.class,
-                supplierService.parameterStringSupplier(USER_ID, oneFieldEntityDto.getValue()),
+                supplierService.parameterStringSupplier(USER_ID, userId),
                 transformationFunctionService.getTransformationFunction(UserProfile.class, ContactInfoDto.class));
     }
 
