@@ -1,6 +1,5 @@
 package com.b2c.prototype.manager.userprofile.basic;
 
-import com.b2c.prototype.manager.userprofile.basic.UserProfileManager;
 import com.b2c.prototype.modal.dto.payload.AddressDto;
 import com.b2c.prototype.modal.dto.payload.ContactInfoDto;
 import com.b2c.prototype.modal.dto.payload.ContactPhoneDto;
@@ -13,7 +12,7 @@ import com.b2c.prototype.modal.entity.payment.CreditCard;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
-import com.b2c.prototype.modal.entity.user.UserProfile;
+import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.dao.user.IUserProfileDao;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.supplier.ISupplierService;
@@ -44,7 +43,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class UserProfileManagerTest {
+class UserDetailsManagerTest {
 
     @Mock
     private IUserProfileDao userProfileDao;
@@ -53,7 +52,7 @@ class UserProfileManagerTest {
     @Mock
     private ISupplierService supplierService;
     @InjectMocks
-    private UserProfileManager userProfileManager;
+    private UserDetailsManager userProfileManager;
 
     @BeforeEach
     void setUp() {
@@ -67,9 +66,9 @@ class UserProfileManagerTest {
                 .username("username")
                 .password("password")
                 .build();
-        UserProfile userProfile = new UserProfile();
+        UserDetails userProfile = new UserDetails();
 
-        when(transformationFunctionService.getEntity(UserProfile.class, registrationUserProfileDto))
+        when(transformationFunctionService.getEntity(UserDetails.class, registrationUserProfileDto))
                 .thenReturn(userProfile);
 
         userProfileManager.createNewUser(registrationUserProfileDto);
@@ -81,7 +80,7 @@ class UserProfileManagerTest {
     void updateUserStatusByUserId_shouldUpdateStatus() {
         String userId = "test-user-id";
         boolean isActive = true;
-        UserProfile userProfile = new UserProfile();
+        UserDetails userProfile = new UserDetails();
         userProfile.setActive(false);
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
@@ -119,13 +118,13 @@ class UserProfileManagerTest {
     void getUserProfileByUserId_shouldReturnUserDetailsDto() {
         String userId = "test-user-id";
         UserProfileDto userProfileDto = getUserProfileDto();
-        UserProfile userProfile = getUserProfile();
+        UserDetails userProfile = getUserProfile();
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
         when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(parameterSupplier);
-        when(transformationFunctionService.getTransformationFunction(UserProfile.class, UserProfileDto.class))
+        when(transformationFunctionService.getTransformationFunction(UserDetails.class, UserProfileDto.class))
                 .thenReturn(transformationFunction);
         when(userProfileDao.getEntityGraph(anyString(), eq(parameter)))
                 .thenReturn(userProfile);
@@ -138,9 +137,9 @@ class UserProfileManagerTest {
     @Test
     void getUserProfiles_shouldReturnListOfUserDetailsDto() {
         UserProfileDto userProfileDto = getUserProfileDto();
-        UserProfile userProfile = getUserProfile();
+        UserDetails userProfile = getUserProfile();
 
-        when(transformationFunctionService.getTransformationFunction(UserProfile.class, UserProfileDto.class))
+        when(transformationFunctionService.getTransformationFunction(UserDetails.class, UserProfileDto.class))
                 .thenReturn(transformationFunction);
         when(userProfileDao.getEntityList())
                 .thenReturn(Collections.singletonList(userProfile));
@@ -183,7 +182,7 @@ class UserProfileManagerTest {
                 .build();
     }
 
-    private UserProfile getUserProfile() {
+    private UserDetails getUserProfile() {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(1L)
                 .value("+11")
@@ -225,19 +224,18 @@ class UserProfileManagerTest {
                 .isActive(CardUtil.isCardActive(6, 28))
                 .cvv("818")
                 .build();
-        return UserProfile.builder()
+        return UserDetails.builder()
                 .id(1L)
                 .username("username")
-                .email("email@email.com")
                 .dateOfCreate(100)
                 .isActive(true)
                 .contactInfo(contactInfo)
-                .address(address)
+                .addresses(List.of(address))
                 .creditCardList(List.of(creditCard))
                 .build();
     }
 
-    Function<UserProfile, UserProfileDto> transformationFunction =userProfile -> {
+    Function<UserDetails, UserProfileDto> transformationFunction = userProfile -> {
         ContactInfo contactInfo = userProfile.getContactInfo();
         ContactInfoDto contactInfoDto = ContactInfoDto.builder()
                 .contactPhone(ContactPhoneDto.builder()
@@ -247,7 +245,7 @@ class UserProfileManagerTest {
                 .firstName(userProfile.getContactInfo().getFirstName())
                 .lastName(userProfile.getContactInfo().getLastName())
                 .build();
-        Address address = userProfile.getAddress();
+        Address address = userProfile.getAddresses().get(0);
         AddressDto addressDto = AddressDto.builder()
                 .apartmentNumber(address.getApartmentNumber())
                 .buildingNumber(address.getBuildingNumber())
@@ -267,7 +265,6 @@ class UserProfileManagerTest {
                 .ownerName(creditCard.getOwnerName())
                 .build();
         return UserProfileDto.builder()
-                .email(userProfile.getEmail())
                 .contactInfo(contactInfoDto)
                 .creditCards(List.of(creditCardDto))
                 .addressDto(addressDto)

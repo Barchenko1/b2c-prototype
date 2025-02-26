@@ -100,7 +100,7 @@ class BasicPaymentDaoTest extends AbstractCustomEntityDaoTest {
                 .discount(discount)
                 .paymentMethod(paymentMethod)
                 .creditCard(creditCard)
-                .fullPrice(price)
+                .commissionPrice(price)
                 .totalPrice(price)
                 .build();
     }
@@ -146,7 +146,7 @@ class BasicPaymentDaoTest extends AbstractCustomEntityDaoTest {
                 .discount(discount)
                 .paymentMethod(paymentMethod)
                 .creditCard(creditCard)
-                .fullPrice(price)
+                .commissionPrice(price)
                 .totalPrice(price)
                 .build();
     }
@@ -192,7 +192,7 @@ class BasicPaymentDaoTest extends AbstractCustomEntityDaoTest {
                 .discount(discount)
                 .paymentMethod(paymentMethod)
                 .creditCard(creditCard)
-                .fullPrice(price)
+                .commissionPrice(price)
                 .totalPrice(price)
                 .build();
     }

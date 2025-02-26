@@ -2,13 +2,13 @@ package com.b2c.prototype.manager.userprofile.basic;
 
 import com.b2c.prototype.modal.dto.payload.RegistrationUserProfileDto;
 import com.b2c.prototype.modal.dto.payload.UserProfileDto;
-import com.b2c.prototype.modal.entity.user.UserProfile;
+import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.dao.user.IUserProfileDao;
 
 import com.b2c.prototype.service.common.EntityOperationManager;
 import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.manager.userprofile.IUserProfileManager;
+import com.b2c.prototype.manager.userprofile.IUserDetailsManager;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.factory.IParameterFactory;
 
@@ -16,14 +16,14 @@ import java.util.List;
 
 import static com.b2c.prototype.util.Constant.USER_ID;
 
-public class UserProfileManager implements IUserProfileManager {
+public class UserDetailsManager implements IUserDetailsManager {
 
     private final IEntityOperationManager entityOperationDao;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
     private final IParameterFactory parameterFactory;
 
-    public UserProfileManager(IUserProfileDao userProfileDao,
+    public UserDetailsManager(IUserProfileDao userProfileDao,
                               ITransformationFunctionService transformationFunctionService,
                               ISupplierService supplierService,
                               IParameterFactory parameterFactory) {
@@ -37,15 +37,20 @@ public class UserProfileManager implements IUserProfileManager {
     public void createNewUser(RegistrationUserProfileDto registrationUserProfileDto) {
         // to do need call to auth service
         entityOperationDao.updateEntity(
-                transformationFunctionService.getEntity(UserProfile.class, registrationUserProfileDto));
+                transformationFunctionService.getEntity(UserDetails.class, registrationUserProfileDto));
     }
 
     @Override
-    public void updateUserStatusByUserId(String userId, boolean isActive) {
+    public void updateUserDetailsByUserId(String userId, UserProfileDto userProfileDto) {
+
+    }
+
+    @Override
+    public void updateUserStatusByUserId(String userId, boolean status) {
         entityOperationDao.executeConsumer(session -> {
-            UserProfile existingUser = entityOperationDao.getEntity(
+            UserDetails existingUser = entityOperationDao.getEntity(
                     parameterFactory.createStringParameter(USER_ID, userId));
-            existingUser.setActive(isActive);
+            existingUser.setActive(status);
             session.merge(existingUser);
         });
     }
@@ -61,13 +66,13 @@ public class UserProfileManager implements IUserProfileManager {
         return entityOperationDao.getEntityGraphDto(
                 "",
                 parameterFactory.createStringParameter(USER_ID, userId),
-                transformationFunctionService.getTransformationFunction(UserProfile.class, UserProfileDto.class));
+                transformationFunctionService.getTransformationFunction(UserDetails.class, UserProfileDto.class));
     }
 
     @Override
     public List<UserProfileDto> getUserProfiles() {
         return entityOperationDao.getEntityGraphDtoList("",
-                transformationFunctionService.getTransformationFunction(UserProfile.class, UserProfileDto.class));
+                transformationFunctionService.getTransformationFunction(UserDetails.class, UserProfileDto.class));
     }
 
 }

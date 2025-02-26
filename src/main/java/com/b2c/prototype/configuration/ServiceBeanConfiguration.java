@@ -1,8 +1,11 @@
 package com.b2c.prototype.configuration;
 
+import com.b2c.prototype.dao.address.IAddressDao;
 import com.b2c.prototype.dao.address.ICountryDao;
+import com.b2c.prototype.dao.delivery.IDeliveryDao;
 import com.b2c.prototype.dao.delivery.IDeliveryTypeDao;
 import com.b2c.prototype.dao.item.IBrandDao;
+import com.b2c.prototype.dao.item.ICategoryDao;
 import com.b2c.prototype.dao.item.IDiscountDao;
 import com.b2c.prototype.dao.item.IItemDao;
 import com.b2c.prototype.dao.item.IItemDataDao;
@@ -15,44 +18,40 @@ import com.b2c.prototype.dao.option.IOptionGroupDao;
 import com.b2c.prototype.dao.option.IOptionItemDao;
 import com.b2c.prototype.dao.order.IOrderItemDataDao;
 import com.b2c.prototype.dao.order.IOrderStatusDao;
+import com.b2c.prototype.dao.payment.ICreditCardDao;
+import com.b2c.prototype.dao.payment.IPaymentDao;
 import com.b2c.prototype.dao.payment.IPaymentMethodDao;
+import com.b2c.prototype.dao.post.IPostDao;
 import com.b2c.prototype.dao.price.ICurrencyDao;
 import com.b2c.prototype.dao.rating.IRatingDao;
 import com.b2c.prototype.dao.store.ICountTypeDao;
 import com.b2c.prototype.dao.user.IContactInfoDao;
-import com.b2c.prototype.dao.address.IAddressDao;
-import com.b2c.prototype.dao.delivery.IDeliveryDao;
-import com.b2c.prototype.dao.payment.ICreditCardDao;
-import com.b2c.prototype.dao.payment.IPaymentDao;
-import com.b2c.prototype.dao.item.ICategoryDao;
 import com.b2c.prototype.dao.user.ICountryPhoneCodeDao;
-import com.b2c.prototype.manager.option.IOptionItemManager;
-import com.b2c.prototype.manager.option.base.OptionItemManager;
-import com.b2c.prototype.service.parallel.AsyncProcessor;
-import com.b2c.prototype.service.parallel.IAsyncProcessor;
-import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.function.TransformationFunctionService;
-import com.b2c.prototype.manager.item.IItemDataManager;
-import com.b2c.prototype.manager.item.IArticularItemManager;
-import com.b2c.prototype.manager.item.base.ItemDataManager;
-import com.b2c.prototype.manager.item.base.ArticularItemManager;
-import com.b2c.prototype.processor.constant.ConstantProcessorService;
-import com.b2c.prototype.processor.constant.IConstantProcessorService;
-import com.b2c.prototype.manager.address.base.AddressManager;
-import com.b2c.prototype.manager.address.base.CountryManager;
+import com.b2c.prototype.dao.user.IUserProfileDao;
+import com.b2c.prototype.gateway.IRestClient;
+import com.b2c.prototype.gateway.RestClient;
 import com.b2c.prototype.manager.address.IAddressManager;
 import com.b2c.prototype.manager.address.ICountryManager;
-import com.b2c.prototype.service.help.calculate.IPriceCalculationService;
-import com.b2c.prototype.service.help.calculate.PriceCalculationService;
+import com.b2c.prototype.manager.address.base.AddressManager;
+import com.b2c.prototype.manager.address.base.CountryManager;
+import com.b2c.prototype.manager.delivery.IDeliveryManager;
 import com.b2c.prototype.manager.delivery.IDeliveryTypeManager;
+import com.b2c.prototype.manager.delivery.base.DeliveryManager;
 import com.b2c.prototype.manager.delivery.base.DeliveryTypeManager;
+import com.b2c.prototype.manager.item.IArticularItemManager;
 import com.b2c.prototype.manager.item.IBrandManager;
+import com.b2c.prototype.manager.item.ICategoryManager;
 import com.b2c.prototype.manager.item.IDiscountManager;
+import com.b2c.prototype.manager.item.IItemDataManager;
+import com.b2c.prototype.manager.item.IItemManager;
 import com.b2c.prototype.manager.item.IItemStatusManager;
 import com.b2c.prototype.manager.item.IItemTypeManager;
+import com.b2c.prototype.manager.item.base.ArticularItemManager;
 import com.b2c.prototype.manager.item.base.BrandManager;
 import com.b2c.prototype.manager.item.base.CategoryManager;
 import com.b2c.prototype.manager.item.base.DiscountManager;
+import com.b2c.prototype.manager.item.base.ItemDataManager;
+import com.b2c.prototype.manager.item.base.ItemManager;
 import com.b2c.prototype.manager.item.base.ItemStatusManager;
 import com.b2c.prototype.manager.item.base.ItemTypeManager;
 import com.b2c.prototype.manager.message.IMessageStatusManager;
@@ -60,56 +59,59 @@ import com.b2c.prototype.manager.message.IMessageTypeManager;
 import com.b2c.prototype.manager.message.base.MessageStatusManager;
 import com.b2c.prototype.manager.message.base.MessageTypeManager;
 import com.b2c.prototype.manager.option.IOptionGroupManager;
+import com.b2c.prototype.manager.option.IOptionItemManager;
 import com.b2c.prototype.manager.option.base.OptionGroupManager;
+import com.b2c.prototype.manager.option.base.OptionItemManager;
 import com.b2c.prototype.manager.order.IOrderArticularItemQuantityManager;
 import com.b2c.prototype.manager.order.IOrderStatusManager;
 import com.b2c.prototype.manager.order.base.OrderArticularItemQuantityManager;
 import com.b2c.prototype.manager.order.base.OrderStatusManager;
+import com.b2c.prototype.manager.payment.ICreditCardManager;
+import com.b2c.prototype.manager.payment.IPaymentManager;
 import com.b2c.prototype.manager.payment.IPaymentMethodManager;
+import com.b2c.prototype.manager.payment.base.CreditCardManager;
+import com.b2c.prototype.manager.payment.base.PaymentManager;
 import com.b2c.prototype.manager.payment.base.PaymentMethodManager;
+import com.b2c.prototype.manager.post.IPostManager;
 import com.b2c.prototype.manager.post.base.PostManager;
-import com.b2c.prototype.manager.price.base.CurrencyManager;
 import com.b2c.prototype.manager.price.ICurrencyManager;
+import com.b2c.prototype.manager.price.base.CurrencyManager;
+import com.b2c.prototype.manager.rating.IRatingManager;
+import com.b2c.prototype.manager.rating.base.RatingManager;
+import com.b2c.prototype.manager.store.ICountTypeManager;
+import com.b2c.prototype.manager.store.base.CountTypeManager;
+import com.b2c.prototype.manager.userprofile.IContactInfoManager;
+import com.b2c.prototype.manager.userprofile.ICountryPhoneCodeManager;
+import com.b2c.prototype.manager.userprofile.IUserDetailsManager;
+import com.b2c.prototype.manager.userprofile.basic.ContactInfoManager;
+import com.b2c.prototype.manager.userprofile.basic.CountryPhoneCodeManager;
+import com.b2c.prototype.manager.userprofile.basic.UserDetailsManager;
+import com.b2c.prototype.processor.constant.ConstantProcessorService;
+import com.b2c.prototype.processor.constant.IConstantProcessorService;
 import com.b2c.prototype.processor.discount.DiscountProcess;
 import com.b2c.prototype.processor.discount.IDiscountProcess;
+import com.b2c.prototype.processor.item.ArticularItemProcessor;
 import com.b2c.prototype.processor.item.IArticularItemProcessor;
 import com.b2c.prototype.processor.item.IItemDataProcessor;
+import com.b2c.prototype.processor.item.ItemDataProcessor;
 import com.b2c.prototype.processor.option.IOptionItemProcessor;
 import com.b2c.prototype.processor.option.OptionItemProcessor;
 import com.b2c.prototype.processor.order.IOrderProcessor;
-import com.b2c.prototype.processor.item.ArticularItemProcessor;
-import com.b2c.prototype.processor.item.ItemDataProcessor;
 import com.b2c.prototype.processor.order.OrderProcessor;
+import com.b2c.prototype.processor.user.IUserDetailsProcess;
+import com.b2c.prototype.processor.user.UserDetailsProcess;
+import com.b2c.prototype.service.function.ITransformationFunctionService;
+import com.b2c.prototype.service.function.TransformationFunctionService;
+import com.b2c.prototype.service.help.calculate.IPriceCalculationService;
+import com.b2c.prototype.service.help.calculate.PriceCalculationService;
+import com.b2c.prototype.service.parallel.AsyncProcessor;
+import com.b2c.prototype.service.parallel.IAsyncProcessor;
 import com.b2c.prototype.service.query.ISearchService;
-import com.b2c.prototype.manager.rating.IRatingManager;
-import com.b2c.prototype.manager.rating.base.RatingManager;
-import com.b2c.prototype.manager.store.base.CountTypeManager;
-import com.b2c.prototype.manager.store.ICountTypeManager;
-import com.b2c.prototype.manager.userprofile.IContactInfoManager;
-import com.b2c.prototype.manager.userprofile.ICountryPhoneCodeManager;
-import com.b2c.prototype.manager.userprofile.IUserProfileManager;
-import com.b2c.prototype.manager.userprofile.basic.CountryPhoneCodeManager;
-import com.b2c.prototype.manager.userprofile.basic.UserProfileManager;
-import com.b2c.prototype.manager.payment.base.CreditCardManager;
-import com.b2c.prototype.manager.payment.ICreditCardManager;
-import com.b2c.prototype.manager.item.ICategoryManager;
-import com.b2c.prototype.manager.delivery.base.DeliveryManager;
-import com.b2c.prototype.manager.delivery.IDeliveryManager;
-import com.b2c.prototype.manager.payment.IPaymentManager;
-import com.b2c.prototype.manager.payment.base.PaymentManager;
-import com.b2c.prototype.manager.post.IPostManager;
-import com.b2c.prototype.manager.item.IItemManager;
-import com.b2c.prototype.manager.item.base.ItemManager;
-import com.b2c.prototype.dao.post.IPostDao;
-import com.b2c.prototype.dao.user.IUserProfileDao;
-import com.b2c.prototype.manager.userprofile.basic.ContactInfoManager;
-import com.b2c.prototype.gateway.IRestClient;
-import com.b2c.prototype.gateway.RestClient;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import com.b2c.prototype.service.supplier.SupplierService;
-import com.tm.core.process.dao.identifier.IQueryService;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.finder.factory.ParameterFactory;
+import com.tm.core.process.dao.identifier.IQueryService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -240,11 +242,11 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public IUserProfileManager userProfileManager(IUserProfileDao userProfileDao,
+    public IUserDetailsManager userDetailsManager(IUserProfileDao userProfileDao,
                                                   ITransformationFunctionService transformationFunctionService,
                                                   ISupplierService supplierService,
                                                   IParameterFactory parameterFactory) {
-        return new UserProfileManager(userProfileDao, transformationFunctionService, supplierService, parameterFactory);
+        return new UserDetailsManager(userProfileDao, transformationFunctionService, supplierService, parameterFactory);
     }
 
     @Bean
@@ -343,13 +345,19 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public ICategoryManager categoryManager(ICategoryDao categoryDao) {
-        return new CategoryManager(categoryDao);
+    public ICategoryManager categoryManager(ICategoryDao categoryDao,
+                                            ITransformationFunctionService transformationFunctionService,
+                                            ISupplierService supplierService,
+                                            IParameterFactory parameterFactory) {
+        return new CategoryManager(categoryDao, transformationFunctionService, supplierService, parameterFactory);
     }
 
     @Bean
-    public IPostManager postManager(IPostDao postDao) {
-        return new PostManager(postDao);
+    public IPostManager postManager(IPostDao postDao,
+                                    ITransformationFunctionService transformationFunctionService,
+                                    ISupplierService supplierService,
+                                    IParameterFactory parameterFactory) {
+        return new PostManager(postDao, transformationFunctionService, supplierService, parameterFactory);
     }
 
     @Bean
@@ -413,5 +421,10 @@ public class ServiceBeanConfiguration {
     @Bean
     public IOrderProcessor orderProcessor(IOrderArticularItemQuantityManager orderItemDataOptionManager) {
         return new OrderProcessor(orderItemDataOptionManager);
+    }
+
+    @Bean
+    public IUserDetailsProcess userDetailsProcessor(IUserDetailsManager userDetailsManager) {
+        return new UserDetailsProcess(userDetailsManager);
     }
 }

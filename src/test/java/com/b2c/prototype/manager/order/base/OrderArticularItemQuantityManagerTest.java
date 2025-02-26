@@ -37,7 +37,7 @@ import com.b2c.prototype.modal.entity.order.Beneficiary;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
-import com.b2c.prototype.modal.entity.user.UserProfile;
+import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import com.b2c.prototype.util.CardUtil;
@@ -291,7 +291,7 @@ class OrderArticularItemQuantityManagerTest {
                 .discount(discount)
                 .paymentMethod(paymentMethod)
                 .creditCard(creditCard)
-                .fullPrice(price)
+                .commissionPrice(price)
                 .totalPrice(price)
                 .build();
     }
@@ -338,7 +338,7 @@ class OrderArticularItemQuantityManagerTest {
                 .build();
     }
 
-    private UserProfile prepareTestUserProfile() {
+    private UserDetails prepareTestUserProfile() {
         CreditCard creditCard = prepareCard();
         Post parent = Post.builder()
                 .id(1L)
@@ -348,14 +348,13 @@ class OrderArticularItemQuantityManagerTest {
                 .dateOfCreate(100000)
                 .build();
 
-        return UserProfile.builder()
+        return UserDetails.builder()
                 .id(1L)
                 .username("username")
-                .email("email")
                 .dateOfCreate(100)
                 .isActive(true)
                 .contactInfo(prepareContactInfo())
-                .address(createAddress())
+                .addresses(List.of(createAddress()))
                 .creditCardList(List.of(creditCard))
                 .build();
     }

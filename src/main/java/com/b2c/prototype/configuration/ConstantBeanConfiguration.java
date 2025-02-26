@@ -65,7 +65,7 @@ public class ConstantBeanConfiguration {
 
     @Bean
     public Map<String, Category> categoryMap(ICategoryDao categoryDao) {
-        List<Category> categoryList = categoryDao.getTransitiveSelfEntityList();
+        List<Category> categoryList = categoryDao.getEntityList();
         return categoryList.stream()
                 .collect(Collectors.toMap(Category::getValue, category -> category, (existing, replacement) -> existing));
     }

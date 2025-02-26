@@ -5,7 +5,7 @@ import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
 import com.b2c.prototype.modal.entity.order.OrderStatus;
 import com.b2c.prototype.modal.entity.payment.Payment;
 import com.b2c.prototype.modal.entity.order.Beneficiary;
-import com.b2c.prototype.modal.entity.user.UserProfile;
+import com.b2c.prototype.modal.entity.user.UserDetails;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.FetchType;
@@ -16,6 +16,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,8 +26,6 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.b2c.prototype.util.Util.getUUID;
 
 @MappedSuperclass
 @Data
@@ -43,13 +42,13 @@ public class AbstractOrderArticularItem {
     private long dateOfCreate;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_profile_id")
-    private UserProfile userProfile;
+    private UserDetails userProfile;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "order_articular_item_id")
     @Builder.Default
     @EqualsAndHashCode.Exclude
     private List<ArticularItemQuantity> articularItemQuantityList = new ArrayList<>();
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -60,7 +59,7 @@ public class AbstractOrderArticularItem {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "order_status_id")
     private OrderStatus orderStatus;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "payment_id")
     private Payment payment;
     private String note;

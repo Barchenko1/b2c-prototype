@@ -7,7 +7,6 @@ import com.b2c.prototype.modal.dto.response.ResponseArticularItemDto;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
-import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.service.common.EntityOperationManager;
 import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
@@ -15,10 +14,8 @@ import com.b2c.prototype.manager.item.IArticularItemManager;
 import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.factory.IParameterFactory;
-import org.hibernate.Session;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 import static com.b2c.prototype.util.Constant.ARTICULAR_ITEM_FULL;

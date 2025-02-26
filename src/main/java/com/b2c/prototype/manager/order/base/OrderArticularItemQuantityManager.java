@@ -36,7 +36,7 @@ public class OrderArticularItemQuantityManager implements IOrderArticularItemQua
     public void saveOrderArticularItemQuantity(OrderArticularItemQuantityDto orderArticularItemQuantityDto) {
         entityOperationDao.executeConsumer(session -> {
             OrderArticularItem orderItemDataOption =
-                    transformationFunctionService.getEntity(OrderArticularItem.class, orderArticularItemQuantityDto);
+                    transformationFunctionService.getEntity(session, OrderArticularItem.class, orderArticularItemQuantityDto);
             session.merge(orderItemDataOption);
         });
     }
@@ -70,7 +70,8 @@ public class OrderArticularItemQuantityManager implements IOrderArticularItemQua
 
     @Override
     public List<ResponseOrderDetails> getResponseOrderDetailsList() {
-        return entityOperationDao.getEntityGraphDtoList("",
+        return entityOperationDao.getEntityGraphDtoList(
+                "",
                 transformationFunctionService.getTransformationFunction(OrderArticularItem.class, ResponseOrderDetails.class));
     }
 }

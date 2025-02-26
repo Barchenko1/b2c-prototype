@@ -1,11 +1,9 @@
 package com.b2c.prototype.manager.message.base;
 
 import com.b2c.prototype.dao.message.IMessageDao;
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
-import com.b2c.prototype.modal.dto.delete.MultipleFieldsSearchDtoDelete;
+import com.b2c.prototype.modal.dto.payload.MessageDto;
 import com.b2c.prototype.modal.dto.response.ResponseMessageOverviewDto;
 import com.b2c.prototype.modal.dto.response.ResponseMessagePayloadDto;
-import com.b2c.prototype.modal.dto.update.MessageDtoUpdate;
 import com.b2c.prototype.modal.entity.message.Message;
 import com.b2c.prototype.modal.entity.message.MessageBox;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
@@ -47,15 +45,20 @@ public class MessageManager implements IMessageManager {
     }
 
     @Override
-    public void saveUpdateMessage(MessageDtoUpdate messageDtoUpdate) {
+    public void saveMessage(String userId, MessageDto messageDto) {
+
+    }
+
+    @Override
+    public void updateMessage(String userId, String messageId, MessageDto messageDto) {
         entityOperationDao.executeConsumer(session -> {
             NativeQuery<MessageBox> query = session.createNativeQuery(SELECT_MESSAGEBOX_BY_USER_ID, MessageBox.class);
             MessageBox messageBox = searchService.getQueryEntity(
                     query,
-                    supplierService.parameterStringSupplier(USER_ID, messageDtoUpdate.getMainSearchField()));
-            Message existingMessage = getExistingMessage(messageBox, messageDtoUpdate.getInnerSearchField());
+                    supplierService.parameterStringSupplier(USER_ID, userId));
+            Message existingMessage = getExistingMessage(messageBox, messageId);
             Message newMessage = transformationFunctionService
-                    .getEntity(Message.class, messageDtoUpdate.getNewEntity());
+                    .getEntity(Message.class, messageDto);
             if (existingMessage != null) {
                 newMessage.setId(existingMessage.getId());
             }
@@ -65,25 +68,25 @@ public class MessageManager implements IMessageManager {
     }
 
     @Override
-    public void deleteMessage(MultipleFieldsSearchDtoDelete multipleFieldsSearchDtoDelete) {
+    public void deleteMessage(String userId, String messageId) {
         entityOperationDao.executeConsumer(session -> {
             NativeQuery<MessageBox> query = session.createNativeQuery(SELECT_MESSAGEBOX_BY_USER_ID, MessageBox.class);
             MessageBox messageBox = searchService.getQueryEntity(
                     query,
-                    supplierService.parameterStringSupplier(USER_ID, multipleFieldsSearchDtoDelete.getMainSearchField()));
-            Message existingMessage = getExistingMessage(messageBox, multipleFieldsSearchDtoDelete.getInnerSearchField());
+                    supplierService.parameterStringSupplier(USER_ID, userId));
+            Message existingMessage = getExistingMessage(messageBox, messageId);
             messageBox.removeMessage(existingMessage);
             session.merge(messageBox);
         });
     }
 
     @Override
-    public void cleanUpMessagesByUserId(OneFieldEntityDto oneFieldEntityDto) {
+    public void cleanUpMessagesByUserId(String userId) {
         entityOperationDao.executeConsumer(session -> {
             NativeQuery<MessageBox> query = session.createNativeQuery(SELECT_MESSAGEBOX_BY_USER_ID, MessageBox.class);
             MessageBox messageBox = searchService.getQueryEntity(
                     query,
-                    supplierService.parameterStringSupplier(USER_ID, oneFieldEntityDto.getValue()));
+                    supplierService.parameterStringSupplier(USER_ID, userId));
             messageBox.getMessages().forEach(message -> {
                 messageBox.removeMessage(message);
                 session.remove(message);
@@ -93,26 +96,26 @@ public class MessageManager implements IMessageManager {
     }
 
     @Override
-    public List<ResponseMessageOverviewDto> getMessageOverviewBySenderEmail(OneFieldEntityDto oneFieldEntityDto) {
+    public List<ResponseMessageOverviewDto> getMessageOverviewBySenderEmail(String senderEmail) {
         return entityOperationDao.getSubEntityGraphDtoList(
                 "",
-                parameterFactory.createStringParameter("sender", oneFieldEntityDto.getValue()),
+                parameterFactory.createStringParameter("sender", senderEmail),
                 transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class));
     }
 
     @Override
-    public List<ResponseMessageOverviewDto> getMessageOverviewByReceiverEmail(OneFieldEntityDto oneFieldEntityDto) {
+    public List<ResponseMessageOverviewDto> getMessageOverviewByReceiverEmail(String receiverEmail) {
         return entityOperationDao.getSubEntityGraphDtoList(
                 "",
-                parameterFactory.createStringParameter("receiver", oneFieldEntityDto.getValue()),
+                parameterFactory.createStringParameter("receiver", receiverEmail),
                 transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class));
     }
 
     @Override
-    public ResponseMessagePayloadDto getMessagePayloadDto(OneFieldEntityDto oneFieldEntityDto) {
+    public ResponseMessagePayloadDto getMessagePayloadDto(String userId, String messageId) {
         return entityOperationDao.getEntityGraphDto(
                 "",
-                parameterFactory.createStringParameter("messageUniqNumber", oneFieldEntityDto.getValue()),
+                parameterFactory.createStringParameter("messageUniqNumber", messageId),
                 transformationFunctionService.getTransformationFunction(Message.class, ResponseMessagePayloadDto.class)
         );
     }

@@ -35,14 +35,18 @@
         <mapping class="com.b2c.prototype.modal.entity.address.Country" />
 
         <mapping class="com.b2c.prototype.modal.entity.delivery.TimeDurationOption" />
+        <mapping class="com.b2c.prototype.modal.entity.delivery.ZoneOption" />
         <mapping class="com.b2c.prototype.modal.entity.delivery.DeliveryType" />
         <mapping class="com.b2c.prototype.modal.entity.delivery.Delivery" />
 
         <mapping class="com.b2c.prototype.modal.entity.price.Currency" />
         <mapping class="com.b2c.prototype.modal.entity.price.Price" />
         <mapping class="com.b2c.prototype.modal.entity.payment.CreditCard" />
+        <mapping class="com.b2c.prototype.modal.entity.user.UserCreditCard" />
 
         <mapping class="com.b2c.prototype.modal.entity.item.Discount" />
+        <mapping class="com.b2c.prototype.modal.entity.payment.SellerCommission" />
+        <mapping class="com.b2c.prototype.modal.entity.payment.BuyerCommission" />
         <mapping class="com.b2c.prototype.modal.entity.payment.Payment" />
 
         <mapping class="com.b2c.prototype.modal.entity.item.Brand" />
@@ -65,7 +69,8 @@
         <mapping class="com.b2c.prototype.modal.entity.message.Message" />
         <mapping class="com.b2c.prototype.modal.entity.message.MessageBox" />
 
-        <mapping class="com.b2c.prototype.modal.entity.user.UserProfile" />
+        <mapping class="com.b2c.prototype.modal.entity.user.Device" />
+        <mapping class="com.b2c.prototype.modal.entity.user.UserDetails" />
         <mapping class="com.b2c.prototype.modal.entity.order.Beneficiary" />
         <mapping class="com.b2c.prototype.modal.entity.user.ContactInfo" />
         <mapping class="com.b2c.prototype.modal.entity.user.CountryPhoneCode" />

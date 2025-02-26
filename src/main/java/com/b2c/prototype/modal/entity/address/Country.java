@@ -2,6 +2,8 @@ package com.b2c.prototype.modal.entity.address;
 
 import com.b2c.prototype.modal.base.AbstractConstantEntity;
 import jakarta.persistence.Entity;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +18,12 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@NamedQueries({
+        @NamedQuery(
+                name = "Country.findByValue",
+                query = "SELECT c FROM Country c WHERE c.value = : value"
+        )
+})
 public class Country extends AbstractConstantEntity {
     private String flagImagePath;
 }

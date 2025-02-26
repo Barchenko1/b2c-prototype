@@ -1,6 +1,6 @@
 package com.b2c.prototype.dao.item.base;
 
-import com.b2c.prototype.dao.AbstractTransitiveSelfEntityDaoTest;
+import com.b2c.prototype.dao.AbstractConstantEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.tm.core.process.dao.identifier.QueryService;
@@ -10,7 +10,7 @@ import com.tm.core.finder.manager.IEntityMappingManager;
 import com.tm.core.finder.table.EntityTable;
 import org.junit.jupiter.api.BeforeAll;
 
-class BasicCategoryDaoTest extends AbstractTransitiveSelfEntityDaoTest {
+class BasicCategoryDaoTest extends AbstractConstantEntityDaoTest {
 
     @BeforeAll
     static void setup() {
@@ -91,16 +91,16 @@ class BasicCategoryDaoTest extends AbstractTransitiveSelfEntityDaoTest {
         return new EntityDataSet<>(root, "/datasets/item/category/updateCategoryDataSet.yml");
     }
 
-    @Override
-    protected EntityDataSet<? extends TransitiveSelfEntity> getDeleteDataSet() {
-        Category parent = Category.builder()
-                .id(1L)
-                .label("parent")
-                .value("parent")
-                .build();
-
-        return new EntityDataSet<>(parent,
-                "/datasets/item/category/deleteCategoryDataSet.yml",
-                            "/datasets/item/category/deleteChildCategoryDataSet.yml");
-    }
+//    @Override
+//    protected EntityDataSet<? extends TransitiveSelfEntity> getDeleteDataSet() {
+//        Category parent = Category.builder()
+//                .id(1L)
+//                .label("parent")
+//                .value("parent")
+//                .build();
+//
+//        return new EntityDataSet<>(parent,
+//                "/datasets/item/category/deleteCategoryDataSet.yml",
+//                            "/datasets/item/category/deleteChildCategoryDataSet.yml");
+//    }
 }

@@ -6,7 +6,7 @@ import com.b2c.prototype.modal.dto.payload.ContactPhoneDto;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
-import com.b2c.prototype.modal.entity.user.UserProfile;
+import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
@@ -52,14 +52,14 @@ class ContactInfoManagerTest {
     void testSaveUpdateAppUserAddress() {
         String userId = "123";
         ContactInfoDto contactInfoDto = getContactInfoDto();
-        UserProfile userProfile = mock(UserProfile.class);
+        UserDetails userProfile = mock(UserDetails.class);
         ContactInfo contactInfo = mock(ContactInfo.class);
         when(userProfile.getContactInfo()).thenReturn(contactInfo);
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
         when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(UserProfile.class, parameterSupplier))
+        when(queryService.getEntity(UserDetails.class, parameterSupplier))
                 .thenReturn(userProfile);
         when(transformationFunctionService.getEntity(ContactInfo.class, contactInfoDto))
                 .thenReturn(contactInfo);
@@ -80,14 +80,14 @@ class ContactInfoManagerTest {
     void testSaveUpdateAppUserAddressContactInfoNull() {
         String userId = "123";
         ContactInfoDto contactInfoDto = getContactInfoDto();
-        UserProfile userProfile = mock(UserProfile.class);
+        UserDetails userProfile = mock(UserDetails.class);
         ContactInfo contactInfo = mock(ContactInfo.class);
         when(userProfile.getContactInfo()).thenReturn(null);
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
         when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(UserProfile.class, parameterSupplier))
+        when(queryService.getEntity(UserDetails.class, parameterSupplier))
                 .thenReturn(userProfile);
         when(transformationFunctionService.getEntity(ContactInfo.class, contactInfoDto))
                 .thenReturn(contactInfo);
@@ -107,7 +107,7 @@ class ContactInfoManagerTest {
     @Test
     void testDeleteContactInfoByUserId() {
         String userId = "123";
-        UserProfile userProfile = mock(UserProfile.class);
+        UserDetails userProfile = mock(UserDetails.class);
         ContactInfo contactInfo = getContactInfo();
         when(userProfile.getContactInfo()).thenReturn(contactInfo);
         Supplier<ContactInfo> supplier = () -> contactInfo;
@@ -117,11 +117,11 @@ class ContactInfoManagerTest {
         when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(parameterSupplier);
 
-        Function<UserProfile, ContactInfo> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(UserProfile.class, ContactInfo.class))
+        Function<UserDetails, ContactInfo> function = mock(Function.class);
+        when(transformationFunctionService.getTransformationFunction(UserDetails.class, ContactInfo.class))
                 .thenReturn(function);
         when(supplierService.entityFieldSupplier(
-                UserProfile.class,
+                UserDetails.class,
                 parameterSupplier,
                 function
         )).thenReturn(supplier);
@@ -134,7 +134,7 @@ class ContactInfoManagerTest {
     @Test
     void testGetContactInfoByUserId() {
         String userId = "123";
-        UserProfile userProfile = mock(UserProfile.class);
+        UserDetails userProfile = mock(UserDetails.class);
         ContactInfo contactInfo = getContactInfo();
         ContactInfoDto contactInfoDto = getContactInfoDto();
         Parameter parameter = mock(Parameter.class);
@@ -142,14 +142,14 @@ class ContactInfoManagerTest {
         Supplier<Parameter> parameterSupplier = () -> parameter;
         when(supplierService.parameterStringSupplier(USER_ID, userId)).thenReturn(parameterSupplier);
 
-        Function<UserProfile, ContactInfoDto> transformationFunction = user -> contactInfoDto;
-        when(transformationFunctionService.getTransformationFunction(UserProfile.class, ContactInfoDto.class))
+        Function<UserDetails, ContactInfoDto> transformationFunction = user -> contactInfoDto;
+        when(transformationFunctionService.getTransformationFunction(UserDetails.class, ContactInfoDto.class))
                 .thenReturn(transformationFunction);
 
-        when(queryService.getEntityDto(eq(UserProfile.class), eq(parameterSupplier), eq(transformationFunction)))
+        when(queryService.getEntityDto(eq(UserDetails.class), eq(parameterSupplier), eq(transformationFunction)))
                 .thenAnswer(invocation -> {
                     Supplier<Parameter> supplierArg = invocation.getArgument(1);
-                    Function<UserProfile, ContactInfoDto> functionArg = invocation.getArgument(2);
+                    Function<UserDetails, ContactInfoDto> functionArg = invocation.getArgument(2);
                     assertEquals(parameterSupplier.get(), supplierArg.get());
                     return functionArg.apply(userProfile);
                 });

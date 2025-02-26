@@ -3,7 +3,6 @@ package com.b2c.prototype.manager.store.base;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 
 import com.b2c.prototype.dao.store.IStoreDao;
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.payload.StoreDto;
 import com.b2c.prototype.modal.dto.response.ResponseStoreDto;
 import com.b2c.prototype.modal.entity.store.CountType;
@@ -115,16 +114,13 @@ class StoreManagerTest {
 
     @Test
     void testDeleteStore() {
-        OneFieldEntityDto oneFieldEntityDto = OneFieldEntityDto.builder()
-                .value("articularId")
-                .build();
-
+        String articularId = "articularId";
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
         Supplier<Store> storeSupplier = () -> getStore();
 
-        when(supplierService.parameterStringSupplier(ARTICULAR_ID, oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
                 .thenReturn(parameterSupplier);
         Function<ArticularItem, Store> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(ArticularItem.class, Store.class))
@@ -135,21 +131,20 @@ class StoreManagerTest {
                 function
         )).thenReturn(storeSupplier);
 
-        storeManager.deleteStore(oneFieldEntityDto);
+        storeManager.deleteStore(articularId);
 
         verify(storeDao).deleteEntity(storeSupplier);
     }
 
     @Test
     void testGetStoreResponse() {
-        OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto();
-        oneFieldEntityDto.setValue("articular1");
+        String articularId = "articularId";
         Store store = getStore();
         ResponseStoreDto responseStoreDto = mock(ResponseStoreDto.class);
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(ARTICULAR_ID, oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
                 .thenReturn(parameterSupplier);
         Function<Store, ResponseStoreDto> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(Store.class, ResponseStoreDto.class))
@@ -157,7 +152,7 @@ class StoreManagerTest {
         when(storeDao.getEntityGraph(anyString(), eq(parameter))).thenReturn(store);
         when(function.apply(store)).thenReturn(responseStoreDto);
 
-        ResponseStoreDto result = storeManager.getStoreResponse(oneFieldEntityDto);
+        ResponseStoreDto result = storeManager.getStoreResponse(articularId);
 
         assertEquals(responseStoreDto, result);
     }

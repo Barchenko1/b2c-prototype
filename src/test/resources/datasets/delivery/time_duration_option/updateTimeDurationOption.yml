@@ -1,0 +1,4 @@
+time_duration_option:
+  - id: 1
+    value: "Update Post"
+    label: "Post"

@@ -1,19 +1,18 @@
 package com.b2c.prototype.manager.message;
 
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
-import com.b2c.prototype.modal.dto.delete.MultipleFieldsSearchDtoDelete;
+import com.b2c.prototype.modal.dto.payload.MessageDto;
 import com.b2c.prototype.modal.dto.response.ResponseMessageOverviewDto;
 import com.b2c.prototype.modal.dto.response.ResponseMessagePayloadDto;
-import com.b2c.prototype.modal.dto.update.MessageDtoUpdate;
 
 import java.util.List;
 
 public interface IMessageManager {
-    void saveUpdateMessage(MessageDtoUpdate messageDtoUpdate);
-    void deleteMessage(MultipleFieldsSearchDtoDelete multipleFieldsSearchDtoDelete);
-    void cleanUpMessagesByUserId(OneFieldEntityDto oneFieldEntityDto);
+    void saveMessage(String userId, MessageDto messageDto);
+    void updateMessage(String userId, String messageId, MessageDto messageDto);
+    void deleteMessage(String userId, String messageId);
+    void cleanUpMessagesByUserId(String userId);
 
-    List<ResponseMessageOverviewDto> getMessageOverviewBySenderEmail(OneFieldEntityDto oneFieldEntityDto);
-    List<ResponseMessageOverviewDto> getMessageOverviewByReceiverEmail(OneFieldEntityDto oneFieldEntityDto);
-    ResponseMessagePayloadDto getMessagePayloadDto(OneFieldEntityDto oneFieldEntityDto);
+    List<ResponseMessageOverviewDto> getMessageOverviewBySenderEmail(String senderEmail);
+    List<ResponseMessageOverviewDto> getMessageOverviewByReceiverEmail(String receiverEmail);
+    ResponseMessagePayloadDto getMessagePayloadDto(String userId, String messageId);
 }

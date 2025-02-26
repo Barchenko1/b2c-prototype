@@ -51,7 +51,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Discount extends AbstractDiscount {
     private boolean isPercent;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private Currency currency;
     @OneToMany(mappedBy = "discount", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
     @Builder.Default

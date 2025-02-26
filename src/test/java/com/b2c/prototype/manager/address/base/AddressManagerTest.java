@@ -6,7 +6,7 @@ import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
 import com.b2c.prototype.modal.entity.order.OrderArticularItem;
-import com.b2c.prototype.modal.entity.user.UserProfile;
+import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
@@ -59,12 +59,12 @@ class AddressManagerTest {
     void testSaveUpdateAppUserAddress() {
         String userId = "123";
         AddressDto addressDto = getAddressDto();
-        UserProfile userProfile = mock(UserProfile.class);
+        UserDetails userProfile = mock(UserDetails.class);
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
         when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(UserProfile.class, parameterSupplier))
+        when(queryService.getEntity(UserDetails.class, parameterSupplier))
                 .thenReturn(userProfile);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -109,21 +109,21 @@ class AddressManagerTest {
     @Test
     void testDeleteAppUserAddress() {
         String userId = "userId";
-        UserProfile userProfile = mock(UserProfile.class);
+        UserDetails userProfile = mock(UserDetails.class);
         Address address = mock(Address.class);
 
-        when(userProfile.getAddress()).thenReturn(address);
+        when(userProfile.getAddresses()).thenReturn(List.of(address));
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
         when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(parameterSupplier);
         Supplier<Address> addressSupplier = () -> address;
-        Function<UserProfile, Address> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(UserProfile.class, Address.class))
+        Function<UserDetails, Address> function = mock(Function.class);
+        when(transformationFunctionService.getTransformationFunction(UserDetails.class, Address.class))
                 .thenReturn(function);
         when(supplierService.entityFieldSupplier(
-                UserProfile.class,
+                UserDetails.class,
                 parameterSupplier,
                 function
         )).thenReturn(addressSupplier);
@@ -141,7 +141,7 @@ class AddressManagerTest {
         doThrow(new RuntimeException()).when(addressDao).deleteEntity(any(Supplier.class));
         when(supplierService.parameterStringSupplier(eq("user_id"), any()))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(eq(UserProfile.class), any(Supplier.class)))
+        when(queryService.getEntity(eq(UserDetails.class), any(Supplier.class)))
                 .thenReturn(null);
         assertThrows(RuntimeException.class, () -> addressManager.deleteAppUserAddress(null));
     }
@@ -177,26 +177,26 @@ class AddressManagerTest {
     @Test
     void testGetAddressByUserId() {
         String userId = "123";
-        UserProfile userProfile = mock(UserProfile.class);
+        UserDetails userProfile = mock(UserDetails.class);
         Address address = getAddress();
         Parameter parameter = mock(Parameter.class);
 
         Supplier<Parameter> parameterSupplier = () -> parameter;
         when(supplierService.parameterStringSupplier(USER_ID, userId)).thenReturn(parameterSupplier);
 
-        Function<UserProfile, AddressDto> transformationFunction = user -> getAddressDto();
-        when(transformationFunctionService.getTransformationFunction(UserProfile.class, AddressDto.class))
+        Function<UserDetails, AddressDto> transformationFunction = user -> getAddressDto();
+        when(transformationFunctionService.getTransformationFunction(UserDetails.class, AddressDto.class))
                 .thenReturn(transformationFunction);
 
-        when(queryService.getEntityDto(eq(UserProfile.class), eq(parameterSupplier), eq(transformationFunction)))
+        when(queryService.getEntityDto(eq(UserDetails.class), eq(parameterSupplier), eq(transformationFunction)))
                 .thenAnswer(invocation -> {
                     Supplier<Parameter> supplierArg = invocation.getArgument(1);
-                    Function<UserProfile, AddressDto> functionArg = invocation.getArgument(2);
+                    Function<UserDetails, AddressDto> functionArg = invocation.getArgument(2);
                     assertEquals(parameterSupplier.get(), supplierArg.get());
                     return functionArg.apply(userProfile);
                 });
 
-        when(userProfile.getAddress()).thenReturn(address);
+        when(userProfile.getAddresses()).thenReturn(List.of(address));
 
         AddressDto addressDto = addressManager.getAddressByUserId(userId);
         AddressDto expectedAddressDto = getAddressDto();

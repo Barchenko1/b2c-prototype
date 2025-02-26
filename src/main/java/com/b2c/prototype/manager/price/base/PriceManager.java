@@ -136,16 +136,17 @@ public class PriceManager implements IPriceManager {
 
     @Override
     public List<PriceDto> getPrices() {
-        return entityOperationDao.getEntityGraphDtoList("",
+        return entityOperationDao.getEntityGraphDtoList(
+                "",
                 transformationFunctionService.getTransformationFunction(Price.class, PriceDto.class));
     }
 
     private void updateFullPrice(Payment payment, Price price) {
-        Price existingPrice = payment.getFullPrice();
+        Price existingPrice = payment.getCommissionPrice();
         if (existingPrice != null) {
             price.setId(existingPrice.getId());
         }
-        payment.setFullPrice(price);
+        payment.setCommissionPrice(price);
     }
 
     private void updateTotalPrice(Payment payment, Price price) {

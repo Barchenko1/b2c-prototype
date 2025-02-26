@@ -13,7 +13,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
 import jakarta.persistence.NamedAttributeNode;
 import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.NamedEntityGraphs;
@@ -30,10 +29,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
-
-import static com.b2c.prototype.util.Util.getUUID;
 
 @Entity
 @Table(name = "articular_item")

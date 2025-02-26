@@ -4,6 +4,7 @@ import com.b2c.prototype.modal.base.AbstractConstantEntity;
 import com.b2c.prototype.modal.constant.MessageStatusEnum;
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.dto.common.NumberConstantPayloadDto;
+import com.b2c.prototype.modal.dto.common.PaymentPrice;
 import com.b2c.prototype.modal.dto.common.SearchFieldUpdateCollectionEntityDto;
 import com.b2c.prototype.modal.dto.common.SearchFieldUpdateEntityDto;
 import com.b2c.prototype.modal.dto.payload.AddressDto;
@@ -12,9 +13,6 @@ import com.b2c.prototype.modal.dto.payload.ArticularItemQuantityDto;
 import com.b2c.prototype.modal.dto.payload.BeneficiaryDto;
 import com.b2c.prototype.modal.dto.payload.ContactInfoDto;
 import com.b2c.prototype.modal.dto.payload.ContactPhoneDto;
-import com.b2c.prototype.modal.dto.payload.OrderArticularItemQuantityDto;
-import com.b2c.prototype.modal.dto.payload.PaymentDto;
-import com.b2c.prototype.modal.dto.payload.constant.CountryDto;
 import com.b2c.prototype.modal.dto.payload.CreditCardDto;
 import com.b2c.prototype.modal.dto.payload.DeliveryDto;
 import com.b2c.prototype.modal.dto.payload.DiscountDto;
@@ -24,6 +22,8 @@ import com.b2c.prototype.modal.dto.payload.MessageDto;
 import com.b2c.prototype.modal.dto.payload.OptionGroupDto;
 import com.b2c.prototype.modal.dto.payload.OptionGroupOptionItemSetDto;
 import com.b2c.prototype.modal.dto.payload.OptionItemDto;
+import com.b2c.prototype.modal.dto.payload.OrderArticularItemQuantityDto;
+import com.b2c.prototype.modal.dto.payload.PaymentDto;
 import com.b2c.prototype.modal.dto.payload.PriceDto;
 import com.b2c.prototype.modal.dto.payload.RegistrationUserProfileDto;
 import com.b2c.prototype.modal.dto.payload.ReviewDto;
@@ -31,6 +31,7 @@ import com.b2c.prototype.modal.dto.payload.SingleOptionItemDto;
 import com.b2c.prototype.modal.dto.payload.UserProfileDto;
 import com.b2c.prototype.modal.dto.payload.constant.BrandDto;
 import com.b2c.prototype.modal.dto.payload.constant.CategoryValueDto;
+import com.b2c.prototype.modal.dto.payload.constant.CountryDto;
 import com.b2c.prototype.modal.dto.payload.constant.ItemTypeDto;
 import com.b2c.prototype.modal.dto.response.ResponseArticularItemDto;
 import com.b2c.prototype.modal.dto.response.ResponseCreditCardDto;
@@ -42,6 +43,7 @@ import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
+import com.b2c.prototype.modal.entity.delivery.TimeDurationOption;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
 import com.b2c.prototype.modal.entity.item.ArticularStatus;
@@ -59,6 +61,7 @@ import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.modal.entity.order.Beneficiary;
 import com.b2c.prototype.modal.entity.order.OrderArticularItem;
 import com.b2c.prototype.modal.entity.order.OrderStatus;
+import com.b2c.prototype.modal.entity.payment.SellerCommission;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
 import com.b2c.prototype.modal.entity.payment.Payment;
 import com.b2c.prototype.modal.entity.payment.PaymentMethod;
@@ -70,20 +73,19 @@ import com.b2c.prototype.modal.entity.store.CountType;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
-import com.b2c.prototype.modal.entity.user.UserProfile;
+import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.service.function.ITransformationFunction;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.help.calculate.IPriceCalculationService;
 import com.b2c.prototype.util.CardUtil;
-import com.tm.core.process.dao.identifier.IQueryService;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.finder.parameter.Parameter;
+import com.tm.core.process.dao.identifier.IQueryService;
 import org.hibernate.Session;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -95,6 +97,9 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
+import static com.b2c.prototype.util.Constant.ARTICULAR_ITEM_FULL;
+import static com.b2c.prototype.util.Constant.CHAR_SEQUENCE_CODE;
 import static com.b2c.prototype.util.Constant.USER_ID;
 import static com.b2c.prototype.util.Constant.VALUE;
 import static com.b2c.prototype.util.Util.getCurrentTimeMillis;
@@ -135,7 +140,7 @@ public class TransformationEntityConfiguration {
         transformationFunctionService.addTransformationFunction(Address.class, AddressDto.class, mapAddressToAddressDtoFunction());
         transformationFunctionService.addTransformationFunction(AddressDto.class, Address.class, mapAddressDtoToAddressFunction());
         transformationFunctionService.addTransformationFunction(OrderArticularItem.class, AddressDto.class, mapOrderItemToAddressDtoFunction());
-        transformationFunctionService.addTransformationFunction(UserProfile.class, AddressDto.class, mapUserProfileToAddressDtoFunction());
+        transformationFunctionService.addTransformationFunction(UserDetails.class, AddressDto.class, mapUserProfileToAddressDtoFunction());
 
         transformationFunctionService.addTransformationFunction(CreditCardDto.class, CreditCard.class, mapCreditCardDtoToCreditCardFunction());
         transformationFunctionService.addTransformationFunction(CreditCard.class, ResponseCreditCardDto.class, mapCreditCardToResponseCardDtoFunction());
@@ -146,12 +151,12 @@ public class TransformationEntityConfiguration {
 
         transformationFunctionService.addTransformationFunction(ContactPhone.class, ContactPhoneDto.class, mapContactPhoneToContactPhoneDtoFunction());
         transformationFunctionService.addTransformationFunction(ContactPhoneDto.class, ContactPhone.class, mapContactPhoneDtoToContactPhoneFunction());
-        transformationFunctionService.addTransformationFunction(UserProfile.class, ContactPhoneDto.class, mapUserProfileToContactPhoneDtoFunction());
+        transformationFunctionService.addTransformationFunction(UserDetails.class, ContactPhoneDto.class, mapUserProfileToContactPhoneDtoFunction());
         transformationFunctionService.addTransformationFunction(OrderArticularItem.class, ContactPhoneDto.class, mapOrderItemToContactPhoneDtoFunction());
         transformationFunctionService.addTransformationFunction(BeneficiaryDto.class, Beneficiary.class, "list", mapContactInfoDtoToContactInfoFunction());
 
-        transformationFunctionService.addTransformationFunction(RegistrationUserProfileDto.class, UserProfile.class, mapRegistrationUserProfileDtoToUserProfileFunction());
-        transformationFunctionService.addTransformationFunction(UserProfile.class, UserProfileDto.class, mapUserProfileToUserProfileDtoFunction());
+        transformationFunctionService.addTransformationFunction(RegistrationUserProfileDto.class, UserDetails.class, mapRegistrationUserProfileDtoToUserProfileFunction());
+        transformationFunctionService.addTransformationFunction(UserDetails.class, UserProfileDto.class, mapUserProfileToUserProfileDtoFunction());
 
         transformationFunctionService.addTransformationFunction(ReviewDto.class, Review.class, mapReviewDtoToReviewFunction());
         transformationFunctionService.addTransformationFunction(Review.class, ResponseReviewDto.class, mapReviewToResponseReviewDtoFunction());
@@ -258,10 +263,7 @@ public class TransformationEntityConfiguration {
 
     private BiFunction<Session, AddressDto, Address> mapAddressDtoToAddressFunction() {
         return (session, addressDto) -> Address.builder()
-                .country(queryService.getEntity(
-                        session,
-                        Country.class,
-                        parameterFactory.createStringParameter(VALUE, addressDto.getCountry())))
+                .country(fetchCountry(session, addressDto.getCountry()))
                 .city(addressDto.getCity())
                 .street(addressDto.getStreet())
                 .street2(addressDto.getStreet2())
@@ -285,9 +287,9 @@ public class TransformationEntityConfiguration {
                 .build();
     }
 
-    private Function<UserProfile, AddressDto> mapUserProfileToAddressDtoFunction() {
+    private Function<UserDetails, AddressDto> mapUserProfileToAddressDtoFunction() {
         return userProfile -> {
-            Address address = userProfile.getAddress();
+            Address address = userProfile.getAddresses().get(0);
             return mapAddressToAddressDtoFunction().apply(address);
         };
     }
@@ -324,14 +326,8 @@ public class TransformationEntityConfiguration {
 
     private BiFunction<Session, MessageDto, Message> mapMessageDtoToMessageFunction() {
         return (session, messageDto) -> {
-            MessageStatus messageStatus = queryService.getEntity(
-                    session,
-                    MessageStatus.class,
-                    parameterFactory.createStringParameter(VALUE, MessageStatusEnum.UNREAD.getValue()));
-            MessageType messageType = queryService.getEntity(
-                    session,
-                    MessageType.class,
-                    parameterFactory.createStringParameter(VALUE, "value"));
+            MessageStatus messageStatus = fetchMessageStatus(session, MessageStatusEnum.UNREAD.getValue());
+            MessageType messageType = fetchMessageType(session, "value");
 
             return Message.builder()
                     .sender(messageDto.getSender())
@@ -382,7 +378,7 @@ public class TransformationEntityConfiguration {
                 .build();
     }
 
-    private Function<UserProfile, ContactPhoneDto> mapUserProfileToContactPhoneDtoFunction() {
+    private Function<UserDetails, ContactPhoneDto> mapUserProfileToContactPhoneDtoFunction() {
         return userProfile -> {
             ContactPhone contactPhone = userProfile.getContactInfo().getContactPhone();
             return mapContactPhoneToContactPhoneDtoFunction().apply(contactPhone);
@@ -415,7 +411,7 @@ public class TransformationEntityConfiguration {
         return OrderArticularItem::getBeneficiaries;
     }
 
-    Function<UserProfile, ContactInfoDto> mapUserProfileToContactInfoDtoFunction() {
+    Function<UserDetails, ContactInfoDto> mapUserProfileToContactInfoDtoFunction() {
         return userProfile -> {
             ContactInfo contactInfo = userProfile.getContactInfo();
             ContactPhone contactPhone = contactInfo.getContactPhone();
@@ -430,15 +426,15 @@ public class TransformationEntityConfiguration {
         };
     }
 
-    private Function<RegistrationUserProfileDto, UserProfile> mapRegistrationUserProfileDtoToUserProfileFunction() {
-        return registrationUserProfileDto -> UserProfile.builder()
+    private Function<RegistrationUserProfileDto, UserDetails> mapRegistrationUserProfileDtoToUserProfileFunction() {
+        return registrationUserProfileDto -> UserDetails.builder()
                 .username(registrationUserProfileDto.getUsername())
-                .email(registrationUserProfileDto.getEmail())
+                .userId(getUUID())
                 .dateOfCreate(getCurrentTimeMillis())
                 .build();
     }
 
-    private Function<UserProfile, UserProfileDto> mapUserProfileToUserProfileDtoFunction() {
+    private Function<UserDetails, UserProfileDto> mapUserProfileToUserProfileDtoFunction() {
         return userProfile -> {
             ContactInfoDto contactInfoDto = mapUserProfileToContactInfoDtoFunction().apply(userProfile);
             AddressDto addressDto = mapUserProfileToAddressDtoFunction().apply(userProfile);
@@ -446,7 +442,6 @@ public class TransformationEntityConfiguration {
                     .map(c -> mapCreditCardToResponseCardDtoFunction().apply(c))
                     .toList();
             return UserProfileDto.builder()
-                    .email(userProfile.getEmail())
                     .contactInfo(contactInfoDto)
                     .creditCards(responseCreditCardDtoList)
                     .addressDto(addressDto)
@@ -483,7 +478,7 @@ public class TransformationEntityConfiguration {
 
     private Function<OrderArticularItem, PriceDto> mapOrderItemToFullPriceDtoFunction() {
         return orderItem -> {
-            Price fullPrice = orderItem.getPayment().getFullPrice();
+            Price fullPrice = orderItem.getPayment().getCommissionPrice();
             return PriceDto.builder()
                     .amount(fullPrice.getAmount())
                     .currency(fullPrice.getCurrency().getValue())
@@ -537,7 +532,7 @@ public class TransformationEntityConfiguration {
     }
 
     private Function<OrderArticularItem, Price> mapOrderItemToFullPriceFunction() {
-        return orderItem -> orderItem.getPayment().getFullPrice();
+        return orderItem -> orderItem.getPayment().getCommissionPrice();
     }
 
     private Function<OrderArticularItem, Price> mapOrderItemToTotalPriceFunction() {
@@ -658,17 +653,17 @@ public class TransformationEntityConfiguration {
 
     private BiFunction<Session, ItemDataDto, ItemData> mapItemDataDtoToItemDataFunction() {
         return (session, itemDataDto) -> {
-            Category category = queryService.getOptionalEntity(session, Category.class, new Parameter(VALUE, itemDataDto.getCategory().getValue()))
+            Category category = fetchOptionalCategory(session, itemDataDto.getCategory().getValue())
                     .orElse(Category.builder()
                             .label(itemDataDto.getCategory().getLabel())
                             .value(itemDataDto.getCategory().getValue())
                             .build());
-            Brand brand = queryService.getOptionalEntity(session, Brand.class, new Parameter(VALUE, itemDataDto.getBrand().getValue()))
+            Brand brand = fetchOptionalBrand(session, itemDataDto.getBrand().getValue())
                     .orElse(Brand.builder()
                             .label(itemDataDto.getBrand().getLabel())
                             .value(itemDataDto.getBrand().getValue())
                             .build());
-            ItemType itemType = queryService.getOptionalEntity(session, ItemType.class, new Parameter(VALUE, itemDataDto.getItemType().getValue()))
+            ItemType itemType = fetchOptionalItemType(session, itemDataDto.getItemType().getValue())
                     .orElse(ItemType.builder()
                             .label(itemDataDto.getItemType().getLabel())
                             .value(itemDataDto.getItemType().getValue())
@@ -756,17 +751,17 @@ public class TransformationEntityConfiguration {
                             articularItem -> articularItem
                     ));
 
-            Category category = queryService.getOptionalEntity(session, Category.class, new Parameter(VALUE, itemDataDto.getCategory().getValue()))
+            Category category = fetchOptionalCategory(session, itemDataDto.getCategory().getValue())
                     .orElse(Category.builder()
                             .label(itemDataDto.getCategory().getLabel())
                             .value(itemDataDto.getCategory().getValue())
                             .build());
-            Brand brand = queryService.getOptionalEntity(session, Brand.class, new Parameter(VALUE, itemDataDto.getBrand().getValue()))
+            Brand brand = fetchOptionalBrand(session, itemDataDto.getBrand().getValue())
                     .orElse(Brand.builder()
                             .label(itemDataDto.getBrand().getLabel())
                             .value(itemDataDto.getBrand().getValue())
                             .build());
-            ItemType itemType = queryService.getOptionalEntity(session, ItemType.class, new Parameter(VALUE, itemDataDto.getItemType().getValue()))
+            ItemType itemType = fetchOptionalItemType(session, itemDataDto.getItemType().getValue())
                     .orElse(ItemType.builder()
                             .label(itemDataDto.getItemType().getLabel())
                             .value(itemDataDto.getItemType().getValue())
@@ -802,10 +797,7 @@ public class TransformationEntityConfiguration {
                                                    Map<String, ArticularItem> articularItemMap) {
         return articularItemDtoSet.stream()
                 .map(articularItemDto -> {
-                    Discount discount = queryService.getOptionalEntity(
-                            session,
-                            Discount.class,
-                            parameterFactory.createStringParameter("charSequenceCode", articularItemDto.getDiscount().getCharSequenceCode()))
+                    Discount discount = fetchOptionDiscount(session, articularItemDto.getDiscount().getCharSequenceCode())
                             .orElse(mapInitDiscountDtoToDiscount().apply(session, articularItemDto.getDiscount()));
 
                     ArticularStatus articularStatus = fetchArticularStatus(session, articularItemDto.getStatus());
@@ -849,28 +841,35 @@ public class TransformationEntityConfiguration {
 
     private BiFunction<Session, OrderArticularItemQuantityDto, OrderArticularItem> mapOrderArticularItemQuantityToOrderArticularItem() {
         return (session, orderArticularItemQuantityDto) -> {
-            UserProfile userProfile = null;
+            Optional<UserDetails> userProfileOptional = Optional.empty();
             if (orderArticularItemQuantityDto.getUser().getUserId() != null) {
-                userProfile = queryService.getEntity(
+                userProfileOptional = queryService.getOptionalEntityNamedQuery(
                         session,
-                        UserProfile.class,
+                        UserDetails.class,
+                        "UserDetails.findByUserId",
                         parameterFactory.createStringParameter(USER_ID, orderArticularItemQuantityDto.getUser().getUserId()));
             }
-            OrderStatus orderStatus = queryService.getEntity(
-                    session,
-                    OrderStatus.class,
-                    parameterFactory.createStringParameter(VALUE, "COMMON"));
+            List<ArticularItemQuantity> articularItemQuantityList = mapArticularItemQuantityDtoToArticularItemQuantity()
+                    .apply(session, orderArticularItemQuantityDto.getItemDataOptionQuantities());
+            Delivery delivery = mapDeliveryDtoToDelivery().apply(session, orderArticularItemQuantityDto.getDelivery());
+            Payment payment = mapPaymentDtoToPayment().apply(session, orderArticularItemQuantityDto.getPayment());
+            Optional<SellerCommission> commissionOptional = fetchCommission(session);
+            PaymentPrice paymentPrice = PaymentPrice.builder()
+                    .articularItemQuantityList(articularItemQuantityList)
+                    .delivery(delivery)
+                    .discount(payment.getDiscount())
+                    .sellerCommission(commissionOptional.get())
+                    .build();
 
             return OrderArticularItem.builder()
-                    .userProfile(userProfile)
+                    .userProfile(userProfileOptional.orElse(null))
                     .dateOfCreate(getCurrentTimeMillis())
                     .orderId(getUUID())
-                    .articularItemQuantityList(mapArticularItemQuantityDtoToArticularItemQuantity()
-                            .apply(session, orderArticularItemQuantityDto.getItemDataOptionQuantities()))
-                    .delivery(mapDeliveryDtoToDelivery().apply(session, orderArticularItemQuantityDto.getDelivery()))
+                    .articularItemQuantityList(articularItemQuantityList)
+                    .delivery(delivery)
                     .beneficiaries(mapBeneficiariesDtoToBeneficiaries().apply(session, orderArticularItemQuantityDto.getBeneficiaries()))
                     .payment(mapPaymentDtoToPayment().apply(session, orderArticularItemQuantityDto.getPayment()))
-                    .orderStatus(orderStatus)
+                    .orderStatus(fetchOrderStatus(session, "CREATED"))
                     .note(orderArticularItemQuantityDto.getNote())
                     .build();
         };
@@ -878,7 +877,13 @@ public class TransformationEntityConfiguration {
 
     private BiFunction<Session, DeliveryDto, Delivery> mapDeliveryDtoToDelivery() {
         return (session, deliveryDto) -> {
+            DeliveryType deliveryType = fetchDeliveryType(session, deliveryDto.getDeliveryType());
+            Address address = mapAddressDtoToAddressFunction().apply(session, deliveryDto.getDeliveryAddress());
+            TimeDurationOption timeDurationOption = fetchTimeDurationOption(session, deliveryDto.getTimeDurationOption());
             return Delivery.builder()
+                    .deliveryType(deliveryType)
+                    .address(address)
+                    .timeDurationOption(timeDurationOption)
                     .build();
         };
     }
@@ -891,8 +896,13 @@ public class TransformationEntityConfiguration {
 
     private BiFunction<Session, BeneficiaryDto, Beneficiary> mapBeneficiaryDtoToBeneficiary() {
         return (session, beneficiaryDto) -> {
+            ContactPhone contactPhone = mapContactPhoneDtoToContactPhoneFunction().apply(session, beneficiaryDto.getContactPhone());
             return Beneficiary.builder()
                     .orderNumber(beneficiaryDto.getOrderNumber())
+                    .email(beneficiaryDto.getEmail())
+                    .firstName(beneficiaryDto.getFirstName())
+                    .lastName(beneficiaryDto.getLastName())
+                    .contactPhone(contactPhone)
                     .build();
         };
     }
@@ -915,18 +925,19 @@ public class TransformationEntityConfiguration {
     private BiFunction<Session, PaymentDto, Payment> mapPaymentDtoToPayment() {
         return (session, paymentDto) -> {
 
+
             return Payment.builder()
                     .paymentId(getUUID())
                     .paymentMethod(fetchPaymentMethod(session, paymentDto.getPaymentMethod()))
-                    .paymentStatus(fetchPaymentStatus(session, "NEW"))
+                    .paymentStatus(fetchPaymentStatus(session, "Done"))
                     .creditCard(paymentDto.getCreditCard() != null
                             ? mapCreditCardDtoToCreditCardFunction().apply(paymentDto.getCreditCard())
                             : null)
                     .discount(paymentDto.getDiscount() != null
                             ? mapDiscountDtoToDiscountFunction().apply(session, paymentDto.getDiscount())
                             : null)
-                    .fullPrice(mapPriceDtoToPriceFunction().apply(session, paymentDto.getFullPrice()))
-                    .totalPrice(mapPriceDtoToPriceFunction().apply(session, paymentDto.getTotalPrice()))
+//                    .commissionPrice(mapPriceDtoToPriceFunction().apply(session, paymentDto.getFullPrice()))
+//                    .totalPrice(mapPriceDtoToPriceFunction().apply(session, paymentDto.getTotalPrice()))
                     .build();
         };
     }
@@ -1105,10 +1116,7 @@ public class TransformationEntityConfiguration {
     private BiFunction<Session, DeliveryDto, Delivery> mapDeliveryDtoToDeliveryFunction() {
         return (session, deliveryDto) -> {
             Address address = mapAddressDtoToAddressFunction().apply(session, deliveryDto.getDeliveryAddress());
-            DeliveryType deliveryType = queryService.getEntity(
-                    session,
-                    DeliveryType.class,
-                    parameterFactory.createStringParameter(VALUE, deliveryDto.getDeliveryType()));
+            DeliveryType deliveryType = fetchDeliveryType(session, deliveryDto.getDeliveryType());
 
             return Delivery.builder()
                     .address(address)
@@ -1129,44 +1137,67 @@ public class TransformationEntityConfiguration {
     }
 
     private PaymentMethod fetchPaymentMethod(Session session, String value) {
-        return queryService.getEntity(
+        return queryService.getEntityNamedQuery(
                 session,
                 PaymentMethod.class,
+                "PaymentMethod.findByValue",
                 parameterFactory.createStringParameter(VALUE, value));
     }
 
     private PaymentStatus fetchPaymentStatus(Session session, String value) {
-        return queryService.getEntity(
+        return queryService.getEntityNamedQuery(
                 session,
                 PaymentStatus.class,
+                "PaymentStatus.findByValue",
                 parameterFactory.createStringParameter(VALUE, value));
     }
 
     private Currency fetchCurrency(Session session, String value) {
-        return queryService.getEntity(
+        return queryService.getEntityNamedQuery(
                 session,
                 Currency.class,
+                "Currency.findByValue",
                 parameterFactory.createStringParameter(VALUE, value));
     }
 
     private CountryPhoneCode fetchCountryPhoneCode(Session session, String value) {
-        return queryService.getEntity(
+        return queryService.getEntityNamedQuery(
                 session,
                 CountryPhoneCode.class,
-                parameterFactory.createStringParameter("code", value));
+                "CountryPhoneCode.findByValue",
+                parameterFactory.createStringParameter(VALUE, value));
+    }
+
+    private Country fetchCountry(Session session, String value) {
+        return queryService.getEntityNamedQuery(
+                session,
+                Country.class,
+                "Country.findByValue",
+                parameterFactory.createStringParameter(VALUE, value)
+        );
     }
 
     private Discount fetchDiscount(Session session, String value) {
-        return queryService.getEntity(
+        return queryService.getEntityNamedQuery(
                 session,
                 Discount.class,
-                parameterFactory.createStringParameter("charSequenceCode", value));
+                "ArticularItem.findByDiscountCharSequenceCode",
+                parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, value));
+    }
+
+    private Optional<Discount> fetchOptionDiscount(Session session, String value) {
+        return queryService.getOptionalEntityNamedQuery(
+                session,
+                Discount.class,
+                "ArticularItem.findByDiscountCharSequenceCode",
+                parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, value));
     }
 
     private ArticularStatus fetchArticularStatus(Session session, String value) {
-        return queryService.getEntity(
+        return queryService.getEntityNamedQuery(
                 session,
                 ArticularStatus.class,
+                "ArticularStatus.findByValue",
                 parameterFactory.createStringParameter(VALUE, value));
     }
 
@@ -1178,11 +1209,83 @@ public class TransformationEntityConfiguration {
                 parameterFactory.createStringParameter(VALUE, value));
     }
 
+    private OrderStatus fetchOrderStatus(Session session, String value) {
+        return queryService.getEntityNamedQuery(
+                session,
+                OrderStatus.class,
+                "OrderStatus.findByValue",
+                parameterFactory.createStringParameter(VALUE, value));
+    }
+
     private ArticularItem fetchArticularItem(Session session, String articularId) {
-        return queryService.getEntity(
+        return queryService.getEntityGraph(
                 session,
                 ArticularItem.class,
-                parameterFactory.createStringParameter(VALUE, articularId));
+                ARTICULAR_ITEM_FULL,
+                parameterFactory.createStringParameter(ARTICULAR_ID, articularId));
+    }
+
+    private DeliveryType fetchDeliveryType(Session session, String value) {
+        return queryService.getEntityNamedQuery(
+                session,
+                DeliveryType.class,
+                "DeliveryType.findByValue",
+                parameterFactory.createStringParameter(VALUE, value));
+    }
+
+    private TimeDurationOption fetchTimeDurationOption(Session session, String value) {
+        return queryService.getEntityNamedQuery(
+                session,
+                TimeDurationOption.class,
+                "TimeDurationOption.findByValue",
+                parameterFactory.createStringParameter(VALUE, value));
+    }
+
+    private MessageStatus fetchMessageStatus(Session session, String value) {
+        return queryService.getEntityNamedQuery(
+                session,
+                MessageStatus.class,
+                "MessageStatus.findByValue",
+                parameterFactory.createStringParameter(VALUE, MessageStatusEnum.UNREAD.getValue()));
+    }
+
+    private MessageType fetchMessageType(Session session, String value) {
+        return queryService.getEntityNamedQuery(
+                session,
+                MessageType.class,
+                "MessageType.findByValue",
+                parameterFactory.createStringParameter(VALUE, value));
+    }
+
+    private Optional<Category> fetchOptionalCategory(Session session, String value) {
+        return queryService.getOptionalEntityNamedQuery(
+                session,
+                Category.class,
+                "Category.findByValue",
+                parameterFactory.createStringParameter(VALUE, value));
+    }
+
+    private Optional<Brand> fetchOptionalBrand(Session session, String value) {
+        return queryService.getOptionalEntityNamedQuery(
+                session,
+                Brand.class,
+                "Brand.findByValue",
+                parameterFactory.createStringParameter(VALUE, value));
+    }
+
+    private Optional<ItemType> fetchOptionalItemType(Session session, String value) {
+        return queryService.getOptionalEntityNamedQuery(
+                session,
+                ItemType.class,
+                "ItemType.findByValue",
+                parameterFactory.createStringParameter(VALUE, value));
+    }
+
+    private Optional<SellerCommission> fetchCommission(Session session) {
+        return queryService.getOptionalEntityNamedQuery(
+                session,
+                SellerCommission.class,
+                "SellerCommission.getLatest");
     }
 
 }

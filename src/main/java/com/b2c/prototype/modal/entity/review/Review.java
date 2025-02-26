@@ -1,7 +1,7 @@
 package com.b2c.prototype.modal.entity.review;
 
 import com.b2c.prototype.modal.entity.item.Rating;
-import com.b2c.prototype.modal.entity.user.UserProfile;
+import com.b2c.prototype.modal.entity.user.UserDetails;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,8 +21,6 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.b2c.prototype.util.Util.getUUID;
-
 @Entity
 @Table(name = "review")
 @Data
@@ -40,7 +38,7 @@ public class Review {
     private String message;
     private long dateOfCreate;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    private UserProfile userProfile;
+    private UserDetails userProfile;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private Rating rating;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)

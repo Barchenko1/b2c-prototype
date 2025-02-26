@@ -8,7 +8,7 @@ import com.b2c.prototype.modal.entity.order.Beneficiary;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
-import com.b2c.prototype.modal.entity.user.UserProfile;
+import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
@@ -61,10 +61,10 @@ class ContactPhoneManagerTest {
         ContactPhone contactPhone = getTestContactPhone();
         Parameter mockParameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> mockParameter;
-        UserProfile userProfile = mock(UserProfile.class);
+        UserDetails userProfile = mock(UserDetails.class);
         ContactInfo contactInfo = mock(ContactInfo.class);
 
-        when(queryService.getEntity(eq(UserProfile.class), any(Supplier.class)))
+        when(queryService.getEntity(eq(UserDetails.class), any(Supplier.class)))
                 .thenReturn(userProfile);
         when(transformationFunctionService.getEntity(
                 ContactPhone.class,
@@ -125,16 +125,16 @@ class ContactPhoneManagerTest {
     void testDeleteContactPhoneByUserId() {
         String userId = "123";
         Parameter mockParameter = mock(Parameter.class);
-        UserProfile userProfile = mock(UserProfile.class);
+        UserDetails userProfile = mock(UserDetails.class);
         ContactInfo contactInfo = mock(ContactInfo.class);
         ContactPhone contactPhone = getTestContactPhone();
         Supplier<ContactPhone> contactPhoneSupplier = () -> contactPhone;
 
         Supplier<Parameter> parameterSupplier = () -> mockParameter;
-        Function<UserProfile, ContactPhone> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(UserProfile.class, ContactPhone.class))
+        Function<UserDetails, ContactPhone> function = mock(Function.class);
+        when(transformationFunctionService.getTransformationFunction(UserDetails.class, ContactPhone.class))
                 .thenReturn(function);
-        when(supplierService.entityFieldSupplier(UserProfile.class, parameterSupplier, function))
+        when(supplierService.entityFieldSupplier(UserDetails.class, parameterSupplier, function))
                 .thenReturn(contactPhoneSupplier);
         when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(parameterSupplier);
@@ -180,21 +180,21 @@ class ContactPhoneManagerTest {
         String userId = "123";
         ContactPhoneDto contactPhoneDto = createContactPhoneDto();
         Parameter mockParameter = mock(Parameter.class);
-        UserProfile userProfile = mock(UserProfile.class);
+        UserDetails userProfile = mock(UserDetails.class);
         ContactInfo contactInfo = mock(ContactInfo.class);
         ContactPhone contactPhone = getTestContactPhone();
 
         Supplier<Parameter> parameterSupplier = () -> mockParameter;
-        Function<UserProfile, ContactPhoneDto> mapFunction = profile -> contactPhoneDto;
+        Function<UserDetails, ContactPhoneDto> mapFunction = profile -> contactPhoneDto;
 
         when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(parameterSupplier);
-        when(transformationFunctionService.getTransformationFunction(UserProfile.class, ContactPhoneDto.class))
+        when(transformationFunctionService.getTransformationFunction(UserDetails.class, ContactPhoneDto.class))
                 .thenReturn(mapFunction);
-        when(queryService.getEntityDto(eq(UserProfile.class), any(Supplier.class), any(Function.class)))
+        when(queryService.getEntityDto(eq(UserDetails.class), any(Supplier.class), any(Function.class)))
                 .thenAnswer(invocation -> {
                     Supplier<Parameter> paramSupplier = invocation.getArgument(1);
-                    Function<UserProfile, ContactPhoneDto> mappingFunction = invocation.getArgument(2);
+                    Function<UserDetails, ContactPhoneDto> mappingFunction = invocation.getArgument(2);
                     assertEquals(mockParameter, paramSupplier.get());
                     return mappingFunction.apply(userProfile);
                 });

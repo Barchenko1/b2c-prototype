@@ -3,7 +3,7 @@ package com.b2c.prototype.manager.userprofile.basic;
 import com.b2c.prototype.dao.user.IContactInfoDao;
 import com.b2c.prototype.modal.dto.payload.ContactInfoDto;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
-import com.b2c.prototype.modal.entity.user.UserProfile;
+import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.service.common.EntityOperationManager;
 import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
@@ -37,8 +37,8 @@ public class ContactInfoManager implements IContactInfoManager {
     @Override
     public void saveUpdateContactInfoByUserId(String userId, ContactInfoDto contactInfoDto) {
         entityOperationDao.executeConsumer(session -> {
-            UserProfile userProfile = searchService.getEntity(
-                    UserProfile.class,
+            UserDetails userProfile = searchService.getEntity(
+                    UserDetails.class,
                     supplierService.parameterStringSupplier(USER_ID, userId));
             ContactInfo newContactInfo = transformationFunctionService
                     .getEntity(ContactInfo.class, contactInfoDto);
@@ -55,18 +55,18 @@ public class ContactInfoManager implements IContactInfoManager {
     public void deleteContactInfoByUserId(String userId) {
         entityOperationDao.deleteEntity(
                 supplierService.entityFieldSupplier(
-                        UserProfile.class,
+                        UserDetails.class,
                         supplierService.parameterStringSupplier(USER_ID, userId),
-                        transformationFunctionService.getTransformationFunction(UserProfile.class, ContactInfo.class))
+                        transformationFunctionService.getTransformationFunction(UserDetails.class, ContactInfo.class))
         );
     }
 
     @Override
     public ContactInfoDto getContactInfoByUserId(String userId) {
         return searchService.getEntityDto(
-                UserProfile.class,
+                UserDetails.class,
                 supplierService.parameterStringSupplier(USER_ID, userId),
-                transformationFunctionService.getTransformationFunction(UserProfile.class, ContactInfoDto.class));
+                transformationFunctionService.getTransformationFunction(UserDetails.class, ContactInfoDto.class));
     }
 
 }

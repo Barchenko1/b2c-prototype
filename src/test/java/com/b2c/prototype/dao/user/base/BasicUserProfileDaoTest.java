@@ -8,7 +8,7 @@ import com.b2c.prototype.modal.entity.post.Post;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
-import com.b2c.prototype.modal.entity.user.UserProfile;
+import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.util.CardUtil;
 import com.tm.core.process.dao.common.AbstractEntityDao;
 import com.tm.core.process.dao.identifier.QueryService;
@@ -73,7 +73,7 @@ class BasicUserProfileDaoTest extends AbstractCustomEntityDaoTest {
         EntityTable countryEntityTable = new EntityTable(Country.class, "country");
         EntityTable addressEntityTable = new EntityTable(Address.class, "address");
         EntityTable creditCardEntityTable = new EntityTable(CreditCard.class, "credit_card");
-        EntityTable itemEntityTable = new EntityTable(UserProfile.class, "user_profile");
+        EntityTable itemEntityTable = new EntityTable(UserDetails.class, "user_profile");
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
         entityMappingManager.addEntityTable(countryEntityTable);
         entityMappingManager.addEntityTable(addressEntityTable);
@@ -82,7 +82,7 @@ class BasicUserProfileDaoTest extends AbstractCustomEntityDaoTest {
         return entityMappingManager;
     }
 
-    private UserProfile prepareTestUserProfile() {
+    private UserDetails prepareTestUserProfile() {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(1L)
                 .value("+11")
@@ -132,19 +132,18 @@ class BasicUserProfileDaoTest extends AbstractCustomEntityDaoTest {
                 .dateOfCreate(100000)
                 .build();
 
-        return UserProfile.builder()
+        return UserDetails.builder()
                 .id(1L)
                 .username("username")
-                .email("email")
                 .dateOfCreate(100)
                 .isActive(true)
                 .contactInfo(contactInfo)
-                .address(address)
+                .addresses(List.of(address))
                 .creditCardList(List.of(creditCard))
                 .build();
     }
 
-    private UserProfile prepareSaveUserProfile() {
+    private UserDetails prepareSaveUserProfile() {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(1L)
                 .value("+11")
@@ -188,19 +187,18 @@ class BasicUserProfileDaoTest extends AbstractCustomEntityDaoTest {
                 .cvv("818")
                 .build();
 
-        return UserProfile.builder()
+        return UserDetails.builder()
                 .userId("123")
                 .username("username")
-                .email("email")
                 .dateOfCreate(100)
                 .isActive(true)
                 .contactInfo(contactInfo)
-                .address(address)
+                .addresses(List.of(address))
                 .creditCardList(List.of(creditCard))
                 .build();
     }
 
-    private UserProfile prepareUpdateUserProfile() {
+    private UserDetails prepareUpdateUserProfile() {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(1L)
                 .value("+11")
@@ -251,23 +249,21 @@ class BasicUserProfileDaoTest extends AbstractCustomEntityDaoTest {
                 .dateOfCreate(100000)
                 .build();
 
-        return UserProfile.builder()
+        return UserDetails.builder()
                 .id(1L)
                 .userId("123")
                 .username("Update username")
-                .email("Update email")
                 .dateOfCreate(200)
                 .isActive(false)
                 .contactInfo(contactInfo)
-                .address(address)
+                .addresses(List.of(address))
                 .creditCardList(List.of(creditCard))
                 .build();
     }
 
-    private void checkUserProfile(UserProfile expectedUserProfile, UserProfile actualUserProfile) {
+    private void checkUserProfile(UserDetails expectedUserProfile, UserDetails actualUserProfile) {
         assertEquals(expectedUserProfile.getId(), actualUserProfile.getId());
         assertEquals(expectedUserProfile.getUsername(), actualUserProfile.getUsername());
-        assertEquals(expectedUserProfile.getEmail(), actualUserProfile.getEmail());
         assertEquals(expectedUserProfile.getDateOfCreate(), actualUserProfile.getDateOfCreate());
         assertEquals(expectedUserProfile.isActive(), actualUserProfile.isActive());
 
@@ -279,8 +275,8 @@ class BasicUserProfileDaoTest extends AbstractCustomEntityDaoTest {
         loadDataSet("/datasets/user/user_profile/testUserProfileDataSet.yml");
         Parameter parameter = new Parameter("id", 1L);
 
-        UserProfile userProfile = prepareTestUserProfile();
-        List<UserProfile> resultList =
+        UserDetails userProfile = prepareTestUserProfile();
+        List<UserDetails> resultList =
                 dao.getEntityList(parameter);
 
         assertEquals(1, resultList.size());
@@ -299,7 +295,7 @@ class BasicUserProfileDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void saveEntity_success() {
         loadDataSet("/datasets/user/user_profile/emptyUserProfileDataSet.yml");
-        UserProfile userProfile = prepareSaveUserProfile();
+        UserDetails userProfile = prepareSaveUserProfile();
         dao.mergeEntity(userProfile);
         verifyExpectedData("/datasets/user/user_profile/saveUserProfileDataSet.yml");
     }
@@ -307,12 +303,12 @@ class BasicUserProfileDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void saveEntityWithDependencies_success() {
         loadDataSet("/datasets/user/user_profile/emptyUserProfileWithoutDetailsDataSet.yml");
-        UserProfile userProfile = prepareSaveUserProfile();
+        UserDetails userProfile = prepareSaveUserProfile();
         ContactInfo contactInfo = userProfile.getContactInfo();
         contactInfo.setId(0L);
         ContactPhone contactPhone = contactInfo.getContactPhone();
         contactPhone.setId(0L);
-        Address address = userProfile.getAddress();
+        Address address = userProfile.getAddresses().get(0);
         address.setId(0L);
         CreditCard creditCard = userProfile.getCreditCardList().get(0);
         creditCard.setId(0L);
@@ -323,7 +319,7 @@ class BasicUserProfileDaoTest extends AbstractCustomEntityDaoTest {
 
     @Test
     void saveRelationshipEntity_transactionFailure() {
-        UserProfile userProfile = prepareUpdateUserProfile();
+        UserDetails userProfile = prepareUpdateUserProfile();
         SessionFactory sessionFactory = mock(SessionFactory.class);
         Session session = mock(Session.class);
         Transaction transaction = mock(Transaction.class);
@@ -351,8 +347,8 @@ class BasicUserProfileDaoTest extends AbstractCustomEntityDaoTest {
     void saveEntityConsumer_success() {
         loadDataSet("/datasets/user/user_profile/emptyUserProfileDataSet.yml");
         Consumer<Session> consumer = (Session s) -> {
-            UserProfile userProfile = prepareSaveUserProfile();
-            userProfile.setAddress(s.merge(userProfile.getAddress()));
+            UserDetails userProfile = prepareSaveUserProfile();
+            userProfile.setAddresses(s.merge(userProfile.getAddresses()));
             userProfile.setContactInfo(s.merge(userProfile.getContactInfo()));
             userProfile.setCreditCardList(userProfile.getCreditCardList().stream().map(s::merge).toList());
             s.persist(userProfile);
@@ -380,14 +376,14 @@ class BasicUserProfileDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void updateRelationshipEntity_success() {
         loadDataSet("/datasets/user/user_profile/testUserProfileDataSet.yml");
-        Supplier<UserProfile> supplier = this::prepareUpdateUserProfile;
+        Supplier<UserDetails> supplier = this::prepareUpdateUserProfile;
         dao.updateEntity(supplier);
         verifyExpectedData("/datasets/user/user_profile/updateUserProfileDataSet.yml");
     }
 
     @Test
     void updateRelationshipEntity_transactionFailure() {
-        Supplier<UserProfile> supplier = () -> {
+        Supplier<UserDetails> supplier = () -> {
             throw new RuntimeException();
         };
 
@@ -402,7 +398,7 @@ class BasicUserProfileDaoTest extends AbstractCustomEntityDaoTest {
     void updateEntityConsumer_success() {
         loadDataSet("/datasets/user/user_profile/testUserProfileDataSet.yml");
         Consumer<Session> consumer = (Session s) -> {
-            UserProfile userProfile = prepareUpdateUserProfile();
+            UserDetails userProfile = prepareUpdateUserProfile();
             s.merge(userProfile);
         };
         dao.executeConsumer(consumer);
@@ -413,7 +409,7 @@ class BasicUserProfileDaoTest extends AbstractCustomEntityDaoTest {
     void updateRelationshipEntityConsumer_transactionFailure() {
         loadDataSet("/datasets/user/user_profile/testUserProfileDataSet.yml");
         Consumer<Session> consumer = (Session s) -> {
-            UserProfile userProfile = prepareUpdateUserProfile();
+            UserDetails userProfile = prepareUpdateUserProfile();
             s.merge(userProfile);
             throw new RuntimeException();
         };
@@ -438,8 +434,8 @@ class BasicUserProfileDaoTest extends AbstractCustomEntityDaoTest {
     void deleteRelationshipEntityByConsumer_success() {
         loadDataSet("/datasets/user/user_profile/testUserProfileDataSet.yml");
         Consumer<Session> consumer = (Session s) -> {
-            UserProfile userProfile = prepareTestUserProfile();
-            s.remove(userProfile.getAddress());
+            UserDetails userProfile = prepareTestUserProfile();
+            s.remove(userProfile.getAddresses());
             s.remove(userProfile);
         };
 
@@ -464,7 +460,7 @@ class BasicUserProfileDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void deleteRelationshipEntityByGeneralEntity_success() {
         loadDataSet("/datasets/user/user_profile/testUserProfileDataSet.yml");
-        UserProfile userProfile = prepareTestUserProfile();
+        UserDetails userProfile = prepareTestUserProfile();
 
         dao.deleteEntity(userProfile);
         verifyExpectedData("/datasets/user/user_profile/emptyUserProfileWithoutDetailsDataSet.yml");
@@ -489,7 +485,7 @@ class BasicUserProfileDaoTest extends AbstractCustomEntityDaoTest {
         when(session.beginTransaction()).thenReturn(transaction);
         doThrow(new RuntimeException()).when(session).remove(any(Object.class));
 
-        UserProfile userProfile = prepareTestUserProfile();
+        UserDetails userProfile = prepareTestUserProfile();
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
             dao.deleteEntity(userProfile);
@@ -501,13 +497,13 @@ class BasicUserProfileDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void deleteRelationshipEntity_transactionFailure() {
         loadDataSet("/datasets/user/user_profile/testUserProfileDataSet.yml");
-        UserProfile userProfile = prepareTestUserProfile();
+        UserDetails userProfile = prepareTestUserProfile();
         Parameter parameter = new Parameter("id", 1L);
 
         SessionFactory sessionFactory = mock(SessionFactory.class);
         Session session = mock(Session.class);
         Transaction transaction = mock(Transaction.class);
-        NativeQuery<UserProfile> nativeQuery = mock(NativeQuery.class);
+        NativeQuery<UserDetails> nativeQuery = mock(NativeQuery.class);
 
         try {
             Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
@@ -519,7 +515,7 @@ class BasicUserProfileDaoTest extends AbstractCustomEntityDaoTest {
 
         when(sessionFactory.openSession()).thenReturn(session);
         when(session.beginTransaction()).thenReturn(transaction);
-        when(session.createNativeQuery(anyString(), eq(UserProfile.class))).thenReturn(nativeQuery);
+        when(session.createNativeQuery(anyString(), eq(UserDetails.class))).thenReturn(nativeQuery);
         when(nativeQuery.getSingleResult()).thenReturn(userProfile);
         doThrow(new RuntimeException()).when(session).remove(userProfile);
 
@@ -537,11 +533,11 @@ class BasicUserProfileDaoTest extends AbstractCustomEntityDaoTest {
     void getOptionalEntityWithDependencies_success() {
         loadDataSet("/datasets/user/user_profile/testUserProfileDataSet.yml");
         Parameter parameter = new Parameter("id", 1L);
-        UserProfile userProfile = prepareTestUserProfile();
-        Optional<UserProfile> resultOptional = dao.getOptionalEntity(parameter);
+        UserDetails userProfile = prepareTestUserProfile();
+        Optional<UserDetails> resultOptional = dao.getOptionalEntity(parameter);
 
         assertTrue(resultOptional.isPresent());
-        UserProfile result = resultOptional.get();
+        UserDetails result = resultOptional.get();
 
         checkUserProfile(userProfile, result);
     }
@@ -561,8 +557,8 @@ class BasicUserProfileDaoTest extends AbstractCustomEntityDaoTest {
         loadDataSet("/datasets/user/user_profile/testUserProfileDataSet.yml");
         Parameter parameter = new Parameter("id", 1L);
 
-        UserProfile userProfile = prepareTestUserProfile();
-        UserProfile result = dao.getEntity(parameter);
+        UserDetails userProfile = prepareTestUserProfile();
+        UserDetails result = dao.getEntity(parameter);
 
         checkUserProfile(userProfile, result);
     }

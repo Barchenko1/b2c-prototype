@@ -1,7 +1,6 @@
 package com.b2c.prototype.manager.price;
 
 import com.b2c.prototype.modal.constant.PriceTypeEnum;
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.payload.PriceDto;
 import com.b2c.prototype.modal.dto.response.ResponsePriceDto;
 

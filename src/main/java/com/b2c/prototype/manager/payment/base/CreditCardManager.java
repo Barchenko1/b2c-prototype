@@ -7,7 +7,7 @@ import com.b2c.prototype.modal.entity.order.OrderArticularItem;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
 import com.b2c.prototype.dao.payment.ICreditCardDao;
 import com.b2c.prototype.modal.entity.payment.Payment;
-import com.b2c.prototype.modal.entity.user.UserProfile;
+import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.payment.ICreditCardManager;
 import com.b2c.prototype.service.common.EntityOperationManager;
@@ -49,8 +49,8 @@ public class CreditCardManager implements ICreditCardManager {
     @Override
     public void saveCreditCardByUserId(String userId, CreditCardDto creditCardDto) {
         entityOperationDao.executeConsumer(session -> {
-            UserProfile userProfile = searchService.getEntity(
-                    UserProfile.class,
+            UserDetails userProfile = searchService.getEntity(
+                    UserDetails.class,
                     supplierService.parameterStringSupplier(USER_ID, userId));
             CreditCard creditCard = transformationFunctionService.getEntity(
                     CreditCard.class,
@@ -68,8 +68,8 @@ public class CreditCardManager implements ICreditCardManager {
     @Override
     public void updateCreditCardByUserId(String userId, CreditCardDto creditCardDto) {
         entityOperationDao.executeConsumer(session -> {
-            UserProfile userProfile = searchService.getEntity(
-                    UserProfile.class,
+            UserDetails userProfile = searchService.getEntity(
+                    UserDetails.class,
                     supplierService.parameterStringSupplier(USER_ID, userId));
             CreditCard newCreditCard = transformationFunctionService.getEntity(
                     CreditCard.class,
@@ -120,8 +120,8 @@ public class CreditCardManager implements ICreditCardManager {
     @Override
     public void deleteCreditCardByUserId(MultipleFieldsSearchDtoDelete multipleFieldsSearchDtoDelete) {
         entityOperationDao.executeConsumer(session -> {
-            UserProfile userProfile = searchService.getEntity(
-                    UserProfile.class,
+            UserDetails userProfile = searchService.getEntity(
+                    UserDetails.class,
                     supplierService.parameterStringSupplier(USER_ID, multipleFieldsSearchDtoDelete.getMainSearchField()));
             CreditCard creditCard = userProfile.getCreditCardList().stream()
                     .filter(existingCreditCard ->

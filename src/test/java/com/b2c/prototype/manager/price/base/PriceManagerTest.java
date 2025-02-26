@@ -1,11 +1,5 @@
 package com.b2c.prototype.manager.price.base;
 
-import static com.b2c.prototype.util.Constant.ORDER_ID;
-import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.*;
-
 import com.b2c.prototype.dao.price.IPriceDao;
 import com.b2c.prototype.modal.constant.PriceTypeEnum;
 import com.b2c.prototype.modal.dto.payload.PriceDto;
@@ -30,6 +24,16 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+
+import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
+import static com.b2c.prototype.util.Constant.ORDER_ID;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class PriceManagerTest {
 
@@ -266,7 +270,7 @@ class PriceManagerTest {
         OrderArticularItem orderItemDataOption = mock(OrderArticularItem.class);
         Payment payment = mock(Payment.class);
         when(orderItemDataOption.getPayment()).thenReturn(payment);
-        when(payment.getFullPrice()).thenReturn(getPrice(100.0));
+        when(payment.getCommissionPrice()).thenReturn(getPrice(100.0));
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
         PriceTypeEnum priceType = PriceTypeEnum.FULL_PRICE;

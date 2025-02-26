@@ -16,4 +16,6 @@ import lombok.experimental.SuperBuilder;
 public class Delivery extends AbstractDelivery {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private TimeDurationOption timeDurationOption;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    private ZoneOption zoneOption;
 }

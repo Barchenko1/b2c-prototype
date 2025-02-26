@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class AbstractConstantControllerE2ETest extends BasicE2ETest {
 
-    private final String URL_TEMPLATE = "/api/v1/singlevalue";
+    private final String URL_TEMPLATE = "/api/v1/constant";
     private final String SERVICE_ID = "serviceId";
 
     protected <T> void postConstantEntity(T payloadDto,

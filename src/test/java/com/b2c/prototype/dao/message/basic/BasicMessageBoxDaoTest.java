@@ -12,7 +12,7 @@ import com.b2c.prototype.modal.entity.post.Post;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
-import com.b2c.prototype.modal.entity.user.UserProfile;
+import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.util.CardUtil;
 import com.tm.core.process.dao.common.AbstractEntityDao;
 import com.tm.core.process.dao.identifier.QueryService;
@@ -72,7 +72,7 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
         }
     }
 
-    private UserProfile prepareTestUserProfile() {
+    private UserDetails prepareTestUserProfile() {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(1L)
                 .value("+11")
@@ -120,14 +120,13 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
                 .dateOfCreate(100000)
                 .build();
 
-        return UserProfile.builder()
+        return UserDetails.builder()
                 .id(1L)
                 .username("username")
-                .email("email")
                 .dateOfCreate(100)
                 .isActive(true)
                 .contactInfo(contactInfo)
-                .address(address)
+                .addresses(List.of(address))
                 .creditCardList(List.of(creditCard))
                 .build();
     }
@@ -365,7 +364,7 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
         Message newMessage = prepareNewMessage();
         Supplier<MessageBox> messageBoxSupplier = () -> {
             Parameter parameter = new Parameter("id", 1L);
-            MessageBox oldMessageBox = queryService.getEntity(sessionFactory.openSession(), MessageBox.class, parameter);
+            MessageBox oldMessageBox = queryService.getEntityNamedQuery(sessionFactory.openSession(),MessageBox.class, "",parameter);
             newMessage.setId(2L);
             oldMessageBox.addMessage(newMessage);
             return oldMessageBox;

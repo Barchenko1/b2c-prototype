@@ -19,6 +19,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
+
 @MappedSuperclass
 @Data
 @SuperBuilder
@@ -31,11 +33,12 @@ public class AbstractPayment {
     private long id;
     @Column(name = "upayment_id", unique = true, nullable = false)
     private String paymentId;
+    private LocalDateTime paymentTime;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "payment_method_id")
     private PaymentMethod paymentMethod;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Price fullPrice;
+    private Price commissionPrice;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Price totalPrice;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)

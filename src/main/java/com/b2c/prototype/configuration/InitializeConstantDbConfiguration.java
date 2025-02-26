@@ -368,17 +368,17 @@ public class InitializeConstantDbConfiguration {
 
     private void initializeCategory(Locale defaultLocale) {
         Set<TransitiveSelfYaml> categories = applicationPropertyConfiguration.getCategories();
-        List<Category> existCategoryList = categoryDao.getTransitiveSelfEntityList();
+//        List<Category> existCategoryList = categoryDao.getTransitiveSelfEntityList();
         List<TransitiveSelfYaml> configYamlList = extractTransitiveSelfYaml(categories);
-        List<TransitiveSelfYaml> nonExistingCategories = findNonExistingCategories(configYamlList, existCategoryList);
-        Map<Category, List<TransitiveSelfYaml>> nonExistingCategoriesMap = findNonExistingCategoriesMap(categories, existCategoryList);
-        if (!nonExistingCategoriesMap.isEmpty()) {
-            buildNewCategories(nonExistingCategoriesMap);
-        } else {
-            categories.stream()
-                    .map(CategoryUtil::buildCategory)
-                    .forEach(categoryDao::saveEntityTree);
-        }
+//        List<TransitiveSelfYaml> nonExistingCategories = findNonExistingCategories(configYamlList, existCategoryList);
+//        Map<Category, List<TransitiveSelfYaml>> nonExistingCategoriesMap = findNonExistingCategoriesMap(categories, existCategoryList);
+//        if (!nonExistingCategoriesMap.isEmpty()) {
+//            buildNewCategories(nonExistingCategoriesMap);
+//        } else {
+//            categories.stream()
+//                    .map(CategoryUtil::buildCategory);
+////                    .forEach(categoryDao::saveEntityTree);
+//        }
     }
 
     private void buildNewCategories(Map<Category, List<TransitiveSelfYaml>> nonExistingCategoriesMap) {

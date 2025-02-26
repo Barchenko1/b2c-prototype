@@ -238,7 +238,7 @@ class PaymentManagerTest {
                 .paymentId("123")
                 .paymentMethod(paymentMethod)
                 .creditCard(getCreditCard())
-                .fullPrice(getPrice(120))
+                .commissionPrice(getPrice(120))
                 .totalPrice(getPrice(100))
                 .discount(getDiscount())
                 .build();

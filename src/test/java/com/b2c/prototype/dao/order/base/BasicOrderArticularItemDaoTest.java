@@ -26,7 +26,7 @@ import com.b2c.prototype.modal.entity.order.Beneficiary;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
-import com.b2c.prototype.modal.entity.user.UserProfile;
+import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.util.CardUtil;
 import com.tm.core.process.dao.common.AbstractEntityDao;
 import com.tm.core.process.dao.identifier.QueryService;
@@ -216,16 +216,15 @@ class BasicOrderArticularItemDaoTest extends AbstractCustomEntityDaoTest {
                 .build();
     }
 
-    private UserProfile prepareTestUserProfile() {
+    private UserDetails prepareTestUserProfile() {
         CreditCard creditCard = prepareCard();
-        return UserProfile.builder()
+        return UserDetails.builder()
                 .id(1L)
                 .username("username")
-                .email("email")
                 .dateOfCreate(100)
                 .isActive(true)
                 .contactInfo(prepareContactInfo())
-                .address(createAddress())
+                .addresses(List.of(createAddress()))
                 .creditCardList(List.of(creditCard))
                 .build();
     }
@@ -328,7 +327,7 @@ class BasicOrderArticularItemDaoTest extends AbstractCustomEntityDaoTest {
                 .discount(discount)
                 .paymentMethod(paymentMethod)
                 .creditCard(creditCard)
-                .fullPrice(price)
+                .commissionPrice(price)
                 .totalPrice(price)
                 .build();
     }
@@ -339,7 +338,7 @@ class BasicOrderArticularItemDaoTest extends AbstractCustomEntityDaoTest {
         Beneficiary beneficiary = prepareBeneficiary();
         beneficiary.setId(1L);
         beneficiary.getContactPhone().setId(1L);
-        UserProfile userProfile = prepareTestUserProfile();
+        UserDetails userProfile = prepareTestUserProfile();
         userProfile.getContactInfo().setId(1L);
         OrderArticularItem orderItemDataOption = OrderArticularItem.builder()
                 .id(1L)
@@ -358,7 +357,7 @@ class BasicOrderArticularItemDaoTest extends AbstractCustomEntityDaoTest {
         orderItemDataOption.getDelivery().getAddress().setId(1L);
 
         orderItemDataOption.getPayment().setId(1L);
-        orderItemDataOption.getPayment().getFullPrice().setId(1L);
+        orderItemDataOption.getPayment().getCommissionPrice().setId(1L);
         orderItemDataOption.getPayment().getTotalPrice().setId(1L);
         orderItemDataOption.getPayment().getCreditCard().setId(1L);
 
@@ -386,7 +385,7 @@ class BasicOrderArticularItemDaoTest extends AbstractCustomEntityDaoTest {
         Beneficiary beneficiary = prepareBeneficiary();
         beneficiary.setId(1L);
         beneficiary.getContactPhone().setId(1L);
-        UserProfile userProfile = prepareTestUserProfile();
+        UserDetails userProfile = prepareTestUserProfile();
         userProfile.getContactInfo().setId(1L);
         OrderArticularItem orderItemDataOption = OrderArticularItem.builder()
                 .id(1L)
@@ -404,7 +403,7 @@ class BasicOrderArticularItemDaoTest extends AbstractCustomEntityDaoTest {
         orderItemDataOption.getDelivery().getAddress().setId(1L);
 
         orderItemDataOption.getPayment().setId(1L);
-        orderItemDataOption.getPayment().getFullPrice().setId(1L);
+        orderItemDataOption.getPayment().getCommissionPrice().setId(1L);
         orderItemDataOption.getPayment().getTotalPrice().setId(1L);
         orderItemDataOption.getPayment().getCreditCard().setId(1L);
 
@@ -521,7 +520,7 @@ class BasicOrderArticularItemDaoTest extends AbstractCustomEntityDaoTest {
             Address address = orderArticularItem.getDelivery().getAddress();
             s.merge(address);
             orderArticularItem.getDelivery().setAddress(address);
-            orderArticularItem.getUserProfile().setAddress(address);
+            orderArticularItem.getUserProfile().setAddresses(List.of(address));
 
             CreditCard creditCard = orderArticularItem.getPayment().getCreditCard();
             s.merge(creditCard);

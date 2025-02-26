@@ -1,7 +1,7 @@
 package com.b2c.prototype.dao.item;
 
-import com.tm.core.process.dao.transitive.ITransitiveSelfEntityDao;
+import com.tm.core.process.dao.common.IEntityDao;
 
-public interface ICategoryDao extends ITransitiveSelfEntityDao {
+public interface ICategoryDao extends IEntityDao {
 
 }

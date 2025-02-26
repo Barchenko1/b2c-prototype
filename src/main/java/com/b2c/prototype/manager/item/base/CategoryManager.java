@@ -2,13 +2,14 @@ package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.dao.item.ICategoryDao;
 import com.b2c.prototype.modal.dto.payload.constant.CategoryDto;
-import com.b2c.prototype.modal.dto.update.CategoryDtoUpdate;
 import com.b2c.prototype.modal.entity.item.Category;
-import com.b2c.prototype.manager.AbstractTransitiveSelfEntityManager;
 import com.b2c.prototype.manager.item.ICategoryManager;
-import com.tm.core.process.dao.transitive.ITransitiveSelfEntityDao;
+import com.b2c.prototype.service.common.EntityOperationManager;
+import com.b2c.prototype.service.common.IEntityOperationManager;
+import com.b2c.prototype.service.function.ITransformationFunctionService;
+import com.b2c.prototype.service.supplier.ISupplierService;
+import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.finder.parameter.Parameter;
-import com.tm.core.util.TransitiveSelfEnum;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -17,51 +18,52 @@ import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
-public class CategoryManager extends AbstractTransitiveSelfEntityManager implements ICategoryManager {
+public class CategoryManager implements ICategoryManager {
 
-    private final ICategoryDao categoryDao;
+    private final IEntityOperationManager entityOperationManager;
+    private final ITransformationFunctionService transformationFunctionService;
+    private final ISupplierService supplierService;
+    private final IParameterFactory parameterFactory;
 
-    public CategoryManager(ICategoryDao categoryDao) {
-        this.categoryDao = categoryDao;
-    }
-
-    @Override
-    protected ITransitiveSelfEntityDao getEntityDao() {
-        return this.categoryDao;
+    public CategoryManager(ICategoryDao categoryDao,
+                           ITransformationFunctionService transformationFunctionService,
+                           ISupplierService supplierService,
+                           IParameterFactory parameterFactory) {
+        this.entityOperationManager = new EntityOperationManager(categoryDao);
+        this.transformationFunctionService = transformationFunctionService;
+        this.supplierService = supplierService;
+        this.parameterFactory = parameterFactory;
     }
 
     @Override
     public void createCategory(CategoryDto categoryDto) {
         Category newCategory = buildCategory(categoryDto);
-
-        super.saveEntityTree(newCategory);
+        entityOperationManager.saveEntity(newCategory);
     }
 
     @Override
-    public void updateCategory(CategoryDtoUpdate categoryDtoUpdate) {
-        Category oldCategory = buildCategory(categoryDtoUpdate.getOldEntity());
-        Category newCategory = buildCategory(categoryDtoUpdate.getNewEntity());
+    public void updateCategory(String parentCategoryValue, CategoryDto categoryDto) {
+//        Category oldCategory = buildCategory(categoryDto.getOldEntity());
+//        Category newCategory = buildCategory(categoryDto.getNewEntity());
 
-        CategoryDto oldCategoryDto = categoryDtoUpdate.getOldEntity();
-        Parameter parameter =
-                parameterFactory.createStringParameter("name", oldCategoryDto.getRoot().getValue());
-        categoryDao.updateEntityTreeOldMain(newCategory, parameter);
+//        CategoryDto oldCategoryDto = categoryDtoUpdate.getOldEntity();
+//        Parameter parameter =
+//                parameterFactory.createStringParameter("name", oldCategoryDto.getRoot().getValue());
+        Category category = buildCategory(categoryDto);
+        entityOperationManager.updateEntity(category);
     }
 
     @Override
-    public void deleteCategory(CategoryDto categoryDto) {
-        Category oldCategory = buildCategory(categoryDto);
-
+    public void deleteCategory(String categoryValue) {
         Parameter parameter =
-                parameterFactory.createStringParameter("name", categoryDto.getRoot().getValue());
-        categoryDao.deleteEntityTree(parameter);
+                parameterFactory.createStringParameter("value", categoryValue);
+        entityOperationManager.deleteEntity(parameter);
     }
 
     @Override
     public Category getCategoryByCategoryName(String categoryName) {
         Parameter parameter = new Parameter("name", categoryName);
-        Optional<Category> optionalCategory =
-                categoryDao.getOptionalTransitiveSelfEntity(parameter);
+        Optional<Category> optionalCategory = entityOperationManager.getOptionalEntity(parameter);
 
         if (optionalCategory.isEmpty()) {
             throw new RuntimeException();
@@ -72,12 +74,12 @@ public class CategoryManager extends AbstractTransitiveSelfEntityManager impleme
 
     @Override
     public List<Category> getAllCategories() {
-        return categoryDao.getTransitiveSelfEntityList();
+        return entityOperationManager.getEntityList();
     }
 
     @Override
-    public Map<TransitiveSelfEnum, List<Category>> getAllCategoriesTree() {
-        return categoryDao.getTransitiveSelfEntitiesTree();
+    public Map<String, List<Category>> getAllCategoriesTree() {
+        return null;
     }
 
     private Category buildCategory(CategoryDto categoryDto) {

@@ -1,7 +1,6 @@
 package com.b2c.prototype.manager.delivery.base;
 
 import com.b2c.prototype.dao.delivery.IDeliveryDao;
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.payload.AddressDto;
 import com.b2c.prototype.modal.dto.payload.DeliveryDto;
 import com.b2c.prototype.modal.entity.address.Address;
@@ -162,9 +161,6 @@ class DeliveryManagerTest {
 
     @Test
     void testGetDeliveries() {
-        OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto();
-        oneFieldEntityDto.setValue("123");
-
         Delivery delivery = getDelivery();
         DeliveryDto deliveryDto =  getDeliveryDto();
         Function<Delivery, DeliveryDto> function = mock(Function.class);

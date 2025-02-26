@@ -1,6 +1,6 @@
 package com.b2c.prototype.dao.post.base;
 
-import com.b2c.prototype.dao.AbstractTransitiveSelfEntityDaoTest;
+import com.b2c.prototype.dao.AbstractConstantEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
 import com.b2c.prototype.modal.entity.post.Post;
 import com.tm.core.process.dao.identifier.QueryService;
@@ -10,7 +10,7 @@ import com.tm.core.finder.manager.IEntityMappingManager;
 import com.tm.core.finder.table.EntityTable;
 import org.junit.jupiter.api.BeforeAll;
 
-class BasicPostDaoTest extends AbstractTransitiveSelfEntityDaoTest {
+class BasicPostDaoTest extends AbstractConstantEntityDaoTest {
 
     @BeforeAll
     static void setup() {
@@ -106,31 +106,4 @@ class BasicPostDaoTest extends AbstractTransitiveSelfEntityDaoTest {
         return new EntityDataSet<>(root, "/datasets/post/updatePostDataSet.yml");
     }
 
-    @Override
-    protected EntityDataSet<? extends TransitiveSelfEntity> getDeleteDataSet() {
-        Post parent = Post.builder()
-                .title("parent")
-                .uniquePostId("1")
-                .message("parent")
-                .dateOfCreate(100000)
-                .build();
-        Post root = Post.builder()
-                .title("root")
-                .uniquePostId("2")
-                .message("root")
-                .dateOfCreate(100000)
-                .build();
-        Post child = Post.builder()
-                .title("child")
-                .uniquePostId("3")
-                .message("child")
-                .dateOfCreate(100000)
-                .build();
-
-        parent.addChildPost(root);
-        root.addChildPost(child);
-        return new EntityDataSet<>(root,
-                "/datasets/post/deletePostDataSet.yml",
-                            "/datasets/post/deleteChildPostDataSet.yml");
-    }
 }

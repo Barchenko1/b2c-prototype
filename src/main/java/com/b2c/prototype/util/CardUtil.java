@@ -3,11 +3,8 @@ package com.b2c.prototype.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.Date;
 
 public final class CardUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(CardUtil.class);

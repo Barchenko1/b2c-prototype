@@ -5,7 +5,7 @@ import com.b2c.prototype.modal.dto.payload.AddressDto;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
 import com.b2c.prototype.modal.entity.order.OrderArticularItem;
-import com.b2c.prototype.modal.entity.user.UserProfile;
+import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.address.IAddressManager;
@@ -38,12 +38,12 @@ public class AddressManager implements IAddressManager {
     @Override
     public void saveUpdateAppUserAddress(String userId, AddressDto addressDto) {
         entityOperationDao.executeConsumer(session -> {
-            UserProfile userProfile = searchService.getEntity(
-                    UserProfile.class,
+            UserDetails userProfile = searchService.getEntity(
+                    UserDetails.class,
                     supplierService.parameterStringSupplier(USER_ID, userId));
             Address newAddress = transformationFunctionService
                     .getEntity(Address.class, addressDto);
-            userProfile.setAddress(newAddress);
+            userProfile.setAddresses(List.of(newAddress));
             session.merge(userProfile);
         });
     }
@@ -66,9 +66,9 @@ public class AddressManager implements IAddressManager {
     public void deleteAppUserAddress(String userId) {
         entityOperationDao.deleteEntity(
                 supplierService.entityFieldSupplier(
-                        UserProfile.class,
+                        UserDetails.class,
                         supplierService.parameterStringSupplier(USER_ID, userId),
-                        transformationFunctionService.getTransformationFunction(UserProfile.class, Address.class)));
+                        transformationFunctionService.getTransformationFunction(UserDetails.class, Address.class)));
     }
 
     @Override
@@ -83,9 +83,9 @@ public class AddressManager implements IAddressManager {
     @Override
     public AddressDto getAddressByUserId(String userId) {
         return searchService.getEntityDto(
-                UserProfile.class,
+                UserDetails.class,
                 supplierService.parameterStringSupplier(USER_ID, userId),
-                transformationFunctionService.getTransformationFunction(UserProfile.class, AddressDto.class));
+                transformationFunctionService.getTransformationFunction(UserDetails.class, AddressDto.class));
     }
 
     @Override

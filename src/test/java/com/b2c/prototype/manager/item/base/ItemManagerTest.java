@@ -1,7 +1,6 @@
 package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.dao.item.IItemDao;
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.payload.ItemDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.ArticularStatus;

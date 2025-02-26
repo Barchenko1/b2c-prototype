@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/singlevalue")
+@RequestMapping("/api/v1/constant")
 public class ConstantController {
 
     private final IConstantProcessorService constantOrchestratorService;

@@ -2,12 +2,9 @@ package com.b2c.prototype.manager.message.base;
 
 
 import com.b2c.prototype.dao.message.IMessageDao;
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
-import com.b2c.prototype.modal.dto.delete.MultipleFieldsSearchDtoDelete;
 import com.b2c.prototype.modal.dto.payload.MessageDto;
 import com.b2c.prototype.modal.dto.response.ResponseMessageOverviewDto;
 import com.b2c.prototype.modal.dto.response.ResponseMessagePayloadDto;
-import com.b2c.prototype.modal.dto.update.MessageDtoUpdate;
 import com.b2c.prototype.modal.entity.message.Message;
 import com.b2c.prototype.modal.entity.message.MessageBox;
 import com.b2c.prototype.modal.entity.message.MessageStatus;
@@ -67,11 +64,8 @@ class MessageManagerTest {
                 .message("This is a test.")
                 .receivers(Collections.singletonList("receiver@domain.com"))
                 .build();
-        MessageDtoUpdate messageDtoUpdate = MessageDtoUpdate.builder()
-                .mainSearchField("uniqId")
-                .innerSearchField("123")
-                .newEntity(messageDto)
-                .build();
+        String userId = "userId";
+        String messageId = "uniqId";
         MessageBox messageBox = mock(MessageBox.class);
         Message existingMessage = mock(Message.class);
         Message newMessage = mock(Message.class);
@@ -82,7 +76,7 @@ class MessageManagerTest {
         NativeQuery<MessageBox> query = mock(NativeQuery.class);
 
         when(session.createNativeQuery(any(String.class), eq(MessageBox.class))).thenReturn(query);
-        when(supplierService.parameterStringSupplier(USER_ID, messageDtoUpdate.getMainSearchField()))
+        when(supplierService.parameterStringSupplier(USER_ID, "uniqId"))
                 .thenReturn(supplier);
         when(queryService.getQueryEntity(eq(query), any(Supplier.class))).thenReturn(messageBox);
         when(transformationFunctionService.getEntity(eq(Message.class), eq(messageDto))).thenReturn(newMessage);
@@ -95,7 +89,7 @@ class MessageManagerTest {
             return null;
         }).when(messageDao).executeConsumer(any());
 
-        messageManager.saveUpdateMessage(messageDtoUpdate);
+        messageManager.updateMessage(userId, messageId, messageDto);
 
         verify(messageBox).addMessage(newMessage);
         verify(session).merge(messageBox);
@@ -103,10 +97,8 @@ class MessageManagerTest {
 
     @Test
     void deleteMessage_shouldRemoveMessageFromMessageBoxAndMerge() {
-        MultipleFieldsSearchDtoDelete multipleFieldsSearchDtoDelete = MultipleFieldsSearchDtoDelete.builder()
-                .mainSearchField("uniqueId")
-                .innerSearchField("123")
-                .build();
+        String userId = "uniqId";
+        String messageId = "123";
 
         MessageBox messageBox = mock(MessageBox.class);
         Message existingMessage = mock(Message.class);
@@ -116,7 +108,7 @@ class MessageManagerTest {
         NativeQuery<MessageBox> query = mock(NativeQuery.class);
 
         when(session.createNativeQuery(any(String.class), eq(MessageBox.class))).thenReturn(query);
-        when(supplierService.parameterStringSupplier(USER_ID, multipleFieldsSearchDtoDelete.getMainSearchField()))
+        when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(supplier);
         when(queryService.getQueryEntity(eq(query), any(Supplier.class))).thenReturn(messageBox);
         when(messageBox.getMessages()).thenReturn(Set.of(existingMessage));
@@ -128,7 +120,7 @@ class MessageManagerTest {
             return null;
         }).when(messageDao).executeConsumer(any());
 
-        messageManager.deleteMessage(multipleFieldsSearchDtoDelete);
+        messageManager.deleteMessage(userId, messageId);
 
         verify(messageBox).removeMessage(existingMessage);
         verify(session).merge(messageBox);
@@ -136,9 +128,7 @@ class MessageManagerTest {
 
     @Test
     void cleanUpMessagesByUserId_shouldRemoveMessageFromMessageBoxAndMerge() {
-        OneFieldEntityDto oneFieldEntityDto = OneFieldEntityDto.builder()
-                .value("uniqueId")
-                .build();
+        String uniqueId = "uniqueId";
 
         MessageBox messageBox = mock(MessageBox.class);
         Message existingMessage = mock(Message.class);
@@ -148,7 +138,7 @@ class MessageManagerTest {
         NativeQuery<MessageBox> query = mock(NativeQuery.class);
 
         when(session.createNativeQuery(any(String.class), eq(MessageBox.class))).thenReturn(query);
-        when(supplierService.parameterStringSupplier(USER_ID, oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier(USER_ID, uniqueId))
                 .thenReturn(supplier);
         when(queryService.getQueryEntity(eq(query), any(Supplier.class))).thenReturn(messageBox);
         when(messageBox.getMessages()).thenReturn(Set.of(existingMessage));
@@ -159,7 +149,7 @@ class MessageManagerTest {
             return null;
         }).when(messageDao).executeConsumer(any());
 
-        messageManager.cleanUpMessagesByUserId(oneFieldEntityDto);
+        messageManager.cleanUpMessagesByUserId(uniqueId);
 
         verify(messageBox).removeMessage(existingMessage);
         verify(session).merge(messageBox);
@@ -167,17 +157,14 @@ class MessageManagerTest {
 
     @Test
     void getMessageOverviewBySenderEmail_shouldReturnList() {
-        OneFieldEntityDto oneFieldEntityDto = OneFieldEntityDto.builder()
-                .value("sender@domain.com")
-                .build();
-
+        String senderEmail = "sender@domain.com";
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> supplier = () -> parameter;
         Function<Message, ResponseMessageOverviewDto> transformationFunction = message -> ResponseMessageOverviewDto.builder()
                 .sender(message.getSender())
                 .receivers(message.getReceivers())
                 .build();
-        when(supplierService.parameterStringSupplier("sender", oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier("sender", senderEmail))
                 .thenReturn(supplier);
         when(transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class))
                 .thenReturn(transformationFunction);
@@ -185,7 +172,7 @@ class MessageManagerTest {
         when(messageDao.getEntityList(parameter))
                 .thenReturn(Collections.singletonList(getMessage()));
 
-        List<ResponseMessageOverviewDto> result = messageManager.getMessageOverviewBySenderEmail(oneFieldEntityDto);
+        List<ResponseMessageOverviewDto> result = messageManager.getMessageOverviewBySenderEmail(senderEmail);
 
         assertEquals("sender@domain.com", result.get(0).getSender());
         assertEquals("receiver@domain.com", result.get(0).getReceivers().get(0));
@@ -193,17 +180,14 @@ class MessageManagerTest {
 
     @Test
     void getMessageOverviewByReceiverEmail_shouldReturnList() {
-        OneFieldEntityDto oneFieldEntityDto = OneFieldEntityDto.builder()
-                .value("reciever@domain.com")
-                .build();
-
+        String receiverEmail = "receiver@domain.com";
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> supplier = () -> parameter;
         Function<Message, ResponseMessageOverviewDto> transformationFunction = message -> ResponseMessageOverviewDto.builder()
                 .sender(message.getSender())
                 .receivers(message.getReceivers())
                 .build();
-        when(supplierService.parameterStringSupplier("receiver", oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier("receiver", receiverEmail))
                 .thenReturn(supplier);
         when(transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class))
                 .thenReturn(transformationFunction);
@@ -211,7 +195,7 @@ class MessageManagerTest {
         when(messageDao.getEntityList(parameter))
                 .thenReturn(Collections.singletonList(getMessage()));
 
-        List<ResponseMessageOverviewDto> result = messageManager.getMessageOverviewByReceiverEmail(oneFieldEntityDto);
+        List<ResponseMessageOverviewDto> result = messageManager.getMessageOverviewByReceiverEmail(receiverEmail);
 
         assertEquals("sender@domain.com", result.get(0).getSender());
         assertEquals("receiver@domain.com", result.get(0).getReceivers().get(0));
@@ -219,10 +203,7 @@ class MessageManagerTest {
 
     @Test
     void getMessagePayloadDto_shouldReturnPayload() {
-        OneFieldEntityDto oneFieldEntityDto = OneFieldEntityDto.builder()
-                .value("messageUniqNumber1")
-                .build();
-
+        String uniqueId = "messageUniqNumber1";
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> supplier = () -> parameter;
         Function<Message, ResponseMessagePayloadDto> transformationFunction = message -> ResponseMessagePayloadDto.builder()
@@ -231,13 +212,13 @@ class MessageManagerTest {
         Message testMessage = getMessage();
         ResponseMessagePayloadDto expectedResponseMessagePayloadDto = getResponseMessagePayloadDto();
 
-        when(supplierService.parameterStringSupplier("messageUniqNumber", oneFieldEntityDto.getValue()))
+        when(supplierService.parameterStringSupplier("messageUniqNumber", uniqueId))
                 .thenReturn(supplier);
         when(transformationFunctionService.getTransformationFunction(Message.class, ResponseMessagePayloadDto.class))
                 .thenReturn(transformationFunction);
         when(messageDao.getEntityGraph(anyString(), eq(parameter))).thenReturn(testMessage);
 
-        ResponseMessagePayloadDto result = messageManager.getMessagePayloadDto(oneFieldEntityDto);
+        ResponseMessagePayloadDto result = messageManager.getMessagePayloadDto("", uniqueId);
 
         assertEquals("Message Content", result.getMessage());
     }

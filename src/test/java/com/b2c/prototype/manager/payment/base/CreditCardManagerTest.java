@@ -1,14 +1,13 @@
 package com.b2c.prototype.manager.payment.base;
 
 import com.b2c.prototype.dao.payment.ICreditCardDao;
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.delete.MultipleFieldsSearchDtoDelete;
 import com.b2c.prototype.modal.dto.payload.CreditCardDto;
 import com.b2c.prototype.modal.dto.response.ResponseCreditCardDto;
 import com.b2c.prototype.modal.entity.order.OrderArticularItem;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
 import com.b2c.prototype.modal.entity.payment.Payment;
-import com.b2c.prototype.modal.entity.user.UserProfile;
+import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
@@ -64,7 +63,7 @@ class CreditCardManagerTest {
         CreditCardDto creditCardDto = getTestCreditCardDto();
         String userId = "abc";
 
-        UserProfile userProfile = mock(UserProfile.class);
+        UserDetails userProfile = mock(UserDetails.class);
         CreditCard newCreditCard = mock(CreditCard.class);
         List<CreditCard> existingCreditCards = new ArrayList<>();
         Parameter parameter = mock(Parameter.class);
@@ -72,7 +71,7 @@ class CreditCardManagerTest {
 
         when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(supplier);
-        when(queryService.getEntity(UserProfile.class, supplier))
+        when(queryService.getEntity(UserDetails.class, supplier))
                 .thenReturn(userProfile);
         when(transformationFunctionService.getEntity(CreditCard.class, creditCardDto))
                 .thenReturn(newCreditCard);
@@ -95,7 +94,7 @@ class CreditCardManagerTest {
         CreditCardDto creditCardDto = getTestCreditCardDto();
         String userId = "abc";
 
-        UserProfile userProfile = mock(UserProfile.class);
+        UserDetails userProfile = mock(UserDetails.class);
         CreditCard newCreditCard = mock(CreditCard.class);
         List<CreditCard> existingCreditCards = new ArrayList<>(){{
             add(newCreditCard);
@@ -105,7 +104,7 @@ class CreditCardManagerTest {
 
         when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(supplier);
-        when(queryService.getEntity(UserProfile.class, supplier))
+        when(queryService.getEntity(UserDetails.class, supplier))
                 .thenReturn(userProfile);
         when(transformationFunctionService.getEntity(CreditCard.class, creditCardDto))
                 .thenReturn(newCreditCard);
@@ -159,13 +158,13 @@ class CreditCardManagerTest {
     void updateCreditCardByUserId_shouldUpdateCreditCreditCard() {
         String userId = "abc";
         CreditCardDto creditCardDto = getTestCreditCardDto();
-        UserProfile userProfile = mock(UserProfile.class);
+        UserDetails userProfile = mock(UserDetails.class);
         CreditCard creditCard = getTestCreditCard();
         List<CreditCard> creditCardList = List.of(creditCard);
         Supplier<Parameter> parameterSupplier = mock(Supplier.class);
         when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(eq(UserProfile.class), any(Supplier.class)))
+        when(queryService.getEntity(eq(UserDetails.class), any(Supplier.class)))
                 .thenReturn(userProfile);
         when(transformationFunctionService.getEntity(CreditCard.class, creditCardDto))
                 .thenReturn(creditCard);
@@ -254,7 +253,7 @@ class CreditCardManagerTest {
                 .innerSearchField("123")
                 .build();
 
-        UserProfile userProfile = mock(UserProfile.class);
+        UserDetails userProfile = mock(UserDetails.class);
         CreditCard creditCard = mock(CreditCard.class);
         List<CreditCard> existingCreditCards = new ArrayList<>(){{
             add(creditCard);
@@ -265,7 +264,7 @@ class CreditCardManagerTest {
 
         when(supplierService.parameterStringSupplier(USER_ID, multipleFieldsSearchDtoDelete.getMainSearchField()))
                 .thenReturn(supplier);
-        when(queryService.getEntity(UserProfile.class, supplier))
+        when(queryService.getEntity(UserDetails.class, supplier))
                 .thenReturn(userProfile);
         when(userProfile.getCreditCardList()).thenReturn(existingCreditCards);
         doAnswer(invocation -> {
@@ -389,7 +388,6 @@ class CreditCardManagerTest {
     void getCardByOrderId_shouldReturnResponseCardDto() {
         String orderId = "123";
         Parameter parameter = mock(Parameter.class);
-        OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto(orderId);
 
         CreditCard creditCard = getTestCreditCard();
         ResponseCreditCardDto responseCreditCardDto = getTestResponseCardDto();

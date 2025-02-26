@@ -27,8 +27,8 @@ public class AbstractContactInfo {
     private long id;
     private String firstName;
     private String lastName;
+    private String email;
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     @JoinColumn(name = "contact_phone_id")
     private ContactPhone contactPhone;
-    private String email;
 }

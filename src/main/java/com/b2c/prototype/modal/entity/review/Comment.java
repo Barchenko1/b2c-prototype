@@ -1,6 +1,6 @@
 package com.b2c.prototype.modal.entity.review;
 
-import com.b2c.prototype.modal.entity.user.UserProfile;
+import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.tm.core.modal.TransitiveSelfEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -41,7 +41,7 @@ public class Comment extends TransitiveSelfEntity {
     private String message;
     private long dateOfCreate;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    private UserProfile userProfile;
+    private UserDetails userProfile;
     @ManyToOne
     @JoinColumn(name = "comment_id")
     @ToString.Exclude

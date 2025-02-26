@@ -1,7 +1,6 @@
 package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.dao.item.IDiscountDao;
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.payload.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.DiscountStatusDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
@@ -226,7 +225,6 @@ class DiscountManagerTest {
     @Test
     void getDiscounts_shouldReturnListOfDiscounts() {
         String code = "CODE123";
-        OneFieldEntityDto oneFieldEntityDto = new OneFieldEntityDto(code);
         Parameter mockParameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> mockParameter;
         Function<Collection<ArticularItem>, Collection<DiscountDto>> function = mock(Function.class);

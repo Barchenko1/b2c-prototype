@@ -10,6 +10,13 @@ currency:
   - id: 1
     value: "USD"
     label: "USD"
+price:
+  - id: 1
+    amount: 27
+    currency_id: 1
+  - id: 2
+    amount: 100
+    currency_id: 1
 discount:
   - id: 1
     amount: 5
@@ -42,6 +49,13 @@ category:
     category_id: 2
     label: "child"
     value: "child"
+articular_status:
+  - id: 1
+    value: "NEW"
+    label: "NEW"
+  - id: 2
+    value: "COMMON"
+    label: "COMMON"
 item_data:
   - id: 1
     item_id: 123
@@ -50,24 +64,45 @@ item_data:
     itemtype_id: 1
 articular_item:
   - id: 1
-    articular_id: 1
+    articular_id: "A123"
     dateOfCreate: 10000
+    discount_id: 1
+    fullprice_id: 2
+    totalprice_id: 2
+    item_data_id: 1
+    status_id: 1
+    productname: "Mob 1"
 delivery_type:
   - id: 1
     value: "Post"
     label: "Post"
+time_duration_option:
+  - id: 1
+    label: "9:00 - 11:00"
+    value: "9-11"
+    start_time: "09:00:00"
+    end_time: "11:00:00"
+    duration_in_min: 120
+    price_id: 1
 country:
   - id: 1
     label: "USA"
     value: "USA"
 order_status:
   - id: 1
-    value: "Pending"
-    label: "Pending"
+    label: "CREATED"
+    value: "CREATED"
+  - id: 2
+    value: "PENDING"
+    label: "PENDING"
+payment_status:
+  - id: 1
+    value: "Done"
+    label: "Done"
 payment_method:
   - id: 1
-    value: "Card"
-    label: "Card"
+    value: "CreditCard"
+    label: "CreditCard"
   - id: 2
     value: "Blik"
     label: "Blik"
@@ -84,7 +119,7 @@ contact_info:
 user_profile:
   - id: 1
     username: "username"
-    user_id: "123"
+    user_id: "userId1"
     email: "email"
     dateOfCreate: 100
     isActive: true

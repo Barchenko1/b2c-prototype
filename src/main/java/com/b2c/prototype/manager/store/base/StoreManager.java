@@ -3,10 +3,8 @@ package com.b2c.prototype.manager.store.base;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 
 import com.b2c.prototype.dao.store.IStoreDao;
-import com.b2c.prototype.modal.dto.common.OneFieldEntityDto;
 import com.b2c.prototype.modal.dto.payload.StoreDto;
 import com.b2c.prototype.modal.dto.response.ResponseStoreDto;
-import com.b2c.prototype.modal.entity.store.CountType;
 import com.b2c.prototype.modal.entity.store.Store;
 import com.b2c.prototype.service.common.EntityOperationManager;
 import com.b2c.prototype.service.common.IEntityOperationManager;
@@ -73,19 +71,19 @@ public class StoreManager implements IStoreManager {
     }
 
     @Override
-    public void deleteStore(OneFieldEntityDto oneFieldEntityDto) {
+    public void deleteStore(String articularId) {
         entityOperationDao.deleteEntity(
                 supplierService.entityFieldSupplier(
                         ArticularItem.class,
-                        supplierService.parameterStringSupplier(ARTICULAR_ID, oneFieldEntityDto.getValue()),
+                        supplierService.parameterStringSupplier(ARTICULAR_ID, articularId),
                         transformationFunctionService.getTransformationFunction(ArticularItem.class, Store.class)));
     }
 
     @Override
-    public ResponseStoreDto getStoreResponse(OneFieldEntityDto oneFieldEntityDto) {
+    public ResponseStoreDto getStoreResponse(String articularId) {
         return entityOperationDao.getEntityGraphDto(
                 "",
-                parameterFactory.createStringParameter(ARTICULAR_ID, oneFieldEntityDto.getValue()),
+                parameterFactory.createStringParameter(ARTICULAR_ID, articularId),
                 transformationFunctionService.getTransformationFunction(Store.class, ResponseStoreDto.class));
     }
 

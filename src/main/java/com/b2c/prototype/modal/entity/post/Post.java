@@ -1,6 +1,6 @@
 package com.b2c.prototype.modal.entity.post;
 
-import com.b2c.prototype.modal.entity.user.UserProfile;
+import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.tm.core.modal.TransitiveSelfEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -40,7 +40,7 @@ public class Post extends TransitiveSelfEntity {
     private String uniquePostId;
     private long dateOfCreate;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    private UserProfile userProfile;
+    private UserDetails userProfile;
     @ManyToOne
     @JoinColumn(name = "post_id")
     @ToString.Exclude

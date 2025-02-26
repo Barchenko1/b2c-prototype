@@ -19,7 +19,7 @@
 //    void testPostConstantEntityInvalidServiceId() {
 //        try {
 //            String jsonPayload = objectMapper.writeValueAsString(getPayloadDto());
-//            mockMvc.perform(post("/api/v1/singlevalue")
+//            mockMvc.perform(post("/api/v1/constant")
 //                            .contentType(MediaType.APPLICATION_JSON)
 //                            .header("serviceId", "invalidServiceId")
 //                            .content(jsonPayload))
@@ -34,7 +34,7 @@
 //    void testPutConstantEntityInvalidServiceId() {
 //        try {
 //            String jsonPayload = objectMapper.writeValueAsString(getPayloadDto());
-//            mockMvc.perform(put("/api/v1/singlevalue")
+//            mockMvc.perform(put("/api/v1/constant")
 //                            .contentType(MediaType.APPLICATION_JSON)
 //                            .header("serviceId", "invalidServiceId")
 //                            .param("value", "invalidValue")
@@ -50,7 +50,7 @@
 //    void testPatchConstantEntityInvalidServiceId() {
 //        try {
 //            String jsonPayload = objectMapper.writeValueAsString(getPayloadDto());
-//            mockMvc.perform(patch("/api/v1/singlevalue")
+//            mockMvc.perform(patch("/api/v1/constant")
 //                            .contentType(MediaType.APPLICATION_JSON)
 //                            .header("serviceId", "invalidServiceId")
 //                            .param("value", "invalidValue")
@@ -79,7 +79,7 @@
 //    @Test
 //    void testGetConstantEntityInvalidServiceId() {
 //        try {
-//            mockMvc.perform(get("/api/v1/singlevalue")
+//            mockMvc.perform(get("/api/v1/constant")
 //                            .header("Accept-Language", "en")
 //                            .header("serviceId", "invalidServiceId")
 //                            .param("value", "invalidValue"))
@@ -92,7 +92,7 @@
 //
 //    @Test
 //    void testGetAllConstantEntitiesInvalidServiceId() throws Exception {
-//        mockMvc.perform(get("/api/v1/singlevalue/all")
+//        mockMvc.perform(get("/api/v1/constant/all")
 //                        .header("Accept-Language", "en")
 //                        .header("serviceId", "invalidServiceId")
 //                        .param("value", "invalidValue"))

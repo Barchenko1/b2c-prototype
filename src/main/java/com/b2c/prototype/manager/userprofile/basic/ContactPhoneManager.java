@@ -7,7 +7,7 @@ import com.b2c.prototype.modal.entity.order.OrderArticularItem;
 import com.b2c.prototype.modal.entity.order.Beneficiary;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
-import com.b2c.prototype.modal.entity.user.UserProfile;
+import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.manager.userprofile.IContactPhoneManager;
@@ -44,8 +44,8 @@ public class ContactPhoneManager implements IContactPhoneManager {
     @Override
     public void saveUpdateContactPhoneByUserId(String userId, ContactPhoneDto contactPhoneDto) {
         entityOperationDao.executeConsumer(session -> {
-            UserProfile userProfile = searchService.getEntity(
-                    UserProfile.class,
+            UserDetails userProfile = searchService.getEntity(
+                    UserDetails.class,
                     supplierService.parameterStringSupplier(USER_ID, userId));
             ContactPhone newContactPhone = transformationFunctionService.getEntity(
                     ContactPhone.class,
@@ -75,9 +75,9 @@ public class ContactPhoneManager implements IContactPhoneManager {
     public void deleteContactPhoneByUserId(String userId) {
         entityOperationDao.deleteEntity(
                 supplierService.entityFieldSupplier(
-                        UserProfile.class,
+                        UserDetails.class,
                         supplierService.parameterStringSupplier(USER_ID, userId),
-                        transformationFunctionService.getTransformationFunction(UserProfile.class, ContactPhone.class)));
+                        transformationFunctionService.getTransformationFunction(UserDetails.class, ContactPhone.class)));
     }
 
     @Override
@@ -95,9 +95,9 @@ public class ContactPhoneManager implements IContactPhoneManager {
     @Override
     public ContactPhoneDto getContactPhoneByUserId(String userId) {
         return searchService.getEntityDto(
-                UserProfile.class,
+                UserDetails.class,
                 supplierService.parameterStringSupplier(USER_ID, userId),
-                transformationFunctionService.getTransformationFunction(UserProfile.class, ContactPhoneDto.class));
+                transformationFunctionService.getTransformationFunction(UserDetails.class, ContactPhoneDto.class));
     }
 
     @Override
