@@ -89,7 +89,7 @@ class ArticularStatusManagerTest extends AbstractConstantEntityManagerTest<Artic
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
         when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
-        when(dao.getEntity(parameter)).thenReturn(testValue);
+        //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
         ConstantPayloadDto result = itemStatusManager.getEntity("testValue");
 
@@ -105,7 +105,7 @@ class ArticularStatusManagerTest extends AbstractConstantEntityManagerTest<Artic
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
         when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
-        when(dao.getEntity(parameter)).thenReturn(testValue);
+        //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
         Optional<ConstantPayloadDto> result = itemStatusManager.getEntityOptional("testValue");
 
@@ -118,7 +118,7 @@ class ArticularStatusManagerTest extends AbstractConstantEntityManagerTest<Artic
         ConstantPayloadDto constantPayloadDto = getResponseOneFieldEntityDto();
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
-        when(dao.getEntityList()).thenReturn(List.of(testValue));
+//        when(dao.getEntityList()).thenReturn(List.of(testValue));
 
         List<ConstantPayloadDto> list = itemStatusManager.getEntities();
 

@@ -85,7 +85,7 @@ class CountryManagerTest extends AbstractConstantEntityManagerTest<Country> {
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(countryDto);
         when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
-        when(dao.getEntity(parameter)).thenReturn(testValue);
+        //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
         CountryDto result = countryManager.getEntity("testValue");
 
@@ -100,7 +100,7 @@ class CountryManagerTest extends AbstractConstantEntityManagerTest<Country> {
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(countryDto);
         when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
-        when(dao.getEntity(parameter)).thenReturn(testValue);
+        //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
         Optional<CountryDto> result = countryManager.getEntityOptional("testValue");
 
@@ -114,7 +114,7 @@ class CountryManagerTest extends AbstractConstantEntityManagerTest<Country> {
         CountryDto countryDto = getCountryDto();
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(countryDto);
-        when(dao.getEntityList()).thenReturn(List.of(testValue));
+//        when(dao.getEntityList()).thenReturn(List.of(testValue));
 
         List<CountryDto> list = countryManager.getEntities();
 

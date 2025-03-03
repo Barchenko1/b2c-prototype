@@ -72,7 +72,7 @@ class ArticularItemQuantityManagerTest {
 
         when(supplierService.parameterStringSupplier(ORDER_ID, dto.getOrderId()))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier)).thenReturn(orderItemDataOption);
+//        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier)).thenReturn(orderItemDataOption);
 
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -103,7 +103,7 @@ class ArticularItemQuantityManagerTest {
 
         when(supplierService.parameterStringSupplier(ORDER_ID, dto.getOrderId()))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier)).thenReturn(orderItemDataOption);
+//        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier)).thenReturn(orderItemDataOption);
 
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -138,8 +138,8 @@ class ArticularItemQuantityManagerTest {
 
         when(supplierService.parameterStringSupplier(ORDER_ID, dto.getOrderId()))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
-                .thenReturn(orderItemDataOption);
+//        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
+//                .thenReturn(orderItemDataOption);
         when(session.createNativeQuery(anyString(), eq(Store.class)))
                 .thenReturn(query);
         when(queryService.getQueryEntity(query, parameterSupplier)).thenReturn(store);
@@ -178,8 +178,8 @@ class ArticularItemQuantityManagerTest {
 
         when(supplierService.parameterStringSupplier(ORDER_ID, dto.getOrderId()))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
-                .thenReturn(orderItemDataOption);
+//        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
+//                .thenReturn(orderItemDataOption);
         when(session.createNativeQuery(anyString(), eq(Store.class)))
                 .thenReturn(query);
         when(queryService.getQueryEntity(query, parameterSupplier)).thenReturn(store);
@@ -212,7 +212,7 @@ class ArticularItemQuantityManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier)).thenReturn(orderItemDataOption);
+//        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier)).thenReturn(orderItemDataOption);
 
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -241,7 +241,7 @@ class ArticularItemQuantityManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier)).thenReturn(orderItemDataOption);
+//        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier)).thenReturn(orderItemDataOption);
 
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -274,8 +274,8 @@ class ArticularItemQuantityManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
-                .thenReturn(orderItemDataOption);
+//        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
+//                .thenReturn(orderItemDataOption);
         when(session.createNativeQuery(anyString(), eq(Store.class)))
                 .thenReturn(query);
         when(queryService.getQueryEntity(query, parameterSupplier)).thenReturn(store);
@@ -312,8 +312,8 @@ class ArticularItemQuantityManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
-                .thenReturn(orderItemDataOption);
+//        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
+//                .thenReturn(orderItemDataOption);
         when(session.createNativeQuery(anyString(), eq(Store.class)))
                 .thenReturn(query);
         when(queryService.getQueryEntity(query, parameterSupplier)).thenReturn(store);
@@ -350,8 +350,8 @@ class ArticularItemQuantityManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
-                .thenReturn(orderItemDataOption);
+//        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
+//                .thenReturn(orderItemDataOption);
         when(session.createNativeQuery(anyString(), eq(Store.class)))
                 .thenReturn(query);
         when(queryService.getQueryEntity(query, parameterSupplier)).thenReturn(store);

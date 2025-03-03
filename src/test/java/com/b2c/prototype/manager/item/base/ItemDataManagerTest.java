@@ -85,7 +85,7 @@ class ItemDataManagerTest {
 
         when(supplierService.parameterStringSupplier(ITEM_ID, itemId))
                 .thenReturn(parameterSupplier);
-        when(itemDataDao.getEntity(parameter)).thenReturn(itemData);
+        when(itemDataDao.getNamedQueryEntity("", parameter)).thenReturn(itemData);
         when(transformationFunctionService.getEntity(ItemData.class, itemDataDto))
                 .thenReturn(itemData);
         doAnswer(invocation -> {
@@ -128,7 +128,7 @@ class ItemDataManagerTest {
                 .thenReturn(parameterSupplier);
         when(transformationFunctionService.getTransformationFunction(ItemData.class, ResponseItemDataDto.class))
                 .thenReturn(function);
-        when(itemDataDao.getEntityGraph(anyString(), eq(parameter))).thenReturn(itemData);
+        when(itemDataDao.getGraphEntity(anyString(), eq(parameter))).thenReturn(itemData);
         when(function.apply(itemData)).thenReturn(responseDto);
         ResponseItemDataDto result = itemDataManager.getItemData(itemId);
 
@@ -145,7 +145,7 @@ class ItemDataManagerTest {
         Function<ItemData, ResponseItemDataDto> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(ItemData.class, ResponseItemDataDto.class))
                 .thenReturn(function);
-        when(itemDataDao.getEntityList()).thenReturn(List.of(itemData));
+//        when(itemDataDao.getEntityList()).thenReturn(List.of(itemData));
         when(function.apply(itemData)).thenReturn(responseDto);
 
         List<ResponseItemDataDto> result = itemDataManager.getItemDataList();

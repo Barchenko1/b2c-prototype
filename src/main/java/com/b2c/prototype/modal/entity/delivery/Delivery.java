@@ -1,6 +1,6 @@
 package com.b2c.prototype.modal.entity.delivery;
 
-import com.b2c.prototype.modal.base.AbstractDelivery;
+import com.b2c.prototype.modal.base.delivery.AbstractDelivery;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

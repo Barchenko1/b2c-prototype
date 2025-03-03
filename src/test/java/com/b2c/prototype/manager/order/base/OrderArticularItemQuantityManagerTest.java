@@ -13,7 +13,7 @@ import com.b2c.prototype.modal.dto.payload.ArticularItemQuantityDto;
 import com.b2c.prototype.modal.dto.payload.OrderArticularItemQuantityDto;
 import com.b2c.prototype.modal.dto.payload.PaymentDto;
 import com.b2c.prototype.modal.dto.payload.PriceDto;
-import com.b2c.prototype.modal.dto.payload.UserProfileDto;
+import com.b2c.prototype.modal.dto.payload.UserDetailsDto;
 import com.b2c.prototype.modal.dto.response.ResponseCreditCardDto;
 import com.b2c.prototype.modal.dto.response.ResponseOrderDetails;
 import com.b2c.prototype.modal.entity.address.Address;
@@ -37,6 +37,7 @@ import com.b2c.prototype.modal.entity.order.Beneficiary;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
+import com.b2c.prototype.modal.entity.user.UserCreditCard;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.supplier.ISupplierService;
@@ -113,7 +114,7 @@ class OrderArticularItemQuantityManagerTest {
         Supplier<Parameter> parameterSupplier = () -> parameter;
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-        when(orderItemDataDao.getEntity(parameter)).thenReturn(existingEntity);
+        when(orderItemDataDao.getNamedQueryEntity("", parameter)).thenReturn(existingEntity);
         when(transformationFunctionService.getEntity(OrderArticularItem.class, orderArticularItemQuantityDto))
                 .thenReturn(newEntity);
         doAnswer(invocation -> {
@@ -153,8 +154,8 @@ class OrderArticularItemQuantityManagerTest {
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
         Function<OrderArticularItem, ResponseOrderDetails> function = mock(Function.class);
-        when(orderItemDataDao.getEntityGraph(anyString(), eq(parameter)))
-                .thenReturn(entity);
+//        when(orderItemDataDao.getGraphEntity(anyString(), eq(parameter)))
+//                .thenReturn(entity);
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
         when(transformationFunctionService.getTransformationFunction(OrderArticularItem.class, ResponseOrderDetails.class))
@@ -170,7 +171,7 @@ class OrderArticularItemQuantityManagerTest {
     void getOrderItemListData_shouldReturnDtoList() {
         ResponseOrderDetails responseOrderDetails = getResponseOrderDetailsDto();
         OrderArticularItem orderItemDataOption = getOrderItemData();
-        when(orderItemDataDao.getEntityList()).thenReturn(List.of(orderItemDataOption));
+//        when(orderItemDataDao.getEntityList()).thenReturn(List.of(orderItemDataOption));
         Function<OrderArticularItem, ResponseOrderDetails> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(OrderArticularItem.class, ResponseOrderDetails.class))
                 .thenReturn(function);
@@ -195,9 +196,12 @@ class OrderArticularItemQuantityManagerTest {
                 .build();
         return Beneficiary.builder()
                 .id(1L)
-                .firstName("Wolter")
-                .lastName("White")
-                .contactPhone(contactPhone)
+                .contactInfo(ContactInfo.builder()
+                        .firstName("Wolter")
+                        .lastName("White")
+                        .contactPhone(contactPhone)
+                        .build())
+                .orderNumber(0)
                 .build();
     }
 
@@ -338,8 +342,12 @@ class OrderArticularItemQuantityManagerTest {
                 .build();
     }
 
-    private UserDetails prepareTestUserProfile() {
+    private UserDetails prepareTestUserDetails() {
         CreditCard creditCard = prepareCard();
+        UserCreditCard userCreditCard = UserCreditCard.builder()
+                .creditCard(creditCard)
+                .isDefault(false)
+                .build();
         Post parent = Post.builder()
                 .id(1L)
                 .title("parent")
@@ -354,8 +362,8 @@ class OrderArticularItemQuantityManagerTest {
                 .dateOfCreate(100)
                 .isActive(true)
                 .contactInfo(prepareContactInfo())
-                .addresses(List.of(createAddress()))
-                .creditCardList(List.of(creditCard))
+                .addresses(Set.of(createAddress()))
+                .userCreditCardList(Set.of(userCreditCard))
                 .build();
     }
 
@@ -369,7 +377,7 @@ class OrderArticularItemQuantityManagerTest {
                 .delivery(prepareTestDelivery())
                 .articularItemQuantityList(List.of(prepareTestOrderItemQuantity()))
                 .orderStatus(prepareTestOrderStatus())
-                .userProfile(prepareTestUserProfile())
+                .userDetails(prepareTestUserDetails())
                 .orderId("100")
                 .note("note")
                 .build();
@@ -384,12 +392,14 @@ class OrderArticularItemQuantityManagerTest {
 
     private BeneficiaryDto getBeneficiaryDto() {
         return BeneficiaryDto.builder()
-                .contactPhone(ContactPhoneDto.builder()
-                        .countryPhoneCode("USA")
-                        .phoneNumber("newPhoneNumber")
+                .contactInfo(ContactInfoDto.builder()
+                        .contactPhone(ContactPhoneDto.builder()
+                                .countryPhoneCode("USA")
+                                .phoneNumber("newPhoneNumber")
+                                .build())
+                        .firstName("newName")
+                        .lastName("newLastName")
                         .build())
-                .firstName("newName")
-                .lastName("newLastName")
                 .build();
     }
 
@@ -471,11 +481,10 @@ class OrderArticularItemQuantityManagerTest {
                 .build();
     }
 
-    private UserProfileDto getUserProfileDto() {
-        return UserProfileDto.builder()
-                .creditCards(List.of(getResponseCreditCardDto()))
-                .addressDto(getAddressDto())
-                .email("email")
+    private UserDetailsDto getUserDetailsDto() {
+        return UserDetailsDto.builder()
+                .creditCard(getCreditCardDto())
+                .address(getAddressDto())
                 .contactInfo(getContactInfoDto())
                 .build();
     }
@@ -505,7 +514,7 @@ class OrderArticularItemQuantityManagerTest {
                 .payment(getPaymentDto())
                 .delivery(getDeliveryDto())
                 .itemDataOptionQuantities(Set.of(getItemDataOptionQuantityDto()))
-                .userProfile(getUserProfileDto())
+                .userDetails(getUserDetailsDto())
                 .note("note")
                 .build();
     }

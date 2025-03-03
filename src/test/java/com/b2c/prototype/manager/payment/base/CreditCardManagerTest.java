@@ -7,6 +7,7 @@ import com.b2c.prototype.modal.dto.response.ResponseCreditCardDto;
 import com.b2c.prototype.modal.entity.order.OrderArticularItem;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
 import com.b2c.prototype.modal.entity.payment.Payment;
+import com.b2c.prototype.modal.entity.user.UserCreditCard;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.query.ISearchService;
@@ -20,8 +21,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -33,9 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -63,24 +63,24 @@ class CreditCardManagerTest {
         CreditCardDto creditCardDto = getTestCreditCardDto();
         String userId = "abc";
 
-        UserDetails userProfile = mock(UserDetails.class);
+        UserDetails userDetails = mock(UserDetails.class);
         CreditCard newCreditCard = mock(CreditCard.class);
-        List<CreditCard> existingCreditCards = new ArrayList<>();
+        Set<UserCreditCard> existingUserCreditCards = new HashSet<>();
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> supplier = () -> parameter;
 
         when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(supplier);
-        when(queryService.getEntity(UserDetails.class, supplier))
-                .thenReturn(userProfile);
+//        when(queryService.getEntity(UserDetails.class, supplier))
+//                .thenReturn(userDetails);
         when(transformationFunctionService.getEntity(CreditCard.class, creditCardDto))
                 .thenReturn(newCreditCard);
-        when(userProfile.getCreditCardList()).thenReturn(existingCreditCards);
+        when(userDetails.getUserCreditCardList()).thenReturn(existingUserCreditCards);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
             Session session = mock(Session.class);
             consumer.accept(session);
-            verify(session).merge(userProfile);
+            verify(session).merge(userDetails);
             return null;
         }).when(creditCardDao).executeConsumer(any(Consumer.class));
 
@@ -94,26 +94,27 @@ class CreditCardManagerTest {
         CreditCardDto creditCardDto = getTestCreditCardDto();
         String userId = "abc";
 
-        UserDetails userProfile = mock(UserDetails.class);
+        UserDetails userDetails = mock(UserDetails.class);
         CreditCard newCreditCard = mock(CreditCard.class);
-        List<CreditCard> existingCreditCards = new ArrayList<>(){{
-            add(newCreditCard);
+        UserCreditCard userCreditCard = mock(UserCreditCard.class);
+        Set<UserCreditCard> existingUserCreditCards = new HashSet<>(){{
+            add(userCreditCard);
         }};
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> supplier = () -> parameter;
 
         when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(supplier);
-        when(queryService.getEntity(UserDetails.class, supplier))
-                .thenReturn(userProfile);
+//        when(queryService.getEntity(UserDetails.class, supplier))
+//                .thenReturn(userDetails);
         when(transformationFunctionService.getEntity(CreditCard.class, creditCardDto))
                 .thenReturn(newCreditCard);
-        when(userProfile.getCreditCardList()).thenReturn(existingCreditCards);
+        when(userDetails.getUserCreditCardList()).thenReturn(existingUserCreditCards);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
             Session session = mock(Session.class);
             consumer.accept(session);
-            verify(session).merge(userProfile);
+            verify(session).merge(userDetails);
             return null;
         }).when(creditCardDao).executeConsumer(any(Consumer.class));
 
@@ -135,8 +136,8 @@ class CreditCardManagerTest {
 
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(supplier);
-        when(queryService.getEntity(OrderArticularItem.class, supplier))
-                .thenReturn(orderItemDataOption);
+//        when(queryService.getEntity(OrderArticularItem.class, supplier))
+//                .thenReturn(orderItemDataOption);
         when(transformationFunctionService.getEntity(CreditCard.class, creditCardDto))
                 .thenReturn(creditCard);
         when(orderItemDataOption.getPayment()).thenReturn(payment);
@@ -158,17 +159,21 @@ class CreditCardManagerTest {
     void updateCreditCardByUserId_shouldUpdateCreditCreditCard() {
         String userId = "abc";
         CreditCardDto creditCardDto = getTestCreditCardDto();
-        UserDetails userProfile = mock(UserDetails.class);
+        UserDetails userDetails = mock(UserDetails.class);
         CreditCard creditCard = getTestCreditCard();
-        List<CreditCard> creditCardList = List.of(creditCard);
+        UserCreditCard userCreditCard = UserCreditCard.builder()
+                .creditCard(creditCard)
+                .isDefault(false)
+                .build();
+        Set<UserCreditCard> creditCardList = Set.of(userCreditCard);
         Supplier<Parameter> parameterSupplier = mock(Supplier.class);
         when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(eq(UserDetails.class), any(Supplier.class)))
-                .thenReturn(userProfile);
-        when(transformationFunctionService.getEntity(CreditCard.class, creditCardDto))
+//        when(queryService.getEntity(eq(UserDetails.class), any(Supplier.class)))
+//                .thenReturn(userDetails);
+        when(transformationFunctionService.getEntity(CreditCard.class, userCreditCard))
                 .thenReturn(creditCard);
-        when(userProfile.getCreditCardList()).thenReturn(creditCardList);
+        when(userDetails.getUserCreditCardList()).thenReturn(creditCardList);
 
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -193,8 +198,8 @@ class CreditCardManagerTest {
         Supplier<Parameter> parameterSupplier = mock(Supplier.class);
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(eq(OrderArticularItem.class), any(Supplier.class)))
-                .thenReturn(orderItemDataOption);
+//        when(queryService.getEntity(eq(OrderArticularItem.class), any(Supplier.class)))
+//                .thenReturn(orderItemDataOption);
         when(transformationFunctionService.getEntity(CreditCard.class, creditCardDto))
                 .thenReturn(creditCard);
         when(orderItemDataOption.getPayment()).thenReturn(payment);
@@ -223,8 +228,8 @@ class CreditCardManagerTest {
         Supplier<Parameter> parameterSupplier = mock(Supplier.class);
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(eq(OrderArticularItem.class), any(Supplier.class)))
-                .thenReturn(orderItemDataOption);
+//        when(queryService.getEntity(eq(OrderArticularItem.class), any(Supplier.class)))
+//                .thenReturn(orderItemDataOption);
         when(transformationFunctionService.getEntity(CreditCard.class, creditCardDto))
                 .thenReturn(creditCard);
         when(orderItemDataOption.getPayment()).thenReturn(payment);
@@ -253,10 +258,11 @@ class CreditCardManagerTest {
                 .innerSearchField("123")
                 .build();
 
-        UserDetails userProfile = mock(UserDetails.class);
+        UserDetails userDetails = mock(UserDetails.class);
         CreditCard creditCard = mock(CreditCard.class);
-        List<CreditCard> existingCreditCards = new ArrayList<>(){{
-            add(creditCard);
+        UserCreditCard userCreditCard = mock(UserCreditCard.class);
+        Set<UserCreditCard> existingUserCreditCard = new HashSet<>(){{
+            add(userCreditCard);
         }};
         when(creditCard.getCardNumber()).thenReturn("123");
         Parameter parameter = mock(Parameter.class);
@@ -264,9 +270,9 @@ class CreditCardManagerTest {
 
         when(supplierService.parameterStringSupplier(USER_ID, multipleFieldsSearchDtoDelete.getMainSearchField()))
                 .thenReturn(supplier);
-        when(queryService.getEntity(UserDetails.class, supplier))
-                .thenReturn(userProfile);
-        when(userProfile.getCreditCardList()).thenReturn(existingCreditCards);
+//        when(queryService.getEntity(UserDetails.class, supplier))
+//                .thenReturn(userDetails);
+        when(userDetails.getUserCreditCardList()).thenReturn(existingUserCreditCard);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
             Session session = mock(Session.class);
@@ -299,8 +305,8 @@ class CreditCardManagerTest {
 
         when(supplierService.parameterStringSupplier(ORDER_ID, multipleFieldsSearchDtoDelete.getMainSearchField()))
                 .thenReturn(supplier);
-        when(queryService.getEntity(OrderArticularItem.class, supplier))
-                .thenReturn(orderItemDataOption);
+//        when(queryService.getEntity(OrderArticularItem.class, supplier))
+//                .thenReturn(orderItemDataOption);
         when(payment.getCreditCard()).thenReturn(creditCard);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -322,8 +328,8 @@ class CreditCardManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-        when(creditCardDao.getEntityList(parameter))
-                .thenReturn(List.of(creditCard));
+//        when(creditCarddao.getNamedQueryEntityList("", parameter))
+//                .thenReturn(List.of(creditCard));
         when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(parameterSupplier);
         when(transformationFunctionService.getTransformationFunction(CreditCard.class, ResponseCreditCardDto.class))
@@ -368,8 +374,8 @@ class CreditCardManagerTest {
 
         when(supplierService.parameterStringSupplier(ORDER_ID, multipleFieldsSearchDtoDelete.getMainSearchField()))
                 .thenReturn(supplier);
-        when(queryService.getEntity(OrderArticularItem.class, supplier))
-                .thenReturn(orderItemDataOption);
+//        when(queryService.getEntity(OrderArticularItem.class, supplier))
+//                .thenReturn(orderItemDataOption);
         when(payment.getCreditCard()).thenReturn(creditCard);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -402,7 +408,7 @@ class CreditCardManagerTest {
                 .build();
 
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(creditCardDao.getEntityGraph(anyString(), eq(parameter))).thenReturn(creditCard);
+//        when(creditCardDao.getGraphEntity(anyString(), eq(parameter))).thenReturn(creditCard);
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
         when(transformationFunctionService.getTransformationFunction(CreditCard.class, ResponseCreditCardDto.class))
@@ -427,7 +433,7 @@ class CreditCardManagerTest {
         Supplier<Parameter> parameterSupplier = () -> parameter;
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-        when(creditCardDao.getOptionalEntity(parameter)).thenReturn(Optional.empty());
+//        when(creditCardDao.getOptionalEntity(parameter)).thenReturn(Optional.empty());
         when(transformationFunctionService.getTransformationFunction(CreditCard.class, ResponseCreditCardDto.class))
                 .thenReturn(creditCard1 -> ResponseCreditCardDto.builder()
                         .isActive(creditCard1.isActive())
@@ -446,7 +452,7 @@ class CreditCardManagerTest {
         Parameter parameter = mock(Parameter.class);
 
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(creditCardDao.getEntityList()).thenReturn(List.of(creditCard));
+//        when(creditCardDao.getEntityList()).thenReturn(List.of(creditCard));
         when(supplierService.parameterStringSupplier(ORDER_ID, "123"))
                 .thenReturn(parameterSupplier);
         when(transformationFunctionService.getTransformationFunction(CreditCard.class, ResponseCreditCardDto.class))

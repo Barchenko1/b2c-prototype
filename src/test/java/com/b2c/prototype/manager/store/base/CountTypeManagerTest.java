@@ -89,7 +89,7 @@ public class CountTypeManagerTest extends AbstractConstantEntityManagerTest<Coun
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
         when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
-        when(dao.getEntity(parameter)).thenReturn(testValue);
+//        //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
         ConstantPayloadDto result = countTypeManager.getEntity("testValue");
 
@@ -104,7 +104,7 @@ public class CountTypeManagerTest extends AbstractConstantEntityManagerTest<Coun
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
         when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
-        when(dao.getEntity(parameter)).thenReturn(testValue);
+        //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
         Optional<ConstantPayloadDto> result = countTypeManager.getEntityOptional("testValue");
 
@@ -117,7 +117,7 @@ public class CountTypeManagerTest extends AbstractConstantEntityManagerTest<Coun
         ConstantPayloadDto constantPayloadDto = getResponseOneFieldEntityDto();
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
-        when(dao.getEntityList()).thenReturn(List.of(testValue));
+//        when(dao.getEntityList()).thenReturn(List.of(testValue));
 
         List<ConstantPayloadDto> list = countTypeManager.getEntities();
 

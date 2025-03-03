@@ -1,6 +1,6 @@
 package com.b2c.prototype.modal.entity.option;
 
-import com.b2c.prototype.modal.base.AbstractConstantEntity;
+import com.b2c.prototype.modal.base.constant.AbstractConstantEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -9,7 +9,6 @@ import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.NamedEntityGraphs;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
-import jakarta.persistence.NamedSubgraph;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -34,6 +33,10 @@ import java.util.List;
         ),
 })
 @NamedQueries({
+        @NamedQuery(
+                name = "OptionGroup.all",
+                query = "SELECT og FROM OptionGroup og"
+        ),
         @NamedQuery(
                 name = "optionGroup.withOptionItemsAndArticularItems",
                 query = "SELECT DISTINCT og FROM OptionGroup og " +

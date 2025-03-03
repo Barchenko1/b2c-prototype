@@ -1,6 +1,6 @@
 package com.b2c.prototype.modal.entity.payment;
 
-import com.b2c.prototype.modal.base.AbstractCommission;
+import com.b2c.prototype.modal.base.commission.AbstractCommission;
 import jakarta.persistence.Entity;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;

@@ -41,9 +41,10 @@ public class PaymentManager implements IPaymentManager {
     @Override
     public void saveUpdatePayment(String orderId, PaymentDto paymentDto) {
         entityOperationDao.executeConsumer(session -> {
-            OrderArticularItem orderItemDataOption = searchService.getEntity(
+            OrderArticularItem orderItemDataOption = searchService.getNamedQueryEntity(
                     OrderArticularItem.class,
-                    supplierService.parameterStringSupplier(ORDER_ID, orderId));
+                    "",
+                    parameterFactory.createStringParameter(ORDER_ID, orderId));
             Payment newPayment = transformationFunctionService.getEntity(
                     Payment.class,
                     paymentDto);
@@ -63,6 +64,7 @@ public class PaymentManager implements IPaymentManager {
         entityOperationDao.deleteEntity(
                 supplierService.entityFieldSupplier(
                         OrderArticularItem.class,
+                        "",
                         supplierService.parameterStringSupplier(ORDER_ID, orderId),
                         transformationFunctionService.getTransformationFunction(OrderArticularItem.class, Payment.class)));
     }
@@ -72,20 +74,22 @@ public class PaymentManager implements IPaymentManager {
         entityOperationDao.deleteEntity(
                 supplierService.entityFieldSupplier(
                         Payment.class,
+                        "",
                         supplierService.parameterStringSupplier(PAYMENT_ID, paymentId)));
     }
 
     @Override
     public PaymentDto getPaymentByOrderId(String orderId) {
-        return searchService.getEntityDto(
+        return searchService.getNamedQueryEntityDto(
                 OrderArticularItem.class,
-                supplierService.parameterStringSupplier(ORDER_ID, orderId),
+                "",
+                parameterFactory.createStringParameter(ORDER_ID, orderId),
                 transformationFunctionService.getTransformationFunction(OrderArticularItem.class, PaymentDto.class));
     }
 
     @Override
     public PaymentDto getPaymentByPaymentId(String paymentId) {
-        return entityOperationDao.getEntityGraphDto(
+        return entityOperationDao.getGraphEntityDto(
                 "",
                 parameterFactory.createStringParameter(PAYMENT_ID, paymentId),
                 transformationFunctionService.getTransformationFunction(Payment.class, PaymentDto.class));
@@ -93,7 +97,7 @@ public class PaymentManager implements IPaymentManager {
 
     @Override
     public List<PaymentDto> getAllPayments() {
-        return entityOperationDao.getEntityGraphDtoList(
+        return entityOperationDao.getGraphEntityDtoList(
                 "",
                 transformationFunctionService.getTransformationFunction(Payment.class, PaymentDto.class));
     }

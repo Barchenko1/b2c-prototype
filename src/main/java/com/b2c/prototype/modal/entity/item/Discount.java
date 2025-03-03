@@ -1,6 +1,6 @@
 package com.b2c.prototype.modal.entity.item;
 
-import com.b2c.prototype.modal.base.AbstractDiscount;
+import com.b2c.prototype.modal.base.discount.AbstractDiscount;
 import com.b2c.prototype.modal.entity.price.Currency;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -25,12 +25,22 @@ import java.util.List;
 @Entity
 @Table(name = "discount")
 @NamedEntityGraph(
-        name = "discount.currency",
+        name = "Discount.currency",
         attributeNodes = {
                 @NamedAttributeNode("currency")
         }
 )
 @NamedQueries({
+        @NamedQuery(
+                name = "Discount.all",
+                query = "SELECT d FROM Discount d"
+        ),
+        @NamedQuery(
+                name = "Discount.currency",
+                query = "SELECT d FROM Discount d " +
+                        "LEFT JOIN FETCH d.currency " +
+                        "WHERE d.charSequenceCode = :charSequenceCode"
+        ),
         @NamedQuery(
                 name = "ArticularItem.findByDiscountCharSequenceCode",
                 query = "SELECT ai FROM ArticularItem ai " +

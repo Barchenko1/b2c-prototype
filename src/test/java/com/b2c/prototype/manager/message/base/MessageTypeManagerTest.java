@@ -89,7 +89,7 @@ class MessageTypeManagerTest extends AbstractConstantEntityManagerTest<MessageTy
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
         when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
-        when(dao.getEntity(parameter)).thenReturn(testValue);
+        //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
         ConstantPayloadDto result = messageTypeManager.getEntity("testValue");
 
@@ -105,7 +105,7 @@ class MessageTypeManagerTest extends AbstractConstantEntityManagerTest<MessageTy
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
         when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
-        when(dao.getEntity(parameter)).thenReturn(testValue);
+        //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
         Optional<ConstantPayloadDto> result = messageTypeManager.getEntityOptional("testValue");
 
@@ -118,7 +118,7 @@ class MessageTypeManagerTest extends AbstractConstantEntityManagerTest<MessageTy
         ConstantPayloadDto constantPayloadDto = getResponseOneFieldEntityDto();
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
-        when(dao.getEntityList()).thenReturn(List.of(testValue));
+//        when(dao.getEntityList()).thenReturn(List.of(testValue));
 
         List<ConstantPayloadDto> list = messageTypeManager.getEntities();
 

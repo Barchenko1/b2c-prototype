@@ -1,6 +1,6 @@
 package com.b2c.prototype.modal.entity.delivery;
 
-import com.b2c.prototype.modal.base.AbstractConstantEntity;
+import com.b2c.prototype.modal.base.constant.AbstractConstantEntity;
 import com.b2c.prototype.modal.entity.price.Price;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -26,6 +26,10 @@ import lombok.experimental.SuperBuilder;
         @NamedQuery(
                 name = "ZoneOption.findByValue",
                 query = "SELECT zo FROM ZoneOption zo WHERE zo.value = : value"
+        ),
+        @NamedQuery(
+                name = "ZoneOption.all",
+                query = "SELECT zo FROM ZoneOption zo"
         )
 })
 public class ZoneOption extends AbstractConstantEntity {

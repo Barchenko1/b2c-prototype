@@ -128,7 +128,7 @@ contact_info:
   - id: 1
     firstName: "Wolter"
     lastName: "White"
-user_profile:
+user_details:
   - id: 1
     username: "username"
     user_id: "123"
@@ -142,5 +142,5 @@ order_articular_item:
     delivery_id: 1
     order_status_id: 1
     payment_id: 1
-    user_profile_id: 1
+    user_details_id: 1
     note: "note"

@@ -99,7 +99,7 @@ public abstract class AbstractConstantEntityDaoTest extends DataBaseLoader {
         loadDataSet(testEntityDataSet.getDataSetPath()[0]);
         Parameter parameter = new Parameter("id", 1L);
 
-        List<Object> result = dao.getEntityList(parameter);
+        List<Object> result = dao.getNamedQueryEntityList("", parameter);
 
         assertEquals(1, result.size());
         verifyExpectedData(testEntityDataSet.getDataSetPath()[0]);
@@ -110,7 +110,7 @@ public abstract class AbstractConstantEntityDaoTest extends DataBaseLoader {
         Parameter parameter = new Parameter("id1", 1L);
 
         assertThrows(RuntimeException.class, () -> {
-            dao.getEntityList(parameter);
+            dao.getNamedQueryEntityList("", parameter);
         });
     }
 
@@ -309,7 +309,7 @@ public abstract class AbstractConstantEntityDaoTest extends DataBaseLoader {
         loadDataSet(testEntityDataSet.getDataSetPath()[0]);
         Parameter parameter = new Parameter("id", 1L);
 
-        Optional<Object> result = dao.getOptionalEntity(parameter);
+        Optional<Object> result = dao.getNamedQueryOptionalEntity("", parameter);
 
         assertTrue(result.isPresent());
         Object resultEntity = result.get();
@@ -322,7 +322,7 @@ public abstract class AbstractConstantEntityDaoTest extends DataBaseLoader {
         Parameter parameter = new Parameter("id1", 1L);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.getOptionalEntity(parameter);
+           dao.getNamedQueryOptionalEntity("", parameter);
         });
 
     }
@@ -332,7 +332,7 @@ public abstract class AbstractConstantEntityDaoTest extends DataBaseLoader {
         loadDataSet(emptyDataSet);
         Parameter parameter = new Parameter("id", 100L);
 
-        Optional<Object> result = dao.getOptionalEntity(parameter);
+        Optional<Object> result =dao.getNamedQueryOptionalEntity("", parameter);
 
         assertTrue(result.isEmpty());
         verifyExpectedData(emptyDataSet);
@@ -342,7 +342,7 @@ public abstract class AbstractConstantEntityDaoTest extends DataBaseLoader {
     void getEntity_success() {
         loadDataSet(testEntityDataSet.getDataSetPath()[0]);
         Parameter parameter = new Parameter("id", 1L);
-        Object result = dao.getEntity(parameter);
+        Object result = dao.getNamedQueryEntity("", parameter);
 
         assertNotNull(result);
         verifyExpectedData(testEntityDataSet.getDataSetPath()[0]);
@@ -352,7 +352,7 @@ public abstract class AbstractConstantEntityDaoTest extends DataBaseLoader {
     void getEntity_Failure() {
         Parameter parameter = new Parameter("id", 100L);
         assertThrows(RuntimeException.class, () -> {
-            dao.getEntity(parameter);
+            dao.getNamedQueryEntity("", parameter);
         });
 
     }

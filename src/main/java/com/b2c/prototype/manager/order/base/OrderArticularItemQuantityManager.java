@@ -44,7 +44,8 @@ public class OrderArticularItemQuantityManager implements IOrderArticularItemQua
     @Override
     public void updateOrderArticularItemQuantity(String orderId, OrderArticularItemQuantityDto orderArticularItemQuantityDto) {
         entityOperationDao.executeConsumer(session -> {
-            OrderArticularItem orderItemDataOption = entityOperationDao.getEntity(
+            OrderArticularItem orderItemDataOption = entityOperationDao.getNamedQueryEntity(
+                    "",
                     parameterFactory.createStringParameter(ORDER_ID, orderId));
             OrderArticularItem newOrderItemDataOption =
                     transformationFunctionService.getEntity(OrderArticularItem.class, orderArticularItemQuantityDto);
@@ -62,7 +63,7 @@ public class OrderArticularItemQuantityManager implements IOrderArticularItemQua
 
     @Override
     public ResponseOrderDetails getResponseOrderDetails(String orderId) {
-        return entityOperationDao.getEntityGraphDto(
+        return entityOperationDao.getGraphEntityDto(
                 "",
                 parameterFactory.createStringParameter(ORDER_ID, orderId),
                 transformationFunctionService.getTransformationFunction(OrderArticularItem.class, ResponseOrderDetails.class));
@@ -70,7 +71,7 @@ public class OrderArticularItemQuantityManager implements IOrderArticularItemQua
 
     @Override
     public List<ResponseOrderDetails> getResponseOrderDetailsList() {
-        return entityOperationDao.getEntityGraphDtoList(
+        return entityOperationDao.getGraphEntityDtoList(
                 "",
                 transformationFunctionService.getTransformationFunction(OrderArticularItem.class, ResponseOrderDetails.class));
     }

@@ -6,7 +6,7 @@ management:
         accountId: "your-account-id"
 thread:
   pool:
-    size: 3
+    size: 4
 entity:
   package:
     path: com.b2c.prototype.modal.entity

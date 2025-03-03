@@ -1,8 +1,8 @@
 package com.b2c.prototype.manager.rating.base;
 
+import com.b2c.prototype.manager.AbstractConstantEntityManagerTest;
 import com.b2c.prototype.modal.dto.common.NumberConstantPayloadDto;
 import com.b2c.prototype.modal.entity.item.Rating;
-import com.b2c.prototype.manager.AbstractConstantEntityManagerTest;
 import com.tm.core.finder.parameter.Parameter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,8 +15,6 @@ import java.util.function.Function;
 import static com.b2c.prototype.util.Constant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -85,7 +83,7 @@ class RatingManagerTest extends AbstractConstantEntityManagerTest<Rating> {
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(numberConstantPayloadDto);
         when(parameterFactory.createNumberParameter(VALUE, 1)).thenReturn(parameter);
-        when(dao.getEntity(parameter)).thenReturn(testValue);
+//        when(dao.getNamedQueryEntity(parameter)).thenReturn(testValue);
 
         NumberConstantPayloadDto result = ratingManager.getEntity(1);
 
@@ -100,7 +98,7 @@ class RatingManagerTest extends AbstractConstantEntityManagerTest<Rating> {
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(numberConstantPayloadDto);
         when(parameterFactory.createNumberParameter(VALUE, 1)).thenReturn(parameter);
-        when(dao.getEntity(parameter)).thenReturn(testValue);
+        //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
         Optional<NumberConstantPayloadDto> result = ratingManager.getEntityOptional(1);
 
@@ -114,7 +112,7 @@ class RatingManagerTest extends AbstractConstantEntityManagerTest<Rating> {
         Rating testValue = createTestValue();
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(numberConstantPayloadDto);
-        when(dao.getEntityList()).thenReturn(List.of(testValue));
+//        when(dao.getEntityList()).thenReturn(List.of(testValue));
 
         List<NumberConstantPayloadDto> list = ratingManager.getEntities();
 

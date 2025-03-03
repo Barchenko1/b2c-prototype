@@ -45,8 +45,6 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import static com.b2c.prototype.util.CategoryUtil.extractTransitiveSelfYaml;
-import static com.b2c.prototype.util.CategoryUtil.findNonExistingCategories;
-import static com.b2c.prototype.util.CategoryUtil.findNonExistingCategoriesMap;
 
 @Configuration
 public class InitializeConstantDbConfiguration {
@@ -144,7 +142,7 @@ public class InitializeConstantDbConfiguration {
 
     private void initializeCountTypes(Locale defaultLocale) {
         Set<ApplicationProperty> countTypeNames = applicationPropertyConfiguration.getCountTypes();
-        List<CountType> existingCountTypes = countTypeDao.getEntityList();
+        List<CountType> existingCountTypes = countTypeDao.getNamedQueryEntityList("CountType.all");
 
         if (countTypeNames != null) {
             countTypeNames.stream()
@@ -160,7 +158,7 @@ public class InitializeConstantDbConfiguration {
 
     private void initializeCountryPhoneCode(Locale defaultLocale) {
         Set<ApplicationProperty> countryPhoneCodes = applicationPropertyConfiguration.getCountryPhoneCodes();
-        List<CountryPhoneCode> existingCountryPhoneCodes = countryPhoneCodeDao.getEntityList();
+        List<CountryPhoneCode> existingCountryPhoneCodes = countryPhoneCodeDao.getNamedQueryEntityList("CountryPhoneCode.all");
 
         if (countryPhoneCodes != null) {
             countryPhoneCodes.stream()
@@ -176,7 +174,7 @@ public class InitializeConstantDbConfiguration {
 
     private void initializeCountries(Locale defaultLocale) {
         Set<ApplicationProperty> countrySet = applicationPropertyConfiguration.getCountries();
-        List<Country> existingCountries = countryDao.getEntityList();
+        List<Country> existingCountries = countryDao.getNamedQueryEntityList("Country.all");
 
         if (countrySet != null) {
             countrySet.stream()
@@ -192,7 +190,7 @@ public class InitializeConstantDbConfiguration {
 
     private void initializeCurrencies(Locale defaultLocale) {
         Set<ApplicationProperty> currencySet = applicationPropertyConfiguration.getCurrencies();
-        List<Currency> existingCurrencies = currencyDao.getEntityList();
+        List<Currency> existingCurrencies = currencyDao.getNamedQueryEntityList("Currency.all");
 
         if (currencySet != null) {
             currencySet.stream()
@@ -208,7 +206,7 @@ public class InitializeConstantDbConfiguration {
 
     private void initializeDeliveryTypeEntities(Locale defaultLocale) {
         Set<ApplicationProperty> deliveryTypeSet = applicationPropertyConfiguration.getDeliveryTypes();
-        List<DeliveryType> existingDeliveryTypeList = deliveryTypeDao.getEntityList();
+        List<DeliveryType> existingDeliveryTypeList = deliveryTypeDao.getNamedQueryEntityList("DeliveryType.all");
 
         if (deliveryTypeSet != null) {
             deliveryTypeSet.stream()
@@ -224,7 +222,7 @@ public class InitializeConstantDbConfiguration {
 
     private void initializePaymentMethodEntities(Locale defaultLocale) {
         Set<ApplicationProperty> paymentMethodSet = applicationPropertyConfiguration.getPaymentMethods();
-        List<PaymentMethod> existingPaymentMethodList = paymentMethodDao.getEntityList();
+        List<PaymentMethod> existingPaymentMethodList = paymentMethodDao.getNamedQueryEntityList("PaymentMethod.all");
 
         if (paymentMethodSet != null) {
             paymentMethodSet.stream()
@@ -240,7 +238,7 @@ public class InitializeConstantDbConfiguration {
 
     private void initializeOrderStatusEntities(Locale defaultLocale) {
         Set<ApplicationProperty> applicationPropertySet = applicationPropertyConfiguration.getOrderStatuses();
-        List<OrderStatus> existingOrderStatus = orderStatusDao.getEntityList();
+        List<OrderStatus> existingOrderStatus = orderStatusDao.getNamedQueryEntityList("OrderStatus.all");
 
         if (applicationPropertySet != null) {
             applicationPropertySet.stream()
@@ -256,7 +254,7 @@ public class InitializeConstantDbConfiguration {
 
     private void initializeBrandEntities(Locale defaultLocale) {
         Set<ApplicationProperty> brandSet = applicationPropertyConfiguration.getBrands();
-        List<Brand> existingBrands = brandDao.getEntityList();
+        List<Brand> existingBrands = brandDao.getNamedQueryEntityList("Brand.all");
 
         if (brandSet != null) {
             brandSet.stream()
@@ -272,7 +270,7 @@ public class InitializeConstantDbConfiguration {
 
     private void initializeItemStatusEntities(Locale defaultLocale) {
         Set<ApplicationProperty> itemStatuses = applicationPropertyConfiguration.getItemStatuses();
-        List<ArticularStatus> existArticularStatuses = itemStatusDao.getEntityList();
+        List<ArticularStatus> existArticularStatuses = itemStatusDao.getNamedQueryEntityList("ArticularStatus.all");
 
         if (itemStatuses != null) {
             itemStatuses.stream()
@@ -288,7 +286,7 @@ public class InitializeConstantDbConfiguration {
 
     private void initializeItemTypesEntities(Locale defaultLocale) {
         Set<ApplicationProperty> itemTypeSet = applicationPropertyConfiguration.getItemTypes();
-        List<ItemType> existItemTypes = itemTypeDao.getEntityList();
+        List<ItemType> existItemTypes = itemTypeDao.getNamedQueryEntityList("ItemType.all");
 
         if (itemTypeSet != null) {
             itemTypeSet.stream()
@@ -304,7 +302,7 @@ public class InitializeConstantDbConfiguration {
 
     private void initializeMessageStatuses(Locale defaultLocale) {
         Set<ApplicationProperty> messageStatuses = applicationPropertyConfiguration.getMessageStatuses();
-        List<MessageStatus> existingMessageStatuses = messageStatusDao.getEntityList();
+        List<MessageStatus> existingMessageStatuses = messageStatusDao.getNamedQueryEntityList("MessageStatus.all");
 
         if (messageStatuses != null) {
             messageStatuses.stream()
@@ -320,7 +318,7 @@ public class InitializeConstantDbConfiguration {
 
     private void initializeMessageTypes(Locale defaultLocale) {
         Set<ApplicationProperty> messageTypes = applicationPropertyConfiguration.getMessageTypes();
-        List<MessageType> existingMessageTypes = messageTypeDao.getEntityList();
+        List<MessageType> existingMessageTypes = messageTypeDao.getNamedQueryEntityList("MessageType.all");
 
         if (messageTypes != null) {
             messageTypes.stream()
@@ -336,7 +334,7 @@ public class InitializeConstantDbConfiguration {
 
     private void initializeOptionGroupEntities(Locale defaultLocale) {
         Set<ApplicationProperty> optionGroupSet = applicationPropertyConfiguration.getOptionGroups();
-        List<OptionGroup> existOptionGroupList = optionGroupDao.getEntityList();
+        List<OptionGroup> existOptionGroupList = optionGroupDao.getNamedQueryEntityList("OptionGroup.all");
 
         if (optionGroupSet != null) {
             optionGroupSet.stream()
@@ -352,13 +350,13 @@ public class InitializeConstantDbConfiguration {
 
     private void initializeRatingEntities() {
         Set<Integer> ratingList = applicationPropertyConfiguration.getRatings();
-        List<Rating> existRatingList = ratingDao.getEntityList();
+        List<Rating> existRatingList = ratingDao.getNamedQueryEntityList("Rating.all");
 
         if (ratingList != null) {
             ratingList.stream()
                     .filter(rating ->
                             existRatingList.stream()
-                                    .noneMatch(existRating -> existRating.getValue() == rating))
+                                    .noneMatch(existRating -> existRating.getValue().equals(rating)))
                     .map(rating -> Rating.builder()
                             .value(rating)
                             .build())

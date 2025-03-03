@@ -1,6 +1,6 @@
 package com.b2c.prototype.modal.entity.payment;
 
-import com.b2c.prototype.modal.base.AbstractPayment;
+import com.b2c.prototype.modal.base.payment.AbstractPayment;
 import com.b2c.prototype.modal.entity.item.Discount;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;

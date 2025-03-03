@@ -1,6 +1,6 @@
 package com.b2c.prototype.modal.entity.address;
 
-import com.b2c.prototype.modal.base.AbstractAddress;
+import com.b2c.prototype.modal.base.address.AbstractAddress;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;

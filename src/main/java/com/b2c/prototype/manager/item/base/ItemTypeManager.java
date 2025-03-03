@@ -15,6 +15,7 @@ public class ItemTypeManager extends AbstractConstantEntityManager<ConstantPaylo
                            IEntityDao itemTypeDao,
                            ITransformationFunctionService transformationFunctionService) {
         super(parameterFactory, itemTypeDao,
+                "",
                 transformationFunctionService.getTransformationFunction(ConstantPayloadDto.class, ItemType.class),
                 transformationFunctionService.getTransformationFunction(ItemType.class, ConstantPayloadDto.class));
     }

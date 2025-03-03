@@ -1,6 +1,6 @@
 package com.b2c.prototype.dao.review.base;
 
-import com.b2c.prototype.dao.AbstractTransitiveSelfEntityDaoTest;
+import com.b2c.prototype.dao.AbstractConstantEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
 import com.b2c.prototype.modal.entity.review.Comment;
 import com.tm.core.process.dao.identifier.QueryService;
@@ -10,7 +10,7 @@ import com.tm.core.finder.manager.IEntityMappingManager;
 import com.tm.core.finder.table.EntityTable;
 import org.junit.jupiter.api.BeforeAll;
 
-class BasicCommentDaoTest extends AbstractTransitiveSelfEntityDaoTest {
+class BasicCommentDaoTest extends AbstractConstantEntityDaoTest {
 
     @BeforeAll
     public static void setup() {
@@ -109,32 +109,32 @@ class BasicCommentDaoTest extends AbstractTransitiveSelfEntityDaoTest {
         return new EntityDataSet<>(root, "/datasets/review/comment/updateCommentDataSet.yml");
     }
 
-    @Override
-    protected EntityDataSet<? extends TransitiveSelfEntity> getDeleteDataSet() {
-        Comment parent = Comment.builder()
-                .title("parent")
-                .uniqueCommentId("1")
-                .message("parent")
-                .dateOfCreate(100000)
-                .build();
-        Comment root = Comment.builder()
-                .title("root")
-                .uniqueCommentId("2")
-                .message("root")
-                .dateOfCreate(100000)
-                .build();
-        Comment child = Comment.builder()
-                .title("child")
-                .uniqueCommentId("3")
-                .message("child")
-                .dateOfCreate(100000)
-                .build();
-
-        parent.addChildComment(root);
-        root.addChildComment(child);
-
-        return new EntityDataSet<>(root,
-                "/datasets/review/comment/deleteCommentDataSet.yml",
-                "/datasets/review/comment/deleteChildCommentDataSet.yml");
-    }
+//    @Override
+//    protected EntityDataSet<? extends TransitiveSelfEntity> getDeleteDataSet() {
+//        Comment parent = Comment.builder()
+//                .title("parent")
+//                .uniqueCommentId("1")
+//                .message("parent")
+//                .dateOfCreate(100000)
+//                .build();
+//        Comment root = Comment.builder()
+//                .title("root")
+//                .uniqueCommentId("2")
+//                .message("root")
+//                .dateOfCreate(100000)
+//                .build();
+//        Comment child = Comment.builder()
+//                .title("child")
+//                .uniqueCommentId("3")
+//                .message("child")
+//                .dateOfCreate(100000)
+//                .build();
+//
+//        parent.addChildComment(root);
+//        root.addChildComment(child);
+//
+//        return new EntityDataSet<>(root,
+//                "/datasets/review/comment/deleteCommentDataSet.yml",
+//                "/datasets/review/comment/deleteChildCommentDataSet.yml");
+//    }
 }

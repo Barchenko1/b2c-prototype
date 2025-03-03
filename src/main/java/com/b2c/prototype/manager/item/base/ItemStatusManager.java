@@ -13,6 +13,7 @@ public class ItemStatusManager extends AbstractConstantEntityManager<ConstantPay
                              IEntityDao itemStatusDao,
                              ITransformationFunctionService transformationFunctionService) {
         super(parameterFactory, itemStatusDao,
+                "",
                 transformationFunctionService.getTransformationFunction(ConstantPayloadDto.class, ArticularStatus.class),
                 transformationFunctionService.getTransformationFunction(ArticularStatus.class, ConstantPayloadDto.class));
     }

@@ -58,14 +58,15 @@ public class DiscountManager implements IDiscountManager {
             if (discountDto.getCharSequenceCode() == null) {
                 throw new RuntimeException("Discount code is null");
             }
-            ArticularItem articularItem = queryService.getEntityGraph(
+            ArticularItem articularItem = queryService.getGraphEntity(
                     session,
                     ArticularItem.class,
                     "articularItem.discount.currency",
                     parameterFactory.createStringParameter(ARTICULAR_ID, articularId));
 
             Discount discount = (Discount) Optional.ofNullable(discountDto.getCharSequenceCode())
-                    .flatMap(code -> entityOperationDao.getOptionalEntity(
+                    .flatMap(code -> entityOperationDao.getGraphOptionalEntity(
+                            "Discount.currency",
                             parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, code)))
                     .orElseGet(() -> transformationFunctionService.getEntity(session, Discount.class, discountDto));
 
@@ -85,7 +86,8 @@ public class DiscountManager implements IDiscountManager {
                 throw new RuntimeException("Discount code is null");
             }
             Discount newDiscount = transformationFunctionService.getEntity(session, Discount.class, discountDto);
-            Discount oldDiscount = entityOperationDao.getEntity(
+            Discount oldDiscount = entityOperationDao.getGraphEntity(
+                    "Discount.currency",
                     parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, charSequenceCode));
             newDiscount.setId(oldDiscount.getId());
             session.merge(newDiscount);
@@ -95,9 +97,9 @@ public class DiscountManager implements IDiscountManager {
     @Override
     public void changeDiscountStatus(DiscountStatusDto discountStatusDto) {
         entityOperationDao.executeConsumer(session -> {
-            Discount currencyDiscount = searchService.getEntity(
-                    Discount.class,
-                    supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, discountStatusDto.getCharSequenceCode()));
+            Discount currencyDiscount = entityOperationDao.getGraphEntity(
+                    "Discount.currency",
+                    parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, discountStatusDto.getCharSequenceCode()));
             currencyDiscount.setActive(discountStatusDto.isActive());
             session.merge(currencyDiscount);
         });
@@ -106,7 +108,7 @@ public class DiscountManager implements IDiscountManager {
     @Override
     public void deleteDiscount(String charSequenceCode) {
         entityOperationDao.executeConsumer(session -> {
-            List<ArticularItem> articularItemList = searchService.getEntityListNamedQuery(
+            List<ArticularItem> articularItemList = searchService.getNamedQueryEntityList(
                     ArticularItem.class,
                     ARTICULAR_ITEM_FIND_BY_DISCOUNT_CHAR_SEQUENCE_CODE,
                     parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, charSequenceCode));
@@ -121,7 +123,7 @@ public class DiscountManager implements IDiscountManager {
 
     @Override
     public DiscountDto getDiscount(String charSequenceCode) {
-        return searchService.getEntityListNamedQueryDto(
+        return searchService.getNamedQueryEntityDtoList(
                 ArticularItem.class,
                 ARTICULAR_ITEM_FIND_BY_DISCOUNT_CHAR_SEQUENCE_CODE,
                 parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, charSequenceCode),
@@ -130,7 +132,7 @@ public class DiscountManager implements IDiscountManager {
 
     @Override
     public List<DiscountDto> getDiscounts() {
-        return searchService.getEntityListNamedQueryDtoList(
+        return searchService.getNamedQueryEntityDtoList(
                 ArticularItem.class,
                 ARTICULAR_ITEM_FIND_BY_DISCOUNT_NOT_NULL,
                 transformationFunctionService.getCollectionTransformationCollectionFunction(ArticularItem.class, DiscountDto.class, "list"));

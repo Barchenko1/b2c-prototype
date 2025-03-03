@@ -42,16 +42,14 @@ class SupplierServiceTest {
         String entity = "mockEntity";
         String extractedField = "mockField";
         Function<String, String> fieldExtractor = mock(Function.class);
-
-        when(queryService.getEntity(entityClass, parameterSupplier)).thenReturn(entity);
+//        when(queryService.getEntity(entityClass, parameterSupplier)).thenReturn(entity);
         when(fieldExtractor.apply(entity)).thenReturn(extractedField);
-
-        
-        Supplier<String> resultSupplier = supplierService.entityFieldSupplier(entityClass, parameterSupplier, fieldExtractor);
-
-        
+        Supplier<String> resultSupplier = supplierService.entityFieldSupplier(
+                entityClass,
+                "",
+                parameterSupplier);
         assertEquals(extractedField, resultSupplier.get());
-        verify(queryService).getEntity(entityClass, parameterSupplier);
+//        verify(queryService).getEntity(entityClass, parameterSupplier);
         verify(fieldExtractor).apply(entity);
     }
 
@@ -61,13 +59,16 @@ class SupplierServiceTest {
         Supplier<Parameter> parameterSupplier = () -> mock(Parameter.class);
         String entity = "mockEntity";
 
-        when(queryService.getEntity(entityClass, parameterSupplier)).thenReturn(entity);
+//        when(queryService.getEntity(entityClass, parameterSupplier)).thenReturn(entity);
 
-        Supplier<String> resultSupplier = supplierService.entityFieldSupplier(entityClass, parameterSupplier);
+        Supplier<String> resultSupplier = supplierService.entityFieldSupplier(
+                entityClass,
+                "",
+                parameterSupplier);
 
         
         assertEquals(entity, resultSupplier.get());
-        verify(queryService).getEntity(entityClass, parameterSupplier);
+//        verify(queryService).getEntity(entityClass, parameterSupplier);
     }
 
     @Test

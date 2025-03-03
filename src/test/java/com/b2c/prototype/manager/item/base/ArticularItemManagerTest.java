@@ -76,8 +76,8 @@ class ArticularItemManagerTest {
 
         when(supplierService.parameterStringSupplier(ITEM_ID, itemId))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(ItemData.class, parameterSupplier))
-                .thenReturn(itemData);
+//        when(queryService.getEntity(ItemData.class, parameterSupplier))
+//                .thenReturn(itemData);
         when(transformationFunctionService.getEntity(ArticularItem.class, articularItemDto))
                 .thenReturn(newArticularItem);
         doAnswer(invocation -> {
@@ -107,8 +107,8 @@ class ArticularItemManagerTest {
 
         when(supplierService.parameterStringSupplier(ITEM_ID, itemId))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(ItemData.class, parameterSupplier))
-                .thenReturn(itemData);
+//        when(queryService.getEntity(ItemData.class, parameterSupplier))
+//                .thenReturn(itemData);
         when(transformationFunctionService.getEntity(ArticularItem.class, articularItemDto))
                 .thenReturn(newArticularItem);
         doAnswer(invocation -> {
@@ -148,7 +148,7 @@ class ArticularItemManagerTest {
         Supplier<Parameter> parameterSupplier = () -> parameter;
         when(supplierService.parameterStringSupplier(ARTICULAR_ID, value))
                 .thenReturn(parameterSupplier);
-        when(itemDataOptionDao.getEntityGraph(anyString(), eq(parameter))).thenReturn(articularItem);
+        when(itemDataOptionDao.getGraphEntity(anyString(), eq(parameter))).thenReturn(articularItem);
         when(transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class))
                 .thenReturn(function);
         when(function.apply(articularItem)).thenReturn(responseDto);
@@ -166,7 +166,7 @@ class ArticularItemManagerTest {
         Function<ArticularItem, ResponseArticularItemDto> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class))
                 .thenReturn(function);
-        when(itemDataOptionDao.getEntityList()).thenReturn(List.of(getItemDataOption()));
+//        when(itemDataOptionDao.getEntityList()).thenReturn(List.of(getItemDataOption()));
         when(function.apply(articularItem)).thenReturn(responseDto);
 
         List<ResponseArticularItemDto> result = articularItemManager.getResponseArticularItemDtoList();
@@ -182,7 +182,7 @@ class ArticularItemManagerTest {
         Function<ArticularItem, ResponseArticularItemDto> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class))
                 .thenReturn(function);
-        when(itemDataOptionDao.getEntityList()).thenReturn(List.of(getItemDataOption()));
+//        when(itemDataOptionDao.getEntityList()).thenReturn(List.of(getItemDataOption()));
         when(function.apply(articularItem)).thenReturn(responseDto);
 
         List<ResponseArticularItemDto> result = articularItemManager.getResponseArticularItemDtoFiltered();
@@ -199,7 +199,7 @@ class ArticularItemManagerTest {
         Function<ArticularItem, ResponseArticularItemDto> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class))
                 .thenReturn(function);
-        when(itemDataOptionDao.getEntityList()).thenReturn(List.of(articularItem));
+//        when(itemDataOptionDao.getEntityList()).thenReturn(List.of(articularItem));
         when(function.apply(articularItem)).thenReturn(responseDto);
 
         List<ResponseArticularItemDto> result = articularItemManager.getResponseArticularItemDtoSorted(sortType);

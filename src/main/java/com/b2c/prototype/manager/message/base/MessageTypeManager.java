@@ -14,6 +14,7 @@ public class MessageTypeManager extends AbstractConstantEntityManager<ConstantPa
                               IEntityDao dao,
                               ITransformationFunctionService transformationFunctionService) {
         super(parameterFactory, dao,
+                "",
                 transformationFunctionService.getTransformationFunction(ConstantPayloadDto.class, MessageType.class),
                 transformationFunctionService.getTransformationFunction(MessageType.class, ConstantPayloadDto.class)
         );

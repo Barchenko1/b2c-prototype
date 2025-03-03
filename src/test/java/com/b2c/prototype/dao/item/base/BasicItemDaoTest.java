@@ -322,7 +322,7 @@ class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
         loadDataSet("/datasets/item/item/testItemSet.yml");
         Parameter parameter = new Parameter("id", 1L);
         Item item = prepareTestItem();
-        List<Item> resultList = dao.getEntityList(parameter);
+        List<Item> resultList = dao.getNamedQueryEntityList("", parameter);
 
         assertEquals(1, resultList.size());
         resultList.forEach(result -> {
@@ -335,7 +335,7 @@ class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id1", 1L);
 
         assertThrows(RuntimeException.class, () -> {
-            dao.getEntityList(parameter);
+            dao.getNamedQueryEntityList("", parameter);
         });
     }
 
@@ -570,7 +570,7 @@ class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id", 1L);
         Item item = prepareTestItem();
         Optional<Item> resultOptional =
-                dao.getOptionalEntity(parameter);
+               dao.getNamedQueryOptionalEntity("", parameter);
 
         assertTrue(resultOptional.isPresent());
         Item result = resultOptional.get();
@@ -582,7 +582,7 @@ class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id1", 1L);
 
         assertThrows(RuntimeException.class, () -> {
-            dao.getOptionalEntity(parameter);
+           dao.getNamedQueryOptionalEntity("", parameter);
         });
 
     }
@@ -593,7 +593,7 @@ class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id", 1L);
 
         Item item = prepareTestItem();
-        Item result = dao.getEntity(parameter);
+        Item result = dao.getNamedQueryEntity("", parameter);
 
         checkItem(item, result);
     }
@@ -603,7 +603,7 @@ class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id1", 1L);
 
         assertThrows(RuntimeException.class, () -> {
-            dao.getEntity(parameter);
+            dao.getNamedQueryEntity("", parameter);
         });
     }
 

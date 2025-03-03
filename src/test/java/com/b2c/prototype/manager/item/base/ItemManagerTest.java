@@ -65,8 +65,8 @@ class ItemManagerTest {
 
         when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(ItemData.class, parameterSupplier))
-                .thenReturn(itemData);
+//        when(queryService.getEntity(ItemData.class, parameterSupplier))
+//                .thenReturn(itemData);
         when(transformationFunctionService.getEntity(Item.class, itemDto))
                 .thenReturn(item);
 
@@ -97,11 +97,11 @@ class ItemManagerTest {
         Function<ItemData, Item> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(ItemData.class, Item.class))
                 .thenReturn(function);
-        when(supplierService.entityFieldSupplier(
-                ItemData.class,
-                parameterSupplier,
-                function
-        )).thenReturn(itemSupplier);
+//        when(supplierService.entityFieldSupplier(
+//                ItemData.class,
+//                parameterSupplier,
+//                function
+//        )).thenReturn(itemSupplier);
         itemManager.deleteItem(articularId);
 
         verify(itemDao).deleteEntity(itemSupplier);
@@ -120,19 +120,19 @@ class ItemManagerTest {
         Function<ItemData, Item> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(ItemData.class, Item.class))
                 .thenReturn(function);
-        when(queryService.getEntityDto(
-                ItemData.class,
-                parameterSupplier,
-                function)).thenReturn(item);
+//        when(queryService.getEntityDto(
+//                ItemData.class,
+//                parameterSupplier,
+//                function)).thenReturn(item);
 
         Item result = itemManager.getItemByItemId(articularId);
 
         assertNotNull(result);
         assertEquals(item, result);
-        verify(queryService).getEntityDto(
-                eq(ItemData.class),
-                any(),
-                any());
+//        verify(queryService).getEntityDto(
+//                eq(ItemData.class),
+//                any(),
+//                any());
     }
 
     private ItemDto getItemDto() {

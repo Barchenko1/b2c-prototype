@@ -1,6 +1,6 @@
 package com.b2c.prototype.modal.entity.delivery;
 
-import com.b2c.prototype.modal.base.AbstractConstantEntity;
+import com.b2c.prototype.modal.base.constant.AbstractConstantEntity;
 import com.b2c.prototype.modal.entity.price.Price;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -29,6 +29,10 @@ import java.time.LocalTime;
         @NamedQuery(
                 name = "TimeDurationOption.findByValue",
                 query = "SELECT td FROM TimeDurationOption td WHERE td.value = : value"
+        ),
+        @NamedQuery(
+                name = "TimeDurationOption.all",
+                query = "SELECT td FROM TimeDurationOption td"
         )
 })
 public class TimeDurationOption extends AbstractConstantEntity {

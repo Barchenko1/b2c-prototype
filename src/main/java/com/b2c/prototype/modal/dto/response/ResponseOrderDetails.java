@@ -4,7 +4,7 @@ import com.b2c.prototype.modal.dto.payload.BeneficiaryDto;
 import com.b2c.prototype.modal.dto.payload.DeliveryDto;
 import com.b2c.prototype.modal.dto.payload.ArticularItemQuantityDto;
 import com.b2c.prototype.modal.dto.payload.PaymentDto;
-import com.b2c.prototype.modal.dto.payload.UserProfileDto;
+import com.b2c.prototype.modal.dto.payload.UserDetailsDto;
 import lombok.Builder;
 import lombok.Data;
 
@@ -16,7 +16,7 @@ import java.util.Set;
 public class ResponseOrderDetails {
     private String orderId;
     private long dateOfCreate;
-    private UserProfileDto userProfile;
+    private UserDetailsDto userDetails;
     private Set<ArticularItemQuantityDto> itemDataOptionQuantities;
     private DeliveryDto delivery;
     private List<BeneficiaryDto> beneficiaries;

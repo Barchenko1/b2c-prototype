@@ -67,12 +67,12 @@ public class ItemDataManager implements IItemDataManager {
     @Override
     public void deleteItemData(String itemId) {
         entityOperationDao.deleteEntityByParameter(
-                supplierService.parameterStringSupplier("item_id", itemId));
+                supplierService.parameterStringSupplier("itemId", itemId));
     }
 
     @Override
     public ResponseItemDataDto getItemData(String itemId) {
-        return entityOperationDao.getEntityGraphDto(
+        return entityOperationDao.getGraphEntityDto(
                 "itemData.full",
                 parameterFactory.createStringParameter(ITEM_ID, itemId),
                 transformationFunctionService.getTransformationFunction(ItemData.class, ResponseItemDataDto.class));
@@ -80,7 +80,7 @@ public class ItemDataManager implements IItemDataManager {
 
     @Override
     public List<ResponseItemDataDto> getItemDataList() {
-        return entityOperationDao.getEntityGraphDtoList(
+        return entityOperationDao.getGraphEntityDtoList(
                 "itemData.full",
                 transformationFunctionService.getTransformationFunction(ItemData.class, ResponseItemDataDto.class));
     }

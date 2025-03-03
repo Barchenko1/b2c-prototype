@@ -133,11 +133,11 @@ class ReviewManagerTest {
         Function<ItemData, Review> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(ItemData.class, Review.class))
                 .thenReturn(function);
-        when(supplierService.entityFieldSupplier(
-                ItemData.class,
-                parameterSupplier,
-                function
-        )).thenReturn(reviewSupplier);
+//        when(supplierService.entityFieldSupplier(
+//                ItemData.class,
+//                parameterSupplier,
+//                function
+//        )).thenReturn(reviewSupplier);
 
         reviewManager.deleteReview(articularId);
 
@@ -160,7 +160,7 @@ class ReviewManagerTest {
         when(transformationFunctionService.getTransformationCollectionFunction(Review.class, ResponseReviewDto.class))
                 .thenReturn(function);
         when(function.apply(review)).thenReturn(expectedResponse);
-        when(queryService.getEntityDto(Review.class, parameterSupplier, function)).thenReturn(expectedResponse);
+//        when(queryService.getEntityDto(Review.class, parameterSupplier, function)).thenReturn(expectedResponse);
 
         List<ResponseReviewDto> actualResponse = reviewManager.getReviewListByArticularId(articularId);
 

@@ -1,6 +1,6 @@
 package com.b2c.prototype.configuration.transform;
 
-import com.b2c.prototype.modal.base.AbstractConstantEntity;
+import com.b2c.prototype.modal.base.constant.AbstractConstantEntity;
 import com.b2c.prototype.modal.constant.MessageStatusEnum;
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.dto.common.NumberConstantPayloadDto;
@@ -25,10 +25,10 @@ import com.b2c.prototype.modal.dto.payload.OptionItemDto;
 import com.b2c.prototype.modal.dto.payload.OrderArticularItemQuantityDto;
 import com.b2c.prototype.modal.dto.payload.PaymentDto;
 import com.b2c.prototype.modal.dto.payload.PriceDto;
-import com.b2c.prototype.modal.dto.payload.RegistrationUserProfileDto;
+import com.b2c.prototype.modal.dto.payload.RegistrationUserDetailsDto;
 import com.b2c.prototype.modal.dto.payload.ReviewDto;
 import com.b2c.prototype.modal.dto.payload.SingleOptionItemDto;
-import com.b2c.prototype.modal.dto.payload.UserProfileDto;
+import com.b2c.prototype.modal.dto.payload.UserDetailsDto;
 import com.b2c.prototype.modal.dto.payload.constant.BrandDto;
 import com.b2c.prototype.modal.dto.payload.constant.CategoryValueDto;
 import com.b2c.prototype.modal.dto.payload.constant.CountryDto;
@@ -39,6 +39,8 @@ import com.b2c.prototype.modal.dto.response.ResponseItemDataDto;
 import com.b2c.prototype.modal.dto.response.ResponseMessageOverviewDto;
 import com.b2c.prototype.modal.dto.response.ResponseMessagePayloadDto;
 import com.b2c.prototype.modal.dto.response.ResponseReviewDto;
+import com.b2c.prototype.modal.dto.response.ResponseUserCreditCardDto;
+import com.b2c.prototype.modal.dto.response.ResponseUserDetailsDto;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
@@ -73,10 +75,12 @@ import com.b2c.prototype.modal.entity.store.CountType;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
+import com.b2c.prototype.modal.entity.user.UserCreditCard;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.service.function.ITransformationFunction;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.help.calculate.IPriceCalculationService;
+import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.util.CardUtil;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.finder.parameter.Parameter;
@@ -103,6 +107,7 @@ import static com.b2c.prototype.util.Constant.CHAR_SEQUENCE_CODE;
 import static com.b2c.prototype.util.Constant.USER_ID;
 import static com.b2c.prototype.util.Constant.VALUE;
 import static com.b2c.prototype.util.Util.getCurrentTimeMillis;
+import static com.b2c.prototype.util.Util.getEmailPrefix;
 import static com.b2c.prototype.util.Util.getUUID;
 
 @Configuration
@@ -115,7 +120,7 @@ public class TransformationEntityConfiguration {
     public TransformationEntityConfiguration(ITransformationFunctionService transformationFunctionService,
                                              IQueryService queryService,
                                              IParameterFactory parameterFactory,
-                                             IPriceCalculationService priceCalculationService) {
+                                             IPriceCalculationService priceCalculationService, ISearchService searchService) {
         this.queryService = queryService;
         this.parameterFactory = parameterFactory;
         this.priceCalculationService = priceCalculationService;
@@ -140,7 +145,6 @@ public class TransformationEntityConfiguration {
         transformationFunctionService.addTransformationFunction(Address.class, AddressDto.class, mapAddressToAddressDtoFunction());
         transformationFunctionService.addTransformationFunction(AddressDto.class, Address.class, mapAddressDtoToAddressFunction());
         transformationFunctionService.addTransformationFunction(OrderArticularItem.class, AddressDto.class, mapOrderItemToAddressDtoFunction());
-        transformationFunctionService.addTransformationFunction(UserDetails.class, AddressDto.class, mapUserProfileToAddressDtoFunction());
 
         transformationFunctionService.addTransformationFunction(CreditCardDto.class, CreditCard.class, mapCreditCardDtoToCreditCardFunction());
         transformationFunctionService.addTransformationFunction(CreditCard.class, ResponseCreditCardDto.class, mapCreditCardToResponseCardDtoFunction());
@@ -151,12 +155,9 @@ public class TransformationEntityConfiguration {
 
         transformationFunctionService.addTransformationFunction(ContactPhone.class, ContactPhoneDto.class, mapContactPhoneToContactPhoneDtoFunction());
         transformationFunctionService.addTransformationFunction(ContactPhoneDto.class, ContactPhone.class, mapContactPhoneDtoToContactPhoneFunction());
-        transformationFunctionService.addTransformationFunction(UserDetails.class, ContactPhoneDto.class, mapUserProfileToContactPhoneDtoFunction());
+        transformationFunctionService.addTransformationFunction(UserDetails.class, ContactPhoneDto.class, mapUserDetailsToContactPhoneDtoFunction());
         transformationFunctionService.addTransformationFunction(OrderArticularItem.class, ContactPhoneDto.class, mapOrderItemToContactPhoneDtoFunction());
-        transformationFunctionService.addTransformationFunction(BeneficiaryDto.class, Beneficiary.class, "list", mapContactInfoDtoToContactInfoFunction());
-
-        transformationFunctionService.addTransformationFunction(RegistrationUserProfileDto.class, UserDetails.class, mapRegistrationUserProfileDtoToUserProfileFunction());
-        transformationFunctionService.addTransformationFunction(UserDetails.class, UserProfileDto.class, mapUserProfileToUserProfileDtoFunction());
+        transformationFunctionService.addTransformationFunction(BeneficiaryDto.class, Beneficiary.class, "list", mapBeneficiaryDtoToBeneficiaryFunction());
 
         transformationFunctionService.addTransformationFunction(ReviewDto.class, Review.class, mapReviewDtoToReviewFunction());
         transformationFunctionService.addTransformationFunction(Review.class, ResponseReviewDto.class, mapReviewToResponseReviewDtoFunction());
@@ -173,6 +174,7 @@ public class TransformationEntityConfiguration {
         loadArticularItemFunctions(transformationFunctionService);
         loadDiscountFunctions(transformationFunctionService);
         loadOrderFunctions(transformationFunctionService);
+        loadUserDetailsFunctions(transformationFunctionService);
 
         transformationFunctionService.addTransformationFunction(OrderArticularItem.class, Beneficiary.class, "list", mapOrderItemToContactInfoListFunction());
     }
@@ -191,7 +193,7 @@ public class TransformationEntityConfiguration {
     }
 
     private void loadArticularItemFunctions(ITransformationFunctionService transformationFunctionService) {
-        transformationFunctionService.addTransformationFunction(SearchFieldUpdateCollectionEntityDto.class, ItemData.class, mapSearchFieldUpdateCollectionEntityDtoToAItemDataFunction());
+        transformationFunctionService.addTransformationFunction(SearchFieldUpdateCollectionEntityDto.class, ItemData.class, mapSearchFieldUpdateCollectionEntityDtoToItemDataFunction());
         transformationFunctionService.addTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class, mapArticularItemToResponseArticularDto());
     }
 
@@ -207,6 +209,14 @@ public class TransformationEntityConfiguration {
 
     private void loadOrderFunctions(ITransformationFunctionService transformationFunctionService) {
         transformationFunctionService.addTransformationFunction(OrderArticularItemQuantityDto.class, OrderArticularItem.class, mapOrderArticularItemQuantityToOrderArticularItem());
+    }
+
+    private void loadUserDetailsFunctions(ITransformationFunctionService transformationFunctionService) {
+        transformationFunctionService.addTransformationFunction(RegistrationUserDetailsDto.class, UserDetails.class, mapRegistrationUserDetailsDtoToUserDetailsFunction());
+        transformationFunctionService.addTransformationFunction(UserDetailsDto.class, UserDetails.class, mapUserDetailsDtoToUserDetailsFunction());
+        transformationFunctionService.addTransformationFunction(SearchFieldUpdateEntityDto.class, UserDetails.class, mapSearchFieldUpdateEntityDtoToUserDetailsFunction());
+        transformationFunctionService.addTransformationFunction(UserDetails.class, ResponseUserDetailsDto.class, mapUserDetailsToUserResponseUserDetailsDtoFunction());
+
     }
 
     private <T extends AbstractConstantEntity> Function<ConstantPayloadDto, T> mapConstantEntityPayloadDtoToConstantEntityFunction(Supplier<T> entitySupplier) {
@@ -287,10 +297,11 @@ public class TransformationEntityConfiguration {
                 .build();
     }
 
-    private Function<UserDetails, AddressDto> mapUserProfileToAddressDtoFunction() {
-        return userProfile -> {
-            Address address = userProfile.getAddresses().get(0);
-            return mapAddressToAddressDtoFunction().apply(address);
+    private Function<UserDetails, List<AddressDto>> mapUserDetailsToAddressDtoListFunction() {
+        return userDetails -> {
+            return userDetails.getAddresses().stream()
+                    .map(address -> mapAddressToAddressDtoFunction().apply(address))
+                    .toList();
         };
     }
 
@@ -299,6 +310,13 @@ public class TransformationEntityConfiguration {
             Address address = orderItem.getDelivery().getAddress();
             return mapAddressToAddressDtoFunction().apply(address);
         };
+    }
+
+    private Function<CreditCardDto, UserCreditCard> mapCreditCardDtoUserCreditCardDtoFunction() {
+        return creditCardDto -> UserCreditCard.builder()
+                .creditCard(mapCreditCardDtoToCreditCardFunction().apply(creditCardDto))
+                .isDefault(true)
+                .build();
     }
 
     private Function<CreditCardDto, CreditCard> mapCreditCardDtoToCreditCardFunction() {
@@ -311,6 +329,21 @@ public class TransformationEntityConfiguration {
                 .ownerName(creditCardDto.getOwnerName())
                 .ownerSecondName(creditCardDto.getOwnerSecondName())
                 .build();
+    }
+
+    private Function<UserCreditCard, ResponseUserCreditCardDto> mapUserCreditCardToResponseUserCardDtoFunction() {
+        return userCreditCard -> {
+            CreditCard creditCard = userCreditCard.getCreditCard();
+            return ResponseUserCreditCardDto.builder()
+                    .cardNumber(creditCard.getCardNumber())
+                    .monthOfExpire(creditCard.getMonthOfExpire())
+                    .yearOfExpire(creditCard.getYearOfExpire())
+                    .isActive(CardUtil.isCardActive(creditCard.getMonthOfExpire(), creditCard.getYearOfExpire()))
+                    .ownerName(creditCard.getOwnerName())
+                    .ownerSecondName(creditCard.getOwnerSecondName())
+                    .isDefault(userCreditCard.isDefault())
+                    .build();
+        };
     }
 
     private Function<CreditCard, ResponseCreditCardDto> mapCreditCardToResponseCardDtoFunction() {
@@ -378,31 +411,44 @@ public class TransformationEntityConfiguration {
                 .build();
     }
 
-    private Function<UserDetails, ContactPhoneDto> mapUserProfileToContactPhoneDtoFunction() {
-        return userProfile -> {
-            ContactPhone contactPhone = userProfile.getContactInfo().getContactPhone();
+    private Function<UserDetails, ContactPhoneDto> mapUserDetailsToContactPhoneDtoFunction() {
+        return userDetails -> {
+            ContactPhone contactPhone = userDetails.getContactInfo().getContactPhone();
             return mapContactPhoneToContactPhoneDtoFunction().apply(contactPhone);
         };
     }
 
     private Function<OrderArticularItem, List<ContactPhoneDto>> mapOrderItemToContactPhoneDtoFunction() {
         return orderItem -> orderItem.getBeneficiaries().stream()
-                .map(beneficiary -> mapContactPhoneToContactPhoneDtoFunction().apply(beneficiary.getContactPhone()))
+                .map(beneficiary -> mapContactPhoneToContactPhoneDtoFunction().apply(beneficiary.getContactInfo().getContactPhone()))
                 .toList();
     }
 
-    private BiFunction<Session, BeneficiaryDto, Beneficiary> mapContactInfoDtoToContactInfoFunction() {
+    private BiFunction<Session, ContactInfoDto, ContactInfo> mapContactInfoDtoToContactInfoFunction() {
+        return (session, contactInfoDto) -> ContactInfo.builder()
+                .email(contactInfoDto.getEmail())
+                .firstName(contactInfoDto.getFirstName())
+                .lastName(contactInfoDto.getLastName())
+                .contactPhone(mapContactPhoneDtoToContactPhoneFunction().apply(session, contactInfoDto.getContactPhone()))
+                .birthdayDate(contactInfoDto.getBirthDate())
+                .build();
+    }
+
+    private BiFunction<Session, BeneficiaryDto, Beneficiary> mapBeneficiaryDtoToBeneficiaryFunction() {
         return (session, beneficiaryDto) -> {
-            CountryPhoneCode countryPhoneCode = fetchCountryPhoneCode(session, beneficiaryDto.getContactPhone().getCountryPhoneCode());
+            CountryPhoneCode countryPhoneCode = fetchCountryPhoneCode(session, beneficiaryDto.getContactInfo().getContactPhone().getCountryPhoneCode());
             ContactPhone contactPhone = ContactPhone.builder()
-                    .phoneNumber(beneficiaryDto.getContactPhone().getPhoneNumber())
+                    .phoneNumber(beneficiaryDto.getContactInfo().getContactPhone().getPhoneNumber())
                     .countryPhoneCode(countryPhoneCode)
                     .build();
 
             return Beneficiary.builder()
-                    .firstName(beneficiaryDto.getFirstName())
-                    .lastName(beneficiaryDto.getLastName())
-                    .contactPhone(contactPhone)
+                    .contactInfo(ContactInfo.builder()
+                            .firstName(beneficiaryDto.getContactInfo().getFirstName())
+                            .lastName(beneficiaryDto.getContactInfo().getLastName())
+                            .contactPhone(contactPhone)
+                            .build())
+                    .orderNumber(0)
                     .build();
         };
     }
@@ -411,9 +457,9 @@ public class TransformationEntityConfiguration {
         return OrderArticularItem::getBeneficiaries;
     }
 
-    Function<UserDetails, ContactInfoDto> mapUserProfileToContactInfoDtoFunction() {
-        return userProfile -> {
-            ContactInfo contactInfo = userProfile.getContactInfo();
+    Function<UserDetails, ContactInfoDto> mapUserDetailsToContactInfoDtoFunction() {
+        return userDetails -> {
+            ContactInfo contactInfo = userDetails.getContactInfo();
             ContactPhone contactPhone = contactInfo.getContactPhone();
             return ContactInfoDto.builder()
                     .firstName(contactInfo.getFirstName())
@@ -426,25 +472,54 @@ public class TransformationEntityConfiguration {
         };
     }
 
-    private Function<RegistrationUserProfileDto, UserDetails> mapRegistrationUserProfileDtoToUserProfileFunction() {
-        return registrationUserProfileDto -> UserDetails.builder()
-                .username(registrationUserProfileDto.getUsername())
-                .userId(getUUID())
-                .dateOfCreate(getCurrentTimeMillis())
-                .build();
+    private Function<RegistrationUserDetailsDto, UserDetails> mapRegistrationUserDetailsDtoToUserDetailsFunction() {
+        return registrationUserDetailsDto -> {
+            ContactInfo contactInfo = ContactInfo.builder()
+                    .email(registrationUserDetailsDto.getEmail())
+                    .build();
+            return UserDetails.builder()
+                    .username(getEmailPrefix(registrationUserDetailsDto.getEmail()))
+                    .userId(getUUID())
+                    .dateOfCreate(getCurrentTimeMillis())
+                    .contactInfo(contactInfo)
+                    .build();
+        };
     }
 
-    private Function<UserDetails, UserProfileDto> mapUserProfileToUserProfileDtoFunction() {
-        return userProfile -> {
-            ContactInfoDto contactInfoDto = mapUserProfileToContactInfoDtoFunction().apply(userProfile);
-            AddressDto addressDto = mapUserProfileToAddressDtoFunction().apply(userProfile);
-            List<ResponseCreditCardDto> responseCreditCardDtoList = userProfile.getCreditCardList().stream()
-                    .map(c -> mapCreditCardToResponseCardDtoFunction().apply(c))
+    private BiFunction<Session, SearchFieldUpdateEntityDto<UserDetailsDto>, UserDetails> mapSearchFieldUpdateEntityDtoToUserDetailsFunction() {
+        return (session, userDetailsDtoSearchFieldUpdateEntityDto) -> {
+            return mapUserDetailsDtoToUserDetailsFunction()
+                    .apply(session, userDetailsDtoSearchFieldUpdateEntityDto.getUpdateDto());
+        };
+    }
+
+    private BiFunction<Session, UserDetailsDto, UserDetails> mapUserDetailsDtoToUserDetailsFunction() {
+        return (session, userDetailsDto) -> {
+            ContactInfo contactInfo = mapContactInfoDtoToContactInfoFunction().apply(session, userDetailsDto.getContactInfo());
+            Address address = mapAddressDtoToAddressFunction().apply(session, userDetailsDto.getAddress());
+            UserCreditCard userCreditCard = mapCreditCardDtoUserCreditCardDtoFunction().apply(userDetailsDto.getCreditCard());
+            return UserDetails.builder()
+                    .username(getEmailPrefix(userDetailsDto.getContactInfo().getEmail()))
+                    .userId(getUUID())
+                    .dateOfCreate(getCurrentTimeMillis())
+                    .contactInfo(contactInfo)
+                    .addresses(Set.of(address))
+                    .userCreditCardList(Set.of(userCreditCard))
+                    .build();
+        };
+    }
+
+    private Function<UserDetails, ResponseUserDetailsDto> mapUserDetailsToUserResponseUserDetailsDtoFunction() {
+        return userDetails -> {
+            ContactInfoDto contactInfoDto = mapUserDetailsToContactInfoDtoFunction().apply(userDetails);
+            List<AddressDto> addressDtoList = mapUserDetailsToAddressDtoListFunction().apply(userDetails);
+            List<ResponseUserCreditCardDto> responseCreditCardDtoList = userDetails.getUserCreditCardList().stream()
+                    .map(ucc -> mapUserCreditCardToResponseUserCardDtoFunction().apply(ucc))
                     .toList();
-            return UserProfileDto.builder()
+            return ResponseUserDetailsDto.builder()
                     .contactInfo(contactInfoDto)
                     .creditCards(responseCreditCardDtoList)
-                    .addressDto(addressDto)
+                    .addresses(addressDtoList)
                     .build();
         };
     }
@@ -691,12 +766,12 @@ public class TransformationEntityConfiguration {
         };
     }
 
-    private BiFunction<Session, SearchFieldUpdateCollectionEntityDto<ArticularItemDto>, ItemData> mapSearchFieldUpdateCollectionEntityDtoToAItemDataFunction() {
+    private BiFunction<Session, SearchFieldUpdateCollectionEntityDto<ArticularItemDto>, ItemData> mapSearchFieldUpdateCollectionEntityDtoToItemDataFunction() {
         return ((session, searchFieldUpdateCollectionEntityDto) -> {
             String itemId = searchFieldUpdateCollectionEntityDto.getSearchField();
             List<ArticularItemDto> articularItemDtoList = searchFieldUpdateCollectionEntityDto.getUpdateDtoSet();
             Set<ArticularItemDto> articularItemDtoSet = new HashSet<>(articularItemDtoList);
-            ItemData existingItemData = queryService.getEntityGraph(
+            ItemData existingItemData = queryService.getGraphEntity(
                     session,
                     ItemData.class,
                     "itemData.full",
@@ -740,7 +815,7 @@ public class TransformationEntityConfiguration {
         return (session, itemDataSearchFieldUpdateDto) -> {
             String itemId = itemDataSearchFieldUpdateDto.getSearchField();
             ItemDataDto itemDataDto = itemDataSearchFieldUpdateDto.getUpdateDto();
-            ItemData existingItemData = queryService.getEntityGraph(
+            ItemData existingItemData = queryService.getGraphEntity(
                     session,
                     ItemData.class,
                     "itemData.full",
@@ -841,9 +916,9 @@ public class TransformationEntityConfiguration {
 
     private BiFunction<Session, OrderArticularItemQuantityDto, OrderArticularItem> mapOrderArticularItemQuantityToOrderArticularItem() {
         return (session, orderArticularItemQuantityDto) -> {
-            Optional<UserDetails> userProfileOptional = Optional.empty();
+            Optional<UserDetails> userDetailsOptional = Optional.empty();
             if (orderArticularItemQuantityDto.getUser().getUserId() != null) {
-                userProfileOptional = queryService.getOptionalEntityNamedQuery(
+                userDetailsOptional = queryService.getNamedQueryOptionalEntity(
                         session,
                         UserDetails.class,
                         "UserDetails.findByUserId",
@@ -862,7 +937,7 @@ public class TransformationEntityConfiguration {
                     .build();
 
             return OrderArticularItem.builder()
-                    .userProfile(userProfileOptional.orElse(null))
+                    .userDetails(userDetailsOptional.orElse(null))
                     .dateOfCreate(getCurrentTimeMillis())
                     .orderId(getUUID())
                     .articularItemQuantityList(articularItemQuantityList)
@@ -896,13 +971,15 @@ public class TransformationEntityConfiguration {
 
     private BiFunction<Session, BeneficiaryDto, Beneficiary> mapBeneficiaryDtoToBeneficiary() {
         return (session, beneficiaryDto) -> {
-            ContactPhone contactPhone = mapContactPhoneDtoToContactPhoneFunction().apply(session, beneficiaryDto.getContactPhone());
+            ContactPhone contactPhone = mapContactPhoneDtoToContactPhoneFunction().apply(session, beneficiaryDto.getContactInfo().getContactPhone());
             return Beneficiary.builder()
+                    .contactInfo(ContactInfo.builder()
+                            .email(beneficiaryDto.getContactInfo().getEmail())
+                            .firstName(beneficiaryDto.getContactInfo().getFirstName())
+                            .lastName(beneficiaryDto.getContactInfo().getLastName())
+                            .contactPhone(contactPhone)
+                            .build())
                     .orderNumber(beneficiaryDto.getOrderNumber())
-                    .email(beneficiaryDto.getEmail())
-                    .firstName(beneficiaryDto.getFirstName())
-                    .lastName(beneficiaryDto.getLastName())
-                    .contactPhone(contactPhone)
                     .build();
         };
     }
@@ -1137,7 +1214,7 @@ public class TransformationEntityConfiguration {
     }
 
     private PaymentMethod fetchPaymentMethod(Session session, String value) {
-        return queryService.getEntityNamedQuery(
+        return queryService.getNamedQueryEntity(
                 session,
                 PaymentMethod.class,
                 "PaymentMethod.findByValue",
@@ -1145,7 +1222,7 @@ public class TransformationEntityConfiguration {
     }
 
     private PaymentStatus fetchPaymentStatus(Session session, String value) {
-        return queryService.getEntityNamedQuery(
+        return queryService.getNamedQueryEntity(
                 session,
                 PaymentStatus.class,
                 "PaymentStatus.findByValue",
@@ -1153,7 +1230,7 @@ public class TransformationEntityConfiguration {
     }
 
     private Currency fetchCurrency(Session session, String value) {
-        return queryService.getEntityNamedQuery(
+        return queryService.getNamedQueryEntity(
                 session,
                 Currency.class,
                 "Currency.findByValue",
@@ -1161,7 +1238,7 @@ public class TransformationEntityConfiguration {
     }
 
     private CountryPhoneCode fetchCountryPhoneCode(Session session, String value) {
-        return queryService.getEntityNamedQuery(
+        return queryService.getNamedQueryEntity(
                 session,
                 CountryPhoneCode.class,
                 "CountryPhoneCode.findByValue",
@@ -1169,7 +1246,7 @@ public class TransformationEntityConfiguration {
     }
 
     private Country fetchCountry(Session session, String value) {
-        return queryService.getEntityNamedQuery(
+        return queryService.getNamedQueryEntity(
                 session,
                 Country.class,
                 "Country.findByValue",
@@ -1178,7 +1255,7 @@ public class TransformationEntityConfiguration {
     }
 
     private Discount fetchDiscount(Session session, String value) {
-        return queryService.getEntityNamedQuery(
+        return queryService.getNamedQueryEntity(
                 session,
                 Discount.class,
                 "ArticularItem.findByDiscountCharSequenceCode",
@@ -1186,7 +1263,7 @@ public class TransformationEntityConfiguration {
     }
 
     private Optional<Discount> fetchOptionDiscount(Session session, String value) {
-        return queryService.getOptionalEntityNamedQuery(
+        return queryService.getNamedQueryOptionalEntity(
                 session,
                 Discount.class,
                 "ArticularItem.findByDiscountCharSequenceCode",
@@ -1194,7 +1271,7 @@ public class TransformationEntityConfiguration {
     }
 
     private ArticularStatus fetchArticularStatus(Session session, String value) {
-        return queryService.getEntityNamedQuery(
+        return queryService.getNamedQueryEntity(
                 session,
                 ArticularStatus.class,
                 "ArticularStatus.findByValue",
@@ -1202,7 +1279,7 @@ public class TransformationEntityConfiguration {
     }
 
     private Optional<OptionGroup> fetchOptionGroup(Session session, String namedQuery, String value) {
-        return queryService.getOptionalEntityNamedQuery(
+        return queryService.getNamedQueryOptionalEntity(
                 session,
                 OptionGroup.class,
                 namedQuery,
@@ -1210,7 +1287,7 @@ public class TransformationEntityConfiguration {
     }
 
     private OrderStatus fetchOrderStatus(Session session, String value) {
-        return queryService.getEntityNamedQuery(
+        return queryService.getNamedQueryEntity(
                 session,
                 OrderStatus.class,
                 "OrderStatus.findByValue",
@@ -1218,7 +1295,7 @@ public class TransformationEntityConfiguration {
     }
 
     private ArticularItem fetchArticularItem(Session session, String articularId) {
-        return queryService.getEntityGraph(
+        return queryService.getGraphEntity(
                 session,
                 ArticularItem.class,
                 ARTICULAR_ITEM_FULL,
@@ -1226,7 +1303,7 @@ public class TransformationEntityConfiguration {
     }
 
     private DeliveryType fetchDeliveryType(Session session, String value) {
-        return queryService.getEntityNamedQuery(
+        return queryService.getNamedQueryEntity(
                 session,
                 DeliveryType.class,
                 "DeliveryType.findByValue",
@@ -1234,7 +1311,7 @@ public class TransformationEntityConfiguration {
     }
 
     private TimeDurationOption fetchTimeDurationOption(Session session, String value) {
-        return queryService.getEntityNamedQuery(
+        return queryService.getNamedQueryEntity(
                 session,
                 TimeDurationOption.class,
                 "TimeDurationOption.findByValue",
@@ -1242,7 +1319,7 @@ public class TransformationEntityConfiguration {
     }
 
     private MessageStatus fetchMessageStatus(Session session, String value) {
-        return queryService.getEntityNamedQuery(
+        return queryService.getNamedQueryEntity(
                 session,
                 MessageStatus.class,
                 "MessageStatus.findByValue",
@@ -1250,7 +1327,7 @@ public class TransformationEntityConfiguration {
     }
 
     private MessageType fetchMessageType(Session session, String value) {
-        return queryService.getEntityNamedQuery(
+        return queryService.getNamedQueryEntity(
                 session,
                 MessageType.class,
                 "MessageType.findByValue",
@@ -1258,7 +1335,7 @@ public class TransformationEntityConfiguration {
     }
 
     private Optional<Category> fetchOptionalCategory(Session session, String value) {
-        return queryService.getOptionalEntityNamedQuery(
+        return queryService.getNamedQueryOptionalEntity(
                 session,
                 Category.class,
                 "Category.findByValue",
@@ -1266,7 +1343,7 @@ public class TransformationEntityConfiguration {
     }
 
     private Optional<Brand> fetchOptionalBrand(Session session, String value) {
-        return queryService.getOptionalEntityNamedQuery(
+        return queryService.getNamedQueryOptionalEntity(
                 session,
                 Brand.class,
                 "Brand.findByValue",
@@ -1274,7 +1351,7 @@ public class TransformationEntityConfiguration {
     }
 
     private Optional<ItemType> fetchOptionalItemType(Session session, String value) {
-        return queryService.getOptionalEntityNamedQuery(
+        return queryService.getNamedQueryOptionalEntity(
                 session,
                 ItemType.class,
                 "ItemType.findByValue",
@@ -1282,7 +1359,7 @@ public class TransformationEntityConfiguration {
     }
 
     private Optional<SellerCommission> fetchCommission(Session session) {
-        return queryService.getOptionalEntityNamedQuery(
+        return queryService.getNamedQueryOptionalEntity(
                 session,
                 SellerCommission.class,
                 "SellerCommission.getLatest");

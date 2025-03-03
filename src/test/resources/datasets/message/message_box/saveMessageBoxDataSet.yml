@@ -76,7 +76,7 @@ credit_card:
     ownerName: "name"
     ownerSecondName: "secondName"
     isActive: true
-user_profile:
+user_details:
   - id: 1
     username: "username"
     email: "email"
@@ -85,4 +85,4 @@ user_profile:
     address_id: 1
     contactinfo_id: 1
 message_box:
-  - userprofile_id: 1
+  - userdetails_id: 1

@@ -1,6 +1,6 @@
 package com.b2c.prototype.modal.entity.order;
 
-import com.b2c.prototype.modal.base.AbstractOrderArticularItem;
+import com.b2c.prototype.modal.base.order.AbstractOrderArticularItem;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Data;

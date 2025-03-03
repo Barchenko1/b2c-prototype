@@ -31,8 +31,10 @@ public final class DatabaseQueries {
             statement.execute("DELETE FROM price");
 
             statement.execute("DELETE FROM message_box");
+            statement.execute("DELETE FROM address");
+            statement.execute("DELETE FROM user_credit_card");
             statement.execute("DELETE FROM credit_card");
-            statement.execute("DELETE FROM user_profile");
+            statement.execute("DELETE FROM user_details");
             statement.execute("DELETE FROM contact_info");
             statement.execute("DELETE FROM contact_phone");
             // Add other child tables in correct order

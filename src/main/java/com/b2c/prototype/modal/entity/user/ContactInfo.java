@@ -1,6 +1,6 @@
 package com.b2c.prototype.modal.entity.user;
 
-import com.b2c.prototype.modal.base.AbstractContactInfo;
+import com.b2c.prototype.modal.base.user.AbstractContactInfo;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Data;

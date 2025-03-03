@@ -1,6 +1,6 @@
 package com.b2c.prototype.modal.entity.payment;
 
-import com.b2c.prototype.modal.base.AbstractCreditCard;
+import com.b2c.prototype.modal.base.payment.AbstractCreditCard;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Data;

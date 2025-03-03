@@ -97,7 +97,7 @@ public class MessageManager implements IMessageManager {
 
     @Override
     public List<ResponseMessageOverviewDto> getMessageOverviewBySenderEmail(String senderEmail) {
-        return entityOperationDao.getSubEntityGraphDtoList(
+        return entityOperationDao.getSubGraphEntityDtoList(
                 "",
                 parameterFactory.createStringParameter("sender", senderEmail),
                 transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class));
@@ -105,7 +105,7 @@ public class MessageManager implements IMessageManager {
 
     @Override
     public List<ResponseMessageOverviewDto> getMessageOverviewByReceiverEmail(String receiverEmail) {
-        return entityOperationDao.getSubEntityGraphDtoList(
+        return entityOperationDao.getSubGraphEntityDtoList(
                 "",
                 parameterFactory.createStringParameter("receiver", receiverEmail),
                 transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class));
@@ -113,7 +113,7 @@ public class MessageManager implements IMessageManager {
 
     @Override
     public ResponseMessagePayloadDto getMessagePayloadDto(String userId, String messageId) {
-        return entityOperationDao.getEntityGraphDto(
+        return entityOperationDao.getGraphEntityDto(
                 "",
                 parameterFactory.createStringParameter("messageUniqNumber", messageId),
                 transformationFunctionService.getTransformationFunction(Message.class, ResponseMessagePayloadDto.class)

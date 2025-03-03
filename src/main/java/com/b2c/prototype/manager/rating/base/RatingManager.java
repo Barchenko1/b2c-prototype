@@ -15,6 +15,7 @@ public class RatingManager extends AbstractIntegerConstantEntityManager<NumberCo
                          IEntityDao dao,
                          ITransformationFunctionService transformationFunctionService) {
         super(parameterFactory, dao,
+                "",
                 transformationFunctionService.getTransformationFunction(NumberConstantPayloadDto.class, Rating.class),
                 transformationFunctionService.getTransformationFunction(Rating.class, NumberConstantPayloadDto.class));
     }

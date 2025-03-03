@@ -61,25 +61,25 @@ public class PostManager implements IPostManager {
     @Override
     public List<Post> getPostListByPostTitle(String title) {
         Parameter parameter = parameterFactory.createStringParameter("title", title);
-        return entityOperationDao.getEntityList();
+        return entityOperationDao.getNamedQueryEntityList("");
     }
 
     @Override
     public List<Post> getPostListByEmail(String email) {
         Parameter parameter = parameterFactory.createStringParameter("email", email);
-        return entityOperationDao.getEntityList();
+        return entityOperationDao.getNamedQueryEntityList("");
     }
 
     @Override
     public List<Post> getPostListByUserName(String username) {
         Parameter parameter = parameterFactory.createStringParameter("username", username);
-        return entityOperationDao.getEntityList();
+        return entityOperationDao.getNamedQueryEntityList("");
     }
 
     @Override
     public Post getPostByUniqueId(String uniqueId) {
         Parameter parameter = parameterFactory.createStringParameter("uniqueId", uniqueId);
-        Optional<Post> optionalPost = entityOperationDao.getOptionalEntityGraph(
+        Optional<Post> optionalPost = entityOperationDao.getGraphOptionalEntity(
                 "",
                 parameter);
 
@@ -99,7 +99,7 @@ public class PostManager implements IPostManager {
         Post parentPost = null;
         if (requestPostDto.getParent() != null) {
             Parameter parameter = parameterFactory.createStringParameter("uniquePostId", uniquePostId);
-            Optional<Post> optionalPost = entityOperationDao.getOptionalEntityGraph(
+            Optional<Post> optionalPost = entityOperationDao.getGraphOptionalEntity(
                     "",
                     parameter);
 

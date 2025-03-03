@@ -1,0 +1,68 @@
+[
+  {
+    "contactInfo": {
+      "firstName": "John",
+      "lastName": "Doe",
+      "contactPhone": {
+        "countryPhoneCode": "+11",
+        "phoneNumber": "111-111-111"
+      }
+    },
+    "addresses": [
+      {
+        "country": "USA",
+        "city": "city",
+        "street": "street",
+        "street2": "street2",
+        "buildingNumber": 10,
+        "florNumber": 9,
+        "apartmentNumber": 201,
+        "zipCode": "90000"
+      }
+    ],
+    "creditCards": [
+      {
+        "cardNumber": "4444-1111-2222-3333",
+        "monthOfExpire": 6,
+        "yearOfExpire": 2028,
+        "ownerName": "John",
+        "ownerSecondName": "Doe",
+        "default": true,
+        "active": true
+      }
+    ]
+  },
+  {
+    "contactInfo": {
+      "firstName": "John",
+      "lastName": "Doe",
+      "contactPhone": {
+        "countryPhoneCode": "+11",
+        "phoneNumber": "111-111-111"
+      }
+    },
+    "addresses": [
+      {
+        "country": "USA",
+        "city": "city",
+        "street": "street",
+        "street2": "street2",
+        "buildingNumber": 10,
+        "florNumber": 9,
+        "apartmentNumber": 202,
+        "zipCode": "90000"
+      }
+    ],
+    "creditCards": [
+      {
+        "cardNumber": "4444-1111-2222-1111",
+        "monthOfExpire": 6,
+        "yearOfExpire": 2028,
+        "ownerName": "John",
+        "ownerSecondName": "Doe",
+        "default": true,
+        "active": true
+      }
+    ]
+  }
+]

@@ -1,25 +1,23 @@
 package com.b2c.prototype.manager.order.base;
 
 import com.b2c.prototype.dao.order.IBeneficiaryDao;
+import com.b2c.prototype.manager.order.IBeneficiaryManager;
 import com.b2c.prototype.modal.dto.payload.BeneficiaryDto;
-import com.b2c.prototype.modal.entity.order.OrderArticularItem;
 import com.b2c.prototype.modal.entity.order.Beneficiary;
+import com.b2c.prototype.modal.entity.order.OrderArticularItem;
 import com.b2c.prototype.service.common.EntityOperationManager;
 import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.manager.order.IBeneficiaryManager;
 import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.factory.IParameterFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static com.b2c.prototype.util.Constant.ITEM_ID;
 import static com.b2c.prototype.util.Constant.ORDER_ID;
 
 public class BeneficiaryManager implements IBeneficiaryManager {
@@ -47,9 +45,10 @@ public class BeneficiaryManager implements IBeneficiaryManager {
     @Override
     public void saveUpdateContactInfoByOrderId(String orderId, List<BeneficiaryDto> beneficiaryDtoList) {
         entityOperationDao.executeConsumer(session -> {
-            OrderArticularItem orderItemDataOption = searchService.getEntity(
+            OrderArticularItem orderItemDataOption = searchService.getNamedQueryEntity(
                     OrderArticularItem.class,
-                    supplierService.parameterStringSupplier(ORDER_ID, orderId));
+                    "",
+                    parameterFactory.createStringParameter(ORDER_ID, orderId));
 
             List<Beneficiary> existingBenefits = orderItemDataOption.getBeneficiaries();
             List<Beneficiary> newBeneficiaryList = beneficiaryDtoList.stream()
@@ -73,9 +72,10 @@ public class BeneficiaryManager implements IBeneficiaryManager {
     @Override
     public void deleteContactInfoByOrderId(String orderId, int beneficiaryNumber) {
         entityOperationDao.executeConsumer(session -> {
-            OrderArticularItem orderItemDataOption = searchService.getEntity(
+            OrderArticularItem orderItemDataOption = searchService.getNamedQueryEntity(
                     OrderArticularItem.class,
-                    supplierService.parameterStringSupplier(ORDER_ID, orderId));
+                    "",
+                    parameterFactory.createStringParameter(ORDER_ID, orderId));
             Beneficiary beneficiary = orderItemDataOption.getBeneficiaries()
                     .get(beneficiaryNumber);
             session.remove(beneficiary);
@@ -84,8 +84,9 @@ public class BeneficiaryManager implements IBeneficiaryManager {
 
     @Override
     public List<BeneficiaryDto> getContactInfoListByOrderId(String orderId) {
-        return searchService.getSubEntityDtoList(
+        return searchService.getSubNamedQueryEntityDtoList(
                 OrderArticularItem.class,
+                "",
                 parameterFactory.createStringParameter(ORDER_ID, orderId),
                 transformationFunctionService.getTransformationFunction(OrderArticularItem.class, BeneficiaryDto.class));
     }

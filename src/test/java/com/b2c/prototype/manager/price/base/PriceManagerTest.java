@@ -65,8 +65,8 @@ class PriceManagerTest {
 
         when(supplierService.parameterStringSupplier(ARTICULAR_ID,articularId))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(ArticularItem.class, parameterSupplier))
-                .thenReturn(articularItem);
+//        when(queryService.getEntity(ArticularItem.class, parameterSupplier))
+//                .thenReturn(articularItem);
         when(transformationFunctionService.getEntity(Price.class, priceDto, priceType.getValue()))
                 .thenReturn(getPrice(100.0));
         doAnswer(invocation -> {
@@ -95,8 +95,8 @@ class PriceManagerTest {
 
         when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(ArticularItem.class, parameterSupplier))
-                .thenReturn(articularItem);
+//        when(queryService.getEntity(ArticularItem.class, parameterSupplier))
+//                .thenReturn(articularItem);
         when(transformationFunctionService.getEntity(Price.class, priceDto, priceType.getValue()))
                 .thenReturn(getPrice(100.0));
         doAnswer(invocation -> {
@@ -124,8 +124,8 @@ class PriceManagerTest {
 
         when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(ArticularItem.class, parameterSupplier))
-                .thenReturn(articularItem);
+//        when(queryService.getEntity(ArticularItem.class, parameterSupplier))
+//                .thenReturn(articularItem);
         when(transformationFunctionService.getEntity(Price.class, priceDto, priceType.getValue()))
                 .thenReturn(getPrice(100.0));
         doAnswer(invocation -> {
@@ -153,8 +153,8 @@ class PriceManagerTest {
 
         when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(ArticularItem.class, parameterSupplier))
-                .thenReturn(articularItem);
+//        when(queryService.getEntity(ArticularItem.class, parameterSupplier))
+//                .thenReturn(articularItem);
         when(transformationFunctionService.getEntity(Price.class, priceDto, priceType.getValue()))
                 .thenReturn(getPrice(100.0));
         doAnswer(invocation -> {
@@ -184,8 +184,8 @@ class PriceManagerTest {
 
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
-                .thenReturn(orderItemDataOption);
+//        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
+//                .thenReturn(orderItemDataOption);
         when(transformationFunctionService.getEntity(Price.class, priceDto, priceType.getValue()))
                 .thenReturn(getPrice(100.0));
         doAnswer(invocation -> {
@@ -215,8 +215,8 @@ class PriceManagerTest {
 
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
-                .thenReturn(orderItemDataOption);
+//        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
+//                .thenReturn(orderItemDataOption);
         when(transformationFunctionService.getEntity(Price.class, priceDto, priceType.getValue()))
                 .thenReturn(getPrice(100.0));
         doAnswer(invocation -> {
@@ -246,8 +246,8 @@ class PriceManagerTest {
 
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
-                .thenReturn(orderItemDataOption);
+//        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
+//                .thenReturn(orderItemDataOption);
         when(transformationFunctionService.getEntity(Price.class, priceDto, priceType.getValue()))
                 .thenReturn(getPrice(100.0));
         doAnswer(invocation -> {
@@ -277,8 +277,8 @@ class PriceManagerTest {
 
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
-                .thenReturn(orderItemDataOption);
+//        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
+//                .thenReturn(orderItemDataOption);
         when(transformationFunctionService.getEntity(Price.class, priceDto, priceType.getValue()))
                 .thenReturn(getPrice(100.0));
         doAnswer(invocation -> {
@@ -308,11 +308,11 @@ class PriceManagerTest {
         Function<OrderArticularItem, Price> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(OrderArticularItem.class, Price.class, priceType.getValue()))
                 .thenReturn(function);
-        when(supplierService.entityFieldSupplier(
-                OrderArticularItem.class,
-                parameterSupplier,
-                function
-        )).thenReturn(priceSupplier);
+//        when(supplierService.entityFieldSupplier(
+//                OrderArticularItem.class,
+//                parameterSupplier,
+//                function
+//        )).thenReturn(priceSupplier);
         priceManager.deletePriceByOrderId(orderId, priceType);
 
         verify(priceDao).deleteEntity(priceSupplier);
@@ -333,11 +333,11 @@ class PriceManagerTest {
         Function<ArticularItem, Price> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(ArticularItem.class, Price.class, priceType.getValue()))
                 .thenReturn(function);
-        when(supplierService.entityFieldSupplier(
-                ArticularItem.class,
-                parameterSupplier,
-                function
-        )).thenReturn(priceSupplier);
+//        when(supplierService.entityFieldSupplier(
+//                ArticularItem.class,
+//                parameterSupplier,
+//                function
+//        )).thenReturn(priceSupplier);
         priceManager.deletePriceByArticularId(articularId, priceType);
 
         verify(priceDao).deleteEntity(any(Supplier.class));
@@ -358,13 +358,13 @@ class PriceManagerTest {
         when(transformationFunctionService.getTransformationFunction(OrderArticularItem.class, PriceDto.class, priceType.getValue()))
                 .thenReturn(function);
         when(function.apply(orderItemDataOption)).thenReturn(priceDto);
-        when(queryService.getEntityDto(OrderArticularItem.class, parameterSupplier, function))
-                .thenAnswer(invocation -> {
-                    Supplier<Parameter> supplierArg = invocation.getArgument(1);
-                    Function<OrderArticularItem, PriceDto> functionArg = invocation.getArgument(2);
-                    assertEquals(parameterSupplier.get(), supplierArg.get());
-                    return functionArg.apply(orderItemDataOption);
-                });
+//        when(queryService.getEntityDto(OrderArticularItem.class, parameterSupplier, function))
+//                .thenAnswer(invocation -> {
+//                    Supplier<Parameter> supplierArg = invocation.getArgument(1);
+//                    Function<OrderArticularItem, PriceDto> functionArg = invocation.getArgument(2);
+//                    assertEquals(parameterSupplier.get(), supplierArg.get());
+//                    return functionArg.apply(orderItemDataOption);
+//                });
 
         PriceDto result = priceManager.getPriceByOrderId(orderId, priceType);
 
@@ -387,13 +387,13 @@ class PriceManagerTest {
         when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
                 .thenReturn(parameterSupplier);
         when(function.apply(articularItem)).thenReturn(priceDto);
-        when(queryService.getEntityDto(ArticularItem.class, parameterSupplier, function))
-                .thenAnswer(invocation -> {
-                    Supplier<Parameter> supplierArg = invocation.getArgument(1);
-                    Function<ArticularItem, PriceDto> functionArg = invocation.getArgument(2);
-                    assertEquals(parameterSupplier.get(), supplierArg.get());
-                    return functionArg.apply(articularItem);
-                });
+//        when(queryService.getEntityDto(ArticularItem.class, parameterSupplier, function))
+//                .thenAnswer(invocation -> {
+//                    Supplier<Parameter> supplierArg = invocation.getArgument(1);
+//                    Function<ArticularItem, PriceDto> functionArg = invocation.getArgument(2);
+//                    assertEquals(parameterSupplier.get(), supplierArg.get());
+//                    return functionArg.apply(articularItem);
+//                });
 
         PriceDto result = priceManager.getPriceByArticularId(articularId, priceType);
 
@@ -418,13 +418,13 @@ class PriceManagerTest {
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
         when(function.apply(orderItemDataOption)).thenReturn(responsePriceDto);
-        when(queryService.getEntityDto(OrderArticularItem.class, parameterSupplier, function))
-                .thenAnswer(invocation -> {
-                    Supplier<Parameter> supplierArg = invocation.getArgument(1);
-                    Function<OrderArticularItem, ResponsePriceDto> functionArg = invocation.getArgument(2);
-                    assertEquals(parameterSupplier.get(), supplierArg.get());
-                    return functionArg.apply(orderItemDataOption);
-                });
+//        when(queryService.getEntityDto(OrderArticularItem.class, parameterSupplier, function))
+//                .thenAnswer(invocation -> {
+//                    Supplier<Parameter> supplierArg = invocation.getArgument(1);
+//                    Function<OrderArticularItem, ResponsePriceDto> functionArg = invocation.getArgument(2);
+//                    assertEquals(parameterSupplier.get(), supplierArg.get());
+//                    return functionArg.apply(orderItemDataOption);
+//                });
 
         ResponsePriceDto result = priceManager.getResponsePriceDtoByOrderId(orderId);
 
@@ -447,13 +447,13 @@ class PriceManagerTest {
         when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
                 .thenReturn(parameterSupplier);
         when(function.apply(articularItem)).thenReturn(responsePriceDto);
-        when(queryService.getEntityDto(ArticularItem.class, parameterSupplier, function))
-                .thenAnswer(invocation -> {
-                    Supplier<Parameter> supplierArg = invocation.getArgument(1);
-                    Function<ArticularItem, ResponsePriceDto> functionArg = invocation.getArgument(2);
-                    assertEquals(parameterSupplier.get(), supplierArg.get());
-                    return functionArg.apply(articularItem);
-                });
+//        when(queryService.getEntityDto(ArticularItem.class, parameterSupplier, function))
+//                .thenAnswer(invocation -> {
+//                    Supplier<Parameter> supplierArg = invocation.getArgument(1);
+//                    Function<ArticularItem, ResponsePriceDto> functionArg = invocation.getArgument(2);
+//                    assertEquals(parameterSupplier.get(), supplierArg.get());
+//                    return functionArg.apply(articularItem);
+//                });
 
         ResponsePriceDto result = priceManager.getResponsePriceDtoByArticularId(articularId);
 
@@ -470,7 +470,7 @@ class PriceManagerTest {
         when(transformationFunctionService.getTransformationFunction(Price.class, PriceDto.class))
                 .thenReturn(function);
         when(function.apply(any(Price.class))).thenReturn(priceDto);
-        when(priceDao.getEntityList()).thenReturn(List.of(price));
+//        when(priceDao.getEntityList()).thenReturn(List.of(price));
 
         List<PriceDto> priceDtoList = priceManager.getPrices();
 

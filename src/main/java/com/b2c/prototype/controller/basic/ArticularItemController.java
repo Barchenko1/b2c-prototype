@@ -29,39 +29,39 @@ public class ArticularItemController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> saveItemData(@RequestParam final Map<String, String> requestParams,
+    public ResponseEntity<Void> saveArticularItem(@RequestParam final Map<String, String> requestParams,
                                              @RequestBody final List<ArticularItemDto> itemDataDto) {
         articularItemProcessor.saveUpdateArticularItemList(requestParams, itemDataDto);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> putItemData(@RequestParam final Map<String, String> requestParams,
+    public ResponseEntity<Void> putArticularItem(@RequestParam final Map<String, String> requestParams,
                                             @RequestBody final List<ArticularItemDto> itemDataDto) {
         articularItemProcessor.saveUpdateArticularItemList(requestParams, itemDataDto);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> patchItemData(@RequestParam final Map<String, String> requestParams,
+    public ResponseEntity<Void> patchArticularItem(@RequestParam final Map<String, String> requestParams,
                                               @RequestBody final List<ArticularItemDto> itemDataDto) {
         articularItemProcessor.saveUpdateArticularItemList(requestParams, itemDataDto);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<Void> deleteDiscount(@RequestParam final Map<String, String> requestParams) {
+    public ResponseEntity<Void> deleteArticularItem(@RequestParam final Map<String, String> requestParams) {
         articularItemProcessor.deleteArticularItem(requestParams);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ResponseArticularItemDto> getItemDataList(@RequestParam final Map<String, String> requestParams) {
+    public List<ResponseArticularItemDto> getArticularItemList(@RequestParam final Map<String, String> requestParams) {
         return articularItemProcessor.getResponseArticularItemDtoList(requestParams);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseArticularItemDto> getItemData(@RequestParam final Map<String, String> requestParams) {
+    public ResponseEntity<ResponseArticularItemDto> getArticularItem(@RequestParam final Map<String, String> requestParams) {
         return new ResponseEntity<>(articularItemProcessor.getResponseArticularItemDto(requestParams), HttpStatus.OK);
     }
 

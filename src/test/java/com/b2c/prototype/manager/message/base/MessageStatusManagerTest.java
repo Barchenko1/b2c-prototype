@@ -72,8 +72,6 @@ class MessageStatusManagerTest extends AbstractConstantEntityManagerTest<Message
 
     @Test
     public void testDeleteEntity() {
-        
-
         messageStatusManager.deleteEntity("testValue");
 
         verifyDeleteEntity("testValue");
@@ -88,7 +86,7 @@ class MessageStatusManagerTest extends AbstractConstantEntityManagerTest<Message
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
         when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
-        when(dao.getEntity(parameter)).thenReturn(testValue);
+        //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
         ConstantPayloadDto result = messageStatusManager.getEntity("testValue");
 
@@ -104,7 +102,7 @@ class MessageStatusManagerTest extends AbstractConstantEntityManagerTest<Message
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
         when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
-        when(dao.getEntity(parameter)).thenReturn(testValue);
+        //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
         Optional<ConstantPayloadDto> result = messageStatusManager.getEntityOptional("testValue");
 
@@ -117,7 +115,7 @@ class MessageStatusManagerTest extends AbstractConstantEntityManagerTest<Message
         ConstantPayloadDto constantPayloadDto = getResponseOneFieldEntityDto();
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
-        when(dao.getEntityList()).thenReturn(List.of(testValue));
+//        when(dao.getEntityList()).thenReturn(List.of(testValue));
 
         List<ConstantPayloadDto> list = messageStatusManager.getEntities();
 

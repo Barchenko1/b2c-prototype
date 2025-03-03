@@ -43,9 +43,10 @@ public class StoreManager implements IStoreManager {
     @Override
     public void saveStore(StoreDto storeDto) {
         entityOperationDao.executeConsumer(session -> {
-            ArticularItem articularItem = searchService.getEntity(
+            ArticularItem articularItem = searchService.getNamedQueryEntity(
                     ArticularItem.class,
-                    supplierService.parameterStringSupplier(ARTICULAR_ID, storeDto.getArticularId()));
+                    "",
+                    parameterFactory.createStringParameter(ARTICULAR_ID, storeDto.getArticularId()));
 //            CountType countType = singleValueMap.getEntity(CountType.class, "value", storeDto.getCountType());
             Store store = Store.builder()
                     .articularItem(articularItem)
@@ -75,13 +76,14 @@ public class StoreManager implements IStoreManager {
         entityOperationDao.deleteEntity(
                 supplierService.entityFieldSupplier(
                         ArticularItem.class,
+                        "",
                         supplierService.parameterStringSupplier(ARTICULAR_ID, articularId),
                         transformationFunctionService.getTransformationFunction(ArticularItem.class, Store.class)));
     }
 
     @Override
     public ResponseStoreDto getStoreResponse(String articularId) {
-        return entityOperationDao.getEntityGraphDto(
+        return entityOperationDao.getGraphEntityDto(
                 "",
                 parameterFactory.createStringParameter(ARTICULAR_ID, articularId),
                 transformationFunctionService.getTransformationFunction(Store.class, ResponseStoreDto.class));
@@ -89,7 +91,7 @@ public class StoreManager implements IStoreManager {
 
     @Override
     public List<ResponseStoreDto> getAllStoreResponse() {
-        return entityOperationDao.getEntityGraphDtoList("",
+        return entityOperationDao.getGraphEntityDtoList("",
                 transformationFunctionService.getTransformationFunction(Store.class, ResponseStoreDto.class));
     }
 }

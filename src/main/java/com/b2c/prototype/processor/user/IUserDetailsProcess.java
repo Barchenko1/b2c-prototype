@@ -1,17 +1,19 @@
 package com.b2c.prototype.processor.user;
 
-import com.b2c.prototype.modal.dto.payload.RegistrationUserProfileDto;
-import com.b2c.prototype.modal.dto.payload.UserProfileDto;
+import com.b2c.prototype.modal.dto.payload.RegistrationUserDetailsDto;
+import com.b2c.prototype.modal.dto.payload.UserDetailsDto;
+import com.b2c.prototype.modal.dto.response.ResponseUserDetailsDto;
 
 import java.util.List;
 import java.util.Map;
 
 public interface IUserDetailsProcess {
-    void createNewUser(Map<String, String> requestParams, RegistrationUserProfileDto registrationUserProfileDto);
-    void updateUserDetailsByUserId(Map<String, String> requestParams, UserProfileDto userProfileDto);
-    void updateUserStatusByUserId(Map<String, Object> requestParams);
-    void deleteUserProfileByUserId(Map<String, String> requestParams);
+    void createNewUser(Map<String, String> requestParams, RegistrationUserDetailsDto registrationUserDetailsDto);
+    void saveUserDetails(Map<String, String> requestParams, UserDetailsDto userDetailsDto);
+    void updateUserDetailsByUserId(Map<String, String> requestParams, UserDetailsDto userDetailsDto);
+    void updateUserStatusByUserId(Map<String, String> requestParams);
+    void deleteUserDetailsByUserId(Map<String, String> requestParams);
 
-    UserProfileDto getUserProfileByUserId(Map<String, String> requestParams);
-    List<UserProfileDto> getUserProfiles(Map<String, String> requestParams);
+    ResponseUserDetailsDto getUserDetailsByUserId(Map<String, String> requestParams);
+    List<ResponseUserDetailsDto> getUserDetails(Map<String, String> requestParams);
 }

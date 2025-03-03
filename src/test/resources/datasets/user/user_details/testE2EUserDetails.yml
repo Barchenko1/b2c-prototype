@@ -1,0 +1,51 @@
+country_phone_code:
+  - id: 1
+    value: "+11"
+    label: "+11"
+contact_phone:
+  - id: 1
+    phoneNumber: "111-111-111"
+    country_phone_code_id: 1
+contact_info:
+  - id: 1
+    firstName: "John"
+    lastName: "Doe"
+    contact_phone_id: 1
+user_details:
+  - id: 1
+    user_id: "123"
+    username: "john.doe"
+    dateOfCreate: 100
+    iscontactphoneverified: false
+    isemailverified: false
+    isActive: false
+    contactinfo_id: 1
+country:
+  - id: 1
+    label: "USA"
+    value: "USA"
+address:
+  - id: 1
+    street: "street"
+    street2: "street2"
+    buildingNumber: 10
+    florNumber: 9
+    apartmentNumber: 201
+    zipCode: 90000
+    city: "city"
+    country_id: 1
+    userdetails_id: 1
+credit_card:
+  - id: 1
+    cardNumber: "4444-1111-2222-3333"
+    monthOfExpire: 6
+    yearOfExpire: 2028
+    cvv: 123
+    ownerName: "John"
+    ownerSecondName: "Doe"
+    isActive: true
+user_credit_card:
+  - id: 1
+    credit_card_id: 1
+    userdetails_id: 1
+    isDefault: true

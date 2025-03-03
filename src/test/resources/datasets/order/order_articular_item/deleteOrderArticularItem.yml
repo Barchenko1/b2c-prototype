@@ -101,7 +101,7 @@ contact_info:
   - id: 1
     firstName: "Wolter"
     lastName: "White"
-user_profile:
+user_details:
   - id: 1
     username: "username"
     user_id: "123"

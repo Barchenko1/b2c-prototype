@@ -63,7 +63,7 @@ public class CategoryManager implements ICategoryManager {
     @Override
     public Category getCategoryByCategoryName(String categoryName) {
         Parameter parameter = new Parameter("name", categoryName);
-        Optional<Category> optionalCategory = entityOperationManager.getOptionalEntity(parameter);
+        Optional<Category> optionalCategory = entityOperationManager.getNamedQueryEntity("", parameter);
 
         if (optionalCategory.isEmpty()) {
             throw new RuntimeException();
@@ -74,7 +74,7 @@ public class CategoryManager implements ICategoryManager {
 
     @Override
     public List<Category> getAllCategories() {
-        return entityOperationManager.getEntityList();
+        return entityOperationManager.getNamedQueryEntityList("");
     }
 
     @Override

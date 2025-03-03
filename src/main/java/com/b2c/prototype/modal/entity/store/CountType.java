@@ -1,6 +1,6 @@
 package com.b2c.prototype.modal.entity.store;
 
-import com.b2c.prototype.modal.base.AbstractConstantEntity;
+import com.b2c.prototype.modal.base.constant.AbstractConstantEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
@@ -16,6 +16,10 @@ import lombok.experimental.SuperBuilder;
         @NamedQuery(
                 name = "CountType.findByValue",
                 query = "SELECT c FROM CountType c WHERE c.value = : value"
+        ),
+        @NamedQuery(
+                name = "CountType.all",
+                query = "SELECT c FROM CountType c"
         )
 })
 public class CountType extends AbstractConstantEntity {

@@ -1,6 +1,7 @@
 package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.dao.item.IItemDao;
+import com.b2c.prototype.manager.item.IItemManager;
 import com.b2c.prototype.modal.dto.payload.ItemDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.Item;
@@ -8,14 +9,12 @@ import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.service.common.EntityOperationManager;
 import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.manager.item.IItemManager;
 import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.factory.IParameterFactory;
 import lombok.extern.slf4j.Slf4j;
 
 import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
-import static com.b2c.prototype.util.Constant.ITEM_ID;
 
 @Slf4j
 public class ItemManager implements IItemManager {
@@ -41,9 +40,10 @@ public class ItemManager implements IItemManager {
     @Override
     public void saveUpdateItem(String articularId, ItemDto itemDto) {
         entityOperationDao.executeConsumer(session -> {
-            ArticularItem articularItem = searchService.getEntity(
+            ArticularItem articularItem = searchService.getNamedQueryEntity(
                     ArticularItem.class,
-                    supplierService.parameterStringSupplier(ARTICULAR_ID, articularId));
+                    "",
+                    parameterFactory.createStringParameter(ARTICULAR_ID, articularId));
             Item item = transformationFunctionService.getEntity(Item.class, itemDto);
             item.setArticularItem(articularItem);
             session.merge(item);
@@ -55,17 +55,18 @@ public class ItemManager implements IItemManager {
         entityOperationDao.deleteEntity(
                 supplierService.entityFieldSupplier(
                         ItemData.class,
+                        "",
                         supplierService.parameterStringSupplier(ARTICULAR_ID, articularId),
                         transformationFunctionService.getTransformationFunction(ItemData.class, Item.class)));
     }
 
     @Override
     public Item getItemByItemId(String articularId) {
-        return searchService.getEntityDto(
+        return searchService.getGraphEntityDto(
                 ItemData.class,
-                supplierService.parameterStringSupplier(ARTICULAR_ID, articularId),
-                transformationFunctionService.getTransformationFunction(ItemData.class, Item.class)
-        );
+                "",
+                parameterFactory.createStringParameter(ARTICULAR_ID, articularId),
+                transformationFunctionService.getTransformationFunction(ItemData.class, Item.class));
     }
 
 }

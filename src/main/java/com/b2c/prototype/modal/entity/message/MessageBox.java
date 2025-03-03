@@ -34,7 +34,7 @@ public class MessageBox {
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private UserDetails userProfile;
+    private UserDetails userDetails;
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinTable(
             name = "message_box_message",

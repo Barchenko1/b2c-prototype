@@ -50,7 +50,7 @@ public class EntityOperationManager implements IEntityOperationManager {
         StringBuilder sb = new StringBuilder();
         Parameter parameter = parameterSupplier.get();
         sb.append("Deleting entity: ");
-        sb.append(parameter.getName()).append(", ");
+        sb.append(parameter.getName()).append(" = ");
         sb.append(parameter.getValue());
         LOGGER.info("Deleting entity: {}", sb);
         dao.findEntityAndDelete(parameter);
@@ -75,86 +75,100 @@ public class EntityOperationManager implements IEntityOperationManager {
     }
 
     @Override
-    public <E> E getEntity(Parameter parameter) {
+    public <E> E getGraphEntity(String graph, Parameter parameter) {
         LOGGER.info("Getting entity");
-        return dao.getEntity(parameter);
+        return dao.getGraphEntity(graph, parameter);
     }
 
     @Override
-    public <E> Optional<E> getOptionalEntity(Parameter parameter) {
+    public <E> Optional<E> getGraphOptionalEntity(String graph, Parameter parameter) {
         LOGGER.info("Getting entity");
-        return dao.getOptionalEntity(parameter);
+        return dao.getGraphOptionalEntity(graph, parameter);
     }
 
     @Override
-    public <E> List<E> getEntityList() {
+    public <E> List<E> getGraphEntityList(String graph) {
         LOGGER.info("Getting entity list");
-        return dao.getEntityList();
+        return dao.getGraphEntityList(graph);
     }
 
     @Override
-    public <E> E getEntityGraph(String graph, Parameter parameter) {
+    public <E> E getNamedQueryEntity(String namedQuery, Parameter parameter) {
         LOGGER.info("Getting entity");
-        return dao.getEntityGraph(graph, parameter);
+        return dao.getNamedQueryEntity(namedQuery, parameter);
     }
 
     @Override
-    public <E> Optional<E> getOptionalEntityGraph(String graph, Parameter parameter) {
+    public <E> Optional<E> getNamedQueryOptionalEntity(String namedQuery, Parameter parameter) {
         LOGGER.info("Getting entity");
-        return dao.getOptionalEntityGraph(graph, parameter);
+        return dao.getNamedQueryOptionalEntity(namedQuery, parameter);
     }
 
     @Override
-    public <E> List<E> getEntityGraphList(String graph) {
+    public <E> List<E> getNamedQueryEntityList(String namedQuery) {
         LOGGER.info("Getting entity list");
-        return dao.getEntityGraphList(graph);
+        return dao.getNamedQueryEntityList(namedQuery);
     }
 
     @Override
-    public <E> E getEntityNamedQuery(String namedQuery, Parameter parameter) {
-        LOGGER.info("Getting entity");
-        return dao.getEntityNamedQuery(namedQuery, parameter);
-    }
-
-    @Override
-    public <E> Optional<E> getOptionalEntityNamedQuery(String namedQuery, Parameter parameter) {
-        LOGGER.info("Getting entity");
-        return dao.getOptionalEntityNamedQuery(namedQuery, parameter);
-    }
-
-    @Override
-    public <E> List<E> getEntityNamedQueryList(String namedQuery) {
-        LOGGER.info("Getting entity list");
-        return dao.getEntityNamedQueryList(namedQuery);
-    }
-
-    @Override
-    public <E, R> R getEntityGraphDto(String graph, Parameter parameter, Function<E, R> mapToDtoFunction) {
+    public <E, R> R getGraphEntityDto(String graph, Parameter parameter, Function<E, R> mapToDtoFunction) {
         LOGGER.info("Getting entity dto");
-        E entity = dao.getEntityGraph(graph, parameter);
+        E entity = dao.getGraphEntity(graph, parameter);
         return Optional.ofNullable(entity).map(mapToDtoFunction).orElse(null);
     }
 
     @Override
-    public <E, R> Optional<R> getOptionalEntityGraphDto(String graph, Parameter parameter, Function<E, R> mapToDtoFunction) {
+    public <E, R> Optional<R> getGraphOptionalEntityDto(String graph, Parameter parameter, Function<E, R> mapToDtoFunction) {
         LOGGER.info("Getting entity dto");
-        E entity = dao.getEntityGraph(graph, parameter);
+        E entity = dao.getGraphEntity(graph, parameter);
         return Optional.ofNullable(entity).map(mapToDtoFunction);
     }
 
     @Override
-    public <E, R> List<R> getEntityGraphDtoList(String graph, Function<E, R> mapToDtoFunction) {
+    public <E, R> List<R> getGraphEntityDtoList(String graph, Function<E, R> mapToDtoFunction) {
         LOGGER.info("Getting entity dto list");
-        List<E> entityList = dao.getEntityGraphList(graph);
+        List<E> entityList = dao.getGraphEntityList(graph);
         return entityList.stream()
                 .map(entity -> transformEntityToDto(entity, mapToDtoFunction))
                 .toList();
     }
 
     @Override
-    public <E, R> List<R> getSubEntityGraphDtoList(String graph, Parameter parameter, Function<E, R> mapToDtoFunction) {
+    public <E, R> List<R> getSubGraphEntityDtoList(String graph, Parameter parameter, Function<E, R> mapToDtoFunction) {
         LOGGER.info("Getting entity dto list");
-        List<E> entityList = dao.getEntityGraphList(graph, parameter);
+        List<E> entityList = dao.getGraphEntityList(graph, parameter);
+        return entityList.stream()
+                .map(entity -> transformEntityToDto(entity, mapToDtoFunction))
+                .toList();
+    }
+
+    @Override
+    public <E, R> R getNamedQueryEntityDto(String namedQuery, Parameter parameter, Function<E, R> mapToDtoFunction) {
+        LOGGER.info("Getting entity dto");
+        E entity = dao.getNamedQueryEntity(namedQuery, parameter);
+        return Optional.ofNullable(entity).map(mapToDtoFunction).orElse(null);
+    }
+
+    @Override
+    public <E, R> Optional<R> getNamedQueryOptionalEntityDto(String namedQuery, Parameter parameter, Function<E, R> mapToDtoFunction) {
+        LOGGER.info("Getting entity dto");
+        E entity = dao.getNamedQueryEntity(namedQuery, parameter);
+        return Optional.ofNullable(entity).map(mapToDtoFunction);
+    }
+
+    @Override
+    public <E, R> List<R> getNamedQueryEntityDtoList(String namedQuery, Function<E, R> mapToDtoFunction) {
+        LOGGER.info("Getting entity dto list");
+        List<E> entityList = dao.getNamedQueryEntityList(namedQuery);
+        return entityList.stream()
+                .map(entity -> transformEntityToDto(entity, mapToDtoFunction))
+                .toList();
+    }
+
+    @Override
+    public <E, R> List<R> getSubNamedQueryEntityDtoList(String namedQuery, Parameter parameter, Function<E, R> mapToDtoFunction) {
+        LOGGER.info("Getting entity dto list");
+        List<E> entityList = dao.getNamedQueryEntityList(namedQuery, parameter);
         return entityList.stream()
                 .map(entity -> transformEntityToDto(entity, mapToDtoFunction))
                 .toList();

@@ -87,7 +87,7 @@ class OrderStatusManagerTest extends AbstractConstantEntityManagerTest<OrderStat
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
         when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
-        when(dao.getEntity(parameter)).thenReturn(testValue);
+        //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
         ConstantPayloadDto result = orderStatusManager.getEntity("testValue");
 
@@ -102,7 +102,7 @@ class OrderStatusManagerTest extends AbstractConstantEntityManagerTest<OrderStat
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
         when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
-        when(dao.getEntity(parameter)).thenReturn(testValue);
+        //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
         Optional<ConstantPayloadDto> result = orderStatusManager.getEntityOptional("testValue");
 
@@ -115,7 +115,7 @@ class OrderStatusManagerTest extends AbstractConstantEntityManagerTest<OrderStat
         ConstantPayloadDto constantPayloadDto = getResponseOneFieldEntityDto();
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
-        when(dao.getEntityList()).thenReturn(List.of(testValue));
+//        when(dao.getEntityList()).thenReturn(List.of(testValue));
 
         List<ConstantPayloadDto> list = orderStatusManager.getEntities();
 

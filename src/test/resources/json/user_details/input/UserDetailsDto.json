@@ -1,0 +1,29 @@
+{
+  "contactInfo": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "contactPhone": {
+      "countryPhoneCode": "+11",
+      "phoneNumber": "111-111-111"
+    },
+    "email": "john.doe@example.com"
+  },
+  "address": {
+    "country": "USA",
+    "city": "city",
+    "street": "street",
+    "street2": "street2",
+    "buildingNumber": 10,
+    "florNumber": 9,
+    "apartmentNumber": 201,
+    "zipCode": "90000"
+  },
+  "creditCard": {
+      "cardNumber": "4444-1111-2222-3333",
+      "monthOfExpire": 6,
+      "yearOfExpire": 2028,
+      "cvv": "123",
+      "ownerName": "John",
+      "ownerSecondName": "Doe"
+  }
+}

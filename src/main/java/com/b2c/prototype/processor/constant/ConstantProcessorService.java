@@ -17,7 +17,7 @@ import com.b2c.prototype.manager.payment.IPaymentMethodManager;
 import com.b2c.prototype.manager.price.ICurrencyManager;
 import com.b2c.prototype.manager.rating.IRatingManager;
 import com.b2c.prototype.manager.store.ICountTypeManager;
-import com.b2c.prototype.manager.userprofile.ICountryPhoneCodeManager;
+import com.b2c.prototype.manager.userdetails.ICountryPhoneCodeManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Collections;

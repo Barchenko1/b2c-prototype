@@ -1,9 +1,0 @@
-country_phone_code:
-  - id: 1
-    value: "+11"
-    label: "+11"
-country:
-  - id: 1
-    label: "USA"
-    value: "USA"
-user_profile: []

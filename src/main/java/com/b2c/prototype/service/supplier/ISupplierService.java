@@ -8,9 +8,11 @@ import java.util.function.Supplier;
 
 public interface ISupplierService {
     <E, R> Supplier<R> entityFieldSupplier(Class<E> entityClass,
+                                           String namedQuery,
                                            Supplier<Parameter> parameterSupplier,
                                            Function<E, R> fieldExtractor);
     <E> Supplier<E> entityFieldSupplier(Class<E> entityClass,
+                                        String namedQuery,
                                         Supplier<Parameter> parameterSupplier);
     <E, R> Supplier<R> getSupplier(Class<R> classTo, E dataEntity);
     <E, R> Supplier<R> getSupplier(Class<R> classTo, E dataEntity, String sol);

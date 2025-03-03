@@ -50,7 +50,7 @@ public class ItemDataController {
     }
 
     @DeleteMapping(produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<Void> deleteDiscount(@RequestParam final Map<String, String> requestParams) {
+    public ResponseEntity<Void> deleteItemData(@RequestParam final Map<String, String> requestParams) {
         itemDataProcessor.deleteItemData(requestParams);
         return ResponseEntity.ok().build();
     }

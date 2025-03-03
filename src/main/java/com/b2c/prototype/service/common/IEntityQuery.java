@@ -7,20 +7,21 @@ import java.util.Optional;
 import java.util.function.Function;
 
 public interface IEntityQuery {
-    <E> E getEntity(Parameter parameter);
-    <E> Optional<E> getOptionalEntity(Parameter parameter);
-    <E> List<E> getEntityList();
+    <E> E getGraphEntity(String graph, Parameter parameter);
+    <E> Optional<E> getGraphOptionalEntity(String graph, Parameter parameter);
+    <E> List<E> getGraphEntityList(String graph);
 
-    <E> E getEntityGraph(String graph, Parameter parameter);
-    <E> Optional<E> getOptionalEntityGraph(String graph, Parameter parameter);
-    <E> List<E> getEntityGraphList(String graph);
+    <E> E getNamedQueryEntity(String namedQuery, Parameter parameter);
+    <E> Optional<E> getNamedQueryOptionalEntity(String namedQuery, Parameter parameter);
+    <E> List<E> getNamedQueryEntityList(String namedQuery);
 
-    <E> E getEntityNamedQuery(String namedQuery, Parameter parameter);
-    <E> Optional<E> getOptionalEntityNamedQuery(String namedQuery, Parameter parameter);
-    <E> List<E> getEntityNamedQueryList(String namedQuery);
+    <E, R> R getGraphEntityDto(String graph, Parameter parameter, Function<E, R> mapToDtoFunction);
+    <E, R> Optional<R> getGraphOptionalEntityDto(String graph, Parameter parameter, Function<E, R> mapToDtoFunction);
+    <E, R> List<R> getGraphEntityDtoList(String graph, Function<E, R> mapToDtoFunction);
+    <E, R> List<R> getSubGraphEntityDtoList(String graph, Parameter parameter, Function<E, R> mapToDtoFunction);
 
-    <E, R> R getEntityGraphDto(String graph, Parameter parameter, Function<E, R> mapToDtoFunction);
-    <E, R> Optional<R> getOptionalEntityGraphDto(String graph, Parameter parameter, Function<E, R> mapToDtoFunction);
-    <E, R> List<R> getEntityGraphDtoList(String graph, Function<E, R> mapToDtoFunction);
-    <E, R> List<R> getSubEntityGraphDtoList(String graph, Parameter parameter, Function<E, R> mapToDtoFunction);
+    <E, R> R getNamedQueryEntityDto(String namedQuery, Parameter parameter, Function<E, R> mapToDtoFunction);
+    <E, R> Optional<R> getNamedQueryOptionalEntityDto(String namedQuery, Parameter parameter, Function<E, R> mapToDtoFunction);
+    <E, R> List<R> getNamedQueryEntityDtoList(String graph, Function<E, R> mapToDtoFunction);
+    <E, R> List<R> getSubNamedQueryEntityDtoList(String namedQuery, Parameter parameter, Function<E, R> mapToDtoFunction);
 }

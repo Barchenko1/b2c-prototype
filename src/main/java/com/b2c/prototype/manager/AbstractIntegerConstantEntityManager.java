@@ -1,7 +1,7 @@
 package com.b2c.prototype.manager;
 
 
-import com.b2c.prototype.modal.base.AbstractNumberConstantEntity;
+import com.b2c.prototype.modal.base.constant.AbstractNumberConstantEntity;
 import com.b2c.prototype.modal.dto.common.NumberConstantPayloadDto;
 import com.tm.core.process.dao.common.IEntityDao;
 import com.tm.core.finder.factory.IParameterFactory;
@@ -18,15 +18,17 @@ public abstract class AbstractIntegerConstantEntityManager<T, E extends Abstract
 
     private final IParameterFactory parameterFactory;
     private final IEntityDao dao;
+    private final String namedQuery;
     private final Function<T, E> mapDtoToEntityFunction;
     private final Function<E, T> mapEntityToDtoFunction;
 
     public AbstractIntegerConstantEntityManager(IParameterFactory parameterFactory,
-                                                IEntityDao dao,
+                                                IEntityDao dao, String namedQuery,
                                                 Function<T, E> mapDtoToEntityFunction,
                                                 Function<E, T> mapEntityToDtoFunction) {
         this.parameterFactory = parameterFactory;
         this.dao = dao;
+        this.namedQuery = namedQuery;
         this.mapDtoToEntityFunction = mapDtoToEntityFunction;
         this.mapEntityToDtoFunction = mapEntityToDtoFunction;
     }
@@ -53,20 +55,21 @@ public abstract class AbstractIntegerConstantEntityManager<T, E extends Abstract
     @Override
     public NumberConstantPayloadDto getEntity(int ratingValue) {
         Parameter parameter = parameterFactory.createNumberParameter(VALUE, ratingValue);
-        E entity = dao.getEntity(parameter);
+        E entity = dao.getNamedQueryEntity(namedQuery, parameter);
         return (NumberConstantPayloadDto) mapEntityToDtoFunction.apply(entity);
     }
 
     @Override
     public Optional<NumberConstantPayloadDto> getEntityOptional(int ratingValue) {
         Parameter parameter = parameterFactory.createNumberParameter(VALUE, ratingValue);
-        E entity = dao.getEntity(parameter);
+        E entity = dao.getNamedQueryEntity(namedQuery, parameter);
         return Optional.of((NumberConstantPayloadDto) mapEntityToDtoFunction.apply(entity));
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<NumberConstantPayloadDto> getEntities() {
-        return (List<NumberConstantPayloadDto>) dao.getEntityList().stream()
+        return (List<NumberConstantPayloadDto>) dao.getNamedQueryEntityList(namedQuery).stream()
                 .map(entity -> mapEntityToDtoFunction.apply((E) entity))
                 .collect(Collectors.toList());
     }

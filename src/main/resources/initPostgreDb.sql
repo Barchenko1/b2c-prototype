@@ -148,22 +148,22 @@ drop constraint if exists FK11ufvbaca85vw4h3kak8tkm55
 alter table if exists store
 drop constraint if exists FKht5yqojt5c4yw21kiax7apcsd
 
-alter table if exists user_profile
+alter table if exists user_details
 drop constraint if exists FKt7ck1erxe5phbhrdk1cn92h52
 
-alter table if exists user_profile
+alter table if exists user_details
 drop constraint if exists FKbb0yxp4hid37u6wvl212sl9xq
 
-alter table if exists user_profile_credit_card
+alter table if exists user_details_credit_card
 drop constraint if exists FK9cdt2l66ilcafej5ave1gvkga
 
-alter table if exists user_profile_credit_card
+alter table if exists user_details_credit_card
 drop constraint if exists FK4ovk6akxkfli65wqegfx9t4ue
 
-alter table if exists user_profile_post
+alter table if exists user_details_post
 drop constraint if exists FKhj7tl66aevwcx7n8i387plk9q
 
-alter table if exists user_profile_post
+alter table if exists user_details_post
 drop constraint if exists FKfs87np3bixtnk9tggfenkfpjw
 
 drop table if exists address cascade
@@ -250,11 +250,11 @@ drop table if exists review cascade
     
 drop table if exists store cascade
     
-drop table if exists user_profile cascade
+drop table if exists user_details cascade
     
-drop table if exists user_profile_credit_card cascade
+drop table if exists user_details_credit_card cascade
     
-drop table if exists user_profile_post cascade
+drop table if exists user_details_post cascade
     
 create table address (
                          apartmentNumber integer not null,
@@ -436,7 +436,7 @@ create table message (
     
 create table message_box (
                              id bigserial not null,
-                             userProfile_id bigint unique,
+                             userdetails_id bigint unique,
                              primary key (id)
 )
     
@@ -482,7 +482,7 @@ create table order_item (
                             id bigserial not null,
                             orderStatus_id bigint,
                             payment_id bigint,
-                            userProfile_id bigint,
+                            userdetails_id bigint,
                             note varchar(255),
                             order_id varchar(255) not null unique,
                             primary key (id)
@@ -560,7 +560,7 @@ create table review (
                         dateOfCreate bigint not null,
                         id bigserial not null,
                         rating_id bigint,
-                        userProfile_id bigint unique,
+                        userdetails_id bigint unique,
                         message varchar(255),
                         title varchar(255),
                         primary key (id)
@@ -574,7 +574,7 @@ create table store (
                        primary key (id)
 )
     
-create table user_profile (
+create table user_details (
                               isActive boolean not null,
                               address_id bigint unique,
                               contactInfo_id bigint unique,
@@ -585,13 +585,13 @@ create table user_profile (
                               primary key (id)
 )
     
-create table user_profile_credit_card (
-                                          UserProfile_id bigint not null,
+create table user_details_credit_card (
+                                          userdetails_id bigint not null,
                                           creditCardList_id bigint not null unique
 )
     
-create table user_profile_post (
-                                   UserProfile_id bigint not null,
+create table user_details_post (
+                                   userdetails_id bigint not null,
                                    postList_id bigint not null unique
 )
     
@@ -727,8 +727,8 @@ alter table if exists message
     
 alter table if exists message_box
     add constraint FKl5lntrj6p83iu21a4eno38vy0
-    foreign key (userProfile_id)
-    references user_profile
+    foreign key (userdetails_id)
+    references user_details
     
 alter table if exists message_box_message
     add constraint FK7n91muashe5nwvufuaxicvrux
@@ -767,8 +767,8 @@ alter table if exists order_item
     
 alter table if exists order_item
     add constraint FKl4ignmwea39w75fo9e925v7yi
-    foreign key (userProfile_id)
-    references user_profile
+    foreign key (userdetails_id)
+    references user_details
     
 alter table if exists order_item_contact_info
     add constraint FKdkqpewgye3ykp7ja6026sj8ch
@@ -837,8 +837,8 @@ alter table if exists review
     
 alter table if exists review
     add constraint FKonb8hnnh1sf9udkwu37e7olqq
-    foreign key (userProfile_id)
-    references user_profile
+    foreign key (userdetails_id)
+    references user_details
     
 alter table if exists store
     add constraint FK11ufvbaca85vw4h3kak8tkm55
@@ -850,32 +850,32 @@ alter table if exists store
     foreign key (option_item)
     references option_item
     
-alter table if exists user_profile
+alter table if exists user_details
     add constraint FKt7ck1erxe5phbhrdk1cn92h52
     foreign key (address_id)
     references address
     
-alter table if exists user_profile
+alter table if exists user_details
     add constraint FKbb0yxp4hid37u6wvl212sl9xq
     foreign key (contactInfo_id)
     references contact_info
     
-alter table if exists user_profile_credit_card
+alter table if exists user_details_credit_card
     add constraint FK9cdt2l66ilcafej5ave1gvkga
     foreign key (creditCardList_id)
     references credit_card
     
-alter table if exists user_profile_credit_card
+alter table if exists user_details_credit_card
     add constraint FK4ovk6akxkfli65wqegfx9t4ue
-    foreign key (UserProfile_id)
-    references user_profile
+    foreign key (userdetails_id)
+    references user_details
     
-alter table if exists user_profile_post
+alter table if exists user_details_post
     add constraint FKhj7tl66aevwcx7n8i387plk9q
     foreign key (postList_id)
     references post
     
-alter table if exists user_profile_post
+alter table if exists user_details_post
     add constraint FKfs87np3bixtnk9tggfenkfpjw
-    foreign key (UserProfile_id)
-    references user_profile
+    foreign key (userdetails_id)
+    references user_details

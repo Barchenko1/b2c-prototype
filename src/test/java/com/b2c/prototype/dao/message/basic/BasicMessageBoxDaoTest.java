@@ -12,6 +12,7 @@ import com.b2c.prototype.modal.entity.post.Post;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
+import com.b2c.prototype.modal.entity.user.UserCreditCard;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.util.CardUtil;
 import com.tm.core.process.dao.common.AbstractEntityDao;
@@ -33,6 +34,7 @@ import java.sql.Connection;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -72,7 +74,7 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
         }
     }
 
-    private UserDetails prepareTestUserProfile() {
+    private UserDetails prepareTestUserDetails() {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(1L)
                 .value("+11")
@@ -112,6 +114,10 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
                 .isActive(CardUtil.isCardActive(6, 28))
                 .cvv("818")
                 .build();
+        UserCreditCard userCreditCard = UserCreditCard.builder()
+                .creditCard(creditCard)
+                .isDefault(false)
+                .build();
         Post parent = Post.builder()
                 .id(1L)
                 .title("parent")
@@ -126,8 +132,8 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
                 .dateOfCreate(100)
                 .isActive(true)
                 .contactInfo(contactInfo)
-                .addresses(List.of(address))
-                .creditCardList(List.of(creditCard))
+                .addresses(Set.of(address))
+                .userCreditCardList(Set.of(userCreditCard))
                 .build();
     }
 
@@ -156,7 +162,7 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
 
         MessageBox messageBox = MessageBox.builder()
                 .id(1L)
-                .userProfile(prepareTestUserProfile())
+                .userDetails(prepareTestUserDetails())
                 .build();
         messageBox.addMessage(message);
 
@@ -187,7 +193,7 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
                 .build();
 
         MessageBox messageBox = MessageBox.builder()
-                .userProfile(prepareTestUserProfile())
+                .userDetails(prepareTestUserDetails())
                 .build();
         messageBox.addMessage(message);
 
@@ -231,7 +237,7 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
 
         MessageBox messageBox = MessageBox.builder()
                 .id(1L)
-                .userProfile(prepareTestUserProfile())
+                .userDetails(prepareTestUserDetails())
                 .build();
         messageBox.addMessage(message1);
         messageBox.addMessage(message2);
@@ -271,7 +277,7 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
         loadDataSet("/datasets/message/message_box/testMessageBoxDataSet.yml");
         Parameter parameter = new Parameter("id", 1L);
         MessageBox messageBox = prepareTestMessageBox();
-        List<MessageBox> resultList = dao.getEntityList(parameter);
+        List<MessageBox> resultList = dao.getNamedQueryEntityList("", parameter);
 
         assertEquals(1, resultList.size());
         resultList.forEach(result -> {
@@ -284,7 +290,7 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id1", 1L);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.getEntityList(parameter);
+            dao.getNamedQueryEntityList("", parameter);
         });
     }
 
@@ -364,7 +370,7 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
         Message newMessage = prepareNewMessage();
         Supplier<MessageBox> messageBoxSupplier = () -> {
             Parameter parameter = new Parameter("id", 1L);
-            MessageBox oldMessageBox = queryService.getEntityNamedQuery(sessionFactory.openSession(),MessageBox.class, "",parameter);
+            MessageBox oldMessageBox = queryService.getNamedQueryEntity(sessionFactory.openSession(),MessageBox.class, "",parameter);
             newMessage.setId(2L);
             oldMessageBox.addMessage(newMessage);
             return oldMessageBox;
@@ -528,7 +534,7 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id", 1L);
         MessageBox messageBox = prepareTestMessageBox();
         Optional<MessageBox> resultOptional =
-                dao.getOptionalEntity(parameter);
+               dao.getNamedQueryOptionalEntity("", parameter);
 
         assertTrue(resultOptional.isPresent());
         MessageBox result = resultOptional.get();
@@ -540,7 +546,7 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id1", 1L);
 
         assertThrows(RuntimeException.class, () -> {
-            dao.getOptionalEntity(parameter);
+           dao.getNamedQueryOptionalEntity("", parameter);
         });
 
     }
@@ -551,7 +557,7 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id", 1L);
 
         MessageBox messageBox = prepareTestMessageBox();
-        MessageBox result = dao.getEntity(parameter);
+        MessageBox result = dao.getNamedQueryEntity("", parameter);
 
         checkMessageBox(messageBox, result);
     }
@@ -561,7 +567,7 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id1", 1L);
 
         assertThrows(RuntimeException.class, () -> {
-            dao.getEntity(parameter);
+            dao.getNamedQueryEntity("", parameter);
         });
     }
 

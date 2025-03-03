@@ -26,6 +26,7 @@ import com.b2c.prototype.modal.entity.order.Beneficiary;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
+import com.b2c.prototype.modal.entity.user.UserCreditCard;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.util.CardUtil;
 import com.tm.core.process.dao.common.AbstractEntityDao;
@@ -49,6 +50,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -88,7 +90,7 @@ class BasicOrderArticularItemDaoTest extends AbstractCustomEntityDaoTest {
             statement.execute("DELETE FROM price");
             statement.execute("DELETE FROM credit_card");
             statement.execute("DELETE FROM delivery");
-            statement.execute("DELETE FROM user_profile");
+            statement.execute("DELETE FROM user_details");
             statement.execute("DELETE FROM address");
             statement.execute("DELETE FROM country");
 
@@ -114,10 +116,12 @@ class BasicOrderArticularItemDaoTest extends AbstractCustomEntityDaoTest {
                 .countryPhoneCode(countryPhoneCode)
                 .build();
         return Beneficiary.builder()
-                .firstName("Wolter")
-                .lastName("White")
+                .contactInfo(ContactInfo.builder()
+                        .firstName("Wolter")
+                        .lastName("White")
+                        .contactPhone(contactPhone)
+                        .build())
                 .orderNumber(0)
-                .contactPhone(contactPhone)
                 .build();
     }
 
@@ -216,16 +220,20 @@ class BasicOrderArticularItemDaoTest extends AbstractCustomEntityDaoTest {
                 .build();
     }
 
-    private UserDetails prepareTestUserProfile() {
+    private UserDetails prepareTestUserDetails() {
         CreditCard creditCard = prepareCard();
+        UserCreditCard userCreditCard = UserCreditCard.builder()
+                .creditCard(creditCard)
+                .isDefault(false)
+                .build();
         return UserDetails.builder()
                 .id(1L)
                 .username("username")
                 .dateOfCreate(100)
                 .isActive(true)
                 .contactInfo(prepareContactInfo())
-                .addresses(List.of(createAddress()))
-                .creditCardList(List.of(creditCard))
+                .addresses(Set.of(createAddress()))
+                .userCreditCardList(Set.of(userCreditCard))
                 .build();
     }
 
@@ -337,9 +345,9 @@ class BasicOrderArticularItemDaoTest extends AbstractCustomEntityDaoTest {
         articularItemQuantity.setId(1L);
         Beneficiary beneficiary = prepareBeneficiary();
         beneficiary.setId(1L);
-        beneficiary.getContactPhone().setId(1L);
-        UserDetails userProfile = prepareTestUserProfile();
-        userProfile.getContactInfo().setId(1L);
+        beneficiary.getContactInfo().getContactPhone().setId(1L);
+        UserDetails userDetails = prepareTestUserDetails();
+        userDetails.getContactInfo().setId(1L);
         OrderArticularItem orderItemDataOption = OrderArticularItem.builder()
                 .id(1L)
                 .dateOfCreate(100L)
@@ -348,7 +356,7 @@ class BasicOrderArticularItemDaoTest extends AbstractCustomEntityDaoTest {
                 .delivery(prepareTestDelivery())
                 .articularItemQuantityList(List.of(articularItemQuantity))
                 .orderStatus(prepareTestOrderStatus())
-                .userProfile(userProfile)
+                .userDetails(userDetails)
                 .orderId("100")
                 .note("note")
                 .build();
@@ -373,7 +381,7 @@ class BasicOrderArticularItemDaoTest extends AbstractCustomEntityDaoTest {
                 .delivery(prepareTestDelivery())
                 .articularItemQuantityList(List.of(prepareTestOrderItemQuantity()))
                 .orderStatus(prepareTestOrderStatus())
-                .userProfile(prepareTestUserProfile())
+                .userDetails(prepareTestUserDetails())
                 .orderId("100")
                 .note("note")
                 .build();
@@ -384,9 +392,9 @@ class BasicOrderArticularItemDaoTest extends AbstractCustomEntityDaoTest {
         articularItemQuantity.setId(1L);
         Beneficiary beneficiary = prepareBeneficiary();
         beneficiary.setId(1L);
-        beneficiary.getContactPhone().setId(1L);
-        UserDetails userProfile = prepareTestUserProfile();
-        userProfile.getContactInfo().setId(1L);
+        beneficiary.getContactInfo().getContactPhone().setId(1L);
+        UserDetails userDetails = prepareTestUserDetails();
+        userDetails.getContactInfo().setId(1L);
         OrderArticularItem orderItemDataOption = OrderArticularItem.builder()
                 .id(1L)
                 .dateOfCreate(100L)
@@ -395,7 +403,7 @@ class BasicOrderArticularItemDaoTest extends AbstractCustomEntityDaoTest {
                 .delivery(prepareTestDelivery())
                 .articularItemQuantityList(List.of(articularItemQuantity))
                 .orderStatus(prepareTestOrderStatus())
-                .userProfile(userProfile)
+                .userDetails(userDetails)
                 .orderId("100")
                 .note("note")
                 .build();
@@ -419,7 +427,7 @@ class BasicOrderArticularItemDaoTest extends AbstractCustomEntityDaoTest {
         loadDataSet("/datasets/order/order_articular_item/testOrderArticularItem.yml");
         Parameter parameter = new Parameter("id", 1L);
         OrderArticularItem orderItemDataOption = prepareTestOrderItemData();
-        List<OrderArticularItem> resultList = dao.getEntityList(parameter);
+        List<OrderArticularItem> resultList = dao.getNamedQueryEntityList("", parameter);
 
         assertEquals(1, resultList.size());
         resultList.forEach(result -> {
@@ -432,7 +440,7 @@ class BasicOrderArticularItemDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id1", 1L);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.getEntityList(parameter);
+            dao.getNamedQueryEntity("", parameter);
         });
     }
 
@@ -520,19 +528,21 @@ class BasicOrderArticularItemDaoTest extends AbstractCustomEntityDaoTest {
             Address address = orderArticularItem.getDelivery().getAddress();
             s.merge(address);
             orderArticularItem.getDelivery().setAddress(address);
-            orderArticularItem.getUserProfile().setAddresses(List.of(address));
+            orderArticularItem.getUserDetails().setAddresses(Set.of(address));
 
             CreditCard creditCard = orderArticularItem.getPayment().getCreditCard();
             s.merge(creditCard);
             orderArticularItem.getPayment().setCreditCard(creditCard);
-            orderArticularItem.getUserProfile().setCreditCardList(List.of(creditCard));
+            Set<UserCreditCard> userCreditCardList = orderArticularItem.getUserDetails().getUserCreditCardList();
+            userCreditCardList.forEach(s::merge);
+            orderArticularItem.getUserDetails().setUserCreditCardList(userCreditCardList);
 
-            ContactInfo contactInfo = orderArticularItem.getUserProfile().getContactInfo();
+            ContactInfo contactInfo = orderArticularItem.getUserDetails().getContactInfo();
             Beneficiary beneficiary = orderArticularItem.getBeneficiaries().get(0);
             s.merge(contactInfo);
             s.merge(beneficiary);
             orderArticularItem.setBeneficiaries(List.of(beneficiary));
-            orderArticularItem.getUserProfile().setContactInfo(contactInfo);
+            orderArticularItem.getUserDetails().setContactInfo(contactInfo);
 
             ArticularItemQuantity articularItemQuantity = orderArticularItem.getArticularItemQuantityList().get(0);
 
@@ -637,7 +647,7 @@ class BasicOrderArticularItemDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id", 1L);
         OrderArticularItem orderItemDataOption = prepareTestOrderItemData();
         Optional<OrderArticularItem> resultOptional =
-                dao.getOptionalEntity(parameter);
+                dao.getNamedQueryOptionalEntity("", parameter);
 
         assertTrue(resultOptional.isPresent());
         OrderArticularItem result = resultOptional.get();
@@ -649,7 +659,7 @@ class BasicOrderArticularItemDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id1", 1L);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.getOptionalEntity(parameter);
+            dao.getNamedQueryOptionalEntity("", parameter);
         });
 
     }
@@ -660,7 +670,7 @@ class BasicOrderArticularItemDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id", 1L);
 
         OrderArticularItem orderItemDataOption = prepareTestOrderItemData();
-        OrderArticularItem result = dao.getEntity(parameter);
+        OrderArticularItem result = dao.getNamedQueryEntity("", parameter);
 
         checkOrderItem(orderItemDataOption, result);
     }
@@ -670,7 +680,7 @@ class BasicOrderArticularItemDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id1", 1L);
 
         assertThrows(RuntimeException.class, () -> {
-            dao.getEntity(parameter);
+            dao.getNamedQueryEntity("", parameter);
         });
     }
 

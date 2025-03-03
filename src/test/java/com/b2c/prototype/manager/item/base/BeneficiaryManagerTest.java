@@ -2,9 +2,11 @@ package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.dao.order.IBeneficiaryDao;
 import com.b2c.prototype.modal.dto.payload.BeneficiaryDto;
+import com.b2c.prototype.modal.dto.payload.ContactInfoDto;
 import com.b2c.prototype.modal.dto.payload.ContactPhoneDto;
 import com.b2c.prototype.modal.entity.order.OrderArticularItem;
 import com.b2c.prototype.modal.entity.order.Beneficiary;
+import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
@@ -28,6 +30,7 @@ import java.util.function.Supplier;
 import static com.b2c.prototype.util.Constant.ORDER_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -64,8 +67,8 @@ class BeneficiaryManagerTest {
         Supplier<Parameter> parameterSupplier = () -> parameter;
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
-                .thenReturn(orderItemDataOption);
+//        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
+//                .thenReturn(orderItemDataOption);
         when(transformationFunctionService.getEntity(eq(Beneficiary.class), any(BeneficiaryDto.class)))
                 .thenReturn(beneficiary);
         doAnswer(invocation -> {
@@ -97,8 +100,8 @@ class BeneficiaryManagerTest {
         Supplier<Parameter> parameterSupplier = () -> parameter;
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
-                .thenReturn(orderItemDataOption);
+//        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
+//                .thenReturn(orderItemDataOption);
         when(transformationFunctionService.getEntity(eq(Beneficiary.class), any(BeneficiaryDto.class)))
                 .thenReturn(beneficiary);
         doAnswer(invocation -> {
@@ -125,8 +128,8 @@ class BeneficiaryManagerTest {
         Supplier<Parameter> parameterSupplier = () -> parameter;
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(eq(OrderArticularItem.class), any(Supplier.class)))
-                .thenReturn(orderItemDataOption);
+//        when(queryService.getEntity(eq(OrderArticularItem.class), any(Supplier.class)))
+//                .thenReturn(orderItemDataOption);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
             Session session = mock(Session.class);
@@ -154,18 +157,20 @@ class BeneficiaryManagerTest {
         Function<OrderArticularItem, BeneficiaryDto> transformationFunction = oi -> {
             Beneficiary iob = oi.getBeneficiaries().get(0);
             return BeneficiaryDto.builder()
-                    .firstName(iob.getFirstName())
-                    .lastName(iob.getLastName())
-                    .contactPhone(ContactPhoneDto.builder()
-                            .phoneNumber(iob.getContactPhone().getPhoneNumber())
-                            .countryPhoneCode(iob.getContactPhone().getCountryPhoneCode().getValue())
+                    .contactInfo(ContactInfoDto.builder()
+                            .firstName(iob.getContactInfo().getFirstName())
+                            .lastName(iob.getContactInfo().getLastName())
+                            .contactPhone(ContactPhoneDto.builder()
+                                    .phoneNumber(iob.getContactInfo().getContactPhone().getPhoneNumber())
+                                    .countryPhoneCode(iob.getContactInfo().getContactPhone().getCountryPhoneCode().getValue())
+                                    .build())
                             .build())
                     .build();
         };
         when(transformationFunctionService.getTransformationFunction(OrderArticularItem.class, BeneficiaryDto.class))
                 .thenReturn(transformationFunction);
 
-        when(queryService.getSubEntityDtoList(eq(OrderArticularItem.class), any(Parameter.class), any(Function.class)))
+        when(queryService.getSubNamedQueryEntityDtoList(eq(OrderArticularItem.class), anyString(), any(Parameter.class), any(Function.class)))
                 .thenAnswer(invocation -> {
                     Supplier<Parameter> supplierArg = invocation.getArgument(1);
                     Function<OrderArticularItem, BeneficiaryDto> functionArg = invocation.getArgument(2);
@@ -179,34 +184,38 @@ class BeneficiaryManagerTest {
         BeneficiaryDto beneficiaryDto = getBeneficiaryDto();
         assertEquals(1, contactInfoDtoList.size());
         contactInfoDtoList.forEach(result ->  {
-            assertEquals(beneficiaryDto.getContactPhone().getCountryPhoneCode(), result.getContactPhone().getCountryPhoneCode());
-            assertEquals(beneficiaryDto.getFirstName(), result.getFirstName());
-            assertEquals(beneficiaryDto.getContactPhone().getPhoneNumber(), result.getContactPhone().getPhoneNumber());
-            assertEquals(beneficiaryDto.getLastName(), result.getLastName());
+            assertEquals(beneficiaryDto.getContactInfo().getContactPhone().getCountryPhoneCode(), result.getContactInfo().getContactPhone().getCountryPhoneCode());
+            assertEquals(beneficiaryDto.getContactInfo().getFirstName(), result.getContactInfo().getFirstName());
+            assertEquals(beneficiaryDto.getContactInfo().getContactPhone().getPhoneNumber(), result.getContactInfo().getContactPhone().getPhoneNumber());
+            assertEquals(beneficiaryDto.getContactInfo().getLastName(), result.getContactInfo().getLastName());
         });
     }
 
     private Beneficiary getBeneficiary() {
         return Beneficiary.builder()
-                .firstName("newName")
-                .lastName("newLastName")
-                .contactPhone(ContactPhone.builder()
-                        .countryPhoneCode(CountryPhoneCode.builder()
-                                .value("USA")
+                .contactInfo(ContactInfo.builder()
+                        .firstName("newName")
+                        .lastName("newLastName")
+                        .contactPhone(ContactPhone.builder()
+                                .countryPhoneCode(CountryPhoneCode.builder()
+                                        .value("USA")
+                                        .build())
+                                .phoneNumber("newPhoneNumber")
                                 .build())
-                        .phoneNumber("newPhoneNumber")
                         .build())
                 .build();
     }
 
     private BeneficiaryDto getBeneficiaryDto() {
         return BeneficiaryDto.builder()
-                .contactPhone(ContactPhoneDto.builder()
-                        .countryPhoneCode("USA")
-                        .phoneNumber("newPhoneNumber")
+                .contactInfo(ContactInfoDto.builder()
+                        .contactPhone(ContactPhoneDto.builder()
+                                .countryPhoneCode("USA")
+                                .phoneNumber("newPhoneNumber")
+                                .build())
+                        .firstName("newName")
+                        .lastName("newLastName")
                         .build())
-                .firstName("newName")
-                .lastName("newLastName")
                 .build();
     }
 }

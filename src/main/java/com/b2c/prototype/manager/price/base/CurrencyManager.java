@@ -15,6 +15,7 @@ public class CurrencyManager extends AbstractConstantEntityManager<ConstantPaylo
                            IEntityDao dao,
                            ITransformationFunctionService transformationFunctionService) {
         super(parameterFactory, dao,
+                "",
                 transformationFunctionService.getTransformationFunction(ConstantPayloadDto.class, Currency.class),
                 transformationFunctionService.getTransformationFunction(Currency.class, ConstantPayloadDto.class));
     }

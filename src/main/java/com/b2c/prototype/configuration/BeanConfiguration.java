@@ -32,7 +32,7 @@ import com.b2c.prototype.dao.delivery.IDeliveryDao;
 import com.b2c.prototype.dao.delivery.IDeliveryTypeDao;
 import com.b2c.prototype.dao.payment.IPaymentMethodDao;
 import com.b2c.prototype.dao.item.ICategoryDao;
-import com.b2c.prototype.dao.user.base.BasicUserProfileDao;
+import com.b2c.prototype.dao.user.base.BasicUserDetailsDao;
 import com.b2c.prototype.dao.item.base.BasicBrandDao;
 import com.b2c.prototype.dao.payment.base.BasicCreditCardDao;
 import com.b2c.prototype.dao.option.base.BasicOptionItemDao;
@@ -59,7 +59,7 @@ import com.b2c.prototype.dao.item.IItemStatusDao;
 import com.b2c.prototype.dao.item.IItemTypeDao;
 import com.b2c.prototype.dao.rating.IRatingDao;
 import com.b2c.prototype.dao.review.IReviewDao;
-import com.b2c.prototype.dao.user.IUserProfileDao;
+import com.b2c.prototype.dao.user.IUserDetailsDao;
 import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.query.SearchService;
 import com.tm.core.configuration.manager.DatabaseConfigurationAnnotationClass;
@@ -184,8 +184,8 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public IUserProfileDao appUserDao(SessionFactory sessionFactory, IQueryService queryService) {
-        return new BasicUserProfileDao(sessionFactory, queryService);
+    public IUserDetailsDao appUserDao(SessionFactory sessionFactory, IQueryService queryService) {
+        return new BasicUserDetailsDao(sessionFactory, queryService);
     }
 
     @Bean

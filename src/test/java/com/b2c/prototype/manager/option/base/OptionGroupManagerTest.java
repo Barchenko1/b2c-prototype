@@ -87,7 +87,7 @@ class OptionGroupManagerTest extends AbstractConstantEntityManagerTest<OptionGro
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
         when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
-        when(dao.getEntity(parameter)).thenReturn(testValue);
+        //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
         ConstantPayloadDto result = optionGroupManager.getEntity("testValue");
 
@@ -102,7 +102,7 @@ class OptionGroupManagerTest extends AbstractConstantEntityManagerTest<OptionGro
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
         when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
-        when(dao.getEntity(parameter)).thenReturn(testValue);
+        //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
         Optional<ConstantPayloadDto> result = optionGroupManager.getEntityOptional("testValue");
 
@@ -115,7 +115,7 @@ class OptionGroupManagerTest extends AbstractConstantEntityManagerTest<OptionGro
         ConstantPayloadDto constantPayloadDto = getResponseOneFieldEntityDto();
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
-        when(dao.getEntityList()).thenReturn(List.of(testValue));
+//        when(dao.getEntityList()).thenReturn(List.of(testValue));
 
         List<ConstantPayloadDto> list = optionGroupManager.getEntities();
 

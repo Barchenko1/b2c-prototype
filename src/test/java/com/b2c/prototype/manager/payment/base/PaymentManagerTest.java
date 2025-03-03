@@ -33,7 +33,6 @@ import static com.b2c.prototype.util.Constant.ORDER_ID;
 import static com.b2c.prototype.util.Constant.PAYMENT_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.eq;
@@ -72,8 +71,8 @@ class PaymentManagerTest {
 
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
-                .thenReturn(orderItemDataOption);
+//        when(queryService.getNamedQueryEntity(OrderArticularItem.class, parameterSupplier))
+//                .thenReturn(orderItemDataOption);
         when(orderItemDataOption.getPayment()).thenReturn(payment);
         when(transformationFunctionService.getEntity(eq(Payment.class), eq(paymentDto)))
                 .thenReturn(newPayment);
@@ -104,8 +103,8 @@ class PaymentManagerTest {
 
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
-                .thenReturn(orderItemDataOption);
+//        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
+//                .thenReturn(orderItemDataOption);
         when(orderItemDataOption.getPayment()).thenReturn(payment);
         when(transformationFunctionService.getEntity(eq(Payment.class), eq(paymentDto)))
                 .thenReturn(newPayment);
@@ -136,11 +135,11 @@ class PaymentManagerTest {
         Function<OrderArticularItem, Payment> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(eq(OrderArticularItem.class), eq(Payment.class)))
                 .thenReturn(function);
-        when(supplierService.entityFieldSupplier(
-                OrderArticularItem.class,
-                parameterSupplier,
-                function)
-        ).thenReturn(paymentSupplier);
+//        when(supplierService.entityFieldSupplier(
+//                OrderArticularItem.class,
+//                parameterSupplier,
+//                function)
+//        ).thenReturn(paymentSupplier);
 
         paymentManager.deletePaymentByOrderId(orderId);
 
@@ -158,8 +157,8 @@ class PaymentManagerTest {
 
         when(supplierService.parameterStringSupplier(PAYMENT_ID, paymentId))
                 .thenReturn(parameterSupplier);
-        when(supplierService.entityFieldSupplier(Payment.class, parameterSupplier))
-                .thenReturn(paymentSupplier);
+//        when(supplierService.entityFieldSupplier(Payment.class, parameterSupplier))
+//                .thenReturn(paymentSupplier);
 
         paymentManager.deletePaymentByPaymentId(paymentId);
 
@@ -178,8 +177,8 @@ class PaymentManagerTest {
                 .thenReturn(parameterSupplier);
         when(transformationFunctionService.getTransformationFunction(eq(OrderArticularItem.class), eq(PaymentDto.class)))
                 .thenReturn(function);
-        when(queryService.getEntityDto(OrderArticularItem.class, parameterSupplier, function))
-                .thenReturn(paymentDto);
+//        when(queryService.getEntityDto(OrderArticularItem.class, parameterSupplier, function))
+//                .thenReturn(paymentDto);
 
         PaymentDto result = paymentManager.getPaymentByOrderId(orderId);
 
@@ -199,8 +198,8 @@ class PaymentManagerTest {
                 .thenReturn(parameterSupplier);
         when(transformationFunctionService.getTransformationFunction(eq(Payment.class), eq(PaymentDto.class)))
                 .thenReturn(function);
-        when(paymentDao.getEntityGraph(anyString(), eq(parameter)))
-                .thenReturn(payment);
+//        when(paymentDao.getGraphEntity(anyString(), eq(parameter)))
+//                .thenReturn(payment);
         when(function.apply(payment)).thenReturn(paymentDto);
 
         PaymentDto result = paymentManager.getPaymentByPaymentId(paymentId);
@@ -216,8 +215,8 @@ class PaymentManagerTest {
         when(transformationFunctionService.getTransformationFunction(eq(Payment.class), eq(PaymentDto.class)))
                 .thenReturn(function);
         when(function.apply(payment)).thenReturn(paymentDto);
-        when(paymentDao.getEntityList())
-                .thenReturn(List.of(payment));
+//        when(paymentDao.getEntityList())
+//                .thenReturn(List.of(payment));
 
         List<PaymentDto> allPayments = paymentManager.getAllPayments();
 

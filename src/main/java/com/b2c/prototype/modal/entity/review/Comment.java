@@ -41,7 +41,7 @@ public class Comment extends TransitiveSelfEntity {
     private String message;
     private long dateOfCreate;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    private UserDetails userProfile;
+    private UserDetails userDetails;
     @ManyToOne
     @JoinColumn(name = "comment_id")
     @ToString.Exclude

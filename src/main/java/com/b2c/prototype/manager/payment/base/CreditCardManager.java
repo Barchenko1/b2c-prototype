@@ -7,6 +7,7 @@ import com.b2c.prototype.modal.entity.order.OrderArticularItem;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
 import com.b2c.prototype.dao.payment.ICreditCardDao;
 import com.b2c.prototype.modal.entity.payment.Payment;
+import com.b2c.prototype.modal.entity.user.UserCreditCard;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.payment.ICreditCardManager;
@@ -20,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static com.b2c.prototype.util.Constant.ORDER_ID;
 import static com.b2c.prototype.util.Constant.USER_ID;
@@ -49,36 +51,38 @@ public class CreditCardManager implements ICreditCardManager {
     @Override
     public void saveCreditCardByUserId(String userId, CreditCardDto creditCardDto) {
         entityOperationDao.executeConsumer(session -> {
-            UserDetails userProfile = searchService.getEntity(
+            UserDetails userDetails = searchService.getNamedQueryEntity(
                     UserDetails.class,
-                    supplierService.parameterStringSupplier(USER_ID, userId));
+                    "",
+                    parameterFactory.createStringParameter(USER_ID, userId));
             CreditCard creditCard = transformationFunctionService.getEntity(
                     CreditCard.class,
                     creditCardDto);
-            List<CreditCard> creditCardList = Optional.ofNullable(userProfile.getCreditCardList())
+            Set<UserCreditCard> creditCardList = Optional.ofNullable(userDetails.getUserCreditCardList())
                     .orElseThrow(() -> new RuntimeException("User has no credit card list"));
             if (creditCardList.contains(creditCard)) {
                 throw new RuntimeException("User already has this credit card");
             }
-            creditCardList.add(creditCard);
-            session.merge(userProfile);
+//            creditCardList.add(creditCard);
+            session.merge(userDetails);
         });
     }
 
     @Override
     public void updateCreditCardByUserId(String userId, CreditCardDto creditCardDto) {
         entityOperationDao.executeConsumer(session -> {
-            UserDetails userProfile = searchService.getEntity(
+            UserDetails userDetails = searchService.getNamedQueryEntity(
                     UserDetails.class,
-                    supplierService.parameterStringSupplier(USER_ID, userId));
+                    "",
+                    parameterFactory.createStringParameter(USER_ID, userId));
             CreditCard newCreditCard = transformationFunctionService.getEntity(
                     CreditCard.class,
                     creditCardDto);
-            CreditCard existingCreditCard = userProfile.getCreditCardList().stream()
-                    .filter(card -> card.getCardNumber().equals(creditCardDto.getCardNumber()))
-                    .findFirst()
-                    .orElseThrow();
-            newCreditCard.setId(existingCreditCard.getId());
+//            CreditCard existingCreditCard = userDetails.getCreditCardList().stream()
+//                    .filter(card -> card.getCardNumber().equals(creditCardDto.getCardNumber()))
+//                    .findFirst()
+//                    .orElseThrow();
+//            newCreditCard.setId(existingCreditCard.getId());
             session.merge(newCreditCard);
         });
     }
@@ -86,9 +90,10 @@ public class CreditCardManager implements ICreditCardManager {
     @Override
     public void saveCreditCardByOrderId(String orderId, CreditCardDto creditCardDto) {
         entityOperationDao.executeConsumer(session -> {
-            OrderArticularItem orderItemDataOption = searchService.getEntity(
+            OrderArticularItem orderItemDataOption = searchService.getNamedQueryEntity(
                     OrderArticularItem.class,
-                    supplierService.parameterStringSupplier(ORDER_ID, orderId));
+                    "",
+                    parameterFactory.createStringParameter(ORDER_ID, orderId));
             CreditCard newCreditCard = transformationFunctionService.getEntity(
                     CreditCard.class,
                     creditCardDto);
@@ -101,9 +106,10 @@ public class CreditCardManager implements ICreditCardManager {
     @Override
     public void updateCreditCardByOrderId(String orderId, CreditCardDto creditCardDto) {
         entityOperationDao.executeConsumer(session -> {
-            OrderArticularItem orderItemDataOption = searchService.getEntity(
+            OrderArticularItem orderItemDataOption = searchService.getNamedQueryEntity(
                     OrderArticularItem.class,
-                    supplierService.parameterStringSupplier(ORDER_ID, orderId));
+                    "",
+                    parameterFactory.createStringParameter(ORDER_ID, orderId));
             CreditCard newCreditCard = transformationFunctionService.getEntity(
                     CreditCard.class,
                     creditCardDto);
@@ -120,12 +126,13 @@ public class CreditCardManager implements ICreditCardManager {
     @Override
     public void deleteCreditCardByUserId(MultipleFieldsSearchDtoDelete multipleFieldsSearchDtoDelete) {
         entityOperationDao.executeConsumer(session -> {
-            UserDetails userProfile = searchService.getEntity(
+            UserDetails userDetails = searchService.getNamedQueryEntity(
                     UserDetails.class,
-                    supplierService.parameterStringSupplier(USER_ID, multipleFieldsSearchDtoDelete.getMainSearchField()));
-            CreditCard creditCard = userProfile.getCreditCardList().stream()
-                    .filter(existingCreditCard ->
-                            existingCreditCard.getCardNumber().equals(multipleFieldsSearchDtoDelete.getInnerSearchField()))
+                    "",
+                    parameterFactory.createStringParameter(USER_ID, multipleFieldsSearchDtoDelete.getMainSearchField()));
+            UserCreditCard creditCard = userDetails.getUserCreditCardList().stream()
+                    .filter(existingUserCreditCard ->
+                            existingUserCreditCard.getCreditCard().getCardNumber().equals(multipleFieldsSearchDtoDelete.getInnerSearchField()))
                     .findFirst()
                     .orElseThrow(() ->new RuntimeException("User has no credit card"));
             session.remove(creditCard);
@@ -135,9 +142,10 @@ public class CreditCardManager implements ICreditCardManager {
     @Override
     public void deleteCreditCardByOrderId(MultipleFieldsSearchDtoDelete multipleFieldsSearchDtoDelete) {
         entityOperationDao.executeConsumer(session -> {
-            OrderArticularItem orderItemDataOption = searchService.getEntity(
+            OrderArticularItem orderItemDataOption = searchService.getNamedQueryEntity(
                     OrderArticularItem.class,
-                    supplierService.parameterStringSupplier(ORDER_ID, multipleFieldsSearchDtoDelete.getMainSearchField()));
+                    "",
+                    parameterFactory.createStringParameter(ORDER_ID, multipleFieldsSearchDtoDelete.getMainSearchField()));
             CreditCard creditCard = orderItemDataOption.getPayment().getCreditCard();
             if (!creditCard.getCardNumber().equals(multipleFieldsSearchDtoDelete.getInnerSearchField())) {
                 throw new RuntimeException("User has no credit card");
@@ -148,7 +156,7 @@ public class CreditCardManager implements ICreditCardManager {
 
     @Override
     public List<ResponseCreditCardDto> getCardListByUserId(String userId) {
-        return entityOperationDao.getSubEntityGraphDtoList(
+        return entityOperationDao.getSubGraphEntityDtoList(
                 "",
                 parameterFactory.createStringParameter(USER_ID, userId),
                 transformationFunctionService.getTransformationFunction(CreditCard.class, ResponseCreditCardDto.class));
@@ -156,7 +164,7 @@ public class CreditCardManager implements ICreditCardManager {
 
     @Override
     public ResponseCreditCardDto getCardByOrderId(String orderId) {
-        return entityOperationDao.getEntityGraphDto(
+        return entityOperationDao.getGraphEntityDto(
                 "",
                 parameterFactory.createStringParameter(ORDER_ID, orderId),
                 transformationFunctionService.getTransformationFunction(CreditCard.class, ResponseCreditCardDto.class));
@@ -164,7 +172,7 @@ public class CreditCardManager implements ICreditCardManager {
 
     @Override
     public List<ResponseCreditCardDto> getAllCards() {
-        return entityOperationDao.getEntityGraphDtoList("",
+        return entityOperationDao.getGraphEntityDtoList("",
                 transformationFunctionService.getTransformationFunction(CreditCard.class, ResponseCreditCardDto.class));
     }
 

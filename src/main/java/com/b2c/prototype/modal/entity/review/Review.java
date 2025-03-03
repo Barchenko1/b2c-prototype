@@ -38,10 +38,11 @@ public class Review {
     private String message;
     private long dateOfCreate;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    private UserDetails userProfile;
+    private UserDetails userDetails;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private Rating rating;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "review_id")
+    @Builder.Default
     private List<Comment> comments = new ArrayList<>();
 }

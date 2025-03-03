@@ -1,0 +1,43 @@
+country_phone_code:
+  - id: 1
+    value: "+11"
+    label: "+11"
+contact_phone:
+  - id: 1
+    phoneNumber: "111-111-111"
+    country_phone_code_id: 1
+contact_info:
+  - id: 1
+    firstName: "Wolter"
+    lastNAme: "White"
+    contact_phone_id: 1
+country:
+  - id: 1
+    label: "USA"
+    value: "USA"
+address:
+  - id: 1
+    street: "Update street"
+    buildingNumber: 1
+    florNumber: 9
+    apartmentNumber: 101
+    zipCode: 90000
+    city: "city"
+    country_id: 1
+credit_card:
+  - id: 1
+    cardNumber: "4444-1111-2222-3333"
+    dateOfExpire: "06/28"
+    cvv: 818
+    ownerName: "Update name"
+    ownerSecondName: "Update secondName"
+    isActive: true
+user_details:
+  - id: 1
+    username: "Update username"
+    user_id: "123"
+    email: "Update email"
+    dateOfCreate: 200
+    isActive: false
+    address_id: 1
+    contactinfo_id: 1

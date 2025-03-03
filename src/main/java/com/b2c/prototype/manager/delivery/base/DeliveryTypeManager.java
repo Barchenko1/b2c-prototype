@@ -14,6 +14,7 @@ public class DeliveryTypeManager extends AbstractConstantEntityManager<ConstantP
                                IEntityDao deliveryTypeDao,
                                ITransformationFunctionService transformationFunctionService) {
         super(parameterFactory, deliveryTypeDao,
+                "",
                 transformationFunctionService.getTransformationFunction(ConstantPayloadDto.class, DeliveryType.class),
                 transformationFunctionService.getTransformationFunction(DeliveryType.class, ConstantPayloadDto.class));
     }

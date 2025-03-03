@@ -40,7 +40,7 @@ public class Post extends TransitiveSelfEntity {
     private String uniquePostId;
     private long dateOfCreate;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    private UserDetails userProfile;
+    private UserDetails userDetails;
     @ManyToOne
     @JoinColumn(name = "post_id")
     @ToString.Exclude

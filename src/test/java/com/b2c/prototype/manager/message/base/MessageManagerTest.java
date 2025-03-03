@@ -169,7 +169,7 @@ class MessageManagerTest {
         when(transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class))
                 .thenReturn(transformationFunction);
 
-        when(messageDao.getEntityList(parameter))
+        when(messageDao.getNamedQueryEntityList("", parameter))
                 .thenReturn(Collections.singletonList(getMessage()));
 
         List<ResponseMessageOverviewDto> result = messageManager.getMessageOverviewBySenderEmail(senderEmail);
@@ -192,7 +192,7 @@ class MessageManagerTest {
         when(transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class))
                 .thenReturn(transformationFunction);
 
-        when(messageDao.getEntityList(parameter))
+        when(messageDao.getNamedQueryEntityList("", parameter))
                 .thenReturn(Collections.singletonList(getMessage()));
 
         List<ResponseMessageOverviewDto> result = messageManager.getMessageOverviewByReceiverEmail(receiverEmail);
@@ -216,7 +216,7 @@ class MessageManagerTest {
                 .thenReturn(supplier);
         when(transformationFunctionService.getTransformationFunction(Message.class, ResponseMessagePayloadDto.class))
                 .thenReturn(transformationFunction);
-        when(messageDao.getEntityGraph(anyString(), eq(parameter))).thenReturn(testMessage);
+        when(messageDao.getGraphEntity(anyString(), eq(parameter))).thenReturn(testMessage);
 
         ResponseMessagePayloadDto result = messageManager.getMessagePayloadDto("", uniqueId);
 

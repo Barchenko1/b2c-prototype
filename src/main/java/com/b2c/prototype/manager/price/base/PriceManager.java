@@ -14,6 +14,7 @@ import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.common.EntityOperationManager;
 import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.supplier.ISupplierService;
+import com.tm.core.finder.factory.IParameterFactory;
 
 import java.util.List;
 
@@ -26,23 +27,27 @@ public class PriceManager implements IPriceManager {
     private final ISearchService searchService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
+    private final IParameterFactory parameterFactory;
 
     public PriceManager(IPriceDao priceDao,
                         ISearchService searchService,
                         ITransformationFunctionService transformationFunctionService,
-                        ISupplierService supplierService) {
+                        ISupplierService supplierService,
+                        IParameterFactory parameterFactory) {
         this.entityOperationDao = new EntityOperationManager(priceDao);
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
         this.searchService = searchService;
+        this.parameterFactory = parameterFactory;
     }
 
     @Override
     public void saveUpdatePriceByOrderId(String orderId, PriceDto priceDto, PriceTypeEnum priceType) {
         entityOperationDao.executeConsumer(session -> {
-            OrderArticularItem orderItemDataOption = searchService.getEntity(
+            OrderArticularItem orderItemDataOption = searchService.getNamedQueryEntity(
                     OrderArticularItem.class,
-                    supplierService.parameterStringSupplier(ORDER_ID, orderId));
+                    "",
+                    parameterFactory.createStringParameter(ORDER_ID, orderId));
             Price price = transformationFunctionService.getEntity(
                     Price.class, priceDto, priceType.getValue());
             Payment payment = orderItemDataOption.getPayment();
@@ -60,9 +65,10 @@ public class PriceManager implements IPriceManager {
     @Override
     public void saveUpdatePriceByArticularId(String articularId, PriceDto priceDto, PriceTypeEnum priceType) {
         entityOperationDao.executeConsumer(session -> {
-            ArticularItem articularItem = searchService.getEntity(
+            ArticularItem articularItem = searchService.getNamedQueryEntity(
                     ArticularItem.class,
-                    supplierService.parameterStringSupplier(ARTICULAR_ID, articularId));
+                    "",
+                    parameterFactory.createStringParameter(ARTICULAR_ID, articularId));
             Price price = transformationFunctionService.getEntity(
                     Price.class, priceDto, priceType.getValue());
 
@@ -81,6 +87,7 @@ public class PriceManager implements IPriceManager {
         entityOperationDao.deleteEntity(
                 supplierService.entityFieldSupplier(
                         OrderArticularItem.class,
+                        "",
                         supplierService.parameterStringSupplier(ORDER_ID, orderId),
                         transformationFunctionService.getTransformationFunction(
                                 OrderArticularItem.class, Price.class, priceType.getValue())
@@ -93,6 +100,7 @@ public class PriceManager implements IPriceManager {
         entityOperationDao.deleteEntity(
                 supplierService.entityFieldSupplier(
                         ArticularItem.class,
+                        "",
                         supplierService.parameterStringSupplier(ARTICULAR_ID, articularId),
                         transformationFunctionService.getTransformationFunction(
                                 ArticularItem.class, Price.class, priceType.getValue())
@@ -102,41 +110,45 @@ public class PriceManager implements IPriceManager {
 
     @Override
     public PriceDto getPriceByOrderId(String orderId, PriceTypeEnum priceType) {
-        return searchService.getEntityDto(
+        return searchService.getNamedQueryEntityDto(
                 OrderArticularItem.class,
-                supplierService.parameterStringSupplier(ORDER_ID, orderId),
+                "",
+                parameterFactory.createStringParameter(ORDER_ID, orderId),
                 transformationFunctionService.getTransformationFunction(
                         OrderArticularItem.class, PriceDto.class, priceType.getValue()));
     }
 
     @Override
     public PriceDto getPriceByArticularId(String articularId, PriceTypeEnum priceType) {
-        return searchService.getEntityDto(
+        return searchService.getNamedQueryEntityDto(
                 ArticularItem.class,
-                supplierService.parameterStringSupplier(ARTICULAR_ID, articularId),
+                "",
+                parameterFactory.createStringParameter(ARTICULAR_ID, articularId),
                 transformationFunctionService.getTransformationFunction(
                         ArticularItem.class, PriceDto.class, priceType.getValue()));
     }
 
     @Override
     public ResponsePriceDto getResponsePriceDtoByArticularId(String articularId) {
-        return searchService.getEntityDto(
+        return searchService.getGraphEntityDto(
                 ArticularItem.class,
-                supplierService.parameterStringSupplier(ARTICULAR_ID, articularId),
+                "",
+                parameterFactory.createStringParameter(ARTICULAR_ID, articularId),
                 transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponsePriceDto.class));
     }
 
     @Override
     public ResponsePriceDto getResponsePriceDtoByOrderId(String orderId) {
-        return searchService.getEntityDto(
+        return searchService.getNamedQueryEntityDto(
                 OrderArticularItem.class,
-                supplierService.parameterStringSupplier(ORDER_ID, orderId),
+                "",
+                parameterFactory.createStringParameter(ORDER_ID, orderId),
                 transformationFunctionService.getTransformationFunction(OrderArticularItem.class, ResponsePriceDto.class));
     }
 
     @Override
     public List<PriceDto> getPrices() {
-        return entityOperationDao.getEntityGraphDtoList(
+        return entityOperationDao.getGraphEntityDtoList(
                 "",
                 transformationFunctionService.getTransformationFunction(Price.class, PriceDto.class));
     }

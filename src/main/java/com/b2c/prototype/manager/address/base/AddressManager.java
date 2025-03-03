@@ -12,8 +12,10 @@ import com.b2c.prototype.manager.address.IAddressManager;
 import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.common.EntityOperationManager;
 import com.b2c.prototype.service.supplier.ISupplierService;
+import com.tm.core.finder.factory.IParameterFactory;
 
 import java.util.List;
+import java.util.Set;
 
 import static com.b2c.prototype.util.Constant.ORDER_ID;
 import static com.b2c.prototype.util.Constant.USER_ID;
@@ -24,36 +26,41 @@ public class AddressManager implements IAddressManager {
     private final ISearchService searchService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
+    private final IParameterFactory parameterFactory;
 
     public AddressManager(IAddressDao addressDao,
                           ISearchService searchService,
                           ITransformationFunctionService transformationFunctionService,
-                          ISupplierService supplierService) {
+                          ISupplierService supplierService,
+                          IParameterFactory parameterFactory) {
         this.entityOperationDao = new EntityOperationManager(addressDao);
         this.searchService = searchService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
+        this.parameterFactory = parameterFactory;
     }
 
     @Override
     public void saveUpdateAppUserAddress(String userId, AddressDto addressDto) {
         entityOperationDao.executeConsumer(session -> {
-            UserDetails userProfile = searchService.getEntity(
+            UserDetails userDetails = searchService.getNamedQueryEntity(
                     UserDetails.class,
-                    supplierService.parameterStringSupplier(USER_ID, userId));
+                    "",
+                    parameterFactory.createStringParameter(USER_ID, userId));
             Address newAddress = transformationFunctionService
                     .getEntity(Address.class, addressDto);
-            userProfile.setAddresses(List.of(newAddress));
-            session.merge(userProfile);
+            userDetails.setAddresses(Set.of(newAddress));
+            session.merge(userDetails);
         });
     }
 
     @Override
     public void saveUpdateDeliveryAddress(String orderId, AddressDto addressDto) {
         entityOperationDao.executeConsumer(session -> {
-            OrderArticularItem orderItemDataOption = searchService.getEntity(
+            OrderArticularItem orderItemDataOption = searchService.getNamedQueryEntity(
                     OrderArticularItem.class,
-                    supplierService.parameterStringSupplier(ORDER_ID, orderId));
+                    "",
+                    parameterFactory.createStringParameter(ORDER_ID, orderId));
             Address newAddress = transformationFunctionService
                     .getEntity(Address.class, addressDto);
             Delivery delivery = orderItemDataOption.getDelivery();
@@ -67,6 +74,7 @@ public class AddressManager implements IAddressManager {
         entityOperationDao.deleteEntity(
                 supplierService.entityFieldSupplier(
                         UserDetails.class,
+                        "",
                         supplierService.parameterStringSupplier(USER_ID, userId),
                         transformationFunctionService.getTransformationFunction(UserDetails.class, Address.class)));
     }
@@ -76,29 +84,32 @@ public class AddressManager implements IAddressManager {
         entityOperationDao.deleteEntity(
                 supplierService.entityFieldSupplier(
                         OrderArticularItem.class,
+                        "",
                         supplierService.parameterStringSupplier(ORDER_ID, orderId),
                         transformationFunctionService.getTransformationFunction(OrderArticularItem.class, Address.class)));
     }
 
     @Override
     public AddressDto getAddressByUserId(String userId) {
-        return searchService.getEntityDto(
+        return searchService.getNamedQueryEntityDto(
                 UserDetails.class,
-                supplierService.parameterStringSupplier(USER_ID, userId),
+                "",
+                parameterFactory.createStringParameter(USER_ID, userId),
                 transformationFunctionService.getTransformationFunction(UserDetails.class, AddressDto.class));
     }
 
     @Override
     public AddressDto getAddressByOrderId(String orderId) {
-        return searchService.getEntityDto(
+        return searchService.getNamedQueryEntityDto(
                 OrderArticularItem.class,
-                supplierService.parameterStringSupplier(ORDER_ID, orderId),
+                "",
+                parameterFactory.createStringParameter(ORDER_ID, orderId),
                 transformationFunctionService.getTransformationFunction(OrderArticularItem.class, AddressDto.class));
     }
 
     @Override
     public List<AddressDto> getAddresses() {
-        return entityOperationDao.getEntityGraphDtoList(
+        return entityOperationDao.getGraphEntityDtoList(
                 "",
                 transformationFunctionService.getTransformationFunction(Address.class, AddressDto.class));
     }

@@ -3,6 +3,7 @@ package com.b2c.prototype.dao.user.base;
 import com.b2c.prototype.dao.AbstractCustomEntityDaoTest;
 import com.b2c.prototype.dao.order.base.BasicBeneficiaryDao;
 import com.b2c.prototype.modal.entity.order.Beneficiary;
+import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.tm.core.process.dao.common.AbstractEntityDao;
@@ -79,10 +80,12 @@ class BasicBeneficiaryDaoTest extends AbstractCustomEntityDaoTest {
                 .build();
         return Beneficiary.builder()
                 .id(1L)
-                .firstName("Wolter")
-                .lastName("White")
+                .contactInfo(ContactInfo.builder()
+                        .firstName("Wolter")
+                        .lastName("White")
+                        .contactPhone(contactPhone)
+                        .build())
                 .orderNumber(0)
-                .contactPhone(contactPhone)
                 .build();
     }
     
@@ -97,10 +100,12 @@ class BasicBeneficiaryDaoTest extends AbstractCustomEntityDaoTest {
                 .phoneNumber("111-111-111")
                 .build();
         return Beneficiary.builder()
-                .firstName("Wolter")
-                .lastName("White")
+                .contactInfo(ContactInfo.builder()
+                        .firstName("Wolter")
+                        .lastName("White")
+                        .contactPhone(contactPhone)
+                        .build())
                 .orderNumber(0)
-                .contactPhone(contactPhone)
                 .build();
     }
     
@@ -117,10 +122,12 @@ class BasicBeneficiaryDaoTest extends AbstractCustomEntityDaoTest {
                 .build();
         return Beneficiary.builder()
                 .id(1L)
-                .firstName("Update Wolter")
-                .lastName("Update White")
+                .contactInfo(ContactInfo.builder()
+                        .firstName("Wolter")
+                        .lastName("White")
+                        .contactPhone(contactPhone)
+                        .build())
                 .orderNumber(0)
-                .contactPhone(contactPhone)
                 .build();
     }
     
@@ -134,7 +141,7 @@ class BasicBeneficiaryDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id", 1L);
         Beneficiary beneficiary = prepareTestBeneficiary();
         List<Beneficiary> resultList =
-                dao.getEntityList(parameter);
+                dao.getNamedQueryEntityList("", parameter);
 
         assertEquals(1, resultList.size());
         resultList.forEach(result -> checkBeneficiary(beneficiary, result));
@@ -145,7 +152,7 @@ class BasicBeneficiaryDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id1", 1L);
 
         assertThrows(RuntimeException.class, () -> {
-            dao.getEntityList(parameter);
+            dao.getNamedQueryEntityList("", parameter);
         });
     }
 
@@ -199,7 +206,8 @@ class BasicBeneficiaryDaoTest extends AbstractCustomEntityDaoTest {
         loadDataSet("/datasets/order/beneficiary/emptyBeneficiaryDataSet.yml");
         Consumer<Session> consumer = (Session s) -> {
             Beneficiary beneficiary = prepareToSaveBeneficiary();
-            s.persist(beneficiary.getContactPhone());
+            s.persist(beneficiary.getContactInfo().getContactPhone());
+            s.persist(beneficiary.getContactInfo());
             s.persist(beneficiary);
         };
 
@@ -251,7 +259,8 @@ class BasicBeneficiaryDaoTest extends AbstractCustomEntityDaoTest {
         loadDataSet("/datasets/order/beneficiary/testBeneficiaryDataSet.yml");
         Consumer<Session> consumer = (Session s) -> {
             Beneficiary beneficiary = prepareToUpdateBeneficiary();
-            s.merge(beneficiary.getContactPhone());
+            s.merge(beneficiary.getContactInfo().getContactPhone());
+            s.merge(beneficiary.getContactInfo());
             s.merge(beneficiary);
         };
         dao.executeConsumer(consumer);
@@ -289,7 +298,8 @@ class BasicBeneficiaryDaoTest extends AbstractCustomEntityDaoTest {
         Consumer<Session> consumer = (Session s) -> {
             Beneficiary beneficiary = prepareTestBeneficiary();
             s.remove(beneficiary);
-            s.remove(beneficiary.getContactPhone());
+            s.remove(beneficiary.getContactInfo());
+            s.remove(beneficiary.getContactInfo().getContactPhone());
         };
 
         dao.executeConsumer(consumer);
@@ -389,7 +399,7 @@ class BasicBeneficiaryDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id", 1L);
         Beneficiary beneficiary = prepareTestBeneficiary();
         Optional<Beneficiary> resultOptional =
-                dao.getOptionalEntity(parameter);
+               dao.getNamedQueryOptionalEntity("", parameter);
 
         assertTrue(resultOptional.isPresent());
         Beneficiary result = resultOptional.get();
@@ -401,7 +411,7 @@ class BasicBeneficiaryDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id1", 1L);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.getOptionalEntity(parameter);
+           dao.getNamedQueryOptionalEntity("", parameter);
         });
 
     }
@@ -413,7 +423,7 @@ class BasicBeneficiaryDaoTest extends AbstractCustomEntityDaoTest {
 
         Beneficiary beneficiary = prepareTestBeneficiary();
 
-        Beneficiary result = dao.getEntity(parameter);
+        Beneficiary result = dao.getNamedQueryEntity("", parameter);
 
         checkBeneficiary(beneficiary, result);
     }
@@ -423,7 +433,7 @@ class BasicBeneficiaryDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id1", 1L);
 
         assertThrows(RuntimeException.class, () -> {
-            dao.getEntity(parameter);
+            dao.getNamedQueryEntity("", parameter);
         });
     }
 }

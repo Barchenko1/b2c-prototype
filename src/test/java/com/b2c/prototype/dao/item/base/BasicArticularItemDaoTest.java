@@ -256,7 +256,7 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
         loadDataSet("/datasets/item/articular_item/testArticularItem.yml");
         Parameter parameter = new Parameter("id", 1L);
         ArticularItem articularItem = prepareTestItemDataOption();
-        List<ArticularItem> resultList = dao.getEntityList(parameter);
+        List<ArticularItem> resultList = dao.getNamedQueryEntityList("", parameter);
 
         assertEquals(1, resultList.size());
         resultList.forEach(result -> {
@@ -269,7 +269,7 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id1", 1L);
 
         assertThrows(RuntimeException.class, () -> {
-            dao.getEntityList(parameter);
+            dao.getNamedQueryEntityList("", parameter);
         });
     }
 
@@ -503,7 +503,7 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id", 1L);
         ArticularItem articularItem = prepareTestItemDataOption();
         Optional<ArticularItem> resultOptional =
-                dao.getOptionalEntity(parameter);
+               dao.getNamedQueryOptionalEntity("", parameter);
 
         assertTrue(resultOptional.isPresent());
         ArticularItem result = resultOptional.get();
@@ -515,7 +515,7 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id1", 1L);
 
         assertThrows(RuntimeException.class, () -> {
-            dao.getOptionalEntity(parameter);
+           dao.getNamedQueryOptionalEntity("", parameter);
         });
 
     }
@@ -526,7 +526,7 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id", 1L);
 
         ArticularItem articularItem = prepareTestItemDataOption();
-        ArticularItem result = dao.getEntity(parameter);
+        ArticularItem result = dao.getNamedQueryEntity("", parameter);
 
         checkItem(articularItem, result);
     }
@@ -536,7 +536,7 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id1", 1L);
 
         assertThrows(RuntimeException.class, () -> {
-            dao.getEntity(parameter);
+            dao.getNamedQueryEntity("", parameter);
         });
     }
 

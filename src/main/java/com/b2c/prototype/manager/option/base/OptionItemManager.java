@@ -46,7 +46,7 @@ public class OptionItemManager implements IOptionItemManager {
             OptionGroup newOptionGroup = transformationFunctionService.getEntity(
                     OptionGroup.class,
                     singleOptionItemDto);
-            OptionGroup existingOptionGroup = searchService.getOptionalEntityGraph(
+            OptionGroup existingOptionGroup = searchService.getGraphOptionalEntity(
                             OptionGroup.class,
                             "optionGroup.withOptionItems",
                             parameterFactory.createStringParameter(VALUE, singleOptionItemDto.getOptionGroup().getValue()))
@@ -140,7 +140,7 @@ public class OptionItemManager implements IOptionItemManager {
                         .filter(optionItem -> optionItem.getValue().equals(optionValue))
                         .findFirst()
                         .ifPresent(optionItem -> {
-                            List<ArticularItem> articularItemList = searchService.getEntityListNamedQuery(
+                            List<ArticularItem> articularItemList = searchService.getNamedQueryEntityList(
                                     ArticularItem.class,
                                     "ArticularItem.findByOptionItemValue",
                                     parameterFactory.createStringParameter(VALUE, optionValue));
@@ -157,7 +157,7 @@ public class OptionItemManager implements IOptionItemManager {
 
     @Override
     public OptionGroupOptionItemSetDto getOptionItemListByOptionGroup(String optionGroup) {
-        return searchService.getEntityGraphDto(
+        return searchService.getGraphEntityDto(
                 OptionGroup.class,
                 "optionGroup.withOptionItems",
                 parameterFactory.createStringParameter(VALUE, optionGroup),
@@ -166,7 +166,7 @@ public class OptionItemManager implements IOptionItemManager {
 
     @Override
     public List<OptionGroupOptionItemSetDto> getOptionItemByItemArticularId(String articularId) {
-        return (List<OptionGroupOptionItemSetDto>) searchService.getEntityGraphDto(
+        return (List<OptionGroupOptionItemSetDto>) searchService.getGraphEntityDto(
                 ArticularItem.class,
                 "articularItem.optionItems",
                 parameterFactory.createStringParameter(ARTICULAR_ID, articularId),
@@ -175,7 +175,7 @@ public class OptionItemManager implements IOptionItemManager {
 
     @Override
     public List<OptionGroupOptionItemSetDto> getOptionItemList() {
-        return searchService.getEntityGraphDtoList(
+        return searchService.getGraphEntityDtoList(
                 OptionGroup.class,
                 "optionGroup.withOptionItems",
                 transformationFunctionService.getTransformationFunction(OptionGroup.class, OptionGroupOptionItemSetDto.class));

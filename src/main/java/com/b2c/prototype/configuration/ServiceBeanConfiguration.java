@@ -27,7 +27,7 @@ import com.b2c.prototype.dao.rating.IRatingDao;
 import com.b2c.prototype.dao.store.ICountTypeDao;
 import com.b2c.prototype.dao.user.IContactInfoDao;
 import com.b2c.prototype.dao.user.ICountryPhoneCodeDao;
-import com.b2c.prototype.dao.user.IUserProfileDao;
+import com.b2c.prototype.dao.user.IUserDetailsDao;
 import com.b2c.prototype.gateway.IRestClient;
 import com.b2c.prototype.gateway.RestClient;
 import com.b2c.prototype.manager.address.IAddressManager;
@@ -80,12 +80,12 @@ import com.b2c.prototype.manager.rating.IRatingManager;
 import com.b2c.prototype.manager.rating.base.RatingManager;
 import com.b2c.prototype.manager.store.ICountTypeManager;
 import com.b2c.prototype.manager.store.base.CountTypeManager;
-import com.b2c.prototype.manager.userprofile.IContactInfoManager;
-import com.b2c.prototype.manager.userprofile.ICountryPhoneCodeManager;
-import com.b2c.prototype.manager.userprofile.IUserDetailsManager;
-import com.b2c.prototype.manager.userprofile.basic.ContactInfoManager;
-import com.b2c.prototype.manager.userprofile.basic.CountryPhoneCodeManager;
-import com.b2c.prototype.manager.userprofile.basic.UserDetailsManager;
+import com.b2c.prototype.manager.userdetails.IContactInfoManager;
+import com.b2c.prototype.manager.userdetails.ICountryPhoneCodeManager;
+import com.b2c.prototype.manager.userdetails.IUserDetailsManager;
+import com.b2c.prototype.manager.userdetails.basic.ContactInfoManager;
+import com.b2c.prototype.manager.userdetails.basic.CountryPhoneCodeManager;
+import com.b2c.prototype.manager.userdetails.basic.UserDetailsManager;
 import com.b2c.prototype.processor.constant.ConstantProcessorService;
 import com.b2c.prototype.processor.constant.IConstantProcessorService;
 import com.b2c.prototype.processor.discount.DiscountProcess;
@@ -242,19 +242,20 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public IUserDetailsManager userDetailsManager(IUserProfileDao userProfileDao,
+    public IUserDetailsManager userDetailsManager(IUserDetailsDao userDetailsDao,
                                                   ITransformationFunctionService transformationFunctionService,
-                                                  ISupplierService supplierService,
+                                                  IQueryService queryService,
                                                   IParameterFactory parameterFactory) {
-        return new UserDetailsManager(userProfileDao, transformationFunctionService, supplierService, parameterFactory);
+        return new UserDetailsManager(userDetailsDao, transformationFunctionService, queryService, parameterFactory);
     }
 
     @Bean
     public IContactInfoManager contactInfoManager(IContactInfoDao contactInfoDao,
                                                   ISearchService searchService,
                                                   ITransformationFunctionService transformationFunctionService,
-                                                  ISupplierService supplierService) {
-        return new ContactInfoManager(contactInfoDao, searchService, transformationFunctionService, supplierService);
+                                                  ISupplierService supplierService,
+                                                  IParameterFactory parameterFactory) {
+        return new ContactInfoManager(contactInfoDao, searchService, transformationFunctionService, supplierService, parameterFactory);
     }
 
     @Bean
@@ -324,16 +325,18 @@ public class ServiceBeanConfiguration {
     public IAddressManager addressManager(IAddressDao addressDao,
                                           ISearchService searchService,
                                           ITransformationFunctionService transformationFunctionService,
-                                          ISupplierService supplierService) {
-        return new AddressManager(addressDao, searchService, transformationFunctionService, supplierService);
+                                          ISupplierService supplierService,
+                                          IParameterFactory parameterFactory) {
+        return new AddressManager(addressDao, searchService, transformationFunctionService, supplierService, parameterFactory);
     }
 
     @Bean
     public IDeliveryManager deliveryManager(IDeliveryDao deliveryDao,
                                             ISearchService searchService,
                                             ITransformationFunctionService transformationFunctionService,
-                                            ISupplierService supplierService) {
-        return new DeliveryManager(deliveryDao, searchService, transformationFunctionService, supplierService);
+                                            ISupplierService supplierService,
+                                            IParameterFactory parameterFactory) {
+        return new DeliveryManager(deliveryDao, searchService, transformationFunctionService, supplierService, parameterFactory);
     }
 
     @Bean

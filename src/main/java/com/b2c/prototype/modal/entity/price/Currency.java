@@ -1,6 +1,6 @@
 package com.b2c.prototype.modal.entity.price;
 
-import com.b2c.prototype.modal.base.AbstractConstantEntity;
+import com.b2c.prototype.modal.base.constant.AbstractConstantEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
@@ -16,6 +16,10 @@ import lombok.experimental.SuperBuilder;
         @NamedQuery(
                 name = "Currency.findByValue",
                 query = "SELECT c FROM Currency c WHERE c.value = : value"
+        ),
+        @NamedQuery(
+                name = "Currency.all",
+                query = "SELECT c FROM Currency c"
         )
 })
 public class Currency extends AbstractConstantEntity {

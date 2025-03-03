@@ -66,8 +66,8 @@ class StoreManagerTest {
 
         when(supplierService.parameterStringSupplier(ARTICULAR_ID, storeDto.getArticularId()))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(ArticularItem.class, parameterSupplier))
-                .thenReturn(articularItem);
+//        when(queryService.getEntity(ArticularItem.class, parameterSupplier))
+//                .thenReturn(articularItem);
 
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -125,11 +125,11 @@ class StoreManagerTest {
         Function<ArticularItem, Store> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(ArticularItem.class, Store.class))
                 .thenReturn(function);
-        when(supplierService.entityFieldSupplier(
-                ArticularItem.class,
-                parameterSupplier,
-                function
-        )).thenReturn(storeSupplier);
+//        when(supplierService.entityFieldSupplier(
+//                ArticularItem.class,
+//                parameterSupplier,
+//                function
+//        )).thenReturn(storeSupplier);
 
         storeManager.deleteStore(articularId);
 
@@ -149,7 +149,7 @@ class StoreManagerTest {
         Function<Store, ResponseStoreDto> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(Store.class, ResponseStoreDto.class))
                 .thenReturn(function);
-        when(storeDao.getEntityGraph(anyString(), eq(parameter))).thenReturn(store);
+        when(storeDao.getGraphEntity(anyString(), eq(parameter))).thenReturn(store);
         when(function.apply(store)).thenReturn(responseStoreDto);
 
         ResponseStoreDto result = storeManager.getStoreResponse(articularId);
@@ -167,7 +167,7 @@ class StoreManagerTest {
         Function<Store, ResponseStoreDto> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(Store.class, ResponseStoreDto.class))
                 .thenReturn(function);
-        when(storeDao.getEntityList()).thenReturn(List.of(store));
+//        when(storeDao.getEntityList()).thenReturn(List.of(store));
         when(function.apply(store)).thenReturn(responseStoreDto);
 
         List<ResponseStoreDto> result = storeManager.getAllStoreResponse();

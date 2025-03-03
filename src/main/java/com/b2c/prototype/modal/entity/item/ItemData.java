@@ -13,6 +13,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedAttributeNode;
 import jakarta.persistence.NamedEntityGraph;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.NamedSubgraph;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -70,6 +72,12 @@ import java.util.Set;
                 )
         }
 )
+@NamedQueries({
+        @NamedQuery(
+                name = "ItemData.default",
+                query = "SELECT d FROM ItemData d WHERE d.itemId = :itemId"
+        )
+})
 @Data
 @Builder
 @NoArgsConstructor

@@ -15,6 +15,7 @@ public class OptionGroupManager extends AbstractConstantEntityManager<ConstantPa
                               IEntityDao optionGroupDao,
                               ITransformationFunctionService transformationFunctionService) {
         super(parameterFactory, optionGroupDao,
+                "",
                 transformationFunctionService.getTransformationFunction(ConstantPayloadDto.class, OptionGroup.class),
                 transformationFunctionService.getTransformationFunction(OptionGroup.class, ConstantPayloadDto.class)
         );

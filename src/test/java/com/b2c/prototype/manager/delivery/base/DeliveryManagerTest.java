@@ -29,7 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -66,8 +65,8 @@ class DeliveryManagerTest {
         when(orderItemDataOption.getDelivery()).thenReturn(existingDelivery);
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
-                .thenReturn(orderItemDataOption);
+//        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
+//                .thenReturn(orderItemDataOption);
         when(transformationFunctionService.getEntity(Delivery.class, deliveryDto))
                 .thenReturn(newDelivery);
         doAnswer(invocation -> {
@@ -98,8 +97,8 @@ class DeliveryManagerTest {
         when(orderItemDataOption.getDelivery()).thenReturn(existingDelivery);
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
-                .thenReturn(orderItemDataOption);
+//        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
+//                .thenReturn(orderItemDataOption);
         when(transformationFunctionService.getEntity(Delivery.class, deliveryDto))
                 .thenReturn(newDelivery);
         doAnswer(invocation -> {
@@ -128,11 +127,11 @@ class DeliveryManagerTest {
                 .thenReturn(function);
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-        when(supplierService.entityFieldSupplier(
-                OrderArticularItem.class,
-                parameterSupplier,
-                function
-        )).thenReturn(deliverySupplier);
+//        when(supplierService.entityFieldSupplier(
+//                OrderArticularItem.class,
+//                parameterSupplier,
+//                function
+//        )).thenReturn(deliverySupplier);
 
         deliveryManager.deleteDelivery(orderId);
 
@@ -151,8 +150,8 @@ class DeliveryManagerTest {
         Function<OrderArticularItem, DeliveryDto> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(OrderArticularItem.class, DeliveryDto.class))
                 .thenReturn(function);
-        when(queryService.getEntityDto(OrderArticularItem.class, parameterSupplier, function))
-                .thenReturn(deliveryDto);
+//        when(queryService.getEntityDto(OrderArticularItem.class, parameterSupplier, function))
+//                .thenReturn(deliveryDto);
 
         DeliveryDto result = deliveryManager.getDelivery(orderId);
 
@@ -167,8 +166,7 @@ class DeliveryManagerTest {
         when(transformationFunctionService.getTransformationFunction(Delivery.class, DeliveryDto.class))
                 .thenReturn(function);
         when(function.apply(delivery)).thenReturn(deliveryDto);
-        when(deliveryDao.getEntityList())
-                .thenReturn(List.of(delivery));
+//        when(deliveryDao.getEntityList()).thenReturn(List.of(delivery));
         List<DeliveryDto> resultList = deliveryManager.getDeliveries();
 
         assertNotNull(resultList);

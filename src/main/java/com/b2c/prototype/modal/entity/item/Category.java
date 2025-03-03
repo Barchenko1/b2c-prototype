@@ -34,6 +34,10 @@ import java.util.List;
         @NamedQuery(
                 name = "Category.findByValue",
                 query = "SELECT c FROM Category c WHERE c.value = :value"
+        ),
+        @NamedQuery(
+                name = "Category.all",
+                query = "SELECT c FROM Category c"
         )
 })
 public class Category extends TransitiveSelfEntity {

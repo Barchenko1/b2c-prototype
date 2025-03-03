@@ -1,6 +1,6 @@
 package com.b2c.prototype.modal.entity.item;
 
-import com.b2c.prototype.modal.base.AbstractConstantEntity;
+import com.b2c.prototype.modal.base.constant.AbstractConstantEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
@@ -16,6 +16,10 @@ import lombok.experimental.SuperBuilder;
         @NamedQuery(
                 name = "ItemType.findByValue",
                 query = "SELECT i FROM ItemType i WHERE i.value = : value"
+        ),
+        @NamedQuery(
+                name = "ItemType.all",
+                query = "SELECT i FROM ItemType i"
         )
 })
 public class ItemType extends AbstractConstantEntity {

@@ -129,7 +129,7 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id", 1L);
         OptionItem optionItem = prepareTestOptionItem();
         List<OptionItem> resultList =
-                dao.getEntityList(parameter);
+                dao.getNamedQueryEntityList("", parameter);
 
         assertEquals(1, resultList.size());
         resultList.forEach(result -> checkOptionItem(optionItem, result));
@@ -140,7 +140,7 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id1", 1L);
 
         assertThrows(RuntimeException.class, () -> {
-            dao.getEntityList(parameter);
+            dao.getNamedQueryEntityList("", parameter);
         });
     }
 
@@ -374,7 +374,7 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id", 1L);
         OptionItem optionItem = prepareTestOptionItem();
         Optional<OptionItem> resultOptional =
-                dao.getOptionalEntity(parameter);
+               dao.getNamedQueryOptionalEntity("", parameter);
 
         assertTrue(resultOptional.isPresent());
         OptionItem result = resultOptional.get();
@@ -387,7 +387,7 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id1", 1L);
 
         assertThrows(RuntimeException.class, () -> {
-            dao.getOptionalEntity(parameter);
+           dao.getNamedQueryOptionalEntity("", parameter);
         });
 
     }
@@ -399,7 +399,7 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
 
         OptionItem optionItem = prepareTestOptionItem();
 
-        OptionItem result = dao.getEntity(parameter);
+        OptionItem result = dao.getNamedQueryEntity("", parameter);
 
         checkOptionItem(optionItem, result);
     }
@@ -409,7 +409,7 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
         Parameter parameter = new Parameter("id1", 1L);
 
         assertThrows(RuntimeException.class, () -> {
-            dao.getEntity(parameter);
+            dao.getNamedQueryEntity("", parameter);
         });
     }
 

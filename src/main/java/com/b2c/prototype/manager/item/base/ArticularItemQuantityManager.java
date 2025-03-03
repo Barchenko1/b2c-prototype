@@ -12,6 +12,7 @@ import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.item.IArticularItemQuantityManager;
 import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
+import com.tm.core.finder.factory.IParameterFactory;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 
@@ -26,15 +27,18 @@ public class ArticularItemQuantityManager implements IArticularItemQuantityManag
     private final ISearchService searchService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
+    private final IParameterFactory parameterFactory;
 
     public ArticularItemQuantityManager(IItemDataOptionQuantityDao itemDataOptionQuantityDao,
                                         ISearchService searchService,
                                         ITransformationFunctionService transformationFunctionService,
-                                        ISupplierService supplierService) {
+                                        ISupplierService supplierService,
+                                        IParameterFactory parameterFactory) {
         this.entityOperationDao = new EntityOperationManager(itemDataOptionQuantityDao);
         this.searchService = searchService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
+        this.parameterFactory = parameterFactory;
     }
 
     @Override
@@ -142,9 +146,10 @@ public class ArticularItemQuantityManager implements IArticularItemQuantityManag
     }
 
     private ArticularItemQuantity updateOneIncrementCounter(ItemDataOptionOneQuantityDto itemDataOptionOneQuantityDto, boolean increase) {
-        OrderArticularItem orderItemDataOption = searchService.getEntity(
+        OrderArticularItem orderItemDataOption = searchService.getNamedQueryEntity(
                 OrderArticularItem.class,
-                supplierService.parameterStringSupplier(ORDER_ID, itemDataOptionOneQuantityDto.getOrderId()));
+                "",
+                parameterFactory.createStringParameter(ORDER_ID, itemDataOptionOneQuantityDto.getArticularId()));
         ArticularItemQuantity existingArticularItemQuantity = orderItemDataOption.getArticularItemQuantityList().stream()
                 .filter(idq ->
                         idq.getArticularItem().getArticularId().equals(itemDataOptionOneQuantityDto.getArticularId()))
@@ -159,9 +164,10 @@ public class ArticularItemQuantityManager implements IArticularItemQuantityManag
     }
 
     private ArticularItemQuantity updateCounter(ArticularItemQuantityDto articularItemQuantityDto, boolean increase) {
-        OrderArticularItem orderItemDataOption = searchService.getEntity(
+        OrderArticularItem orderItemDataOption = searchService.getNamedQueryEntity(
                 OrderArticularItem.class,
-                supplierService.parameterStringSupplier(ORDER_ID, null));
+                "",
+                parameterFactory.createStringParameter(ORDER_ID, null));
         ArticularItemQuantity existingArticularItemQuantity = orderItemDataOption.getArticularItemQuantityList().stream()
                 .filter(idq ->
                         idq.getArticularItem().getArticularId().equals(articularItemQuantityDto.getArticularId()))

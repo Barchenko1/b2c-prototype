@@ -83,7 +83,7 @@ public class ArticularItemManager implements IArticularItemManager {
 
     @Override
     public ResponseArticularItemDto getResponseArticularItemDto(String articularId) {
-        return entityOperationDao.getEntityGraphDto(
+        return entityOperationDao.getGraphEntityDto(
                 ARTICULAR_ITEM_FULL,
                 parameterFactory.createStringParameter(ARTICULAR_ID, articularId),
                 transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class));
@@ -91,7 +91,7 @@ public class ArticularItemManager implements IArticularItemManager {
 
     @Override
     public List<ResponseArticularItemDto> getResponseArticularItemDtoList() {
-        return entityOperationDao.getEntityGraphDtoList(
+        return entityOperationDao.getGraphEntityDtoList(
                 ARTICULAR_ITEM_FULL,
                 transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class));
 
@@ -99,14 +99,14 @@ public class ArticularItemManager implements IArticularItemManager {
 
     @Override
     public List<ResponseArticularItemDto> getResponseArticularItemDtoFiltered() {
-        return entityOperationDao.getEntityGraphDtoList(
+        return entityOperationDao.getGraphEntityDtoList(
                 ARTICULAR_ITEM_FULL,
                 transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class));
     }
 
     @Override
     public List<ResponseArticularItemDto> getResponseArticularItemDtoSorted(String sortType) {
-        return entityOperationDao.getEntityGraphDtoList(
+        return entityOperationDao.getGraphEntityDtoList(
                 ARTICULAR_ITEM_FULL,
                 transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class));
     }
