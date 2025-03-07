@@ -51,7 +51,6 @@ dependencies {
 	implementation 'com.tm.core:tm-sdk:1.0-SNAPSHOT'
 
 	// Micrometer and PostgreSQL
-	runtimeOnly 'io.micrometer:micrometer-registry-new-relic'
 	runtimeOnly 'org.postgresql:postgresql'
 	runtimeOnly 'org.hibernate.orm:hibernate-community-dialects'
 

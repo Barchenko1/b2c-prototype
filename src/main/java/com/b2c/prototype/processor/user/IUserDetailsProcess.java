@@ -12,6 +12,8 @@ public interface IUserDetailsProcess {
     void saveUserDetails(Map<String, String> requestParams, UserDetailsDto userDetailsDto);
     void updateUserDetailsByUserId(Map<String, String> requestParams, UserDetailsDto userDetailsDto);
     void updateUserStatusByUserId(Map<String, String> requestParams);
+    void updateUserVerifyEmailByUserId(Map<String, String> requestParams);
+    void updateUserVerifyPhoneByUserId(Map<String, String> requestParams);
     void deleteUserDetailsByUserId(Map<String, String> requestParams);
 
     ResponseUserDetailsDto getUserDetailsByUserId(Map<String, String> requestParams);

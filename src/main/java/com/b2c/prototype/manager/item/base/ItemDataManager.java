@@ -7,10 +7,10 @@ import com.b2c.prototype.modal.dto.response.ResponseItemDataDto;
 import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.item.IItemDataManager;
-import com.b2c.prototype.service.common.EntityOperationManager;
-import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.factory.IParameterFactory;
+import com.tm.core.process.manager.common.EntityOperationManager;
+import com.tm.core.process.manager.common.IEntityOperationManager;
 
 import java.util.List;
 
@@ -67,7 +67,7 @@ public class ItemDataManager implements IItemDataManager {
     @Override
     public void deleteItemData(String itemId) {
         entityOperationDao.deleteEntityByParameter(
-                supplierService.parameterStringSupplier("itemId", itemId));
+                parameterFactory.createStringParameter(ITEM_ID, itemId));
     }
 
     @Override

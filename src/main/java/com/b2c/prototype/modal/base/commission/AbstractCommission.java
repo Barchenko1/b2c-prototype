@@ -32,7 +32,7 @@ public class AbstractCommission {
     @Enumerated(EnumType.STRING)
     @Column(name = "fee_type", nullable = false)
     private FeeType feeType;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE}, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     private Currency currency;
     @Column(name = "effective_date", nullable = false)
     private LocalDateTime effectiveDate;

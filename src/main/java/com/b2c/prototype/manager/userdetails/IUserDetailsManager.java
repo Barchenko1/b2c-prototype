@@ -11,6 +11,8 @@ public interface IUserDetailsManager {
     void saveUserDetails(UserDetailsDto userDetailsDto);
     void updateUserDetailsByUserId(String userId, UserDetailsDto userDetailsDto);
     void updateUserStatusByUserId(String userId, boolean status);
+    void updateUserVerifyEmailByUserId(String userId, boolean verifyEmail);
+    void updateUserVerifyPhoneByUserId(String userId, boolean verifyPhone);
     void deleteUserDetailsByUserId(String userId);
 
     ResponseUserDetailsDto getUserDetailsByUserId(String userId);

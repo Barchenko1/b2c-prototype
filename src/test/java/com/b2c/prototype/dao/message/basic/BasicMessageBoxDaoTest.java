@@ -132,7 +132,7 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
                 .dateOfCreate(100)
                 .isActive(true)
                 .contactInfo(contactInfo)
-                .addresses(Set.of(address))
+//                .addresses(Set.of(address))
                 .userCreditCardList(Set.of(userCreditCard))
                 .build();
     }

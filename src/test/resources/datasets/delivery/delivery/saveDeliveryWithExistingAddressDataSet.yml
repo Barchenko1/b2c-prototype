@@ -9,7 +9,6 @@ country:
 address:
   - id: 1
     street: "street"
-    street2: "street2"
     buildingNumber: 1
     florNumber: 9
     apartmentNumber: 101

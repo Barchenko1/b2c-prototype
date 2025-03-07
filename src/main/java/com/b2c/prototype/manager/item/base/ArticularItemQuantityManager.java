@@ -4,15 +4,15 @@ import com.b2c.prototype.dao.item.IItemDataOptionQuantityDao;
 import com.b2c.prototype.modal.dto.payload.ItemDataOptionOneQuantityDto;
 import com.b2c.prototype.modal.dto.payload.ArticularItemQuantityDto;
 import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
-import com.b2c.prototype.modal.entity.order.OrderArticularItem;
+import com.b2c.prototype.modal.entity.order.OrderArticularItemQuantity;
 import com.b2c.prototype.modal.entity.store.Store;
-import com.b2c.prototype.service.common.EntityOperationManager;
-import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.item.IArticularItemQuantityManager;
 import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.factory.IParameterFactory;
+import com.tm.core.process.manager.common.EntityOperationManager;
+import com.tm.core.process.manager.common.IEntityOperationManager;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 
@@ -146,15 +146,11 @@ public class ArticularItemQuantityManager implements IArticularItemQuantityManag
     }
 
     private ArticularItemQuantity updateOneIncrementCounter(ItemDataOptionOneQuantityDto itemDataOptionOneQuantityDto, boolean increase) {
-        OrderArticularItem orderItemDataOption = searchService.getNamedQueryEntity(
-                OrderArticularItem.class,
+        OrderArticularItemQuantity orderItemDataOption = searchService.getNamedQueryEntity(
+                OrderArticularItemQuantity.class,
                 "",
                 parameterFactory.createStringParameter(ORDER_ID, itemDataOptionOneQuantityDto.getArticularId()));
-        ArticularItemQuantity existingArticularItemQuantity = orderItemDataOption.getArticularItemQuantityList().stream()
-                .filter(idq ->
-                        idq.getArticularItem().getArticularId().equals(itemDataOptionOneQuantityDto.getArticularId()))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException());
+        ArticularItemQuantity existingArticularItemQuantity = orderItemDataOption.getArticularItemQuantity();
         int existingItemDataQuantityQuantityCount = existingArticularItemQuantity.getQuantity();
         int count = increase
                 ? existingItemDataQuantityQuantityCount + 1
@@ -164,15 +160,11 @@ public class ArticularItemQuantityManager implements IArticularItemQuantityManag
     }
 
     private ArticularItemQuantity updateCounter(ArticularItemQuantityDto articularItemQuantityDto, boolean increase) {
-        OrderArticularItem orderItemDataOption = searchService.getNamedQueryEntity(
-                OrderArticularItem.class,
+        OrderArticularItemQuantity orderItemDataOption = searchService.getNamedQueryEntity(
+                OrderArticularItemQuantity.class,
                 "",
                 parameterFactory.createStringParameter(ORDER_ID, null));
-        ArticularItemQuantity existingArticularItemQuantity = orderItemDataOption.getArticularItemQuantityList().stream()
-                .filter(idq ->
-                        idq.getArticularItem().getArticularId().equals(articularItemQuantityDto.getArticularId()))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException());
+        ArticularItemQuantity existingArticularItemQuantity = orderItemDataOption.getArticularItemQuantity();
         int existingItemDataQuantityQuantityCount = existingArticularItemQuantity.getQuantity();
         int counter = increase
                 ? existingItemDataQuantityQuantityCount + articularItemQuantityDto.getQuantity()

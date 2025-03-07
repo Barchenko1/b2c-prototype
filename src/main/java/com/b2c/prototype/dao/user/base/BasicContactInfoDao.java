@@ -1,7 +1,6 @@
 package com.b2c.prototype.dao.user.base;
 
 import com.b2c.prototype.dao.user.IContactInfoDao;
-import com.b2c.prototype.modal.entity.order.Beneficiary;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.tm.core.process.dao.common.AbstractEntityDao;
 import com.tm.core.process.dao.identifier.IQueryService;

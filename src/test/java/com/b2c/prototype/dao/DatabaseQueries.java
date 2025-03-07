@@ -16,8 +16,7 @@ public final class DatabaseQueries {
             statement.execute("DELETE FROM message_receivers");
             statement.execute("DELETE FROM articular_item_option_item");
             statement.execute("DELETE FROM articular_item_quantity");
-            statement.execute("DELETE FROM beneficiary");
-            statement.execute("DELETE FROM order_articular_item");
+            statement.execute("DELETE FROM order_articular_item_quantity");
             statement.execute("DELETE FROM item_review");
             statement.execute("DELETE FROM message_box");
             statement.execute("DELETE FROM item");
@@ -28,12 +27,16 @@ public final class DatabaseQueries {
             statement.execute("DELETE FROM payment");
             statement.execute("DELETE FROM review");
             statement.execute("DELETE FROM rating");
+            statement.execute("DELETE FROM time_duration_option");
+            statement.execute("DELETE FROM zone_option");
             statement.execute("DELETE FROM price");
 
             statement.execute("DELETE FROM message_box");
+            statement.execute("DELETE FROM user_address");
             statement.execute("DELETE FROM address");
             statement.execute("DELETE FROM user_credit_card");
             statement.execute("DELETE FROM credit_card");
+            statement.execute("DELETE FROM device");
             statement.execute("DELETE FROM user_details");
             statement.execute("DELETE FROM contact_info");
             statement.execute("DELETE FROM contact_phone");

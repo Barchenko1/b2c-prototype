@@ -1,6 +1,7 @@
 package com.b2c.prototype.manager.address;
 
 import com.b2c.prototype.modal.dto.payload.AddressDto;
+import com.b2c.prototype.modal.dto.response.ResponseUserAddressDto;
 
 import java.util.List;
 
@@ -10,8 +11,7 @@ public interface IAddressManager {
     void deleteAppUserAddress(String userId);
     void deleteDeliveryAddress(String orderId);
 
-    AddressDto getAddressByUserId(String userId);
+    List<ResponseUserAddressDto> getAddressesByUserId(String userId);
     AddressDto getAddressByOrderId(String orderId);
-
     List<AddressDto> getAddresses();
 }

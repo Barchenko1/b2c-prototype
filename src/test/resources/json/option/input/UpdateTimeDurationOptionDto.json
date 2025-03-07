@@ -1,0 +1,11 @@
+{
+  "label": "8-10",
+  "value": "8-10",
+  "startTime": "08:00:00",
+  "endTime": "10:00:00",
+  "duration": 120,
+  "price": {
+    "amount": 25,
+    "currency": "USD"
+  }
+}

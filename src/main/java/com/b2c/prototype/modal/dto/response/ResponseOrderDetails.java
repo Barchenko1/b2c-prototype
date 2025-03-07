@@ -1,6 +1,6 @@
 package com.b2c.prototype.modal.dto.response;
 
-import com.b2c.prototype.modal.dto.payload.BeneficiaryDto;
+import com.b2c.prototype.modal.dto.payload.ContactInfoDto;
 import com.b2c.prototype.modal.dto.payload.DeliveryDto;
 import com.b2c.prototype.modal.dto.payload.ArticularItemQuantityDto;
 import com.b2c.prototype.modal.dto.payload.PaymentDto;
@@ -19,7 +19,7 @@ public class ResponseOrderDetails {
     private UserDetailsDto userDetails;
     private Set<ArticularItemQuantityDto> itemDataOptionQuantities;
     private DeliveryDto delivery;
-    private List<BeneficiaryDto> beneficiaries;
+    private ContactInfoDto beneficiary;
     private PaymentDto payment;
     private String orderStatus;
     private String note;

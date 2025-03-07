@@ -1,6 +1,8 @@
 package com.b2c.prototype.modal.entity.delivery;
 
 import com.b2c.prototype.modal.base.delivery.AbstractDelivery;
+import com.b2c.prototype.modal.entity.option.TimeDurationOption;
+import com.b2c.prototype.modal.entity.option.ZoneOption;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

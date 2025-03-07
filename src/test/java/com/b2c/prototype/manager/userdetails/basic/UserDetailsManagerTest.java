@@ -157,7 +157,6 @@ class UserDetailsManagerTest {
                         .country("+11")
                         .city("city")
                         .street("street")
-                        .street2("street2")
                         .buildingNumber(1)
                         .florNumber(9)
                         .apartmentNumber(101)
@@ -208,7 +207,6 @@ class UserDetailsManagerTest {
                 .country(country)
                 .city("city")
                 .street("street")
-                .street2("street2")
                 .buildingNumber(1)
                 .apartmentNumber(101)
                 .florNumber(9)
@@ -234,7 +232,7 @@ class UserDetailsManagerTest {
                 .dateOfCreate(100)
                 .isActive(true)
                 .contactInfo(contactInfo)
-                .addresses(Set.of(address))
+//                .addresses(Set.of(address))
                 .userCreditCardList(Set.of(userCreditCard))
                 .build();
     }
@@ -249,14 +247,13 @@ class UserDetailsManagerTest {
                 .firstName(userDetails.getContactInfo().getFirstName())
                 .lastName(userDetails.getContactInfo().getLastName())
                 .build();
-        Address address = (Address) userDetails.getAddresses().stream().toList().get(0);
+        Address address = (Address) userDetails.getUserAddresses().stream().toList().get(0).getAddress();
         AddressDto addressDto = AddressDto.builder()
                 .apartmentNumber(address.getApartmentNumber())
                 .buildingNumber(address.getBuildingNumber())
                 .city(address.getCity())
                 .zipCode(address.getZipCode())
                 .street(address.getStreet())
-                .street2(address.getStreet2())
                 .florNumber(address.getFlorNumber())
                 .country(address.getCountry().getValue())
                 .build();

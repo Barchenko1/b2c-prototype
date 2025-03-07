@@ -37,7 +37,6 @@ class OrderControllerE2ETest extends BasicE2ETest {
             statement.execute("DELETE FROM order_articular_item");
             statement.execute("DELETE FROM order_status");
 
-//            statement.execute("ALTER SEQUENCE discount_id_seq RESTART WITH 2");
             connection.commit();
         } catch (Exception e) {
             throw new RuntimeException("Failed to clean table: order_articular_item", e);

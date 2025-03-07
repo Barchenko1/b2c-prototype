@@ -21,8 +21,9 @@ import lombok.experimental.SuperBuilder;
                 name = "UserDetails.findByUserId",
                 query = "SELECT DISTINCT u FROM UserDetails u " +
                         "LEFT JOIN FETCH u.contactInfo " +
-                        "LEFT JOIN FETCH u.addresses " +
+                        "LEFT JOIN FETCH u.userAddresses " +
                         "LEFT JOIN FETCH u.userCreditCardList " +
+                        "LEFT JOIN FETCH u.devices d " +
                         "WHERE u.userId = :userId"
         ),
         @NamedQuery(
@@ -31,8 +32,9 @@ import lombok.experimental.SuperBuilder;
                         "LEFT JOIN FETCH u.contactInfo ci " +
                         "LEFT JOIN FETCH ci.contactPhone cp " +
                         "LEFT JOIN FETCH cp.countryPhoneCode cpc " +
-                        "LEFT JOIN FETCH u.addresses " +
+                        "LEFT JOIN FETCH u.userAddresses " +
                         "LEFT JOIN FETCH u.userCreditCardList " +
+                        "LEFT JOIN FETCH u.devices d " +
                         "WHERE u.userId = :userId"
         ),
         @NamedQuery(
@@ -41,8 +43,9 @@ import lombok.experimental.SuperBuilder;
                         "LEFT JOIN FETCH u.contactInfo ci " +
                         "LEFT JOIN FETCH ci.contactPhone cp " +
                         "LEFT JOIN FETCH cp.countryPhoneCode cpc " +
-                        "LEFT JOIN FETCH u.addresses " +
-                        "LEFT JOIN FETCH u.userCreditCardList "
+                        "LEFT JOIN FETCH u.userAddresses " +
+                        "LEFT JOIN FETCH u.userCreditCardList " +
+                        "LEFT JOIN FETCH u.devices d "
         )
 })
 public class UserDetails extends AbstractUserDetails {

@@ -6,12 +6,12 @@ import com.b2c.prototype.modal.dto.response.ResponseUserDetailsDto;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.dao.user.IUserDetailsDao;
 
-import com.b2c.prototype.service.common.EntityOperationManager;
-import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.userdetails.IUserDetailsManager;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.dao.identifier.IQueryService;
+import com.tm.core.process.manager.common.EntityOperationManager;
+import com.tm.core.process.manager.common.IEntityOperationManager;
 
 import java.util.List;
 
@@ -59,7 +59,7 @@ public class UserDetailsManager implements IUserDetailsManager {
                     transformationFunctionService.getEntity(session, UserDetails.class, userDetailsDto);
             userDetails.setId(existingUserDetails.getId());
             userDetails.getContactInfo().setId(existingUserDetails.getContactInfo().getId());
-            existingUserDetails.getAddresses().forEach(session::remove);
+            existingUserDetails.getUserAddresses().forEach(session::remove);
             existingUserDetails.getUserCreditCardList().forEach(session::remove);
             session.merge(userDetails);
         });
@@ -72,6 +72,28 @@ public class UserDetailsManager implements IUserDetailsManager {
                     "UserDetails.findByUserId",
                     parameterFactory.createStringParameter(USER_ID, userId));
             existingUser.setActive(status);
+            session.merge(existingUser);
+        });
+    }
+
+    @Override
+    public void updateUserVerifyEmailByUserId(String userId, boolean verifyEmail) {
+        entityOperationDao.executeConsumer(session -> {
+            UserDetails existingUser = entityOperationDao.getNamedQueryEntity(
+                    "UserDetails.findByUserId",
+                    parameterFactory.createStringParameter(USER_ID, userId));
+            existingUser.setEmailVerified(verifyEmail);
+            session.merge(existingUser);
+        });
+    }
+
+    @Override
+    public void updateUserVerifyPhoneByUserId(String userId, boolean verifyPhone) {
+        entityOperationDao.executeConsumer(session -> {
+            UserDetails existingUser = entityOperationDao.getNamedQueryEntity(
+                    "UserDetails.findByUserId",
+                    parameterFactory.createStringParameter(USER_ID, userId));
+            existingUser.setContactPhoneVerified(verifyPhone);
             session.merge(existingUser);
         });
     }

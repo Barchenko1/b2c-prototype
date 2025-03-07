@@ -5,14 +5,13 @@ import com.b2c.prototype.modal.dto.payload.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.DiscountStatusDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.Discount;
-import com.b2c.prototype.service.common.EntityOperationManager;
-import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.item.IDiscountManager;
 import com.b2c.prototype.service.query.ISearchService;
-import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.dao.identifier.IQueryService;
+import com.tm.core.process.manager.common.EntityOperationManager;
+import com.tm.core.process.manager.common.IEntityOperationManager;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,19 +27,17 @@ public class DiscountManager implements IDiscountManager {
     private final ISearchService searchService;
     private final IQueryService queryService;
     private final ITransformationFunctionService transformationFunctionService;
-    private final ISupplierService supplierService;
     private final IParameterFactory parameterFactory;
 
     public DiscountManager(IDiscountDao discountDao,
                            ISearchService searchService,
                            IQueryService queryService,
                            ITransformationFunctionService transformationFunctionService,
-                           ISupplierService supplierService, IParameterFactory parameterFactory) {
+                           IParameterFactory parameterFactory) {
         this.entityOperationDao = new EntityOperationManager(discountDao);
         this.searchService = searchService;
         this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
-        this.supplierService = supplierService;
         this.parameterFactory = parameterFactory;
     }
 

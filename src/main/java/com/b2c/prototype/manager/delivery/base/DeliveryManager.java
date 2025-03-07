@@ -3,14 +3,14 @@ package com.b2c.prototype.manager.delivery.base;
 import com.b2c.prototype.dao.delivery.IDeliveryDao;
 import com.b2c.prototype.modal.dto.payload.DeliveryDto;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
-import com.b2c.prototype.modal.entity.order.OrderArticularItem;
-import com.b2c.prototype.service.common.EntityOperationManager;
-import com.b2c.prototype.service.common.IEntityOperationManager;
+import com.b2c.prototype.modal.entity.order.OrderArticularItemQuantity;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.delivery.IDeliveryManager;
 import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.factory.IParameterFactory;
+import com.tm.core.process.manager.common.EntityOperationManager;
+import com.tm.core.process.manager.common.IEntityOperationManager;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -41,8 +41,8 @@ public class DeliveryManager implements IDeliveryManager {
     @Override
     public void saveUpdateDelivery(String orderId, DeliveryDto deliveryDto) {
         entityOperationDao.executeConsumer(session -> {
-            OrderArticularItem orderItemDataOption = searchService.getNamedQueryEntity(
-                    OrderArticularItem.class,
+            OrderArticularItemQuantity orderItemDataOption = searchService.getNamedQueryEntity(
+                    OrderArticularItemQuantity.class,
                     "",
                     parameterFactory.createStringParameter(ORDER_ID, orderId));
             Delivery newDelivery = transformationFunctionService.getEntity(Delivery.class, deliveryDto);
@@ -59,19 +59,19 @@ public class DeliveryManager implements IDeliveryManager {
     public void deleteDelivery(String orderId) {
         entityOperationDao.deleteEntity(
                 supplierService.entityFieldSupplier(
-                        OrderArticularItem.class,
+                        OrderArticularItemQuantity.class,
                         "",
                         supplierService.parameterStringSupplier(ORDER_ID, orderId),
-                        transformationFunctionService.getTransformationFunction(OrderArticularItem.class, Delivery.class)));
+                        transformationFunctionService.getTransformationFunction(OrderArticularItemQuantity.class, Delivery.class)));
     }
 
     @Override
     public DeliveryDto getDelivery(String orderId) {
         return searchService.getNamedQueryEntityDto(
-                OrderArticularItem.class,
+                OrderArticularItemQuantity.class,
                 "",
                 parameterFactory.createStringParameter(ORDER_ID, orderId),
-                transformationFunctionService.getTransformationFunction(OrderArticularItem.class, DeliveryDto.class));
+                transformationFunctionService.getTransformationFunction(OrderArticularItemQuantity.class, DeliveryDto.class));
     }
 
     @Override

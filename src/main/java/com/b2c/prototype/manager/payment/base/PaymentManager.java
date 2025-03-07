@@ -2,21 +2,20 @@ package com.b2c.prototype.manager.payment.base;
 
 import com.b2c.prototype.dao.payment.IPaymentDao;
 import com.b2c.prototype.modal.dto.payload.PaymentDto;
-import com.b2c.prototype.modal.entity.order.OrderArticularItem;
+import com.b2c.prototype.modal.entity.order.OrderArticularItemQuantity;
 import com.b2c.prototype.modal.entity.payment.Payment;
-import com.b2c.prototype.service.common.EntityOperationManager;
-import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.payment.IPaymentManager;
 import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.factory.IParameterFactory;
+import com.tm.core.process.manager.common.EntityOperationManager;
+import com.tm.core.process.manager.common.IEntityOperationManager;
 
 import java.util.List;
 
 import static com.b2c.prototype.util.Constant.ORDER_ID;
 import static com.b2c.prototype.util.Constant.PAYMENT_ID;
-import static com.b2c.prototype.util.Util.getUUID;
 
 public class PaymentManager implements IPaymentManager {
 
@@ -41,21 +40,21 @@ public class PaymentManager implements IPaymentManager {
     @Override
     public void saveUpdatePayment(String orderId, PaymentDto paymentDto) {
         entityOperationDao.executeConsumer(session -> {
-            OrderArticularItem orderItemDataOption = searchService.getNamedQueryEntity(
-                    OrderArticularItem.class,
+            OrderArticularItemQuantity orderItemDataOption = searchService.getNamedQueryEntity(
+                    OrderArticularItemQuantity.class,
                     "",
                     parameterFactory.createStringParameter(ORDER_ID, orderId));
             Payment newPayment = transformationFunctionService.getEntity(
                     Payment.class,
                     paymentDto);
-            Payment payment = orderItemDataOption.getPayment();
-            if (payment != null) {
-                newPayment.setPaymentId(payment.getPaymentId());
-            } else {
-                newPayment.setPaymentId(getUUID());
-            }
-            orderItemDataOption.setPayment(newPayment);
-            session.merge(orderItemDataOption);
+//            Payment payment = orderItemDataOption.getPayment();
+//            if (payment != null) {
+//                newPayment.setPaymentId(payment.getPaymentId());
+//            } else {
+//                newPayment.setPaymentId(getUUID());
+//            }
+//            orderItemDataOption.setPayment(newPayment);
+//            session.merge(orderItemDataOption);
         });
     }
 
@@ -63,10 +62,10 @@ public class PaymentManager implements IPaymentManager {
     public void deletePaymentByOrderId(String orderId) {
         entityOperationDao.deleteEntity(
                 supplierService.entityFieldSupplier(
-                        OrderArticularItem.class,
+                        OrderArticularItemQuantity.class,
                         "",
                         supplierService.parameterStringSupplier(ORDER_ID, orderId),
-                        transformationFunctionService.getTransformationFunction(OrderArticularItem.class, Payment.class)));
+                        transformationFunctionService.getTransformationFunction(OrderArticularItemQuantity.class, Payment.class)));
     }
 
     @Override
@@ -81,10 +80,10 @@ public class PaymentManager implements IPaymentManager {
     @Override
     public PaymentDto getPaymentByOrderId(String orderId) {
         return searchService.getNamedQueryEntityDto(
-                OrderArticularItem.class,
+                OrderArticularItemQuantity.class,
                 "",
                 parameterFactory.createStringParameter(ORDER_ID, orderId),
-                transformationFunctionService.getTransformationFunction(OrderArticularItem.class, PaymentDto.class));
+                transformationFunctionService.getTransformationFunction(OrderArticularItemQuantity.class, PaymentDto.class));
     }
 
     @Override

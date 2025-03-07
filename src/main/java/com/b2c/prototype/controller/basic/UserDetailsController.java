@@ -59,8 +59,20 @@ public class UserDetailsController {
     }
 
     @PatchMapping(value = "/status", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> patchUserDetails(@RequestParam final Map<String, String> requestParams) {
+    public ResponseEntity<Void> patchUserDetailsStatus(@RequestParam final Map<String, String> requestParams) {
         userDetailsProcess.updateUserStatusByUserId(requestParams);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping(value = "/verifyEmail", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> patchUserDetailsEmail(@RequestParam final Map<String, String> requestParams) {
+        userDetailsProcess.updateUserVerifyEmailByUserId(requestParams);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping(value = "/verifyPhone", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> patchUserDetailsPhone(@RequestParam final Map<String, String> requestParams) {
+        userDetailsProcess.updateUserVerifyPhoneByUserId(requestParams);
         return ResponseEntity.ok().build();
     }
 

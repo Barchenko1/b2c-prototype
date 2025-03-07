@@ -28,7 +28,6 @@ public class AbstractAddress {
     private Country country;
     private String city;
     private String street;
-    private String street2;
     private int buildingNumber;
     private int florNumber;
     private int apartmentNumber;

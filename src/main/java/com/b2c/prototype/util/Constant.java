@@ -2,7 +2,7 @@ package com.b2c.prototype.util;
 
 public interface Constant {
     String USER_ID = "userId";
-    String ORDER_ID = "order_id";
+    String ORDER_ID = "orderId";
     String ARTICULAR_ID = "articularId";
     String PAYMENT_ID = "upayment_id";
     String ITEM_ID = "itemId";

@@ -3,13 +3,13 @@ package com.b2c.prototype.manager.order.base;
 import com.b2c.prototype.dao.order.IOrderItemDataDao;
 import com.b2c.prototype.modal.dto.payload.OrderArticularItemQuantityDto;
 import com.b2c.prototype.modal.dto.response.ResponseOrderDetails;
-import com.b2c.prototype.modal.entity.order.OrderArticularItem;
-import com.b2c.prototype.service.common.EntityOperationManager;
-import com.b2c.prototype.service.common.IEntityOperationManager;
+import com.b2c.prototype.modal.entity.order.OrderArticularItemQuantity;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.order.IOrderArticularItemQuantityManager;
 import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.factory.IParameterFactory;
+import com.tm.core.process.manager.common.EntityOperationManager;
+import com.tm.core.process.manager.common.IEntityOperationManager;
 
 import java.util.List;
 
@@ -35,8 +35,8 @@ public class OrderArticularItemQuantityManager implements IOrderArticularItemQua
     @Override
     public void saveOrderArticularItemQuantity(OrderArticularItemQuantityDto orderArticularItemQuantityDto) {
         entityOperationDao.executeConsumer(session -> {
-            OrderArticularItem orderItemDataOption =
-                    transformationFunctionService.getEntity(session, OrderArticularItem.class, orderArticularItemQuantityDto);
+            OrderArticularItemQuantity orderItemDataOption =
+                    transformationFunctionService.getEntity(session, OrderArticularItemQuantity.class, orderArticularItemQuantityDto);
             session.merge(orderItemDataOption);
         });
     }
@@ -44,12 +44,11 @@ public class OrderArticularItemQuantityManager implements IOrderArticularItemQua
     @Override
     public void updateOrderArticularItemQuantity(String orderId, OrderArticularItemQuantityDto orderArticularItemQuantityDto) {
         entityOperationDao.executeConsumer(session -> {
-            OrderArticularItem orderItemDataOption = entityOperationDao.getNamedQueryEntity(
+            OrderArticularItemQuantity orderItemDataOption = entityOperationDao.getNamedQueryEntity(
                     "",
                     parameterFactory.createStringParameter(ORDER_ID, orderId));
-            OrderArticularItem newOrderItemDataOption =
-                    transformationFunctionService.getEntity(OrderArticularItem.class, orderArticularItemQuantityDto);
-            newOrderItemDataOption.setOrderId(orderItemDataOption.getOrderId());
+            OrderArticularItemQuantity newOrderItemDataOption =
+                    transformationFunctionService.getEntity(OrderArticularItemQuantity.class, orderArticularItemQuantityDto);
             newOrderItemDataOption.setId(orderItemDataOption.getId());
             session.merge(orderItemDataOption);
         });
@@ -58,7 +57,7 @@ public class OrderArticularItemQuantityManager implements IOrderArticularItemQua
     @Override
     public void deleteOrder(String orderId) {
         entityOperationDao.deleteEntityByParameter(
-                supplierService.parameterStringSupplier(ORDER_ID, orderId));
+                parameterFactory.createStringParameter(ORDER_ID, orderId));
     }
 
     @Override
@@ -66,13 +65,13 @@ public class OrderArticularItemQuantityManager implements IOrderArticularItemQua
         return entityOperationDao.getGraphEntityDto(
                 "",
                 parameterFactory.createStringParameter(ORDER_ID, orderId),
-                transformationFunctionService.getTransformationFunction(OrderArticularItem.class, ResponseOrderDetails.class));
+                transformationFunctionService.getTransformationFunction(OrderArticularItemQuantity.class, ResponseOrderDetails.class));
     }
 
     @Override
     public List<ResponseOrderDetails> getResponseOrderDetailsList() {
         return entityOperationDao.getGraphEntityDtoList(
                 "",
-                transformationFunctionService.getTransformationFunction(OrderArticularItem.class, ResponseOrderDetails.class));
+                transformationFunctionService.getTransformationFunction(OrderArticularItemQuantity.class, ResponseOrderDetails.class));
     }
 }

@@ -1,0 +1,10 @@
+{
+  "label": "ZoneA",
+  "value": "ZoneA",
+  "price": {
+    "amount": 27,
+    "currency": "USD"
+  },
+  "city": "New York",
+  "zoneName": "ZoneA"
+}

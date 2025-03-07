@@ -2,7 +2,6 @@ package com.b2c.prototype.e2e.controller.basic;
 
 import com.b2c.prototype.e2e.BasicE2ETest;
 import com.b2c.prototype.e2e.util.TestUtil;
-import com.b2c.prototype.modal.dto.response.ResponseOrderDetails;
 import com.b2c.prototype.modal.dto.response.ResponseUserDetailsDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -37,14 +36,17 @@ class UserDetailsControllerE2ETest extends BasicE2ETest {
         try (Connection connection = connectionHolder.getConnection()) {
             connection.setAutoCommit(false);
             Statement statement = connection.createStatement();
+            statement.execute("DELETE FROM user_address");
             statement.execute("DELETE FROM address");
             statement.execute("DELETE FROM user_credit_card");
             statement.execute("DELETE FROM credit_card");
+            statement.execute("DELETE FROM device");
             statement.execute("DELETE FROM user_details");
             statement.execute("DELETE FROM contact_info");
             statement.execute("DELETE FROM contact_phone");
 
             statement.execute("ALTER SEQUENCE contact_info_id_seq RESTART WITH 1");
+            statement.execute("ALTER SEQUENCE user_address_id_seq RESTART WITH 2");
             statement.execute("ALTER SEQUENCE address_id_seq RESTART WITH 2");
             statement.execute("ALTER SEQUENCE user_credit_card_id_seq RESTART WITH 2");
             statement.execute("ALTER SEQUENCE credit_card_id_seq RESTART WITH 2");
@@ -147,6 +149,48 @@ class UserDetailsControllerE2ETest extends BasicE2ETest {
         }
 
         verifyExpectedData("/datasets/user/user_details/updateStatusE2EUserDetails.yml",
+                new String[] {"id", "option_group_id", "option_item_id", "articular_item_id", "articular_id", "dateOfCreate", "DISCOUNT_ID", "FULLPRICE_ID", "TOTALPRICE_ID"},
+                new String[] {"label", "value", "productname", "charSequenceCode"}
+        );
+    }
+
+    @Test
+    void testPatchUserDetailsVerifyEmail() {
+        loadDataSet("/datasets/user/user_details/testE2EUserDetails.yml");
+        MultiValueMap<String, String> multiValueMap =  new LinkedMultiValueMap<>();
+        multiValueMap.add("userId", "123");
+        multiValueMap.add("verifyEmail", String.valueOf(true));
+        try {
+            mockMvc.perform(patch(URL_TEMPLATE + "/verifyEmail")
+                            .params(multiValueMap)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        verifyExpectedData("/datasets/user/user_details/updateVerifyEmailE2EUserDetails.yml",
+                new String[] {"id", "option_group_id", "option_item_id", "articular_item_id", "articular_id", "dateOfCreate", "DISCOUNT_ID", "FULLPRICE_ID", "TOTALPRICE_ID"},
+                new String[] {"label", "value", "productname", "charSequenceCode"}
+        );
+    }
+
+    @Test
+    void testPatchUserDetailsVerifyPhone() {
+        loadDataSet("/datasets/user/user_details/testE2EUserDetails.yml");
+        MultiValueMap<String, String> multiValueMap =  new LinkedMultiValueMap<>();
+        multiValueMap.add("userId", "123");
+        multiValueMap.add("verifyPhone", String.valueOf(true));
+        try {
+            mockMvc.perform(patch(URL_TEMPLATE + "/verifyPhone")
+                            .params(multiValueMap)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        verifyExpectedData("/datasets/user/user_details/updateVerifyPhoneE2EUserDetails.yml",
                 new String[] {"id", "option_group_id", "option_item_id", "articular_item_id", "articular_id", "dateOfCreate", "DISCOUNT_ID", "FULLPRICE_ID", "TOTALPRICE_ID"},
                 new String[] {"label", "value", "productname", "charSequenceCode"}
         );

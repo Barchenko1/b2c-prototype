@@ -1,0 +1,9 @@
+{
+  "firstName": "Update John",
+  "lastName": "Update Doe",
+  "contactPhone": {
+    "countryPhoneCode": "+22",
+    "phoneNumber": "222-222-222"
+  },
+  "email": "john2.doe@example.com"
+}

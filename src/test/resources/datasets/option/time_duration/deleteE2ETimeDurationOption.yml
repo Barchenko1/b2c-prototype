@@ -1,0 +1,16 @@
+currency:
+  - id: 1
+    value: "USD"
+    label: "USD"
+price:
+  - id: 2
+    amount: 25
+    currency_id: 1
+time_duration_option:
+  - id: 2
+    label: "11-13"
+    value: "11-13"
+    start_time: "11:00:00"
+    end_time: "13:00:00"
+    duration_in_min: 120
+    price_id: 2

@@ -1,6 +1,7 @@
 package com.b2c.prototype.modal.base.user;
 
 import com.b2c.prototype.modal.entity.address.Address;
+import com.b2c.prototype.modal.entity.address.UserAddress;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.Device;
 import com.b2c.prototype.modal.entity.user.UserCreditCard;
@@ -20,9 +21,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @MappedSuperclass
@@ -45,14 +44,16 @@ public class AbstractUserDetails {
     private boolean isEmailVerified;
     private boolean isContactPhoneVerified;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "contactinfo_id")
     private ContactInfo contactInfo;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "userdetails_id")
     @Builder.Default
     private Set<Device> devices = new HashSet<>();
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "userdetails_id")
     @Builder.Default
-    private Set<Address> addresses = new HashSet<>();
+    private Set<UserAddress> userAddresses = new HashSet<>();
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "userdetails_id")
     @Builder.Default

@@ -21,5 +21,5 @@ import java.util.Date;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ContactInfoDto extends AbstractContactInfoDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date birthDate;
+    private Date birthdayDate;
 }

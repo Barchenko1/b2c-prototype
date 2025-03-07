@@ -12,6 +12,10 @@ import com.b2c.prototype.dao.message.IMessageStatusDao;
 import com.b2c.prototype.dao.message.IMessageTypeDao;
 import com.b2c.prototype.dao.message.basic.BasicMessageStatusDao;
 import com.b2c.prototype.dao.message.basic.BasicMessageTypeDao;
+import com.b2c.prototype.dao.option.ITimeDurationOptionDao;
+import com.b2c.prototype.dao.option.IZoneOptionDao;
+import com.b2c.prototype.dao.option.base.BasicTimeDurationOptionDao;
+import com.b2c.prototype.dao.option.base.BasicZoneOptionDao;
 import com.b2c.prototype.dao.price.ICurrencyDao;
 import com.b2c.prototype.dao.price.base.BasicCurrencyDao;
 import com.b2c.prototype.dao.store.ICountTypeDao;
@@ -37,7 +41,7 @@ import com.b2c.prototype.dao.item.base.BasicBrandDao;
 import com.b2c.prototype.dao.payment.base.BasicCreditCardDao;
 import com.b2c.prototype.dao.option.base.BasicOptionItemDao;
 import com.b2c.prototype.dao.option.base.BasicOptionGroupDao;
-import com.b2c.prototype.dao.order.base.BasicOrderItemDataDao;
+import com.b2c.prototype.dao.order.base.BasicOrderArticularItemQuantityDao;
 import com.b2c.prototype.dao.order.base.BasicOrderStatusDao;
 import com.b2c.prototype.dao.payment.base.BasicPaymentDao;
 import com.b2c.prototype.dao.post.base.BasicPostDao;
@@ -210,7 +214,7 @@ public class BeanConfiguration {
 
     @Bean
     public IOrderItemDataDao orderItemDao(SessionFactory sessionFactory, IQueryService queryService) {
-        return new BasicOrderItemDataDao(sessionFactory, queryService);
+        return new BasicOrderArticularItemQuantityDao(sessionFactory, queryService);
     }
 
     @Bean
@@ -251,6 +255,16 @@ public class BeanConfiguration {
     @Bean
     public IOptionItemDao optionItemDao(SessionFactory sessionFactory, IQueryService queryService) {
         return new BasicOptionItemDao(sessionFactory, queryService);
+    }
+
+    @Bean
+    public ITimeDurationOptionDao timeDurationOptionDao(SessionFactory sessionFactory, IQueryService queryService) {
+        return new BasicTimeDurationOptionDao(sessionFactory, queryService);
+    }
+
+    @Bean
+    public IZoneOptionDao zoneOptionDao(SessionFactory sessionFactory, IQueryService queryService) {
+        return new BasicZoneOptionDao(sessionFactory, queryService);
     }
 
     @Bean

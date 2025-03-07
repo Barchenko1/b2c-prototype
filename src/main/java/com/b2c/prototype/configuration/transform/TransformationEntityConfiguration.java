@@ -10,7 +10,6 @@ import com.b2c.prototype.modal.dto.common.SearchFieldUpdateEntityDto;
 import com.b2c.prototype.modal.dto.payload.AddressDto;
 import com.b2c.prototype.modal.dto.payload.ArticularItemDto;
 import com.b2c.prototype.modal.dto.payload.ArticularItemQuantityDto;
-import com.b2c.prototype.modal.dto.payload.BeneficiaryDto;
 import com.b2c.prototype.modal.dto.payload.ContactInfoDto;
 import com.b2c.prototype.modal.dto.payload.ContactPhoneDto;
 import com.b2c.prototype.modal.dto.payload.CreditCardDto;
@@ -28,24 +27,30 @@ import com.b2c.prototype.modal.dto.payload.PriceDto;
 import com.b2c.prototype.modal.dto.payload.RegistrationUserDetailsDto;
 import com.b2c.prototype.modal.dto.payload.ReviewDto;
 import com.b2c.prototype.modal.dto.payload.SingleOptionItemDto;
+import com.b2c.prototype.modal.dto.payload.TimeDurationOptionDto;
+import com.b2c.prototype.modal.dto.payload.UserAddressDto;
 import com.b2c.prototype.modal.dto.payload.UserDetailsDto;
+import com.b2c.prototype.modal.dto.payload.ZoneOptionDto;
 import com.b2c.prototype.modal.dto.payload.constant.BrandDto;
 import com.b2c.prototype.modal.dto.payload.constant.CategoryValueDto;
 import com.b2c.prototype.modal.dto.payload.constant.CountryDto;
 import com.b2c.prototype.modal.dto.payload.constant.ItemTypeDto;
 import com.b2c.prototype.modal.dto.response.ResponseArticularItemDto;
 import com.b2c.prototype.modal.dto.response.ResponseCreditCardDto;
+import com.b2c.prototype.modal.dto.response.ResponseDeviceDto;
 import com.b2c.prototype.modal.dto.response.ResponseItemDataDto;
 import com.b2c.prototype.modal.dto.response.ResponseMessageOverviewDto;
 import com.b2c.prototype.modal.dto.response.ResponseMessagePayloadDto;
 import com.b2c.prototype.modal.dto.response.ResponseReviewDto;
+import com.b2c.prototype.modal.dto.response.ResponseTimeDurationOptionDto;
 import com.b2c.prototype.modal.dto.response.ResponseUserCreditCardDto;
 import com.b2c.prototype.modal.dto.response.ResponseUserDetailsDto;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
+import com.b2c.prototype.modal.entity.address.UserAddress;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
-import com.b2c.prototype.modal.entity.delivery.TimeDurationOption;
+import com.b2c.prototype.modal.entity.option.TimeDurationOption;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
 import com.b2c.prototype.modal.entity.item.ArticularStatus;
@@ -60,8 +65,9 @@ import com.b2c.prototype.modal.entity.message.MessageStatus;
 import com.b2c.prototype.modal.entity.message.MessageType;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
-import com.b2c.prototype.modal.entity.order.Beneficiary;
-import com.b2c.prototype.modal.entity.order.OrderArticularItem;
+import com.b2c.prototype.modal.entity.option.ZoneOption;
+import com.b2c.prototype.modal.entity.order.Order;
+import com.b2c.prototype.modal.entity.order.OrderArticularItemQuantity;
 import com.b2c.prototype.modal.entity.order.OrderStatus;
 import com.b2c.prototype.modal.entity.payment.SellerCommission;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
@@ -75,6 +81,7 @@ import com.b2c.prototype.modal.entity.store.CountType;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
+import com.b2c.prototype.modal.entity.user.Device;
 import com.b2c.prototype.modal.entity.user.UserCreditCard;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.service.function.ITransformationFunction;
@@ -88,6 +95,10 @@ import com.tm.core.process.dao.identifier.IQueryService;
 import org.hibernate.Session;
 import org.springframework.context.annotation.Configuration;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -144,7 +155,7 @@ public class TransformationEntityConfiguration {
 
         transformationFunctionService.addTransformationFunction(Address.class, AddressDto.class, mapAddressToAddressDtoFunction());
         transformationFunctionService.addTransformationFunction(AddressDto.class, Address.class, mapAddressDtoToAddressFunction());
-        transformationFunctionService.addTransformationFunction(OrderArticularItem.class, AddressDto.class, mapOrderItemToAddressDtoFunction());
+        transformationFunctionService.addTransformationFunction(OrderArticularItemQuantity.class, AddressDto.class, mapOrderItemToAddressDtoFunction());
 
         transformationFunctionService.addTransformationFunction(CreditCardDto.class, CreditCard.class, mapCreditCardDtoToCreditCardFunction());
         transformationFunctionService.addTransformationFunction(CreditCard.class, ResponseCreditCardDto.class, mapCreditCardToResponseCardDtoFunction());
@@ -153,21 +164,9 @@ public class TransformationEntityConfiguration {
         transformationFunctionService.addTransformationFunction(Message.class, ResponseMessageOverviewDto.class, mapMessageToResponseMessageOverviewDtoFunction());
         transformationFunctionService.addTransformationFunction(Message.class, ResponseMessagePayloadDto.class, mapMessageToResponseMessagePayloadDtoFunction());
 
-        transformationFunctionService.addTransformationFunction(ContactPhone.class, ContactPhoneDto.class, mapContactPhoneToContactPhoneDtoFunction());
-        transformationFunctionService.addTransformationFunction(ContactPhoneDto.class, ContactPhone.class, mapContactPhoneDtoToContactPhoneFunction());
-        transformationFunctionService.addTransformationFunction(UserDetails.class, ContactPhoneDto.class, mapUserDetailsToContactPhoneDtoFunction());
-        transformationFunctionService.addTransformationFunction(OrderArticularItem.class, ContactPhoneDto.class, mapOrderItemToContactPhoneDtoFunction());
-        transformationFunctionService.addTransformationFunction(BeneficiaryDto.class, Beneficiary.class, "list", mapBeneficiaryDtoToBeneficiaryFunction());
 
         transformationFunctionService.addTransformationFunction(ReviewDto.class, Review.class, mapReviewDtoToReviewFunction());
         transformationFunctionService.addTransformationFunction(Review.class, ResponseReviewDto.class, mapReviewToResponseReviewDtoFunction());
-
-        transformationFunctionService.addTransformationFunction(PriceDto.class, Price.class, mapPriceDtoToPriceFunction());
-        transformationFunctionService.addTransformationFunction(Price.class, PriceDto.class, mapPriceToPriceDtoFunction());
-        transformationFunctionService.addTransformationFunction(OrderArticularItem.class, PriceDto.class, "fullPrice", mapOrderItemToFullPriceDtoFunction());
-        transformationFunctionService.addTransformationFunction(OrderArticularItem.class, PriceDto.class, "totalPrice", mapOrderItemToTotalPriceDtoFunction());
-        transformationFunctionService.addTransformationFunction(ArticularItem.class, PriceDto.class, "fullPrice", mapItemDataOptionToFullPriceDtoFunction());
-        transformationFunctionService.addTransformationFunction(ArticularItem.class, PriceDto.class, "totalPrice", mapItemDataOptionToTotalPriceDtoFunction());
 
         loadOptionItemFunctions(transformationFunctionService);
         loadItemDataFunctions(transformationFunctionService);
@@ -175,8 +174,10 @@ public class TransformationEntityConfiguration {
         loadDiscountFunctions(transformationFunctionService);
         loadOrderFunctions(transformationFunctionService);
         loadUserDetailsFunctions(transformationFunctionService);
+        loadContactInfoFunctions(transformationFunctionService);
+        loadTimeDurationOptionFunctions(transformationFunctionService);
+        loadZoneOptionFunctions(transformationFunctionService);
 
-        transformationFunctionService.addTransformationFunction(OrderArticularItem.class, Beneficiary.class, "list", mapOrderItemToContactInfoListFunction());
     }
 
     private void loadDiscountFunctions(ITransformationFunction transformationFunctionService) {
@@ -208,7 +209,7 @@ public class TransformationEntityConfiguration {
     }
 
     private void loadOrderFunctions(ITransformationFunctionService transformationFunctionService) {
-        transformationFunctionService.addTransformationFunction(OrderArticularItemQuantityDto.class, OrderArticularItem.class, mapOrderArticularItemQuantityToOrderArticularItem());
+        transformationFunctionService.addTransformationFunction(OrderArticularItemQuantityDto.class, OrderArticularItemQuantity.class, mapOrderArticularItemQuantityToOrderArticularItem());
     }
 
     private void loadUserDetailsFunctions(ITransformationFunctionService transformationFunctionService) {
@@ -216,7 +217,22 @@ public class TransformationEntityConfiguration {
         transformationFunctionService.addTransformationFunction(UserDetailsDto.class, UserDetails.class, mapUserDetailsDtoToUserDetailsFunction());
         transformationFunctionService.addTransformationFunction(SearchFieldUpdateEntityDto.class, UserDetails.class, mapSearchFieldUpdateEntityDtoToUserDetailsFunction());
         transformationFunctionService.addTransformationFunction(UserDetails.class, ResponseUserDetailsDto.class, mapUserDetailsToUserResponseUserDetailsDtoFunction());
+    }
 
+    private void loadContactInfoFunctions(ITransformationFunctionService transformationFunctionService) {
+        transformationFunctionService.addTransformationFunction(ContactInfoDto.class, ContactInfo.class, mapContactInfoDtoToContactInfoFunction());
+        transformationFunctionService.addTransformationFunction(ContactInfo.class, ContactInfoDto.class, mapContactInfoToContactInfoDtoFunction());
+        transformationFunctionService.addTransformationFunction(UserDetails.class, ContactInfoDto.class, mapUserDetailsToContactInfoDtoFunction());
+    }
+
+    private void loadTimeDurationOptionFunctions(ITransformationFunctionService transformationFunctionService) {
+        transformationFunctionService.addTransformationFunction(TimeDurationOptionDto.class, TimeDurationOption.class, mapTimeDurationOptionDtoToTimeDurationOptionFunction());
+        transformationFunctionService.addTransformationFunction(TimeDurationOption.class, ResponseTimeDurationOptionDto.class, mapTimeDurationOptionToResponseTimeDurationOptionDtoFunction());
+    }
+
+    private void loadZoneOptionFunctions(ITransformationFunctionService transformationFunctionService) {
+        transformationFunctionService.addTransformationFunction(ZoneOptionDto.class, ZoneOption.class, mapZoneOptionDtoToZoneOptionFunction());
+        transformationFunctionService.addTransformationFunction(ZoneOption.class, ZoneOptionDto.class, mapZoneOptionToZoneOptionDtoFunction());
     }
 
     private <T extends AbstractConstantEntity> Function<ConstantPayloadDto, T> mapConstantEntityPayloadDtoToConstantEntityFunction(Supplier<T> entitySupplier) {
@@ -276,11 +292,17 @@ public class TransformationEntityConfiguration {
                 .country(fetchCountry(session, addressDto.getCountry()))
                 .city(addressDto.getCity())
                 .street(addressDto.getStreet())
-                .street2(addressDto.getStreet2())
                 .buildingNumber(addressDto.getBuildingNumber())
                 .florNumber(addressDto.getFlorNumber())
                 .apartmentNumber(addressDto.getApartmentNumber())
                 .zipCode(addressDto.getZipCode())
+                .build();
+    }
+
+    private BiFunction<Session, UserAddressDto, UserAddress> mapUserAddressDtoToUserAddressFunction() {
+        return (session, userAddressDto) -> UserAddress.builder()
+                .address(mapAddressDtoToAddressFunction().apply(session, userAddressDto.getAddress()))
+                .isDefault(userAddressDto.isDefault())
                 .build();
     }
 
@@ -289,7 +311,6 @@ public class TransformationEntityConfiguration {
                 .country(address.getCountry().getValue())
                 .city(address.getCity())
                 .street(address.getStreet())
-                .street2(address.getStreet2())
                 .buildingNumber(address.getBuildingNumber())
                 .florNumber(address.getFlorNumber())
                 .apartmentNumber(address.getApartmentNumber())
@@ -297,15 +318,20 @@ public class TransformationEntityConfiguration {
                 .build();
     }
 
-    private Function<UserDetails, List<AddressDto>> mapUserDetailsToAddressDtoListFunction() {
-        return userDetails -> {
-            return userDetails.getAddresses().stream()
-                    .map(address -> mapAddressToAddressDtoFunction().apply(address))
-                    .toList();
-        };
+    private Function<UserAddress, UserAddressDto> mapUserAddressToUserAddressDtoFunction() {
+        return userAddress -> UserAddressDto.builder()
+                .address(mapAddressToAddressDtoFunction().apply(userAddress.getAddress()))
+                .isDefault(userAddress.isDefault())
+                .build();
     }
 
-    private Function<OrderArticularItem, AddressDto> mapOrderItemToAddressDtoFunction() {
+    private Function<UserDetails, List<UserAddressDto>> mapUserDetailsToAddressDtoListFunction() {
+        return userDetails -> userDetails.getUserAddresses().stream()
+                .map(userAddress -> mapUserAddressToUserAddressDtoFunction().apply(userAddress))
+                .toList();
+    }
+
+    private Function<OrderArticularItemQuantity, AddressDto> mapOrderItemToAddressDtoFunction() {
         return orderItem -> {
             Address address = orderItem.getDelivery().getAddress();
             return mapAddressToAddressDtoFunction().apply(address);
@@ -335,12 +361,7 @@ public class TransformationEntityConfiguration {
         return userCreditCard -> {
             CreditCard creditCard = userCreditCard.getCreditCard();
             return ResponseUserCreditCardDto.builder()
-                    .cardNumber(creditCard.getCardNumber())
-                    .monthOfExpire(creditCard.getMonthOfExpire())
-                    .yearOfExpire(creditCard.getYearOfExpire())
-                    .isActive(CardUtil.isCardActive(creditCard.getMonthOfExpire(), creditCard.getYearOfExpire()))
-                    .ownerName(creditCard.getOwnerName())
-                    .ownerSecondName(creditCard.getOwnerSecondName())
+                    .creditCard(mapCreditCardToResponseCardDtoFunction().apply(creditCard))
                     .isDefault(userCreditCard.isDefault())
                     .build();
         };
@@ -418,43 +439,24 @@ public class TransformationEntityConfiguration {
         };
     }
 
-    private Function<OrderArticularItem, List<ContactPhoneDto>> mapOrderItemToContactPhoneDtoFunction() {
-        return orderItem -> orderItem.getBeneficiaries().stream()
-                .map(beneficiary -> mapContactPhoneToContactPhoneDtoFunction().apply(beneficiary.getContactInfo().getContactPhone()))
-                .toList();
-    }
-
     private BiFunction<Session, ContactInfoDto, ContactInfo> mapContactInfoDtoToContactInfoFunction() {
         return (session, contactInfoDto) -> ContactInfo.builder()
                 .email(contactInfoDto.getEmail())
                 .firstName(contactInfoDto.getFirstName())
                 .lastName(contactInfoDto.getLastName())
                 .contactPhone(mapContactPhoneDtoToContactPhoneFunction().apply(session, contactInfoDto.getContactPhone()))
-                .birthdayDate(contactInfoDto.getBirthDate())
+                .birthdayDate(contactInfoDto.getBirthdayDate())
                 .build();
     }
 
-    private BiFunction<Session, BeneficiaryDto, Beneficiary> mapBeneficiaryDtoToBeneficiaryFunction() {
-        return (session, beneficiaryDto) -> {
-            CountryPhoneCode countryPhoneCode = fetchCountryPhoneCode(session, beneficiaryDto.getContactInfo().getContactPhone().getCountryPhoneCode());
-            ContactPhone contactPhone = ContactPhone.builder()
-                    .phoneNumber(beneficiaryDto.getContactInfo().getContactPhone().getPhoneNumber())
-                    .countryPhoneCode(countryPhoneCode)
-                    .build();
-
-            return Beneficiary.builder()
-                    .contactInfo(ContactInfo.builder()
-                            .firstName(beneficiaryDto.getContactInfo().getFirstName())
-                            .lastName(beneficiaryDto.getContactInfo().getLastName())
-                            .contactPhone(contactPhone)
-                            .build())
-                    .orderNumber(0)
-                    .build();
-        };
-    }
-
-    Function<OrderArticularItem, List<Beneficiary>> mapOrderItemToContactInfoListFunction() {
-        return OrderArticularItem::getBeneficiaries;
+    private BiFunction<Session, ContactInfo, ContactInfoDto> mapContactInfoToContactInfoDtoFunction() {
+        return (session, contactInfo) -> ContactInfoDto.builder()
+                .email(contactInfo.getEmail())
+                .firstName(contactInfo.getFirstName())
+                .lastName(contactInfo.getLastName())
+                .contactPhone(mapContactPhoneToContactPhoneDtoFunction().apply(contactInfo.getContactPhone()))
+                .birthdayDate(contactInfo.getBirthdayDate())
+                .build();
     }
 
     Function<UserDetails, ContactInfoDto> mapUserDetailsToContactInfoDtoFunction() {
@@ -464,6 +466,8 @@ public class TransformationEntityConfiguration {
             return ContactInfoDto.builder()
                     .firstName(contactInfo.getFirstName())
                     .lastName(contactInfo.getLastName())
+                    .email(contactInfo.getEmail())
+                    .birthdayDate(contactInfo.getBirthdayDate())
                     .contactPhone(ContactPhoneDto.builder()
                             .phoneNumber(contactPhone.getPhoneNumber())
                             .countryPhoneCode(contactPhone.getCountryPhoneCode().getValue())
@@ -487,23 +491,25 @@ public class TransformationEntityConfiguration {
     }
 
     private BiFunction<Session, SearchFieldUpdateEntityDto<UserDetailsDto>, UserDetails> mapSearchFieldUpdateEntityDtoToUserDetailsFunction() {
-        return (session, userDetailsDtoSearchFieldUpdateEntityDto) -> {
-            return mapUserDetailsDtoToUserDetailsFunction()
-                    .apply(session, userDetailsDtoSearchFieldUpdateEntityDto.getUpdateDto());
-        };
+        return (session, userDetailsDtoSearchFieldUpdateEntityDto) -> mapUserDetailsDtoToUserDetailsFunction()
+                .apply(session, userDetailsDtoSearchFieldUpdateEntityDto.getUpdateDto());
     }
 
     private BiFunction<Session, UserDetailsDto, UserDetails> mapUserDetailsDtoToUserDetailsFunction() {
         return (session, userDetailsDto) -> {
             ContactInfo contactInfo = mapContactInfoDtoToContactInfoFunction().apply(session, userDetailsDto.getContactInfo());
             Address address = mapAddressDtoToAddressFunction().apply(session, userDetailsDto.getAddress());
+            UserAddress userAddress = UserAddress.builder()
+                    .address(address)
+                    .isDefault(false)
+                    .build();
             UserCreditCard userCreditCard = mapCreditCardDtoUserCreditCardDtoFunction().apply(userDetailsDto.getCreditCard());
             return UserDetails.builder()
                     .username(getEmailPrefix(userDetailsDto.getContactInfo().getEmail()))
                     .userId(getUUID())
                     .dateOfCreate(getCurrentTimeMillis())
                     .contactInfo(contactInfo)
-                    .addresses(Set.of(address))
+                    .userAddresses(Set.of(userAddress))
                     .userCreditCardList(Set.of(userCreditCard))
                     .build();
         };
@@ -512,16 +518,28 @@ public class TransformationEntityConfiguration {
     private Function<UserDetails, ResponseUserDetailsDto> mapUserDetailsToUserResponseUserDetailsDtoFunction() {
         return userDetails -> {
             ContactInfoDto contactInfoDto = mapUserDetailsToContactInfoDtoFunction().apply(userDetails);
-            List<AddressDto> addressDtoList = mapUserDetailsToAddressDtoListFunction().apply(userDetails);
+            List<UserAddressDto> addressDtoList = mapUserDetailsToAddressDtoListFunction().apply(userDetails);
             List<ResponseUserCreditCardDto> responseCreditCardDtoList = userDetails.getUserCreditCardList().stream()
                     .map(ucc -> mapUserCreditCardToResponseUserCardDtoFunction().apply(ucc))
+                    .toList();
+            List<ResponseDeviceDto> responseDeviceDtoList = userDetails.getDevices().stream()
+                    .map(d -> mapDeviceToResponseDeviceDtoFunction().apply(d))
                     .toList();
             return ResponseUserDetailsDto.builder()
                     .contactInfo(contactInfoDto)
                     .creditCards(responseCreditCardDtoList)
                     .addresses(addressDtoList)
+                    .devices(responseDeviceDtoList)
                     .build();
         };
+    }
+
+    private Function<Device, ResponseDeviceDto> mapDeviceToResponseDeviceDtoFunction() {
+        return device -> ResponseDeviceDto.builder()
+                    .name(device.getName())
+                    .lastSignedIn(device.getLastSignedIn().atZone(ZoneId.of("UTC")))
+                    .isThisDevice(device.isThisDevice())
+                    .build();
     }
 
     private Function<ReviewDto, Review> mapReviewDtoToReviewFunction() {
@@ -551,7 +569,7 @@ public class TransformationEntityConfiguration {
         };
     }
 
-    private Function<OrderArticularItem, PriceDto> mapOrderItemToFullPriceDtoFunction() {
+    private Function<Order, PriceDto> mapOrderToFullPriceDtoFunction() {
         return orderItem -> {
             Price fullPrice = orderItem.getPayment().getCommissionPrice();
             return PriceDto.builder()
@@ -561,7 +579,7 @@ public class TransformationEntityConfiguration {
         };
     }
 
-    private Function<OrderArticularItem, PriceDto> mapOrderItemToTotalPriceDtoFunction() {
+    private Function<Order, PriceDto> mapOrderToTotalPriceDtoFunction() {
         return orderItem -> {
             Price fullPrice = orderItem.getPayment().getTotalPrice();
             return PriceDto.builder()
@@ -604,14 +622,6 @@ public class TransformationEntityConfiguration {
 
     private Function<ArticularItem, Price> mapItemDataOptionToTotalPriceFunction() {
         return ArticularItem::getTotalPrice;
-    }
-
-    private Function<OrderArticularItem, Price> mapOrderItemToFullPriceFunction() {
-        return orderItem -> orderItem.getPayment().getCommissionPrice();
-    }
-
-    private Function<OrderArticularItem, Price> mapOrderItemToTotalPriceFunction() {
-        return orderArticularItem -> orderArticularItem.getPayment().getTotalPrice();
     }
 
     Function<ArticularItem, Set<OptionItem>> mapItemDataOptionToOptionItemFunction() {
@@ -914,7 +924,7 @@ public class TransformationEntityConfiguration {
                 .collect(Collectors.toSet());
     }
 
-    private BiFunction<Session, OrderArticularItemQuantityDto, OrderArticularItem> mapOrderArticularItemQuantityToOrderArticularItem() {
+    private BiFunction<Session, OrderArticularItemQuantityDto, OrderArticularItemQuantity> mapOrderArticularItemQuantityToOrderArticularItem() {
         return (session, orderArticularItemQuantityDto) -> {
             Optional<UserDetails> userDetailsOptional = Optional.empty();
             if (orderArticularItemQuantityDto.getUser().getUserId() != null) {
@@ -936,16 +946,16 @@ public class TransformationEntityConfiguration {
                     .sellerCommission(commissionOptional.get())
                     .build();
 
-            return OrderArticularItem.builder()
-                    .userDetails(userDetailsOptional.orElse(null))
-                    .dateOfCreate(getCurrentTimeMillis())
-                    .orderId(getUUID())
-                    .articularItemQuantityList(articularItemQuantityList)
+            return OrderArticularItemQuantity.builder()
+//                    .userDetails(userDetailsOptional.orElse(null))
+//                    .dateOfCreate(getCurrentTimeMillis())
+//                    .orderId(getUUID())
+//                    .articularItemQuantityList(articularItemQuantityList)
                     .delivery(delivery)
-                    .beneficiaries(mapBeneficiariesDtoToBeneficiaries().apply(session, orderArticularItemQuantityDto.getBeneficiaries()))
-                    .payment(mapPaymentDtoToPayment().apply(session, orderArticularItemQuantityDto.getPayment()))
-                    .orderStatus(fetchOrderStatus(session, "CREATED"))
-                    .note(orderArticularItemQuantityDto.getNote())
+//                    .beneficiaries(mapBeneficiariesDtoToBeneficiaries().apply(session, orderArticularItemQuantityDto.getBeneficiaries()))
+//                    .payment(mapPaymentDtoToPayment().apply(session, orderArticularItemQuantityDto.getPayment()))
+//                    .orderStatus(fetchOrderStatus(session, "CREATED"))
+//                    .note(orderArticularItemQuantityDto.getNote())
                     .build();
         };
     }
@@ -959,27 +969,6 @@ public class TransformationEntityConfiguration {
                     .deliveryType(deliveryType)
                     .address(address)
                     .timeDurationOption(timeDurationOption)
-                    .build();
-        };
-    }
-
-    private BiFunction<Session, List<BeneficiaryDto>, List<Beneficiary>> mapBeneficiariesDtoToBeneficiaries() {
-        return (session, beneficiaryDtos) -> beneficiaryDtos.stream()
-                .map(beneficiaryDto -> mapBeneficiaryDtoToBeneficiary().apply(session, beneficiaryDto))
-                .toList();
-    }
-
-    private BiFunction<Session, BeneficiaryDto, Beneficiary> mapBeneficiaryDtoToBeneficiary() {
-        return (session, beneficiaryDto) -> {
-            ContactPhone contactPhone = mapContactPhoneDtoToContactPhoneFunction().apply(session, beneficiaryDto.getContactInfo().getContactPhone());
-            return Beneficiary.builder()
-                    .contactInfo(ContactInfo.builder()
-                            .email(beneficiaryDto.getContactInfo().getEmail())
-                            .firstName(beneficiaryDto.getContactInfo().getFirstName())
-                            .lastName(beneficiaryDto.getContactInfo().getLastName())
-                            .contactPhone(contactPhone)
-                            .build())
-                    .orderNumber(beneficiaryDto.getOrderNumber())
                     .build();
         };
     }
@@ -1209,6 +1198,62 @@ public class TransformationEntityConfiguration {
             return DeliveryDto.builder()
                     .deliveryAddress(addressDto)
                     .deliveryType(delivery.getDeliveryType().getValue())
+                    .build();
+        };
+    }
+
+    private BiFunction<Session, TimeDurationOptionDto, TimeDurationOption> mapTimeDurationOptionDtoToTimeDurationOptionFunction() {
+        return (session, timeDurationOptionDto) -> {
+            Price price = mapPriceDtoToPriceFunction().apply(session, timeDurationOptionDto.getPrice());
+            return TimeDurationOption.builder()
+                    .startTime(timeDurationOptionDto.getStartTime())
+                    .endTime(timeDurationOptionDto.getEndTime())
+                    .duration(timeDurationOptionDto.getDuration())
+                    .label(timeDurationOptionDto.getLabel())
+                    .value(timeDurationOptionDto.getValue())
+                    .price(price)
+                    .build();
+        };
+    }
+
+    private Function<TimeDurationOption, ResponseTimeDurationOptionDto> mapTimeDurationOptionToResponseTimeDurationOptionDtoFunction() {
+        return timeDurationOption -> {
+            PriceDto price = mapPriceToPriceDtoFunction().apply(timeDurationOption.getPrice());
+            LocalTime startTime = timeDurationOption.getStartTime();
+            LocalTime endTime = timeDurationOption.getEndTime();
+            return ResponseTimeDurationOptionDto.builder()
+                    .startTime(startTime.format(DateTimeFormatter.ofPattern("HH:mm:ss")))
+                    .endTime(endTime.format(DateTimeFormatter.ofPattern("HH:mm:ss")))
+                    .duration(timeDurationOption.getDuration())
+                    .label(timeDurationOption.getLabel())
+                    .value(timeDurationOption.getValue())
+                    .price(price)
+                    .build();
+        };
+    }
+
+    private BiFunction<Session, ZoneOptionDto, ZoneOption> mapZoneOptionDtoToZoneOptionFunction() {
+        return (session, zoneOptionDto) -> {
+            Price price = mapPriceDtoToPriceFunction().apply(session, zoneOptionDto.getPrice());
+            return ZoneOption.builder()
+                    .zoneName(zoneOptionDto.getZoneName())
+                    .city(zoneOptionDto.getCity())
+                    .label(zoneOptionDto.getLabel())
+                    .value(zoneOptionDto.getValue())
+                    .price(price)
+                    .build();
+        };
+    }
+
+    private Function<ZoneOption, ZoneOptionDto> mapZoneOptionToZoneOptionDtoFunction() {
+        return zoneOption -> {
+            PriceDto price = mapPriceToPriceDtoFunction().apply(zoneOption.getPrice());
+            return ZoneOptionDto.builder()
+                    .city(zoneOption.getCity())
+                    .zoneName(zoneOption.getZoneName())
+                    .label(zoneOption.getLabel())
+                    .value(zoneOption.getValue())
+                    .price(price)
                     .build();
         };
     }

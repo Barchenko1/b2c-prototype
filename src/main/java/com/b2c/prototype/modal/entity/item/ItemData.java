@@ -74,7 +74,7 @@ import java.util.Set;
 )
 @NamedQueries({
         @NamedQuery(
-                name = "ItemData.default",
+                name = "ItemData.findByValue",
                 query = "SELECT d FROM ItemData d WHERE d.itemId = :itemId"
         )
 })

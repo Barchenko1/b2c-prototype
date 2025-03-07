@@ -6,29 +6,46 @@
       "contactPhone": {
         "countryPhoneCode": "+11",
         "phoneNumber": "111-111-111"
-      }
+      },
+      "email": "john.doe@mail.com"
     },
     "addresses": [
       {
-        "country": "USA",
-        "city": "city",
-        "street": "street",
-        "street2": "street2",
-        "buildingNumber": 10,
-        "florNumber": 9,
-        "apartmentNumber": 201,
-        "zipCode": "90000"
+        "address": {
+          "country": "USA",
+          "city": "city",
+          "street": "street",
+          "buildingNumber": 10,
+          "florNumber": 9,
+          "apartmentNumber": 201,
+          "zipCode": "90000"
+        },
+        "default": false
       }
     ],
     "creditCards": [
       {
-        "cardNumber": "4444-1111-2222-3333",
-        "monthOfExpire": 6,
-        "yearOfExpire": 2028,
-        "ownerName": "John",
-        "ownerSecondName": "Doe",
-        "default": true,
-        "active": true
+        "creditCard": {
+          "cardNumber": "4444-1111-2222-3333",
+          "monthOfExpire": 6,
+          "yearOfExpire": 2028,
+          "ownerName": "John",
+          "ownerSecondName": "Doe",
+          "active": true
+        },
+        "default": true
+      }
+    ],
+    "devices": [
+      {
+        "name": "phone",
+        "lastSignedIn": "2024-03-03T12:00:00.000Z",
+        "thisDevice": false
+      },
+      {
+        "name": "laptop",
+        "lastSignedIn": "2024-03-03T15:30:00.000Z",
+        "thisDevice": true
       }
     ]
   },
@@ -39,29 +56,46 @@
       "contactPhone": {
         "countryPhoneCode": "+11",
         "phoneNumber": "111-111-111"
-      }
+      },
+      "email": "john.doe@mail.com"
     },
     "addresses": [
       {
-        "country": "USA",
-        "city": "city",
-        "street": "street",
-        "street2": "street2",
-        "buildingNumber": 10,
-        "florNumber": 9,
-        "apartmentNumber": 202,
-        "zipCode": "90000"
+        "address": {
+          "country": "USA",
+          "city": "city",
+          "street": "street",
+          "buildingNumber": 10,
+          "florNumber": 9,
+          "apartmentNumber": 202,
+          "zipCode": "90000"
+        },
+        "default": false
       }
     ],
     "creditCards": [
       {
-        "cardNumber": "4444-1111-2222-1111",
-        "monthOfExpire": 6,
-        "yearOfExpire": 2028,
-        "ownerName": "John",
-        "ownerSecondName": "Doe",
-        "default": true,
-        "active": true
+        "creditCard": {
+          "cardNumber": "4444-1111-2222-1111",
+          "monthOfExpire": 6,
+          "yearOfExpire": 2028,
+          "ownerName": "John",
+          "ownerSecondName": "Doe",
+          "active": true
+        },
+        "default": true
+      }
+    ],
+    "devices": [
+      {
+        "name": "phone",
+        "lastSignedIn": "2024-03-03T12:00:00.000Z",
+        "thisDevice": false
+      },
+      {
+        "name": "laptop",
+        "lastSignedIn": "2024-03-03T15:30:00.000Z",
+        "thisDevice": true
       }
     ]
   }

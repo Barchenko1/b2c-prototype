@@ -7,4 +7,9 @@ public interface IContactInfoManager {
     void deleteContactInfoByUserId(String userId);
 
     ContactInfoDto getContactInfoByUserId(String userId);
+
+    void saveUpdateContactInfoByOrderId(String orderId, ContactInfoDto contactInfoDto);
+    void deleteContactInfoByOrderId(String orderId);
+
+    ContactInfoDto getContactInfoByOrderId(String orderId);
 }

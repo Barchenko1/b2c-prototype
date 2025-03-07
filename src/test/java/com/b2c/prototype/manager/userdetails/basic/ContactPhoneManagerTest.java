@@ -1,12 +1,9 @@
 package com.b2c.prototype.manager.userdetails.basic;
 
 import com.b2c.prototype.dao.user.IContactPhoneDao;
-import com.b2c.prototype.manager.userdetails.basic.ContactPhoneManager;
-import com.b2c.prototype.modal.dto.payload.BeneficiaryDto;
 import com.b2c.prototype.modal.dto.payload.ContactInfoDto;
 import com.b2c.prototype.modal.dto.payload.ContactPhoneDto;
-import com.b2c.prototype.modal.entity.order.OrderArticularItem;
-import com.b2c.prototype.modal.entity.order.Beneficiary;
+import com.b2c.prototype.modal.entity.order.OrderArticularItemQuantity;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
@@ -93,33 +90,33 @@ class ContactPhoneManagerTest {
     @Test
     void testSaveUpdateContactPhoneByOrderId() {
         String orderId = "code";
-        BeneficiaryDto beneficiaryDto = getBeneficiaryDto();
+        ContactInfoDto contactInfoDto = getContactInfoDto();
         ContactPhone contactPhone = getTestContactPhone();
         Parameter mockParameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> mockParameter;
-        OrderArticularItem orderItemDataOption = mock(OrderArticularItem.class);
-        Beneficiary beneficiary = mock(Beneficiary.class);
-        List<Beneficiary> orderItemList = List.of(beneficiary);
+//        OrderArticularItemQuantity orderItemDataOption = mock(OrderArticularItemQuantity.class);
+//        Beneficiary beneficiary = mock(Beneficiary.class);
+//        List<Beneficiary> orderItemList = List.of(beneficiary);
 
-//        when(queryService.getEntity(eq(OrderArticularItem.class), any(Supplier.class)))
+//        when(queryService.getEntity(eq(OrderArticularItemQuantity.class), any(Supplier.class)))
 //                .thenReturn(orderItemDataOption);
         when(transformationFunctionService.getEntity(
                 ContactPhone.class,
-                beneficiaryDto)).thenReturn(contactPhone);
+                contactInfoDto)).thenReturn(contactPhone);
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-        when(orderItemDataOption.getBeneficiaries()).thenReturn(orderItemList);
-        when(beneficiary.getContactInfo().getContactPhone()).thenReturn(contactPhone);
+//        when(orderItemDataOption.getBeneficiaries()).thenReturn(orderItemList);
+//        when(beneficiary.getContactInfo().getContactPhone()).thenReturn(contactPhone);
 
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
             Session session = mock(Session.class);
             consumer.accept(session);
-            verify(session).merge(beneficiary);
+//            verify(session).merge(beneficiary);
             return null;
         }).when(contactPhoneDao).executeConsumer(any(Consumer.class));
 
-        contactPhoneManager.saveUpdateContactPhoneByOrderId(orderId, beneficiaryDto);
+        contactPhoneManager.saveUpdateContactPhoneByOrderId(orderId, contactInfoDto);
 
         verify(contactPhoneDao).executeConsumer(any(Consumer.class));
     }
@@ -153,18 +150,18 @@ class ContactPhoneManagerTest {
     void testDeleteContactPhoneByOrderId() {
         String orderId = "123";
         Parameter mockParameter = mock(Parameter.class);
-        OrderArticularItem orderItemDataOption = mock(OrderArticularItem.class);
-        Beneficiary beneficiary = mock(Beneficiary.class);
+        OrderArticularItemQuantity orderItemDataOption = mock(OrderArticularItemQuantity.class);
+//        Beneficiary beneficiary = mock(Beneficiary.class);
         ContactPhone contactPhone = getTestContactPhone();
-        List<Beneficiary> beneficiaryList = List.of(beneficiary);
+//        List<Beneficiary> beneficiaryList = List.of(beneficiary);
 
         Supplier<Parameter> parameterSupplier = () -> mockParameter;
-//        when(queryService.getEntity(eq(OrderArticularItem.class), any(Supplier.class)))
+//        when(queryService.getEntity(eq(OrderArticularItemQuantity.class), any(Supplier.class)))
 //                .thenReturn(orderItemDataOption);
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-        when(orderItemDataOption.getBeneficiaries()).thenReturn(beneficiaryList);
-        when(beneficiary.getContactInfo().getContactPhone()).thenReturn(contactPhone);
+//        when(orderItemDataOption.getBeneficiaries()).thenReturn(beneficiaryList);
+//        when(beneficiary.getContactInfo().getContactPhone()).thenReturn(contactPhone);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
             Session session = mock(Session.class);
@@ -173,7 +170,7 @@ class ContactPhoneManagerTest {
             return null;
         }).when(contactPhoneDao).executeConsumer(any(Consumer.class));
 
-        contactPhoneManager.deleteContactPhoneByOrderId(orderId, 0);
+        contactPhoneManager.deleteContactPhoneByOrderId(orderId);
 
         verify(contactPhoneDao).executeConsumer(any(Consumer.class));
     }
@@ -215,27 +212,27 @@ class ContactPhoneManagerTest {
         String orderId = "123";
         ContactPhoneDto contactPhoneDto = createContactPhoneDto();
         Parameter mockParameter = mock(Parameter.class);
-        OrderArticularItem orderItemDataOption = mock(OrderArticularItem.class);
-        Beneficiary beneficiary = mock(Beneficiary.class);
+        OrderArticularItemQuantity orderItemDataOption = mock(OrderArticularItemQuantity.class);
+//        Beneficiary beneficiary = mock(Beneficiary.class);
         ContactPhone contactPhone = getTestContactPhone();
 
         Supplier<Parameter> parameterSupplier = () -> mockParameter;
-        Function<OrderArticularItem, ContactPhoneDto> mapFunction = oai -> contactPhoneDto;
+        Function<OrderArticularItemQuantity, ContactPhoneDto> mapFunction = oai -> contactPhoneDto;
 
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-        when(transformationFunctionService.getTransformationFunction(OrderArticularItem.class, ContactPhoneDto.class, "list"))
+        when(transformationFunctionService.getTransformationFunction(OrderArticularItemQuantity.class, ContactPhoneDto.class, "list"))
                 .thenReturn(mapFunction);
 
-        when(queryService.getSubNamedQueryEntityDtoList(eq(OrderArticularItem.class), anyString(), any(Parameter.class), any(Function.class)))
+        when(queryService.getSubNamedQueryEntityDtoList(eq(OrderArticularItemQuantity.class), anyString(), any(Parameter.class), any(Function.class)))
                 .thenAnswer(invocation -> {
                     Supplier<Parameter> paramSupplier = invocation.getArgument(1);
-                    Function<OrderArticularItem, ContactPhoneDto> mappingFunction = invocation.getArgument(2);
+                    Function<OrderArticularItemQuantity, ContactPhoneDto> mappingFunction = invocation.getArgument(2);
                     assertEquals(mockParameter, paramSupplier.get());
                     return List.of(mappingFunction.apply(orderItemDataOption));
                 });
-        when(orderItemDataOption.getBeneficiaries()).thenReturn(List.of(beneficiary));
-        when(beneficiary.getContactInfo().getContactPhone()).thenReturn(contactPhone);
+//        when(orderItemDataOption.getBeneficiaries()).thenReturn(List.of(beneficiary));
+//        when(beneficiary.getContactInfo().getContactPhone()).thenReturn(contactPhone);
 
         List<ContactPhoneDto> resultList = contactPhoneManager.getContactPhoneByOrderId(orderId);
         assertEquals(1, resultList.size());
@@ -300,15 +297,12 @@ class ContactPhoneManagerTest {
                 .build();
     }
 
-    private BeneficiaryDto getBeneficiaryDto() {
-        return BeneficiaryDto.builder()
-                .orderNumber(0)
-                .contactInfo(ContactInfoDto.builder()
-                        .contactPhone(getContactPhoneDto())
-                        .email("email@email.com")
-                        .firstName("firstName")
-                        .lastName("lastName")
-                        .build())
+    private ContactInfoDto getContactInfoDto() {
+        return ContactInfoDto.builder()
+                .contactPhone(getContactPhoneDto())
+                .email("email@email.com")
+                .firstName("firstName")
+                .lastName("lastName")
                 .build();
     }
 }

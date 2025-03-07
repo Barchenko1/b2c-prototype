@@ -40,6 +40,20 @@ public class UserDetailsProcess implements IUserDetailsProcess {
     }
 
     @Override
+    public void updateUserVerifyEmailByUserId(Map<String, String> requestParams) {
+        String userId = requestParams.get("userId");
+        boolean status = Boolean.parseBoolean(requestParams.get("verifyEmail"));
+        userDetailsManager.updateUserVerifyEmailByUserId(userId, status);
+    }
+
+    @Override
+    public void updateUserVerifyPhoneByUserId(Map<String, String> requestParams) {
+        String userId = requestParams.get("userId");
+        boolean status = Boolean.parseBoolean(requestParams.get("verifyPhone"));
+        userDetailsManager.updateUserVerifyPhoneByUserId(userId, status);
+    }
+
+    @Override
     public void deleteUserDetailsByUserId(Map<String, String> requestParams) {
         String userId = requestParams.get("userId");
         userDetailsManager.deleteUserDetailsByUserId(userId);

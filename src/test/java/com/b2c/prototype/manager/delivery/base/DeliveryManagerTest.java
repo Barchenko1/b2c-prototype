@@ -7,7 +7,7 @@ import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
-import com.b2c.prototype.modal.entity.order.OrderArticularItem;
+import com.b2c.prototype.modal.entity.order.OrderArticularItemQuantity;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.supplier.ISupplierService;
@@ -55,7 +55,7 @@ class DeliveryManagerTest {
     void testSaveUpdateDelivery() {
         DeliveryDto deliveryDto = getDeliveryDto();
         String orderId = "searchField";
-        OrderArticularItem orderItemDataOption = mock(OrderArticularItem.class);
+        OrderArticularItemQuantity orderItemDataOption = mock(OrderArticularItemQuantity.class);
         Delivery existingDelivery = getDelivery();
         Delivery newDelivery = getDelivery();
         Parameter parameter = mock(Parameter.class);
@@ -65,7 +65,7 @@ class DeliveryManagerTest {
         when(orderItemDataOption.getDelivery()).thenReturn(existingDelivery);
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-//        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
+//        when(queryService.getEntity(OrderArticularItemQuantity.class, parameterSupplier))
 //                .thenReturn(orderItemDataOption);
         when(transformationFunctionService.getEntity(Delivery.class, deliveryDto))
                 .thenReturn(newDelivery);
@@ -88,7 +88,7 @@ class DeliveryManagerTest {
         DeliveryDto deliveryDto = getDeliveryDto();
         String orderId = "searchField";
 
-        OrderArticularItem orderItemDataOption = mock(OrderArticularItem.class);
+        OrderArticularItemQuantity orderItemDataOption = mock(OrderArticularItemQuantity.class);
         Delivery existingDelivery = null;
         Delivery newDelivery = getDelivery();
         Parameter parameter = mock(Parameter.class);
@@ -97,7 +97,7 @@ class DeliveryManagerTest {
         when(orderItemDataOption.getDelivery()).thenReturn(existingDelivery);
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-//        when(queryService.getEntity(OrderArticularItem.class, parameterSupplier))
+//        when(queryService.getEntity(OrderArticularItemQuantity.class, parameterSupplier))
 //                .thenReturn(orderItemDataOption);
         when(transformationFunctionService.getEntity(Delivery.class, deliveryDto))
                 .thenReturn(newDelivery);
@@ -122,13 +122,13 @@ class DeliveryManagerTest {
         Delivery delivery = getDelivery();
         Supplier<Delivery> deliverySupplier = () -> delivery;
 
-        Function<OrderArticularItem, Delivery> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(OrderArticularItem.class, Delivery.class))
+        Function<OrderArticularItemQuantity, Delivery> function = mock(Function.class);
+        when(transformationFunctionService.getTransformationFunction(OrderArticularItemQuantity.class, Delivery.class))
                 .thenReturn(function);
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
 //        when(supplierService.entityFieldSupplier(
-//                OrderArticularItem.class,
+//                OrderArticularItemQuantity.class,
 //                parameterSupplier,
 //                function
 //        )).thenReturn(deliverySupplier);
@@ -147,10 +147,10 @@ class DeliveryManagerTest {
         DeliveryDto deliveryDto =  getDeliveryDto();
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-        Function<OrderArticularItem, DeliveryDto> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(OrderArticularItem.class, DeliveryDto.class))
+        Function<OrderArticularItemQuantity, DeliveryDto> function = mock(Function.class);
+        when(transformationFunctionService.getTransformationFunction(OrderArticularItemQuantity.class, DeliveryDto.class))
                 .thenReturn(function);
-//        when(queryService.getEntityDto(OrderArticularItem.class, parameterSupplier, function))
+//        when(queryService.getEntityDto(OrderArticularItemQuantity.class, parameterSupplier, function))
 //                .thenReturn(deliveryDto);
 
         DeliveryDto result = deliveryManager.getDelivery(orderId);
@@ -182,7 +182,6 @@ class DeliveryManagerTest {
                 .country("USA")
                 .city("city")
                 .street("street")
-                .street2("street2")
                 .buildingNumber(1)
                 .florNumber(9)
                 .apartmentNumber(101)
@@ -216,7 +215,6 @@ class DeliveryManagerTest {
                 .country(getCountry())
                 .city("city")
                 .street("street")
-                .street2("street2")
                 .buildingNumber(1)
                 .florNumber(9)
                 .apartmentNumber(101)

@@ -22,7 +22,7 @@ class ArticularStatusManagerTest extends AbstractConstantEntityManagerTest<Artic
     private Function<ArticularStatus, ConstantPayloadDto> mapEntityToDtoFunction;
     @Mock
     private Function<ConstantPayloadDto, ArticularStatus> mapDtoToEntityFunction;
-    private ItemStatusManager itemStatusManager;
+    private ArticularStatusManager articularStatusManager;
 
     @BeforeEach
     void setUp() {
@@ -31,7 +31,7 @@ class ArticularStatusManagerTest extends AbstractConstantEntityManagerTest<Artic
         when(transformationFunctionService.getTransformationFunction(ArticularStatus.class, ConstantPayloadDto.class))
                 .thenReturn(mapEntityToDtoFunction);
 
-        itemStatusManager = new ItemStatusManager(
+        articularStatusManager = new ArticularStatusManager(
                 parameterFactory,
                 dao,
                 transformationFunctionService
@@ -49,7 +49,7 @@ class ArticularStatusManagerTest extends AbstractConstantEntityManagerTest<Artic
         when(mapDtoToEntityFunction.apply(dto)).thenReturn(testValue);
         when(dao.getEntityClass()).thenAnswer(invocation -> ArticularStatus.class);
 
-        itemStatusManager.saveEntity(dto);
+        articularStatusManager.saveEntity(dto);
 
         verifySaveEntity(testValue);
     }
@@ -68,14 +68,14 @@ class ArticularStatusManagerTest extends AbstractConstantEntityManagerTest<Artic
         when(mapDtoToEntityFunction.apply(newDto)).thenReturn(testValue);
         when(dao.getEntityClass()).thenAnswer(invocation -> ArticularStatus.class);
 
-        itemStatusManager.updateEntity("testValue", newDto);
+        articularStatusManager.updateEntity("testValue", newDto);
 
         verifyUpdateEntity(testValue, newDto.getValue());
     }
 
     @Test
     public void testDeleteEntity() {
-        itemStatusManager.deleteEntity("testValue");
+        articularStatusManager.deleteEntity("testValue");
 
         verifyDeleteEntity("testValue");
     }
@@ -91,7 +91,7 @@ class ArticularStatusManagerTest extends AbstractConstantEntityManagerTest<Artic
         when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
         //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
-        ConstantPayloadDto result = itemStatusManager.getEntity("testValue");
+        ConstantPayloadDto result = articularStatusManager.getEntity("testValue");
 
         assertEquals(constantPayloadDto, result);
     }
@@ -107,7 +107,7 @@ class ArticularStatusManagerTest extends AbstractConstantEntityManagerTest<Artic
         when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
         //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
-        Optional<ConstantPayloadDto> result = itemStatusManager.getEntityOptional("testValue");
+        Optional<ConstantPayloadDto> result = articularStatusManager.getEntityOptional("testValue");
 
         assertEquals(Optional.of(constantPayloadDto), result);
     }
@@ -120,7 +120,7 @@ class ArticularStatusManagerTest extends AbstractConstantEntityManagerTest<Artic
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
 //        when(dao.getEntityList()).thenReturn(List.of(testValue));
 
-        List<ConstantPayloadDto> list = itemStatusManager.getEntities();
+        List<ConstantPayloadDto> list = articularStatusManager.getEntities();
 
         assertEquals(1, list.size());
         assertEquals(constantPayloadDto, list.get(0));

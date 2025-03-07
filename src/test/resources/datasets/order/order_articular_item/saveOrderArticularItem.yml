@@ -74,7 +74,6 @@ address:
   - id: 1
     city: "New York"
     street: "street"
-    street2: "street2"
     buildingNumber: 1
     florNumber: 9
     apartmentNumber: 101

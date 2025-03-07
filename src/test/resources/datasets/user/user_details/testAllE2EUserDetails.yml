@@ -44,23 +44,28 @@ country:
 address:
   - id: 1
     street: "street"
-    street2: "street2"
     buildingNumber: 10
     florNumber: 9
     apartmentNumber: 201
     zipCode: 90000
     city: "city"
     country_id: 1
-    userdetails_id: 1
   - id: 2
     street: "street"
-    street2: "street2"
     buildingNumber: 10
     florNumber: 9
     apartmentNumber: 202
     zipCode: 90000
     city: "city"
     country_id: 1
+user_address:
+  - id: 1
+    address_id: 1
+    isDefault: false
+    userdetails_id: 1
+  - id: 2
+    address_id: 2
+    isDefault: false
     userdetails_id: 2
 credit_card:
   - id: 1
@@ -88,3 +93,24 @@ user_credit_card:
     credit_card_id: 2
     userdetails_id: 2
     isDefault: true
+device:
+  - id: 1
+    name: "phone"
+    lastSignedIn: "2024-03-03 12:00:00"
+    isThisDevice: false
+    userdetails_id: 1
+  - id: 2
+    name: "laptop"
+    lastSignedIn: "2024-03-03 15:30:00"
+    isThisDevice: true
+    userdetails_id: 1
+  - id: 3
+    name: "phone"
+    lastSignedIn: "2024-03-03 12:00:00"
+    isThisDevice: false
+    userdetails_id: 2
+  - id: 4
+    name: "laptop"
+    lastSignedIn: "2024-03-03 15:30:00"
+    isThisDevice: true
+    userdetails_id: 2

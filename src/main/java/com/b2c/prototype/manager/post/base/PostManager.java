@@ -4,12 +4,11 @@ import com.b2c.prototype.dao.post.IPostDao;
 import com.b2c.prototype.modal.dto.payload.PostDto;
 import com.b2c.prototype.modal.entity.post.Post;
 import com.b2c.prototype.manager.post.IPostManager;
-import com.b2c.prototype.service.common.EntityOperationManager;
-import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.finder.parameter.Parameter;
+import com.tm.core.process.manager.common.EntityOperationManager;
+import com.tm.core.process.manager.common.IEntityOperationManager;
 import com.tm.core.util.TransitiveSelfEnum;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,16 +24,13 @@ public class PostManager implements IPostManager {
 
     private final IEntityOperationManager entityOperationDao;
     private final ITransformationFunctionService transformationFunctionService;
-    private final ISupplierService supplierService;
     private final IParameterFactory parameterFactory;
 
     public PostManager(IPostDao postDao,
                        ITransformationFunctionService transformationFunctionService,
-                       ISupplierService supplierService,
                        IParameterFactory parameterFactory) {
         this.entityOperationDao = new EntityOperationManager(postDao);
         this.transformationFunctionService = transformationFunctionService;
-        this.supplierService = supplierService;
         this.parameterFactory = parameterFactory;
     }
 

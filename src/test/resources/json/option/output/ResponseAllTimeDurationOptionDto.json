@@ -1,0 +1,24 @@
+[
+  {
+    "label": "9-11",
+    "value": "9-11",
+    "startTime": "09:00:00",
+    "endTime": "11:00:00",
+    "duration": 120,
+    "price": {
+      "amount": 27,
+      "currency": "USD"
+    }
+  },
+  {
+    "label": "11-13",
+    "value": "11-13",
+    "startTime": "11:00:00",
+    "endTime": "13:00:00",
+    "duration": 120,
+    "price": {
+      "amount": 25,
+      "currency": "USD"
+    }
+  }
+]

@@ -7,13 +7,12 @@ import com.b2c.prototype.modal.dto.response.ResponseArticularItemDto;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
-import com.b2c.prototype.service.common.EntityOperationManager;
-import com.b2c.prototype.service.common.IEntityOperationManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.item.IArticularItemManager;
 import com.b2c.prototype.service.query.ISearchService;
-import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.factory.IParameterFactory;
+import com.tm.core.process.manager.common.EntityOperationManager;
+import com.tm.core.process.manager.common.IEntityOperationManager;
 
 import java.util.List;
 
@@ -25,18 +24,15 @@ public class ArticularItemManager implements IArticularItemManager {
     private final IEntityOperationManager entityOperationDao;
     private final ISearchService searchService;
     private final ITransformationFunctionService transformationFunctionService;
-    private final ISupplierService supplierService;
     private final IParameterFactory parameterFactory;
 
     public ArticularItemManager(IItemDataOptionDao itemDataOptionDao,
                                 ISearchService searchService,
                                 ITransformationFunctionService transformationFunctionService,
-                                ISupplierService supplierService,
                                 IParameterFactory parameterFactory) {
         this.entityOperationDao = new EntityOperationManager(itemDataOptionDao);
         this.searchService = searchService;
         this.transformationFunctionService = transformationFunctionService;
-        this.supplierService = supplierService;
         this.parameterFactory = parameterFactory;
     }
 

@@ -20,7 +20,7 @@ public class OrderArticularItemQuantityDto {
     private UserDto user;
     private List<ArticularItemQuantityDto> itemDataOptionQuantities;
     private DeliveryDto delivery;
-    private List<BeneficiaryDto> beneficiaries;
+    private ContactInfoDto beneficiary;
     private PaymentDto payment;
     private String note;
 }
