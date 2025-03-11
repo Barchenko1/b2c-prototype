@@ -5,7 +5,7 @@ import com.b2c.prototype.modal.constant.PriceTypeEnum;
 import com.b2c.prototype.modal.dto.payload.PriceDto;
 import com.b2c.prototype.modal.dto.response.ResponsePriceDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
-import com.b2c.prototype.modal.entity.order.OrderArticularItemQuantity;
+import com.b2c.prototype.modal.entity.order.DeliveryArticularItemQuantity;
 import com.b2c.prototype.modal.entity.payment.Payment;
 import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
@@ -44,8 +44,8 @@ public class PriceManager implements IPriceManager {
     @Override
     public void saveUpdatePriceByOrderId(String orderId, PriceDto priceDto, PriceTypeEnum priceType) {
         entityOperationDao.executeConsumer(session -> {
-            OrderArticularItemQuantity orderItemDataOption = searchService.getNamedQueryEntity(
-                    OrderArticularItemQuantity.class,
+            DeliveryArticularItemQuantity orderItemDataOption = searchService.getNamedQueryEntity(
+                    DeliveryArticularItemQuantity.class,
                     "",
                     parameterFactory.createStringParameter(ORDER_ID, orderId));
             Price price = transformationFunctionService.getEntity(
@@ -86,11 +86,11 @@ public class PriceManager implements IPriceManager {
     public void deletePriceByOrderId(String orderId, PriceTypeEnum priceType) {
         entityOperationDao.deleteEntity(
                 supplierService.entityFieldSupplier(
-                        OrderArticularItemQuantity.class,
+                        DeliveryArticularItemQuantity.class,
                         "",
                         supplierService.parameterStringSupplier(ORDER_ID, orderId),
                         transformationFunctionService.getTransformationFunction(
-                                OrderArticularItemQuantity.class, Price.class, priceType.getValue())
+                                DeliveryArticularItemQuantity.class, Price.class, priceType.getValue())
                 )
         );
     }
@@ -111,11 +111,11 @@ public class PriceManager implements IPriceManager {
     @Override
     public PriceDto getPriceByOrderId(String orderId, PriceTypeEnum priceType) {
         return searchService.getNamedQueryEntityDto(
-                OrderArticularItemQuantity.class,
+                DeliveryArticularItemQuantity.class,
                 "",
                 parameterFactory.createStringParameter(ORDER_ID, orderId),
                 transformationFunctionService.getTransformationFunction(
-                        OrderArticularItemQuantity.class, PriceDto.class, priceType.getValue()));
+                        DeliveryArticularItemQuantity.class, PriceDto.class, priceType.getValue()));
     }
 
     @Override
@@ -140,10 +140,10 @@ public class PriceManager implements IPriceManager {
     @Override
     public ResponsePriceDto getResponsePriceDtoByOrderId(String orderId) {
         return searchService.getNamedQueryEntityDto(
-                OrderArticularItemQuantity.class,
+                DeliveryArticularItemQuantity.class,
                 "",
                 parameterFactory.createStringParameter(ORDER_ID, orderId),
-                transformationFunctionService.getTransformationFunction(OrderArticularItemQuantity.class, ResponsePriceDto.class));
+                transformationFunctionService.getTransformationFunction(DeliveryArticularItemQuantity.class, ResponsePriceDto.class));
     }
 
     @Override

@@ -17,7 +17,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NamedQuery(
         name = "BuyerCommission.getLatest",
-        query = "SELECT s FROM BuyerCommission s ORDER BY s.effectiveDate DESC"
+        query = "SELECT b FROM BuyerCommission b ORDER BY b.effectiveDate DESC"
 )
 public class BuyerCommission extends AbstractCommission {
 }

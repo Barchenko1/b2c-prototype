@@ -7,7 +7,7 @@ import com.b2c.prototype.modal.dto.payload.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.PaymentDto;
 import com.b2c.prototype.modal.dto.payload.PriceDto;
 import com.b2c.prototype.modal.entity.item.Discount;
-import com.b2c.prototype.modal.entity.order.OrderArticularItemQuantity;
+import com.b2c.prototype.modal.entity.order.DeliveryArticularItemQuantity;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
 import com.b2c.prototype.modal.entity.payment.Payment;
 import com.b2c.prototype.modal.entity.payment.PaymentMethod;
@@ -65,13 +65,13 @@ class PaymentManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-        OrderArticularItemQuantity orderItemDataOption = mock(OrderArticularItemQuantity.class);
+        DeliveryArticularItemQuantity orderItemDataOption = mock(DeliveryArticularItemQuantity.class);
         Payment payment = mock(Payment.class);
         Payment newPayment = getPayment();
 
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-//        when(queryService.getNamedQueryEntity(OrderArticularItemQuantity.class, parameterSupplier))
+//        when(queryService.getNamedQueryEntity(DeliveryArticularItemQuantity.class, parameterSupplier))
 //                .thenReturn(orderItemDataOption);
 //        when(orderItemDataOption.getPayment()).thenReturn(payment);
         when(transformationFunctionService.getEntity(eq(Payment.class), eq(paymentDto)))
@@ -97,13 +97,13 @@ class PaymentManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-        OrderArticularItemQuantity orderItemDataOption = mock(OrderArticularItemQuantity.class);
+        DeliveryArticularItemQuantity orderItemDataOption = mock(DeliveryArticularItemQuantity.class);
         Payment payment = null;
         Payment newPayment = getPayment();
 
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-//        when(queryService.getEntity(OrderArticularItemQuantity.class, parameterSupplier))
+//        when(queryService.getEntity(DeliveryArticularItemQuantity.class, parameterSupplier))
 //                .thenReturn(orderItemDataOption);
 //        when(orderItemDataOption.getPayment()).thenReturn(payment);
         when(transformationFunctionService.getEntity(eq(Payment.class), eq(paymentDto)))
@@ -132,11 +132,11 @@ class PaymentManagerTest {
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
         Supplier<Payment> paymentSupplier = () -> payment;
-        Function<OrderArticularItemQuantity, Payment> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(eq(OrderArticularItemQuantity.class), eq(Payment.class)))
+        Function<DeliveryArticularItemQuantity, Payment> function = mock(Function.class);
+        when(transformationFunctionService.getTransformationFunction(eq(DeliveryArticularItemQuantity.class), eq(Payment.class)))
                 .thenReturn(function);
 //        when(supplierService.entityFieldSupplier(
-//                OrderArticularItemQuantity.class,
+//                DeliveryArticularItemQuantity.class,
 //                parameterSupplier,
 //                function)
 //        ).thenReturn(paymentSupplier);
@@ -170,14 +170,14 @@ class PaymentManagerTest {
         String orderId = "123";
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        Function<OrderArticularItemQuantity, PaymentDto> function = mock(Function.class);
+        Function<DeliveryArticularItemQuantity, PaymentDto> function = mock(Function.class);
 
         PaymentDto paymentDto = getPaymentDto();
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-        when(transformationFunctionService.getTransformationFunction(eq(OrderArticularItemQuantity.class), eq(PaymentDto.class)))
+        when(transformationFunctionService.getTransformationFunction(eq(DeliveryArticularItemQuantity.class), eq(PaymentDto.class)))
                 .thenReturn(function);
-//        when(queryService.getEntityDto(OrderArticularItemQuantity.class, parameterSupplier, function))
+//        when(queryService.getEntityDto(DeliveryArticularItemQuantity.class, parameterSupplier, function))
 //                .thenReturn(paymentDto);
 
         PaymentDto result = paymentManager.getPaymentByOrderId(orderId);

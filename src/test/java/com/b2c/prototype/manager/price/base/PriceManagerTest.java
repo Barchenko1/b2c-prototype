@@ -5,7 +5,7 @@ import com.b2c.prototype.modal.constant.PriceTypeEnum;
 import com.b2c.prototype.modal.dto.payload.PriceDto;
 import com.b2c.prototype.modal.dto.response.ResponsePriceDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
-import com.b2c.prototype.modal.entity.order.OrderArticularItemQuantity;
+import com.b2c.prototype.modal.entity.order.DeliveryArticularItemQuantity;
 import com.b2c.prototype.modal.entity.payment.Payment;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
@@ -174,7 +174,7 @@ class PriceManagerTest {
     void testSaveUpdateTotalPriceByOrderId() {
         String orderId = "ART123";
         PriceDto priceDto = getPriceDto(10);
-        OrderArticularItemQuantity orderItemDataOption = mock(OrderArticularItemQuantity.class);
+        DeliveryArticularItemQuantity orderItemDataOption = mock(DeliveryArticularItemQuantity.class);
         Payment payment = mock(Payment.class);
 //        when(orderItemDataOption.getPayment()).thenReturn(payment);
 
@@ -184,7 +184,7 @@ class PriceManagerTest {
 
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-//        when(queryService.getEntity(OrderArticularItemQuantity.class, parameterSupplier))
+//        when(queryService.getEntity(DeliveryArticularItemQuantity.class, parameterSupplier))
 //                .thenReturn(orderItemDataOption);
         when(transformationFunctionService.getEntity(Price.class, priceDto, priceType.getValue()))
                 .thenReturn(getPrice(100.0));
@@ -205,7 +205,7 @@ class PriceManagerTest {
     void testSaveUpdateFullPriceByOrderId() {
         String orderId = "ART123";
         PriceDto priceDto = getPriceDto(10);
-        OrderArticularItemQuantity orderItemDataOption = mock(OrderArticularItemQuantity.class);
+        DeliveryArticularItemQuantity orderItemDataOption = mock(DeliveryArticularItemQuantity.class);
         Payment payment = mock(Payment.class);
 //        when(orderItemDataOption.getPayment()).thenReturn(payment);
 
@@ -215,7 +215,7 @@ class PriceManagerTest {
 
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-//        when(queryService.getEntity(OrderArticularItemQuantity.class, parameterSupplier))
+//        when(queryService.getEntity(DeliveryArticularItemQuantity.class, parameterSupplier))
 //                .thenReturn(orderItemDataOption);
         when(transformationFunctionService.getEntity(Price.class, priceDto, priceType.getValue()))
                 .thenReturn(getPrice(100.0));
@@ -236,7 +236,7 @@ class PriceManagerTest {
     void testSaveUpdateTotalPriceByOrderIdExistingPriceNull() {
         String orderId = "ART123";
         PriceDto priceDto = getPriceDto(10);
-        OrderArticularItemQuantity orderItemDataOption = mock(OrderArticularItemQuantity.class);
+        DeliveryArticularItemQuantity orderItemDataOption = mock(DeliveryArticularItemQuantity.class);
         Payment payment = mock(Payment.class);
 //        when(orderItemDataOption.getPayment()).thenReturn(payment);
         when(payment.getTotalPrice()).thenReturn(getPrice(100.0));
@@ -246,7 +246,7 @@ class PriceManagerTest {
 
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-//        when(queryService.getEntity(OrderArticularItemQuantity.class, parameterSupplier))
+//        when(queryService.getEntity(DeliveryArticularItemQuantity.class, parameterSupplier))
 //                .thenReturn(orderItemDataOption);
         when(transformationFunctionService.getEntity(Price.class, priceDto, priceType.getValue()))
                 .thenReturn(getPrice(100.0));
@@ -267,7 +267,7 @@ class PriceManagerTest {
     void testSaveUpdateFullPriceByOrderIdExistingPriceNull() {
         String orderId = "ART123";
         PriceDto priceDto = getPriceDto(10);
-        OrderArticularItemQuantity orderItemDataOption = mock(OrderArticularItemQuantity.class);
+        DeliveryArticularItemQuantity orderItemDataOption = mock(DeliveryArticularItemQuantity.class);
         Payment payment = mock(Payment.class);
 //        when(orderItemDataOption.getPayment()).thenReturn(payment);
         when(payment.getCommissionPrice()).thenReturn(getPrice(100.0));
@@ -277,7 +277,7 @@ class PriceManagerTest {
 
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-//        when(queryService.getEntity(OrderArticularItemQuantity.class, parameterSupplier))
+//        when(queryService.getEntity(DeliveryArticularItemQuantity.class, parameterSupplier))
 //                .thenReturn(orderItemDataOption);
         when(transformationFunctionService.getEntity(Price.class, priceDto, priceType.getValue()))
                 .thenReturn(getPrice(100.0));
@@ -305,11 +305,11 @@ class PriceManagerTest {
         Supplier<Parameter> parameterSupplier = () -> parameter;
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-        Function<OrderArticularItemQuantity, Price> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(OrderArticularItemQuantity.class, Price.class, priceType.getValue()))
+        Function<DeliveryArticularItemQuantity, Price> function = mock(Function.class);
+        when(transformationFunctionService.getTransformationFunction(DeliveryArticularItemQuantity.class, Price.class, priceType.getValue()))
                 .thenReturn(function);
 //        when(supplierService.entityFieldSupplier(
-//                OrderArticularItemQuantity.class,
+//                DeliveryArticularItemQuantity.class,
 //                parameterSupplier,
 //                function
 //        )).thenReturn(priceSupplier);
@@ -346,22 +346,22 @@ class PriceManagerTest {
     @Test
     void testGetFullPriceByOrderId() {
         String orderId = "123";
-        OrderArticularItemQuantity orderItemDataOption = mock(OrderArticularItemQuantity.class);
+        DeliveryArticularItemQuantity orderItemDataOption = mock(DeliveryArticularItemQuantity.class);
         PriceTypeEnum priceType = PriceTypeEnum.FULL_PRICE;
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
         PriceDto priceDto = getPriceDto(150.0);
-        Function<OrderArticularItemQuantity, PriceDto> function = mock(Function.class);
+        Function<DeliveryArticularItemQuantity, PriceDto> function = mock(Function.class);
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-        when(transformationFunctionService.getTransformationFunction(OrderArticularItemQuantity.class, PriceDto.class, priceType.getValue()))
+        when(transformationFunctionService.getTransformationFunction(DeliveryArticularItemQuantity.class, PriceDto.class, priceType.getValue()))
                 .thenReturn(function);
         when(function.apply(orderItemDataOption)).thenReturn(priceDto);
-//        when(queryService.getEntityDto(OrderArticularItemQuantity.class, parameterSupplier, function))
+//        when(queryService.getEntityDto(DeliveryArticularItemQuantity.class, parameterSupplier, function))
 //                .thenAnswer(invocation -> {
 //                    Supplier<Parameter> supplierArg = invocation.getArgument(1);
-//                    Function<OrderArticularItemQuantity, PriceDto> functionArg = invocation.getArgument(2);
+//                    Function<DeliveryArticularItemQuantity, PriceDto> functionArg = invocation.getArgument(2);
 //                    assertEquals(parameterSupplier.get(), supplierArg.get());
 //                    return functionArg.apply(orderItemDataOption);
 //                });
@@ -404,7 +404,7 @@ class PriceManagerTest {
     @Test
     void testGetResponsePriceDtoByOrderId() {
         String orderId = "123";
-        OrderArticularItemQuantity orderItemDataOption = mock(OrderArticularItemQuantity.class);
+        DeliveryArticularItemQuantity orderItemDataOption = mock(DeliveryArticularItemQuantity.class);
         Payment payment = mock(Payment.class);
 //        when(orderItemDataOption.getPayment()).thenReturn(payment);
 
@@ -412,16 +412,16 @@ class PriceManagerTest {
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
         ResponsePriceDto responsePriceDto = getResponsePriceDto(150.0);
-        Function<OrderArticularItemQuantity, ResponsePriceDto> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(OrderArticularItemQuantity.class, ResponsePriceDto.class))
+        Function<DeliveryArticularItemQuantity, ResponsePriceDto> function = mock(Function.class);
+        when(transformationFunctionService.getTransformationFunction(DeliveryArticularItemQuantity.class, ResponsePriceDto.class))
                 .thenReturn(function);
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
         when(function.apply(orderItemDataOption)).thenReturn(responsePriceDto);
-//        when(queryService.getEntityDto(OrderArticularItemQuantity.class, parameterSupplier, function))
+//        when(queryService.getEntityDto(DeliveryArticularItemQuantity.class, parameterSupplier, function))
 //                .thenAnswer(invocation -> {
 //                    Supplier<Parameter> supplierArg = invocation.getArgument(1);
-//                    Function<OrderArticularItemQuantity, ResponsePriceDto> functionArg = invocation.getArgument(2);
+//                    Function<DeliveryArticularItemQuantity, ResponsePriceDto> functionArg = invocation.getArgument(2);
 //                    assertEquals(parameterSupplier.get(), supplierArg.get());
 //                    return functionArg.apply(orderItemDataOption);
 //                });

@@ -10,6 +10,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -24,6 +26,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@NamedQueries({
+        @NamedQuery(
+                name = "UserCreditCard.findByCreditCardNumber",
+                query = "SELECT c FROM CreditCard c WHERE c.cardNumber =: cardNumber"
+        ),
+})
 public class UserCreditCard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

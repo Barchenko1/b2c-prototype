@@ -8,7 +8,7 @@ import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
-import com.b2c.prototype.modal.entity.order.OrderArticularItemQuantity;
+import com.b2c.prototype.modal.entity.order.DeliveryArticularItemQuantity;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.modal.entity.store.CountType;
@@ -24,7 +24,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -61,7 +60,7 @@ class ArticularItemQuantityManagerTest {
     void testIncreaseOneItemDataOptionQuantityCount() {
         ItemDataOptionOneQuantityDto dto = getItemDataOptionOneQuantityDto();
 
-        OrderArticularItemQuantity orderItemDataOption = mock(OrderArticularItemQuantity.class);
+        DeliveryArticularItemQuantity orderItemDataOption = mock(DeliveryArticularItemQuantity.class);
         ArticularItemQuantity articularItemQuantity = getItemDataOptionQuantity();
 
         when(orderItemDataOption.getArticularItemQuantity())
@@ -72,7 +71,7 @@ class ArticularItemQuantityManagerTest {
 
         when(supplierService.parameterStringSupplier(ORDER_ID, dto.getOrderId()))
                 .thenReturn(parameterSupplier);
-//        when(queryService.getEntity(OrderArticularItemQuantity.class, parameterSupplier)).thenReturn(orderItemDataOption);
+//        when(queryService.getEntity(DeliveryArticularItemQuantity.class, parameterSupplier)).thenReturn(orderItemDataOption);
 
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -92,7 +91,7 @@ class ArticularItemQuantityManagerTest {
     void testDecreaseOneItemDataOptionQuantityCount() {
         ItemDataOptionOneQuantityDto dto = getItemDataOptionOneQuantityDto();
 
-        OrderArticularItemQuantity orderItemDataOption = mock(OrderArticularItemQuantity.class);
+        DeliveryArticularItemQuantity orderItemDataOption = mock(DeliveryArticularItemQuantity.class);
         ArticularItemQuantity articularItemQuantity = getItemDataOptionQuantity();
 
         when(orderItemDataOption.getArticularItemQuantity())
@@ -103,7 +102,7 @@ class ArticularItemQuantityManagerTest {
 
         when(supplierService.parameterStringSupplier(ORDER_ID, dto.getOrderId()))
                 .thenReturn(parameterSupplier);
-//        when(queryService.getEntity(OrderArticularItemQuantity.class, parameterSupplier)).thenReturn(orderItemDataOption);
+//        when(queryService.getEntity(DeliveryArticularItemQuantity.class, parameterSupplier)).thenReturn(orderItemDataOption);
 
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -127,7 +126,7 @@ class ArticularItemQuantityManagerTest {
 
         Store store = getStore();
 
-        OrderArticularItemQuantity orderItemDataOption = mock(OrderArticularItemQuantity.class);
+        DeliveryArticularItemQuantity orderItemDataOption = mock(DeliveryArticularItemQuantity.class);
         when(orderItemDataOption.getArticularItemQuantity())
                 .thenReturn(articularItemQuantity);
 
@@ -138,7 +137,7 @@ class ArticularItemQuantityManagerTest {
 
         when(supplierService.parameterStringSupplier(ORDER_ID, dto.getOrderId()))
                 .thenReturn(parameterSupplier);
-//        when(queryService.getEntity(OrderArticularItemQuantity.class, parameterSupplier))
+//        when(queryService.getEntity(DeliveryArticularItemQuantity.class, parameterSupplier))
 //                .thenReturn(orderItemDataOption);
         when(session.createNativeQuery(anyString(), eq(Store.class)))
                 .thenReturn(query);
@@ -167,7 +166,7 @@ class ArticularItemQuantityManagerTest {
         Store store = new Store();
         store.setCount(10);
 
-        OrderArticularItemQuantity orderItemDataOption = mock(OrderArticularItemQuantity.class);
+        DeliveryArticularItemQuantity orderItemDataOption = mock(DeliveryArticularItemQuantity.class);
         when(orderItemDataOption.getArticularItemQuantity())
                 .thenReturn(articularItemQuantity);
 
@@ -178,7 +177,7 @@ class ArticularItemQuantityManagerTest {
 
         when(supplierService.parameterStringSupplier(ORDER_ID, dto.getOrderId()))
                 .thenReturn(parameterSupplier);
-//        when(queryService.getEntity(OrderArticularItemQuantity.class, parameterSupplier))
+//        when(queryService.getEntity(DeliveryArticularItemQuantity.class, parameterSupplier))
 //                .thenReturn(orderItemDataOption);
         when(session.createNativeQuery(anyString(), eq(Store.class)))
                 .thenReturn(query);
@@ -203,7 +202,7 @@ class ArticularItemQuantityManagerTest {
     void testIncreaseItemDataOptionQuantityCount() {
         ArticularItemQuantityDto dto = getItemDataOptionQuantityDto();
         dto.setQuantity(3);
-        OrderArticularItemQuantity orderItemDataOption = mock(OrderArticularItemQuantity.class);
+        DeliveryArticularItemQuantity orderItemDataOption = mock(DeliveryArticularItemQuantity.class);
         ArticularItemQuantity articularItemQuantity = getItemDataOptionQuantity();
 
         when(orderItemDataOption.getArticularItemQuantity())
@@ -212,7 +211,7 @@ class ArticularItemQuantityManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-//        when(queryService.getEntity(OrderArticularItemQuantity.class, parameterSupplier)).thenReturn(orderItemDataOption);
+//        when(queryService.getEntity(DeliveryArticularItemQuantity.class, parameterSupplier)).thenReturn(orderItemDataOption);
 
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -232,7 +231,7 @@ class ArticularItemQuantityManagerTest {
     void testDecreaseItemDataOptionQuantityCount() {
         ArticularItemQuantityDto dto = getItemDataOptionQuantityDto();
         dto.setQuantity(3);
-        OrderArticularItemQuantity orderItemDataOption = mock(OrderArticularItemQuantity.class);
+        DeliveryArticularItemQuantity orderItemDataOption = mock(DeliveryArticularItemQuantity.class);
         ArticularItemQuantity articularItemQuantity = getItemDataOptionQuantity();
 
         when(orderItemDataOption.getArticularItemQuantity())
@@ -241,7 +240,7 @@ class ArticularItemQuantityManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-//        when(queryService.getEntity(OrderArticularItemQuantity.class, parameterSupplier)).thenReturn(orderItemDataOption);
+//        when(queryService.getEntity(DeliveryArticularItemQuantity.class, parameterSupplier)).thenReturn(orderItemDataOption);
 
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -265,7 +264,7 @@ class ArticularItemQuantityManagerTest {
         ArticularItemQuantity articularItemQuantity = getItemDataOptionQuantity();
         Store store = getStore();
 
-        OrderArticularItemQuantity orderItemDataOption = mock(OrderArticularItemQuantity.class);
+        DeliveryArticularItemQuantity orderItemDataOption = mock(DeliveryArticularItemQuantity.class);
         when(orderItemDataOption.getArticularItemQuantity())
                 .thenReturn(articularItemQuantity);
 
@@ -274,7 +273,7 @@ class ArticularItemQuantityManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-//        when(queryService.getEntity(OrderArticularItemQuantity.class, parameterSupplier))
+//        when(queryService.getEntity(DeliveryArticularItemQuantity.class, parameterSupplier))
 //                .thenReturn(orderItemDataOption);
         when(session.createNativeQuery(anyString(), eq(Store.class)))
                 .thenReturn(query);
@@ -303,7 +302,7 @@ class ArticularItemQuantityManagerTest {
         ArticularItemQuantity articularItemQuantity = getItemDataOptionQuantity();
         Store store = getStore();
 
-        OrderArticularItemQuantity orderItemDataOption = mock(OrderArticularItemQuantity.class);
+        DeliveryArticularItemQuantity orderItemDataOption = mock(DeliveryArticularItemQuantity.class);
         when(orderItemDataOption.getArticularItemQuantity())
                 .thenReturn(articularItemQuantity);
 
@@ -312,7 +311,7 @@ class ArticularItemQuantityManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-//        when(queryService.getEntity(OrderArticularItemQuantity.class, parameterSupplier))
+//        when(queryService.getEntity(DeliveryArticularItemQuantity.class, parameterSupplier))
 //                .thenReturn(orderItemDataOption);
         when(session.createNativeQuery(anyString(), eq(Store.class)))
                 .thenReturn(query);
@@ -341,7 +340,7 @@ class ArticularItemQuantityManagerTest {
         ArticularItemQuantity articularItemQuantity = getItemDataOptionQuantity();
         Store store = getStore();
 
-        OrderArticularItemQuantity orderItemDataOption = mock(OrderArticularItemQuantity.class);
+        DeliveryArticularItemQuantity orderItemDataOption = mock(DeliveryArticularItemQuantity.class);
         when(orderItemDataOption.getArticularItemQuantity())
                 .thenReturn(articularItemQuantity);
 
@@ -350,7 +349,7 @@ class ArticularItemQuantityManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-//        when(queryService.getEntity(OrderArticularItemQuantity.class, parameterSupplier))
+//        when(queryService.getEntity(DeliveryArticularItemQuantity.class, parameterSupplier))
 //                .thenReturn(orderItemDataOption);
         when(session.createNativeQuery(anyString(), eq(Store.class)))
                 .thenReturn(query);

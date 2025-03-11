@@ -2,7 +2,7 @@ package com.b2c.prototype.manager.payment.base;
 
 import com.b2c.prototype.dao.payment.IPaymentDao;
 import com.b2c.prototype.modal.dto.payload.PaymentDto;
-import com.b2c.prototype.modal.entity.order.OrderArticularItemQuantity;
+import com.b2c.prototype.modal.entity.order.DeliveryArticularItemQuantity;
 import com.b2c.prototype.modal.entity.payment.Payment;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.payment.IPaymentManager;
@@ -40,8 +40,8 @@ public class PaymentManager implements IPaymentManager {
     @Override
     public void saveUpdatePayment(String orderId, PaymentDto paymentDto) {
         entityOperationDao.executeConsumer(session -> {
-            OrderArticularItemQuantity orderItemDataOption = searchService.getNamedQueryEntity(
-                    OrderArticularItemQuantity.class,
+            DeliveryArticularItemQuantity orderItemDataOption = searchService.getNamedQueryEntity(
+                    DeliveryArticularItemQuantity.class,
                     "",
                     parameterFactory.createStringParameter(ORDER_ID, orderId));
             Payment newPayment = transformationFunctionService.getEntity(
@@ -62,10 +62,10 @@ public class PaymentManager implements IPaymentManager {
     public void deletePaymentByOrderId(String orderId) {
         entityOperationDao.deleteEntity(
                 supplierService.entityFieldSupplier(
-                        OrderArticularItemQuantity.class,
+                        DeliveryArticularItemQuantity.class,
                         "",
                         supplierService.parameterStringSupplier(ORDER_ID, orderId),
-                        transformationFunctionService.getTransformationFunction(OrderArticularItemQuantity.class, Payment.class)));
+                        transformationFunctionService.getTransformationFunction(DeliveryArticularItemQuantity.class, Payment.class)));
     }
 
     @Override
@@ -80,10 +80,10 @@ public class PaymentManager implements IPaymentManager {
     @Override
     public PaymentDto getPaymentByOrderId(String orderId) {
         return searchService.getNamedQueryEntityDto(
-                OrderArticularItemQuantity.class,
+                DeliveryArticularItemQuantity.class,
                 "",
                 parameterFactory.createStringParameter(ORDER_ID, orderId),
-                transformationFunctionService.getTransformationFunction(OrderArticularItemQuantity.class, PaymentDto.class));
+                transformationFunctionService.getTransformationFunction(DeliveryArticularItemQuantity.class, PaymentDto.class));
     }
 
     @Override

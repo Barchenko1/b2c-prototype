@@ -3,7 +3,7 @@ package com.b2c.prototype.manager.userdetails.basic;
 import com.b2c.prototype.dao.user.IContactPhoneDao;
 import com.b2c.prototype.modal.dto.payload.ContactInfoDto;
 import com.b2c.prototype.modal.dto.payload.ContactPhoneDto;
-import com.b2c.prototype.modal.entity.order.OrderArticularItemQuantity;
+import com.b2c.prototype.modal.entity.order.DeliveryArticularItemQuantity;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.UserDetails;
@@ -59,8 +59,8 @@ public class ContactPhoneManager implements IContactPhoneManager {
     @Override
     public void saveUpdateContactPhoneByOrderId(String orderId, ContactInfoDto contactInfoDto) {
         entityOperationDao.executeConsumer(session -> {
-            OrderArticularItemQuantity orderItemDataOption = searchService.getNamedQueryEntity(
-                    OrderArticularItemQuantity.class,
+            DeliveryArticularItemQuantity orderItemDataOption = searchService.getNamedQueryEntity(
+                    DeliveryArticularItemQuantity.class,
                     "",
                     parameterFactory.createStringParameter(ORDER_ID, orderId));
             ContactPhone newContactPhone = transformationFunctionService
@@ -84,8 +84,8 @@ public class ContactPhoneManager implements IContactPhoneManager {
     @Override
     public void deleteContactPhoneByOrderId(String orderId) {
         entityOperationDao.executeConsumer(session -> {
-            OrderArticularItemQuantity orderItemDataOption = searchService.getNamedQueryEntity(
-                    OrderArticularItemQuantity.class,
+            DeliveryArticularItemQuantity orderItemDataOption = searchService.getNamedQueryEntity(
+                    DeliveryArticularItemQuantity.class,
                     "",
                     parameterFactory.createStringParameter(ORDER_ID, orderId));
             ContactInfo beneficiary = orderItemDataOption.getBeneficiary();
@@ -105,10 +105,10 @@ public class ContactPhoneManager implements IContactPhoneManager {
     @Override
     public List<ContactPhoneDto> getContactPhoneByOrderId(String orderId) {
         return searchService.getSubNamedQueryEntityDtoList(
-                OrderArticularItemQuantity.class,
+                DeliveryArticularItemQuantity.class,
                 "",
                 parameterFactory.createStringParameter(ORDER_ID, orderId),
-                transformationFunctionService.getTransformationFunction(OrderArticularItemQuantity.class, ContactPhoneDto.class, "list"));
+                transformationFunctionService.getTransformationFunction(DeliveryArticularItemQuantity.class, ContactPhoneDto.class, "list"));
     }
 
     @Override

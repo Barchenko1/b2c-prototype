@@ -111,7 +111,7 @@ class BasicUserDetailsDaoTest extends AbstractCustomEntityDaoTest {
                 .id(1L)
                 .country(country)
                 .street("street")
-                .buildingNumber(1)
+                .buildingNumber("1")
                 .apartmentNumber(101)
                 .florNumber(9)
                 .zipCode("90000")
@@ -146,7 +146,7 @@ class BasicUserDetailsDaoTest extends AbstractCustomEntityDaoTest {
                 .isActive(true)
                 .contactInfo(contactInfo)
 //                .addresses(Set.of(address))
-                .userCreditCardList(Set.of(userCreditCard))
+                .userCreditCards(Set.of(userCreditCard))
                 .build();
     }
 
@@ -177,7 +177,7 @@ class BasicUserDetailsDaoTest extends AbstractCustomEntityDaoTest {
                 .country(country)
                 .city("city")
                 .street("street")
-                .buildingNumber(1)
+                .buildingNumber("1")
                 .apartmentNumber(101)
                 .florNumber(9)
                 .zipCode("90000")
@@ -204,7 +204,7 @@ class BasicUserDetailsDaoTest extends AbstractCustomEntityDaoTest {
                 .isActive(true)
                 .contactInfo(contactInfo)
 //                .addresses(Set.of(address))
-                .userCreditCardList(Set.of(userCreditCard))
+                .userCreditCards(Set.of(userCreditCard))
                 .build();
     }
 
@@ -234,7 +234,7 @@ class BasicUserDetailsDaoTest extends AbstractCustomEntityDaoTest {
                 .id(1L)
                 .country(country)
                 .street("Update street")
-                .buildingNumber(1)
+                .buildingNumber("1")
                 .apartmentNumber(101)
                 .florNumber(9)
                 .zipCode("90000")
@@ -270,7 +270,7 @@ class BasicUserDetailsDaoTest extends AbstractCustomEntityDaoTest {
                 .isActive(false)
                 .contactInfo(contactInfo)
 //                .addresses(Set.of(address))
-                .userCreditCardList(Set.of(userCreditCard))
+                .userCreditCards(Set.of(userCreditCard))
                 .build();
     }
 
@@ -323,7 +323,7 @@ class BasicUserDetailsDaoTest extends AbstractCustomEntityDaoTest {
         contactPhone.setId(0L);
 //        Address address = userDetails.getAddresses().stream().toList().get(0);
 //        address.setId(0L);
-        CreditCard creditCard = userDetails.getUserCreditCardList().stream().toList().get(0).getCreditCard();
+        CreditCard creditCard = userDetails.getUserCreditCards().stream().toList().get(0).getCreditCard();
         creditCard.setId(0L);
 
         dao.persistEntity(userDetails);
@@ -363,7 +363,7 @@ class BasicUserDetailsDaoTest extends AbstractCustomEntityDaoTest {
             UserDetails userDetails = prepareSaveUserDetails();
 //            userDetails.setAddresses(s.merge(userDetails.getAddresses()));
             userDetails.setContactInfo(s.merge(userDetails.getContactInfo()));
-            userDetails.setUserCreditCardList(userDetails.getUserCreditCardList().stream()
+            userDetails.setUserCreditCards(userDetails.getUserCreditCards().stream()
                     .peek(uc -> s.merge(uc.getCreditCard()))
                     .collect(Collectors.toSet()));
             s.persist(userDetails);

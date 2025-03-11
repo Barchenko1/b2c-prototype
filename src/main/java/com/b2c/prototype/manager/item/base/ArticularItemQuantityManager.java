@@ -4,7 +4,7 @@ import com.b2c.prototype.dao.item.IItemDataOptionQuantityDao;
 import com.b2c.prototype.modal.dto.payload.ItemDataOptionOneQuantityDto;
 import com.b2c.prototype.modal.dto.payload.ArticularItemQuantityDto;
 import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
-import com.b2c.prototype.modal.entity.order.OrderArticularItemQuantity;
+import com.b2c.prototype.modal.entity.order.DeliveryArticularItemQuantity;
 import com.b2c.prototype.modal.entity.store.Store;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.item.IArticularItemQuantityManager;
@@ -146,8 +146,8 @@ public class ArticularItemQuantityManager implements IArticularItemQuantityManag
     }
 
     private ArticularItemQuantity updateOneIncrementCounter(ItemDataOptionOneQuantityDto itemDataOptionOneQuantityDto, boolean increase) {
-        OrderArticularItemQuantity orderItemDataOption = searchService.getNamedQueryEntity(
-                OrderArticularItemQuantity.class,
+        DeliveryArticularItemQuantity orderItemDataOption = searchService.getNamedQueryEntity(
+                DeliveryArticularItemQuantity.class,
                 "",
                 parameterFactory.createStringParameter(ORDER_ID, itemDataOptionOneQuantityDto.getArticularId()));
         ArticularItemQuantity existingArticularItemQuantity = orderItemDataOption.getArticularItemQuantity();
@@ -160,8 +160,8 @@ public class ArticularItemQuantityManager implements IArticularItemQuantityManag
     }
 
     private ArticularItemQuantity updateCounter(ArticularItemQuantityDto articularItemQuantityDto, boolean increase) {
-        OrderArticularItemQuantity orderItemDataOption = searchService.getNamedQueryEntity(
-                OrderArticularItemQuantity.class,
+        DeliveryArticularItemQuantity orderItemDataOption = searchService.getNamedQueryEntity(
+                DeliveryArticularItemQuantity.class,
                 "",
                 parameterFactory.createStringParameter(ORDER_ID, null));
         ArticularItemQuantity existingArticularItemQuantity = orderItemDataOption.getArticularItemQuantity();

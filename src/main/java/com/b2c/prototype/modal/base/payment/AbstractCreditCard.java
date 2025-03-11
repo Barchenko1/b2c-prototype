@@ -24,7 +24,4 @@ public class AbstractCreditCard {
     private int monthOfExpire;
     private int yearOfExpire;
     private String cvv;
-    private boolean isActive;
-    private String ownerName;
-    private String ownerSecondName;
 }

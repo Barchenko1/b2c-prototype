@@ -60,7 +60,7 @@ public class UserDetailsManager implements IUserDetailsManager {
             userDetails.setId(existingUserDetails.getId());
             userDetails.getContactInfo().setId(existingUserDetails.getContactInfo().getId());
             existingUserDetails.getUserAddresses().forEach(session::remove);
-            existingUserDetails.getUserCreditCardList().forEach(session::remove);
+            existingUserDetails.getUserCreditCards().forEach(session::remove);
             session.merge(userDetails);
         });
     }

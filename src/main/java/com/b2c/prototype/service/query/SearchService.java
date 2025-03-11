@@ -40,7 +40,10 @@ public class SearchService implements ISearchService {
 
     @Override
     public <E> List<E> getNamedQueryEntityList(Class<E> clazz, String namedQuery, Parameter parameter) {
-        return fetchHandler.getNamedQueryEntityList(clazz, namedQuery, parameter);
+        if (parameter != null) {
+            return fetchHandler.getNamedQueryEntityList(clazz, namedQuery, parameter);
+        }
+        return fetchHandler.getNamedQueryEntityList(clazz, namedQuery);
     }
 
     @Override
@@ -81,23 +84,31 @@ public class SearchService implements ISearchService {
                 .orElse(null);
     }
 
-    @Override
-    public <R, E> List<R> getNamedQueryEntityDtoList(Class<E> clazz, String namedQuery, Function<Collection<E>, Collection<R>> mapToDtoFunction) {
-        List<E> entityList = fetchHandler.getNamedQueryEntityList(clazz, namedQuery);
-        return (List<R>) mapToDtoFunction.apply(entityList);
-    }
-
-    @Override
-    public <R, E> R getNamedQueryEntityDtoList(Class<E> clazz, String namedQuery, Parameter parameter, Function<Collection<E>, R> mapToDtoFunction) {
-        List<E> entityList = fetchHandler.getNamedQueryEntityList(clazz, namedQuery, parameter);
-        return mapToDtoFunction.apply(entityList);
-    }
+//    @Override
+//    public <R, E> List<R> getNamedQueryEntityDtoList(Class<E> clazz, String namedQuery, Function<Collection<E>, Collection<R>> mapToDtoFunction) {
+//        List<E> entityList = fetchHandler.getNamedQueryEntityList(clazz, namedQuery);
+//        return (List<R>) mapToDtoFunction.apply(entityList);
+//    }
+//
+//    @Override
+//    public <R, E> R getNamedQueryEntityDtoList(Class<E> clazz, String namedQuery, Parameter parameter, Function<Collection<E>, R> mapToDtoFunction) {
+//        List<E> entityList = fetchHandler.getNamedQueryEntityList(clazz, namedQuery, parameter);
+//        return mapToDtoFunction.apply(entityList);
+//    }
 
     @Override
     public <R, E> Optional<R> getNamedQueryOptionalEntityDto(Class<E> clazz, String namedQuery, Parameter parameter, Function<E, R> mapToDtoFunction) {
         E entity = fetchHandler.getNamedQueryEntity(clazz, namedQuery, parameter);
         return Optional.ofNullable(entity)
                 .map(mapToDtoFunction);
+    }
+
+    @Override
+    public <R, E> List<R> getNamedQueryEntityDtoList(Class<E> clazz, String namedQuery, Function<E, R> mapToDtoFunction) {
+        List<E> entityList = fetchHandler.getNamedQueryEntityList(clazz, namedQuery);
+        return entityList.stream()
+                .map(mapToDtoFunction)
+                .toList();
     }
 
     @Override

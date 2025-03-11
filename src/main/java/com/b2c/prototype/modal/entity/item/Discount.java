@@ -45,6 +45,7 @@ import java.util.List;
                 name = "ArticularItem.findByDiscountCharSequenceCode",
                 query = "SELECT ai FROM ArticularItem ai " +
                         "LEFT JOIN FETCH ai.discount d " +
+                        "LEFT JOIN FETCH d.articularItemList " +
                         "LEFT JOIN FETCH d.currency " +
                         "WHERE d.charSequenceCode = :charSequenceCode"
         ),
@@ -52,6 +53,7 @@ import java.util.List;
                 name = "ArticularItem.findByDiscountNotNull",
                 query = "SELECT ai FROM ArticularItem ai " +
                         "LEFT JOIN FETCH ai.discount d " +
+                        "LEFT JOIN FETCH d.articularItemList " +
                         "LEFT JOIN FETCH d.currency " +
                         "WHERE ai.discount IS NOT NULL"
         )

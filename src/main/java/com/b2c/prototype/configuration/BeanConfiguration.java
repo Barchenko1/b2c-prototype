@@ -16,12 +16,17 @@ import com.b2c.prototype.dao.option.ITimeDurationOptionDao;
 import com.b2c.prototype.dao.option.IZoneOptionDao;
 import com.b2c.prototype.dao.option.base.BasicTimeDurationOptionDao;
 import com.b2c.prototype.dao.option.base.BasicZoneOptionDao;
+import com.b2c.prototype.dao.payment.IBuyerCommissionDao;
+import com.b2c.prototype.dao.payment.ISellerCommissionDao;
+import com.b2c.prototype.dao.payment.base.BasicBuyerCommissionDao;
+import com.b2c.prototype.dao.payment.base.BasicSellerCommissionDao;
 import com.b2c.prototype.dao.price.ICurrencyDao;
 import com.b2c.prototype.dao.price.base.BasicCurrencyDao;
 import com.b2c.prototype.dao.store.ICountTypeDao;
 import com.b2c.prototype.dao.store.base.BasicCountTypeDao;
 import com.b2c.prototype.dao.user.IContactPhoneDao;
 import com.b2c.prototype.dao.user.ICountryPhoneCodeDao;
+import com.b2c.prototype.dao.user.IDeviceDao;
 import com.b2c.prototype.dao.user.base.BasicContactPhoneDao;
 import com.b2c.prototype.dao.user.base.BasicCountryPhoneCodeDao;
 import com.b2c.prototype.dao.user.base.BasicContactInfoDao;
@@ -36,6 +41,7 @@ import com.b2c.prototype.dao.delivery.IDeliveryDao;
 import com.b2c.prototype.dao.delivery.IDeliveryTypeDao;
 import com.b2c.prototype.dao.payment.IPaymentMethodDao;
 import com.b2c.prototype.dao.item.ICategoryDao;
+import com.b2c.prototype.dao.user.base.BasicDeviceDao;
 import com.b2c.prototype.dao.user.base.BasicUserDetailsDao;
 import com.b2c.prototype.dao.item.base.BasicBrandDao;
 import com.b2c.prototype.dao.payment.base.BasicCreditCardDao;
@@ -190,6 +196,21 @@ public class BeanConfiguration {
     @Bean
     public IUserDetailsDao appUserDao(SessionFactory sessionFactory, IQueryService queryService) {
         return new BasicUserDetailsDao(sessionFactory, queryService);
+    }
+
+    @Bean
+    public IDeviceDao deviceDao(SessionFactory sessionFactory, IQueryService queryService) {
+        return new BasicDeviceDao(sessionFactory, queryService);
+    }
+
+    @Bean
+    public ISellerCommissionDao sellerCommissionDao(SessionFactory sessionFactory, IQueryService queryService) {
+        return new BasicSellerCommissionDao(sessionFactory, queryService);
+    }
+
+    @Bean
+    public IBuyerCommissionDao buyerCommissionDao(SessionFactory sessionFactory, IQueryService queryService) {
+        return new BasicBuyerCommissionDao(sessionFactory, queryService);
     }
 
     @Bean

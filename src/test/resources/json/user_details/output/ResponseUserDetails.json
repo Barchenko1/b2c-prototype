@@ -14,12 +14,12 @@
         "country": "USA",
         "city": "city",
         "street": "street",
-        "buildingNumber": 10,
+        "buildingNumber": "10",
         "florNumber": 9,
         "apartmentNumber": 201,
         "zipCode": "90000"
       },
-      "default": false
+      "isDefault": false
     }
   ],
   "creditCards": [
@@ -37,14 +37,14 @@
   ],
   "devices": [
     {
-      "name": "phone",
-      "lastSignedIn": "2024-03-03T12:00:00.000Z",
-      "thisDevice": false
-    },
-    {
       "name": "laptop",
       "lastSignedIn": "2024-03-03T15:30:00.000Z",
       "thisDevice": true
+    },
+    {
+      "name": "phone",
+      "lastSignedIn": "2024-03-03T12:00:00.000Z",
+      "thisDevice": false
     }
   ]
 }

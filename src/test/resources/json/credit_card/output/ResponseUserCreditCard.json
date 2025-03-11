@@ -1,0 +1,11 @@
+{
+  "creditCard" : {
+    "cardNumber" : "4444-1111-2222-3331",
+    "monthOfExpire" : 6,
+    "yearOfExpire" : 2028,
+    "ownerName" : "John",
+    "ownerSecondName" : "Doe",
+    "active" : true
+  },
+  "default" : true
+}

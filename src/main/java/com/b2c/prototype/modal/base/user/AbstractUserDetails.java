@@ -1,6 +1,5 @@
 package com.b2c.prototype.modal.base.user;
 
-import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.UserAddress;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.Device;
@@ -57,5 +56,5 @@ public class AbstractUserDetails {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "userdetails_id")
     @Builder.Default
-    private Set<UserCreditCard> userCreditCardList = new HashSet<>();
+    private Set<UserCreditCard> userCreditCards = new HashSet<>();
 }

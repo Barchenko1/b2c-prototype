@@ -2,7 +2,7 @@ package com.b2c.prototype.manager.userdetails.basic;
 
 import com.b2c.prototype.dao.user.IContactInfoDao;
 import com.b2c.prototype.modal.dto.payload.ContactInfoDto;
-import com.b2c.prototype.modal.entity.order.OrderArticularItemQuantity;
+import com.b2c.prototype.modal.entity.order.DeliveryArticularItemQuantity;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
@@ -81,9 +81,9 @@ public class ContactInfoManager implements IContactInfoManager {
     @Override
     public void saveUpdateContactInfoByOrderId(String orderId, ContactInfoDto contactInfoDto) {
         entityOperationDao.executeConsumer(session -> {
-            OrderArticularItemQuantity orderItemDataOption = searchService.getNamedQueryEntity(
-                    OrderArticularItemQuantity.class,
-                    "OrderArticularItemQuantity.findByOrderIdWithBeneficiaries",
+            DeliveryArticularItemQuantity orderItemDataOption = searchService.getNamedQueryEntity(
+                    DeliveryArticularItemQuantity.class,
+                    "DeliveryArticularItemQuantity.findByOrderIdWithBeneficiaries",
                     parameterFactory.createStringParameter(ORDER_ID, orderId));
 
             ContactInfo existingBeneficiary = orderItemDataOption.getBeneficiary();
@@ -102,9 +102,9 @@ public class ContactInfoManager implements IContactInfoManager {
     @Override
     public void deleteContactInfoByOrderId(String orderId) {
         entityOperationDao.executeConsumer(session -> {
-            OrderArticularItemQuantity orderItemDataOption = searchService.getNamedQueryEntity(
-                    OrderArticularItemQuantity.class,
-                    "OrderArticularItemQuantity.findByOrderIdWithBeneficiaries",
+            DeliveryArticularItemQuantity orderItemDataOption = searchService.getNamedQueryEntity(
+                    DeliveryArticularItemQuantity.class,
+                    "DeliveryArticularItemQuantity.findByOrderIdWithBeneficiaries",
                     parameterFactory.createStringParameter(ORDER_ID, orderId));
             ContactInfo beneficiary = orderItemDataOption.getBeneficiary();
             session.remove(beneficiary);
@@ -114,10 +114,10 @@ public class ContactInfoManager implements IContactInfoManager {
     @Override
     public ContactInfoDto getContactInfoByOrderId(String orderId) {
         return searchService.getNamedQueryEntityDto(
-                OrderArticularItemQuantity.class,
-                "OrderArticularItemQuantity.findByOrderIdWithBeneficiaries",
+                DeliveryArticularItemQuantity.class,
+                "DeliveryArticularItemQuantity.findByOrderIdWithBeneficiaries",
                 parameterFactory.createStringParameter(ORDER_ID, orderId),
-                transformationFunctionService.getTransformationFunction(OrderArticularItemQuantity.class, ContactInfoDto.class));
+                transformationFunctionService.getTransformationFunction(DeliveryArticularItemQuantity.class, ContactInfoDto.class));
     }
 
 }

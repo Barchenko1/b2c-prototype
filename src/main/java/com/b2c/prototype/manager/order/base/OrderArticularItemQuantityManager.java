@@ -3,7 +3,7 @@ package com.b2c.prototype.manager.order.base;
 import com.b2c.prototype.dao.order.IOrderItemDataDao;
 import com.b2c.prototype.modal.dto.payload.OrderArticularItemQuantityDto;
 import com.b2c.prototype.modal.dto.response.ResponseOrderDetails;
-import com.b2c.prototype.modal.entity.order.OrderArticularItemQuantity;
+import com.b2c.prototype.modal.entity.order.DeliveryArticularItemQuantity;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.order.IOrderArticularItemQuantityManager;
 import com.b2c.prototype.service.supplier.ISupplierService;
@@ -35,8 +35,8 @@ public class OrderArticularItemQuantityManager implements IOrderArticularItemQua
     @Override
     public void saveOrderArticularItemQuantity(OrderArticularItemQuantityDto orderArticularItemQuantityDto) {
         entityOperationDao.executeConsumer(session -> {
-            OrderArticularItemQuantity orderItemDataOption =
-                    transformationFunctionService.getEntity(session, OrderArticularItemQuantity.class, orderArticularItemQuantityDto);
+            DeliveryArticularItemQuantity orderItemDataOption =
+                    transformationFunctionService.getEntity(session, DeliveryArticularItemQuantity.class, orderArticularItemQuantityDto);
             session.merge(orderItemDataOption);
         });
     }
@@ -44,11 +44,11 @@ public class OrderArticularItemQuantityManager implements IOrderArticularItemQua
     @Override
     public void updateOrderArticularItemQuantity(String orderId, OrderArticularItemQuantityDto orderArticularItemQuantityDto) {
         entityOperationDao.executeConsumer(session -> {
-            OrderArticularItemQuantity orderItemDataOption = entityOperationDao.getNamedQueryEntity(
+            DeliveryArticularItemQuantity orderItemDataOption = entityOperationDao.getNamedQueryEntity(
                     "",
                     parameterFactory.createStringParameter(ORDER_ID, orderId));
-            OrderArticularItemQuantity newOrderItemDataOption =
-                    transformationFunctionService.getEntity(OrderArticularItemQuantity.class, orderArticularItemQuantityDto);
+            DeliveryArticularItemQuantity newOrderItemDataOption =
+                    transformationFunctionService.getEntity(DeliveryArticularItemQuantity.class, orderArticularItemQuantityDto);
             newOrderItemDataOption.setId(orderItemDataOption.getId());
             session.merge(orderItemDataOption);
         });
@@ -65,13 +65,13 @@ public class OrderArticularItemQuantityManager implements IOrderArticularItemQua
         return entityOperationDao.getGraphEntityDto(
                 "",
                 parameterFactory.createStringParameter(ORDER_ID, orderId),
-                transformationFunctionService.getTransformationFunction(OrderArticularItemQuantity.class, ResponseOrderDetails.class));
+                transformationFunctionService.getTransformationFunction(DeliveryArticularItemQuantity.class, ResponseOrderDetails.class));
     }
 
     @Override
     public List<ResponseOrderDetails> getResponseOrderDetailsList() {
         return entityOperationDao.getGraphEntityDtoList(
                 "",
-                transformationFunctionService.getTransformationFunction(OrderArticularItemQuantity.class, ResponseOrderDetails.class));
+                transformationFunctionService.getTransformationFunction(DeliveryArticularItemQuantity.class, ResponseOrderDetails.class));
     }
 }

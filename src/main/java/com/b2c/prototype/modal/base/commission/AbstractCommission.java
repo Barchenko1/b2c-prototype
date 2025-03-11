@@ -34,6 +34,6 @@ public class AbstractCommission {
     private FeeType feeType;
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     private Currency currency;
-    @Column(name = "effective_date", nullable = false)
+    @Column(name = "effective_date", unique = true, nullable = false)
     private LocalDateTime effectiveDate;
 }

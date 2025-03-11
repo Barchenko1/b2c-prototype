@@ -157,7 +157,7 @@ class UserDetailsManagerTest {
                         .country("+11")
                         .city("city")
                         .street("street")
-                        .buildingNumber(1)
+                        .buildingNumber("1")
                         .florNumber(9)
                         .apartmentNumber(101)
                         .zipCode("90000")
@@ -207,7 +207,7 @@ class UserDetailsManagerTest {
                 .country(country)
                 .city("city")
                 .street("street")
-                .buildingNumber(1)
+                .buildingNumber("1")
                 .apartmentNumber(101)
                 .florNumber(9)
                 .zipCode("90000")
@@ -233,7 +233,7 @@ class UserDetailsManagerTest {
                 .isActive(true)
                 .contactInfo(contactInfo)
 //                .addresses(Set.of(address))
-                .userCreditCardList(Set.of(userCreditCard))
+                .userCreditCards(Set.of(userCreditCard))
                 .build();
     }
 
@@ -257,7 +257,7 @@ class UserDetailsManagerTest {
                 .florNumber(address.getFlorNumber())
                 .country(address.getCountry().getValue())
                 .build();
-        UserCreditCard userCreditCard = userDetails.getUserCreditCardList().stream().toList().get(0);
+        UserCreditCard userCreditCard = userDetails.getUserCreditCards().stream().toList().get(0);
         CreditCard creditCard = userCreditCard.getCreditCard();
         CreditCardDto creditCardDto = CreditCardDto.builder()
                 .cardNumber(creditCard.getCardNumber())

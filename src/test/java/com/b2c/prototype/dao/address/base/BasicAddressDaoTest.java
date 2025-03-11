@@ -22,7 +22,7 @@ class BasicAddressDaoTest extends AbstractConstantEntityDaoTest {
 
     @Override
     protected String getEmptyDataSetPath() {
-        return "/datasets/address/address/emptyAddressDataSet.yml";
+        return "/datasets/order/address/emptyAddressDataSet.yml";
     }
 
     @Override
@@ -36,12 +36,12 @@ class BasicAddressDaoTest extends AbstractConstantEntityDaoTest {
                 .id(1L)
                 .country(country)
                 .street("street")
-                .buildingNumber(1)
+                .buildingNumber("1")
                 .apartmentNumber(101)
                 .florNumber(9)
                 .zipCode("90000")
                 .build();
-        return new EntityDataSet<>(address, "/datasets/address/address/testAddressDataSet.yml");
+        return new EntityDataSet<>(address, "/datasets/order/address/testAddressDataSet.yml");
     }
 
     @Override
@@ -54,12 +54,12 @@ class BasicAddressDaoTest extends AbstractConstantEntityDaoTest {
         Address address = Address.builder()
                 .country(country)
                 .street("street")
-                .buildingNumber(1)
+                .buildingNumber("1")
                 .apartmentNumber(101)
                 .florNumber(9)
                 .zipCode("90000")
                 .build();
-        return new EntityDataSet<>(address, "/datasets/address/address/saveAddressDataSet.yml");
+        return new EntityDataSet<>(address, "/datasets/order/address/saveAddressDataSet.yml");
     }
 
     @Override
@@ -73,12 +73,12 @@ class BasicAddressDaoTest extends AbstractConstantEntityDaoTest {
                 .id(1L)
                 .country(country)
                 .street("Update street")
-                .buildingNumber(1)
+                .buildingNumber("1")
                 .apartmentNumber(102)
                 .florNumber(9)
                 .zipCode("90001")
                 .build();
-        return new EntityDataSet<>(address, "/datasets/address/address/updateAddressDataSet.yml");
+        return new EntityDataSet<>(address, "/datasets/order/address/updateAddressDataSet.yml");
     }
 
 }

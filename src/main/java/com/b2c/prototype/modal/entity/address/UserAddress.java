@@ -8,6 +8,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -21,6 +23,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@NamedQueries({
+        @NamedQuery(
+                name = "UserAddress.findByUserAddressCombination",
+                query = "SELECT DISTINCT u FROM UserAddress u " +
+                        "LEFT JOIN FETCH u.address a " +
+                        "LEFT JOIN FETCH a.country c " +
+                        "WHERE u.userAddressCombination =: userAddressCombination"
+        )
+})
 public class UserAddress {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,4 +41,5 @@ public class UserAddress {
     @JoinColumn(name = "address_id")
     private Address address;
     private boolean isDefault;
+    private String userAddressCombination;
 }

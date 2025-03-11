@@ -22,8 +22,8 @@ public class CountryControllerE2ETest extends AbstractConstantControllerE2ETest 
 
         postConstantEntity(countryDto,
                 COUNTRY_SERVICE_ID,
-                "/datasets/address/country/emptyCountryDataSet.yml",
-                "/datasets/address/country/saveCountryDataSet.yml");
+                "/datasets/constant/country/emptyCountryDataSet.yml",
+                "/datasets/constant/country/saveCountryDataSet.yml");
     }
 
     @Test
@@ -37,8 +37,8 @@ public class CountryControllerE2ETest extends AbstractConstantControllerE2ETest 
         putConstantEntity(countryDto,
                 COUNTRY_SERVICE_ID,
                 "USA",
-                "/datasets/address/country/testCountryDataSet.yml",
-                "/datasets/address/country/updateCountryDataSet.yml");
+                "/datasets/constant/country/testCountryDataSet.yml",
+                "/datasets/constant/country/updateCountryDataSet.yml");
     }
 
     @Test
@@ -52,8 +52,8 @@ public class CountryControllerE2ETest extends AbstractConstantControllerE2ETest 
         patchConstantEntity(countryDto,
                 COUNTRY_SERVICE_ID,
                 "USA",
-                "/datasets/address/country/testCountryDataSet.yml",
-                "/datasets/address/country/updateCountryDataSet.yml");
+                "/datasets/constant/country/testCountryDataSet.yml",
+                "/datasets/constant/country/updateCountryDataSet.yml");
     }
 
     @Test
@@ -61,8 +61,8 @@ public class CountryControllerE2ETest extends AbstractConstantControllerE2ETest 
         deleteConstantEntity(
                 COUNTRY_SERVICE_ID,
                 "USA",
-                "/datasets/address/country/testCountryDataSet.yml",
-                "/datasets/address/country/emptyCountryDataSet.yml");
+                "/datasets/constant/country/testCountryDataSet.yml",
+                "/datasets/constant/country/emptyCountryDataSet.yml");
     }
 
     @Test
@@ -81,7 +81,7 @@ public class CountryControllerE2ETest extends AbstractConstantControllerE2ETest 
         );
 
         MvcResult mvcResult = getConstantEntities(COUNTRY_SERVICE_ID,
-                "/datasets/address/country/testAllCountryDataSet.yml");
+                "/datasets/constant/country/testAllCountryDataSet.yml");
 
         assertMvcListResult(mvcResult, countryDtoList, new TypeReference<>() {});
     }
@@ -92,7 +92,7 @@ public class CountryControllerE2ETest extends AbstractConstantControllerE2ETest 
         MvcResult mvcResult = getConstantEntity(
                 COUNTRY_SERVICE_ID,
                 "USA",
-                "/datasets/address/country/testCountryDataSet.yml");
+                "/datasets/constant/country/testCountryDataSet.yml");
 
         assertMvcResult(mvcResult, countryDto);
     }

@@ -99,7 +99,7 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
                 .id(1L)
                 .country(country)
                 .street("street")
-                .buildingNumber(1)
+                .buildingNumber("1")
                 .apartmentNumber(101)
                 .florNumber(9)
                 .zipCode("90000")
@@ -133,7 +133,7 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
                 .isActive(true)
                 .contactInfo(contactInfo)
 //                .addresses(Set.of(address))
-                .userCreditCardList(Set.of(userCreditCard))
+                .userCreditCards(Set.of(userCreditCard))
                 .build();
     }
 

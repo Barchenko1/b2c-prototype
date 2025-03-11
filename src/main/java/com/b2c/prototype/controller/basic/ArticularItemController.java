@@ -37,14 +37,14 @@ public class ArticularItemController {
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> putArticularItem(@RequestParam final Map<String, String> requestParams,
-                                            @RequestBody final List<ArticularItemDto> articularItemDtoList) {
+                                                 @RequestBody final List<ArticularItemDto> articularItemDtoList) {
         articularItemProcessor.saveUpdateArticularItemList(requestParams, articularItemDtoList);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> patchArticularItem(@RequestParam final Map<String, String> requestParams,
-                                              @RequestBody final List<ArticularItemDto> articularItemDtoList) {
+                                                   @RequestBody final List<ArticularItemDto> articularItemDtoList) {
         articularItemProcessor.saveUpdateArticularItemList(requestParams, articularItemDtoList);
         return ResponseEntity.ok().build();
     }

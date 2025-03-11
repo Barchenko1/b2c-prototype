@@ -22,8 +22,25 @@ import lombok.experimental.SuperBuilder;
                 query = "SELECT DISTINCT u FROM UserDetails u " +
                         "LEFT JOIN FETCH u.contactInfo " +
                         "LEFT JOIN FETCH u.userAddresses " +
-                        "LEFT JOIN FETCH u.userCreditCardList " +
+                        "LEFT JOIN FETCH u.userCreditCards " +
                         "LEFT JOIN FETCH u.devices d " +
+                        "WHERE u.userId = :userId"
+        ),
+        @NamedQuery(
+                name = "UserDetails.findAddressesByUserId",
+                query = "SELECT DISTINCT u FROM UserDetails u " +
+                        "LEFT JOIN FETCH u.contactInfo ci " +
+                        "LEFT JOIN FETCH u.userAddresses ua " +
+                        "LEFT JOIN FETCH ua.address a " +
+                        "LEFT JOIN FETCH a.country c " +
+                        "WHERE u.userId = :userId"
+        ),
+        @NamedQuery(
+                name = "UserDetails.findUserCreditCardsByUserId",
+                query = "SELECT DISTINCT u FROM UserDetails u " +
+                        "LEFT JOIN FETCH u.contactInfo ci " +
+                        "LEFT JOIN FETCH u.userCreditCards ucard " +
+                        "LEFT JOIN FETCH ucard.creditCard c " +
                         "WHERE u.userId = :userId"
         ),
         @NamedQuery(
@@ -33,7 +50,7 @@ import lombok.experimental.SuperBuilder;
                         "LEFT JOIN FETCH ci.contactPhone cp " +
                         "LEFT JOIN FETCH cp.countryPhoneCode cpc " +
                         "LEFT JOIN FETCH u.userAddresses " +
-                        "LEFT JOIN FETCH u.userCreditCardList " +
+                        "LEFT JOIN FETCH u.userCreditCards " +
                         "LEFT JOIN FETCH u.devices d " +
                         "WHERE u.userId = :userId"
         ),
@@ -44,7 +61,7 @@ import lombok.experimental.SuperBuilder;
                         "LEFT JOIN FETCH ci.contactPhone cp " +
                         "LEFT JOIN FETCH cp.countryPhoneCode cpc " +
                         "LEFT JOIN FETCH u.userAddresses " +
-                        "LEFT JOIN FETCH u.userCreditCardList " +
+                        "LEFT JOIN FETCH u.userCreditCards " +
                         "LEFT JOIN FETCH u.devices d "
         )
 })

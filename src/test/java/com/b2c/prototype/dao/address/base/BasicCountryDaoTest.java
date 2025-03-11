@@ -21,7 +21,7 @@ public class BasicCountryDaoTest extends AbstractConstantEntityDaoTest {
 
     @Override
     protected String getEmptyDataSetPath() {
-        return "/datasets/address/country/emptyCountryDataSet.yml";
+        return "/datasets/constant/country/emptyCountryDataSet.yml";
     }
 
     @Override
@@ -31,7 +31,7 @@ public class BasicCountryDaoTest extends AbstractConstantEntityDaoTest {
                 .label("USA")
                 .value("USA")
                 .build();
-        return new EntityDataSet<>(country, "/datasets/address/country/testCountryDataSet.yml");
+        return new EntityDataSet<>(country, "/datasets/constant/country/testCountryDataSet.yml");
     }
 
     @Override
@@ -40,7 +40,7 @@ public class BasicCountryDaoTest extends AbstractConstantEntityDaoTest {
                 .value("USA")
                 .label("USA")
                 .build();
-        return new EntityDataSet<>(country, "/datasets/address/country/saveCountryDataSet.yml");
+        return new EntityDataSet<>(country, "/datasets/constant/country/saveCountryDataSet.yml");
     }
 
     @Override
@@ -50,7 +50,7 @@ public class BasicCountryDaoTest extends AbstractConstantEntityDaoTest {
                 .value("Update USA")
                 .label("USA")
                 .build();
-        return new EntityDataSet<>(country, "/datasets/address/country/updateCountryDataSet.yml");
+        return new EntityDataSet<>(country, "/datasets/constant/country/updateCountryDataSet.yml");
     }
 
 }

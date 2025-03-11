@@ -22,10 +22,11 @@ public interface ISearchService {
     <R, E> List<R> getSubGraphEntityDtoList(Class<E> clazz, String graph, Parameter parameter, Function<E, R> mapToDtoFunction);
 
     <R, E> R getNamedQueryEntityDto(Class<E> clazz, String namedQuery, Parameter parameter, Function<E, R> mapToDtoFunction);
-    <R, E> List<R> getNamedQueryEntityDtoList(Class<E> clazz, String namedQuery, Function<Collection<E>, Collection<R>> mapToDtoFunction);
-    <R, E> R getNamedQueryEntityDtoList(Class<E> clazz, String namedQuery, Parameter parameter, Function<Collection<E>, R> mapToDtoFunction);
-//    <R, E> R getNamedQueryEntityDtoList(Class<E> clazz, String namedQuery, Parameter parameter, Function<E, R> mapToDtoFunction);
+//    <R, E> List<R> getNamedQueryEntityDtoList(Class<E> clazz, String namedQuery, Function<Collection<E>, Collection<R>> mapToDtoFunction);
+//    <R, E> R getNamedQueryEntityDtoList(Class<E> clazz, String namedQuery, Parameter parameter, Function<Collection<E>, R> mapToDtoFunction);
+//    <R, E> List<R> getNamedQueryEntityDtoList(Class<E> clazz, String namedQuery, Parameter parameter, Function<E, Collection<R>> mapToDtoFunction);
     <R, E> Optional<R> getNamedQueryOptionalEntityDto(Class<E> clazz, String namedQuery, Parameter parameter, Function<E, R> mapToDtoFunction);
+    <R, E> List<R> getNamedQueryEntityDtoList(Class<E> clazz, String namedQuery, Function<E, R> mapToDtoFunction);
     <R, E> List<R> getSubNamedQueryEntityDtoList(Class<E> clazz, String namedQuery, Parameter parameter, Function<E, R> mapToDtoFunction);
 
     <E> E getQueryEntity(Query<E> query, Supplier<Parameter> parameterSupplier);

@@ -20,21 +20,24 @@ import com.b2c.prototype.dao.option.ITimeDurationOptionDao;
 import com.b2c.prototype.dao.option.IZoneOptionDao;
 import com.b2c.prototype.dao.order.IOrderItemDataDao;
 import com.b2c.prototype.dao.order.IOrderStatusDao;
+import com.b2c.prototype.dao.payment.IBuyerCommissionDao;
 import com.b2c.prototype.dao.payment.ICreditCardDao;
 import com.b2c.prototype.dao.payment.IPaymentDao;
 import com.b2c.prototype.dao.payment.IPaymentMethodDao;
+import com.b2c.prototype.dao.payment.ISellerCommissionDao;
 import com.b2c.prototype.dao.post.IPostDao;
 import com.b2c.prototype.dao.price.ICurrencyDao;
 import com.b2c.prototype.dao.rating.IRatingDao;
 import com.b2c.prototype.dao.store.ICountTypeDao;
 import com.b2c.prototype.dao.user.IContactInfoDao;
 import com.b2c.prototype.dao.user.ICountryPhoneCodeDao;
+import com.b2c.prototype.dao.user.IDeviceDao;
 import com.b2c.prototype.dao.user.IUserDetailsDao;
 import com.b2c.prototype.gateway.IRestClient;
 import com.b2c.prototype.gateway.RestClient;
-import com.b2c.prototype.manager.address.IAddressManager;
+import com.b2c.prototype.manager.address.IUserAddressManager;
 import com.b2c.prototype.manager.address.ICountryManager;
-import com.b2c.prototype.manager.address.base.AddressManager;
+import com.b2c.prototype.manager.address.base.UserAddressManager;
 import com.b2c.prototype.manager.address.base.CountryManager;
 import com.b2c.prototype.manager.delivery.IDeliveryManager;
 import com.b2c.prototype.manager.delivery.IDeliveryTypeManager;
@@ -72,10 +75,16 @@ import com.b2c.prototype.manager.order.IOrderArticularItemQuantityManager;
 import com.b2c.prototype.manager.order.IOrderStatusManager;
 import com.b2c.prototype.manager.order.base.OrderArticularItemQuantityManager;
 import com.b2c.prototype.manager.order.base.OrderStatusManager;
-import com.b2c.prototype.manager.payment.ICreditCardManager;
+import com.b2c.prototype.manager.payment.IBuyerCommissionManager;
+import com.b2c.prototype.manager.payment.ISellerCommissionManager;
+import com.b2c.prototype.manager.payment.base.BuyerCommissionManager;
+import com.b2c.prototype.manager.payment.base.SellerCommissionManager;
+import com.b2c.prototype.manager.userdetails.DeviceManager;
+import com.b2c.prototype.manager.userdetails.IDeviceManager;
+import com.b2c.prototype.manager.userdetails.IUserCreditCardManager;
 import com.b2c.prototype.manager.payment.IPaymentManager;
 import com.b2c.prototype.manager.payment.IPaymentMethodManager;
-import com.b2c.prototype.manager.payment.base.CreditCardManager;
+import com.b2c.prototype.manager.userdetails.basic.UserCreditCardManager;
 import com.b2c.prototype.manager.payment.base.PaymentManager;
 import com.b2c.prototype.manager.payment.base.PaymentMethodManager;
 import com.b2c.prototype.manager.post.IPostManager;
@@ -92,12 +101,16 @@ import com.b2c.prototype.manager.userdetails.IUserDetailsManager;
 import com.b2c.prototype.manager.userdetails.basic.ContactInfoManager;
 import com.b2c.prototype.manager.userdetails.basic.CountryPhoneCodeManager;
 import com.b2c.prototype.manager.userdetails.basic.UserDetailsManager;
-import com.b2c.prototype.processor.address.AddressProcess;
-import com.b2c.prototype.processor.address.IAddressProcess;
+import com.b2c.prototype.processor.address.UserAddressProcess;
+import com.b2c.prototype.processor.address.IUserAddressProcess;
+import com.b2c.prototype.processor.commission.BuyerCommissionProcess;
+import com.b2c.prototype.processor.commission.IBuyerCommissionProcess;
+import com.b2c.prototype.processor.commission.ISellerCommissionProcess;
+import com.b2c.prototype.processor.commission.SellerCommissionProcess;
 import com.b2c.prototype.processor.constant.ConstantProcessorService;
 import com.b2c.prototype.processor.constant.IConstantProcessorService;
-import com.b2c.prototype.processor.creditcard.CreditCardProcess;
-import com.b2c.prototype.processor.creditcard.ICreditCardProcess;
+import com.b2c.prototype.processor.creditcard.IUserCreditCardProcess;
+import com.b2c.prototype.processor.creditcard.UserCreditCardProcess;
 import com.b2c.prototype.processor.discount.DiscountProcess;
 import com.b2c.prototype.processor.discount.IDiscountProcess;
 import com.b2c.prototype.processor.item.ArticularItemProcessor;
@@ -113,7 +126,9 @@ import com.b2c.prototype.processor.option.ZoneOptionProcess;
 import com.b2c.prototype.processor.order.IOrderProcessor;
 import com.b2c.prototype.processor.order.OrderProcessor;
 import com.b2c.prototype.processor.user.ContactInfoProcess;
+import com.b2c.prototype.processor.user.DeviceProcess;
 import com.b2c.prototype.processor.user.IContactInfoProcess;
+import com.b2c.prototype.processor.user.IDeviceProcess;
 import com.b2c.prototype.processor.user.IUserDetailsProcess;
 import com.b2c.prototype.processor.user.UserDetailsProcess;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
@@ -266,6 +281,14 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
+    public IDeviceManager deviceManager(IDeviceDao deviceDao,
+                                        ITransformationFunctionService transformationFunctionService,
+                                        IQueryService queryService,
+                                        IParameterFactory parameterFactory) {
+        return new DeviceManager(deviceDao, transformationFunctionService, queryService, parameterFactory);
+    }
+
+    @Bean
     public IContactInfoManager contactInfoManager(IContactInfoDao contactInfoDao,
                                                   ISearchService searchService,
                                                   ITransformationFunctionService transformationFunctionService,
@@ -330,11 +353,27 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public ICreditCardManager creditCardManager(ICreditCardDao cardDao,
-                                          ISearchService searchService,
-                                          ITransformationFunctionService transformationFunctionService,
-                                          IParameterFactory parameterFactory) {
-        return new CreditCardManager(cardDao, searchService, transformationFunctionService, parameterFactory);
+    public IUserCreditCardManager creditCardManager(ICreditCardDao cardDao,
+                                                    ISearchService searchService,
+                                                    ITransformationFunctionService transformationFunctionService,
+                                                    IParameterFactory parameterFactory) {
+        return new UserCreditCardManager(cardDao, searchService, transformationFunctionService, parameterFactory);
+    }
+
+    @Bean
+    public ISellerCommissionManager sellerCommissionManager(ISellerCommissionDao sellerCommissionDao,
+                                                            ISearchService searchService,
+                                                            ITransformationFunctionService transformationFunctionService,
+                                                            IParameterFactory parameterFactory) {
+        return new SellerCommissionManager(sellerCommissionDao, searchService, transformationFunctionService, parameterFactory);
+    }
+
+    @Bean
+    public IBuyerCommissionManager buyerCommissionManager(IBuyerCommissionDao buyerCommissionDao,
+                                                          ISearchService searchService,
+                                                          ITransformationFunctionService transformationFunctionService,
+                                                          IParameterFactory parameterFactory) {
+        return new BuyerCommissionManager(buyerCommissionDao, searchService, transformationFunctionService, parameterFactory);
     }
 
     @Bean
@@ -347,12 +386,11 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public IAddressManager addressManager(IAddressDao addressDao,
-                                          ISearchService searchService,
-                                          ITransformationFunctionService transformationFunctionService,
-                                          ISupplierService supplierService,
-                                          IParameterFactory parameterFactory) {
-        return new AddressManager(addressDao, searchService, transformationFunctionService, supplierService, parameterFactory);
+    public IUserAddressManager userAddressManager(IAddressDao addressDao,
+                                              ISearchService searchService,
+                                              ITransformationFunctionService transformationFunctionService,
+                                              IParameterFactory parameterFactory) {
+        return new UserAddressManager(addressDao, searchService, transformationFunctionService, parameterFactory);
     }
 
     @Bean
@@ -470,13 +508,28 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public IAddressProcess addressProcess(IAddressManager addressManager) {
-        return new AddressProcess(addressManager);
+    public IUserAddressProcess userAddressProcess(IUserAddressManager userAddressManager) {
+        return new UserAddressProcess(userAddressManager);
     }
 
     @Bean
-    public ICreditCardProcess creditCardProcess(ICreditCardManager creditCardManager) {
-        return new CreditCardProcess(creditCardManager);
+    public IUserCreditCardProcess userCreditCardProcess(IUserCreditCardManager creditCardManager) {
+        return new UserCreditCardProcess(creditCardManager);
+    }
+
+    @Bean
+    public IDeviceProcess deviceProcess(IDeviceManager deviceManager) {
+        return new DeviceProcess(deviceManager);
+    }
+
+    @Bean
+    public ISellerCommissionProcess sellerCommissionProcess(ISellerCommissionManager sellerCommissionManager) {
+        return new SellerCommissionProcess(sellerCommissionManager);
+    }
+
+    @Bean
+    public IBuyerCommissionProcess buyerCommissionProcess(IBuyerCommissionManager buyerCommissionManager) {
+        return new BuyerCommissionProcess(buyerCommissionManager);
     }
 
 }

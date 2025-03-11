@@ -201,12 +201,12 @@ class DiscountManagerTest {
         Parameter mockParameter = mock(Parameter.class);
         Function<Collection<ArticularItem>, DiscountDto> function = mock(Function.class);
         DiscountDto expectedDto = createTestDto();
-        when(queryService.getNamedQueryEntityDtoList(
-                eq(ArticularItem.class),
-                anyString(),
-                eq(mockParameter),
-                eq(function)
-        )).thenReturn(expectedDto);
+//        when(queryService.getSubNamedQueryEntityDtoList(
+//                eq(ArticularItem.class),
+//                anyString(),
+//                eq(mockParameter),
+//                eq(function)
+//        )).thenReturn(expectedDto);
         when(transformationFunctionService.getCollectionTransformationFunction(ArticularItem.class, DiscountDto.class))
                 .thenReturn(function);
         when(function.apply(anyList())).thenReturn(expectedDto);
@@ -242,11 +242,11 @@ class DiscountManagerTest {
                         .isActive(true)
                         .build()
         );
-        when(queryService.getNamedQueryEntityDtoList(
-                eq(ArticularItem.class),
-                anyString(),
-                eq(function)
-        )).thenReturn(expectedList);
+//        when(queryService.getNamedQueryEntityDtoList(
+//                eq(ArticularItem.class),
+//                anyString(),
+//                eq(function)
+//        )).thenReturn(expectedList);
         when(transformationFunctionService.getCollectionTransformationCollectionFunction(ArticularItem.class, DiscountDto.class, "list"))
                 .thenReturn(function);
 

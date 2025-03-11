@@ -3,7 +3,7 @@ package com.b2c.prototype.manager.userdetails.basic;
 import com.b2c.prototype.dao.user.IContactPhoneDao;
 import com.b2c.prototype.modal.dto.payload.ContactInfoDto;
 import com.b2c.prototype.modal.dto.payload.ContactPhoneDto;
-import com.b2c.prototype.modal.entity.order.OrderArticularItemQuantity;
+import com.b2c.prototype.modal.entity.order.DeliveryArticularItemQuantity;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
@@ -94,11 +94,11 @@ class ContactPhoneManagerTest {
         ContactPhone contactPhone = getTestContactPhone();
         Parameter mockParameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> mockParameter;
-//        OrderArticularItemQuantity orderItemDataOption = mock(OrderArticularItemQuantity.class);
+//        DeliveryArticularItemQuantity orderItemDataOption = mock(DeliveryArticularItemQuantity.class);
 //        Beneficiary beneficiary = mock(Beneficiary.class);
 //        List<Beneficiary> orderItemList = List.of(beneficiary);
 
-//        when(queryService.getEntity(eq(OrderArticularItemQuantity.class), any(Supplier.class)))
+//        when(queryService.getEntity(eq(DeliveryArticularItemQuantity.class), any(Supplier.class)))
 //                .thenReturn(orderItemDataOption);
         when(transformationFunctionService.getEntity(
                 ContactPhone.class,
@@ -150,13 +150,13 @@ class ContactPhoneManagerTest {
     void testDeleteContactPhoneByOrderId() {
         String orderId = "123";
         Parameter mockParameter = mock(Parameter.class);
-        OrderArticularItemQuantity orderItemDataOption = mock(OrderArticularItemQuantity.class);
+        DeliveryArticularItemQuantity orderItemDataOption = mock(DeliveryArticularItemQuantity.class);
 //        Beneficiary beneficiary = mock(Beneficiary.class);
         ContactPhone contactPhone = getTestContactPhone();
 //        List<Beneficiary> beneficiaryList = List.of(beneficiary);
 
         Supplier<Parameter> parameterSupplier = () -> mockParameter;
-//        when(queryService.getEntity(eq(OrderArticularItemQuantity.class), any(Supplier.class)))
+//        when(queryService.getEntity(eq(DeliveryArticularItemQuantity.class), any(Supplier.class)))
 //                .thenReturn(orderItemDataOption);
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
@@ -212,22 +212,22 @@ class ContactPhoneManagerTest {
         String orderId = "123";
         ContactPhoneDto contactPhoneDto = createContactPhoneDto();
         Parameter mockParameter = mock(Parameter.class);
-        OrderArticularItemQuantity orderItemDataOption = mock(OrderArticularItemQuantity.class);
+        DeliveryArticularItemQuantity orderItemDataOption = mock(DeliveryArticularItemQuantity.class);
 //        Beneficiary beneficiary = mock(Beneficiary.class);
         ContactPhone contactPhone = getTestContactPhone();
 
         Supplier<Parameter> parameterSupplier = () -> mockParameter;
-        Function<OrderArticularItemQuantity, ContactPhoneDto> mapFunction = oai -> contactPhoneDto;
+        Function<DeliveryArticularItemQuantity, ContactPhoneDto> mapFunction = oai -> contactPhoneDto;
 
         when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
                 .thenReturn(parameterSupplier);
-        when(transformationFunctionService.getTransformationFunction(OrderArticularItemQuantity.class, ContactPhoneDto.class, "list"))
+        when(transformationFunctionService.getTransformationFunction(DeliveryArticularItemQuantity.class, ContactPhoneDto.class, "list"))
                 .thenReturn(mapFunction);
 
-        when(queryService.getSubNamedQueryEntityDtoList(eq(OrderArticularItemQuantity.class), anyString(), any(Parameter.class), any(Function.class)))
+        when(queryService.getSubNamedQueryEntityDtoList(eq(DeliveryArticularItemQuantity.class), anyString(), any(Parameter.class), any(Function.class)))
                 .thenAnswer(invocation -> {
                     Supplier<Parameter> paramSupplier = invocation.getArgument(1);
-                    Function<OrderArticularItemQuantity, ContactPhoneDto> mappingFunction = invocation.getArgument(2);
+                    Function<DeliveryArticularItemQuantity, ContactPhoneDto> mappingFunction = invocation.getArgument(2);
                     assertEquals(mockParameter, paramSupplier.get());
                     return List.of(mappingFunction.apply(orderItemDataOption));
                 });

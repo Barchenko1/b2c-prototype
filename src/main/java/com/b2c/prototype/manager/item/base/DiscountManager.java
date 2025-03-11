@@ -120,19 +120,22 @@ public class DiscountManager implements IDiscountManager {
 
     @Override
     public DiscountDto getDiscount(String charSequenceCode) {
-        return searchService.getNamedQueryEntityDtoList(
+        List<ArticularItem> articularItemList = searchService.getNamedQueryEntityList(
                 ArticularItem.class,
                 ARTICULAR_ITEM_FIND_BY_DISCOUNT_CHAR_SEQUENCE_CODE,
-                parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, charSequenceCode),
-                transformationFunctionService.getCollectionTransformationFunction(ArticularItem.class, DiscountDto.class));
+                parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, charSequenceCode));
+        return transformationFunctionService.getCollectionTransformationFunction(ArticularItem.class, DiscountDto.class)
+                .apply(articularItemList);
     }
 
     @Override
     public List<DiscountDto> getDiscounts() {
-        return searchService.getNamedQueryEntityDtoList(
+        List<ArticularItem> articularItemList = searchService.getNamedQueryEntityList(
                 ArticularItem.class,
                 ARTICULAR_ITEM_FIND_BY_DISCOUNT_NOT_NULL,
-                transformationFunctionService.getCollectionTransformationCollectionFunction(ArticularItem.class, DiscountDto.class, "list"));
+                null);
+        return (List<DiscountDto>) transformationFunctionService.getCollectionTransformationCollectionFunction(ArticularItem.class, DiscountDto.class, "list")
+                .apply(articularItemList);
     }
 
 }
