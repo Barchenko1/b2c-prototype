@@ -8,8 +8,8 @@ import com.b2c.prototype.dao.user.IUserDetailsDao;
 
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.userdetails.IUserDetailsManager;
+import com.b2c.prototype.service.query.ISearchService;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.identifier.IQueryService;
 import com.tm.core.process.manager.common.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
 
@@ -21,16 +21,16 @@ public class UserDetailsManager implements IUserDetailsManager {
 
     private final IEntityOperationManager entityOperationDao;
     private final ITransformationFunctionService transformationFunctionService;
-    private final IQueryService queryService;
+    private final ISearchService searchService;
     private final IParameterFactory parameterFactory;
 
     public UserDetailsManager(IUserDetailsDao userDetailsDao,
                               ITransformationFunctionService transformationFunctionService,
-                              IQueryService queryService,
+                              ISearchService searchService,
                               IParameterFactory parameterFactory) {
         this.entityOperationDao = new EntityOperationManager(userDetailsDao);
         this.transformationFunctionService = transformationFunctionService;
-        this.queryService = queryService;
+        this.searchService = searchService;
         this.parameterFactory = parameterFactory;
     }
 
@@ -101,8 +101,7 @@ public class UserDetailsManager implements IUserDetailsManager {
     @Override
     public void deleteUserDetailsByUserId(String userId) {
         entityOperationDao.executeConsumer(session -> {
-            UserDetails existingUserDetails = queryService.getNamedQueryEntity(
-                    session,
+            UserDetails existingUserDetails = searchService.getNamedQueryEntity(
                     UserDetails.class,
                     "UserDetails.findByUserId",
                     parameterFactory.createStringParameter(USER_ID, userId));

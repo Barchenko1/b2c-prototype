@@ -2,6 +2,7 @@ package com.b2c.prototype.processor.commission;
 
 import com.b2c.prototype.manager.payment.IBuyerCommissionManager;
 import com.b2c.prototype.modal.dto.payload.CommissionDto;
+import com.b2c.prototype.modal.dto.response.ResponseCommissionDto;
 import com.b2c.prototype.modal.dto.response.ResponseDeviceDto;
 
 import java.time.LocalDateTime;
@@ -16,18 +17,23 @@ public class BuyerCommissionProcess implements IBuyerCommissionProcess {
     }
 
     @Override
-    public void putCommission(Map<String, String> requestParams, CommissionDto commissionDto) {
-
+    public void saveLastCommission(Map<String, String> requestParams, CommissionDto commissionDto) {
+        buyerCommissionManager.saveLastCommission(commissionDto);
     }
 
     @Override
     public void deleteCommission(Map<String, String> requestParams) {
-        LocalDateTime effectiveDate = LocalDateTime.now();
-        buyerCommissionManager.deleteBuyerCommission(effectiveDate);
+        String effectiveDate = requestParams.get("effectiveDate");
+        buyerCommissionManager.deleteCommissionByTime(effectiveDate);
     }
 
     @Override
-    public List<ResponseDeviceDto> getCommissions(Map<String, String> requestParams) {
-        return List.of();
+    public List<ResponseCommissionDto> getCommissions(Map<String, String> requestParams) {
+        return buyerCommissionManager.getCommissionList();
+    }
+
+    @Override
+    public ResponseCommissionDto getCommission(Map<String, String> requestParams) {
+        return buyerCommissionManager.getLastCommission();
     }
 }

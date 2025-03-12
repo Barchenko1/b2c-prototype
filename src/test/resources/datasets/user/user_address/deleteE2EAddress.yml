@@ -56,12 +56,32 @@ user_credit_card:
     isDefault: true
 device:
   - id: 1
-    name: "phone"
-    lastSignedIn: "2024-03-03 12:00:00"
-    isThisDevice: false
+    loginTime: "2024-03-03 12:00:00"
+    ipAddress: "127.0.0.1"
     userdetails_id: 1
+    userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    screenWidth: 1920
+    screenHeight: 1080
+    timezone: "America/New_York"
+    language: "en-US"
+    platform: "Win32"
   - id: 2
-    name: "laptop"
-    lastSignedIn: "2024-03-03 15:30:00"
-    isThisDevice: true
+    loginTime: "2024-03-03 15:30:00"
+    ipAddress: "127.0.0.2"
     userdetails_id: 1
+    userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    screenWidth: 2560
+    screenHeight: 1600
+    timezone: "America/Los_Angeles"
+    language: "en-US"
+    platform: "MacIntel"
+  - id: 3
+    loginTime: "2024-03-03 12:00:00"
+    ipAddress: "127.0.0.3"
+    userdetails_id: 1
+    userAgent: "Mozilla/5.0 (iPhone; CPU iPhone OS 16_2 like Mac OS X) AppleWebKit/537.36 (KHTML, like Gecko) Version/16.2 Mobile/15E148 Safari/537.36"
+    screenWidth: 1170
+    screenHeight: 2532
+    timezone: "Asia/Tokyo"
+    language: "ja-JP"
+    platform: "iPhone"

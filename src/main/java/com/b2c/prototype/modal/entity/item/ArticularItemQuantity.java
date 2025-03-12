@@ -34,5 +34,6 @@ public class ArticularItemQuantity {
     private ArticularItem articularItem;
     private int quantity;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(nullable = false)
     private Price totalPrice;
 }

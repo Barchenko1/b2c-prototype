@@ -1,6 +1,16 @@
+currency:
+  - id: 1
+    value: "USD"
+    label: "USD"
+price:
+  - id: 1
+    amount: 100
+    currency_id: 1
 articular_item:
   - id: 1
     articular_id: 1234
     dateOfCreate: 10000
+    fullprice_id: 1
+    totalprice_id: 1
 option_group: []
 option_item: []

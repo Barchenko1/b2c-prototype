@@ -32,6 +32,10 @@ import java.util.Set;
                 name = "ArticularItem.findByOptionItemValue",
                 query = "SELECT ai FROM ArticularItem ai " +
                         "JOIN FETCH ai.optionItems oi " +
+                        "JOIN FETCH ai.totalPrice t " +
+                        "JOIN FETCH ai.fullPrice f " +
+                        "JOIN FETCH t.currency c1 " +
+                        "JOIN FETCH f.currency c2 " +
                         "WHERE oi.value = :value"
         )
 })

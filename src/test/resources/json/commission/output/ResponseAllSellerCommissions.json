@@ -1,0 +1,17 @@
+[
+  {
+    "amount": 3.0,
+    "feeType": "PERCENTAGE",
+    "effectiveDate": "2024-03-05T14:30:00.000Z"
+  },
+  {
+    "amount": 3.0,
+    "feeType": "PERCENTAGE",
+    "effectiveDate": "2024-03-04T14:30:00.000Z"
+  },
+  {
+    "amount": 5.0,
+    "feeType": "PERCENTAGE",
+    "effectiveDate": "2024-03-03T14:30:00.000Z"
+  }
+]

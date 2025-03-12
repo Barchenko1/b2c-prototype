@@ -108,8 +108,8 @@ class UserDetailsControllerE2ETest extends BasicE2ETest {
         }
 
         verifyExpectedData("/datasets/user/user_details/updateE2EUserDetails.yml",
-                new String[] {"id", "option_group_id", "option_item_id", "articular_item_id", "articular_id", "dateOfCreate", "DISCOUNT_ID", "FULLPRICE_ID", "TOTALPRICE_ID"},
-                new String[] {"label", "value", "productname", "charSequenceCode"}
+                new String[] {"id", "dateOfCreate", "user_id"},
+                new String[] {"label", "value"}
         );
     }
 
@@ -128,8 +128,8 @@ class UserDetailsControllerE2ETest extends BasicE2ETest {
         }
 
         verifyExpectedData("/datasets/user/user_details/updateE2EUserDetails.yml",
-                new String[] {"id", "option_group_id", "option_item_id", "articular_item_id", "articular_id", "dateOfCreate", "DISCOUNT_ID", "FULLPRICE_ID", "TOTALPRICE_ID"},
-                new String[] {"label", "value", "productname", "charSequenceCode"}
+                new String[] {"id", "dateOfCreate", "user_id"},
+                new String[] {"label", "value"}
         );
     }
 
@@ -149,8 +149,8 @@ class UserDetailsControllerE2ETest extends BasicE2ETest {
         }
 
         verifyExpectedData("/datasets/user/user_details/updateStatusE2EUserDetails.yml",
-                new String[] {"id", "option_group_id", "option_item_id", "articular_item_id", "articular_id", "dateOfCreate", "DISCOUNT_ID", "FULLPRICE_ID", "TOTALPRICE_ID"},
-                new String[] {"label", "value", "productname", "charSequenceCode"}
+                new String[] {"id", "dateOfCreate", "user_id"},
+                new String[] {"label", "value"}
         );
     }
 
@@ -170,8 +170,8 @@ class UserDetailsControllerE2ETest extends BasicE2ETest {
         }
 
         verifyExpectedData("/datasets/user/user_details/updateVerifyEmailE2EUserDetails.yml",
-                new String[] {"id", "option_group_id", "option_item_id", "articular_item_id", "articular_id", "dateOfCreate", "DISCOUNT_ID", "FULLPRICE_ID", "TOTALPRICE_ID"},
-                new String[] {"label", "value", "productname", "charSequenceCode"}
+                new String[] {"id", "dateOfCreate", "user_id"},
+                new String[] {"label", "value"}
         );
     }
 
@@ -191,8 +191,8 @@ class UserDetailsControllerE2ETest extends BasicE2ETest {
         }
 
         verifyExpectedData("/datasets/user/user_details/updateVerifyPhoneE2EUserDetails.yml",
-                new String[] {"id", "option_group_id", "option_item_id", "articular_item_id", "articular_id", "dateOfCreate", "DISCOUNT_ID", "FULLPRICE_ID", "TOTALPRICE_ID"},
-                new String[] {"label", "value", "productname", "charSequenceCode"}
+                new String[] {"id", "dateOfCreate", "user_id"},
+                new String[] {"label", "value"}
         );
     }
 

@@ -1,0 +1,9 @@
+seller_commission:
+  - id: 1
+    fee_type: 'PERCENTAGE'
+    amount: 5
+    effective_date: "2024-03-03 15:30:00"
+  - id: 2
+    fee_type: 'PERCENTAGE'
+    amount: 3
+    effective_date: "2024-03-04 15:30:00"

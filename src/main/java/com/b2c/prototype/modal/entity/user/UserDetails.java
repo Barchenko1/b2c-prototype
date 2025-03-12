@@ -63,6 +63,12 @@ import lombok.experimental.SuperBuilder;
                         "LEFT JOIN FETCH u.userAddresses " +
                         "LEFT JOIN FETCH u.userCreditCards " +
                         "LEFT JOIN FETCH u.devices d "
+        ),
+        @NamedQuery(
+                name = "UserDetails.findAllDevicesByUserId",
+                query = "SELECT DISTINCT u FROM UserDetails u " +
+                        "LEFT JOIN FETCH u.devices d " +
+                        "WHERE u.userId = :userId"
         )
 })
 public class UserDetails extends AbstractUserDetails {

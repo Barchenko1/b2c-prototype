@@ -1,13 +1,14 @@
 package com.b2c.prototype.controller.user;
 
-import com.b2c.prototype.modal.dto.payload.AddressDto;
 import com.b2c.prototype.modal.dto.payload.DeviceDto;
 import com.b2c.prototype.modal.dto.response.ResponseDeviceDto;
 import com.b2c.prototype.processor.user.IDeviceProcess;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,10 +27,11 @@ public class DeviceController {
         this.deviceProcess = deviceProcess;
     }
 
-    @PutMapping(produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<Void> putDevice(@RequestParam final Map<String, String> requestParams,
-                                          @RequestBody final DeviceDto deviceDto) {
-        deviceProcess.putDevice(requestParams, deviceDto);
+    @PostMapping(produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity<Void> activateCurrentDevice(HttpServletRequest request,
+                                                      @RequestParam final Map<String, String> requestParams,
+                                                      @RequestBody final DeviceDto deviceDto) {
+        deviceProcess.activateCurrentDevice(requestParams, request, deviceDto);
         return ResponseEntity.ok().build();
     }
 
@@ -41,7 +43,8 @@ public class DeviceController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ResponseDeviceDto> getDevicesByUserId(@RequestParam final Map<String, String> requestParams) {
-        return deviceProcess.getDevicesByUserId(requestParams);
+    public List<ResponseDeviceDto> getDevicesByUserId(HttpServletRequest request,
+                                                      @RequestParam final Map<String, String> requestParams) {
+        return deviceProcess.getDevicesByUserId(requestParams, request);
     }
 }

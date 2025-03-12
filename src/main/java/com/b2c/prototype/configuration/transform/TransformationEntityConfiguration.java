@@ -1,6 +1,7 @@
 package com.b2c.prototype.configuration.transform;
 
 import com.b2c.prototype.modal.base.constant.AbstractConstantEntity;
+import com.b2c.prototype.modal.constant.FeeType;
 import com.b2c.prototype.modal.constant.MessageStatusEnum;
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.dto.common.NumberConstantPayloadDto;
@@ -10,10 +11,12 @@ import com.b2c.prototype.modal.dto.common.SearchFieldUpdateEntityDto;
 import com.b2c.prototype.modal.dto.payload.AddressDto;
 import com.b2c.prototype.modal.dto.payload.ArticularItemDto;
 import com.b2c.prototype.modal.dto.payload.ArticularItemQuantityDto;
+import com.b2c.prototype.modal.dto.payload.CommissionDto;
 import com.b2c.prototype.modal.dto.payload.ContactInfoDto;
 import com.b2c.prototype.modal.dto.payload.ContactPhoneDto;
 import com.b2c.prototype.modal.dto.payload.CreditCardDto;
 import com.b2c.prototype.modal.dto.payload.DeliveryDto;
+import com.b2c.prototype.modal.dto.payload.DeviceDto;
 import com.b2c.prototype.modal.dto.payload.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.InitDiscountDto;
 import com.b2c.prototype.modal.dto.payload.ItemDataDto;
@@ -37,6 +40,7 @@ import com.b2c.prototype.modal.dto.payload.constant.CategoryValueDto;
 import com.b2c.prototype.modal.dto.payload.constant.CountryDto;
 import com.b2c.prototype.modal.dto.payload.constant.ItemTypeDto;
 import com.b2c.prototype.modal.dto.response.ResponseArticularItemDto;
+import com.b2c.prototype.modal.dto.response.ResponseCommissionDto;
 import com.b2c.prototype.modal.dto.response.ResponseCreditCardDto;
 import com.b2c.prototype.modal.dto.response.ResponseDeviceDto;
 import com.b2c.prototype.modal.dto.response.ResponseItemDataDto;
@@ -71,6 +75,7 @@ import com.b2c.prototype.modal.entity.option.ZoneOption;
 import com.b2c.prototype.modal.entity.order.CustomerOrder;
 import com.b2c.prototype.modal.entity.order.DeliveryArticularItemQuantity;
 import com.b2c.prototype.modal.entity.order.OrderStatus;
+import com.b2c.prototype.modal.entity.payment.BuyerCommission;
 import com.b2c.prototype.modal.entity.payment.SellerCommission;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
 import com.b2c.prototype.modal.entity.payment.Payment;
@@ -97,6 +102,7 @@ import com.tm.core.process.dao.identifier.IQueryService;
 import org.hibernate.Session;
 import org.springframework.context.annotation.Configuration;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -173,6 +179,8 @@ public class TransformationEntityConfiguration {
         loadZoneOptionFunctions(transformationFunctionService);
         loadAddressFunctions(transformationFunctionService);
         loadCreditCardFunctions(transformationFunctionService);
+        loadDeviceFunctions(transformationFunctionService);
+        loadCommissionFunctions(transformationFunctionService);
 
     }
 
@@ -248,6 +256,18 @@ public class TransformationEntityConfiguration {
         transformationFunctionService.addTransformationFunction(UserCreditCardDto.class, UserCreditCard.class, mapUserCreditCardDtoToUserCreditCardFunction());
         transformationFunctionService.addTransformationFunction(UserCreditCard.class, ResponseUserCreditCardDto.class, mapUserCreditCardToResponseUserCardDtoFunction());
         transformationFunctionService.addTransformationFunction(CreditCard.class, ResponseCreditCardDto.class, mapCreditCardToResponseCardDtoFunction());
+    }
+
+    private void loadDeviceFunctions(ITransformationFunctionService transformationFunctionService) {
+        transformationFunctionService.addTransformationFunction(DeviceDto.class, Device.class, mapDeviceDtoToDeviceFunction());
+        transformationFunctionService.addTransformationFunction(Device.class, ResponseDeviceDto.class, mapDeviceToResponseDeviceDtoFunction());
+    }
+
+    private void loadCommissionFunctions(ITransformationFunctionService transformationFunctionService) {
+        transformationFunctionService.addTransformationFunction(SellerCommission.class, ResponseCommissionDto.class, mapSellerCommissionToResponseCommissionDtoFunction());
+        transformationFunctionService.addTransformationFunction(CommissionDto.class, SellerCommission.class, mapCommissionDtoToSellerCommissionFunction());
+        transformationFunctionService.addTransformationFunction(BuyerCommission.class, ResponseCommissionDto.class, mapBuyerCommissionToResponseCommissionDtoFunction());
+        transformationFunctionService.addTransformationFunction(CommissionDto.class, BuyerCommission.class, mapCommissionDtoToBuyerCommissionFunction());
     }
 
     private <T extends AbstractConstantEntity> Function<ConstantPayloadDto, T> mapConstantEntityPayloadDtoToConstantEntityFunction(Supplier<T> entitySupplier) {
@@ -566,12 +586,29 @@ public class TransformationEntityConfiguration {
         };
     }
 
+    private Function<DeviceDto, Device> mapDeviceDtoToDeviceFunction() {
+        return deviceDto -> Device.builder()
+                .loginTime(LocalDateTime.now())
+                .screenHeight(deviceDto.getScreenHeight())
+                .screenWidth(deviceDto.getScreenWidth())
+                .userAgent(deviceDto.getUserAgent())
+                .timezone(deviceDto.getTimezone())
+                .language(deviceDto.getLanguage())
+                .platform(deviceDto.getPlatform())
+                .build();
+    }
+
     private Function<Device, ResponseDeviceDto> mapDeviceToResponseDeviceDtoFunction() {
         return device -> ResponseDeviceDto.builder()
-                    .name(device.getName())
-                    .lastSignedIn(device.getLastSignedIn().atZone(ZoneId.of("UTC")))
-                    .isThisDevice(device.isThisDevice())
-                    .build();
+                .ipAddress(device.getIpAddress())
+                .loginTime(device.getLoginTime().atZone(ZoneId.of("UTC")))
+                .screenHeight(device.getScreenHeight())
+                .screenWidth(device.getScreenWidth())
+                .userAgent(device.getUserAgent())
+                .timezone(device.getTimezone())
+                .language(device.getLanguage())
+                .platform(device.getPlatform())
+                .build();
     }
 
     private Function<ReviewDto, Review> mapReviewDtoToReviewFunction() {
@@ -1290,6 +1327,42 @@ public class TransformationEntityConfiguration {
         };
     }
 
+    private Function<SellerCommission, ResponseCommissionDto> mapSellerCommissionToResponseCommissionDtoFunction() {
+        return sellerCommission -> ResponseCommissionDto.builder()
+                .amount(sellerCommission.getAmount())
+                .currency(sellerCommission.getCurrency() != null ? sellerCommission.getCurrency().getValue() : null)
+                .feeType(sellerCommission.getFeeType().name())
+                .effectiveDate(sellerCommission.getEffectiveDate().atZone(ZoneId.systemDefault()))
+                .build();
+    }
+
+    private BiFunction<Session, CommissionDto, SellerCommission> mapCommissionDtoToSellerCommissionFunction() {
+        return (session, commissionDto) -> SellerCommission.builder()
+                .amount(commissionDto.getAmount())
+                .currency(commissionDto.getCurrency() != null ? fetchCurrency(session, commissionDto.getCurrency()) : null)
+                .feeType(FeeType.valueOf(commissionDto.getFeeType()))
+                .effectiveDate(LocalDateTime.now())
+                .build();
+    }
+
+    private Function<BuyerCommission, ResponseCommissionDto> mapBuyerCommissionToResponseCommissionDtoFunction() {
+        return buyerCommission -> ResponseCommissionDto.builder()
+                .amount(buyerCommission.getAmount())
+                .currency(buyerCommission.getCurrency() != null ? buyerCommission.getCurrency().getValue() : null)
+                .feeType(buyerCommission.getFeeType().name())
+                .effectiveDate(buyerCommission.getEffectiveDate().atZone(ZoneId.systemDefault()))
+                .build();
+    }
+
+    private BiFunction<Session, CommissionDto, BuyerCommission> mapCommissionDtoToBuyerCommissionFunction() {
+        return (session, commissionDto) -> BuyerCommission.builder()
+                .amount(commissionDto.getAmount())
+                .currency(commissionDto.getCurrency() != null ? fetchCurrency(session, commissionDto.getCurrency()) : null)
+                .feeType(FeeType.valueOf(commissionDto.getFeeType()))
+                .effectiveDate(LocalDateTime.now())
+                .build();
+    }
+
     private PaymentMethod fetchPaymentMethod(Session session, String value) {
         return queryService.getNamedQueryEntity(
                 session,
@@ -1439,7 +1512,7 @@ public class TransformationEntityConfiguration {
         return queryService.getNamedQueryOptionalEntity(
                 session,
                 SellerCommission.class,
-                "SellerCommission.getLatest");
+                "SellerCommission.getCommissionList");
     }
 
     private String combineUserAddress(String country, String city, String street, String buildingNumber, int flatNumber) {

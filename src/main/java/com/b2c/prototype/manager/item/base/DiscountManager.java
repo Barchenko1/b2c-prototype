@@ -25,18 +25,15 @@ public class DiscountManager implements IDiscountManager {
 
     private final IEntityOperationManager entityOperationDao;
     private final ISearchService searchService;
-    private final IQueryService queryService;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
     public DiscountManager(IDiscountDao discountDao,
                            ISearchService searchService,
-                           IQueryService queryService,
                            ITransformationFunctionService transformationFunctionService,
                            IParameterFactory parameterFactory) {
         this.entityOperationDao = new EntityOperationManager(discountDao);
         this.searchService = searchService;
-        this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
     }
@@ -55,8 +52,7 @@ public class DiscountManager implements IDiscountManager {
             if (discountDto.getCharSequenceCode() == null) {
                 throw new RuntimeException("Discount code is null");
             }
-            ArticularItem articularItem = queryService.getGraphEntity(
-                    session,
+            ArticularItem articularItem = searchService.getGraphEntity(
                     ArticularItem.class,
                     "articularItem.discount.currency",
                     parameterFactory.createStringParameter(ARTICULAR_ID, articularId));

@@ -45,6 +45,8 @@ public final class DatabaseQueries {
 
             statement.execute("DELETE FROM payment_method");
             statement.execute("DELETE FROM discount");
+            statement.execute("DELETE FROM seller_commission");
+            statement.execute("DELETE FROM buyer_commission");
             statement.execute("DELETE FROM currency");
             statement.execute("DELETE FROM item_data");
         } catch (SQLException e) {

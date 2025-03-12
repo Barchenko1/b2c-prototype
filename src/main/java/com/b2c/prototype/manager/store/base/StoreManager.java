@@ -49,8 +49,7 @@ public class StoreManager implements IStoreManager {
                     parameterFactory.createStringParameter(ARTICULAR_ID, storeDto.getArticularId()));
 //            CountType countType = singleValueMap.getEntity(CountType.class, "value", storeDto.getCountType());
             Store store = Store.builder()
-                    .articularItem(articularItem)
-                    .count(storeDto.getCount())
+//                    .articularItemQuantities(articularItem)
 //                    .countType(countType)
                     .build();
             session.merge(store);
@@ -65,7 +64,6 @@ public class StoreManager implements IStoreManager {
                     query,
                     supplierService.parameterStringSupplier(ARTICULAR_ID, storeDto.getArticularId()));
 //            CountType countType = singleValueMap.getEntity(CountType.class, "value", storeDto.getCountType());
-            store.setCount(storeDto.getCount());
 //            store.setCountType(countType);
             session.merge(store);
         });
@@ -91,7 +89,8 @@ public class StoreManager implements IStoreManager {
 
     @Override
     public List<ResponseStoreDto> getAllStoreResponse() {
-        return entityOperationDao.getGraphEntityDtoList("",
+        return entityOperationDao.getGraphEntityDtoList(
+                "",
                 transformationFunctionService.getTransformationFunction(Store.class, ResponseStoreDto.class));
     }
 }

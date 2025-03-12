@@ -275,17 +275,17 @@ public class ServiceBeanConfiguration {
     @Bean
     public IUserDetailsManager userDetailsManager(IUserDetailsDao userDetailsDao,
                                                   ITransformationFunctionService transformationFunctionService,
-                                                  IQueryService queryService,
+                                                  ISearchService searchService,
                                                   IParameterFactory parameterFactory) {
-        return new UserDetailsManager(userDetailsDao, transformationFunctionService, queryService, parameterFactory);
+        return new UserDetailsManager(userDetailsDao, transformationFunctionService, searchService, parameterFactory);
     }
 
     @Bean
     public IDeviceManager deviceManager(IDeviceDao deviceDao,
                                         ITransformationFunctionService transformationFunctionService,
-                                        IQueryService queryService,
+                                        ISearchService searchService,
                                         IParameterFactory parameterFactory) {
-        return new DeviceManager(deviceDao, transformationFunctionService, queryService, parameterFactory);
+        return new DeviceManager(deviceDao, transformationFunctionService, searchService, parameterFactory);
     }
 
     @Bean
@@ -299,10 +299,9 @@ public class ServiceBeanConfiguration {
     @Bean
     public IDiscountManager discountManager(IDiscountDao discountDao,
                                             ISearchService searchService,
-                                            IQueryService queryService,
                                             ITransformationFunctionService transformationFunctionService,
                                             IParameterFactory parameterFactory) {
-        return new DiscountManager(discountDao, searchService, queryService, transformationFunctionService, parameterFactory);
+        return new DiscountManager(discountDao, searchService, transformationFunctionService, parameterFactory);
     }
 
     @Bean
@@ -362,18 +361,16 @@ public class ServiceBeanConfiguration {
 
     @Bean
     public ISellerCommissionManager sellerCommissionManager(ISellerCommissionDao sellerCommissionDao,
-                                                            ISearchService searchService,
                                                             ITransformationFunctionService transformationFunctionService,
                                                             IParameterFactory parameterFactory) {
-        return new SellerCommissionManager(sellerCommissionDao, searchService, transformationFunctionService, parameterFactory);
+        return new SellerCommissionManager(sellerCommissionDao, transformationFunctionService, parameterFactory);
     }
 
     @Bean
     public IBuyerCommissionManager buyerCommissionManager(IBuyerCommissionDao buyerCommissionDao,
-                                                          ISearchService searchService,
                                                           ITransformationFunctionService transformationFunctionService,
                                                           IParameterFactory parameterFactory) {
-        return new BuyerCommissionManager(buyerCommissionDao, searchService, transformationFunctionService, parameterFactory);
+        return new BuyerCommissionManager(buyerCommissionDao, transformationFunctionService, parameterFactory);
     }
 
     @Bean

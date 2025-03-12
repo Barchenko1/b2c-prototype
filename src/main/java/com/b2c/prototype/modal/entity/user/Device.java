@@ -22,16 +22,20 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @NamedQuery(
-        name = "Device.getLatest",
-        query = "SELECT d FROM Device d ORDER BY d.lastSignedIn DESC"
+        name = "Device.getCommissionList",
+        query = "SELECT d FROM Device d ORDER BY d.loginTime DESC"
 )
 public class Device {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String name;
     private String ipAddress;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime lastSignedIn;
-    private boolean isThisDevice;
+    private LocalDateTime loginTime;
+    private String userAgent;
+    private int screenWidth;
+    private int screenHeight;
+    private String timezone;
+    private String language;
+    private String platform;
 }

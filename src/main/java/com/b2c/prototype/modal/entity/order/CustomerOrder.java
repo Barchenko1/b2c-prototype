@@ -60,7 +60,7 @@ public class CustomerOrder {
     @EqualsAndHashCode.Exclude
     private List<DeliveryArticularItemQuantity> articularItemQuantityList = new ArrayList<>();
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "payment_id")
+    @JoinColumn(name = "payment_id", nullable = false)
     private Payment payment;
     private String note;
 }

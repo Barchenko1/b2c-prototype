@@ -185,7 +185,6 @@ class StoreManagerTest {
     private Store getStore() {
         return Store.builder()
                 .countType(getCountType())
-                .count(10)
                 .build();
     }
 

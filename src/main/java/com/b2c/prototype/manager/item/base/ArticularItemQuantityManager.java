@@ -62,9 +62,9 @@ public class ArticularItemQuantityManager implements IArticularItemQuantityManag
         entityOperationDao.executeConsumer(session -> {
             ArticularItemQuantity articularItemQuantity = updateOneIncrementCounter(itemDataOptionOneQuantityDto, true);
             Store store = getStore(session, itemDataOptionOneQuantityDto.getArticularId(), 1);
-            int storeCount = store.getCount();
+//            int storeCount = store.getCount();
             if (LIMITED.getValue().equalsIgnoreCase(store.getCountType().getValue())) {
-                store.setCount(storeCount - 1);
+//                store.setCount(storeCount - 1);
                 session.merge(store);
             }
             session.merge(articularItemQuantity);
@@ -79,8 +79,8 @@ public class ArticularItemQuantityManager implements IArticularItemQuantityManag
             Store store = searchService.getQueryEntity(
                     query,
                     supplierService.parameterStringSupplier(ARTICULAR_ID, itemDataOptionOneQuantityDto.getArticularId()));
-            int storeCount = store.getCount();
-            store.setCount(storeCount + 1);
+//            int storeCount = store.getCount();
+//            store.setCount(storeCount + 1);
             session.merge(articularItemQuantity);
             session.merge(store);
         });
@@ -107,9 +107,9 @@ public class ArticularItemQuantityManager implements IArticularItemQuantityManag
         entityOperationDao.executeConsumer(session -> {
             ArticularItemQuantity articularItemQuantity = updateCounter(articularItemQuantityDto, true);
             Store store = getStore(session, articularItemQuantityDto.getArticularId(), articularItemQuantityDto.getQuantity());
-            int storeCount = store.getCount();
+//            int storeCount = store.getCount();
             if (LIMITED.getValue().equalsIgnoreCase(store.getCountType().getValue())) {
-                store.setCount(storeCount - articularItemQuantity.getQuantity());
+//                store.setCount(storeCount - articularItemQuantity.getQuantity());
                 session.merge(store);
             }
             session.merge(articularItemQuantity);
@@ -124,8 +124,8 @@ public class ArticularItemQuantityManager implements IArticularItemQuantityManag
             Store store = searchService.getQueryEntity(
                     query,
                     supplierService.parameterStringSupplier(ARTICULAR_ID, articularItemQuantityDto.getArticularId()));
-            int storeCount = store.getCount();
-            store.setCount(storeCount + articularItemQuantity.getQuantity());
+//            int storeCount = store.getCount();
+//            store.setCount(storeCount + articularItemQuantity.getQuantity());
             session.merge(articularItemQuantity);
             session.merge(store);
         });
@@ -136,11 +136,11 @@ public class ArticularItemQuantityManager implements IArticularItemQuantityManag
         Store store = searchService.getQueryEntity(
                 query,
                 supplierService.parameterStringSupplier(ARTICULAR_ID, articularId));
-        int storeCount = store.getCount();
-        if (LIMITED.getValue().equalsIgnoreCase(store.getCountType().getValue())
-                && storeCount < quantity) {
-            throw new RuntimeException("Limited item quantity limit reached");
-        }
+//        int storeCount = store.getCount();
+//        if (LIMITED.getValue().equalsIgnoreCase(store.getCountType().getValue())
+//                && storeCount < quantity) {
+//            throw new RuntimeException("Limited item quantity limit reached");
+//        }
 
         return store;
     }

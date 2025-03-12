@@ -1,0 +1,20 @@
+currency:
+  - id: 1
+    value: "USD"
+    label: "USD"
+buyer_commission:
+  - id: 1
+    fee_type: 'FIXED'
+    amount: 5
+    currency_id: 1
+    effective_date: "2024-03-03 15:30:00"
+  - id: 2
+    fee_type: 'FIXED'
+    amount: 3
+    currency_id: 1
+    effective_date: "2024-03-04 15:30:00"
+  - id: 3
+    fee_type: 'FIXED'
+    amount: 3
+    currency_id: 1
+    effective_date: "2024-03-05 15:30:00"

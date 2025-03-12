@@ -3,6 +3,8 @@ package com.b2c.prototype.processor.user;
 import com.b2c.prototype.manager.userdetails.IDeviceManager;
 import com.b2c.prototype.modal.dto.payload.DeviceDto;
 import com.b2c.prototype.modal.dto.response.ResponseDeviceDto;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Map;
@@ -15,9 +17,10 @@ public class DeviceProcess implements IDeviceProcess {
     }
 
     @Override
-    public void putDevice(Map<String, String> requestParams, DeviceDto deviceDto) {
+    public void activateCurrentDevice(Map<String, String> requestParams, HttpServletRequest request, DeviceDto deviceDto) {
         String userId = requestParams.get("userId");
-        deviceManager.putDevice(userId, deviceDto);
+        String clientId = getClientIp(request);
+        deviceManager.activateCurrentDevice(userId, clientId, deviceDto);
     }
 
     @Override
@@ -27,8 +30,17 @@ public class DeviceProcess implements IDeviceProcess {
     }
 
     @Override
-    public List<ResponseDeviceDto> getDevicesByUserId(Map<String, String> requestParams) {
+    public List<ResponseDeviceDto> getDevicesByUserId(Map<String, String> requestParams, HttpServletRequest request) {
         String userId = requestParams.get("userId");
-        return deviceManager.getDevicesByUserId(userId);
+        String clientId = getClientIp(request);
+        return deviceManager.getDevicesByUserId(userId, clientId);
+    }
+
+    private String getClientIp(HttpServletRequest request) {
+        String ip = request.getHeader("X-Forwarded-For");
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        return ip;
     }
 }

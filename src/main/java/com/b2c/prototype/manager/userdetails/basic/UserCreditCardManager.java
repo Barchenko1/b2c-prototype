@@ -138,7 +138,7 @@ public class UserCreditCardManager implements IUserCreditCardManager {
                     .filter(existingUserCreditCard ->
                             existingUserCreditCard.getCreditCard().getCardNumber().equals(cardNumber))
                     .findFirst()
-                    .orElseThrow(() ->new RuntimeException("User has no such credit card"));
+                    .orElseThrow(() -> new RuntimeException("User has no such credit card"));
             userDetails.getUserCreditCards().remove(userCreditCard);
             if (userCreditCard.isDefault()) {
                 userDetails.getUserCreditCards().stream()

@@ -40,8 +40,10 @@ class DiscountControllerE2ETest extends BasicE2ETest {
             Statement statement = connection.createStatement();
             statement.execute("DELETE FROM articular_item");
             statement.execute("DELETE FROM discount");
+            statement.execute("DELETE FROM price");
             statement.execute("DELETE FROM currency");
             statement.execute("TRUNCATE TABLE discount RESTART IDENTITY CASCADE");
+            statement.execute("ALTER SEQUENCE price_id_seq RESTART WITH 5");
             statement.execute("ALTER SEQUENCE discount_id_seq RESTART WITH 1");
             connection.commit();
         } catch (Exception e) {

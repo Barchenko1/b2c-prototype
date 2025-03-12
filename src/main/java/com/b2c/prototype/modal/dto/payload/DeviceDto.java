@@ -14,6 +14,10 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DeviceDto {
-    private String name;
-    private String ipAddress;
+    private String userAgent;
+    private int screenWidth;
+    private int screenHeight;
+    private String timezone;
+    private String language;
+    private String platform;
 }

@@ -154,7 +154,7 @@ class ArticularItemQuantityManagerTest {
 
         articularItemQuantityManager.increaseOneItemDataOptionQuantityCountAndStore(dto);
 
-        assertEquals(9, store.getCount());
+//        assertEquals(9, store.getCount());
         assertEquals(6, articularItemQuantity.getQuantity());
     }
 
@@ -164,7 +164,7 @@ class ArticularItemQuantityManagerTest {
         Session session = mock(Session.class);
         ArticularItemQuantity articularItemQuantity = getItemDataOptionQuantity();
         Store store = new Store();
-        store.setCount(10);
+//        store.setCount(10);
 
         DeliveryArticularItemQuantity orderItemDataOption = mock(DeliveryArticularItemQuantity.class);
         when(orderItemDataOption.getArticularItemQuantity())
@@ -194,7 +194,7 @@ class ArticularItemQuantityManagerTest {
 
         articularItemQuantityManager.decreaseOneItemDataOptionQuantityCountAndStore(dto);
 
-        assertEquals(11, store.getCount());
+//        assertEquals(11, store.getCount());
         assertEquals(4, articularItemQuantity.getQuantity());
     }
 
@@ -290,7 +290,7 @@ class ArticularItemQuantityManagerTest {
 
         articularItemQuantityManager.increaseItemDataOptionQuantityCountAndStore(dto);
 
-        assertEquals(2, store.getCount());
+//        assertEquals(2, store.getCount());
         assertEquals(8, articularItemQuantity.getQuantity());
     }
 
@@ -328,7 +328,7 @@ class ArticularItemQuantityManagerTest {
 
         articularItemQuantityManager.decreaseItemDataOptionQuantityCountAndStore(dto);
 
-        assertEquals(12, store.getCount());
+//        assertEquals(12, store.getCount());
         assertEquals(2, articularItemQuantity.getQuantity());
     }
 
@@ -438,7 +438,6 @@ class ArticularItemQuantityManagerTest {
         return Store.builder()
                 .id(1L)
                 .countType(getCountType())
-                .count(10)
                 .build();
     }
 

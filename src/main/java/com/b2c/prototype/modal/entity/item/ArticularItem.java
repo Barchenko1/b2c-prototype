@@ -52,7 +52,9 @@ import java.util.Set;
         @NamedEntityGraph(
                 name = "articularItem.optionItems",
                 attributeNodes = {
-                        @NamedAttributeNode(value = "optionItems", subgraph = "optionItem.subgraph")
+                        @NamedAttributeNode(value = "optionItems", subgraph = "optionItem.subgraph"),
+                        @NamedAttributeNode(value = "fullPrice", subgraph = "price.subgraph"),
+                        @NamedAttributeNode(value = "totalPrice", subgraph = "price.subgraph"),
                 },
                 subgraphs = {
                         @NamedSubgraph(
@@ -60,7 +62,13 @@ import java.util.Set;
                                 attributeNodes = {
                                         @NamedAttributeNode("optionGroup")
                                 }
-                        )
+                        ),
+                        @NamedSubgraph(
+                                name = "price.subgraph",
+                                attributeNodes = {
+                                        @NamedAttributeNode("currency")
+                                }
+                        ),
                 }
         ),
         @NamedEntityGraph(
@@ -125,6 +133,8 @@ import java.util.Set;
                 query = "SELECT ai FROM ArticularItem ai " +
                         "JOIN FETCH ai.optionItems oi " +
                         "JOIN FETCH oi.optionGroup og " +
+                        "JOIN FETCH ai.fullPrice f " +
+                        "JOIN FETCH ai.totalPrice t " +
                         "JOIN FETCH og.optionItems " +
                         "JOIN FETCH oi.articularItems " +
                         "WHERE ai.articularId = :articularId"
@@ -164,8 +174,10 @@ public class ArticularItem {
     @EqualsAndHashCode.Exclude
     private Set<OptionItemCost> optionItemCosts = new HashSet<>();
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(nullable = false)
     private Price fullPrice;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(nullable = false)
     private Price totalPrice;
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "status_id")

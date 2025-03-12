@@ -1,13 +1,15 @@
 package com.b2c.prototype.controller.commission;
 
 import com.b2c.prototype.modal.dto.payload.CommissionDto;
-import com.b2c.prototype.modal.dto.response.ResponseDeviceDto;
+import com.b2c.prototype.modal.dto.response.ResponseCommissionDto;
 import com.b2c.prototype.processor.commission.IBuyerCommissionProcess;
 import com.b2c.prototype.processor.commission.ISellerCommissionProcess;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,10 +30,10 @@ public class CommissionController {
         this.sellerCommissionProcess = sellerCommissionProcess;
     }
 
-    @PutMapping(value = "/buyer", produces = MediaType.TEXT_PLAIN_VALUE)
+    @PostMapping(value = "/buyer", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<Void> putBuyerCommission(@RequestParam final Map<String, String> requestParams,
                                                    @RequestBody final CommissionDto commissionDto) {
-        buyerCommissionProcess.putCommission(requestParams, commissionDto);
+        buyerCommissionProcess.saveLastCommission(requestParams, commissionDto);
         return ResponseEntity.ok().build();
     }
 
@@ -41,15 +43,20 @@ public class CommissionController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/buyer", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ResponseDeviceDto> getBuyerCommissions(@RequestParam final Map<String, String> requestParams) {
+    @GetMapping(value = "/buyer/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<ResponseCommissionDto> getBuyerCommissions(@RequestParam final Map<String, String> requestParams) {
         return buyerCommissionProcess.getCommissions(requestParams);
     }
 
-    @PutMapping(value = "/seller", produces = MediaType.TEXT_PLAIN_VALUE)
+    @GetMapping(value = "/buyer", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseCommissionDto> getBuyerCommission(@RequestParam final Map<String, String> requestParams) {
+        return new ResponseEntity<>(buyerCommissionProcess.getCommission(requestParams), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/seller", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<Void> putSellerCommission(@RequestParam final Map<String, String> requestParams,
                                                     @RequestBody final CommissionDto commissionDto) {
-        sellerCommissionProcess.putCommission(requestParams, commissionDto);
+        sellerCommissionProcess.saveLastCommission(requestParams, commissionDto);
         return ResponseEntity.ok().build();
     }
 
@@ -59,8 +66,13 @@ public class CommissionController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/seller", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ResponseDeviceDto> getSellerCommissions(@RequestParam final Map<String, String> requestParams) {
+    @GetMapping(value = "/seller/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<ResponseCommissionDto> getSellerCommissions(@RequestParam final Map<String, String> requestParams) {
         return sellerCommissionProcess.getCommissions(requestParams);
+    }
+
+    @GetMapping(value = "/seller", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseCommissionDto> getSellerCommission(@RequestParam final Map<String, String> requestParams) {
+        return new ResponseEntity<>(sellerCommissionProcess.getCommission(requestParams), HttpStatus.OK);
     }
 }

@@ -2,6 +2,7 @@ package com.b2c.prototype.modal.entity.payment;
 
 import com.b2c.prototype.modal.base.commission.AbstractCommission;
 import jakarta.persistence.Entity;
+import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -15,9 +16,18 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder
 @AllArgsConstructor
-@NamedQuery(
-        name = "SellerCommission.getLatest",
-        query = "SELECT s FROM SellerCommission s ORDER BY s.effectiveDate DESC"
-)
+@NamedQueries({
+        @NamedQuery(
+                name = "SellerCommission.getCommissionList",
+                query = "SELECT s FROM SellerCommission s " +
+                        "LEFT JOIN FETCH s.currency c " +
+                        "ORDER BY s.effectiveDate DESC"
+        ),
+        @NamedQuery(
+                name = "SellerCommission.getCommissionByEffectiveDate",
+                query = "SELECT s FROM SellerCommission s " +
+                        "WHERE s.effectiveDate =: effectiveDate"
+        )
+})
 public class SellerCommission extends AbstractCommission {
 }

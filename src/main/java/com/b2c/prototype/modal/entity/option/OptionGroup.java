@@ -43,6 +43,10 @@ import java.util.List;
                         "LEFT JOIN FETCH og.optionItems oi " +
                         "LEFT JOIN FETCH oi.articularItems ai " +
                         "LEFT JOIN FETCH ai.optionItems ao " +
+                        "LEFT JOIN FETCH ai.totalPrice t " +
+                        "LEFT JOIN FETCH ai.fullPrice f " +
+                        "LEFT JOIN FETCH t.currency c1 " +
+                        "LEFT JOIN FETCH f.currency c2 " +
                         "WHERE og.value = :value"
         )
 })
