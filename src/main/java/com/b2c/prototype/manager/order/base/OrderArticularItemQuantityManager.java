@@ -17,7 +17,7 @@ import static com.b2c.prototype.util.Constant.ORDER_ID;
 
 public class OrderArticularItemQuantityManager implements IOrderArticularItemQuantityManager {
 
-    private final IEntityOperationManager entityOperationDao;
+    private final IEntityOperationManager entityOperationManager;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
     private final IParameterFactory parameterFactory;
@@ -26,7 +26,7 @@ public class OrderArticularItemQuantityManager implements IOrderArticularItemQua
                                              ITransformationFunctionService transformationFunctionService,
                                              ISupplierService supplierService,
                                              IParameterFactory parameterFactory) {
-        this.entityOperationDao = new EntityOperationManager(orderItemDao);
+        this.entityOperationManager = new EntityOperationManager(orderItemDao);
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
         this.parameterFactory = parameterFactory;
@@ -34,7 +34,7 @@ public class OrderArticularItemQuantityManager implements IOrderArticularItemQua
 
     @Override
     public void saveOrderArticularItemQuantity(OrderArticularItemQuantityDto orderArticularItemQuantityDto) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             DeliveryArticularItemQuantity orderItemDataOption =
                     transformationFunctionService.getEntity(session, DeliveryArticularItemQuantity.class, orderArticularItemQuantityDto);
             session.merge(orderItemDataOption);
@@ -43,8 +43,8 @@ public class OrderArticularItemQuantityManager implements IOrderArticularItemQua
 
     @Override
     public void updateOrderArticularItemQuantity(String orderId, OrderArticularItemQuantityDto orderArticularItemQuantityDto) {
-        entityOperationDao.executeConsumer(session -> {
-            DeliveryArticularItemQuantity orderItemDataOption = entityOperationDao.getNamedQueryEntity(
+        entityOperationManager.executeConsumer(session -> {
+            DeliveryArticularItemQuantity orderItemDataOption = entityOperationManager.getNamedQueryEntity(
                     "",
                     parameterFactory.createStringParameter(ORDER_ID, orderId));
             DeliveryArticularItemQuantity newOrderItemDataOption =
@@ -56,13 +56,13 @@ public class OrderArticularItemQuantityManager implements IOrderArticularItemQua
 
     @Override
     public void deleteOrder(String orderId) {
-        entityOperationDao.deleteEntityByParameter(
+        entityOperationManager.deleteEntityByParameter(
                 parameterFactory.createStringParameter(ORDER_ID, orderId));
     }
 
     @Override
     public ResponseOrderDetails getResponseOrderDetails(String orderId) {
-        return entityOperationDao.getGraphEntityDto(
+        return entityOperationManager.getGraphEntityDto(
                 "",
                 parameterFactory.createStringParameter(ORDER_ID, orderId),
                 transformationFunctionService.getTransformationFunction(DeliveryArticularItemQuantity.class, ResponseOrderDetails.class));
@@ -70,7 +70,7 @@ public class OrderArticularItemQuantityManager implements IOrderArticularItemQua
 
     @Override
     public List<ResponseOrderDetails> getResponseOrderDetailsList() {
-        return entityOperationDao.getGraphEntityDtoList(
+        return entityOperationManager.getGraphEntityDtoList(
                 "",
                 transformationFunctionService.getTransformationFunction(DeliveryArticularItemQuantity.class, ResponseOrderDetails.class));
     }

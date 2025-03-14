@@ -51,6 +51,7 @@
         <mapping class="com.b2c.prototype.modal.entity.payment.BuyerCommission" />
         <mapping class="com.b2c.prototype.modal.entity.payment.Payment" />
 
+        <mapping class="com.b2c.prototype.modal.entity.item.AvailabilityStatus" />
         <mapping class="com.b2c.prototype.modal.entity.item.Brand" />
         <mapping class="com.b2c.prototype.modal.entity.item.Category" />
         <mapping class="com.b2c.prototype.modal.entity.item.ItemType" />
@@ -65,6 +66,7 @@
         <mapping class="com.b2c.prototype.modal.entity.item.ItemData" />
         <mapping class="com.b2c.prototype.modal.entity.item.ArticularItem" />
         <mapping class="com.b2c.prototype.modal.entity.item.Item" />
+        <mapping class="com.b2c.prototype.modal.entity.item.ArticularItemQuantityPrice" />
         <mapping class="com.b2c.prototype.modal.entity.item.ArticularItemQuantity" />
 
         <mapping class="com.b2c.prototype.modal.entity.message.MessageType" />

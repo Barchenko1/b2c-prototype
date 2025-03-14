@@ -1,4 +1,4 @@
-package com.b2c.prototype.controller.basic;
+package com.b2c.prototype.controller.item;
 
 import com.b2c.prototype.manager.item.IItemManager;
 import org.springframework.web.bind.annotation.RequestMapping;

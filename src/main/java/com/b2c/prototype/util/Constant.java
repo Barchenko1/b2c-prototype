@@ -8,6 +8,7 @@ public interface Constant {
     String ITEM_ID = "itemId";
     String CHAR_SEQUENCE_CODE = "charSequenceCode";
     String VALUE = "value";
+    String STORE_ID = "storeId";
 
     // serviceId
     String BRAND_SERVICE_ID = "brand";

@@ -29,6 +29,7 @@ import com.b2c.prototype.dao.post.IPostDao;
 import com.b2c.prototype.dao.price.ICurrencyDao;
 import com.b2c.prototype.dao.rating.IRatingDao;
 import com.b2c.prototype.dao.store.ICountTypeDao;
+import com.b2c.prototype.dao.store.IStoreDao;
 import com.b2c.prototype.dao.user.IContactInfoDao;
 import com.b2c.prototype.dao.user.ICountryPhoneCodeDao;
 import com.b2c.prototype.dao.user.IDeviceDao;
@@ -79,6 +80,10 @@ import com.b2c.prototype.manager.payment.IBuyerCommissionManager;
 import com.b2c.prototype.manager.payment.ISellerCommissionManager;
 import com.b2c.prototype.manager.payment.base.BuyerCommissionManager;
 import com.b2c.prototype.manager.payment.base.SellerCommissionManager;
+import com.b2c.prototype.manager.store.IStoreAddressManager;
+import com.b2c.prototype.manager.store.IStoreManager;
+import com.b2c.prototype.manager.store.base.StoreAddressManager;
+import com.b2c.prototype.manager.store.base.StoreManager;
 import com.b2c.prototype.manager.userdetails.DeviceManager;
 import com.b2c.prototype.manager.userdetails.IDeviceManager;
 import com.b2c.prototype.manager.userdetails.IUserCreditCardManager;
@@ -125,6 +130,10 @@ import com.b2c.prototype.processor.option.TimeDurationOptionProcess;
 import com.b2c.prototype.processor.option.ZoneOptionProcess;
 import com.b2c.prototype.processor.order.IOrderProcessor;
 import com.b2c.prototype.processor.order.OrderProcessor;
+import com.b2c.prototype.processor.store.IStoreAddressProcess;
+import com.b2c.prototype.processor.store.IStoreProcess;
+import com.b2c.prototype.processor.store.StoreAddressProcess;
+import com.b2c.prototype.processor.store.StoreProcess;
 import com.b2c.prototype.processor.user.ContactInfoProcess;
 import com.b2c.prototype.processor.user.DeviceProcess;
 import com.b2c.prototype.processor.user.IContactInfoProcess;
@@ -143,6 +152,7 @@ import com.b2c.prototype.service.supplier.SupplierService;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.finder.factory.ParameterFactory;
 import com.tm.core.process.dao.identifier.IQueryService;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -422,6 +432,22 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
+    public IStoreManager storeManager(IStoreDao storeDao,
+                                      ISearchService searchService,
+                                      ITransformationFunctionService transformationFunctionService,
+                                      IParameterFactory parameterFactory) {
+        return new StoreManager(storeDao, searchService, transformationFunctionService, parameterFactory);
+    }
+
+    @Bean
+    public IStoreAddressManager storeAddressManager(IAddressDao addressDao,
+                                                    ISearchService searchService,
+                                                    ITransformationFunctionService transformationFunctionService,
+                                                    IParameterFactory parameterFactory) {
+        return new StoreAddressManager(addressDao, searchService, transformationFunctionService, parameterFactory);
+    }
+
+    @Bean
     public IConstantProcessorService constantOrchestratorService(
             IBrandManager brandManager,
             ICountTypeManager countTypeManager,
@@ -527,6 +553,16 @@ public class ServiceBeanConfiguration {
     @Bean
     public IBuyerCommissionProcess buyerCommissionProcess(IBuyerCommissionManager buyerCommissionManager) {
         return new BuyerCommissionProcess(buyerCommissionManager);
+    }
+
+    @Bean
+    public IStoreProcess storeProcess(IStoreManager storeManager) {
+        return new StoreProcess(storeManager);
+    }
+
+    @Bean
+    public IStoreAddressProcess storeAddressProcess(IStoreAddressManager storeAddressManager) {
+        return new StoreAddressProcess(storeAddressManager);
     }
 
 }

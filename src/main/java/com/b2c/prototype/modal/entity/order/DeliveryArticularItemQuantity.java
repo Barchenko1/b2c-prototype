@@ -1,7 +1,7 @@
 package com.b2c.prototype.modal.entity.order;
 
 import com.b2c.prototype.modal.entity.delivery.Delivery;
-import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
+import com.b2c.prototype.modal.entity.item.ArticularItemQuantityPrice;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -32,7 +32,7 @@ public class DeliveryArticularItemQuantity {
     private long id;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "delivery_articular_item_id")
-    private ArticularItemQuantity articularItemQuantity;
+    private ArticularItemQuantityPrice articularItemQuantityPrice;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "delivery_status_id")
     private OrderStatus orderStatus;

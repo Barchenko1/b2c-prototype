@@ -22,7 +22,7 @@ import static com.b2c.prototype.util.Query.SELECT_ITEM_BY_ITEM_ID;
 
 public class ReviewManager implements IReviewManager {
 
-    private final IEntityOperationManager entityOperationDao;
+    private final IEntityOperationManager entityOperationManager;
     private final ISearchService searchService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
@@ -33,7 +33,7 @@ public class ReviewManager implements IReviewManager {
                          ITransformationFunctionService transformationFunctionService,
                          ISupplierService supplierService,
                          IParameterFactory parameterFactory) {
-        this.entityOperationDao = new EntityOperationManager(reviewDao);
+        this.entityOperationManager = new EntityOperationManager(reviewDao);
         this.searchService = searchService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
@@ -42,29 +42,29 @@ public class ReviewManager implements IReviewManager {
 
     @Override
     public void saveUpdateReview(String articularId, ReviewDto reviewDto) {
-        entityOperationDao.executeConsumer(session -> {
-            NativeQuery<Item> query = session.createNativeQuery(SELECT_ITEM_BY_ITEM_ID, Item.class);
-            Item item = searchService.getQueryEntity(
-                    query,
-                    supplierService.parameterStringSupplier(ARTICULAR_ID, articularId));
+        entityOperationManager.executeConsumer(session -> {
+//            NativeQuery<Item> query = session.createNativeQuery(SELECT_ITEM_BY_ITEM_ID, Item.class);
+//            Item item = searchService.getQueryEntity(
+//                    query,
+//                    supplierService.parameterStringSupplier(ARTICULAR_ID, articularId));
             Review newReview = transformationFunctionService.getEntity(Review.class, reviewDto);
-            Review existingReview = item.getReviews().stream()
-                    .filter(reviewEntity -> reviewEntity.getUniqueId().equals(reviewDto.getReviewId()))
-                    .findFirst()
-                    .orElse(null);
-            if (existingReview != null) {
-                newReview.setId(existingReview.getId());
-                newReview.setUniqueId(existingReview.getUniqueId());
-                item.getReviews().remove(existingReview);
-            }
-            item.getReviews().add(newReview);
-            session.merge(item);
+//            Review existingReview = item.getReviews().stream()
+//                    .filter(reviewEntity -> reviewEntity.getUniqueId().equals(reviewDto.getReviewId()))
+//                    .findFirst()
+//                    .orElse(null);
+//            if (existingReview != null) {
+//                newReview.setId(existingReview.getId());
+//                newReview.setUniqueId(existingReview.getUniqueId());
+//                item.getReviews().remove(existingReview);
+//            }
+//            item.getReviews().add(newReview);
+//            session.merge(item);
         });
     }
 
     @Override
     public void deleteReview(String articularId) {
-        entityOperationDao.deleteEntity(
+        entityOperationManager.deleteEntity(
                 supplierService.entityFieldSupplier(
                         ArticularItem.class,
                         "",

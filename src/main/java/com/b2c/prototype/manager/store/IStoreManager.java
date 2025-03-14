@@ -7,9 +7,11 @@ import java.util.List;
 
 public interface IStoreManager {
     void saveStore(StoreDto storeDto);
-    void updateStore(StoreDto storeDto);
-    void deleteStore(String articularId);
+    void updateStore(String storeId, StoreDto storeDto);
+    void deleteStore(String storeId);
 
-    ResponseStoreDto getStoreResponse(String articularId);
-    List<ResponseStoreDto> getAllStoreResponse();
+    ResponseStoreDto getResponseStoreByStoreId(String storeId);
+    List<ResponseStoreDto> getAllResponseStoresByArticularId(String articularId);
+    List<ResponseStoreDto> getAllResponseStoreByCountry(String countryName);
+    List<ResponseStoreDto> getAllResponseStoreByCountryAndCity(String countryName, String cityName);
 }

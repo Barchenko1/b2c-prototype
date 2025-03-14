@@ -1,6 +1,6 @@
 package com.b2c.prototype.manager.store.base;
 
-import com.b2c.prototype.modal.entity.item.ArticularItem;
+import com.b2c.prototype.modal.entity.address.Address;
 
 import com.b2c.prototype.dao.store.IStoreDao;
 import com.b2c.prototype.modal.dto.payload.StoreDto;
@@ -9,88 +9,106 @@ import com.b2c.prototype.modal.entity.store.Store;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.manager.store.IStoreManager;
-import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.manager.common.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
-import org.hibernate.query.NativeQuery;
 
 import java.util.List;
 
 import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
-import static com.b2c.prototype.util.Query.SELECT_STORE_BY_ARTICULAR_ID;
+import static com.b2c.prototype.util.Constant.STORE_ID;
+import static com.b2c.prototype.util.Constant.VALUE;
 
 public class StoreManager implements IStoreManager {
 
-    private final IEntityOperationManager entityOperationDao;
+    private final IEntityOperationManager entityOperationManager;
     private final ISearchService searchService;
     private final ITransformationFunctionService transformationFunctionService;
-    private final ISupplierService supplierService;
     private final IParameterFactory parameterFactory;
 
     public StoreManager(IStoreDao storeDao,
                         ISearchService searchService,
                         ITransformationFunctionService transformationFunctionService,
-                        ISupplierService supplierService,
                         IParameterFactory parameterFactory) {
-        this.entityOperationDao = new EntityOperationManager(storeDao);
+        this.entityOperationManager = new EntityOperationManager(storeDao);
         this.searchService = searchService;
         this.transformationFunctionService = transformationFunctionService;
-        this.supplierService = supplierService;
         this.parameterFactory = parameterFactory;
     }
 
     @Override
     public void saveStore(StoreDto storeDto) {
-        entityOperationDao.executeConsumer(session -> {
-            ArticularItem articularItem = searchService.getNamedQueryEntity(
-                    ArticularItem.class,
-                    "",
-                    parameterFactory.createStringParameter(ARTICULAR_ID, storeDto.getArticularId()));
-//            CountType countType = singleValueMap.getEntity(CountType.class, "value", storeDto.getCountType());
-            Store store = Store.builder()
-//                    .articularItemQuantities(articularItem)
-//                    .countType(countType)
-                    .build();
+        entityOperationManager.executeConsumer(session -> {
+            Store store = transformationFunctionService.getEntity(session, Store.class, storeDto);
             session.merge(store);
         });
     }
 
     @Override
-    public void updateStore(StoreDto storeDto) {
-        entityOperationDao.executeConsumer(session -> {
-            NativeQuery<Store> query = session.createNativeQuery(SELECT_STORE_BY_ARTICULAR_ID, Store.class);
-            Store store = searchService.getQueryEntity(
-                    query,
-                    supplierService.parameterStringSupplier(ARTICULAR_ID, storeDto.getArticularId()));
-//            CountType countType = singleValueMap.getEntity(CountType.class, "value", storeDto.getCountType());
-//            store.setCountType(countType);
-            session.merge(store);
+    public void updateStore(String storeId, StoreDto storeDto) {
+        entityOperationManager.executeConsumer(session -> {
+            Store existingStore = entityOperationManager.getNamedQueryEntity(
+                    "Store.findStoreWithAddressByStoreId",
+                    parameterFactory.createStringParameter(STORE_ID, storeId));
+
+            Store store = transformationFunctionService.getEntity(session, Store.class, storeDto);
+            existingStore.setStoreName(store.getStoreName());
+            existingStore.setActive(store.isActive());
+            Address existingAddress = existingStore.getAddress();
+            Address address = store.getAddress();
+            existingAddress.setCountry(address.getCountry());
+            existingAddress.setCity(address.getCity());
+            existingAddress.setStreet(address.getStreet());
+            existingAddress.setBuildingNumber(address.getBuildingNumber());
+            existingAddress.setFlorNumber(address.getFlorNumber());
+            existingAddress.setApartmentNumber(address.getApartmentNumber());
+            existingAddress.setZipCode(address.getZipCode());
+            session.merge(existingStore);
         });
     }
 
     @Override
-    public void deleteStore(String articularId) {
-        entityOperationDao.deleteEntity(
-                supplierService.entityFieldSupplier(
-                        ArticularItem.class,
-                        "",
-                        supplierService.parameterStringSupplier(ARTICULAR_ID, articularId),
-                        transformationFunctionService.getTransformationFunction(ArticularItem.class, Store.class)));
+    public void deleteStore(String storeId) {
+        entityOperationManager.executeConsumer(session -> {
+            Store existingStore = entityOperationManager.getNamedQueryEntity(
+                    "Store.findStoreByStoreId",
+                    parameterFactory.createStringParameter(STORE_ID, storeId));
+
+            session.remove(existingStore);
+        });
     }
 
     @Override
-    public ResponseStoreDto getStoreResponse(String articularId) {
-        return entityOperationDao.getGraphEntityDto(
-                "",
+    public ResponseStoreDto getResponseStoreByStoreId(String storeId) {
+        return entityOperationManager.getNamedQueryEntityDto(
+                "Store.findStoreWithAddressArticularItemQuantityByStoreId",
+                parameterFactory.createStringParameter(STORE_ID, storeId),
+                transformationFunctionService.getTransformationFunction(Store.class, ResponseStoreDto.class)
+        );
+    }
+
+    @Override
+    public List<ResponseStoreDto> getAllResponseStoresByArticularId(String articularId) {
+        return entityOperationManager.getSubNamedQueryEntityDtoList(
+                "Store.findStoreWithAddressArticularItemQuantityByArticularId",
                 parameterFactory.createStringParameter(ARTICULAR_ID, articularId),
                 transformationFunctionService.getTransformationFunction(Store.class, ResponseStoreDto.class));
     }
 
     @Override
-    public List<ResponseStoreDto> getAllStoreResponse() {
-        return entityOperationDao.getGraphEntityDtoList(
-                "",
+    public List<ResponseStoreDto> getAllResponseStoreByCountry(String countryName) {
+        return entityOperationManager.getSubNamedQueryEntityDtoList(
+                "Store.findStoreWithAddressArticularItemQuantityByCountry",
+                parameterFactory.createStringParameter(VALUE, countryName),
+                transformationFunctionService.getTransformationFunction(Store.class, ResponseStoreDto.class));
+    }
+
+    // fix next
+    @Override
+    public List<ResponseStoreDto> getAllResponseStoreByCountryAndCity(String countryName, String cityName) {
+        return entityOperationManager.getSubNamedQueryEntityDtoList(
+                "Store.findStoreWithAddressArticularItemQuantityByCountryCity",
+                parameterFactory.createStringParameter(VALUE, countryName),
                 transformationFunctionService.getTransformationFunction(Store.class, ResponseStoreDto.class));
     }
 }

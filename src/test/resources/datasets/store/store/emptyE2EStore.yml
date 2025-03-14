@@ -1,0 +1,105 @@
+count_type:
+  - id: 1
+    value: "LIMITED"
+    label: "limited"
+brand:
+  - id: 1
+    value: "Hermes"
+    label: "Hermes"
+item_type:
+  - id: 1
+    value: "Clothes"
+    label: "Clothes"
+currency:
+  - id: 1
+    value: "USD"
+    label: "USD"
+price:
+  - id: 1
+    amount: 100
+    currency_id: 1
+  - id: 2
+    amount: 100
+    currency_id: 1
+  - id: 3
+    amount: 200
+    currency_id: 1
+  - id: 4
+    amount: 300
+    currency_id: 1
+discount:
+  - id: 1
+    amount: 5
+    charSequenceCode: "abc"
+    isActive: true
+    isPercent: false
+    currency_id: 1
+option_group:
+  - id: 1
+    label: "Size"
+    value: "Size"
+option_item:
+  - id: 1
+    value: "L"
+    label: "L"
+    option_group_id: 1
+category:
+  - id: 1
+    label: "parent"
+    value: "parent"
+  - id: 2
+    category_id: 1
+    label: "root"
+    value: "root"
+  - id: 3
+    category_id: 2
+    label: "child"
+    value: "child"
+item_data:
+  - id: 1
+    item_id: 123
+    brand_id: 1
+    category_id: 3
+    itemtype_id: 1
+country:
+  - id: 1
+    label: "USA"
+    value: "USA"
+    flagImagePath: "/images/usa.jpg"
+address:
+  - id: 1
+    street: "street"
+    buildingNumber: 1
+    florNumber: 9
+    apartmentNumber: 101
+    zipCode: 90000
+    country_id: 1
+store:
+  - id: 1
+    store_id: "exist"
+    storeName: "abc"
+    isActive: true
+    address_id: 1
+articular_item:
+  - id: 1
+    articular_id: "123"
+    dateOfCreate: 10000
+    fullprice_id: 1
+    totalprice_id: 1
+  - id: 2
+    articular_id: "125"
+    dateOfCreate: 10000
+    fullprice_id: 2
+    totalprice_id: 2
+articular_item_option_item:
+  - articular_item_id: 1
+    option_item_id: 1
+articular_item_quantity:
+  - id: 1
+    articular_item_id: 1
+    store_id: 1
+    quantity: 2
+  - id: 2
+    articular_item_id: 2
+    store_id: 1
+    quantity: 3

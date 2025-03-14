@@ -21,7 +21,7 @@ import static com.b2c.prototype.util.Constant.ARTICULAR_ITEM_FULL;
 
 public class ArticularItemManager implements IArticularItemManager {
 
-    private final IEntityOperationManager entityOperationDao;
+    private final IEntityOperationManager entityOperationManager;
     private final ISearchService searchService;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
@@ -30,7 +30,7 @@ public class ArticularItemManager implements IArticularItemManager {
                                 ISearchService searchService,
                                 ITransformationFunctionService transformationFunctionService,
                                 IParameterFactory parameterFactory) {
-        this.entityOperationDao = new EntityOperationManager(itemDataOptionDao);
+        this.entityOperationManager = new EntityOperationManager(itemDataOptionDao);
         this.searchService = searchService;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
@@ -38,7 +38,7 @@ public class ArticularItemManager implements IArticularItemManager {
 
     @Override
     public void saveUpdateArticularItem(String itemId, List<ArticularItemDto> articularItemDtoList) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             SearchFieldUpdateCollectionEntityDto<ArticularItemDto> searchFieldUpdateCollectionEntityDto =
                     SearchFieldUpdateCollectionEntityDto.<ArticularItemDto>builder()
                             .searchField(itemId)
@@ -55,7 +55,7 @@ public class ArticularItemManager implements IArticularItemManager {
 
     @Override
     public void deleteArticularItem(String articularId) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             ItemData itemData = searchService.getNamedQueryEntity(
                     ItemData.class,
                     "ArticularItem.findItemDataByArticularId",
@@ -79,7 +79,7 @@ public class ArticularItemManager implements IArticularItemManager {
 
     @Override
     public ResponseArticularItemDto getResponseArticularItemDto(String articularId) {
-        return entityOperationDao.getGraphEntityDto(
+        return entityOperationManager.getGraphEntityDto(
                 ARTICULAR_ITEM_FULL,
                 parameterFactory.createStringParameter(ARTICULAR_ID, articularId),
                 transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class));
@@ -87,7 +87,7 @@ public class ArticularItemManager implements IArticularItemManager {
 
     @Override
     public List<ResponseArticularItemDto> getResponseArticularItemDtoList() {
-        return entityOperationDao.getGraphEntityDtoList(
+        return entityOperationManager.getGraphEntityDtoList(
                 ARTICULAR_ITEM_FULL,
                 transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class));
 
@@ -95,14 +95,14 @@ public class ArticularItemManager implements IArticularItemManager {
 
     @Override
     public List<ResponseArticularItemDto> getResponseArticularItemDtoFiltered() {
-        return entityOperationDao.getGraphEntityDtoList(
+        return entityOperationManager.getGraphEntityDtoList(
                 ARTICULAR_ITEM_FULL,
                 transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class));
     }
 
     @Override
     public List<ResponseArticularItemDto> getResponseArticularItemDtoSorted(String sortType) {
-        return entityOperationDao.getGraphEntityDtoList(
+        return entityOperationManager.getGraphEntityDtoList(
                 ARTICULAR_ITEM_FULL,
                 transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class));
     }

@@ -25,7 +25,7 @@ public class UserCreditCardManager implements IUserCreditCardManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserCreditCardManager.class);
 
-    private final IEntityOperationManager entityOperationDao;
+    private final IEntityOperationManager entityOperationManager;
     private final ISearchService searchService;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
@@ -34,7 +34,7 @@ public class UserCreditCardManager implements IUserCreditCardManager {
                                  ISearchService searchService,
                                  ITransformationFunctionService transformationFunctionService,
                                  IParameterFactory parameterFactory) {
-        this.entityOperationDao = new EntityOperationManager(creditCardDao);
+        this.entityOperationManager = new EntityOperationManager(creditCardDao);
         this.searchService = searchService;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
@@ -42,7 +42,7 @@ public class UserCreditCardManager implements IUserCreditCardManager {
 
     @Override
     public void saveUserCreditCardByUserId(String userId, UserCreditCardDto userCreditCardDto) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             UserDetails userDetails = searchService.getNamedQueryEntity(
                     UserDetails.class,
                     "UserDetails.findUserCreditCardsByUserId",
@@ -67,7 +67,7 @@ public class UserCreditCardManager implements IUserCreditCardManager {
 
     @Override
     public void updateUserCreditCardByUserId(String userId, String creditCardNumber, UserCreditCardDto userCreditCardDto) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             UserDetails userDetails = searchService.getNamedQueryEntity(
                     UserDetails.class,
                     "UserDetails.findUserCreditCardsByUserId",
@@ -108,7 +108,7 @@ public class UserCreditCardManager implements IUserCreditCardManager {
 
     @Override
     public void setDefaultUserCreditCard(String userId, String cardNumber) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             UserDetails userDetails = searchService.getNamedQueryEntity(
                     UserDetails.class,
                     "UserDetails.findUserCreditCardsByUserId",
@@ -129,7 +129,7 @@ public class UserCreditCardManager implements IUserCreditCardManager {
 
     @Override
     public void deleteCreditCardByUserId(String userId, String cardNumber) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             UserDetails userDetails = searchService.getNamedQueryEntity(
                     UserDetails.class,
                     "UserDetails.findUserCreditCardsByUserId",
@@ -179,7 +179,7 @@ public class UserCreditCardManager implements IUserCreditCardManager {
 
     @Override
     public List<ResponseCreditCardDto> getAllCreditCardByCardNumber(String cardNumber) {
-        return entityOperationDao.getSubNamedQueryEntityDtoList(
+        return entityOperationManager.getSubNamedQueryEntityDtoList(
                 "UserCreditCard.findByCreditCardNumber",
                 parameterFactory.createStringParameter("cardNumber", cardNumber),
                 transformationFunctionService.getTransformationFunction(CreditCard.class, ResponseCreditCardDto.class));

@@ -78,7 +78,7 @@ class MessageManagerTest {
         when(session.createNativeQuery(any(String.class), eq(MessageBox.class))).thenReturn(query);
         when(supplierService.parameterStringSupplier(USER_ID, "uniqId"))
                 .thenReturn(supplier);
-        when(queryService.getQueryEntity(eq(query), any(Supplier.class))).thenReturn(messageBox);
+//        when(queryService.getQueryEntity(eq(query), any(Supplier.class))).thenReturn(messageBox);
         when(transformationFunctionService.getEntity(eq(Message.class), eq(messageDto))).thenReturn(newMessage);
         when(messageBox.getMessages()).thenReturn(Set.of(existingMessage));
         when(existingMessage.getMessageUniqNumber()).thenReturn("123");
@@ -110,7 +110,7 @@ class MessageManagerTest {
         when(session.createNativeQuery(any(String.class), eq(MessageBox.class))).thenReturn(query);
         when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(supplier);
-        when(queryService.getQueryEntity(eq(query), any(Supplier.class))).thenReturn(messageBox);
+//        when(queryService.getQueryEntity(eq(query), any(Supplier.class))).thenReturn(messageBox);
         when(messageBox.getMessages()).thenReturn(Set.of(existingMessage));
         when(existingMessage.getMessageUniqNumber()).thenReturn("123");
 
@@ -140,7 +140,7 @@ class MessageManagerTest {
         when(session.createNativeQuery(any(String.class), eq(MessageBox.class))).thenReturn(query);
         when(supplierService.parameterStringSupplier(USER_ID, uniqueId))
                 .thenReturn(supplier);
-        when(queryService.getQueryEntity(eq(query), any(Supplier.class))).thenReturn(messageBox);
+//        when(queryService.getQueryEntity(eq(query), any(Supplier.class))).thenReturn(messageBox);
         when(messageBox.getMessages()).thenReturn(Set.of(existingMessage));
 
         doAnswer(invocation -> {

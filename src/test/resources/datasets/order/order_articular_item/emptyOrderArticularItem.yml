@@ -48,7 +48,6 @@ item_data:
     brand_id: 1
     category_id: 3
     itemtype_id: 1
-    
 articular_item:
   - id: 1
     articular_id: 1

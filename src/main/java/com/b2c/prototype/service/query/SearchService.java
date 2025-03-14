@@ -118,11 +118,4 @@ public class SearchService implements ISearchService {
                 .map(mapToDtoFunction)
                 .toList();
     }
-
-    @Override
-    public  <E> E getQueryEntity(Query<E> query, Supplier<Parameter> parameterSupplier) {
-        Parameter parameter = parameterSupplier.get();
-        query.setParameter(parameter.getName(), parameter.getValue());
-        return query.uniqueResult();
-    }
 }

@@ -20,7 +20,7 @@ import static com.b2c.prototype.util.Constant.ORDER_ID;
 @Slf4j
 public class DeliveryManager implements IDeliveryManager {
 
-    private final IEntityOperationManager entityOperationDao;
+    private final IEntityOperationManager entityOperationManager;
     private final ISearchService searchService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
@@ -31,7 +31,7 @@ public class DeliveryManager implements IDeliveryManager {
                            ITransformationFunctionService transformationFunctionService,
                            ISupplierService supplierService,
                            IParameterFactory parameterFactory) {
-        this.entityOperationDao = new EntityOperationManager(deliveryDao);
+        this.entityOperationManager = new EntityOperationManager(deliveryDao);
         this.searchService = searchService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
@@ -40,7 +40,7 @@ public class DeliveryManager implements IDeliveryManager {
 
     @Override
     public void saveUpdateDelivery(String orderId, DeliveryDto deliveryDto) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             DeliveryArticularItemQuantity orderItemDataOption = searchService.getNamedQueryEntity(
                     DeliveryArticularItemQuantity.class,
                     "",
@@ -57,7 +57,7 @@ public class DeliveryManager implements IDeliveryManager {
 
     @Override
     public void deleteDelivery(String orderId) {
-        entityOperationDao.deleteEntity(
+        entityOperationManager.deleteEntity(
                 supplierService.entityFieldSupplier(
                         DeliveryArticularItemQuantity.class,
                         "",
@@ -76,7 +76,7 @@ public class DeliveryManager implements IDeliveryManager {
 
     @Override
     public List<DeliveryDto> getDeliveries() {
-        return entityOperationDao.getGraphEntityDtoList("",
+        return entityOperationManager.getGraphEntityDtoList("",
                 transformationFunctionService.getTransformationFunction(Delivery.class, DeliveryDto.class));
     }
 }

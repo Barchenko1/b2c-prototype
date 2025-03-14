@@ -73,7 +73,7 @@ class ReviewManagerTest {
                 .thenReturn(parameterSupplier);
         NativeQuery<Item> query = mock(NativeQuery.class);
         when(session.createNativeQuery(anyString(), eq(Item.class))).thenReturn(query);
-        when(queryService.getQueryEntity(query, parameterSupplier)).thenReturn(item);
+//        when(queryService.getQueryEntity(query, parameterSupplier)).thenReturn(item);
         when(transformationFunctionService.getEntity(Review.class, reviewDto)).thenReturn(review);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -105,7 +105,7 @@ class ReviewManagerTest {
                 .thenReturn(parameterSupplier);
         NativeQuery<Item> query = mock(NativeQuery.class);
         when(session.createNativeQuery(anyString(), eq(Item.class))).thenReturn(query);
-        when(queryService.getQueryEntity(query, parameterSupplier)).thenReturn(item);
+//        when(queryService.getQueryEntity(query, parameterSupplier)).thenReturn(item);
         when(transformationFunctionService.getEntity(Review.class, reviewDto)).thenReturn(review);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);

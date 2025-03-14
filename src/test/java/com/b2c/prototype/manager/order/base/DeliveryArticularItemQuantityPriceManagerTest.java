@@ -19,9 +19,9 @@ import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
+import com.b2c.prototype.modal.entity.item.ArticularItemQuantityPrice;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
-import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.modal.entity.order.DeliveryArticularItemQuantity;
@@ -64,7 +64,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class DeliveryArticularItemQuantityManagerTest {
+class DeliveryArticularItemQuantityPriceManagerTest {
 
     @Mock
     private IOrderItemDataDao orderItemDataDao;
@@ -274,7 +274,7 @@ class DeliveryArticularItemQuantityManagerTest {
                 .build();
     }
 
-    private ArticularItemQuantity prepareTestOrderItemQuantity() {
+    private ArticularItemQuantityPrice prepareTestOrderItemQuantity() {
         OptionGroup optionGroup = OptionGroup.builder()
                 .id(1L)
                 .value("Size")
@@ -289,10 +289,10 @@ class DeliveryArticularItemQuantityManagerTest {
                 .optionItems(Set.of(optionItem))
                 .articularId("1")
                 .build();
-        return ArticularItemQuantity.builder()
+        return ArticularItemQuantityPrice.builder()
                 .id(1L)
-                .articularItem(articularItem)
-                .quantity(1)
+//                .articularItem(articularItem)
+//                .quantity(1)
                 .build();
     }
 
@@ -349,7 +349,7 @@ class DeliveryArticularItemQuantityManagerTest {
 //                .beneficiaries(List.of(prepareBeneficiary()))
 //                .payment(prepareTestPayment())
                 .delivery(prepareTestDelivery())
-//                .articularItemQuantityList(List.of(prepareTestOrderItemQuantity()))
+//                .articularItemQuantityPriceList(List.of(prepareTestOrderItemQuantity()))
 //                .orderStatus(prepareTestOrderStatus())
 //                .userDetails(prepareTestUserDetails())
 //                .orderId("100")

@@ -1,13 +1,10 @@
 package com.b2c.prototype.service.query;
 
 import com.tm.core.finder.parameter.Parameter;
-import org.hibernate.query.Query;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public interface ISearchService {
     <E> E getGraphEntity(Class<E> clazz, String graph, Parameter parameter);
@@ -28,7 +25,4 @@ public interface ISearchService {
     <R, E> Optional<R> getNamedQueryOptionalEntityDto(Class<E> clazz, String namedQuery, Parameter parameter, Function<E, R> mapToDtoFunction);
     <R, E> List<R> getNamedQueryEntityDtoList(Class<E> clazz, String namedQuery, Function<E, R> mapToDtoFunction);
     <R, E> List<R> getSubNamedQueryEntityDtoList(Class<E> clazz, String namedQuery, Parameter parameter, Function<E, R> mapToDtoFunction);
-
-    <E> E getQueryEntity(Query<E> query, Supplier<Parameter> parameterSupplier);
-
 }

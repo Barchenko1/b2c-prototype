@@ -64,8 +64,8 @@ class StoreManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-        when(supplierService.parameterStringSupplier(ARTICULAR_ID, storeDto.getArticularId()))
-                .thenReturn(parameterSupplier);
+//        when(supplierService.parameterStringSupplier(ARTICULAR_ID, storeDto.getArticularId()))
+//                .thenReturn(parameterSupplier);
 //        when(queryService.getEntity(ArticularItem.class, parameterSupplier))
 //                .thenReturn(articularItem);
 
@@ -95,10 +95,8 @@ class StoreManagerTest {
 
         when(session.createNativeQuery(anyString(), eq(Store.class)))
                 .thenReturn(query);
-        when(supplierService.parameterStringSupplier(ARTICULAR_ID, storeDto.getArticularId()))
-                .thenReturn(parameterSupplier);
-        when(queryService.getQueryEntity(query, parameterSupplier))
-                .thenReturn(store);
+//        when(supplierService.parameterStringSupplier(ARTICULAR_ID, storeDto.getArticularId()))
+//                .thenReturn(parameterSupplier);
 
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -107,7 +105,7 @@ class StoreManagerTest {
             return null;
         }).when(storeDao).executeConsumer(any(Consumer.class));
 
-        storeManager.updateStore(storeDto);
+        storeManager.updateStore("", storeDto);
 
         verify(storeDao).executeConsumer(any(Consumer.class));
     }
@@ -137,7 +135,7 @@ class StoreManagerTest {
     }
 
     @Test
-    void testGetStoreResponse() {
+    void testGetAllResponseStoresByArticularId() {
         String articularId = "articularId";
         Store store = getStore();
         ResponseStoreDto responseStoreDto = mock(ResponseStoreDto.class);
@@ -152,7 +150,7 @@ class StoreManagerTest {
         when(storeDao.getGraphEntity(anyString(), eq(parameter))).thenReturn(store);
         when(function.apply(store)).thenReturn(responseStoreDto);
 
-        ResponseStoreDto result = storeManager.getStoreResponse(articularId);
+        List<ResponseStoreDto> result = storeManager.getAllResponseStoresByArticularId(articularId);
 
         assertEquals(responseStoreDto, result);
     }
@@ -170,9 +168,9 @@ class StoreManagerTest {
 //        when(storeDao.getEntityList()).thenReturn(List.of(store));
         when(function.apply(store)).thenReturn(responseStoreDto);
 
-        List<ResponseStoreDto> result = storeManager.getAllStoreResponse();
+//        List<ResponseStoreDto> result = storeManager.getAllResponseStore();
 
-        assertEquals(responseStoreDtoList, result);
+//        assertEquals(responseStoreDtoList, result);
     }
 
     private CountType getCountType() {
@@ -184,15 +182,11 @@ class StoreManagerTest {
 
     private Store getStore() {
         return Store.builder()
-                .countType(getCountType())
                 .build();
     }
 
     private StoreDto getStoreDto() {
         return StoreDto.builder()
-                .articularId("articularId")
-                .count(10)
-                .countType(LIMITED)
                 .build();
     }
 }

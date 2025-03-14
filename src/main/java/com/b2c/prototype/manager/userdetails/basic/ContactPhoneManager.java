@@ -22,7 +22,7 @@ import static com.b2c.prototype.util.Constant.USER_ID;
 
 public class ContactPhoneManager implements IContactPhoneManager {
 
-    private final IEntityOperationManager entityOperationDao;
+    private final IEntityOperationManager entityOperationManager;
     private final ISearchService searchService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
@@ -33,7 +33,7 @@ public class ContactPhoneManager implements IContactPhoneManager {
                                ITransformationFunctionService transformationFunctionService,
                                ISupplierService supplierService,
                                IParameterFactory parameterFactory) {
-        this.entityOperationDao = new EntityOperationManager(contactPhoneDao);
+        this.entityOperationManager = new EntityOperationManager(contactPhoneDao);
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
         this.searchService = searchService;
@@ -42,7 +42,7 @@ public class ContactPhoneManager implements IContactPhoneManager {
 
     @Override
     public void saveUpdateContactPhoneByUserId(String userId, ContactPhoneDto contactPhoneDto) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             UserDetails userDetails = searchService.getGraphEntity(
                     UserDetails.class,
                     "",
@@ -58,7 +58,7 @@ public class ContactPhoneManager implements IContactPhoneManager {
 
     @Override
     public void saveUpdateContactPhoneByOrderId(String orderId, ContactInfoDto contactInfoDto) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             DeliveryArticularItemQuantity orderItemDataOption = searchService.getNamedQueryEntity(
                     DeliveryArticularItemQuantity.class,
                     "",
@@ -73,7 +73,7 @@ public class ContactPhoneManager implements IContactPhoneManager {
 
     @Override
     public void deleteContactPhoneByUserId(String userId) {
-        entityOperationDao.deleteEntity(
+        entityOperationManager.deleteEntity(
                 supplierService.entityFieldSupplier(
                         UserDetails.class,
                         "",
@@ -83,7 +83,7 @@ public class ContactPhoneManager implements IContactPhoneManager {
 
     @Override
     public void deleteContactPhoneByOrderId(String orderId) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             DeliveryArticularItemQuantity orderItemDataOption = searchService.getNamedQueryEntity(
                     DeliveryArticularItemQuantity.class,
                     "",
@@ -113,7 +113,7 @@ public class ContactPhoneManager implements IContactPhoneManager {
 
     @Override
     public List<ContactPhoneDto> getContactPhoneList() {
-        return entityOperationDao.getGraphEntityDtoList(
+        return entityOperationManager.getGraphEntityDtoList(
                 "",
                 transformationFunctionService.getTransformationFunction(ContactPhone.class, ContactPhoneDto.class));
     }

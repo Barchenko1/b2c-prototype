@@ -19,7 +19,7 @@ import static com.b2c.prototype.util.Constant.PAYMENT_ID;
 
 public class PaymentManager implements IPaymentManager {
 
-    private final IEntityOperationManager entityOperationDao;
+    private final IEntityOperationManager entityOperationManager;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISearchService searchService;
     private final ISupplierService supplierService;
@@ -30,7 +30,7 @@ public class PaymentManager implements IPaymentManager {
                           ITransformationFunctionService transformationFunctionService,
                           ISupplierService supplierService,
                           IParameterFactory parameterFactory) {
-        this.entityOperationDao = new EntityOperationManager(paymentDao);
+        this.entityOperationManager = new EntityOperationManager(paymentDao);
         this.searchService = searchService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
@@ -39,7 +39,7 @@ public class PaymentManager implements IPaymentManager {
 
     @Override
     public void saveUpdatePayment(String orderId, PaymentDto paymentDto) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             DeliveryArticularItemQuantity orderItemDataOption = searchService.getNamedQueryEntity(
                     DeliveryArticularItemQuantity.class,
                     "",
@@ -60,7 +60,7 @@ public class PaymentManager implements IPaymentManager {
 
     @Override
     public void deletePaymentByOrderId(String orderId) {
-        entityOperationDao.deleteEntity(
+        entityOperationManager.deleteEntity(
                 supplierService.entityFieldSupplier(
                         DeliveryArticularItemQuantity.class,
                         "",
@@ -70,7 +70,7 @@ public class PaymentManager implements IPaymentManager {
 
     @Override
     public void deletePaymentByPaymentId(String paymentId) {
-        entityOperationDao.deleteEntity(
+        entityOperationManager.deleteEntity(
                 supplierService.entityFieldSupplier(
                         Payment.class,
                         "",
@@ -88,7 +88,7 @@ public class PaymentManager implements IPaymentManager {
 
     @Override
     public PaymentDto getPaymentByPaymentId(String paymentId) {
-        return entityOperationDao.getGraphEntityDto(
+        return entityOperationManager.getGraphEntityDto(
                 "",
                 parameterFactory.createStringParameter(PAYMENT_ID, paymentId),
                 transformationFunctionService.getTransformationFunction(Payment.class, PaymentDto.class));
@@ -96,7 +96,7 @@ public class PaymentManager implements IPaymentManager {
 
     @Override
     public List<PaymentDto> getAllPayments() {
-        return entityOperationDao.getGraphEntityDtoList(
+        return entityOperationManager.getGraphEntityDtoList(
                 "",
                 transformationFunctionService.getTransformationFunction(Payment.class, PaymentDto.class));
     }

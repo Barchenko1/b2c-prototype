@@ -19,7 +19,7 @@ import static com.b2c.prototype.util.Util.getUUID;
 
 public class ItemDataManager implements IItemDataManager {
 
-    private final IEntityOperationManager entityOperationDao;
+    private final IEntityOperationManager entityOperationManager;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
     private final IParameterFactory parameterFactory;
@@ -28,7 +28,7 @@ public class ItemDataManager implements IItemDataManager {
                            ITransformationFunctionService transformationFunctionService,
                            ISupplierService supplierService,
                            IParameterFactory parameterFactory) {
-        this.entityOperationDao = new EntityOperationManager(itemDataDao);
+        this.entityOperationManager = new EntityOperationManager(itemDataDao);
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
         this.parameterFactory = parameterFactory;
@@ -36,7 +36,7 @@ public class ItemDataManager implements IItemDataManager {
 
     @Override
     public void saveItemData(ItemDataDto itemDataDto) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             ItemData itemData = transformationFunctionService.getEntity(
                     session,
                     ItemData.class,
@@ -50,7 +50,7 @@ public class ItemDataManager implements IItemDataManager {
 
     @Override
     public void updateItemData(String itemId, ItemDataDto itemDataDto) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             SearchFieldUpdateEntityDto<ItemDataDto> updateDto = SearchFieldUpdateEntityDto.<ItemDataDto>builder()
                     .searchField(itemId)
                     .updateDto(itemDataDto)
@@ -66,13 +66,13 @@ public class ItemDataManager implements IItemDataManager {
 
     @Override
     public void deleteItemData(String itemId) {
-        entityOperationDao.deleteEntityByParameter(
+        entityOperationManager.deleteEntityByParameter(
                 parameterFactory.createStringParameter(ITEM_ID, itemId));
     }
 
     @Override
     public ResponseItemDataDto getItemData(String itemId) {
-        return entityOperationDao.getGraphEntityDto(
+        return entityOperationManager.getGraphEntityDto(
                 "itemData.full",
                 parameterFactory.createStringParameter(ITEM_ID, itemId),
                 transformationFunctionService.getTransformationFunction(ItemData.class, ResponseItemDataDto.class));
@@ -80,7 +80,7 @@ public class ItemDataManager implements IItemDataManager {
 
     @Override
     public List<ResponseItemDataDto> getItemDataList() {
-        return entityOperationDao.getGraphEntityDtoList(
+        return entityOperationManager.getGraphEntityDtoList(
                 "itemData.full",
                 transformationFunctionService.getTransformationFunction(ItemData.class, ResponseItemDataDto.class));
     }

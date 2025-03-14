@@ -47,7 +47,6 @@ class BasicStoreDaoTest extends AbstractConstantEntityDaoTest {
         Store store = Store.builder()
                 .id(1L)
 //                .articularItemQuantities(prepareTestItemDataOption())
-                .countType(countType)
                 .build();
         return new EntityDataSet<>(store, "/datasets/store/store/testStoreDataSet.yml");
     }
@@ -61,7 +60,6 @@ class BasicStoreDaoTest extends AbstractConstantEntityDaoTest {
                 .build();
         Store store = Store.builder()
 //                .articularItem(prepareTestItemDataOption())
-                .countType(countType)
                 .build();
         return new EntityDataSet<>(store, "/datasets/store/store/saveStoreDataSet.yml");
     }
@@ -75,7 +73,6 @@ class BasicStoreDaoTest extends AbstractConstantEntityDaoTest {
                 .build();
         Store store = Store.builder()
                 .id(1L)
-                .countType(countType)
 //                .articularItem(prepareTestItemDataOption())
                 .build();
         return new EntityDataSet<>(store, "/datasets/store/store/updateStoreDataSet.yml");

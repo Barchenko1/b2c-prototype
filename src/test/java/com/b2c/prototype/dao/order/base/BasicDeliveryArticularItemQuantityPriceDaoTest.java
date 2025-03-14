@@ -11,7 +11,7 @@ import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.item.ItemData;
-import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
+import com.b2c.prototype.modal.entity.item.ArticularItemQuantityPrice;
 import com.b2c.prototype.modal.entity.item.ItemType;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
@@ -61,7 +61,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class BasicDeliveryArticularItemQuantityDaoTest extends AbstractCustomEntityDaoTest {
+class BasicDeliveryArticularItemQuantityPriceDaoTest extends AbstractCustomEntityDaoTest {
 
     @BeforeAll
     public static void setup() {
@@ -243,7 +243,7 @@ class BasicDeliveryArticularItemQuantityDaoTest extends AbstractCustomEntityDaoT
         return itemData;
     }
 
-    private ArticularItemQuantity prepareTestOrderItemQuantity() {
+    private ArticularItemQuantityPrice prepareTestOrderItemQuantity() {
         OptionItem optionItem = OptionItem.builder()
                 .id(1L)
                 .value("L")
@@ -261,9 +261,9 @@ class BasicDeliveryArticularItemQuantityDaoTest extends AbstractCustomEntityDaoT
                 .articularId("1")
                 .build();
         articularItem.addOptionItem(optionItem);
-        return ArticularItemQuantity.builder()
-                .articularItem(articularItem)
-                .quantity(1)
+        return ArticularItemQuantityPrice.builder()
+//                .articularItem(articularItem)
+//                .quantity(1)
                 .build();
     }
 
@@ -319,8 +319,8 @@ class BasicDeliveryArticularItemQuantityDaoTest extends AbstractCustomEntityDaoT
     }
 
     private DeliveryArticularItemQuantity prepareTestOrderItemData() {
-        ArticularItemQuantity articularItemQuantity = prepareTestOrderItemQuantity();
-        articularItemQuantity.setId(1L);
+        ArticularItemQuantityPrice articularItemQuantityPrice = prepareTestOrderItemQuantity();
+        articularItemQuantityPrice.setId(1L);
         UserDetails userDetails = prepareTestUserDetails();
         userDetails.getContactInfo().setId(1L);
         DeliveryArticularItemQuantity orderItemDataOption = DeliveryArticularItemQuantity.builder()
@@ -329,7 +329,7 @@ class BasicDeliveryArticularItemQuantityDaoTest extends AbstractCustomEntityDaoT
 //                .beneficiaries(List.of(beneficiary))
 //                .payment(prepareTestPayment())
                 .delivery(prepareTestDelivery())
-//                .articularItemQuantityList(List.of(articularItemQuantity))
+//                .articularItemQuantityPriceList(List.of(articularItemQuantityPrice))
 //                .orderStatus(prepareTestOrderStatus())
 //                .userDetails(userDetails)
 //                .orderId("100")
@@ -354,7 +354,7 @@ class BasicDeliveryArticularItemQuantityDaoTest extends AbstractCustomEntityDaoT
 //                .beneficiaries(List.of(prepareBeneficiary()))
 //                .payment(prepareTestPayment())
                 .delivery(prepareTestDelivery())
-//                .articularItemQuantityList(List.of(prepareTestOrderItemQuantity()))
+//                .articularItemQuantityPriceList(List.of(prepareTestOrderItemQuantity()))
 //                .orderStatus(prepareTestOrderStatus())
 //                .userDetails(prepareTestUserDetails())
 //                .orderId("100")
@@ -363,8 +363,8 @@ class BasicDeliveryArticularItemQuantityDaoTest extends AbstractCustomEntityDaoT
     }
 
     private DeliveryArticularItemQuantity prepareUpdateOrderItem() {
-        ArticularItemQuantity articularItemQuantity = prepareTestOrderItemQuantity();
-        articularItemQuantity.setId(1L);
+        ArticularItemQuantityPrice articularItemQuantityPrice = prepareTestOrderItemQuantity();
+        articularItemQuantityPrice.setId(1L);
         UserDetails userDetails = prepareTestUserDetails();
         userDetails.getContactInfo().setId(1L);
         DeliveryArticularItemQuantity orderItemDataOption = DeliveryArticularItemQuantity.builder()
@@ -373,7 +373,7 @@ class BasicDeliveryArticularItemQuantityDaoTest extends AbstractCustomEntityDaoT
 //                .beneficiaries(List.of(beneficiary))
 //                .payment(prepareTestPayment())
                 .delivery(prepareTestDelivery())
-//                .articularItemQuantityList(List.of(articularItemQuantity))
+//                .articularItemQuantityPriceList(List.of(articularItemQuantityPrice))
 //                .orderStatus(prepareTestOrderStatus())
 //                .userDetails(userDetails)
 //                .orderId("100")
@@ -516,10 +516,10 @@ class BasicDeliveryArticularItemQuantityDaoTest extends AbstractCustomEntityDaoT
 //            deliveryArticularItemQuantity.setBeneficiaries(List.of(beneficiary));
 //            deliveryArticularItemQuantity.getUserDetails().setContactInfo(contactInfo);
 //
-//            ArticularItemQuantity articularItemQuantity = deliveryArticularItemQuantity.getArticularItemQuantityList().get(0);
+//            ArticularItemQuantityPrice articularItemQuantityPrice = deliveryArticularItemQuantity.getArticularItemQuantityPriceList().get(0);
 //
-//            s.merge(articularItemQuantity);
-//            deliveryArticularItemQuantity.setArticularItemQuantityList(List.of(articularItemQuantity));
+//            s.merge(articularItemQuantityPrice);
+//            deliveryArticularItemQuantity.setArticularItemQuantityPriceList(List.of(articularItemQuantityPrice));
 
             s.merge(deliveryArticularItemQuantity);
         };

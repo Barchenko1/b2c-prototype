@@ -3,8 +3,8 @@ package com.b2c.prototype.dao.item.base;
 import com.b2c.prototype.dao.AbstractConstantEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
+import com.b2c.prototype.modal.entity.item.ArticularItemQuantityPrice;
 import com.b2c.prototype.modal.entity.item.Discount;
-import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.modal.entity.price.Currency;
@@ -18,14 +18,13 @@ import org.junit.jupiter.api.BeforeEach;
 
 import java.sql.Connection;
 import java.sql.Statement;
-import java.util.Set;
 
-class BasicArticularItemQuantityDaoTest extends AbstractConstantEntityDaoTest {
+class BasicArticularItemQuantityPriceDaoTest extends AbstractConstantEntityDaoTest {
 
     @BeforeAll
     public static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
-        entityMappingManager.addEntityTable(new EntityTable(ArticularItemQuantity.class, "articular_item_quantity"));
+        entityMappingManager.addEntityTable(new EntityTable(ArticularItemQuantityPrice.class, "articular_item_quantity"));
         queryService = new QueryService(entityMappingManager);
         dao = new BasicItemDataOptionQuantityDao(sessionFactory, queryService);
     }
@@ -52,31 +51,31 @@ class BasicArticularItemQuantityDaoTest extends AbstractConstantEntityDaoTest {
 
     @Override
     protected EntityDataSet<?> getTestDataSet() {
-        ArticularItemQuantity articularItemQuantity = ArticularItemQuantity.builder()
+        ArticularItemQuantityPrice articularItemQuantityPrice = ArticularItemQuantityPrice.builder()
                 .id(1L)
-                .articularItem(prepareTestItemDataOption())
-                .quantity(1)
+//                .articularItem(prepareTestItemDataOption())
+//                .quantity(1)
                 .build();
-        return new EntityDataSet<>(articularItemQuantity, "/datasets/item/articular_item_quantity/testIArticularItemQuantityDataSet.yml");
+        return new EntityDataSet<>(articularItemQuantityPrice, "/datasets/item/articular_item_quantity/testIArticularItemQuantityDataSet.yml");
     }
 
     @Override
     protected EntityDataSet<?> getSaveDataSet() {
-        ArticularItemQuantity articularItemQuantity = ArticularItemQuantity.builder()
-                .articularItem(prepareTestItemDataOption())
-                .quantity(1)
+        ArticularItemQuantityPrice articularItemQuantityPrice = ArticularItemQuantityPrice.builder()
+//                .articularItem(prepareTestItemDataOption())
+//                .quantity(1)
                 .build();
-        return new EntityDataSet<>(articularItemQuantity, "/datasets/item/articular_item_quantity/saveArticularItemQuantityDataSet.yml");
+        return new EntityDataSet<>(articularItemQuantityPrice, "/datasets/item/articular_item_quantity/saveArticularItemQuantityDataSet.yml");
     }
 
     @Override
     protected EntityDataSet<?> getUpdateDataSet() {
-        ArticularItemQuantity articularItemQuantity = ArticularItemQuantity.builder()
+        ArticularItemQuantityPrice articularItemQuantityPrice = ArticularItemQuantityPrice.builder()
                 .id(1L)
-                .articularItem(prepareTestItemDataOption())
-                .quantity(2)
+//                .articularItem(prepareTestItemDataOption())
+//                .quantity(2)
                 .build();
-        return new EntityDataSet<>(articularItemQuantity, "/datasets/item/articular_item_quantity/updateArticularItemQuantityDataSet.yml");
+        return new EntityDataSet<>(articularItemQuantityPrice, "/datasets/item/articular_item_quantity/updateArticularItemQuantityDataSet.yml");
     }
 
     private ArticularItem prepareTestItemDataOption() {

@@ -19,7 +19,7 @@ import static com.b2c.prototype.util.Constant.USER_ID;
 
 public class UserDetailsManager implements IUserDetailsManager {
 
-    private final IEntityOperationManager entityOperationDao;
+    private final IEntityOperationManager entityOperationManager;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISearchService searchService;
     private final IParameterFactory parameterFactory;
@@ -28,7 +28,7 @@ public class UserDetailsManager implements IUserDetailsManager {
                               ITransformationFunctionService transformationFunctionService,
                               ISearchService searchService,
                               IParameterFactory parameterFactory) {
-        this.entityOperationDao = new EntityOperationManager(userDetailsDao);
+        this.entityOperationManager = new EntityOperationManager(userDetailsDao);
         this.transformationFunctionService = transformationFunctionService;
         this.searchService = searchService;
         this.parameterFactory = parameterFactory;
@@ -36,13 +36,13 @@ public class UserDetailsManager implements IUserDetailsManager {
 
     @Override
     public void createNewUser(RegistrationUserDetailsDto registrationUserDetailsDto) {
-        entityOperationDao.updateEntity(
+        entityOperationManager.updateEntity(
                 transformationFunctionService.getEntity(UserDetails.class, registrationUserDetailsDto));
     }
 
     @Override
     public void saveUserDetails(UserDetailsDto userDetailsDto) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             UserDetails userDetails =
                     transformationFunctionService.getEntity(session, UserDetails.class, userDetailsDto);
             session.merge(userDetails);
@@ -51,8 +51,8 @@ public class UserDetailsManager implements IUserDetailsManager {
 
     @Override
     public void updateUserDetailsByUserId(String userId, UserDetailsDto userDetailsDto) {
-        entityOperationDao.executeConsumer(session -> {
-            UserDetails existingUserDetails = entityOperationDao.getNamedQueryEntity(
+        entityOperationManager.executeConsumer(session -> {
+            UserDetails existingUserDetails = entityOperationManager.getNamedQueryEntity(
                     "UserDetails.findByUserId",
                     parameterFactory.createStringParameter(USER_ID, userId));
             UserDetails userDetails =
@@ -67,8 +67,8 @@ public class UserDetailsManager implements IUserDetailsManager {
 
     @Override
     public void updateUserStatusByUserId(String userId, boolean status) {
-        entityOperationDao.executeConsumer(session -> {
-            UserDetails existingUser = entityOperationDao.getNamedQueryEntity(
+        entityOperationManager.executeConsumer(session -> {
+            UserDetails existingUser = entityOperationManager.getNamedQueryEntity(
                     "UserDetails.findByUserId",
                     parameterFactory.createStringParameter(USER_ID, userId));
             existingUser.setActive(status);
@@ -78,8 +78,8 @@ public class UserDetailsManager implements IUserDetailsManager {
 
     @Override
     public void updateUserVerifyEmailByUserId(String userId, boolean verifyEmail) {
-        entityOperationDao.executeConsumer(session -> {
-            UserDetails existingUser = entityOperationDao.getNamedQueryEntity(
+        entityOperationManager.executeConsumer(session -> {
+            UserDetails existingUser = entityOperationManager.getNamedQueryEntity(
                     "UserDetails.findByUserId",
                     parameterFactory.createStringParameter(USER_ID, userId));
             existingUser.setEmailVerified(verifyEmail);
@@ -89,8 +89,8 @@ public class UserDetailsManager implements IUserDetailsManager {
 
     @Override
     public void updateUserVerifyPhoneByUserId(String userId, boolean verifyPhone) {
-        entityOperationDao.executeConsumer(session -> {
-            UserDetails existingUser = entityOperationDao.getNamedQueryEntity(
+        entityOperationManager.executeConsumer(session -> {
+            UserDetails existingUser = entityOperationManager.getNamedQueryEntity(
                     "UserDetails.findByUserId",
                     parameterFactory.createStringParameter(USER_ID, userId));
             existingUser.setContactPhoneVerified(verifyPhone);
@@ -100,7 +100,7 @@ public class UserDetailsManager implements IUserDetailsManager {
 
     @Override
     public void deleteUserDetailsByUserId(String userId) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             UserDetails existingUserDetails = searchService.getNamedQueryEntity(
                     UserDetails.class,
                     "UserDetails.findByUserId",
@@ -111,7 +111,7 @@ public class UserDetailsManager implements IUserDetailsManager {
 
     @Override
     public ResponseUserDetailsDto getUserDetailsByUserId(String userId) {
-        return entityOperationDao.getNamedQueryEntityDto(
+        return entityOperationManager.getNamedQueryEntityDto(
                 "UserDetails.findFullUserDetailsByUserId",
                 parameterFactory.createStringParameter(USER_ID, userId),
                 transformationFunctionService.getTransformationFunction(UserDetails.class, ResponseUserDetailsDto.class));
@@ -119,7 +119,7 @@ public class UserDetailsManager implements IUserDetailsManager {
 
     @Override
     public List<ResponseUserDetailsDto> getResponseUserDetails() {
-        return entityOperationDao.getNamedQueryEntityDtoList(
+        return entityOperationManager.getNamedQueryEntityDtoList(
                 "UserDetails.findAllFullUserDetailsByUserId",
                 transformationFunctionService.getTransformationFunction(UserDetails.class, ResponseUserDetailsDto.class));
     }

@@ -1,0 +1,38 @@
+[
+  {
+    "storeName": "abc",
+    "storeId": "exist",
+    "address": {
+      "country": "USA",
+      "street": "street",
+      "buildingNumber": "1",
+      "florNumber": 9,
+      "apartmentNumber": 101,
+      "zipCode": "90000"
+    },
+    "articularItemQuantityList": [
+      {
+        "articularId": "123",
+        "quantity": 2
+      },
+      {
+        "articularId": "125",
+        "quantity": 3
+      }
+    ]
+  },
+  {
+    "storeName": "name",
+    "storeId": "123",
+    "address": {
+      "country": "USA",
+      "city": "New York",
+      "street": "5th Avenue",
+      "buildingNumber": "10A",
+      "florNumber": 9,
+      "apartmentNumber": 202,
+      "zipCode": "10001"
+    },
+    "articularItemQuantityList": []
+  }
+]

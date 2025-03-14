@@ -5,7 +5,6 @@ import com.b2c.prototype.modal.constant.FeeType;
 import com.b2c.prototype.modal.constant.MessageStatusEnum;
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.dto.common.NumberConstantPayloadDto;
-import com.b2c.prototype.modal.dto.common.PaymentPrice;
 import com.b2c.prototype.modal.dto.common.SearchFieldUpdateCollectionEntityDto;
 import com.b2c.prototype.modal.dto.common.SearchFieldUpdateEntityDto;
 import com.b2c.prototype.modal.dto.payload.AddressDto;
@@ -30,6 +29,7 @@ import com.b2c.prototype.modal.dto.payload.PriceDto;
 import com.b2c.prototype.modal.dto.payload.RegistrationUserDetailsDto;
 import com.b2c.prototype.modal.dto.payload.ReviewDto;
 import com.b2c.prototype.modal.dto.payload.SingleOptionItemDto;
+import com.b2c.prototype.modal.dto.payload.StoreDto;
 import com.b2c.prototype.modal.dto.payload.TimeDurationOptionDto;
 import com.b2c.prototype.modal.dto.payload.UserAddressDto;
 import com.b2c.prototype.modal.dto.payload.UserCreditCardDto;
@@ -47,6 +47,7 @@ import com.b2c.prototype.modal.dto.response.ResponseItemDataDto;
 import com.b2c.prototype.modal.dto.response.ResponseMessageOverviewDto;
 import com.b2c.prototype.modal.dto.response.ResponseMessagePayloadDto;
 import com.b2c.prototype.modal.dto.response.ResponseReviewDto;
+import com.b2c.prototype.modal.dto.response.ResponseStoreDto;
 import com.b2c.prototype.modal.dto.response.ResponseTimeDurationOptionDto;
 import com.b2c.prototype.modal.dto.response.ResponseUserAddressDto;
 import com.b2c.prototype.modal.dto.response.ResponseUserCreditCardDto;
@@ -56,9 +57,10 @@ import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.address.UserAddress;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
+import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
+import com.b2c.prototype.modal.entity.item.ArticularItemQuantityPrice;
 import com.b2c.prototype.modal.entity.option.TimeDurationOption;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
-import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
 import com.b2c.prototype.modal.entity.item.ArticularStatus;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
@@ -85,6 +87,7 @@ import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.modal.entity.review.Review;
 import com.b2c.prototype.modal.entity.store.CountType;
+import com.b2c.prototype.modal.entity.store.Store;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
@@ -181,6 +184,7 @@ public class TransformationEntityConfiguration {
         loadCreditCardFunctions(transformationFunctionService);
         loadDeviceFunctions(transformationFunctionService);
         loadCommissionFunctions(transformationFunctionService);
+        loadStoreFunctions(transformationFunctionService);
 
     }
 
@@ -268,6 +272,11 @@ public class TransformationEntityConfiguration {
         transformationFunctionService.addTransformationFunction(CommissionDto.class, SellerCommission.class, mapCommissionDtoToSellerCommissionFunction());
         transformationFunctionService.addTransformationFunction(BuyerCommission.class, ResponseCommissionDto.class, mapBuyerCommissionToResponseCommissionDtoFunction());
         transformationFunctionService.addTransformationFunction(CommissionDto.class, BuyerCommission.class, mapCommissionDtoToBuyerCommissionFunction());
+    }
+
+    private void loadStoreFunctions(ITransformationFunctionService transformationFunctionService) {
+        transformationFunctionService.addTransformationFunction(StoreDto.class, Store.class, mapStoreDtoToStoreFunction());
+        transformationFunctionService.addTransformationFunction(Store.class, ResponseStoreDto.class, mapStoreToResponseStoreDtoFunction());
     }
 
     private <T extends AbstractConstantEntity> Function<ConstantPayloadDto, T> mapConstantEntityPayloadDtoToConstantEntityFunction(Supplier<T> entitySupplier) {
@@ -1003,23 +1012,23 @@ public class TransformationEntityConfiguration {
                         "UserDetails.findByUserId",
                         parameterFactory.createStringParameter(USER_ID, orderArticularItemQuantityDto.getUser().getUserId()));
             }
-            List<ArticularItemQuantity> articularItemQuantityList = mapArticularItemQuantityDtoToArticularItemQuantity()
+            List<ArticularItemQuantityPrice> articularItemQuantityPriceList = mapArticularItemQuantityDtoToArticularItemQuantity()
                     .apply(session, orderArticularItemQuantityDto.getItemDataOptionQuantities());
             Delivery delivery = mapDeliveryDtoToDelivery().apply(session, orderArticularItemQuantityDto.getDelivery());
             Payment payment = mapPaymentDtoToPayment().apply(session, orderArticularItemQuantityDto.getPayment());
             Optional<SellerCommission> commissionOptional = fetchCommission(session);
-            PaymentPrice paymentPrice = PaymentPrice.builder()
-                    .articularItemQuantityList(articularItemQuantityList)
-                    .delivery(delivery)
-                    .discount(payment.getDiscount())
-                    .sellerCommission(commissionOptional.get())
-                    .build();
+//            PaymentPriceDto paymentPriceDto = PaymentPriceDto.builder()
+//                    .articularItemQuantityPriceList(articularItemQuantityPriceList)
+//                    .delivery(delivery)
+//                    .discount(payment.getDiscount())
+//                    .sellerCommission(commissionOptional.get())
+//                    .build();
 
             return DeliveryArticularItemQuantity.builder()
 //                    .userDetails(userDetailsOptional.orElse(null))
 //                    .dateOfCreate(getCurrentTimeMillis())
 //                    .orderId(getUUID())
-//                    .articularItemQuantityList(articularItemQuantityList)
+//                    .articularItemQuantityPriceList(articularItemQuantityPriceList)
                     .delivery(delivery)
 //                    .beneficiaries(mapBeneficiariesDtoToBeneficiaries().apply(session, orderArticularItemQuantityDto.getBeneficiaries()))
 //                    .payment(mapPaymentDtoToPayment().apply(session, orderArticularItemQuantityDto.getPayment()))
@@ -1042,19 +1051,17 @@ public class TransformationEntityConfiguration {
         };
     }
 
-    private BiFunction<Session, List<ArticularItemQuantityDto>, List<ArticularItemQuantity>> mapArticularItemQuantityDtoToArticularItemQuantity() {
-        return (session, articularItemQuantityDtos) -> {
-            return articularItemQuantityDtos.stream()
-                    .map(articularItemQuantityDto -> {
-                        ArticularItem articularItem = fetchArticularItem(session, articularItemQuantityDto.getArticularId());
-                        return ArticularItemQuantity.builder()
-                                .articularItem(articularItem)
-                                .quantity(articularItemQuantityDto.getQuantity())
-                                .totalPrice(articularItem.getTotalPrice())
-                                .build();
-                    })
-                    .toList();
-        };
+    private BiFunction<Session, List<ArticularItemQuantityDto>, List<ArticularItemQuantityPrice>> mapArticularItemQuantityDtoToArticularItemQuantity() {
+        return (session, articularItemQuantityDtos) -> articularItemQuantityDtos.stream()
+                .map(articularItemQuantityDto -> {
+                    ArticularItem articularItem = fetchArticularItem(session, articularItemQuantityDto.getArticularId());
+                    ArticularItemQuantity articularItemQuantity = null;
+                    return ArticularItemQuantityPrice.builder()
+                            .articularItemQuantity(articularItemQuantity)
+                            .totalPrice(articularItem.getTotalPrice())
+                            .build();
+                })
+                .toList();
     }
 
     private BiFunction<Session, PaymentDto, Payment> mapPaymentDtoToPayment() {
@@ -1360,6 +1367,36 @@ public class TransformationEntityConfiguration {
                 .currency(commissionDto.getCurrency() != null ? fetchCurrency(session, commissionDto.getCurrency()) : null)
                 .feeType(FeeType.valueOf(commissionDto.getFeeType()))
                 .effectiveDate(LocalDateTime.now())
+                .build();
+    }
+
+    private BiFunction<Session, StoreDto, Store> mapStoreDtoToStoreFunction() {
+        return (session, storeDto) -> Store.builder()
+                .storeId(getUUID())
+                .storeName(storeDto.getStoreName())
+                .address(storeDto.getAddress() != null ? mapAddressDtoToAddressFunction().apply(session, storeDto.getAddress()) : null)
+                .isActive(true)
+                .build();
+    }
+
+    private Function<Store, ResponseStoreDto> mapStoreToResponseStoreDtoFunction() {
+        return store -> {
+            List<ArticularItemQuantityDto> articularItemQuantityList = store.getArticularItemQuantities().stream()
+                    .map(mapArticularItemQuantityToArticularItemQuantityDtoFunction())
+                    .toList();
+            return ResponseStoreDto.builder()
+                    .storeName(store.getStoreName())
+                    .storeId(store.getStoreId())
+                    .address(mapAddressToAddressDtoFunction().apply(store.getAddress()))
+                    .articularItemQuantityList(articularItemQuantityList)
+                    .build();
+        };
+    }
+
+    private Function<ArticularItemQuantity, ArticularItemQuantityDto> mapArticularItemQuantityToArticularItemQuantityDtoFunction() {
+        return articularItemQuantity -> ArticularItemQuantityDto.builder()
+                .articularId(articularItemQuantity.getArticularItem().getArticularId())
+                .quantity(articularItemQuantity.getQuantity())
                 .build();
     }
 

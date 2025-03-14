@@ -23,7 +23,7 @@ import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 
 public class PriceManager implements IPriceManager {
 
-    private final IEntityOperationManager entityOperationDao;
+    private final IEntityOperationManager entityOperationManager;
     private final ISearchService searchService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
@@ -34,7 +34,7 @@ public class PriceManager implements IPriceManager {
                         ITransformationFunctionService transformationFunctionService,
                         ISupplierService supplierService,
                         IParameterFactory parameterFactory) {
-        this.entityOperationDao = new EntityOperationManager(priceDao);
+        this.entityOperationManager = new EntityOperationManager(priceDao);
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
         this.searchService = searchService;
@@ -43,7 +43,7 @@ public class PriceManager implements IPriceManager {
 
     @Override
     public void saveUpdatePriceByOrderId(String orderId, PriceDto priceDto, PriceTypeEnum priceType) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             DeliveryArticularItemQuantity orderItemDataOption = searchService.getNamedQueryEntity(
                     DeliveryArticularItemQuantity.class,
                     "",
@@ -64,7 +64,7 @@ public class PriceManager implements IPriceManager {
 
     @Override
     public void saveUpdatePriceByArticularId(String articularId, PriceDto priceDto, PriceTypeEnum priceType) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             ArticularItem articularItem = searchService.getNamedQueryEntity(
                     ArticularItem.class,
                     "",
@@ -84,7 +84,7 @@ public class PriceManager implements IPriceManager {
 
     @Override
     public void deletePriceByOrderId(String orderId, PriceTypeEnum priceType) {
-        entityOperationDao.deleteEntity(
+        entityOperationManager.deleteEntity(
                 supplierService.entityFieldSupplier(
                         DeliveryArticularItemQuantity.class,
                         "",
@@ -97,7 +97,7 @@ public class PriceManager implements IPriceManager {
 
     @Override
     public void deletePriceByArticularId(String articularId, PriceTypeEnum priceType) {
-        entityOperationDao.deleteEntity(
+        entityOperationManager.deleteEntity(
                 supplierService.entityFieldSupplier(
                         ArticularItem.class,
                         "",
@@ -148,7 +148,7 @@ public class PriceManager implements IPriceManager {
 
     @Override
     public List<PriceDto> getPrices() {
-        return entityOperationDao.getGraphEntityDtoList(
+        return entityOperationManager.getGraphEntityDtoList(
                 "",
                 transformationFunctionService.getTransformationFunction(Price.class, PriceDto.class));
     }

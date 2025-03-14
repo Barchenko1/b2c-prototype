@@ -22,14 +22,14 @@ import static com.b2c.prototype.util.Util.getUUID;
 @Slf4j
 public class PostManager implements IPostManager {
 
-    private final IEntityOperationManager entityOperationDao;
+    private final IEntityOperationManager entityOperationManager;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
     public PostManager(IPostDao postDao,
                        ITransformationFunctionService transformationFunctionService,
                        IParameterFactory parameterFactory) {
-        this.entityOperationDao = new EntityOperationManager(postDao);
+        this.entityOperationManager = new EntityOperationManager(postDao);
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
     }
@@ -37,7 +37,7 @@ public class PostManager implements IPostManager {
     @Override
     public void savePost(String articularId, PostDto requestPostDto) {
         Post newPost = buildPost(requestPostDto, getUUID());
-        entityOperationDao.saveEntity(newPost);
+        entityOperationManager.saveEntity(newPost);
     }
 
     @Override
@@ -45,37 +45,37 @@ public class PostManager implements IPostManager {
         Post newPost = transformationFunctionService.getEntity(Post.class, postDto);
 
         Parameter parameter = parameterFactory.createStringParameter("uniquePostId", uniqueId);
-        entityOperationDao.updateEntity(newPost);
+        entityOperationManager.updateEntity(newPost);
     }
 
     @Override
     public void deletePostByUniqueId(String articularId, String uniqueId) {
         Parameter parameter = parameterFactory.createStringParameter("uniquePostId", uniqueId);
-        entityOperationDao.deleteEntity(parameter);
+        entityOperationManager.deleteEntity(parameter);
     }
 
     @Override
     public List<Post> getPostListByPostTitle(String title) {
         Parameter parameter = parameterFactory.createStringParameter("title", title);
-        return entityOperationDao.getNamedQueryEntityList("");
+        return entityOperationManager.getNamedQueryEntityList("");
     }
 
     @Override
     public List<Post> getPostListByEmail(String email) {
         Parameter parameter = parameterFactory.createStringParameter("email", email);
-        return entityOperationDao.getNamedQueryEntityList("");
+        return entityOperationManager.getNamedQueryEntityList("");
     }
 
     @Override
     public List<Post> getPostListByUserName(String username) {
         Parameter parameter = parameterFactory.createStringParameter("username", username);
-        return entityOperationDao.getNamedQueryEntityList("");
+        return entityOperationManager.getNamedQueryEntityList("");
     }
 
     @Override
     public Post getPostByUniqueId(String uniqueId) {
         Parameter parameter = parameterFactory.createStringParameter("uniqueId", uniqueId);
-        Optional<Post> optionalPost = entityOperationDao.getGraphOptionalEntity(
+        Optional<Post> optionalPost = entityOperationManager.getGraphOptionalEntity(
                 "",
                 parameter);
 
@@ -95,7 +95,7 @@ public class PostManager implements IPostManager {
         Post parentPost = null;
         if (requestPostDto.getParent() != null) {
             Parameter parameter = parameterFactory.createStringParameter("uniquePostId", uniquePostId);
-            Optional<Post> optionalPost = entityOperationDao.getGraphOptionalEntity(
+            Optional<Post> optionalPost = entityOperationManager.getGraphOptionalEntity(
                     "",
                     parameter);
 

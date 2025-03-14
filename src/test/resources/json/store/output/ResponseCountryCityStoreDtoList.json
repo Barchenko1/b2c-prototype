@@ -1,0 +1,14 @@
+{
+  "storeName" : "name",
+  "storeId" : "123",
+  "address" : {
+    "country" : "USA",
+    "city" : "New York",
+    "street" : "5th Avenue",
+    "buildingNumber" : "10A",
+    "florNumber" : 9,
+    "apartmentNumber" : 202,
+    "zipCode" : "10001"
+  },
+  "articularItemQuantityList" : [ ]
+}

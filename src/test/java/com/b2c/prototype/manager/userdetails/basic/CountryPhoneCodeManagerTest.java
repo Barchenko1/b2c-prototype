@@ -73,8 +73,6 @@ class CountryPhoneCodeManagerTest extends AbstractConstantEntityManagerTest<Coun
 
     @Test
     public void testDeleteEntity() {
-        
-
         countryPhoneCodeManager.deleteEntity("testValue");
 
         verifyDeleteEntity("testValue");
@@ -82,7 +80,6 @@ class CountryPhoneCodeManagerTest extends AbstractConstantEntityManagerTest<Coun
 
     @Test
     public void testGetEntity() {
-        
         Parameter parameter = parameterFactory.createStringParameter(VALUE, "testValue");
         CountryPhoneCode testValue = createTestValue();
         ConstantPayloadDto constantPayloadDto = getResponseOneFieldEntityDto();
@@ -98,7 +95,6 @@ class CountryPhoneCodeManagerTest extends AbstractConstantEntityManagerTest<Coun
 
     @Test
     public void testGetEntityOptional() {
-        
         Parameter parameter = parameterFactory.createStringParameter(VALUE, "testValue");
         CountryPhoneCode testValue = createTestValue();
         ConstantPayloadDto constantPayloadDto = getResponseOneFieldEntityDto();

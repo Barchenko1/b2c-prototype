@@ -23,7 +23,7 @@ import static com.b2c.prototype.util.Constant.ARTICULAR_ITEM_FIND_BY_DISCOUNT_CH
 
 public class DiscountManager implements IDiscountManager {
 
-    private final IEntityOperationManager entityOperationDao;
+    private final IEntityOperationManager entityOperationManager;
     private final ISearchService searchService;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
@@ -32,7 +32,7 @@ public class DiscountManager implements IDiscountManager {
                            ISearchService searchService,
                            ITransformationFunctionService transformationFunctionService,
                            IParameterFactory parameterFactory) {
-        this.entityOperationDao = new EntityOperationManager(discountDao);
+        this.entityOperationManager = new EntityOperationManager(discountDao);
         this.searchService = searchService;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
@@ -40,7 +40,7 @@ public class DiscountManager implements IDiscountManager {
 
     @Override
     public void saveDiscount(DiscountDto discountDto) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             Discount discount = transformationFunctionService.getEntity(session, Discount.class, discountDto);
             session.merge(discount);
         });
@@ -48,7 +48,7 @@ public class DiscountManager implements IDiscountManager {
 
     @Override
     public void updateItemDataDiscount(String articularId, DiscountDto discountDto) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             if (discountDto.getCharSequenceCode() == null) {
                 throw new RuntimeException("Discount code is null");
             }
@@ -58,7 +58,7 @@ public class DiscountManager implements IDiscountManager {
                     parameterFactory.createStringParameter(ARTICULAR_ID, articularId));
 
             Discount discount = (Discount) Optional.ofNullable(discountDto.getCharSequenceCode())
-                    .flatMap(code -> entityOperationDao.getGraphOptionalEntity(
+                    .flatMap(code -> entityOperationManager.getGraphOptionalEntity(
                             "Discount.currency",
                             parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, code)))
                     .orElseGet(() -> transformationFunctionService.getEntity(session, Discount.class, discountDto));
@@ -74,12 +74,12 @@ public class DiscountManager implements IDiscountManager {
 
     @Override
     public void updateDiscount(String charSequenceCode, DiscountDto discountDto) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             if (discountDto.getCharSequenceCode() == null) {
                 throw new RuntimeException("Discount code is null");
             }
             Discount newDiscount = transformationFunctionService.getEntity(session, Discount.class, discountDto);
-            Discount oldDiscount = entityOperationDao.getGraphEntity(
+            Discount oldDiscount = entityOperationManager.getGraphEntity(
                     "Discount.currency",
                     parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, charSequenceCode));
             newDiscount.setId(oldDiscount.getId());
@@ -89,8 +89,8 @@ public class DiscountManager implements IDiscountManager {
 
     @Override
     public void changeDiscountStatus(DiscountStatusDto discountStatusDto) {
-        entityOperationDao.executeConsumer(session -> {
-            Discount currencyDiscount = entityOperationDao.getGraphEntity(
+        entityOperationManager.executeConsumer(session -> {
+            Discount currencyDiscount = entityOperationManager.getGraphEntity(
                     "Discount.currency",
                     parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, discountStatusDto.getCharSequenceCode()));
             currencyDiscount.setActive(discountStatusDto.isActive());
@@ -100,7 +100,7 @@ public class DiscountManager implements IDiscountManager {
 
     @Override
     public void deleteDiscount(String charSequenceCode) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             List<ArticularItem> articularItemList = searchService.getNamedQueryEntityList(
                     ArticularItem.class,
                     ARTICULAR_ITEM_FIND_BY_DISCOUNT_CHAR_SEQUENCE_CODE,

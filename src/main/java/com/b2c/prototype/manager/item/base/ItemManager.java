@@ -19,7 +19,7 @@ import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 @Slf4j
 public class ItemManager implements IItemManager {
 
-    private final IEntityOperationManager entityOperationDao;
+    private final IEntityOperationManager entityOperationManager;
     private final ISearchService searchService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
@@ -30,7 +30,7 @@ public class ItemManager implements IItemManager {
                        ITransformationFunctionService transformationFunctionService,
                        ISupplierService supplierService,
                        IParameterFactory parameterFactory) {
-        this.entityOperationDao = new EntityOperationManager(itemDao);
+        this.entityOperationManager = new EntityOperationManager(itemDao);
         this.searchService = searchService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
@@ -39,7 +39,7 @@ public class ItemManager implements IItemManager {
 
     @Override
     public void saveUpdateItem(String articularId, ItemDto itemDto) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             ArticularItem articularItem = searchService.getNamedQueryEntity(
                     ArticularItem.class,
                     "",
@@ -52,7 +52,7 @@ public class ItemManager implements IItemManager {
 
     @Override
     public void deleteItem(String articularId) {
-        entityOperationDao.deleteEntity(
+        entityOperationManager.deleteEntity(
                 supplierService.entityFieldSupplier(
                         ItemData.class,
                         "",

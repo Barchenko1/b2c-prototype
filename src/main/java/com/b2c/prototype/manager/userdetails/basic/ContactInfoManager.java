@@ -21,7 +21,7 @@ public class ContactInfoManager implements IContactInfoManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ContactInfoManager.class);
 
-    private final IEntityOperationManager entityOperationDao;
+    private final IEntityOperationManager entityOperationManager;
     private final ISearchService searchService;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
@@ -30,7 +30,7 @@ public class ContactInfoManager implements IContactInfoManager {
                               ISearchService searchService,
                               ITransformationFunctionService transformationFunctionService,
                               IParameterFactory parameterFactory) {
-        this.entityOperationDao = new EntityOperationManager(contactInfoDao);
+        this.entityOperationManager = new EntityOperationManager(contactInfoDao);
         this.searchService = searchService;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
@@ -38,7 +38,7 @@ public class ContactInfoManager implements IContactInfoManager {
 
     @Override
     public void saveUpdateContactInfoByUserId(String userId, ContactInfoDto contactInfoDto) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             UserDetails userDetails = searchService.getNamedQueryEntity(
                     UserDetails.class,
                     "UserDetails.findFullUserDetailsByUserId",
@@ -55,7 +55,7 @@ public class ContactInfoManager implements IContactInfoManager {
 
     @Override
     public void deleteContactInfoByUserId(String userId) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             UserDetails userDetails = searchService.getNamedQueryEntity(
                     UserDetails.class,
                     "UserDetails.findFullUserDetailsByUserId",
@@ -80,7 +80,7 @@ public class ContactInfoManager implements IContactInfoManager {
 
     @Override
     public void saveUpdateContactInfoByOrderId(String orderId, ContactInfoDto contactInfoDto) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             DeliveryArticularItemQuantity orderItemDataOption = searchService.getNamedQueryEntity(
                     DeliveryArticularItemQuantity.class,
                     "DeliveryArticularItemQuantity.findByOrderIdWithBeneficiaries",
@@ -101,7 +101,7 @@ public class ContactInfoManager implements IContactInfoManager {
 
     @Override
     public void deleteContactInfoByOrderId(String orderId) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             DeliveryArticularItemQuantity orderItemDataOption = searchService.getNamedQueryEntity(
                     DeliveryArticularItemQuantity.class,
                     "DeliveryArticularItemQuantity.findByOrderIdWithBeneficiaries",

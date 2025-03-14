@@ -26,7 +26,7 @@ public class MessageManager implements IMessageManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageManager.class);
 
-    private final IEntityOperationManager entityOperationDao;
+    private final IEntityOperationManager entityOperationManager;
     private final ISearchService searchService;
     private final ITransformationFunctionService transformationFunctionService;
     private final ISupplierService supplierService;
@@ -37,7 +37,7 @@ public class MessageManager implements IMessageManager {
                           ITransformationFunctionService transformationFunctionService,
                           ISupplierService supplierService,
                           IParameterFactory parameterFactory) {
-        this.entityOperationDao = new EntityOperationManager(messageDao);
+        this.entityOperationManager = new EntityOperationManager(messageDao);
         this.searchService = searchService;
         this.transformationFunctionService = transformationFunctionService;
         this.supplierService = supplierService;
@@ -51,53 +51,52 @@ public class MessageManager implements IMessageManager {
 
     @Override
     public void updateMessage(String userId, String messageId, MessageDto messageDto) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             NativeQuery<MessageBox> query = session.createNativeQuery(SELECT_MESSAGEBOX_BY_USER_ID, MessageBox.class);
-            MessageBox messageBox = searchService.getQueryEntity(
-                    query,
-                    supplierService.parameterStringSupplier(USER_ID, userId));
-            Message existingMessage = getExistingMessage(messageBox, messageId);
-            Message newMessage = transformationFunctionService
-                    .getEntity(Message.class, messageDto);
-            if (existingMessage != null) {
-                newMessage.setId(existingMessage.getId());
-            }
-            messageBox.addMessage(newMessage);
-            session.merge(messageBox);
+//            MessageBox messageBox = searchService.getQueryEntity(
+//                    query,
+//                    supplierService.parameterStringSupplier(USER_ID, userId));
+//            Message existingMessage = getExistingMessage(messageBox, messageId);
+            Message newMessage = transformationFunctionService.getEntity(Message.class, messageDto);
+//            if (existingMessage != null) {
+//                newMessage.setId(existingMessage.getId());
+//            }
+//            messageBox.addMessage(newMessage);
+//            session.merge(messageBox);
         });
     }
 
     @Override
     public void deleteMessage(String userId, String messageId) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             NativeQuery<MessageBox> query = session.createNativeQuery(SELECT_MESSAGEBOX_BY_USER_ID, MessageBox.class);
-            MessageBox messageBox = searchService.getQueryEntity(
-                    query,
-                    supplierService.parameterStringSupplier(USER_ID, userId));
-            Message existingMessage = getExistingMessage(messageBox, messageId);
-            messageBox.removeMessage(existingMessage);
-            session.merge(messageBox);
+//            MessageBox messageBox = searchService.getQueryEntity(
+//                    query,
+//                    supplierService.parameterStringSupplier(USER_ID, userId));
+//            Message existingMessage = getExistingMessage(messageBox, messageId);
+//            messageBox.removeMessage(existingMessage);
+//            session.merge(messageBox);
         });
     }
 
     @Override
     public void cleanUpMessagesByUserId(String userId) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             NativeQuery<MessageBox> query = session.createNativeQuery(SELECT_MESSAGEBOX_BY_USER_ID, MessageBox.class);
-            MessageBox messageBox = searchService.getQueryEntity(
-                    query,
-                    supplierService.parameterStringSupplier(USER_ID, userId));
-            messageBox.getMessages().forEach(message -> {
-                messageBox.removeMessage(message);
-                session.remove(message);
-                session.merge(messageBox);
-            });
+//            MessageBox messageBox = searchService.getQueryEntity(
+//                    query,
+//                    supplierService.parameterStringSupplier(USER_ID, userId));
+//            messageBox.getMessages().forEach(message -> {
+//                messageBox.removeMessage(message);
+//                session.remove(message);
+//                session.merge(messageBox);
+//            });
         });
     }
 
     @Override
     public List<ResponseMessageOverviewDto> getMessageOverviewBySenderEmail(String senderEmail) {
-        return entityOperationDao.getSubGraphEntityDtoList(
+        return entityOperationManager.getSubGraphEntityDtoList(
                 "",
                 parameterFactory.createStringParameter("sender", senderEmail),
                 transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class));
@@ -105,7 +104,7 @@ public class MessageManager implements IMessageManager {
 
     @Override
     public List<ResponseMessageOverviewDto> getMessageOverviewByReceiverEmail(String receiverEmail) {
-        return entityOperationDao.getSubGraphEntityDtoList(
+        return entityOperationManager.getSubGraphEntityDtoList(
                 "",
                 parameterFactory.createStringParameter("receiver", receiverEmail),
                 transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class));
@@ -113,7 +112,7 @@ public class MessageManager implements IMessageManager {
 
     @Override
     public ResponseMessagePayloadDto getMessagePayloadDto(String userId, String messageId) {
-        return entityOperationDao.getGraphEntityDto(
+        return entityOperationManager.getGraphEntityDto(
                 "",
                 parameterFactory.createStringParameter("messageUniqNumber", messageId),
                 transformationFunctionService.getTransformationFunction(Message.class, ResponseMessagePayloadDto.class)

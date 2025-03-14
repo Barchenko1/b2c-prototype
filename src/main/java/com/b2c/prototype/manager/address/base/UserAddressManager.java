@@ -25,7 +25,7 @@ import static com.b2c.prototype.util.Constant.USER_ID;
 
 public class UserAddressManager implements IUserAddressManager {
 
-    private final IEntityOperationManager entityOperationDao;
+    private final IEntityOperationManager entityOperationManager;
     private final ISearchService searchService;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
@@ -34,7 +34,7 @@ public class UserAddressManager implements IUserAddressManager {
                               ISearchService searchService,
                               ITransformationFunctionService transformationFunctionService,
                               IParameterFactory parameterFactory) {
-        this.entityOperationDao = new EntityOperationManager(addressDao);
+        this.entityOperationManager = new EntityOperationManager(addressDao);
         this.searchService = searchService;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
@@ -42,7 +42,7 @@ public class UserAddressManager implements IUserAddressManager {
 
     @Override
     public void saveUserAddress(String userId, UserAddressDto userAddressDto) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             UserDetails userDetails = searchService.getNamedQueryEntity(
                     UserDetails.class,
                     "UserDetails.findAddressesByUserId",
@@ -61,7 +61,7 @@ public class UserAddressManager implements IUserAddressManager {
 
     @Override
     public void updateUserAddress(String userId, String addressId, UserAddressDto userAddressDto) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             UserDetails userDetails = searchService.getNamedQueryEntity(
                     UserDetails.class,
                     "UserDetails.findAddressesByUserId",
@@ -103,7 +103,7 @@ public class UserAddressManager implements IUserAddressManager {
 
     @Override
     public void setDefaultUserCreditCard(String userId, String addressId) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             UserDetails userDetails = searchService.getNamedQueryEntity(
                     UserDetails.class,
                     "UserDetails.findAddressesByUserId",
@@ -124,7 +124,7 @@ public class UserAddressManager implements IUserAddressManager {
 
     @Override
     public void deleteUserAddress(String userId, String addressId) {
-        entityOperationDao.executeConsumer(session -> {
+        entityOperationManager.executeConsumer(session -> {
             UserDetails userDetails = searchService.getNamedQueryEntity(
                     UserDetails.class,
                     "UserDetails.findAddressesByUserId",

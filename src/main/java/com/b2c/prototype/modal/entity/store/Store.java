@@ -11,7 +11,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,19 +30,71 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@NamedQueries({
+        @NamedQuery(
+                name = "Store.findStoreByStoreId",
+                query = "SELECT s FROM Store s " +
+                        "WHERE s.storeId = :storeId"
+        ),
+        @NamedQuery(
+                name = "Store.findStoreWithAddressByStoreId",
+                query = "SELECT s FROM Store s " +
+                        "LEFT JOIN FETCH s.address a " +
+                        "LEFT JOIN FETCH a.country c " +
+                        "WHERE s.storeId = :storeId"
+        ),
+        @NamedQuery(
+                name = "Store.findStoreWithAddressArticularItemQuantityByStoreId",
+                query = "SELECT s FROM Store s " +
+                        "LEFT JOIN FETCH s.address a " +
+                        "LEFT JOIN FETCH a.country c " +
+                        "LEFT JOIN FETCH s.articularItemQuantities aiq " +
+                        "LEFT JOIN FETCH aiq.articularItem ai " +
+                        "WHERE s.storeId = :storeId"
+        ),
+        @NamedQuery(
+                name = "Store.findStoreWithAddressArticularItemQuantityByCountry",
+                query = "SELECT s FROM Store s " +
+                        "LEFT JOIN FETCH s.address a " +
+                        "LEFT JOIN FETCH a.country c " +
+                        "LEFT JOIN FETCH s.articularItemQuantities aiq " +
+                        "LEFT JOIN FETCH aiq.articularItem ai " +
+                        "WHERE c.value = :value"
+        ),
+        @NamedQuery(
+                name = "Store.findStoreWithAddressArticularItemQuantityByCountryCity",
+                query = "SELECT s FROM Store s " +
+                        "LEFT JOIN FETCH s.address a " +
+                        "LEFT JOIN FETCH a.country c " +
+                        "LEFT JOIN FETCH s.articularItemQuantities aiq " +
+                        "LEFT JOIN FETCH aiq.articularItem ai " +
+                        "WHERE c.value = :value " +
+                        "AND a.city =: value"
+        ),
+        @NamedQuery(
+                name = "Store.findStoreWithAddressArticularItemQuantityByArticularId",
+                query = "SELECT s FROM Store s " +
+                        "LEFT JOIN FETCH s.address a " +
+                        "LEFT JOIN FETCH a.country c " +
+                        "LEFT JOIN FETCH s.articularItemQuantities aiq " +
+                        "LEFT JOIN FETCH aiq.articularItem ai " +
+                        "WHERE ai.articularId = : articularId"
+        )
+})
 public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
+    @Column(name = "store_id", unique = true, nullable = false)
+    private String storeId;
+    private String storeName;
+    private boolean isActive;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "articular_item_quantity_id")
+    @JoinColumn(name = "store_id")
     @Builder.Default
     private List<ArticularItemQuantity> articularItemQuantities = new ArrayList<>();
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "address_id")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "address_id", nullable = false)
     private Address address;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "count_type")
-    private CountType countType;
 }

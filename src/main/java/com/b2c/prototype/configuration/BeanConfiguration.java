@@ -23,7 +23,9 @@ import com.b2c.prototype.dao.payment.base.BasicSellerCommissionDao;
 import com.b2c.prototype.dao.price.ICurrencyDao;
 import com.b2c.prototype.dao.price.base.BasicCurrencyDao;
 import com.b2c.prototype.dao.store.ICountTypeDao;
+import com.b2c.prototype.dao.store.IStoreDao;
 import com.b2c.prototype.dao.store.base.BasicCountTypeDao;
+import com.b2c.prototype.dao.store.base.BasicStoreDao;
 import com.b2c.prototype.dao.user.IContactPhoneDao;
 import com.b2c.prototype.dao.user.ICountryPhoneCodeDao;
 import com.b2c.prototype.dao.user.IDeviceDao;
@@ -70,6 +72,9 @@ import com.b2c.prototype.dao.item.IItemTypeDao;
 import com.b2c.prototype.dao.rating.IRatingDao;
 import com.b2c.prototype.dao.review.IReviewDao;
 import com.b2c.prototype.dao.user.IUserDetailsDao;
+import com.b2c.prototype.manager.store.IStoreAddressManager;
+import com.b2c.prototype.manager.store.IStoreManager;
+import com.b2c.prototype.manager.store.base.StoreManager;
 import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.query.SearchService;
 import com.tm.core.configuration.manager.DatabaseConfigurationAnnotationClass;
@@ -342,5 +347,11 @@ public class BeanConfiguration {
     public ICountryPhoneCodeDao countryPhoneCodeDao(SessionFactory sessionFactory, IQueryService queryService) {
         return new BasicCountryPhoneCodeDao(sessionFactory, queryService);
     }
+
+    @Bean
+    public IStoreDao storeDao(SessionFactory sessionFactory, IQueryService queryService) {
+        return new BasicStoreDao(sessionFactory, queryService);
+    }
+
 
 }

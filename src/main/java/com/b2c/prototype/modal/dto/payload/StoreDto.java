@@ -1,13 +1,19 @@
 package com.b2c.prototype.modal.dto.payload;
 
-import com.b2c.prototype.modal.constant.CountTypeEnum;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonIgnoreProperties
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class StoreDto {
-    private String articularId;
-    private int count;
-    private CountTypeEnum countType;
+    private String storeName;
+    private AddressDto address;
 }

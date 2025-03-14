@@ -1,0 +1,9 @@
+{
+  "country": "USA",
+  "city": "New York2",
+  "street": "7th Avenue",
+  "buildingNumber": "11A",
+  "florNumber": 3,
+  "apartmentNumber": 12,
+  "zipCode": "10001"
+}
