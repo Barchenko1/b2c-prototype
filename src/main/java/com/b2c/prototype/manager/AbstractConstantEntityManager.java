@@ -15,17 +15,18 @@ public abstract class AbstractConstantEntityManager<T, E extends IConstant> impl
 
     private final IParameterFactory parameterFactory;
     private final IEntityDao dao;
-    private final String namedQuery;
+    private final String[] namedQueries;
     private final Function<T, E> mapDtoToEntityFunction;
     private final Function<E, T> mapEntityToDtoFunction;
 
     public AbstractConstantEntityManager(IParameterFactory parameterFactory,
-                                         IEntityDao dao, String namedQuery,
+                                         IEntityDao dao,
+                                         String[] namedQueries,
                                          Function<T, E> mapDtoToEntityFunction,
                                          Function<E, T> mapEntityToDtoFunction) {
         this.parameterFactory = parameterFactory;
         this.dao = dao;
-        this.namedQuery = namedQuery;
+        this.namedQueries = namedQueries;
         this.mapDtoToEntityFunction = mapDtoToEntityFunction;
         this.mapEntityToDtoFunction = mapEntityToDtoFunction;
     }
@@ -52,21 +53,21 @@ public abstract class AbstractConstantEntityManager<T, E extends IConstant> impl
     @Override
     public T getEntity(String value) {
         Parameter parameter = parameterFactory.createStringParameter(VALUE, value);
-        E entity = dao.getNamedQueryEntity(namedQuery, parameter);
+        E entity = dao.getNamedQueryEntity(namedQueries[0], parameter);
         return mapEntityToDtoFunction.apply(entity);
     }
 
     @Override
     public Optional<T> getEntityOptional(String value) {
         Parameter parameter = parameterFactory.createStringParameter(VALUE, value);
-        E entity = dao.getNamedQueryEntity(namedQuery, parameter);
+        E entity = dao.getNamedQueryEntity(namedQueries[0], parameter);
         return Optional.of(mapEntityToDtoFunction.apply(entity));
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public List<T> getEntities() {
-        return dao.getNamedQueryEntityList(namedQuery).stream()
+        return dao.getNamedQueryEntityList(namedQueries[1]).stream()
                 .map(e -> (E) e)
                 .map(mapEntityToDtoFunction)
                 .toList();

@@ -13,7 +13,7 @@ public class ArticularStatusManager extends AbstractConstantEntityManager<Consta
                                   IEntityDao itemStatusDao,
                                   ITransformationFunctionService transformationFunctionService) {
         super(parameterFactory, itemStatusDao,
-                "ArticularStatus.findByValue",
+                new String[] {"ArticularStatus.findByValue", "ArticularStatus.all"},
                 transformationFunctionService.getTransformationFunction(ConstantPayloadDto.class, ArticularStatus.class),
                 transformationFunctionService.getTransformationFunction(ArticularStatus.class, ConstantPayloadDto.class));
     }

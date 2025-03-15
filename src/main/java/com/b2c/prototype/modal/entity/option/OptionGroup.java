@@ -34,6 +34,10 @@ import java.util.List;
 })
 @NamedQueries({
         @NamedQuery(
+                name = "OptionGroup.findByValue",
+                query = "SELECT og FROM OptionGroup og WHERE og.value = : value"
+        ),
+        @NamedQuery(
                 name = "OptionGroup.all",
                 query = "SELECT og FROM OptionGroup og"
         ),

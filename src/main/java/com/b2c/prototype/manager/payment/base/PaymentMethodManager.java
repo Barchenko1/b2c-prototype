@@ -15,7 +15,7 @@ public class PaymentMethodManager extends AbstractConstantEntityManager<Constant
                                 IEntityDao paymentMethodDao,
                                 ITransformationFunctionService transformationFunctionService) {
         super(parameterFactory, paymentMethodDao,
-                "",
+                new String[] {"PaymentMethod.findByValue", "PaymentMethod.all"},
                 transformationFunctionService.getTransformationFunction(ConstantPayloadDto.class, PaymentMethod.class),
                 transformationFunctionService.getTransformationFunction(PaymentMethod.class, ConstantPayloadDto.class));
     }

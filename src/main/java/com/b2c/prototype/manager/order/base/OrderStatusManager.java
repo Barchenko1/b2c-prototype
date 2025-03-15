@@ -15,7 +15,7 @@ public class OrderStatusManager extends AbstractConstantEntityManager<ConstantPa
                               IEntityDao orderStatusDao,
                               ITransformationFunctionService transformationFunctionService) {
         super(parameterFactory, orderStatusDao,
-                "",
+                new String[] {"OrderStatus.findByValue", "OrderStatus.all"},
                 transformationFunctionService.getTransformationFunction(ConstantPayloadDto.class, OrderStatus.class),
                 transformationFunctionService.getTransformationFunction(OrderStatus.class, ConstantPayloadDto.class)
         );

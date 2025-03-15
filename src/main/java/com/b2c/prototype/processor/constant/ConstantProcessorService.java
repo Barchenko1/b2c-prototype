@@ -1,5 +1,6 @@
 package com.b2c.prototype.processor.constant;
 
+import com.b2c.prototype.manager.item.IAvailabilityStatusManager;
 import com.b2c.prototype.modal.dto.common.NumberConstantPayloadDto;
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.dto.payload.constant.CountryDto;
@@ -25,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.b2c.prototype.util.Constant.AVAILABILITY_STATUS_ID;
 import static com.b2c.prototype.util.Constant.BRAND_SERVICE_ID;
 import static com.b2c.prototype.util.Constant.COUNTRY_PHONE_CODE_SERVICE_ID;
 import static com.b2c.prototype.util.Constant.COUNTRY_SERVICE_ID;
@@ -48,6 +50,7 @@ public class ConstantProcessorService implements IConstantProcessorService {
     private final IRatingManager ratingManager;
 
     public ConstantProcessorService(
+            IAvailabilityStatusManager availabilityStatusManager,
             IBrandManager brandManager,
             ICountTypeManager countTypeManager,
             ICountryPhoneCodeManager countryPhoneCodeManager,
@@ -66,6 +69,7 @@ public class ConstantProcessorService implements IConstantProcessorService {
         this.countryManager = countryManager;
         this.ratingManager = ratingManager;
         constantEntityManagerMap = new HashMap<>(){{
+            put(AVAILABILITY_STATUS_ID, availabilityStatusManager);
             put(BRAND_SERVICE_ID, brandManager);
             put(COUNT_TYPE_SERVICE_ID, countTypeManager);
             put(COUNTRY_PHONE_CODE_SERVICE_ID, countryPhoneCodeManager);

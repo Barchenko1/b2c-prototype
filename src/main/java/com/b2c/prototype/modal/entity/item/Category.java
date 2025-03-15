@@ -23,7 +23,6 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "category")
 @Data
@@ -40,7 +39,7 @@ import java.util.List;
                 query = "SELECT c FROM Category c"
         )
 })
-public class Category extends TransitiveSelfEntity {
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
@@ -59,19 +58,14 @@ public class Category extends TransitiveSelfEntity {
     @EqualsAndHashCode.Exclude
     private List<Category> childNodeList = new ArrayList<>();
 
-    @Override
-    public void setParent(TransitiveSelfEntity transitiveSelfEntity) {
-        this.parent = (Category) transitiveSelfEntity;
+    public void addChildTransitiveEntity(Category child) {
+        this.getChildNodeList().add(child);
+        child.setParent(this);
     }
 
-    @Override
-    public String getRootField() {
-        return value;
-    }
-
-    @Override
-    public <E extends TransitiveSelfEntity> void setChildNodeList(List<E> childNodeList) {
-        this.childNodeList = (List<Category>) childNodeList;
+    public void removeChildTransitiveEntity(Category child) {
+        this.getChildNodeList().remove(child);
+        child.setParent(null);
     }
 
 }

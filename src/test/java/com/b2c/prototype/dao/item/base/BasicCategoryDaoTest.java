@@ -26,7 +26,7 @@ class BasicCategoryDaoTest extends AbstractConstantEntityDaoTest {
     }
 
     @Override
-    protected EntityDataSet<? extends TransitiveSelfEntity> getTestDataSet() {
+    protected EntityDataSet<Category> getTestDataSet() {
         Category parent = Category.builder()
                 .id(1L)
                 .label("parent")
@@ -50,7 +50,7 @@ class BasicCategoryDaoTest extends AbstractConstantEntityDaoTest {
     }
 
     @Override
-    protected EntityDataSet<? extends TransitiveSelfEntity> getSaveDataSet() {
+    protected EntityDataSet<Category> getSaveDataSet() {
         Category parent = Category.builder()
                 .label("parent")
                 .value("parent")
@@ -71,7 +71,7 @@ class BasicCategoryDaoTest extends AbstractConstantEntityDaoTest {
     }
 
     @Override
-    protected EntityDataSet<? extends TransitiveSelfEntity> getUpdateDataSet() {
+    protected EntityDataSet<Category> getUpdateDataSet() {
         Category parent = Category.builder()
                 .label("parent")
                 .value("parent")
@@ -91,16 +91,4 @@ class BasicCategoryDaoTest extends AbstractConstantEntityDaoTest {
         return new EntityDataSet<>(root, "/datasets/item/category/updateCategoryDataSet.yml");
     }
 
-//    @Override
-//    protected EntityDataSet<? extends TransitiveSelfEntity> getDeleteDataSet() {
-//        Category parent = Category.builder()
-//                .id(1L)
-//                .label("parent")
-//                .value("parent")
-//                .build();
-//
-//        return new EntityDataSet<>(parent,
-//                "/datasets/item/category/deleteCategoryDataSet.yml",
-//                            "/datasets/item/category/deleteChildCategoryDataSet.yml");
-//    }
 }

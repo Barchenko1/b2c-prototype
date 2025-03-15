@@ -15,7 +15,7 @@ public class BrandManager extends AbstractConstantEntityManager<ConstantPayloadD
                         IEntityDao brandDao,
                         ITransformationFunctionService transformationFunctionService) {
         super(parameterFactory, brandDao,
-                "",
+                new String[] {"Brand.findByValue", "Brand.all"},
                 transformationFunctionService.getTransformationFunction(ConstantPayloadDto.class, Brand.class),
                 transformationFunctionService.getTransformationFunction(Brand.class, ConstantPayloadDto.class));
     }

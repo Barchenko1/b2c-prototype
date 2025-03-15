@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 
-@Slf4j
 public class ItemManager implements IItemManager {
 
     private final IEntityOperationManager entityOperationManager;

@@ -11,6 +11,7 @@ public interface Constant {
     String STORE_ID = "storeId";
 
     // serviceId
+    String AVAILABILITY_STATUS_ID = "availabilityStatus";
     String BRAND_SERVICE_ID = "brand";
     String COUNT_TYPE_SERVICE_ID = "countType";
     String COUNTRY_PHONE_CODE_SERVICE_ID = "countryPhoneCode";

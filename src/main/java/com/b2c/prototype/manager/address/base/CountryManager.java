@@ -14,7 +14,7 @@ public class CountryManager extends AbstractConstantEntityManager<CountryDto, Co
                           IEntityDao dao,
                           ITransformationFunctionService transformationFunctionService) {
         super(parameterFactory, dao,
-                "",
+                new String[] {"Country.findByValue", "Country.all"},
                 transformationFunctionService.getTransformationFunction(CountryDto.class, Country.class),
                 transformationFunctionService.getTransformationFunction(Country.class, CountryDto.class));
     }

@@ -4,6 +4,7 @@ import com.b2c.prototype.dao.address.IAddressDao;
 import com.b2c.prototype.dao.address.ICountryDao;
 import com.b2c.prototype.dao.delivery.IDeliveryDao;
 import com.b2c.prototype.dao.delivery.IDeliveryTypeDao;
+import com.b2c.prototype.dao.item.IAvailabilityStatusDao;
 import com.b2c.prototype.dao.item.IBrandDao;
 import com.b2c.prototype.dao.item.ICategoryDao;
 import com.b2c.prototype.dao.item.IDiscountDao;
@@ -15,6 +16,7 @@ import com.b2c.prototype.dao.item.IItemTypeDao;
 import com.b2c.prototype.dao.message.IMessageStatusDao;
 import com.b2c.prototype.dao.message.IMessageTypeDao;
 import com.b2c.prototype.dao.option.IOptionGroupDao;
+import com.b2c.prototype.dao.option.IOptionItemCostDao;
 import com.b2c.prototype.dao.option.IOptionItemDao;
 import com.b2c.prototype.dao.option.ITimeDurationOptionDao;
 import com.b2c.prototype.dao.option.IZoneOptionDao;
@@ -45,6 +47,7 @@ import com.b2c.prototype.manager.delivery.IDeliveryTypeManager;
 import com.b2c.prototype.manager.delivery.base.DeliveryManager;
 import com.b2c.prototype.manager.delivery.base.DeliveryTypeManager;
 import com.b2c.prototype.manager.item.IArticularItemManager;
+import com.b2c.prototype.manager.item.IAvailabilityStatusManager;
 import com.b2c.prototype.manager.item.IBrandManager;
 import com.b2c.prototype.manager.item.ICategoryManager;
 import com.b2c.prototype.manager.item.IDiscountManager;
@@ -53,6 +56,7 @@ import com.b2c.prototype.manager.item.IItemManager;
 import com.b2c.prototype.manager.item.IItemStatusManager;
 import com.b2c.prototype.manager.item.IItemTypeManager;
 import com.b2c.prototype.manager.item.base.ArticularItemManager;
+import com.b2c.prototype.manager.item.base.AvailabilityStatusManager;
 import com.b2c.prototype.manager.item.base.BrandManager;
 import com.b2c.prototype.manager.item.base.CategoryManager;
 import com.b2c.prototype.manager.item.base.DiscountManager;
@@ -65,10 +69,12 @@ import com.b2c.prototype.manager.message.IMessageTypeManager;
 import com.b2c.prototype.manager.message.base.MessageStatusManager;
 import com.b2c.prototype.manager.message.base.MessageTypeManager;
 import com.b2c.prototype.manager.option.IOptionGroupManager;
+import com.b2c.prototype.manager.option.IOptionItemCostManager;
 import com.b2c.prototype.manager.option.IOptionItemManager;
 import com.b2c.prototype.manager.option.ITimeDurationOptionManager;
 import com.b2c.prototype.manager.option.IZoneOptionManager;
 import com.b2c.prototype.manager.option.base.OptionGroupManager;
+import com.b2c.prototype.manager.option.base.OptionItemCostManager;
 import com.b2c.prototype.manager.option.base.OptionItemManager;
 import com.b2c.prototype.manager.option.base.TimeDurationOptionManager;
 import com.b2c.prototype.manager.option.base.ZoneOptionManager;
@@ -199,87 +205,108 @@ public class ServiceBeanConfiguration {
     // app service
 
     @Bean
+    public IAvailabilityStatusManager availabilityStatusManager(IAvailabilityStatusDao availabilityStatusDao,
+                                                                IParameterFactory parameterFactory,
+                                                                ITransformationFunctionService transformationFunctionService) {
+        return new AvailabilityStatusManager(parameterFactory, availabilityStatusDao, transformationFunctionService);
+    }
+
+    @Bean
     public IBrandManager brandManager(IBrandDao brandDao,
+                                      IParameterFactory parameterFactory,
                                       ITransformationFunctionService transformationFunctionService) {
-        return new BrandManager(parameterFactory(), brandDao, transformationFunctionService);
+        return new BrandManager(parameterFactory, brandDao, transformationFunctionService);
     }
 
     @Bean
     public ICountTypeManager countTypeManager(ICountTypeDao countTypeDao,
+                                              IParameterFactory parameterFactory,
                                               ITransformationFunctionService transformationFunctionService) {
-        return new CountTypeManager(parameterFactory(), countTypeDao, transformationFunctionService);
+        return new CountTypeManager(parameterFactory, countTypeDao, transformationFunctionService);
     }
 
     @Bean
     public ICountryPhoneCodeManager countryPhoneCodeManager(ICountryPhoneCodeDao countryPhoneCodeDao,
+                                                            IParameterFactory parameterFactory,
                                                             ITransformationFunctionService transformationFunctionService) {
-        return new CountryPhoneCodeManager(parameterFactory(), countryPhoneCodeDao, transformationFunctionService);
+        return new CountryPhoneCodeManager(parameterFactory, countryPhoneCodeDao, transformationFunctionService);
     }
 
     @Bean
     public ICountryManager countryManager(ICountryDao countryDao,
+                                          IParameterFactory parameterFactory,
                                           ITransformationFunctionService transformationFunctionService) {
-        return new CountryManager(parameterFactory(), countryDao, transformationFunctionService);
+        return new CountryManager(parameterFactory, countryDao, transformationFunctionService);
     }
 
     @Bean
     public ICurrencyManager currencyManager(ICurrencyDao currencyDao,
+                                            IParameterFactory parameterFactory,
                                             ITransformationFunctionService transformationFunctionService) {
-        return new CurrencyManager(parameterFactory(), currencyDao, transformationFunctionService);
+        return new CurrencyManager(parameterFactory, currencyDao, transformationFunctionService);
     }
 
     @Bean
     public IDeliveryTypeManager deliveryTypeManager(IDeliveryTypeDao deliveryTypeDao,
+                                                    IParameterFactory parameterFactory,
                                                     ITransformationFunctionService transformationFunctionService) {
-        return new DeliveryTypeManager(parameterFactory(), deliveryTypeDao, transformationFunctionService);
+        return new DeliveryTypeManager(parameterFactory, deliveryTypeDao, transformationFunctionService);
     }
 
     @Bean
     public IItemStatusManager itemStatusManager(IItemStatusDao itemStatusDao,
+                                                IParameterFactory parameterFactory,
                                                 ITransformationFunctionService transformationFunctionService) {
-        return new ArticularStatusManager(parameterFactory(), itemStatusDao, transformationFunctionService);
+        return new ArticularStatusManager(parameterFactory, itemStatusDao, transformationFunctionService);
     }
 
     @Bean
     public IItemTypeManager itemTypeManager(IItemTypeDao itemTypeDao,
+                                            IParameterFactory parameterFactory,
                                             ITransformationFunctionService transformationFunctionService) {
-        return new ItemTypeManager(parameterFactory(), itemTypeDao, transformationFunctionService);
+        return new ItemTypeManager(parameterFactory, itemTypeDao, transformationFunctionService);
     }
 
     @Bean
     public IMessageStatusManager messageStatusManager(IMessageStatusDao messageStatusDao,
+                                                      IParameterFactory parameterFactory,
                                                       ITransformationFunctionService transformationFunctionService) {
-        return new MessageStatusManager(parameterFactory(), messageStatusDao, transformationFunctionService);
+        return new MessageStatusManager(parameterFactory, messageStatusDao, transformationFunctionService);
     }
 
     @Bean
     public IMessageTypeManager messageTypeManager(IMessageTypeDao messageTypeDao,
+                                                  IParameterFactory parameterFactory,
                                                   ITransformationFunctionService transformationFunctionService) {
-        return new MessageTypeManager(parameterFactory(), messageTypeDao, transformationFunctionService);
+        return new MessageTypeManager(parameterFactory, messageTypeDao, transformationFunctionService);
     }
 
     @Bean
     public IOptionGroupManager optionGroupManager(IOptionGroupDao optionGroupDao,
+                                                  IParameterFactory parameterFactory,
                                                   ITransformationFunctionService transformationFunctionService) {
-        return new OptionGroupManager(parameterFactory(), optionGroupDao, transformationFunctionService);
+        return new OptionGroupManager(parameterFactory, optionGroupDao, transformationFunctionService);
     }
 
     @Bean
     public IOrderStatusManager orderStatusManager(IOrderStatusDao orderStatusDao,
+                                                  IParameterFactory parameterFactory,
                                                   ITransformationFunctionService transformationFunctionService) {
-        return new OrderStatusManager(parameterFactory(), orderStatusDao, transformationFunctionService);
+        return new OrderStatusManager(parameterFactory, orderStatusDao, transformationFunctionService);
     }
 
     @Bean
     public IPaymentMethodManager paymentMethodManager(IPaymentMethodDao paymentMethodDao,
+                                                      IParameterFactory parameterFactory,
                                                       ITransformationFunctionService transformationFunctionService) {
-        return new PaymentMethodManager(parameterFactory(), paymentMethodDao, transformationFunctionService);
+        return new PaymentMethodManager(parameterFactory, paymentMethodDao, transformationFunctionService);
     }
 
     @Bean
     public IRatingManager ratingManager(IRatingDao ratingDao,
+                                        IParameterFactory parameterFactory,
                                         ITransformationFunctionService transformationFunctionService) {
-        return new RatingManager(parameterFactory(), ratingDao, transformationFunctionService);
+        return new RatingManager(parameterFactory, ratingDao, transformationFunctionService);
     }
 
     @Bean
@@ -345,6 +372,14 @@ public class ServiceBeanConfiguration {
                                                 ITransformationFunctionService transformationFunctionService,
                                                 IParameterFactory parameterFactory) {
         return new OptionItemManager(optionItemDao, searchService, transformationFunctionService, parameterFactory);
+    }
+
+    @Bean
+    public IOptionItemCostManager optionItemCostManager(IOptionItemCostDao optionItemCostDao,
+                                                        ISearchService searchService,
+                                                        ITransformationFunctionService transformationFunctionService,
+                                                        IParameterFactory parameterFactory) {
+        return new OptionItemCostManager(optionItemCostDao, searchService, transformationFunctionService, parameterFactory);
     }
 
     @Bean
@@ -449,6 +484,7 @@ public class ServiceBeanConfiguration {
 
     @Bean
     public IConstantProcessorService constantOrchestratorService(
+            IAvailabilityStatusManager availabilityStatusManager,
             IBrandManager brandManager,
             ICountTypeManager countTypeManager,
             ICountryPhoneCodeManager countryPhoneCodeManager,
@@ -465,6 +501,7 @@ public class ServiceBeanConfiguration {
             IRatingManager ratingManager
     ) {
         return new ConstantProcessorService(
+                availabilityStatusManager,
                 brandManager,
                 countTypeManager,
                 countryPhoneCodeManager,

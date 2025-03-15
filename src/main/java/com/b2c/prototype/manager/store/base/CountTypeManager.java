@@ -15,7 +15,7 @@ public class CountTypeManager extends AbstractConstantEntityManager<ConstantPayl
                             IEntityDao dao,
                             ITransformationFunctionService transformationFunctionService) {
         super(parameterFactory, dao,
-                "",
+                new String[] {"CountType.findByValue", "CountType.all"},
                 transformationFunctionService.getTransformationFunction(ConstantPayloadDto.class, CountType.class),
                 transformationFunctionService.getTransformationFunction(CountType.class, ConstantPayloadDto.class));
     }

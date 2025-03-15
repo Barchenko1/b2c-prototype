@@ -59,6 +59,7 @@ import com.b2c.prototype.modal.entity.delivery.Delivery;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
 import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
 import com.b2c.prototype.modal.entity.item.ArticularItemQuantityPrice;
+import com.b2c.prototype.modal.entity.item.AvailabilityStatus;
 import com.b2c.prototype.modal.entity.option.TimeDurationOption;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.ArticularStatus;
@@ -157,6 +158,7 @@ public class TransformationEntityConfiguration {
         addConstantEntityTransformationFunctions(transformationFunctionService, OptionGroup.class, OptionGroup::new);
         addConstantEntityTransformationFunctions(transformationFunctionService, OrderStatus.class, OrderStatus::new);
         addConstantEntityTransformationFunctions(transformationFunctionService, PaymentMethod.class, PaymentMethod::new);
+        addConstantEntityTransformationFunctions(transformationFunctionService, AvailabilityStatus.class, AvailabilityStatus::new);
         transformationFunctionService.addTransformationFunction(NumberConstantPayloadDto.class, Rating.class, mapOneIntegerFieldEntityDtoRatingFunction());
 
         loadCountryFunctions(transformationFunctionService);

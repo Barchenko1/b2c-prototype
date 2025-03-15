@@ -2,9 +2,11 @@ package com.b2c.prototype.configuration;
 
 import com.b2c.prototype.dao.address.ICountryDao;
 import com.b2c.prototype.dao.address.base.BasicCountryDao;
+import com.b2c.prototype.dao.item.IAvailabilityStatusDao;
 import com.b2c.prototype.dao.item.IDiscountDao;
 import com.b2c.prototype.dao.item.IItemDataDao;
 import com.b2c.prototype.dao.item.IItemDataOptionDao;
+import com.b2c.prototype.dao.item.base.BasicAvailabilityStatusDao;
 import com.b2c.prototype.dao.item.base.BasicDiscountDao;
 import com.b2c.prototype.dao.item.base.BasicArticularItemDao;
 import com.b2c.prototype.dao.item.base.BasicItemDataDao;
@@ -12,8 +14,10 @@ import com.b2c.prototype.dao.message.IMessageStatusDao;
 import com.b2c.prototype.dao.message.IMessageTypeDao;
 import com.b2c.prototype.dao.message.basic.BasicMessageStatusDao;
 import com.b2c.prototype.dao.message.basic.BasicMessageTypeDao;
+import com.b2c.prototype.dao.option.IOptionItemCostDao;
 import com.b2c.prototype.dao.option.ITimeDurationOptionDao;
 import com.b2c.prototype.dao.option.IZoneOptionDao;
+import com.b2c.prototype.dao.option.base.BasicOptionItemCostDao;
 import com.b2c.prototype.dao.option.base.BasicTimeDurationOptionDao;
 import com.b2c.prototype.dao.option.base.BasicZoneOptionDao;
 import com.b2c.prototype.dao.payment.IBuyerCommissionDao;
@@ -254,6 +258,11 @@ public class BeanConfiguration {
     }
 
     @Bean
+    public IAvailabilityStatusDao availabilityStatusDao(SessionFactory sessionFactory, IQueryService queryService) {
+        return new BasicAvailabilityStatusDao(sessionFactory, queryService);
+    }
+
+    @Bean
     public IBrandDao brandDao(SessionFactory sessionFactory, IQueryService queryService) {
         return new BasicBrandDao(sessionFactory, queryService);
     }
@@ -281,6 +290,11 @@ public class BeanConfiguration {
     @Bean
     public IOptionItemDao optionItemDao(SessionFactory sessionFactory, IQueryService queryService) {
         return new BasicOptionItemDao(sessionFactory, queryService);
+    }
+
+    @Bean
+    public IOptionItemCostDao optionItemCostDao(SessionFactory sessionFactory, IQueryService queryService) {
+        return new BasicOptionItemCostDao(sessionFactory, queryService);
     }
 
     @Bean

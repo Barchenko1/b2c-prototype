@@ -15,7 +15,7 @@ public class CountryPhoneCodeManager extends AbstractConstantEntityManager<Const
                                    IEntityDao countryPhoneCodeDao,
                                    ITransformationFunctionService transformationFunctionService) {
         super(parameterFactory, countryPhoneCodeDao,
-                "",
+                new String[] {"CountryPhoneCode.findByValue", "CountryPhoneCode.all"},
                 transformationFunctionService.getTransformationFunction(ConstantPayloadDto.class, CountryPhoneCode.class),
                 transformationFunctionService.getTransformationFunction(CountryPhoneCode.class, ConstantPayloadDto.class));
     }
