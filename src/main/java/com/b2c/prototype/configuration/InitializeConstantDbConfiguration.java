@@ -42,9 +42,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Consumer;
-
-import static com.b2c.prototype.util.CategoryUtil.extractTransitiveSelfYaml;
 
 @Configuration
 public class InitializeConstantDbConfiguration {
@@ -367,7 +364,7 @@ public class InitializeConstantDbConfiguration {
     private void initializeCategory(Locale defaultLocale) {
         Set<TransitiveSelfYaml> categories = applicationPropertyConfiguration.getCategories();
 //        List<Category> existCategoryList = categoryDao.getTransitiveSelfEntityList();
-        List<TransitiveSelfYaml> configYamlList = extractTransitiveSelfYaml(categories);
+//        List<TransitiveSelfYaml> configYamlList = extractTransitiveSelfYaml(categories);
 //        List<TransitiveSelfYaml> nonExistingCategories = findNonExistingCategories(configYamlList, existCategoryList);
 //        Map<Category, List<TransitiveSelfYaml>> nonExistingCategoriesMap = findNonExistingCategoriesMap(categories, existCategoryList);
 //        if (!nonExistingCategoriesMap.isEmpty()) {
@@ -381,18 +378,18 @@ public class InitializeConstantDbConfiguration {
 
     private void buildNewCategories(Map<Category, List<TransitiveSelfYaml>> nonExistingCategoriesMap) {
         nonExistingCategoriesMap.forEach((key, value) -> {
-            List<Category> newCategories = value.stream()
-                    .map(CategoryUtil::buildCategory)
-                    .toList();
-            newCategories.forEach(newCategory -> {
-                key.addChildTransitiveEntity(newCategory);
-                Consumer<Session> consumer = session -> {
-                    session.persist(newCategory);
-                };
-                //not work
-//                categoryDao.saveEntityTree(newCategory);
-                transactionHandler.executeConsumer(consumer);
-            });
+//            List<Category> newCategories = value.stream()
+//                    .map(CategoryUtil::buildCategory)
+//                    .toList();
+//            newCategories.forEach(newCategory -> {
+//                key.addChildEntity(newCategory);
+//                Consumer<Session> consumer = session -> {
+//                    session.persist(newCategory);
+//                };
+//                //not work
+////                categoryDao.saveEntityTree(newCategory);
+//                transactionHandler.executeConsumer(consumer);
+//            });
         });
     }
 

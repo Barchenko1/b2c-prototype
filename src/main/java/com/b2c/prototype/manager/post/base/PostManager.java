@@ -112,7 +112,7 @@ public class PostManager implements IPostManager {
                 .dateOfCreate(getCurrentTimeMillis())
                 .build();
 
-        post.setChildNodeList(null);
+        post.setChildList(null);
 
         return post;
     }

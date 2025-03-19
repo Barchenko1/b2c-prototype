@@ -177,9 +177,9 @@ class BasicDeliveryArticularItemQuantityPriceDaoTest extends AbstractCustomEntit
                 .value("child")
                 .build();
 
-        parent.setChildNodeList(List.of(root));
+        parent.setChildList(List.of(root));
         root.setParent(parent);
-        root.setChildNodeList(List.of(child));
+        root.setChildList(List.of(child));
         child.setParent(root);
 
         return child;

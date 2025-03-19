@@ -1,7 +1,6 @@
 package com.b2c.prototype.modal.entity.post;
 
 import com.b2c.prototype.modal.entity.user.UserDetails;
-import com.tm.core.modal.TransitiveSelfEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,14 +22,13 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "post")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Post extends TransitiveSelfEntity {
+public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -49,30 +47,15 @@ public class Post extends TransitiveSelfEntity {
     @Builder.Default
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private List<Post> childNodeList = new ArrayList<>();
-
-    @Override
-    public void setParent(TransitiveSelfEntity transitiveSelfEntity) {
-        this.parent = (Post) transitiveSelfEntity;
-    }
-
-    @Override
-    public String getRootField() {
-        return uniquePostId;
-    }
-
-    @Override
-    public <E extends TransitiveSelfEntity> void setChildNodeList(List<E> childNodeList) {
-        this.childNodeList = (List<Post>) childNodeList;
-    }
+    private List<Post> childList = new ArrayList<>();
 
     public void addChildPost(Post post) {
-        this.childNodeList.add(post);
+        this.childList.add(post);
         post.setParent(this);
     }
 
     public void removeChildPost(Post post) {
-        this.childNodeList.remove(post);
+        this.childList.remove(post);
         post.setParent(null);
     }
 

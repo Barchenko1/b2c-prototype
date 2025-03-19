@@ -1,7 +1,6 @@
 package com.b2c.prototype.modal.entity.review;
 
 import com.b2c.prototype.modal.entity.user.UserDetails;
-import com.tm.core.modal.TransitiveSelfEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,14 +22,13 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "comment")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Comment extends TransitiveSelfEntity {
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
@@ -50,30 +48,15 @@ public class Comment extends TransitiveSelfEntity {
     @Builder.Default
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private List<Comment> childNodeList = new ArrayList<>();
-
-    @Override
-    public void setParent(TransitiveSelfEntity transitiveSelfEntity) {
-        this.parent = (Comment) transitiveSelfEntity;
-    }
-
-    @Override
-    public String getRootField() {
-        return uniqueCommentId;
-    }
-
-    @Override
-    public <E extends TransitiveSelfEntity> void setChildNodeList(List<E> childNodeList) {
-        this.childNodeList = (List<Comment>) childNodeList;
-    }
+    private List<Comment> childList = new ArrayList<>();
 
     public void addChildComment(Comment comment) {
-        this.childNodeList.add(comment);
+        this.childList.add(comment);
         comment.setParent(this);
     }
 
     public void removeChildComment(Comment comment) {
-        this.childNodeList.remove(comment);
+        this.childList.remove(comment);
         comment.setParent(null);
     }
 }

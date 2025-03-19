@@ -4,7 +4,6 @@ import com.b2c.prototype.dao.AbstractConstantEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
 import com.b2c.prototype.modal.entity.post.Post;
 import com.tm.core.process.dao.identifier.QueryService;
-import com.tm.core.modal.TransitiveSelfEntity;
 import com.tm.core.finder.manager.EntityMappingManager;
 import com.tm.core.finder.manager.IEntityMappingManager;
 import com.tm.core.finder.table.EntityTable;
@@ -26,7 +25,7 @@ class BasicPostDaoTest extends AbstractConstantEntityDaoTest {
     }
 
     @Override
-    protected EntityDataSet<? extends TransitiveSelfEntity> getTestDataSet() {
+    protected EntityDataSet<Post> getTestDataSet() {
         Post parent = Post.builder()
                 .id(1L)
                 .title("parent")
@@ -55,7 +54,7 @@ class BasicPostDaoTest extends AbstractConstantEntityDaoTest {
     }
 
     @Override
-    protected EntityDataSet<? extends TransitiveSelfEntity> getSaveDataSet() {
+    protected EntityDataSet<Post> getSaveDataSet() {
         Post parent = Post.builder()
                 .title("parent")
                 .uniquePostId("1")
@@ -81,7 +80,7 @@ class BasicPostDaoTest extends AbstractConstantEntityDaoTest {
     }
 
     @Override
-    protected EntityDataSet<? extends TransitiveSelfEntity> getUpdateDataSet() {
+    protected EntityDataSet<Post> getUpdateDataSet() {
         Post parent = Post.builder()
                 .title("parent")
                 .uniquePostId("1")

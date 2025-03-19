@@ -125,7 +125,9 @@ import com.b2c.prototype.processor.creditcard.UserCreditCardProcess;
 import com.b2c.prototype.processor.discount.DiscountProcess;
 import com.b2c.prototype.processor.discount.IDiscountProcess;
 import com.b2c.prototype.processor.item.ArticularItemProcessor;
+import com.b2c.prototype.processor.item.CategoryProcess;
 import com.b2c.prototype.processor.item.IArticularItemProcessor;
+import com.b2c.prototype.processor.item.ICategoryProcess;
 import com.b2c.prototype.processor.item.IItemDataProcessor;
 import com.b2c.prototype.processor.item.ItemDataProcessor;
 import com.b2c.prototype.processor.option.IOptionItemProcessor;
@@ -158,7 +160,6 @@ import com.b2c.prototype.service.supplier.SupplierService;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.finder.factory.ParameterFactory;
 import com.tm.core.process.dao.identifier.IQueryService;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -454,9 +455,10 @@ public class ServiceBeanConfiguration {
 
     @Bean
     public ICategoryManager categoryManager(ICategoryDao categoryDao,
+                                            IQueryService queryService,
                                             ITransformationFunctionService transformationFunctionService,
                                             IParameterFactory parameterFactory) {
-        return new CategoryManager(categoryDao, transformationFunctionService, parameterFactory);
+        return new CategoryManager(categoryDao, queryService, transformationFunctionService, parameterFactory);
     }
 
     @Bean
@@ -521,6 +523,11 @@ public class ServiceBeanConfiguration {
 
 
     //process
+
+    @Bean
+    public ICategoryProcess categoryProcess(ICategoryManager categoryManager) {
+        return new CategoryProcess(categoryManager);
+    }
 
     @Bean
     public IDiscountProcess discountProcess(IDiscountManager discountManager) {

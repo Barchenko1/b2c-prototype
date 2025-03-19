@@ -4,7 +4,6 @@ import com.b2c.prototype.dao.AbstractConstantEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
 import com.b2c.prototype.modal.entity.review.Comment;
 import com.tm.core.process.dao.identifier.QueryService;
-import com.tm.core.modal.TransitiveSelfEntity;
 import com.tm.core.finder.manager.EntityMappingManager;
 import com.tm.core.finder.manager.IEntityMappingManager;
 import com.tm.core.finder.table.EntityTable;
@@ -26,7 +25,7 @@ class BasicCommentDaoTest extends AbstractConstantEntityDaoTest {
     }
 
     @Override
-    protected EntityDataSet<? extends TransitiveSelfEntity> getTestDataSet() {
+    protected EntityDataSet<Comment> getTestDataSet() {
         Comment parent = Comment.builder()
                 .id(1L)
                 .title("parent")
@@ -55,7 +54,7 @@ class BasicCommentDaoTest extends AbstractConstantEntityDaoTest {
     }
 
     @Override
-    protected EntityDataSet<? extends TransitiveSelfEntity> getSaveDataSet() {
+    protected EntityDataSet<Comment> getSaveDataSet() {
         Comment parent = Comment.builder()
                 .title("parent")
                 .uniqueCommentId("1")
@@ -81,7 +80,7 @@ class BasicCommentDaoTest extends AbstractConstantEntityDaoTest {
     }
 
     @Override
-    protected EntityDataSet<? extends TransitiveSelfEntity> getUpdateDataSet() {
+    protected EntityDataSet<Comment> getUpdateDataSet() {
         Comment parent = Comment.builder()
                 .id(1L)
                 .title("parent")

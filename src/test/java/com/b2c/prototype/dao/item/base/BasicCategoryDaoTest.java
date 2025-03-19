@@ -4,7 +4,6 @@ import com.b2c.prototype.dao.AbstractConstantEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.tm.core.process.dao.identifier.QueryService;
-import com.tm.core.modal.TransitiveSelfEntity;
 import com.tm.core.finder.manager.EntityMappingManager;
 import com.tm.core.finder.manager.IEntityMappingManager;
 import com.tm.core.finder.table.EntityTable;
@@ -44,8 +43,8 @@ class BasicCategoryDaoTest extends AbstractConstantEntityDaoTest {
                 .value("child")
                 .build();
 
-        parent.addChildTransitiveEntity(root);
-        root.addChildTransitiveEntity(child);
+        parent.addChildEntity(root);
+        root.addChildEntity(child);
         return new EntityDataSet<>(root, "/datasets/item/category/testCategoryDataSet.yml");
     }
 
@@ -65,8 +64,8 @@ class BasicCategoryDaoTest extends AbstractConstantEntityDaoTest {
                 .value("child")
                 .build();
 
-        parent.addChildTransitiveEntity(root);
-        root.addChildTransitiveEntity(child);
+        parent.addChildEntity(root);
+        root.addChildEntity(child);
         return new EntityDataSet<>(root, "/datasets/item/category/saveCategoryDataSet.yml");
     }
 
@@ -86,8 +85,8 @@ class BasicCategoryDaoTest extends AbstractConstantEntityDaoTest {
                 .value("child")
                 .build();
 
-        parent.addChildTransitiveEntity(root);
-        root.addChildTransitiveEntity(child);
+        parent.addChildEntity(root);
+        root.addChildEntity(child);
         return new EntityDataSet<>(root, "/datasets/item/category/updateCategoryDataSet.yml");
     }
 
