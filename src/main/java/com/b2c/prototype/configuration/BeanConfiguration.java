@@ -10,8 +10,12 @@ import com.b2c.prototype.dao.item.base.BasicAvailabilityStatusDao;
 import com.b2c.prototype.dao.item.base.BasicDiscountDao;
 import com.b2c.prototype.dao.item.base.BasicArticularItemDao;
 import com.b2c.prototype.dao.item.base.BasicItemDataDao;
+import com.b2c.prototype.dao.message.IMessageBoxDao;
+import com.b2c.prototype.dao.message.IMessageDao;
 import com.b2c.prototype.dao.message.IMessageStatusDao;
 import com.b2c.prototype.dao.message.IMessageTypeDao;
+import com.b2c.prototype.dao.message.basic.BasicMessageBoxDao;
+import com.b2c.prototype.dao.message.basic.BasicMessageDao;
 import com.b2c.prototype.dao.message.basic.BasicMessageStatusDao;
 import com.b2c.prototype.dao.message.basic.BasicMessageTypeDao;
 import com.b2c.prototype.dao.option.IOptionItemCostDao;
@@ -76,9 +80,6 @@ import com.b2c.prototype.dao.item.IItemTypeDao;
 import com.b2c.prototype.dao.rating.IRatingDao;
 import com.b2c.prototype.dao.review.IReviewDao;
 import com.b2c.prototype.dao.user.IUserDetailsDao;
-import com.b2c.prototype.manager.store.IStoreAddressManager;
-import com.b2c.prototype.manager.store.IStoreManager;
-import com.b2c.prototype.manager.store.base.StoreManager;
 import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.service.query.SearchService;
 import com.tm.core.configuration.manager.DatabaseConfigurationAnnotationClass;
@@ -200,6 +201,17 @@ public class BeanConfiguration {
     @Bean
     public IMessageStatusDao messageStatusDao(SessionFactory sessionFactory, IQueryService queryService) {
         return new BasicMessageStatusDao(sessionFactory, queryService);
+    }
+
+    @Bean
+    public IMessageDao messageDao(SessionFactory sessionFactory,
+                                      IQueryService queryService) {
+        return new BasicMessageDao(sessionFactory, queryService);
+    }
+
+    @Bean
+    public IMessageBoxDao messageBoxDao(SessionFactory sessionFactory, IQueryService queryService) {
+        return new BasicMessageBoxDao(sessionFactory, queryService);
     }
 
     @Bean

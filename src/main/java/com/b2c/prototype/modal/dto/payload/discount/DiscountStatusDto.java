@@ -1,4 +1,4 @@
-package com.b2c.prototype.modal.dto.payload;
+package com.b2c.prototype.modal.dto.payload.discount;
 
 import lombok.Builder;
 import lombok.Data;

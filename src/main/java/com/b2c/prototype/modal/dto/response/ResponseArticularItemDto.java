@@ -1,8 +1,8 @@
 package com.b2c.prototype.modal.dto.response;
 
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
-import com.b2c.prototype.modal.dto.payload.InitDiscountDto;
-import com.b2c.prototype.modal.dto.payload.OptionGroupOptionItemSetDto;
+import com.b2c.prototype.modal.dto.payload.discount.InitDiscountDto;
+import com.b2c.prototype.modal.dto.payload.option.OptionGroupOptionItemSetDto;
 import com.b2c.prototype.modal.dto.payload.PriceDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

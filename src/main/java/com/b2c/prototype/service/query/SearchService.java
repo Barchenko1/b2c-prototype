@@ -2,13 +2,10 @@ package com.b2c.prototype.service.query;
 
 import com.tm.core.process.dao.query.IFetchHandler;
 import com.tm.core.finder.parameter.Parameter;
-import org.hibernate.query.Query;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class SearchService implements ISearchService {
 

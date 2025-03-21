@@ -2,7 +2,7 @@ package com.b2c.prototype.manager.payment.base;
 
 import com.b2c.prototype.dao.payment.ISellerCommissionDao;
 import com.b2c.prototype.manager.payment.ISellerCommissionManager;
-import com.b2c.prototype.modal.dto.payload.CommissionDto;
+import com.b2c.prototype.modal.dto.payload.commission.CommissionDto;
 import com.b2c.prototype.modal.dto.response.ResponseCommissionDto;
 import com.b2c.prototype.modal.entity.payment.SellerCommission;
 import com.b2c.prototype.service.function.ITransformationFunctionService;

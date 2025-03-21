@@ -2,7 +2,7 @@ package com.b2c.prototype.manager.option.base;
 
 import com.b2c.prototype.dao.option.ITimeDurationOptionDao;
 import com.b2c.prototype.manager.option.ITimeDurationOptionManager;
-import com.b2c.prototype.modal.dto.payload.TimeDurationOptionDto;
+import com.b2c.prototype.modal.dto.payload.option.TimeDurationOptionDto;
 import com.b2c.prototype.modal.dto.response.ResponseTimeDurationOptionDto;
 import com.b2c.prototype.modal.entity.option.TimeDurationOption;
 import com.b2c.prototype.service.function.ITransformationFunctionService;

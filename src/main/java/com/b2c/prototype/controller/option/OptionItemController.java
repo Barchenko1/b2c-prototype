@@ -1,7 +1,7 @@
 package com.b2c.prototype.controller.option;
 
-import com.b2c.prototype.modal.dto.payload.OptionGroupOptionItemSetDto;
-import com.b2c.prototype.modal.dto.payload.SingleOptionItemDto;
+import com.b2c.prototype.modal.dto.payload.option.OptionGroupOptionItemSetDto;
+import com.b2c.prototype.modal.dto.payload.option.SingleOptionItemDto;
 import com.b2c.prototype.processor.option.IOptionItemProcessor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

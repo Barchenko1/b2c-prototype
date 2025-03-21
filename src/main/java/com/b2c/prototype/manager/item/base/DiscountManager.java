@@ -1,15 +1,14 @@
 package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.dao.item.IDiscountDao;
-import com.b2c.prototype.modal.dto.payload.DiscountDto;
-import com.b2c.prototype.modal.dto.payload.DiscountStatusDto;
+import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
+import com.b2c.prototype.modal.dto.payload.discount.DiscountStatusDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.item.IDiscountManager;
 import com.b2c.prototype.service.query.ISearchService;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.identifier.IQueryService;
 import com.tm.core.process.manager.common.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
 

@@ -17,7 +17,6 @@
 //import org.hibernate.query.NativeQuery;
 //
 //import static com.b2c.prototype.util.Constant.ORDER_ID;
-//import static com.b2c.prototype.util.Query.SELECT_STORE_BY_ARTICULAR_ID;
 //
 //public class ArticularItemQuantityManager implements IArticularItemQuantityManager {
 //

@@ -1,7 +1,7 @@
 package com.b2c.prototype.manager.option;
 
-import com.b2c.prototype.modal.dto.payload.OptionGroupOptionItemSetDto;
-import com.b2c.prototype.modal.dto.payload.SingleOptionItemDto;
+import com.b2c.prototype.modal.dto.payload.option.OptionGroupOptionItemSetDto;
+import com.b2c.prototype.modal.dto.payload.option.SingleOptionItemDto;
 
 import java.util.List;
 import java.util.Set;

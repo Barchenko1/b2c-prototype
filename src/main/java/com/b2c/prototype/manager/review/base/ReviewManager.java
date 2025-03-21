@@ -2,41 +2,31 @@ package com.b2c.prototype.manager.review.base;
 
 import com.b2c.prototype.dao.review.IReviewDao;
 import com.b2c.prototype.manager.review.IReviewManager;
-import com.b2c.prototype.modal.dto.payload.ReviewDto;
+import com.b2c.prototype.modal.dto.payload.review.ReviewDto;
 import com.b2c.prototype.modal.dto.response.ResponseReviewDto;
-import com.b2c.prototype.modal.entity.item.ArticularItem;
-import com.b2c.prototype.modal.entity.item.Item;
 import com.b2c.prototype.modal.entity.review.Review;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.query.ISearchService;
-import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.factory.IParameterFactory;
+import com.tm.core.process.dao.identifier.IQueryService;
 import com.tm.core.process.manager.common.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
-import org.hibernate.query.NativeQuery;
 
 import java.util.List;
-
-import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
-import static com.b2c.prototype.util.Query.SELECT_ITEM_BY_ITEM_ID;
 
 public class ReviewManager implements IReviewManager {
 
     private final IEntityOperationManager entityOperationManager;
-    private final ISearchService searchService;
+    private final IQueryService queryService;
     private final ITransformationFunctionService transformationFunctionService;
-    private final ISupplierService supplierService;
     private final IParameterFactory parameterFactory;
 
     public ReviewManager(IReviewDao reviewDao,
-                         ISearchService searchService,
+                         IQueryService queryService,
                          ITransformationFunctionService transformationFunctionService,
-                         ISupplierService supplierService,
                          IParameterFactory parameterFactory) {
         this.entityOperationManager = new EntityOperationManager(reviewDao);
-        this.searchService = searchService;
+        this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
-        this.supplierService = supplierService;
         this.parameterFactory = parameterFactory;
     }
 
@@ -64,21 +54,22 @@ public class ReviewManager implements IReviewManager {
 
     @Override
     public void deleteReview(String articularId) {
-        entityOperationManager.deleteEntity(
-                supplierService.entityFieldSupplier(
-                        ArticularItem.class,
-                        "",
-                        supplierService.parameterStringSupplier(ARTICULAR_ID, articularId),
-                        transformationFunctionService.getTransformationFunction(ArticularItem.class, Review.class)));
+//        entityOperationManager.deleteEntity(
+//                supplierService.entityFieldSupplier(
+//                        ArticularItem.class,
+//                        "",
+//                        supplierService.parameterStringSupplier(ARTICULAR_ID, articularId),
+//                        transformationFunctionService.getTransformationFunction(ArticularItem.class, Review.class)));
     }
 
     @Override
     public List<ResponseReviewDto> getReviewListByArticularId(String articularId) {
-        return (List<ResponseReviewDto>) searchService.getNamedQueryEntityDto(
-                Review.class,
-                "",
-                parameterFactory.createStringParameter(ARTICULAR_ID, articularId),
-                transformationFunctionService.getTransformationCollectionFunction(Review.class, ResponseReviewDto.class));
+//        return (List<ResponseReviewDto>) searchService.getNamedQueryEntityDto(
+//                Review.class,
+//                "",
+//                parameterFactory.createStringParameter(ARTICULAR_ID, articularId),
+//                transformationFunctionService.getTransformationCollectionFunction(Review.class, ResponseReviewDto.class));
+        return null;
     }
 
 }

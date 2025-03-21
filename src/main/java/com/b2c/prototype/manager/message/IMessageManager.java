@@ -14,5 +14,6 @@ public interface IMessageManager {
 
     List<ResponseMessageOverviewDto> getMessageOverviewBySenderEmail(String senderEmail);
     List<ResponseMessageOverviewDto> getMessageOverviewByReceiverEmail(String receiverEmail);
+    List<ResponseMessageOverviewDto> getMessageOverviewListByUserId(String userId);
     ResponseMessagePayloadDto getMessagePayloadDto(String userId, String messageId);
 }

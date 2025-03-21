@@ -2,7 +2,7 @@ package com.b2c.prototype.manager.address.base;
 
 import com.b2c.prototype.dao.address.IAddressDao;
 import com.b2c.prototype.modal.dto.payload.AddressDto;
-import com.b2c.prototype.modal.dto.payload.UserAddressDto;
+import com.b2c.prototype.modal.dto.payload.user.UserAddressDto;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.delivery.Delivery;

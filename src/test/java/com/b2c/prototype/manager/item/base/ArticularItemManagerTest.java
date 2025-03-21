@@ -1,9 +1,9 @@
 package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.dao.item.IItemDataOptionDao;
-import com.b2c.prototype.modal.dto.payload.InitDiscountDto;
+import com.b2c.prototype.modal.dto.payload.discount.InitDiscountDto;
 import com.b2c.prototype.modal.dto.payload.ArticularItemDto;
-import com.b2c.prototype.modal.dto.payload.OptionGroupOptionItemSetDto;
+import com.b2c.prototype.modal.dto.payload.option.OptionGroupOptionItemSetDto;
 import com.b2c.prototype.modal.dto.payload.PriceDto;
 import com.b2c.prototype.modal.dto.response.ResponseArticularItemDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;

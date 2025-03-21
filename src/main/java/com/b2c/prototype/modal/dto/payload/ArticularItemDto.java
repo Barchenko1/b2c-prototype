@@ -1,5 +1,7 @@
 package com.b2c.prototype.modal.dto.payload;
 
+import com.b2c.prototype.modal.dto.payload.discount.InitDiscountDto;
+import com.b2c.prototype.modal.dto.payload.option.SingleOptionItemDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

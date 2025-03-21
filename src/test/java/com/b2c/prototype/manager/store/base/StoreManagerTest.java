@@ -3,7 +3,7 @@ package com.b2c.prototype.manager.store.base;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 
 import com.b2c.prototype.dao.store.IStoreDao;
-import com.b2c.prototype.modal.dto.payload.StoreDto;
+import com.b2c.prototype.modal.dto.payload.store.StoreDto;
 import com.b2c.prototype.modal.dto.response.ResponseStoreDto;
 import com.b2c.prototype.modal.entity.store.CountType;
 import com.b2c.prototype.modal.entity.store.Store;
@@ -25,7 +25,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static com.b2c.prototype.modal.constant.CountTypeEnum.LIMITED;
 import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -93,8 +92,8 @@ class StoreManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-        when(session.createNativeQuery(anyString(), eq(Store.class)))
-                .thenReturn(query);
+//        when(session.createNativeQuery(anyString(), eq(Store.class)))
+//                .thenReturn(query);
 //        when(supplierService.parameterStringSupplier(ARTICULAR_ID, storeDto.getArticularId()))
 //                .thenReturn(parameterSupplier);
 

@@ -3,7 +3,7 @@ package com.b2c.prototype.manager.store.base;
 import com.b2c.prototype.modal.entity.address.Address;
 
 import com.b2c.prototype.dao.store.IStoreDao;
-import com.b2c.prototype.modal.dto.payload.StoreDto;
+import com.b2c.prototype.modal.dto.payload.store.StoreDto;
 import com.b2c.prototype.modal.dto.response.ResponseStoreDto;
 import com.b2c.prototype.modal.entity.store.Store;
 import com.b2c.prototype.service.function.ITransformationFunctionService;

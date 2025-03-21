@@ -1,10 +1,10 @@
 package com.b2c.prototype.e2e.controller.basic;
 
 import com.b2c.prototype.e2e.BasicE2ETest;
-import com.b2c.prototype.modal.dto.payload.OptionGroupDto;
-import com.b2c.prototype.modal.dto.payload.OptionGroupOptionItemSetDto;
-import com.b2c.prototype.modal.dto.payload.OptionItemDto;
-import com.b2c.prototype.modal.dto.payload.SingleOptionItemDto;
+import com.b2c.prototype.modal.dto.payload.option.OptionGroupDto;
+import com.b2c.prototype.modal.dto.payload.option.OptionGroupOptionItemSetDto;
+import com.b2c.prototype.modal.dto.payload.option.OptionItemDto;
+import com.b2c.prototype.modal.dto.payload.option.SingleOptionItemDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.BeforeEach;

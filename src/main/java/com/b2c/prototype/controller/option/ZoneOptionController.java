@@ -1,7 +1,6 @@
 package com.b2c.prototype.controller.option;
 
-import com.b2c.prototype.modal.dto.payload.TimeDurationOptionDto;
-import com.b2c.prototype.modal.dto.payload.ZoneOptionDto;
+import com.b2c.prototype.modal.dto.payload.option.ZoneOptionDto;
 import com.b2c.prototype.processor.option.IZoneOptionProcess;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

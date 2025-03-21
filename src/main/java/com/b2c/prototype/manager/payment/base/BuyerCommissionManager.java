@@ -2,10 +2,9 @@ package com.b2c.prototype.manager.payment.base;
 
 import com.b2c.prototype.dao.payment.IBuyerCommissionDao;
 import com.b2c.prototype.manager.payment.IBuyerCommissionManager;
-import com.b2c.prototype.modal.dto.payload.CommissionDto;
+import com.b2c.prototype.modal.dto.payload.commission.CommissionDto;
 import com.b2c.prototype.modal.dto.response.ResponseCommissionDto;
 import com.b2c.prototype.modal.entity.payment.BuyerCommission;
-import com.b2c.prototype.modal.entity.payment.SellerCommission;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.finder.parameter.Parameter;

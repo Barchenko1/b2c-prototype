@@ -55,11 +55,6 @@ public final class CategoryUtil {
                 .toList();
     }
 
-    public static List<String> getDtoValues(CategoryDto categoryDto) {
-        return flattenCategoryDto(categoryDto)
-                .toList();
-    }
-
     public static List<String> getAllValues(List<Category> categories) {
         return categories.stream()
                 .flatMap(CategoryUtil::flattenCategory)
@@ -72,12 +67,6 @@ public final class CategoryUtil {
                 category.getChildList() == null ? Stream.empty() :
                         category.getChildList().stream().flatMap(CategoryUtil::flattenCategory)
         );
-    }
-
-    public static List<String> getAllDtoValues(List<CategoryDto> categories) {
-        return categories.stream()
-                .flatMap(CategoryUtil::flattenCategoryDto)
-                .collect(Collectors.toList());
     }
 
     private static Stream<String> flattenCategoryDto(CategoryDto categoryDto) {
@@ -105,27 +94,14 @@ public final class CategoryUtil {
     private static void extractNestedCategories(CategoryDto category, List<CategoryDto> flatList) {
         if (category == null) return;
 
-        flatList.add(category); // Add current category
+        flatList.add(category);
 
         if (category.getChildList() != null) {
             for (CategoryDto child : category.getChildList()) {
-                extractNestedCategories(child, flatList); // Recursively add all children
+                extractNestedCategories(child, flatList);
             }
         }
     }
-
-
-//    public static void validateNoDuplicates(List<String> values, List<String> dtoValues) {
-//        Set<String> existingSet = Set.copyOf(values);
-//
-//        List<String> duplicates = dtoValues.stream()
-//                .filter(existingSet::contains)
-//                .toList();
-//
-//        if (!duplicates.isEmpty()) {
-//            throw new RuntimeException("Duplicate values found: " + duplicates);
-//        }
-//    }
 
     public static List<String> validateNoDuplicates(List<String> existingValues, List<CategoryDto> categoryDtoList) {
         Set<String> duplicateValues = new HashSet<>();

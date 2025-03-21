@@ -1,7 +1,7 @@
 package com.b2c.prototype.manager.userdetails.basic;
 
-import com.b2c.prototype.modal.dto.payload.RegistrationUserDetailsDto;
-import com.b2c.prototype.modal.dto.payload.UserDetailsDto;
+import com.b2c.prototype.modal.dto.payload.user.RegistrationUserDetailsDto;
+import com.b2c.prototype.modal.dto.payload.user.UserDetailsDto;
 import com.b2c.prototype.modal.dto.response.ResponseUserDetailsDto;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.dao.user.IUserDetailsDao;

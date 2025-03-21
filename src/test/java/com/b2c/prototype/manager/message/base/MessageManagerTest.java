@@ -75,7 +75,7 @@ class MessageManagerTest {
         Session session = mock(Session.class);
         NativeQuery<MessageBox> query = mock(NativeQuery.class);
 
-        when(session.createNativeQuery(any(String.class), eq(MessageBox.class))).thenReturn(query);
+//        when(session.createNativeQuery(any(String.class), eq(MessageBox.class))).thenReturn(query);
         when(supplierService.parameterStringSupplier(USER_ID, "uniqId"))
                 .thenReturn(supplier);
 //        when(queryService.getQueryEntity(eq(query), any(Supplier.class))).thenReturn(messageBox);
@@ -107,7 +107,7 @@ class MessageManagerTest {
         Session session = mock(Session.class);
         NativeQuery<MessageBox> query = mock(NativeQuery.class);
 
-        when(session.createNativeQuery(any(String.class), eq(MessageBox.class))).thenReturn(query);
+//        when(session.createNativeQuery(any(String.class), eq(MessageBox.class))).thenReturn(query);
         when(supplierService.parameterStringSupplier(USER_ID, userId))
                 .thenReturn(supplier);
 //        when(queryService.getQueryEntity(eq(query), any(Supplier.class))).thenReturn(messageBox);
@@ -137,7 +137,7 @@ class MessageManagerTest {
         Session session = mock(Session.class);
         NativeQuery<MessageBox> query = mock(NativeQuery.class);
 
-        when(session.createNativeQuery(any(String.class), eq(MessageBox.class))).thenReturn(query);
+//        when(session.createNativeQuery(any(String.class), eq(MessageBox.class))).thenReturn(query);
         when(supplierService.parameterStringSupplier(USER_ID, uniqueId))
                 .thenReturn(supplier);
 //        when(queryService.getQueryEntity(eq(query), any(Supplier.class))).thenReturn(messageBox);

@@ -1,4 +1,4 @@
-package com.b2c.prototype.modal.dto.payload;
+package com.b2c.prototype.modal.dto.payload.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

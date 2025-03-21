@@ -1,7 +1,7 @@
 package com.b2c.prototype.manager.review.base;
 
 import com.b2c.prototype.dao.review.IReviewDao;
-import com.b2c.prototype.modal.dto.payload.ReviewDto;
+import com.b2c.prototype.modal.dto.payload.review.ReviewDto;
 import com.b2c.prototype.modal.dto.response.ResponseReviewDto;
 import com.b2c.prototype.modal.entity.item.Item;
 import com.b2c.prototype.modal.entity.item.ItemData;
@@ -28,7 +28,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
-import static com.b2c.prototype.util.Constant.ITEM_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyString;
@@ -72,7 +71,7 @@ class ReviewManagerTest {
         when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
                 .thenReturn(parameterSupplier);
         NativeQuery<Item> query = mock(NativeQuery.class);
-        when(session.createNativeQuery(anyString(), eq(Item.class))).thenReturn(query);
+//        when(session.createNativeQuery(anyString(), eq(Item.class))).thenReturn(query);
 //        when(queryService.getQueryEntity(query, parameterSupplier)).thenReturn(item);
         when(transformationFunctionService.getEntity(Review.class, reviewDto)).thenReturn(review);
         doAnswer(invocation -> {
@@ -104,7 +103,7 @@ class ReviewManagerTest {
         when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
                 .thenReturn(parameterSupplier);
         NativeQuery<Item> query = mock(NativeQuery.class);
-        when(session.createNativeQuery(anyString(), eq(Item.class))).thenReturn(query);
+//        when(session.createNativeQuery(anyString(), eq(Item.class))).thenReturn(query);
 //        when(queryService.getQueryEntity(query, parameterSupplier)).thenReturn(item);
         when(transformationFunctionService.getEntity(Review.class, reviewDto)).thenReturn(review);
         doAnswer(invocation -> {

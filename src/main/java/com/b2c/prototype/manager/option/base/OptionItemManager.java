@@ -1,7 +1,7 @@
 package com.b2c.prototype.manager.option.base;
 
-import com.b2c.prototype.modal.dto.payload.OptionGroupOptionItemSetDto;
-import com.b2c.prototype.modal.dto.payload.SingleOptionItemDto;
+import com.b2c.prototype.modal.dto.payload.option.OptionGroupOptionItemSetDto;
+import com.b2c.prototype.modal.dto.payload.option.SingleOptionItemDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.dao.option.IOptionItemDao;
 import com.b2c.prototype.modal.entity.option.OptionGroup;

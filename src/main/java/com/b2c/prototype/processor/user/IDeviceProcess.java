@@ -1,6 +1,6 @@
 package com.b2c.prototype.processor.user;
 
-import com.b2c.prototype.modal.dto.payload.DeviceDto;
+import com.b2c.prototype.modal.dto.payload.user.DeviceDto;
 import com.b2c.prototype.modal.dto.response.ResponseDeviceDto;
 import jakarta.servlet.http.HttpServletRequest;
 

@@ -1,10 +1,9 @@
 package com.b2c.prototype.manager.item;
 
-import com.b2c.prototype.modal.dto.payload.DiscountDto;
-import com.b2c.prototype.modal.dto.payload.DiscountStatusDto;
+import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
+import com.b2c.prototype.modal.dto.payload.discount.DiscountStatusDto;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IDiscountManager {
     void saveDiscount(DiscountDto discountDto);

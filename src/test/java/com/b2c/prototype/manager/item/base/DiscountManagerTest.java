@@ -1,8 +1,8 @@
 package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.dao.item.IDiscountDao;
-import com.b2c.prototype.modal.dto.payload.DiscountDto;
-import com.b2c.prototype.modal.dto.payload.DiscountStatusDto;
+import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
+import com.b2c.prototype.modal.dto.payload.discount.DiscountStatusDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.price.Currency;
@@ -28,7 +28,6 @@ import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 import static com.b2c.prototype.util.Constant.CHAR_SEQUENCE_CODE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.eq;

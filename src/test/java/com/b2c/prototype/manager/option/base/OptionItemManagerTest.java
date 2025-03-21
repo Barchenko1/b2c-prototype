@@ -1,6 +1,6 @@
 package com.b2c.prototype.manager.option.base;
 
-import com.b2c.prototype.modal.dto.payload.OptionGroupOptionItemSetDto;
+import com.b2c.prototype.modal.dto.payload.option.OptionGroupOptionItemSetDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 
 import com.b2c.prototype.dao.option.IOptionItemDao;
@@ -137,8 +137,8 @@ class OptionItemManagerTest {
         Supplier<Parameter> parameterSupplier = () -> parameter;
         NativeQuery<OptionItem> query = mock(NativeQuery.class);
 
-        when(session.createNativeQuery(anyString(), eq(OptionItem.class)))
-                .thenReturn(query);
+//        when(session.createNativeQuery(anyString(), eq(OptionItem.class)))
+//                .thenReturn(query);
         when(supplierService.parameterStringSupplier("value", optionGroupName))
                 .thenReturn(parameterSupplier);
         when(supplierService.parameterStringSupplier("optionName", optionValue))

@@ -1,5 +1,6 @@
-package com.b2c.prototype.modal.dto.payload;
+package com.b2c.prototype.modal.dto.payload.user;
 
+import com.b2c.prototype.modal.dto.payload.AddressDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,12 +11,12 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @JsonIgnoreProperties
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserCreditCardDto {
-    private CreditCardDto creditCard;
+public class UserAddressDto {
+    private AddressDto address;
     @JsonProperty("isDefault")
     private boolean isDefault;
 }

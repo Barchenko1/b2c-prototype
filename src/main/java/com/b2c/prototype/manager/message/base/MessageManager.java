@@ -1,6 +1,6 @@
 package com.b2c.prototype.manager.message.base;
 
-import com.b2c.prototype.dao.message.IMessageDao;
+import com.b2c.prototype.dao.message.IMessageBoxDao;
 import com.b2c.prototype.modal.dto.payload.MessageDto;
 import com.b2c.prototype.modal.dto.response.ResponseMessageOverviewDto;
 import com.b2c.prototype.modal.dto.response.ResponseMessagePayloadDto;
@@ -8,9 +8,8 @@ import com.b2c.prototype.modal.entity.message.Message;
 import com.b2c.prototype.modal.entity.message.MessageBox;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.message.IMessageManager;
-import com.b2c.prototype.service.query.ISearchService;
-import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.factory.IParameterFactory;
+import com.tm.core.process.dao.identifier.IQueryService;
 import com.tm.core.process.manager.common.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
 import org.hibernate.query.NativeQuery;
@@ -20,27 +19,23 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 import static com.b2c.prototype.util.Constant.USER_ID;
-import static com.b2c.prototype.util.Query.SELECT_MESSAGEBOX_BY_USER_ID;
 
 public class MessageManager implements IMessageManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageManager.class);
 
     private final IEntityOperationManager entityOperationManager;
-    private final ISearchService searchService;
+    private final IQueryService queryService;
     private final ITransformationFunctionService transformationFunctionService;
-    private final ISupplierService supplierService;
     private final IParameterFactory parameterFactory;
 
-    public MessageManager(IMessageDao messageDao,
-                          ISearchService searchService,
+    public MessageManager(IMessageBoxDao messageBoxDao,
+                          IQueryService queryService,
                           ITransformationFunctionService transformationFunctionService,
-                          ISupplierService supplierService,
                           IParameterFactory parameterFactory) {
-        this.entityOperationManager = new EntityOperationManager(messageDao);
-        this.searchService = searchService;
+        this.entityOperationManager = new EntityOperationManager(messageBoxDao);
+        this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
-        this.supplierService = supplierService;
         this.parameterFactory = parameterFactory;
     }
 
@@ -52,7 +47,7 @@ public class MessageManager implements IMessageManager {
     @Override
     public void updateMessage(String userId, String messageId, MessageDto messageDto) {
         entityOperationManager.executeConsumer(session -> {
-            NativeQuery<MessageBox> query = session.createNativeQuery(SELECT_MESSAGEBOX_BY_USER_ID, MessageBox.class);
+//            NativeQuery<MessageBox> query = session.createNativeQuery(SELECT_MESSAGEBOX_BY_USER_ID, MessageBox.class);
 //            MessageBox messageBox = searchService.getQueryEntity(
 //                    query,
 //                    supplierService.parameterStringSupplier(USER_ID, userId));
@@ -69,7 +64,7 @@ public class MessageManager implements IMessageManager {
     @Override
     public void deleteMessage(String userId, String messageId) {
         entityOperationManager.executeConsumer(session -> {
-            NativeQuery<MessageBox> query = session.createNativeQuery(SELECT_MESSAGEBOX_BY_USER_ID, MessageBox.class);
+//            NativeQuery<MessageBox> query = session.createNativeQuery(SELECT_MESSAGEBOX_BY_USER_ID, MessageBox.class);
 //            MessageBox messageBox = searchService.getQueryEntity(
 //                    query,
 //                    supplierService.parameterStringSupplier(USER_ID, userId));
@@ -82,7 +77,7 @@ public class MessageManager implements IMessageManager {
     @Override
     public void cleanUpMessagesByUserId(String userId) {
         entityOperationManager.executeConsumer(session -> {
-            NativeQuery<MessageBox> query = session.createNativeQuery(SELECT_MESSAGEBOX_BY_USER_ID, MessageBox.class);
+//            NativeQuery<MessageBox> query = session.createNativeQuery(SELECT_MESSAGEBOX_BY_USER_ID, MessageBox.class);
 //            MessageBox messageBox = searchService.getQueryEntity(
 //                    query,
 //                    supplierService.parameterStringSupplier(USER_ID, userId));
@@ -108,6 +103,11 @@ public class MessageManager implements IMessageManager {
                 "",
                 parameterFactory.createStringParameter("receiver", receiverEmail),
                 transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class));
+    }
+
+    @Override
+    public List<ResponseMessageOverviewDto> getMessageOverviewListByUserId(String userId) {
+        return List.of();
     }
 
     @Override

@@ -1,9 +1,8 @@
 package com.b2c.prototype.manager.payment;
 
-import com.b2c.prototype.modal.dto.payload.CommissionDto;
+import com.b2c.prototype.modal.dto.payload.commission.CommissionDto;
 import com.b2c.prototype.modal.dto.response.ResponseCommissionDto;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ICommissionManager {

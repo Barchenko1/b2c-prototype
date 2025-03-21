@@ -13,6 +13,7 @@ import com.b2c.prototype.dao.item.IItemDataDao;
 import com.b2c.prototype.dao.item.IItemDataOptionDao;
 import com.b2c.prototype.dao.item.IItemStatusDao;
 import com.b2c.prototype.dao.item.IItemTypeDao;
+import com.b2c.prototype.dao.message.IMessageBoxDao;
 import com.b2c.prototype.dao.message.IMessageStatusDao;
 import com.b2c.prototype.dao.message.IMessageTypeDao;
 import com.b2c.prototype.dao.option.IOptionGroupDao;
@@ -30,6 +31,7 @@ import com.b2c.prototype.dao.payment.ISellerCommissionDao;
 import com.b2c.prototype.dao.post.IPostDao;
 import com.b2c.prototype.dao.price.ICurrencyDao;
 import com.b2c.prototype.dao.rating.IRatingDao;
+import com.b2c.prototype.dao.review.IReviewDao;
 import com.b2c.prototype.dao.store.ICountTypeDao;
 import com.b2c.prototype.dao.store.IStoreDao;
 import com.b2c.prototype.dao.user.IContactInfoDao;
@@ -42,9 +44,7 @@ import com.b2c.prototype.manager.address.IUserAddressManager;
 import com.b2c.prototype.manager.address.ICountryManager;
 import com.b2c.prototype.manager.address.base.UserAddressManager;
 import com.b2c.prototype.manager.address.base.CountryManager;
-import com.b2c.prototype.manager.delivery.IDeliveryManager;
 import com.b2c.prototype.manager.delivery.IDeliveryTypeManager;
-import com.b2c.prototype.manager.delivery.base.DeliveryManager;
 import com.b2c.prototype.manager.delivery.base.DeliveryTypeManager;
 import com.b2c.prototype.manager.item.IArticularItemManager;
 import com.b2c.prototype.manager.item.IAvailabilityStatusManager;
@@ -64,8 +64,10 @@ import com.b2c.prototype.manager.item.base.ItemDataManager;
 import com.b2c.prototype.manager.item.base.ItemManager;
 import com.b2c.prototype.manager.item.base.ArticularStatusManager;
 import com.b2c.prototype.manager.item.base.ItemTypeManager;
+import com.b2c.prototype.manager.message.IMessageManager;
 import com.b2c.prototype.manager.message.IMessageStatusManager;
 import com.b2c.prototype.manager.message.IMessageTypeManager;
+import com.b2c.prototype.manager.message.base.MessageManager;
 import com.b2c.prototype.manager.message.base.MessageStatusManager;
 import com.b2c.prototype.manager.message.base.MessageTypeManager;
 import com.b2c.prototype.manager.option.IOptionGroupManager;
@@ -86,6 +88,8 @@ import com.b2c.prototype.manager.payment.IBuyerCommissionManager;
 import com.b2c.prototype.manager.payment.ISellerCommissionManager;
 import com.b2c.prototype.manager.payment.base.BuyerCommissionManager;
 import com.b2c.prototype.manager.payment.base.SellerCommissionManager;
+import com.b2c.prototype.manager.review.IReviewManager;
+import com.b2c.prototype.manager.review.base.ReviewManager;
 import com.b2c.prototype.manager.store.IStoreAddressManager;
 import com.b2c.prototype.manager.store.IStoreManager;
 import com.b2c.prototype.manager.store.base.StoreAddressManager;
@@ -93,10 +97,8 @@ import com.b2c.prototype.manager.store.base.StoreManager;
 import com.b2c.prototype.manager.userdetails.DeviceManager;
 import com.b2c.prototype.manager.userdetails.IDeviceManager;
 import com.b2c.prototype.manager.userdetails.IUserCreditCardManager;
-import com.b2c.prototype.manager.payment.IPaymentManager;
 import com.b2c.prototype.manager.payment.IPaymentMethodManager;
 import com.b2c.prototype.manager.userdetails.basic.UserCreditCardManager;
-import com.b2c.prototype.manager.payment.base.PaymentManager;
 import com.b2c.prototype.manager.payment.base.PaymentMethodManager;
 import com.b2c.prototype.manager.post.IPostManager;
 import com.b2c.prototype.manager.post.base.PostManager;
@@ -129,7 +131,11 @@ import com.b2c.prototype.processor.item.CategoryProcess;
 import com.b2c.prototype.processor.item.IArticularItemProcessor;
 import com.b2c.prototype.processor.item.ICategoryProcess;
 import com.b2c.prototype.processor.item.IItemDataProcessor;
+import com.b2c.prototype.processor.item.IPostProcess;
+import com.b2c.prototype.processor.item.IReviewProcessor;
 import com.b2c.prototype.processor.item.ItemDataProcessor;
+import com.b2c.prototype.processor.item.PostProcess;
+import com.b2c.prototype.processor.item.ReviewProcessor;
 import com.b2c.prototype.processor.option.IOptionItemProcessor;
 import com.b2c.prototype.processor.option.ITimeDurationOptionProcess;
 import com.b2c.prototype.processor.option.IZoneOptionProcess;
@@ -146,7 +152,9 @@ import com.b2c.prototype.processor.user.ContactInfoProcess;
 import com.b2c.prototype.processor.user.DeviceProcess;
 import com.b2c.prototype.processor.user.IContactInfoProcess;
 import com.b2c.prototype.processor.user.IDeviceProcess;
+import com.b2c.prototype.processor.user.IMessageProcess;
 import com.b2c.prototype.processor.user.IUserDetailsProcess;
+import com.b2c.prototype.processor.user.MessageProcess;
 import com.b2c.prototype.processor.user.UserDetailsProcess;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.function.TransformationFunctionService;
@@ -280,6 +288,14 @@ public class ServiceBeanConfiguration {
                                                   IParameterFactory parameterFactory,
                                                   ITransformationFunctionService transformationFunctionService) {
         return new MessageTypeManager(parameterFactory, messageTypeDao, transformationFunctionService);
+    }
+
+    @Bean
+    public IMessageManager messageManager(IMessageBoxDao messageBoxDao,
+                                          IQueryService queryService,
+                                          ITransformationFunctionService transformationFunctionService,
+                                          IParameterFactory parameterFactory) {
+        return new MessageManager(messageBoxDao, queryService, transformationFunctionService, parameterFactory);
     }
 
     @Bean
@@ -419,14 +435,14 @@ public class ServiceBeanConfiguration {
         return new BuyerCommissionManager(buyerCommissionDao, transformationFunctionService, parameterFactory);
     }
 
-    @Bean
-    public IPaymentManager paymentManager(IPaymentDao paymentDao,
-                                          ISearchService searchService,
-                                          ITransformationFunctionService transformationFunctionService,
-                                          ISupplierService supplierService,
-                                          IParameterFactory parameterFactory) {
-        return new PaymentManager(paymentDao, searchService, transformationFunctionService, supplierService, parameterFactory);
-    }
+//    @Bean
+//    public IPaymentManager paymentManager(IPaymentDao paymentDao,
+//                                          ISearchService searchService,
+//                                          ITransformationFunctionService transformationFunctionService,
+//                                          ISupplierService supplierService,
+//                                          IParameterFactory parameterFactory) {
+//        return new PaymentManager(paymentDao, searchService, transformationFunctionService, supplierService, parameterFactory);
+//    }
 
     @Bean
     public IUserAddressManager userAddressManager(IAddressDao addressDao,
@@ -436,14 +452,14 @@ public class ServiceBeanConfiguration {
         return new UserAddressManager(addressDao, searchService, transformationFunctionService, parameterFactory);
     }
 
-    @Bean
-    public IDeliveryManager deliveryManager(IDeliveryDao deliveryDao,
-                                            ISearchService searchService,
-                                            ITransformationFunctionService transformationFunctionService,
-                                            ISupplierService supplierService,
-                                            IParameterFactory parameterFactory) {
-        return new DeliveryManager(deliveryDao, searchService, transformationFunctionService, supplierService, parameterFactory);
-    }
+//    @Bean
+//    public IDeliveryManager deliveryManager(IDeliveryDao deliveryDao,
+//                                            ISearchService searchService,
+//                                            ITransformationFunctionService transformationFunctionService,
+//                                            ISupplierService supplierService,
+//                                            IParameterFactory parameterFactory) {
+//        return new DeliveryManager(deliveryDao, searchService, transformationFunctionService, supplierService, parameterFactory);
+//    }
 
     @Bean
     public IOrderArticularItemQuantityManager orderItemDataManager(IOrderItemDataDao orderItemDao,
@@ -463,9 +479,18 @@ public class ServiceBeanConfiguration {
 
     @Bean
     public IPostManager postManager(IPostDao postDao,
+                                    IQueryService queryService,
                                     ITransformationFunctionService transformationFunctionService,
                                     IParameterFactory parameterFactory) {
-        return new PostManager(postDao, transformationFunctionService, parameterFactory);
+        return new PostManager(postDao, queryService, transformationFunctionService, parameterFactory);
+    }
+
+    @Bean
+    public IReviewManager reviewManager(IReviewDao reviewDao,
+                                        IQueryService queryService,
+                                        ITransformationFunctionService transformationFunctionService,
+                                        IParameterFactory parameterFactory) {
+        return new ReviewManager(reviewDao, queryService, transformationFunctionService, parameterFactory);
     }
 
     @Bean
@@ -608,5 +633,21 @@ public class ServiceBeanConfiguration {
     public IStoreAddressProcess storeAddressProcess(IStoreAddressManager storeAddressManager) {
         return new StoreAddressProcess(storeAddressManager);
     }
+
+    @Bean
+    public IMessageProcess messageProcess(IMessageManager messageManager) {
+        return new MessageProcess(messageManager);
+    }
+
+    @Bean
+    public IPostProcess postProcess(IPostManager postManager) {
+        return new PostProcess(postManager);
+    }
+
+    @Bean
+    public IReviewProcessor reviewProcessor(IReviewManager reviewManager) {
+        return new ReviewProcessor(reviewManager);
+    }
+
 
 }

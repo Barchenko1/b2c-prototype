@@ -1,4 +1,4 @@
-package com.b2c.prototype.modal.dto.payload;
+package com.b2c.prototype.modal.dto.payload.review;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SingleOptionItemDto {
-    private OptionGroupDto optionGroup;
-    private OptionItemDto optionItem;
+public class CommentDto {
+    private String title;
+    private String message;
 }

@@ -1,7 +1,7 @@
 package com.b2c.prototype.processor.creditcard;
 
 import com.b2c.prototype.manager.userdetails.IUserCreditCardManager;
-import com.b2c.prototype.modal.dto.payload.UserCreditCardDto;
+import com.b2c.prototype.modal.dto.payload.user.UserCreditCardDto;
 import com.b2c.prototype.modal.dto.response.ResponseCreditCardDto;
 import com.b2c.prototype.modal.dto.response.ResponseUserCreditCardDto;
 

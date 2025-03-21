@@ -1,8 +1,8 @@
 package com.b2c.prototype.processor.user;
 
 import com.b2c.prototype.manager.userdetails.IUserDetailsManager;
-import com.b2c.prototype.modal.dto.payload.RegistrationUserDetailsDto;
-import com.b2c.prototype.modal.dto.payload.UserDetailsDto;
+import com.b2c.prototype.modal.dto.payload.user.RegistrationUserDetailsDto;
+import com.b2c.prototype.modal.dto.payload.user.UserDetailsDto;
 import com.b2c.prototype.modal.dto.response.ResponseUserDetailsDto;
 
 import java.util.List;

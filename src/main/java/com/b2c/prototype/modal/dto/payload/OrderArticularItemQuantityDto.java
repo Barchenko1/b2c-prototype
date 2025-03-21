@@ -1,5 +1,6 @@
 package com.b2c.prototype.modal.dto.payload;
 
+import com.b2c.prototype.modal.dto.payload.user.UserDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -8,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Set;
 
 @Data
 @Builder

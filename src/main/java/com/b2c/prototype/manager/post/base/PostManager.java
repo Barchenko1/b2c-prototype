@@ -7,13 +7,13 @@ import com.b2c.prototype.manager.post.IPostManager;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.finder.parameter.Parameter;
+import com.tm.core.process.dao.identifier.IQueryService;
 import com.tm.core.process.manager.common.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
-import com.tm.core.util.TransitiveSelfEnum;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
-import java.util.Map;
+
 import java.util.Optional;
 
 import static com.b2c.prototype.util.Util.getCurrentTimeMillis;
@@ -23,25 +23,22 @@ import static com.b2c.prototype.util.Util.getUUID;
 public class PostManager implements IPostManager {
 
     private final IEntityOperationManager entityOperationManager;
+    private final IQueryService queryService;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
     public PostManager(IPostDao postDao,
+                       IQueryService queryService,
                        ITransformationFunctionService transformationFunctionService,
                        IParameterFactory parameterFactory) {
         this.entityOperationManager = new EntityOperationManager(postDao);
+        this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
     }
 
     @Override
-    public void savePost(String articularId, PostDto requestPostDto) {
-        Post newPost = buildPost(requestPostDto, getUUID());
-        entityOperationManager.saveEntity(newPost);
-    }
-
-    @Override
-    public void updatePost(String articularId, String uniqueId, PostDto postDto) {
+    public void saveUpdatePost(String articularId, String uniqueId, PostDto postDto) {
         Post newPost = transformationFunctionService.getEntity(Post.class, postDto);
 
         Parameter parameter = parameterFactory.createStringParameter("uniquePostId", uniqueId);
@@ -67,8 +64,8 @@ public class PostManager implements IPostManager {
     }
 
     @Override
-    public List<Post> getPostListByUserName(String username) {
-        Parameter parameter = parameterFactory.createStringParameter("username", username);
+    public List<Post> getPostListByUserId(String userId) {
+        Parameter parameter = parameterFactory.createStringParameter("userId", userId);
         return entityOperationManager.getNamedQueryEntityList("");
     }
 
@@ -84,11 +81,6 @@ public class PostManager implements IPostManager {
         }
 
         return optionalPost.get();
-    }
-
-    @Override
-    public Map<TransitiveSelfEnum, List<Post>> getAllPostsTree() {
-        return null;
     }
 
     private Post buildPost(PostDto requestPostDto, String uniquePostId) {

@@ -530,7 +530,7 @@ class BasicUserDetailsDaoTest extends AbstractCustomEntityDaoTest {
 
         when(sessionFactory.openSession()).thenReturn(session);
         when(session.beginTransaction()).thenReturn(transaction);
-        when(session.createNativeQuery(anyString(), eq(UserDetails.class))).thenReturn(nativeQuery);
+//        when(session.createNativeQuery(anyString(), eq(UserDetails.class))).thenReturn(nativeQuery);
         when(nativeQuery.getSingleResult()).thenReturn(userDetails);
         doThrow(new RuntimeException()).when(session).remove(userDetails);
 

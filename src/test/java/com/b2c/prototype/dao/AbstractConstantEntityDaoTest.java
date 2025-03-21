@@ -243,7 +243,7 @@ public abstract class AbstractConstantEntityDaoTest extends DataBaseLoader {
 
         when(sessionFactory.openSession()).thenReturn(session);
         when(session.beginTransaction()).thenReturn(transaction);
-        when(session.createNativeQuery(anyString(), any(Class.class))).thenReturn(nativeQuery);
+//        when(session.createNativeQuery(anyString(), any(Class.class))).thenReturn(nativeQuery);
         when(nativeQuery.getSingleResult()).thenReturn(testEntityDataSet.getEntity());
         doThrow(new RuntimeException()).when(session).merge(testEntityDataSet.getEntity());
 
@@ -288,7 +288,7 @@ public abstract class AbstractConstantEntityDaoTest extends DataBaseLoader {
 
         when(sessionFactory.openSession()).thenReturn(session);
         when(session.beginTransaction()).thenReturn(transaction);
-        when(session.createNativeQuery(anyString(), any(Class.class))).thenReturn(nativeQuery);
+//        when(session.createNativeQuery(anyString(), any(Class.class))).thenReturn(nativeQuery);
         when(nativeQuery.getSingleResult()).thenReturn(testEntityDataSet.getEntity());
         doThrow(new RuntimeException()).when(session).remove(testEntityDataSet.getEntity());
 

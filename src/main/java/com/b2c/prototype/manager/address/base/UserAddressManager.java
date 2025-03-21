@@ -2,14 +2,9 @@ package com.b2c.prototype.manager.address.base;
 
 import com.b2c.prototype.dao.address.IAddressDao;
 import com.b2c.prototype.modal.dto.payload.AddressDto;
-import com.b2c.prototype.modal.dto.payload.UserAddressDto;
-import com.b2c.prototype.modal.dto.response.ResponseCreditCardDto;
+import com.b2c.prototype.modal.dto.payload.user.UserAddressDto;
 import com.b2c.prototype.modal.dto.response.ResponseUserAddressDto;
-import com.b2c.prototype.modal.dto.response.ResponseUserCreditCardDto;
-import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.UserAddress;
-import com.b2c.prototype.modal.entity.payment.CreditCard;
-import com.b2c.prototype.modal.entity.user.UserCreditCard;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.address.IUserAddressManager;

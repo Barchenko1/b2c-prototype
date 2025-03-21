@@ -1,7 +1,7 @@
 package com.b2c.prototype.controller.user;
 
-import com.b2c.prototype.modal.dto.payload.RegistrationUserDetailsDto;
-import com.b2c.prototype.modal.dto.payload.UserDetailsDto;
+import com.b2c.prototype.modal.dto.payload.user.RegistrationUserDetailsDto;
+import com.b2c.prototype.modal.dto.payload.user.UserDetailsDto;
 import com.b2c.prototype.modal.dto.response.ResponseUserDetailsDto;
 import com.b2c.prototype.processor.user.IUserDetailsProcess;
 import org.springframework.http.HttpStatus;

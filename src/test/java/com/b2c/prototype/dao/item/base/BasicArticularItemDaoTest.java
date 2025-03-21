@@ -483,7 +483,7 @@ class BasicArticularItemDaoTest extends AbstractCustomEntityDaoTest {
 
         when(sessionFactory.openSession()).thenReturn(session);
         when(session.beginTransaction()).thenReturn(transaction);
-        when(session.createNativeQuery(anyString(), eq(ArticularItem.class))).thenReturn(nativeQuery);
+//        when(session.createNativeQuery(anyString(), eq(ArticularItem.class))).thenReturn(nativeQuery);
         when(nativeQuery.getSingleResult()).thenReturn(articularItem);
         doThrow(new RuntimeException()).when(session).remove(articularItem);
 

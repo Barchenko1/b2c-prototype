@@ -1,7 +1,7 @@
 package com.b2c.prototype.modal.dto.common;
 
 import com.b2c.prototype.modal.dto.payload.CreditCardDto;
-import com.b2c.prototype.modal.dto.payload.DiscountDto;
+import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.PriceDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;

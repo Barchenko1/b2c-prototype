@@ -1,6 +1,6 @@
 package com.b2c.prototype.manager.review;
 
-import com.b2c.prototype.modal.dto.payload.ReviewDto;
+import com.b2c.prototype.modal.dto.payload.review.ReviewDto;
 import com.b2c.prototype.modal.dto.response.ResponseReviewDto;
 
 import java.util.List;

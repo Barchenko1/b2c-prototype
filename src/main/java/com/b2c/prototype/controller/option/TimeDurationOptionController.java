@@ -1,6 +1,6 @@
 package com.b2c.prototype.controller.option;
 
-import com.b2c.prototype.modal.dto.payload.TimeDurationOptionDto;
+import com.b2c.prototype.modal.dto.payload.option.TimeDurationOptionDto;
 import com.b2c.prototype.modal.dto.response.ResponseTimeDurationOptionDto;
 import com.b2c.prototype.processor.option.ITimeDurationOptionProcess;
 import org.springframework.http.HttpStatus;

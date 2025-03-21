@@ -4,11 +4,10 @@ import com.b2c.prototype.modal.dto.payload.ContactInfoDto;
 import com.b2c.prototype.modal.dto.payload.DeliveryDto;
 import com.b2c.prototype.modal.dto.payload.ArticularItemQuantityDto;
 import com.b2c.prototype.modal.dto.payload.PaymentDto;
-import com.b2c.prototype.modal.dto.payload.UserDetailsDto;
+import com.b2c.prototype.modal.dto.payload.user.UserDetailsDto;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.List;
 import java.util.Set;
 
 @Data

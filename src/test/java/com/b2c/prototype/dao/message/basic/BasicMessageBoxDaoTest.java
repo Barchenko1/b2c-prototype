@@ -514,7 +514,7 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
 
         when(sessionFactory.openSession()).thenReturn(session);
         when(session.beginTransaction()).thenReturn(transaction);
-        when(session.createNativeQuery(anyString(), eq(MessageBox.class))).thenReturn(nativeQuery);
+//        when(session.createNativeQuery(anyString(), eq(MessageBox.class))).thenReturn(nativeQuery);
         when(nativeQuery.getSingleResult()).thenReturn(messageBox);
         doThrow(new RuntimeException()).when(session).remove(messageBox);
 

@@ -468,7 +468,7 @@ class BasicPaymentDaoTest extends AbstractCustomEntityDaoTest {
 
         when(sessionFactory.openSession()).thenReturn(session);
         when(session.beginTransaction()).thenReturn(transaction);
-        when(session.createNativeQuery(anyString(), eq(Payment.class))).thenReturn(nativeQuery);
+//        when(session.createNativeQuery(anyString(), eq(Payment.class))).thenReturn(nativeQuery);
         when(nativeQuery.getSingleResult()).thenReturn(payment);
         doThrow(new RuntimeException()).when(session).remove(payment);
 

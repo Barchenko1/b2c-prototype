@@ -354,7 +354,7 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
 
         when(sessionFactory.openSession()).thenReturn(session);
         when(session.beginTransaction()).thenReturn(transaction);
-        when(session.createNativeQuery(anyString(), eq(OptionItem.class))).thenReturn(nativeQuery);
+//        when(session.createNativeQuery(anyString(), eq(OptionItem.class))).thenReturn(nativeQuery);
         when(nativeQuery.getSingleResult()).thenReturn(optionItem);
         doThrow(new RuntimeException()).when(session).remove(optionItem);
 

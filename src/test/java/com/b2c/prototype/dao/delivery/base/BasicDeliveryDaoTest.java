@@ -399,7 +399,7 @@ class BasicDeliveryDaoTest extends AbstractCustomEntityDaoTest {
 
         when(sessionFactory.openSession()).thenReturn(session);
         when(session.beginTransaction()).thenReturn(transaction);
-        when(session.createNativeQuery(anyString(), eq(Delivery.class))).thenReturn(nativeQuery);
+//        when(session.createNativeQuery(anyString(), eq(Delivery.class))).thenReturn(nativeQuery);
         when(nativeQuery.getSingleResult()).thenReturn(delivery);
         doThrow(new RuntimeException()).when(session).remove(delivery);
 
