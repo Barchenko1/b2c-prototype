@@ -13,15 +13,19 @@ public final class DatabaseQueries {
              Statement statement = connection.createStatement()) {
             // Clean up tables in the correct order
             statement.execute("DELETE FROM message_box_message");
-            statement.execute("DELETE FROM message_receivers");
+            statement.execute("DELETE FROM message_box");
+            statement.execute("DELETE FROM message");
+            statement.execute("DELETE FROM message_template_receivers");
+            statement.execute("DELETE FROM message_template");
             statement.execute("DELETE FROM articular_item_option_item");
             statement.execute("DELETE FROM articular_item_quantity_price");
             statement.execute("DELETE FROM articular_item_quantity");
+            statement.execute("DELETE FROM store");
+            statement.execute("DELETE FROM user_address");
+            statement.execute("DELETE FROM address");
             statement.execute("DELETE FROM delivery_articular_item_quantity");
             statement.execute("DELETE FROM item_review");
-            statement.execute("DELETE FROM message_box");
             statement.execute("DELETE FROM item");
-            statement.execute("DELETE FROM store");
             statement.execute("DELETE FROM articular_item");
             statement.execute("DELETE FROM option_item");
             statement.execute("DELETE FROM option_group");
@@ -32,9 +36,6 @@ public final class DatabaseQueries {
             statement.execute("DELETE FROM zone_option");
             statement.execute("DELETE FROM price");
 
-            statement.execute("DELETE FROM message_box");
-            statement.execute("DELETE FROM user_address");
-            statement.execute("DELETE FROM address");
             statement.execute("DELETE FROM user_credit_card");
             statement.execute("DELETE FROM credit_card");
             statement.execute("DELETE FROM device");

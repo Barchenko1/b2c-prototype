@@ -1,6 +1,7 @@
 package com.b2c.prototype.controller.user;
 
-import com.b2c.prototype.modal.dto.payload.MessageDto;
+import com.b2c.prototype.modal.dto.payload.user.MessageDto;
+import com.b2c.prototype.modal.dto.payload.user.MessageTemplateDto;
 import com.b2c.prototype.modal.dto.response.ResponseMessageOverviewDto;
 import com.b2c.prototype.modal.dto.response.ResponseMessagePayloadDto;
 import com.b2c.prototype.processor.user.IMessageProcess;
@@ -30,8 +31,8 @@ public class MessageController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> saveMessage(@RequestParam final Map<String, String> requestParams,
-                                            @RequestBody final MessageDto messageDto) {
-        messageProcess.saveMessage(requestParams, messageDto);
+                                            @RequestBody final MessageTemplateDto messageTemplateDto) {
+        messageProcess.saveMessage(requestParams, messageTemplateDto);
         return ResponseEntity.ok().build();
     }
 
@@ -39,6 +40,12 @@ public class MessageController {
     public ResponseEntity<Void> updateMessage(@RequestParam final Map<String, String> requestParams,
                                               @RequestBody final MessageDto messageDto) {
         messageProcess.updateMessage(requestParams, messageDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping(value = "/status", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> changeMessageStatus(@RequestParam final Map<String, String> requestParams) {
+        messageProcess.changeMessageStatus(requestParams);
         return ResponseEntity.ok().build();
     }
 

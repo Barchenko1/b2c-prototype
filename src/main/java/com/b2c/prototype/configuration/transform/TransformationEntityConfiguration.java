@@ -19,7 +19,7 @@ import com.b2c.prototype.modal.dto.payload.user.DeviceDto;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.discount.InitDiscountDto;
 import com.b2c.prototype.modal.dto.payload.ItemDataDto;
-import com.b2c.prototype.modal.dto.payload.MessageDto;
+import com.b2c.prototype.modal.dto.payload.user.MessageDto;
 import com.b2c.prototype.modal.dto.payload.option.OptionGroupDto;
 import com.b2c.prototype.modal.dto.payload.option.OptionGroupOptionItemSetDto;
 import com.b2c.prototype.modal.dto.payload.option.OptionItemDto;
@@ -60,6 +60,8 @@ import com.b2c.prototype.modal.entity.delivery.DeliveryType;
 import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
 import com.b2c.prototype.modal.entity.item.ArticularItemQuantityPrice;
 import com.b2c.prototype.modal.entity.item.AvailabilityStatus;
+import com.b2c.prototype.modal.entity.message.MessageBox;
+import com.b2c.prototype.modal.entity.message.MessageTemplate;
 import com.b2c.prototype.modal.entity.option.TimeDurationOption;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.ArticularStatus;
@@ -165,14 +167,6 @@ public class TransformationEntityConfiguration {
 
         transformationFunctionService.addTransformationFunction(DeliveryArticularItemQuantity.class, AddressDto.class, mapOrderItemToAddressDtoFunction());
 
-        transformationFunctionService.addTransformationFunction(MessageDto.class, Message.class, mapMessageDtoToMessageFunction());
-        transformationFunctionService.addTransformationFunction(Message.class, ResponseMessageOverviewDto.class, mapMessageToResponseMessageOverviewDtoFunction());
-        transformationFunctionService.addTransformationFunction(Message.class, ResponseMessagePayloadDto.class, mapMessageToResponseMessagePayloadDtoFunction());
-
-
-        transformationFunctionService.addTransformationFunction(ReviewDto.class, Review.class, mapReviewDtoToReviewFunction());
-        transformationFunctionService.addTransformationFunction(Review.class, ResponseReviewDto.class, mapReviewToResponseReviewDtoFunction());
-
         loadOptionItemFunctions(transformationFunctionService);
         loadItemDataFunctions(transformationFunctionService);
         loadArticularItemFunctions(transformationFunctionService);
@@ -187,6 +181,9 @@ public class TransformationEntityConfiguration {
         loadDeviceFunctions(transformationFunctionService);
         loadCommissionFunctions(transformationFunctionService);
         loadStoreFunctions(transformationFunctionService);
+        loadMessageFunctions(transformationFunctionService);
+        loadPostFunctions(transformationFunctionService);
+        loadReviewFunctions(transformationFunctionService);
 
     }
 
@@ -279,6 +276,23 @@ public class TransformationEntityConfiguration {
     private void loadStoreFunctions(ITransformationFunctionService transformationFunctionService) {
         transformationFunctionService.addTransformationFunction(StoreDto.class, Store.class, mapStoreDtoToStoreFunction());
         transformationFunctionService.addTransformationFunction(Store.class, ResponseStoreDto.class, mapStoreToResponseStoreDtoFunction());
+    }
+
+    private void loadMessageFunctions(ITransformationFunctionService transformationFunctionService) {
+        transformationFunctionService.addTransformationFunction(MessageDto.class, Message.class, mapMessageDtoToMessageFunction());
+        transformationFunctionService.addTransformationFunction(MessageBox.class, ResponseMessageOverviewDto.class, mapMessageToResponseMessageOverviewDtoFunction());
+        transformationFunctionService.addTransformationFunction(Message.class, ResponseMessageOverviewDto.class, mapMessageToResponseMessageOverviewDtoFunction());
+        transformationFunctionService.addTransformationFunction(Message.class, ResponseMessagePayloadDto.class, mapMessageToResponseMessagePayloadDtoFunction());
+
+    }
+
+    private void loadPostFunctions(ITransformationFunctionService transformationFunctionService) {
+
+    }
+
+    private void loadReviewFunctions(ITransformationFunctionService transformationFunctionService) {
+        transformationFunctionService.addTransformationFunction(ReviewDto.class, Review.class, mapReviewDtoToReviewFunction());
+        transformationFunctionService.addTransformationFunction(Review.class, ResponseReviewDto.class, mapReviewToResponseReviewDtoFunction());
     }
 
     private <T extends AbstractConstantEntity> Function<ConstantPayloadDto, T> mapConstantEntityPayloadDtoToConstantEntityFunction(Supplier<T> entitySupplier) {
@@ -441,38 +455,41 @@ public class TransformationEntityConfiguration {
 
     private BiFunction<Session, MessageDto, Message> mapMessageDtoToMessageFunction() {
         return (session, messageDto) -> {
-            MessageStatus messageStatus = fetchMessageStatus(session, MessageStatusEnum.UNREAD.getValue());
-            MessageType messageType = fetchMessageType(session, "value");
+            MessageStatus messageStatus = fetchMessageStatus(session, messageDto.getStatus());
+            MessageType messageType = fetchMessageType(session, messageDto.getMessageTemplate().getType());
 
             return Message.builder()
-                    .sender(messageDto.getSender())
-                    .title(messageDto.getTitle())
-                    .message(messageDto.getMessage())
-                    .messageUniqNumber(getUUID())
-                    .dateOfSend(getCurrentTimeMillis())
-                    .receivers(messageDto.getReceivers())
-                    .subscribe("subscribe")
-                    .type(messageType)
+                    .messageTemplate(MessageTemplate.builder()
+                            .sender(messageDto.getMessageTemplate().getSender())
+                            .title(messageDto.getMessageTemplate().getTitle())
+                            .message(messageDto.getMessageTemplate().getMessage())
+                            .messageUniqNumber(getUUID())
+                            .dateOfSend(getCurrentTimeMillis())
+                            .receivers(messageDto.getMessageTemplate().getReceivers())
+                            .sendSystem("APP")
+                            .type(messageType)
+                            .build())
                     .status(messageStatus)
                     .build();
         };
     }
 
     private Function<Message, ResponseMessageOverviewDto> mapMessageToResponseMessageOverviewDtoFunction() {
-        return message -> ResponseMessageOverviewDto.builder()
-                .sender(message.getSender())
-                .title(message.getTitle())
-                .dateOfSend(message.getDateOfSend())
-                .receivers(message.getReceivers())
-                .subscribe(message.getSubscribe())
-                .type(message.getType().getValue())
-                .status(message.getStatus().getValue())
-                .build();
+        return message -> {
+            MessageTemplate messageTemplate = message.getMessageTemplate();
+            return ResponseMessageOverviewDto.builder()
+                    .sender(messageTemplate.getSender())
+                    .title(messageTemplate.getTitle())
+                    .dateOfSend(messageTemplate.getDateOfSend())
+                    .type(messageTemplate.getType().getValue())
+                    .status(message.getStatus().getValue())
+                    .build();
+        };
     }
 
     private Function<Message, ResponseMessagePayloadDto> mapMessageToResponseMessagePayloadDtoFunction() {
         return message -> ResponseMessagePayloadDto.builder()
-                .message(message.getMessage())
+                .message(message.getMessageTemplate().getMessage())
                 .build();
     }
 
@@ -1512,7 +1529,7 @@ public class TransformationEntityConfiguration {
                 session,
                 MessageStatus.class,
                 "MessageStatus.findByValue",
-                parameterFactory.createStringParameter(VALUE, MessageStatusEnum.UNREAD.getValue()));
+                parameterFactory.createStringParameter(VALUE, value));
     }
 
     private MessageType fetchMessageType(Session session, String value) {

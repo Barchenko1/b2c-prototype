@@ -1,75 +1,142 @@
 package com.b2c.prototype.manager.message.base;
 
 import com.b2c.prototype.dao.message.IMessageBoxDao;
-import com.b2c.prototype.modal.dto.payload.MessageDto;
+import com.b2c.prototype.modal.constant.MessageStatusEnum;
+import com.b2c.prototype.modal.dto.payload.user.MessageDto;
 import com.b2c.prototype.modal.dto.response.ResponseMessageOverviewDto;
 import com.b2c.prototype.modal.dto.response.ResponseMessagePayloadDto;
 import com.b2c.prototype.modal.entity.message.Message;
 import com.b2c.prototype.modal.entity.message.MessageBox;
+import com.b2c.prototype.modal.entity.message.MessageStatus;
+import com.b2c.prototype.modal.entity.message.MessageTemplate;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.message.IMessageManager;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.dao.identifier.IQueryService;
+import com.tm.core.process.dao.query.IFetchHandler;
 import com.tm.core.process.manager.common.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
-import org.hibernate.query.NativeQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static com.b2c.prototype.util.Constant.USER_ID;
+import static com.b2c.prototype.util.Constant.VALUE;
 
 public class MessageManager implements IMessageManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageManager.class);
 
     private final IEntityOperationManager entityOperationManager;
+    private final IFetchHandler fetchHandler;
     private final IQueryService queryService;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
     public MessageManager(IMessageBoxDao messageBoxDao,
+                          IFetchHandler fetchHandler,
                           IQueryService queryService,
                           ITransformationFunctionService transformationFunctionService,
                           IParameterFactory parameterFactory) {
         this.entityOperationManager = new EntityOperationManager(messageBoxDao);
+        this.fetchHandler = fetchHandler;
         this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
     }
 
     @Override
-    public void saveMessage(String userId, MessageDto messageDto) {
-
-    }
-
-    @Override
-    public void updateMessage(String userId, String messageId, MessageDto messageDto) {
+    public void saveMessage(MessageDto messageDto) {
         entityOperationManager.executeConsumer(session -> {
-//            NativeQuery<MessageBox> query = session.createNativeQuery(SELECT_MESSAGEBOX_BY_USER_ID, MessageBox.class);
-//            MessageBox messageBox = searchService.getQueryEntity(
-//                    query,
-//                    supplierService.parameterStringSupplier(USER_ID, userId));
-//            Message existingMessage = getExistingMessage(messageBox, messageId);
-            Message newMessage = transformationFunctionService.getEntity(Message.class, messageDto);
-//            if (existingMessage != null) {
-//                newMessage.setId(existingMessage.getId());
-//            }
-//            messageBox.addMessage(newMessage);
-//            session.merge(messageBox);
+            Map<String, List<?>> map = new HashMap<>(){{
+                put("emails", messageDto.getMessageTemplate().getReceivers());
+            }};
+            List<MessageBox> messageBoxes = queryService.getNamedQueryEntityMap(
+                    session,
+                    MessageBox.class,
+                    "MessageBox.findByEmailListWithMessages",
+                    map);
+            Message message = transformationFunctionService.getEntity(session, Message.class, messageDto);
+            messageBoxes.forEach(message::addMessageBox);
+            session.merge(message);
         });
     }
 
     @Override
-    public void deleteMessage(String userId, String messageId) {
+    public void updateMessage(String messageId, MessageDto messageDto) {
         entityOperationManager.executeConsumer(session -> {
-//            NativeQuery<MessageBox> query = session.createNativeQuery(SELECT_MESSAGEBOX_BY_USER_ID, MessageBox.class);
-//            MessageBox messageBox = searchService.getQueryEntity(
-//                    query,
-//                    supplierService.parameterStringSupplier(USER_ID, userId));
-//            Message existingMessage = getExistingMessage(messageBox, messageId);
-//            messageBox.removeMessage(existingMessage);
+            MessageBox messageBox = queryService.getNamedQueryEntity(
+                    session,
+                    MessageBox.class,
+                    "MessageBox.findByUserIdWithMessages",
+                    parameterFactory.createStringParameter(USER_ID, messageId));
+            Message newMessage = transformationFunctionService.getEntity(session, Message.class, messageDto);
+            Message message = getExistingMessage(messageBox, messageId);
+            MessageTemplate messageTemplate = message.getMessageTemplate();
+            messageTemplate.setSender(newMessage.getMessageTemplate().getSender());
+            messageTemplate.setReceivers(newMessage.getMessageTemplate().getReceivers());
+            messageTemplate.setTitle(newMessage.getMessageTemplate().getTitle());
+            messageTemplate.setMessage(newMessage.getMessageTemplate().getMessage());
+            messageTemplate.setSendSystem("APP");
+            messageTemplate.setDateOfSend(newMessage.getMessageTemplate().getDateOfSend());
+            messageTemplate.setType(newMessage.getMessageTemplate().getType());
+            message.setStatus(newMessage.getStatus());
+
+            session.merge(messageBox);
+        });
+    }
+
+    @Override
+    public void changeMessageStatus(String userId, String messageId, MessageStatusEnum status) {
+        entityOperationManager.executeConsumer(session -> {
+            MessageBox messageBox = queryService.getNamedQueryEntity(
+                    session,
+                    MessageBox.class,
+                    "MessageBox.findByUserIdWithMessages",
+                    parameterFactory.createStringParameter(USER_ID, messageId));
+            Message message = getExistingMessage(messageBox, messageId);
+            MessageStatus messageStatus = queryService.getNamedQueryEntity(
+                    session,
+                    MessageStatus.class,
+                    "MessageStatus.findByValue",
+                    parameterFactory.createStringParameter(VALUE, status.getValue()));
+            message.setStatus(messageStatus);
+            session.merge(message);
+        });
+    }
+
+    @Override
+    public void deleteMessage(String messageId) {
+        entityOperationManager.executeConsumer(session -> {;
+            Optional<MessageTemplate> optionalMessageTemplate = queryService.getNamedQueryOptionalEntity(
+                    session,
+                    MessageTemplate.class,
+                    "MessageTemplate.findByMessageId",
+                    parameterFactory.createStringParameter("messageUniqNumber", messageId));
+
+            optionalMessageTemplate.ifPresent(session::remove);
+        });
+    }
+
+    @Override
+    public void deleteMessageByUserId(String userId, String messageId) {
+        entityOperationManager.executeConsumer(session -> {
+            MessageBox messageBox = queryService.getNamedQueryEntity(
+                    session,
+                    MessageBox.class,
+                    "MessageBox.findByUserIdWithMessages",
+                    parameterFactory.createStringParameter(USER_ID, userId));
+
+            Message message = getExistingMessage(messageBox, messageId);
+            messageBox.removeMessage(message);
+            if (message.getBoxes().isEmpty()) {
+                session.remove(message);
+            }
 //            session.merge(messageBox);
         });
     }
@@ -77,51 +144,78 @@ public class MessageManager implements IMessageManager {
     @Override
     public void cleanUpMessagesByUserId(String userId) {
         entityOperationManager.executeConsumer(session -> {
-//            NativeQuery<MessageBox> query = session.createNativeQuery(SELECT_MESSAGEBOX_BY_USER_ID, MessageBox.class);
-//            MessageBox messageBox = searchService.getQueryEntity(
-//                    query,
-//                    supplierService.parameterStringSupplier(USER_ID, userId));
-//            messageBox.getMessages().forEach(message -> {
-//                messageBox.removeMessage(message);
-//                session.remove(message);
-//                session.merge(messageBox);
-//            });
+            MessageBox messageBox = queryService.getNamedQueryEntity(
+                    session,
+                    MessageBox.class,
+                    "MessageBox.findByUserIdWithMessages",
+                    parameterFactory.createStringParameter(USER_ID, userId));
+
+            List<Message> messagesToProcess = new ArrayList<>(messageBox.getMessages());
+            List<Message> messagesToDelete = new ArrayList<>();
+
+            for (Message message : messagesToProcess) {
+                messageBox.removeMessage(message);
+                if (message.getBoxes().isEmpty()) {
+                    messagesToDelete.add(message);
+                }
+            }
+            messagesToProcess.forEach(session::remove);
+            session.merge(messageBox);
         });
     }
 
     @Override
     public List<ResponseMessageOverviewDto> getMessageOverviewBySenderEmail(String senderEmail) {
-        return entityOperationManager.getSubGraphEntityDtoList(
-                "",
-                parameterFactory.createStringParameter("sender", senderEmail),
-                transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class));
+        List<Message> messages = fetchHandler.getNamedQueryEntityList(
+                Message.class,
+                "Message.findMessageBySender",
+                parameterFactory.createStringParameter("sender", senderEmail));
+
+        return messages.stream()
+                .map(transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class))
+                .toList();
     }
 
     @Override
     public List<ResponseMessageOverviewDto> getMessageOverviewByReceiverEmail(String receiverEmail) {
-        return entityOperationManager.getSubGraphEntityDtoList(
-                "",
-                parameterFactory.createStringParameter("receiver", receiverEmail),
-                transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class));
+        List<Message> messages = fetchHandler.getNamedQueryEntityList(
+                Message.class,
+                "Message.findMessageByReceiver",
+                parameterFactory.createStringParameter("receiver", receiverEmail));
+
+        return messages.stream()
+                .map(transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class))
+                .toList();
     }
 
     @Override
     public List<ResponseMessageOverviewDto> getMessageOverviewListByUserId(String userId) {
-        return List.of();
+        MessageBox messageBox = fetchHandler.getNamedQueryEntity(
+                MessageBox.class,
+                "MessageBox.findByUserIdWithMessages",
+                parameterFactory.createStringParameter(USER_ID, userId)
+        );
+        return messageBox.getMessages().stream()
+                .map(transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class))
+                .toList();
     }
 
     @Override
     public ResponseMessagePayloadDto getMessagePayloadDto(String userId, String messageId) {
-        return entityOperationManager.getGraphEntityDto(
-                "",
-                parameterFactory.createStringParameter("messageUniqNumber", messageId),
-                transformationFunctionService.getTransformationFunction(Message.class, ResponseMessagePayloadDto.class)
-        );
+        MessageBox messageBox = fetchHandler.getNamedQueryEntity(
+                MessageBox.class,
+                "MessageBox.findByUserId",
+                parameterFactory.createStringParameter(USER_ID, userId));
+        Message message = getExistingMessage(messageBox, messageId);
+        ResponseMessagePayloadDto responseMessagePayloadDto =
+                transformationFunctionService.getEntity(ResponseMessagePayloadDto.class, message);
+
+        return responseMessagePayloadDto;
     }
 
-    private Message getExistingMessage(MessageBox messageBox, String uniqMessageName) {
+    private Message getExistingMessage(MessageBox messageBox, String uniqMessageId) {
         return messageBox.getMessages().stream()
-                .filter(message -> message.getMessageUniqNumber().equals(uniqMessageName))
+                .filter(message -> message.getMessageTemplate().getMessageUniqNumber().equals(uniqMessageId))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Message not found"));
     }

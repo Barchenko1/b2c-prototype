@@ -1,7 +1,9 @@
 package com.b2c.prototype.processor.user;
 
 import com.b2c.prototype.manager.message.IMessageManager;
-import com.b2c.prototype.modal.dto.payload.MessageDto;
+import com.b2c.prototype.modal.constant.MessageStatusEnum;
+import com.b2c.prototype.modal.dto.payload.user.MessageDto;
+import com.b2c.prototype.modal.dto.payload.user.MessageTemplateDto;
 import com.b2c.prototype.modal.dto.response.ResponseMessageOverviewDto;
 import com.b2c.prototype.modal.dto.response.ResponseMessagePayloadDto;
 
@@ -17,23 +19,39 @@ public class MessageProcess implements IMessageProcess {
     }
 
     @Override
-    public void saveMessage(Map<String, String> requestParams, MessageDto messageDto) {
-        String userId = requestParams.get("userId");
-        messageManager.saveMessage(userId, messageDto);
+    public void saveMessage(Map<String, String> requestParams, MessageTemplateDto messageTemplateDto) {
+        MessageDto messageDto = MessageDto.builder()
+                .messageTemplate(messageTemplateDto)
+                .status("unread")
+                .build();
+        messageManager.saveMessage(messageDto);
     }
 
     @Override
     public void updateMessage(Map<String, String> requestParams, MessageDto messageDto) {
+        String messageId = requestParams.get("messageId");
+        messageManager.updateMessage(messageId, messageDto);
+    }
+
+    @Override
+    public void changeMessageStatus(Map<String, String> requestParams) {
         String userId = requestParams.get("userId");
         String messageId = requestParams.get("messageId");
-        messageManager.updateMessage(userId, messageId, messageDto);
+        String status = requestParams.get("status");
+        MessageStatusEnum statusEnum = MessageStatusEnum.valueOf(status.toUpperCase());
+        messageManager.changeMessageStatus(userId, messageId, statusEnum);
     }
 
     @Override
     public void deleteMessage(Map<String, String> requestParams) {
         String userId = requestParams.get("userId");
         String messageId = requestParams.get("messageId");
-        messageManager.deleteMessage(userId, messageId);
+        if (userId != null && messageId != null) {
+            messageManager.deleteMessageByUserId(userId, messageId);
+        }
+        if (userId == null && messageId != null) {
+            messageManager.deleteMessage(messageId);
+        }
     }
 
     @Override
@@ -46,13 +64,15 @@ public class MessageProcess implements IMessageProcess {
     public List<ResponseMessageOverviewDto> getMessageOverviewBySenderEmail(Map<String, String> requestParams) {
         String userId = requestParams.get("userId");
         String email = requestParams.get("email");
-        return messageManager.getMessageOverviewBySenderEmail(email);
+        String sender = requestParams.get("sender");
+        return messageManager.getMessageOverviewBySenderEmail(sender);
     }
 
     @Override
     public List<ResponseMessageOverviewDto> getMessageOverviewByReceiverEmail(Map<String, String> requestParams) {
         String email = requestParams.get("email");
-        return messageManager.getMessageOverviewByReceiverEmail(email);
+        String receiver = requestParams.get("receiver");
+        return messageManager.getMessageOverviewByReceiverEmail(receiver);
     }
 
     @Override

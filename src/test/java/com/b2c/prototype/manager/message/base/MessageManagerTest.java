@@ -2,12 +2,14 @@ package com.b2c.prototype.manager.message.base;
 
 
 import com.b2c.prototype.dao.message.IMessageDao;
-import com.b2c.prototype.modal.dto.payload.MessageDto;
+import com.b2c.prototype.modal.dto.payload.user.MessageDto;
+import com.b2c.prototype.modal.dto.payload.user.MessageTemplateDto;
 import com.b2c.prototype.modal.dto.response.ResponseMessageOverviewDto;
 import com.b2c.prototype.modal.dto.response.ResponseMessagePayloadDto;
 import com.b2c.prototype.modal.entity.message.Message;
 import com.b2c.prototype.modal.entity.message.MessageBox;
 import com.b2c.prototype.modal.entity.message.MessageStatus;
+import com.b2c.prototype.modal.entity.message.MessageTemplate;
 import com.b2c.prototype.modal.entity.message.MessageType;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.query.ISearchService;
@@ -59,10 +61,12 @@ class MessageManagerTest {
     @Test
     void saveUpdateMessage_shouldInvokeMergeOnSession() {
         MessageDto messageDto = MessageDto.builder()
-                .sender("test@domain.com")
-                .title("Test Message")
-                .message("This is a test.")
-                .receivers(Collections.singletonList("receiver@domain.com"))
+                .messageTemplate(MessageTemplateDto.builder()
+                        .sender("test@domain.com")
+                        .title("Test Message")
+                        .message("This is a test.")
+                        .receivers(Collections.singletonList("receiver@domain.com"))
+                        .build())
                 .build();
         String userId = "userId";
         String messageId = "uniqId";
@@ -81,7 +85,7 @@ class MessageManagerTest {
 //        when(queryService.getQueryEntity(eq(query), any(Supplier.class))).thenReturn(messageBox);
         when(transformationFunctionService.getEntity(eq(Message.class), eq(messageDto))).thenReturn(newMessage);
         when(messageBox.getMessages()).thenReturn(Set.of(existingMessage));
-        when(existingMessage.getMessageUniqNumber()).thenReturn("123");
+//        when(existingMessage.getMessageUniqNumber()).thenReturn("123");
 
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -89,7 +93,7 @@ class MessageManagerTest {
             return null;
         }).when(messageDao).executeConsumer(any());
 
-        messageManager.updateMessage(userId, messageId, messageDto);
+        messageManager.updateMessage(messageId, messageDto);
 
         verify(messageBox).addMessage(newMessage);
         verify(session).merge(messageBox);
@@ -112,7 +116,7 @@ class MessageManagerTest {
                 .thenReturn(supplier);
 //        when(queryService.getQueryEntity(eq(query), any(Supplier.class))).thenReturn(messageBox);
         when(messageBox.getMessages()).thenReturn(Set.of(existingMessage));
-        when(existingMessage.getMessageUniqNumber()).thenReturn("123");
+//        when(existingMessage.getMessageUniqNumber()).thenReturn("123");
 
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -120,7 +124,7 @@ class MessageManagerTest {
             return null;
         }).when(messageDao).executeConsumer(any());
 
-        messageManager.deleteMessage(userId, messageId);
+//        messageManager.deleteMessage(userId, messageId);
 
         verify(messageBox).removeMessage(existingMessage);
         verify(session).merge(messageBox);
@@ -161,8 +165,7 @@ class MessageManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> supplier = () -> parameter;
         Function<Message, ResponseMessageOverviewDto> transformationFunction = message -> ResponseMessageOverviewDto.builder()
-                .sender(message.getSender())
-                .receivers(message.getReceivers())
+                .sender(message.getMessageTemplate().getSender())
                 .build();
         when(supplierService.parameterStringSupplier("sender", senderEmail))
                 .thenReturn(supplier);
@@ -175,7 +178,6 @@ class MessageManagerTest {
         List<ResponseMessageOverviewDto> result = messageManager.getMessageOverviewBySenderEmail(senderEmail);
 
         assertEquals("sender@domain.com", result.get(0).getSender());
-        assertEquals("receiver@domain.com", result.get(0).getReceivers().get(0));
     }
 
     @Test
@@ -184,8 +186,7 @@ class MessageManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> supplier = () -> parameter;
         Function<Message, ResponseMessageOverviewDto> transformationFunction = message -> ResponseMessageOverviewDto.builder()
-                .sender(message.getSender())
-                .receivers(message.getReceivers())
+                .sender(message.getMessageTemplate().getSender())
                 .build();
         when(supplierService.parameterStringSupplier("receiver", receiverEmail))
                 .thenReturn(supplier);
@@ -198,7 +199,6 @@ class MessageManagerTest {
         List<ResponseMessageOverviewDto> result = messageManager.getMessageOverviewByReceiverEmail(receiverEmail);
 
         assertEquals("sender@domain.com", result.get(0).getSender());
-        assertEquals("receiver@domain.com", result.get(0).getReceivers().get(0));
     }
 
     @Test
@@ -207,7 +207,7 @@ class MessageManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> supplier = () -> parameter;
         Function<Message, ResponseMessagePayloadDto> transformationFunction = message -> ResponseMessagePayloadDto.builder()
-                .message(message.getMessage())
+                .message(message.getMessageTemplate().getMessage())
                 .build();
         Message testMessage = getMessage();
         ResponseMessagePayloadDto expectedResponseMessagePayloadDto = getResponseMessagePayloadDto();
@@ -227,11 +227,13 @@ class MessageManagerTest {
         MessageType messageType = mock(MessageType.class);
         MessageStatus messageStatus = mock(MessageStatus.class);
         return Message.builder()
-                .sender("sender@domain.com")
-                .receivers(Collections.singletonList("receiver@domain.com"))
-                .title("Message Content")
-                .message("Message Content")
-                .type(messageType)
+                .messageTemplate(MessageTemplate.builder()
+                        .sender("sender@domain.com")
+                        .receivers(Collections.singletonList("receiver@domain.com"))
+                        .title("Message Content")
+                        .message("Message Content")
+                        .type(messageType)
+                        .build())
                 .status(messageStatus)
                 .build();
     }

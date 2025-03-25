@@ -1,0 +1,11 @@
+[
+  {
+    "sender": "sender.test@example.com",
+    "title": "Welcome to the platform",
+    "dateOfSend": 100000,
+    "sendSystem": null,
+    "subscribe": null,
+    "type": "APP_NOTIFICATION",
+    "status": "unread"
+  }
+]

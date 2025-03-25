@@ -2,6 +2,7 @@ package com.b2c.prototype.util;
 
 public interface Constant {
     String USER_ID = "userId";
+    String EMAIL = "email";
     String ORDER_ID = "orderId";
     String ARTICULAR_ID = "articularId";
     String PAYMENT_ID = "upayment_id";
@@ -9,6 +10,7 @@ public interface Constant {
     String CHAR_SEQUENCE_CODE = "charSequenceCode";
     String VALUE = "value";
     String STORE_ID = "storeId";
+    String MESSAGE_ID = "messageId";
 
     // serviceId
     String AVAILABILITY_STATUS_ID = "availabilityStatus";

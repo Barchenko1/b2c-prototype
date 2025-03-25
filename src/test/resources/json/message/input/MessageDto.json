@@ -1,0 +1,12 @@
+{
+  "sender": "john.doe@example.com",
+  "receivers": [
+    "jane.smith@example.com",
+    "alice.brown@example.com"
+  ],
+  "title": "Welcome to the platform",
+  "message": "Hello! We're excited to have you on board.",
+  "sendSystem": "APP",
+  "type": "APP_NOTIFICATION",
+  "timeOfSend": "2025-03-21T10:30:00Z"
+}

@@ -1,0 +1,16 @@
+{
+  "messageTemplate": {
+    "sender": "john1.doe@example.com",
+    "receivers": [
+      "jane.smith@example.com",
+      "alice.brown@example.com",
+      "alice2.brown@example.com"
+    ],
+    "title": "Update Welcome to the platform",
+    "message": "Update Hello! We're excited to have you on board.",
+    "sendSystem": "APP",
+    "type": "APP_NOTIFICATION",
+    "timeOfSend": "2026-03-21T10:30:00Z"
+  },
+  "status": "read"
+}

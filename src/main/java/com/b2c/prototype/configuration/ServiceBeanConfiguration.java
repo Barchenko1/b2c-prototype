@@ -168,6 +168,7 @@ import com.b2c.prototype.service.supplier.SupplierService;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.finder.factory.ParameterFactory;
 import com.tm.core.process.dao.identifier.IQueryService;
+import com.tm.core.process.dao.query.IFetchHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -292,10 +293,11 @@ public class ServiceBeanConfiguration {
 
     @Bean
     public IMessageManager messageManager(IMessageBoxDao messageBoxDao,
+                                          IFetchHandler fetchHandler,
                                           IQueryService queryService,
                                           ITransformationFunctionService transformationFunctionService,
                                           IParameterFactory parameterFactory) {
-        return new MessageManager(messageBoxDao, queryService, transformationFunctionService, parameterFactory);
+        return new MessageManager(messageBoxDao, fetchHandler, queryService, transformationFunctionService, parameterFactory);
     }
 
     @Bean
