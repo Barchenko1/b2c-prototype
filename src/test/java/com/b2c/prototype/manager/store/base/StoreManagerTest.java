@@ -4,12 +4,11 @@ import com.b2c.prototype.modal.entity.item.ArticularItem;
 
 import com.b2c.prototype.dao.store.IStoreDao;
 import com.b2c.prototype.modal.dto.payload.store.StoreDto;
-import com.b2c.prototype.modal.dto.response.ResponseStoreDto;
+import com.b2c.prototype.modal.dto.payload.store.ResponseStoreDto;
 import com.b2c.prototype.modal.entity.store.CountType;
 import com.b2c.prototype.modal.entity.store.Store;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.query.ISearchService;
-import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
@@ -43,8 +42,6 @@ class StoreManagerTest {
     private ISearchService queryService;
     @Mock
     private ITransformationFunctionService transformationFunctionService;
-    @Mock
-    private ISupplierService supplierService;
     @InjectMocks
     private StoreManager storeManager;
 
@@ -117,8 +114,7 @@ class StoreManagerTest {
 
         Supplier<Store> storeSupplier = () -> getStore();
 
-        when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
-                .thenReturn(parameterSupplier);
+        
         Function<ArticularItem, Store> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(ArticularItem.class, Store.class))
                 .thenReturn(function);
@@ -141,8 +137,7 @@ class StoreManagerTest {
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
-                .thenReturn(parameterSupplier);
+        
         Function<Store, ResponseStoreDto> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(Store.class, ResponseStoreDto.class))
                 .thenReturn(function);

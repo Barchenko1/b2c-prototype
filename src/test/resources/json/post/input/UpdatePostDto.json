@@ -1,0 +1,8 @@
+{
+  "userId": "user456",
+  "articularId": "art789",
+  "authorName": "Update Jane Doe",
+  "authorEmail": "updatejanedoe@example.com",
+  "title": "Update Child Post Title",
+  "message": "Update This is a reply to the parent post."
+}

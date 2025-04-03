@@ -11,6 +11,8 @@ public interface Constant {
     String VALUE = "value";
     String STORE_ID = "storeId";
     String MESSAGE_ID = "messageId";
+    String POST_ID = "postId";
+    String REVIEW_COMMENT_ID = "commentId";
 
     // serviceId
     String AVAILABILITY_STATUS_ID = "availabilityStatus";

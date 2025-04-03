@@ -38,7 +38,6 @@ import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.modal.entity.user.UserCreditCard;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.supplier.ISupplierService;
 import com.b2c.prototype.util.CardUtil;
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
@@ -70,8 +69,6 @@ class DeliveryArticularItemQuantityPriceManagerTest {
     private IOrderItemDataDao orderItemDataDao;
     @Mock
     private ITransformationFunctionService transformationFunctionService;
-    @Mock
-    private ISupplierService supplierService;
     @InjectMocks
     private OrderArticularItemQuantityManager orderArticularItemQuantityManager;
 
@@ -109,8 +106,7 @@ class DeliveryArticularItemQuantityPriceManagerTest {
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
-                .thenReturn(parameterSupplier);
+        
         when(orderItemDataDao.getNamedQueryEntity("", parameter)).thenReturn(existingEntity);
         when(transformationFunctionService.getEntity(DeliveryArticularItemQuantity.class, orderArticularItemQuantityDto))
                 .thenReturn(newEntity);
@@ -134,8 +130,7 @@ class DeliveryArticularItemQuantityPriceManagerTest {
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
-                .thenReturn(parameterSupplier);
+        
 
         orderArticularItemQuantityManager.deleteOrder(orderId);
 
@@ -153,8 +148,7 @@ class DeliveryArticularItemQuantityPriceManagerTest {
         Function<DeliveryArticularItemQuantity, ResponseOrderDetails> function = mock(Function.class);
 //        when(orderItemDataDao.getGraphEntity(anyString(), eq(parameter)))
 //                .thenReturn(entity);
-        when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
-                .thenReturn(parameterSupplier);
+        
         when(transformationFunctionService.getTransformationFunction(DeliveryArticularItemQuantity.class, ResponseOrderDetails.class))
                 .thenReturn(function);
         when(function.apply(entity)).thenReturn(responseOrderDetails);
@@ -325,7 +319,7 @@ class DeliveryArticularItemQuantityPriceManagerTest {
         Post parent = Post.builder()
                 .id(1L)
                 .title("parent")
-                .uniquePostId("1")
+                .postId("1")
                 .message("parent")
                 .dateOfCreate(100000)
                 .build();

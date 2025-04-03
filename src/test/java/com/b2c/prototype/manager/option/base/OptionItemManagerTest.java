@@ -8,7 +8,6 @@ import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.query.ISearchService;
-import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
@@ -42,8 +41,6 @@ class OptionItemManagerTest {
     private ISearchService queryService;
     @Mock
     private ITransformationFunctionService transformationFunctionService;
-    @Mock
-    private ISupplierService supplierService;
     @InjectMocks
     private OptionItemManager optionItemManager;
 
@@ -65,8 +62,7 @@ class OptionItemManagerTest {
 
         when(transformationFunctionService.getEntity(OptionItem.class, optionGroupOptionItemSetDto))
                 .thenReturn(optionItem);
-        when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
-                .thenReturn(parameterSupplier);
+        
 //        when(queryService.getEntity(ArticularItem.class, parameterSupplier))
 //                .thenReturn(articularItem);
         doAnswer(invocation -> {
@@ -110,8 +106,7 @@ class OptionItemManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-        when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
-                .thenReturn(parameterSupplier);
+
         Function<ArticularItem, OptionItem> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(ArticularItem.class, OptionItem.class))
                 .thenReturn(function);
@@ -137,12 +132,6 @@ class OptionItemManagerTest {
         Supplier<Parameter> parameterSupplier = () -> parameter;
         NativeQuery<OptionItem> query = mock(NativeQuery.class);
 
-//        when(session.createNativeQuery(anyString(), eq(OptionItem.class)))
-//                .thenReturn(query);
-        when(supplierService.parameterStringSupplier("value", optionGroupName))
-                .thenReturn(parameterSupplier);
-        when(supplierService.parameterStringSupplier("optionName", optionValue))
-                .thenReturn(parameterSupplier);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
             consumer.accept(session);
@@ -164,8 +153,7 @@ class OptionItemManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-        when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
-                .thenReturn(parameterSupplier);
+        
         Function<ArticularItem, OptionGroupOptionItemSetDto> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(ArticularItem.class, OptionGroupOptionItemSetDto.class))
                 .thenReturn(function);

@@ -1,16 +1,17 @@
 package com.b2c.prototype.manager.post;
 
-import com.b2c.prototype.modal.dto.payload.PostDto;
-import com.b2c.prototype.modal.entity.post.Post;
+import com.b2c.prototype.modal.dto.payload.post.PostDto;
+import com.b2c.prototype.modal.dto.payload.post.ResponsePostDto;
 
 import java.util.List;
 
 public interface IPostManager {
-    void saveUpdatePost(String articularId, String uniqueId, PostDto postDto);
-    void deletePostByUniqueId(String articularId, String uniqueId);
+    void savePost(String articularId, PostDto postDto);
+    void updatePost(String articularId, String postId, PostDto postDto);
+    void deletePostByPostId(String articularId, String postId);
 
-    List<Post> getPostListByPostTitle(String title);
-    List<Post> getPostListByEmail(String email);
-    List<Post> getPostListByUserId(String userId);
-    Post getPostByUniqueId(String uniqueId);
+    List<ResponsePostDto> getPostListByArticularId(String articularId);
+    List<ResponsePostDto> getPostListByEmail(String email);
+    List<ResponsePostDto> getPostListByUserId(String userId);
+    ResponsePostDto getPostByArticularIdPostId(String articularId, String postId);
 }

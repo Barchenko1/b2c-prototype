@@ -7,8 +7,8 @@ import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.item.IDiscountManager;
-import com.b2c.prototype.service.query.ISearchService;
 import com.tm.core.finder.factory.IParameterFactory;
+import com.tm.core.process.dao.query.IFetchHandler;
 import com.tm.core.process.manager.common.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
 
@@ -23,16 +23,16 @@ import static com.b2c.prototype.util.Constant.ARTICULAR_ITEM_FIND_BY_DISCOUNT_CH
 public class DiscountManager implements IDiscountManager {
 
     private final IEntityOperationManager entityOperationManager;
-    private final ISearchService searchService;
+    private final IFetchHandler fetchHandler;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
     public DiscountManager(IDiscountDao discountDao,
-                           ISearchService searchService,
+                           IFetchHandler fetchHandler,
                            ITransformationFunctionService transformationFunctionService,
                            IParameterFactory parameterFactory) {
         this.entityOperationManager = new EntityOperationManager(discountDao);
-        this.searchService = searchService;
+        this.fetchHandler = fetchHandler;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
     }
@@ -51,7 +51,7 @@ public class DiscountManager implements IDiscountManager {
             if (discountDto.getCharSequenceCode() == null) {
                 throw new RuntimeException("Discount code is null");
             }
-            ArticularItem articularItem = searchService.getGraphEntity(
+            ArticularItem articularItem = fetchHandler.getGraphEntity(
                     ArticularItem.class,
                     "articularItem.discount.currency",
                     parameterFactory.createStringParameter(ARTICULAR_ID, articularId));
@@ -100,7 +100,7 @@ public class DiscountManager implements IDiscountManager {
     @Override
     public void deleteDiscount(String charSequenceCode) {
         entityOperationManager.executeConsumer(session -> {
-            List<ArticularItem> articularItemList = searchService.getNamedQueryEntityList(
+            List<ArticularItem> articularItemList = fetchHandler.getNamedQueryEntityList(
                     ArticularItem.class,
                     ARTICULAR_ITEM_FIND_BY_DISCOUNT_CHAR_SEQUENCE_CODE,
                     parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, charSequenceCode));
@@ -115,7 +115,7 @@ public class DiscountManager implements IDiscountManager {
 
     @Override
     public DiscountDto getDiscount(String charSequenceCode) {
-        List<ArticularItem> articularItemList = searchService.getNamedQueryEntityList(
+        List<ArticularItem> articularItemList = fetchHandler.getNamedQueryEntityList(
                 ArticularItem.class,
                 ARTICULAR_ITEM_FIND_BY_DISCOUNT_CHAR_SEQUENCE_CODE,
                 parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, charSequenceCode));
@@ -125,10 +125,9 @@ public class DiscountManager implements IDiscountManager {
 
     @Override
     public List<DiscountDto> getDiscounts() {
-        List<ArticularItem> articularItemList = searchService.getNamedQueryEntityList(
+        List<ArticularItem> articularItemList = fetchHandler.getNamedQueryEntityList(
                 ArticularItem.class,
-                ARTICULAR_ITEM_FIND_BY_DISCOUNT_NOT_NULL,
-                null);
+                ARTICULAR_ITEM_FIND_BY_DISCOUNT_NOT_NULL);
         return (List<DiscountDto>) transformationFunctionService.getCollectionTransformationCollectionFunction(ArticularItem.class, DiscountDto.class, "list")
                 .apply(articularItemList);
     }

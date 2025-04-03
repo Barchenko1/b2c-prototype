@@ -2,7 +2,7 @@ package com.b2c.prototype.dao.rating.base;
 
 import com.b2c.prototype.dao.AbstractConstantEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
-import com.b2c.prototype.modal.entity.item.Rating;
+import com.b2c.prototype.modal.entity.review.Rating;
 import com.tm.core.process.dao.identifier.QueryService;
 import com.tm.core.finder.manager.EntityMappingManager;
 import com.tm.core.finder.manager.IEntityMappingManager;

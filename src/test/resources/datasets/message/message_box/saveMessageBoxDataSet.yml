@@ -65,7 +65,7 @@ post:
   - id: 1
     title: "parent"
     message: "parent"
-    uniquePostId: "1"
+    postId: "1"
     dateOfCreate: 100000
 credit_card:
   - id: 1

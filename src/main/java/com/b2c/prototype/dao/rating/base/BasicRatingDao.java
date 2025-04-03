@@ -1,7 +1,7 @@
 package com.b2c.prototype.dao.rating.base;
 
 import com.b2c.prototype.dao.rating.IRatingDao;
-import com.b2c.prototype.modal.entity.item.Rating;
+import com.b2c.prototype.modal.entity.review.Rating;
 import com.tm.core.process.dao.common.AbstractEntityDao;
 import com.tm.core.process.dao.identifier.IQueryService;
 import org.hibernate.SessionFactory;

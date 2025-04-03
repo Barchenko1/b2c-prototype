@@ -2,7 +2,7 @@ package com.b2c.prototype.manager.rating.base;
 
 import com.b2c.prototype.manager.AbstractConstantEntityManagerTest;
 import com.b2c.prototype.modal.dto.common.NumberConstantPayloadDto;
-import com.b2c.prototype.modal.entity.item.Rating;
+import com.b2c.prototype.modal.entity.review.Rating;
 import com.tm.core.finder.parameter.Parameter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

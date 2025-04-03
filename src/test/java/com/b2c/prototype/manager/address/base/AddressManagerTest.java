@@ -10,7 +10,6 @@ import com.b2c.prototype.modal.entity.order.DeliveryArticularItemQuantity;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.query.ISearchService;
-import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,8 +43,6 @@ class AddressManagerTest {
     private ISearchService queryService;
     @Mock
     private ITransformationFunctionService transformationFunctionService;
-    @Mock
-    private ISupplierService supplierService;
     @InjectMocks
     private UserAddressManager addressManager;
 
@@ -61,10 +58,6 @@ class AddressManagerTest {
         UserDetails userDetails = mock(UserDetails.class);
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(USER_ID, userId))
-                .thenReturn(parameterSupplier);
-//        when(queryService.getEntity(UserDetails.class, parameterSupplier))
-//                .thenReturn(userDetails);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
             Session session = mock(Session.class);
@@ -88,8 +81,7 @@ class AddressManagerTest {
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
-                .thenReturn(parameterSupplier);
+        
 //        when(queryService.getEntity(DeliveryArticularItemQuantity.class, parameterSupplier))
 //                .thenReturn(orderItemDataOption);
         doAnswer(invocation -> {
@@ -115,8 +107,6 @@ class AddressManagerTest {
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(USER_ID, userId))
-                .thenReturn(parameterSupplier);
         Supplier<Address> addressSupplier = () -> address;
         Function<UserDetails, Address> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(UserDetails.class, Address.class))
@@ -138,8 +128,7 @@ class AddressManagerTest {
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
         doThrow(new RuntimeException()).when(addressDao).deleteEntity(any(Supplier.class));
-        when(supplierService.parameterStringSupplier(eq("user_id"), any()))
-                .thenReturn(parameterSupplier);
+
 //        when(queryService.getEntity(eq(UserDetails.class), any(Supplier.class)))
 //                .thenReturn(null);
 //        assertThrows(RuntimeException.class, () -> addressManager.deleteAppUserAddress(null));
@@ -154,8 +143,7 @@ class AddressManagerTest {
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(ORDER_ID, orderId))
-                .thenReturn(parameterSupplier);
+        
         when(orderItemDataOption.getDelivery()).thenReturn(delivery);
         when(delivery.getAddress()).thenReturn(address);
         Supplier<Address> addressSupplier = () -> address;
@@ -181,7 +169,7 @@ class AddressManagerTest {
         Parameter parameter = mock(Parameter.class);
 
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(USER_ID, userId)).thenReturn(parameterSupplier);
+        
 
         Function<UserDetails, AddressDto> transformationFunction = user -> getAddressDto();
         when(transformationFunctionService.getTransformationFunction(UserDetails.class, AddressDto.class))
@@ -211,7 +199,6 @@ class AddressManagerTest {
         Parameter parameter = mock(Parameter.class);
 
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(ORDER_ID, orderId)).thenReturn(parameterSupplier);
 
         Function<DeliveryArticularItemQuantity, AddressDto> transformationFunction = user -> getAddressDto();
         when(transformationFunctionService.getTransformationFunction(DeliveryArticularItemQuantity.class, AddressDto.class))

@@ -10,10 +10,12 @@ import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.option.IOptionItemManager;
 import com.b2c.prototype.service.query.ISearchService;
 import com.tm.core.finder.factory.IParameterFactory;
+import com.tm.core.process.dao.query.IFetchHandler;
 import com.tm.core.process.manager.common.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
@@ -22,16 +24,16 @@ import static com.b2c.prototype.util.Constant.VALUE;
 public class OptionItemManager implements IOptionItemManager {
 
     private final IEntityOperationManager entityOperationManager;
-    private final ISearchService searchService;
+    private final IFetchHandler fetchHandler;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
     public OptionItemManager(IOptionItemDao optionItemDao,
-                             ISearchService searchService,
+                             IFetchHandler fetchHandler,
                              ITransformationFunctionService transformationFunctionService,
                              IParameterFactory parameterFactory) {
         this.entityOperationManager = new EntityOperationManager(optionItemDao);
-        this.searchService = searchService;
+        this.fetchHandler = fetchHandler;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
     }
@@ -42,7 +44,7 @@ public class OptionItemManager implements IOptionItemManager {
             OptionGroup newOptionGroup = transformationFunctionService.getEntity(
                     OptionGroup.class,
                     singleOptionItemDto);
-            OptionGroup existingOptionGroup = searchService.getGraphOptionalEntity(
+            OptionGroup existingOptionGroup = fetchHandler.getGraphOptionalEntity(
                             OptionGroup.class,
                             "optionGroup.withOptionItems",
                             parameterFactory.createStringParameter(VALUE, singleOptionItemDto.getOptionGroup().getValue()))
@@ -51,7 +53,7 @@ public class OptionItemManager implements IOptionItemManager {
                         return newOptionGroup;
                     });
 
-            ArticularItem articularItem = searchService.getGraphEntity(
+            ArticularItem articularItem = fetchHandler.getGraphEntity(
                     ArticularItem.class,
                     "articularItem.optionItems",
                     parameterFactory.createStringParameter(ARTICULAR_ID, articularId));
@@ -68,7 +70,7 @@ public class OptionItemManager implements IOptionItemManager {
     @Override
     public void saveUpdateOptionItemByOptionGroup(String optionGroupValue, String optionItemValue, SingleOptionItemDto singleOptionItemDto) {
         entityOperationManager.executeConsumer(session -> {
-            OptionGroup existingOptionGroup = searchService.getGraphEntity(
+            OptionGroup existingOptionGroup = fetchHandler.getGraphEntity(
                     OptionGroup.class,
                     "optionGroup.withOptionItems",
                     parameterFactory.createStringParameter(VALUE, optionGroupValue));
@@ -105,7 +107,7 @@ public class OptionItemManager implements IOptionItemManager {
     @Override
     public void deleteOptionItemByArticularId(String articularId, String optionValue) {
         entityOperationManager.executeConsumer(session -> {
-            ArticularItem articularItem = searchService.getNamedQueryEntity(
+            ArticularItem articularItem = fetchHandler.getNamedQueryEntity(
                     ArticularItem.class,
                     "ArticularItem.findByOptionItemValueAndGroup",
                     parameterFactory.createStringParameter(ARTICULAR_ID, articularId));
@@ -127,7 +129,7 @@ public class OptionItemManager implements IOptionItemManager {
     @Override
     public void deleteOptionItemByOptionGroup(String optionGroupValue, String optionValue) {
         entityOperationManager.executeConsumer(session -> {
-            OptionGroup existingOptionGroup = searchService.getNamedQueryEntity(
+            OptionGroup existingOptionGroup = fetchHandler.getNamedQueryEntity(
                     OptionGroup.class,
                     "optionGroup.withOptionItemsAndArticularItems",
                     parameterFactory.createStringParameter(VALUE, optionGroupValue));
@@ -136,7 +138,7 @@ public class OptionItemManager implements IOptionItemManager {
                         .filter(optionItem -> optionItem.getValue().equals(optionValue))
                         .findFirst()
                         .ifPresent(optionItem -> {
-                            List<ArticularItem> articularItemList = searchService.getNamedQueryEntityList(
+                            List<ArticularItem> articularItemList = fetchHandler.getNamedQueryEntityList(
                                     ArticularItem.class,
                                     "ArticularItem.findByOptionItemValue",
                                     parameterFactory.createStringParameter(VALUE, optionValue));
@@ -152,29 +154,43 @@ public class OptionItemManager implements IOptionItemManager {
     }
 
     @Override
-    public OptionGroupOptionItemSetDto getOptionItemListByOptionGroup(String optionGroup) {
-        return searchService.getGraphEntityDto(
+    public OptionGroupOptionItemSetDto getOptionItemListByOptionGroup(String optionGroupValue) {
+        OptionGroup optionGroup = fetchHandler.getGraphEntity(
                 OptionGroup.class,
                 "optionGroup.withOptionItems",
-                parameterFactory.createStringParameter(VALUE, optionGroup),
-                transformationFunctionService.getTransformationFunction(OptionGroup.class, OptionGroupOptionItemSetDto.class));
+                parameterFactory.createStringParameter(VALUE, optionGroupValue));
+        return Optional.of(optionGroup)
+                .map(transformationFunctionService.getTransformationFunction(OptionGroup.class, OptionGroupOptionItemSetDto.class))
+                .orElseThrow(() -> new RuntimeException(""));
     }
 
     @Override
     public List<OptionGroupOptionItemSetDto> getOptionItemByItemArticularId(String articularId) {
-        return (List<OptionGroupOptionItemSetDto>) searchService.getGraphEntityDto(
+        ArticularItem articularItem = fetchHandler.getGraphEntity(
                 ArticularItem.class,
                 "articularItem.optionItems",
-                parameterFactory.createStringParameter(ARTICULAR_ID, articularId),
-                transformationFunctionService.getTransformationCollectionFunction(ArticularItem.class, OptionGroupOptionItemSetDto.class, "list"));
+                parameterFactory.createStringParameter(ARTICULAR_ID, articularId));
+
+        return (List<OptionGroupOptionItemSetDto>) transformationFunctionService.getTransformationCollectionFunction(
+                ArticularItem.class,
+                OptionGroupOptionItemSetDto.class,
+                "list")
+                .apply(articularItem);
+//        return (List<OptionGroupOptionItemSetDto>) fetchHandler.getGraphEntityDto(
+//                ArticularItem.class,
+//                "articularItem.optionItems",
+//                parameterFactory.createStringParameter(ARTICULAR_ID, articularId),
+//                transformationFunctionService.getTransformationCollectionFunction(ArticularItem.class, OptionGroupOptionItemSetDto.class, "list"));
     }
 
     @Override
     public List<OptionGroupOptionItemSetDto> getOptionItemList() {
-        return searchService.getGraphEntityDtoList(
+        List<OptionGroup> optionGroupList = fetchHandler.getGraphEntityList(
                 OptionGroup.class,
-                "optionGroup.withOptionItems",
-                transformationFunctionService.getTransformationFunction(OptionGroup.class, OptionGroupOptionItemSetDto.class));
+                "optionGroup.withOptionItems");
+        return optionGroupList.stream()
+                .map(transformationFunctionService.getTransformationFunction(OptionGroup.class, OptionGroupOptionItemSetDto.class))
+                .toList();
     }
 
 }

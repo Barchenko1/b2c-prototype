@@ -2,7 +2,7 @@ package com.b2c.prototype.dao.review.base;
 
 import com.b2c.prototype.dao.AbstractConstantEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
-import com.b2c.prototype.modal.entity.review.Comment;
+import com.b2c.prototype.modal.entity.review.ReviewComment;
 import com.tm.core.process.dao.identifier.QueryService;
 import com.tm.core.finder.manager.EntityMappingManager;
 import com.tm.core.finder.manager.IEntityMappingManager;
@@ -14,7 +14,7 @@ class BasicCommentDaoTest extends AbstractConstantEntityDaoTest {
     @BeforeAll
     public static void setup() {
         IEntityMappingManager entityMappingManager = new EntityMappingManager();
-        entityMappingManager.addEntityTable(new EntityTable(Comment.class, "comment"));
+        entityMappingManager.addEntityTable(new EntityTable(ReviewComment.class, "reviewComment"));
         queryService = new QueryService(entityMappingManager);
         dao = new BasicCommentDao(sessionFactory, queryService);
     }
@@ -25,25 +25,25 @@ class BasicCommentDaoTest extends AbstractConstantEntityDaoTest {
     }
 
     @Override
-    protected EntityDataSet<Comment> getTestDataSet() {
-        Comment parent = Comment.builder()
+    protected EntityDataSet<ReviewComment> getTestDataSet() {
+        ReviewComment parent = ReviewComment.builder()
                 .id(1L)
                 .title("parent")
-                .uniqueCommentId("1")
+                .commentId("1")
                 .message("parent")
                 .dateOfCreate(100000)
                 .build();
-        Comment root = Comment.builder()
+        ReviewComment root = ReviewComment.builder()
                 .id(2L)
                 .title("root")
-                .uniqueCommentId("2")
+                .commentId("2")
                 .message("root")
                 .dateOfCreate(100000)
                 .build();
-        Comment child = Comment.builder()
+        ReviewComment child = ReviewComment.builder()
                 .id(3L)
                 .title("child")
-                .uniqueCommentId("3")
+                .commentId("3")
                 .message("child")
                 .dateOfCreate(100000)
                 .build();
@@ -54,22 +54,22 @@ class BasicCommentDaoTest extends AbstractConstantEntityDaoTest {
     }
 
     @Override
-    protected EntityDataSet<Comment> getSaveDataSet() {
-        Comment parent = Comment.builder()
+    protected EntityDataSet<ReviewComment> getSaveDataSet() {
+        ReviewComment parent = ReviewComment.builder()
                 .title("parent")
-                .uniqueCommentId("1")
+                .commentId("1")
                 .message("parent")
                 .dateOfCreate(100000)
                 .build();
-        Comment root = Comment.builder()
+        ReviewComment root = ReviewComment.builder()
                 .title("root")
-                .uniqueCommentId("2")
+                .commentId("2")
                 .message("root")
                 .dateOfCreate(100000)
                 .build();
-        Comment child = Comment.builder()
+        ReviewComment child = ReviewComment.builder()
                 .title("child")
-                .uniqueCommentId("3")
+                .commentId("3")
                 .message("child")
                 .dateOfCreate(100000)
                 .build();
@@ -80,25 +80,25 @@ class BasicCommentDaoTest extends AbstractConstantEntityDaoTest {
     }
 
     @Override
-    protected EntityDataSet<Comment> getUpdateDataSet() {
-        Comment parent = Comment.builder()
+    protected EntityDataSet<ReviewComment> getUpdateDataSet() {
+        ReviewComment parent = ReviewComment.builder()
                 .id(1L)
                 .title("parent")
-                .uniqueCommentId("1")
+                .commentId("1")
                 .message("parent")
                 .dateOfCreate(100000)
                 .build();
-        Comment root = Comment.builder()
+        ReviewComment root = ReviewComment.builder()
                 .id(2L)
                 .title("Update root")
-                .uniqueCommentId("2")
+                .commentId("2")
                 .message("root")
                 .dateOfCreate(100000)
                 .build();
-        Comment child = Comment.builder()
+        ReviewComment child = ReviewComment.builder()
                 .id(3L)
                 .title("child")
-                .uniqueCommentId("3")
+                .commentId("3")
                 .message("child")
                 .dateOfCreate(100000)
                 .build();

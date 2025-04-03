@@ -10,7 +10,6 @@ import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.query.ISearchService;
-import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,8 +37,6 @@ class ContactInfoManagerTest {
     private ISearchService queryService;
     @Mock
     private ITransformationFunctionService transformationFunctionService;
-    @Mock
-    private ISupplierService supplierService;
     @InjectMocks
     private ContactInfoManager contactInfoManager;
 
@@ -57,8 +54,6 @@ class ContactInfoManagerTest {
         when(userDetails.getContactInfo()).thenReturn(contactInfo);
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(USER_ID, userId))
-                .thenReturn(parameterSupplier);
 //        when(queryService.getEntity(UserDetails.class, parameterSupplier))
 //                .thenReturn(userDetails);
         when(transformationFunctionService.getEntity(ContactInfo.class, contactInfoDto))
@@ -85,8 +80,6 @@ class ContactInfoManagerTest {
         when(userDetails.getContactInfo()).thenReturn(null);
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(USER_ID, userId))
-                .thenReturn(parameterSupplier);
 //        when(queryService.getEntity(UserDetails.class, parameterSupplier))
 //                .thenReturn(userDetails);
         when(transformationFunctionService.getEntity(ContactInfo.class, contactInfoDto))
@@ -114,8 +107,6 @@ class ContactInfoManagerTest {
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(USER_ID, userId))
-                .thenReturn(parameterSupplier);
 
         Function<UserDetails, ContactInfo> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(UserDetails.class, ContactInfo.class))
@@ -140,7 +131,7 @@ class ContactInfoManagerTest {
         Parameter parameter = mock(Parameter.class);
 
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(USER_ID, userId)).thenReturn(parameterSupplier);
+        
 
         Function<UserDetails, ContactInfoDto> transformationFunction = user -> contactInfoDto;
         when(transformationFunctionService.getTransformationFunction(UserDetails.class, ContactInfoDto.class))

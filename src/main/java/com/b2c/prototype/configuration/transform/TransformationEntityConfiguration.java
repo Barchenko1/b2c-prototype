@@ -2,7 +2,7 @@ package com.b2c.prototype.configuration.transform;
 
 import com.b2c.prototype.modal.base.constant.AbstractConstantEntity;
 import com.b2c.prototype.modal.constant.FeeType;
-import com.b2c.prototype.modal.constant.MessageStatusEnum;
+import com.b2c.prototype.modal.constant.ReviewStatusEnum;
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.dto.common.NumberConstantPayloadDto;
 import com.b2c.prototype.modal.dto.common.SearchFieldUpdateCollectionEntityDto;
@@ -15,6 +15,10 @@ import com.b2c.prototype.modal.dto.payload.ContactInfoDto;
 import com.b2c.prototype.modal.dto.payload.ContactPhoneDto;
 import com.b2c.prototype.modal.dto.payload.CreditCardDto;
 import com.b2c.prototype.modal.dto.payload.DeliveryDto;
+import com.b2c.prototype.modal.dto.payload.post.PostDto;
+import com.b2c.prototype.modal.dto.payload.post.ResponsePostDto;
+import com.b2c.prototype.modal.dto.payload.review.ResponseReviewCommentDto;
+import com.b2c.prototype.modal.dto.payload.review.ReviewCommentDto;
 import com.b2c.prototype.modal.dto.payload.user.DeviceDto;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.discount.InitDiscountDto;
@@ -47,7 +51,7 @@ import com.b2c.prototype.modal.dto.response.ResponseItemDataDto;
 import com.b2c.prototype.modal.dto.response.ResponseMessageOverviewDto;
 import com.b2c.prototype.modal.dto.response.ResponseMessagePayloadDto;
 import com.b2c.prototype.modal.dto.response.ResponseReviewDto;
-import com.b2c.prototype.modal.dto.response.ResponseStoreDto;
+import com.b2c.prototype.modal.dto.payload.store.ResponseStoreDto;
 import com.b2c.prototype.modal.dto.response.ResponseTimeDurationOptionDto;
 import com.b2c.prototype.modal.dto.response.ResponseUserAddressDto;
 import com.b2c.prototype.modal.dto.response.ResponseUserCreditCardDto;
@@ -70,7 +74,7 @@ import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.modal.entity.item.ItemType;
-import com.b2c.prototype.modal.entity.item.Rating;
+import com.b2c.prototype.modal.entity.review.Rating;
 import com.b2c.prototype.modal.entity.message.Message;
 import com.b2c.prototype.modal.entity.message.MessageStatus;
 import com.b2c.prototype.modal.entity.message.MessageType;
@@ -86,9 +90,12 @@ import com.b2c.prototype.modal.entity.payment.CreditCard;
 import com.b2c.prototype.modal.entity.payment.Payment;
 import com.b2c.prototype.modal.entity.payment.PaymentMethod;
 import com.b2c.prototype.modal.entity.payment.PaymentStatus;
+import com.b2c.prototype.modal.entity.post.Post;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.modal.entity.review.Review;
+import com.b2c.prototype.modal.entity.review.ReviewComment;
+import com.b2c.prototype.modal.entity.review.ReviewStatus;
 import com.b2c.prototype.modal.entity.store.CountType;
 import com.b2c.prototype.modal.entity.store.Store;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
@@ -128,6 +135,8 @@ import java.util.stream.Stream;
 import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 import static com.b2c.prototype.util.Constant.ARTICULAR_ITEM_FULL;
 import static com.b2c.prototype.util.Constant.CHAR_SEQUENCE_CODE;
+import static com.b2c.prototype.util.Constant.POST_ID;
+import static com.b2c.prototype.util.Constant.REVIEW_COMMENT_ID;
 import static com.b2c.prototype.util.Constant.USER_ID;
 import static com.b2c.prototype.util.Constant.VALUE;
 import static com.b2c.prototype.util.Util.getCurrentTimeMillis;
@@ -287,7 +296,10 @@ public class TransformationEntityConfiguration {
     }
 
     private void loadPostFunctions(ITransformationFunctionService transformationFunctionService) {
-
+        transformationFunctionService.addTransformationFunction(PostDto.class, Post.class, mapPostDtoToPostFunction());
+        transformationFunctionService.addTransformationFunction(Post.class, ResponsePostDto.class, mapReviewDtoToReviewFunction());
+        transformationFunctionService.addTransformationFunction(ReviewCommentDto.class, ReviewComment.class, mapReviewCommentDtoToReviewCommentFunction());
+        transformationFunctionService.addTransformationFunction(ReviewComment.class, ResponseReviewCommentDto.class, mapReviewCommentToResponseReviewCommentDtoFunction());
     }
 
     private void loadReviewFunctions(ITransformationFunctionService transformationFunctionService) {
@@ -639,21 +651,79 @@ public class TransformationEntityConfiguration {
                 .build();
     }
 
-    private Function<ReviewDto, Review> mapReviewDtoToReviewFunction() {
-        return reviewDto -> Review.builder()
-                .title(reviewDto.getTitle())
-                .message(reviewDto.getMessage())
+    private BiFunction<Session, PostDto, Post> mapPostDtoToPostFunction() {
+        return (session, postDto) -> Post.builder()
+                .title(postDto.getTitle())
+                .message(postDto.getMessage())
+                .authorEmail(postDto.getAuthorEmail())
+                .authorName(postDto.getAuthorName())
+                .parent(fetchPost(session, postDto.getParentPostId()).orElse(null))
+                .postId(getUUID())
                 .dateOfCreate(getCurrentTimeMillis())
                 .build();
     }
 
+    private BiFunction<Session, ReviewDto, Review> mapReviewDtoToReviewFunction() {
+        return (session, reviewDto) -> {
+            ReviewStatus reviewStatus = fetchReviewStatus(session, ReviewStatusEnum.PENDING.name());
+            Rating rating = fetchRating(session, reviewDto.getRatingValue());
+            return Review.builder()
+                    .title(reviewDto.getTitle())
+                    .message(reviewDto.getMessage())
+                    .dateOfCreate(getCurrentTimeMillis())
+                    .reviewId(getUUID())
+                    .comments(fetchReviewComments(session, reviewDto.getReviewId()))
+                    .status(reviewStatus)
+                    .rating(rating)
+                    .build();
+        };
+    }
+
     private Function<Review, ResponseReviewDto> mapReviewToResponseReviewDtoFunction() {
-        return review -> ResponseReviewDto.builder()
-                .title(review.getTitle())
-                .message(review.getMessage())
-                .ratingValue(review.getRating().getValue())
-                .dateOfCreate(new Date(getCurrentTimeMillis()))
+        return review -> {
+            UserDetails userDetails = review.getUserDetails();
+            ContactInfo contactInfo = userDetails.getContactInfo();
+            List<ResponseReviewCommentDto> responseReviewCommentDtoList = review.getComments().stream()
+                    .map(mapReviewCommentToResponseReviewCommentDtoFunction())
+                    .toList();
+            return ResponseReviewDto.builder()
+                    .title(review.getTitle())
+                    .message(review.getMessage())
+                    .ratingValue(review.getRating().getValue())
+                    .dateOfCreate(new Date(review.getDateOfCreate()))
+                    .status(mapConstantEntityToConstantEntityPayloadDtoFunction().apply(review.getStatus()))
+                    .username(userDetails.getUsername())
+                    .email(contactInfo.getEmail())
+                    .firstName(contactInfo.getFirstName())
+                    .lastName(contactInfo.getLastName())
+                    .comments(responseReviewCommentDtoList)
+                    .build();
+        };
+    }
+
+    private Function<ReviewCommentDto, ReviewComment> mapReviewCommentDtoToReviewCommentFunction() {
+        return (reviewCommentDto) -> ReviewComment.builder()
+                .title(reviewCommentDto.getTitle())
+                .message(reviewCommentDto.getMessage())
+                .dateOfCreate(getCurrentTimeMillis())
+                .commentId(getUUID())
                 .build();
+    }
+
+    private Function<ReviewComment, ResponseReviewCommentDto> mapReviewCommentToResponseReviewCommentDtoFunction() {
+        return (reviewCommentDto) -> {
+            UserDetails userDetails = reviewCommentDto.getUserDetails();
+            ContactInfo contactInfo = userDetails.getContactInfo();
+            return ResponseReviewCommentDto.builder()
+                    .title(reviewCommentDto.getTitle())
+                    .message(reviewCommentDto.getMessage())
+                    .dateOfCreate(reviewCommentDto.getDateOfCreate())
+                    .commentId(reviewCommentDto.getCommentId())
+                    .authorEmail(contactInfo.getEmail())
+                    .authorName(contactInfo.getFirstName())
+                    .authorLastName(contactInfo.getLastName())
+                    .build();
+        };
     }
 
     private BiFunction<Session, PriceDto, Price> mapPriceDtoToPriceFunction() {
@@ -711,14 +781,6 @@ public class TransformationEntityConfiguration {
                 .amount(price.getAmount())
                 .currency(price.getCurrency().getValue())
                 .build();
-    }
-
-    private Function<ArticularItem, Price> mapItemDataOptionToFullPriceFunction() {
-        return ArticularItem::getFullPrice;
-    }
-
-    private Function<ArticularItem, Price> mapItemDataOptionToTotalPriceFunction() {
-        return ArticularItem::getTotalPrice;
     }
 
     Function<ArticularItem, Set<OptionItem>> mapItemDataOptionToOptionItemFunction() {
@@ -1569,6 +1631,48 @@ public class TransformationEntityConfiguration {
                 session,
                 SellerCommission.class,
                 "SellerCommission.getCommissionList");
+    }
+
+    private Optional<Post> fetchPost(Session session, String value) {
+        if (value != null) {
+            return queryService.getNamedQueryOptionalEntity(
+                    session,
+                    Post.class,
+                    "Post.getPostByPostId",
+                    parameterFactory.createStringParameter(POST_ID, value));
+        }
+        return Optional.empty();
+    }
+
+    private List<ReviewComment> fetchReviewComments(Session session, String value) {
+        if (value != null) {
+            Optional<Review> optionalReview = queryService.getNamedQueryOptionalEntity(
+                    session,
+                    Review.class,
+                    "Review.findByReviewId",
+                    parameterFactory.createStringParameter(REVIEW_COMMENT_ID, value));
+            if (optionalReview.isPresent()) {
+                Review review = optionalReview.get();
+                return review.getComments();
+            }
+        }
+        return Collections.emptyList();
+    }
+
+    private ReviewStatus fetchReviewStatus(Session session, String value) {
+        return queryService.getNamedQueryEntity(
+                session,
+                ReviewStatus.class,
+                "ReviewStatus.findByValue",
+                parameterFactory.createStringParameter(VALUE, value));
+    }
+
+    private Rating fetchRating(Session session, int value) {
+        return queryService.getNamedQueryEntity(
+                session,
+                Rating.class,
+                "Rating.findByValue",
+                parameterFactory.createIntegerParameter(VALUE, value));
     }
 
     private String combineUserAddress(String country, String city, String street, String buildingNumber, int flatNumber) {

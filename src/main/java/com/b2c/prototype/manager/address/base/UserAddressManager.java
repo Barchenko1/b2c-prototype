@@ -10,6 +10,7 @@ import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.address.IUserAddressManager;
 import com.b2c.prototype.service.query.ISearchService;
 import com.tm.core.finder.factory.IParameterFactory;
+import com.tm.core.process.dao.query.IFetchHandler;
 import com.tm.core.process.manager.common.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
 
@@ -21,16 +22,16 @@ import static com.b2c.prototype.util.Constant.USER_ID;
 public class UserAddressManager implements IUserAddressManager {
 
     private final IEntityOperationManager entityOperationManager;
-    private final ISearchService searchService;
+    private final IFetchHandler fetchHandler;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
     public UserAddressManager(IAddressDao addressDao,
-                              ISearchService searchService,
+                              IFetchHandler fetchHandler,
                               ITransformationFunctionService transformationFunctionService,
                               IParameterFactory parameterFactory) {
         this.entityOperationManager = new EntityOperationManager(addressDao);
-        this.searchService = searchService;
+        this.fetchHandler = fetchHandler;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
     }
@@ -38,7 +39,7 @@ public class UserAddressManager implements IUserAddressManager {
     @Override
     public void saveUserAddress(String userId, UserAddressDto userAddressDto) {
         entityOperationManager.executeConsumer(session -> {
-            UserDetails userDetails = searchService.getNamedQueryEntity(
+            UserDetails userDetails = fetchHandler.getNamedQueryEntity(
                     UserDetails.class,
                     "UserDetails.findAddressesByUserId",
                     parameterFactory.createStringParameter(USER_ID, userId));
@@ -57,7 +58,7 @@ public class UserAddressManager implements IUserAddressManager {
     @Override
     public void updateUserAddress(String userId, String addressId, UserAddressDto userAddressDto) {
         entityOperationManager.executeConsumer(session -> {
-            UserDetails userDetails = searchService.getNamedQueryEntity(
+            UserDetails userDetails = fetchHandler.getNamedQueryEntity(
                     UserDetails.class,
                     "UserDetails.findAddressesByUserId",
                     parameterFactory.createStringParameter(USER_ID, userId));
@@ -99,7 +100,7 @@ public class UserAddressManager implements IUserAddressManager {
     @Override
     public void setDefaultUserCreditCard(String userId, String addressId) {
         entityOperationManager.executeConsumer(session -> {
-            UserDetails userDetails = searchService.getNamedQueryEntity(
+            UserDetails userDetails = fetchHandler.getNamedQueryEntity(
                     UserDetails.class,
                     "UserDetails.findAddressesByUserId",
                     parameterFactory.createStringParameter(USER_ID, userId));
@@ -120,7 +121,7 @@ public class UserAddressManager implements IUserAddressManager {
     @Override
     public void deleteUserAddress(String userId, String addressId) {
         entityOperationManager.executeConsumer(session -> {
-            UserDetails userDetails = searchService.getNamedQueryEntity(
+            UserDetails userDetails = fetchHandler.getNamedQueryEntity(
                     UserDetails.class,
                     "UserDetails.findAddressesByUserId",
                     parameterFactory.createStringParameter(USER_ID, userId));
@@ -143,7 +144,7 @@ public class UserAddressManager implements IUserAddressManager {
 
     @Override
     public List<ResponseUserAddressDto> getUserAddressesByUserId(String userId) {
-        UserDetails userDetails = searchService.getNamedQueryEntity(
+        UserDetails userDetails = fetchHandler.getNamedQueryEntity(
                 UserDetails.class,
                 "UserDetails.findAddressesByUserId",
                 parameterFactory.createStringParameter(USER_ID, userId));
@@ -155,7 +156,7 @@ public class UserAddressManager implements IUserAddressManager {
 
     @Override
     public ResponseUserAddressDto getDefaultUserAddress(String userId) {
-        UserDetails userDetails = searchService.getNamedQueryEntity(
+        UserDetails userDetails = fetchHandler.getNamedQueryEntity(
                 UserDetails.class,
                 "UserDetails.findAddressesByUserId",
                 parameterFactory.createStringParameter(USER_ID, userId));
@@ -169,11 +170,14 @@ public class UserAddressManager implements IUserAddressManager {
 
     @Override
     public List<AddressDto> getAllAddressesByAddressId(String addressId) {
-        return searchService.getSubNamedQueryEntityDtoList(
+        List<UserAddress> userAddressList = fetchHandler.getNamedQueryEntityList(
                 UserAddress.class,
                 "UserAddress.findByUserAddressCombination",
-                parameterFactory.createStringParameter("userAddressCombination", addressId),
-                transformationFunctionService.getTransformationFunction(UserAddress.class, AddressDto.class));
+                parameterFactory.createStringParameter("userAddressCombination", addressId));
+
+        return userAddressList.stream()
+                .map(transformationFunctionService.getTransformationFunction(UserAddress.class, AddressDto.class))
+                .toList();
     }
 
 }

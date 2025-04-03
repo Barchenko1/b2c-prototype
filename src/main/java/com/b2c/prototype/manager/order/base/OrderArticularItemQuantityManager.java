@@ -6,7 +6,6 @@ import com.b2c.prototype.modal.dto.response.ResponseOrderDetails;
 import com.b2c.prototype.modal.entity.order.DeliveryArticularItemQuantity;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.order.IOrderArticularItemQuantityManager;
-import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.manager.common.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
@@ -19,16 +18,13 @@ public class OrderArticularItemQuantityManager implements IOrderArticularItemQua
 
     private final IEntityOperationManager entityOperationManager;
     private final ITransformationFunctionService transformationFunctionService;
-    private final ISupplierService supplierService;
     private final IParameterFactory parameterFactory;
 
     public OrderArticularItemQuantityManager(IOrderItemDataDao orderItemDao,
                                              ITransformationFunctionService transformationFunctionService,
-                                             ISupplierService supplierService,
                                              IParameterFactory parameterFactory) {
         this.entityOperationManager = new EntityOperationManager(orderItemDao);
         this.transformationFunctionService = transformationFunctionService;
-        this.supplierService = supplierService;
         this.parameterFactory = parameterFactory;
     }
 

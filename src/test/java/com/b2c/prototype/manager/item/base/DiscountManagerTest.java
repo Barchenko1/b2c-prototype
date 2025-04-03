@@ -8,7 +8,6 @@ import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.query.ISearchService;
-import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,8 +42,6 @@ class DiscountManagerTest {
     private ISearchService queryService;
     @Mock
     private ITransformationFunctionService transformationFunctionService;
-    @Mock
-    private ISupplierService supplierService;
     @InjectMocks
     private DiscountManager discountManager;
 
@@ -59,8 +56,6 @@ class DiscountManagerTest {
         Currency currency = creatTestCurrency();
         Discount discount = createTestDiscount();
         Supplier<Discount> supplier = () -> discount;
-        when(supplierService.getSupplier(Discount.class, dto))
-                .thenReturn(supplier);
 
         discountManager.saveDiscount(dto);
 
@@ -81,10 +76,8 @@ class DiscountManagerTest {
         Discount discount = createTestDiscount();
 
         Supplier<Parameter> parameterSupplier = () -> mockParameter;
-        when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
-                .thenReturn(parameterSupplier);
-        when(supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, dto.getCharSequenceCode()))
-                .thenReturn(parameterSupplier);
+        
+        
 //        when(queryService.getEntity(ArticularItem.class, parameterSupplier))
 //                .thenReturn(mockArticularItem);
 //        when(discountDao.getOptionalEntity(mockParameter)).thenReturn(Optional.of(discount));
@@ -114,8 +107,7 @@ class DiscountManagerTest {
         Discount discount = createTestDiscount();
 
         Supplier<Parameter> parameterSupplier = () -> mockParameter;
-        when(supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, dto.getCharSequenceCode()))
-                .thenReturn(parameterSupplier);
+        
 //        when(discountDao.getEntity(mockParameter)).thenReturn(discount);
         when(transformationFunctionService.getEntity(Discount.class, dto))
                 .thenReturn(discount);
@@ -146,11 +138,6 @@ class DiscountManagerTest {
         Parameter mockParameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> mockParameter;
 
-        when(supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, discountStatusDto.getCharSequenceCode()))
-                .thenReturn(parameterSupplier);
-//        when(queryService.getEntity(Discount.class, parameterSupplier))
-//                .thenReturn(discount);
-
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
             Session session = mock(Session.class);
@@ -172,8 +159,7 @@ class DiscountManagerTest {
         Discount discount = createTestDiscount();
 
         Supplier<Parameter> parameterSupplier = () -> mockParameter;
-        when(supplierService.parameterStringSupplier(CHAR_SEQUENCE_CODE, dto.getCharSequenceCode()))
-                .thenReturn(parameterSupplier);
+        
 //        when(queryService.getNamedQueryEntity(
 //                eq(ArticularItem.class),
 //                anyString(),

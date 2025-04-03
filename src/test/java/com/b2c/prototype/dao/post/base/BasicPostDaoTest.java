@@ -29,21 +29,21 @@ class BasicPostDaoTest extends AbstractConstantEntityDaoTest {
         Post parent = Post.builder()
                 .id(1L)
                 .title("parent")
-                .uniquePostId("1")
+                .postId("1")
                 .message("parent")
                 .dateOfCreate(100000)
                 .build();
         Post root = Post.builder()
                 .id(2L)
                 .title("root")
-                .uniquePostId("2")
+                .postId("2")
                 .message("root")
                 .dateOfCreate(100000)
                 .build();
         Post child = Post.builder()
                 .id(3L)
                 .title("child")
-                .uniquePostId("3")
+                .postId("3")
                 .message("child")
                 .dateOfCreate(100000)
                 .build();
@@ -57,19 +57,19 @@ class BasicPostDaoTest extends AbstractConstantEntityDaoTest {
     protected EntityDataSet<Post> getSaveDataSet() {
         Post parent = Post.builder()
                 .title("parent")
-                .uniquePostId("1")
+                .postId("1")
                 .message("parent")
                 .dateOfCreate(100000)
                 .build();
         Post root = Post.builder()
                 .title("root")
-                .uniquePostId("2")
+                .postId("2")
                 .message("root")
                 .dateOfCreate(100000)
                 .build();
         Post child = Post.builder()
                 .title("child")
-                .uniquePostId("3")
+                .postId("3")
                 .message("child")
                 .dateOfCreate(100000)
                 .build();
@@ -83,19 +83,19 @@ class BasicPostDaoTest extends AbstractConstantEntityDaoTest {
     protected EntityDataSet<Post> getUpdateDataSet() {
         Post parent = Post.builder()
                 .title("parent")
-                .uniquePostId("1")
+                .postId("1")
                 .message("parent")
                 .dateOfCreate(100000)
                 .build();
         Post root = Post.builder()
                 .title("Update root")
-                .uniquePostId("2")
+                .postId("2")
                 .message("root")
                 .dateOfCreate(100000)
                 .build();
         Post child = Post.builder()
                 .title("child")
-                .uniquePostId("3")
+                .postId("3")
                 .message("child")
                 .dateOfCreate(100000)
                 .build();

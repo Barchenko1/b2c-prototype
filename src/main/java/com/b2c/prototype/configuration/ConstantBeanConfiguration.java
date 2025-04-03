@@ -18,7 +18,7 @@ import com.b2c.prototype.modal.entity.order.OrderStatus;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.ItemType;
-import com.b2c.prototype.modal.entity.item.Rating;
+import com.b2c.prototype.modal.entity.review.Rating;
 import com.b2c.prototype.dao.option.IOptionGroupDao;
 import com.b2c.prototype.dao.order.IOrderStatusDao;
 import com.b2c.prototype.dao.item.IBrandDao;

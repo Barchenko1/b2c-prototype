@@ -1,0 +1,25 @@
+{
+  "title": "Great Product!",
+  "message": "Really enjoyed using this product. Highly recommend it!",
+  "ratingValue": 5,
+  "dateOfCreate": "1970-01-01T00:00:00.100+00:00",
+  "status": {
+    "label": "Pending",
+    "value": "PENDING"
+  },
+  "username": "john.doe",
+  "firstName": "Wolter",
+  "lastName": "White",
+  "email": "wolter@email.com",
+  "comments": [
+    {
+      "commentId": "comment123",
+      "authorName": "Wolter",
+      "authorLastName": "White",
+      "authorEmail": "wolter@email.com",
+      "dateOfCreate": 100,
+      "title": "Comment Great Product!",
+      "message": "Comment really enjoyed using this product. Highly recommend it!"
+    }
+  ]
+}

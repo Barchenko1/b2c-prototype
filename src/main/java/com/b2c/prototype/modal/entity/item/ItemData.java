@@ -74,6 +74,10 @@ import java.util.Set;
 )
 @NamedQueries({
         @NamedQuery(
+                name = "ItemData.full",
+                query = "SELECT d FROM ItemData d"
+        ),
+        @NamedQuery(
                 name = "ItemData.findByValue",
                 query = "SELECT d FROM ItemData d WHERE d.itemId = :itemId"
         )

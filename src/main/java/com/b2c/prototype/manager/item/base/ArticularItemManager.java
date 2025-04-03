@@ -11,6 +11,7 @@ import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.item.IArticularItemManager;
 import com.b2c.prototype.service.query.ISearchService;
 import com.tm.core.finder.factory.IParameterFactory;
+import com.tm.core.process.dao.query.IFetchHandler;
 import com.tm.core.process.manager.common.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
 
@@ -22,16 +23,16 @@ import static com.b2c.prototype.util.Constant.ARTICULAR_ITEM_FULL;
 public class ArticularItemManager implements IArticularItemManager {
 
     private final IEntityOperationManager entityOperationManager;
-    private final ISearchService searchService;
+    private final IFetchHandler fetchHandler;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
     public ArticularItemManager(IItemDataOptionDao itemDataOptionDao,
-                                ISearchService searchService,
+                                IFetchHandler fetchHandler,
                                 ITransformationFunctionService transformationFunctionService,
                                 IParameterFactory parameterFactory) {
         this.entityOperationManager = new EntityOperationManager(itemDataOptionDao);
-        this.searchService = searchService;
+        this.fetchHandler = fetchHandler;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
     }
@@ -56,7 +57,7 @@ public class ArticularItemManager implements IArticularItemManager {
     @Override
     public void deleteArticularItem(String articularId) {
         entityOperationManager.executeConsumer(session -> {
-            ItemData itemData = searchService.getNamedQueryEntity(
+            ItemData itemData = fetchHandler.getNamedQueryEntity(
                     ItemData.class,
                     "ArticularItem.findItemDataByArticularId",
                     parameterFactory.createStringParameter(ARTICULAR_ID, articularId));

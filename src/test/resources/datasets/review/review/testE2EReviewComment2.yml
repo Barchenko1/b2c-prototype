@@ -1,0 +1,251 @@
+brand:
+  - id: 1
+    value: "TechBrand"
+    label: "TechBrand"
+  - id: 2
+    value: "Update TechBrand"
+    label: "Update TechBrand"
+item_type:
+  - id: 1
+    value: "Electronic"
+    label: "Electronic"
+  - id: 2
+    value: "Update Electronic"
+    label: "Update Electronic"
+currency:
+  - id: 1
+    value: "USD"
+    label: "USD"
+price:
+  - id: 1
+    amount: 1000
+    currency_id: 1
+  - id: 2
+    amount: 1200
+    currency_id: 1
+  - id: 3
+    amount: 1100
+    currency_id: 1
+  - id: 4
+    amount: 1200
+    currency_id: 1
+  - id: 5
+    amount: 1100
+    currency_id: 1
+discount:
+  - id: 1
+    amount: 100
+    charSequenceCode: "xxx"
+    isActive: true
+    isPercent: false
+    currency_id: 1
+  - id: 2
+    amount: 100
+    charSequenceCode: "abc1"
+    isActive: true
+    isPercent: false
+    currency_id: 1
+  - id: 3
+    amount: 100
+    charSequenceCode: "abc2"
+    isActive: true
+    isPercent: false
+    currency_id: 1
+option_group:
+  - id: 1
+    label: "Size"
+    value: "Size"
+  - id: 2
+    label: "Color"
+    value: "Color"
+option_item:
+  - id: 1
+    value: "L"
+    label: "L"
+    option_group_id: 1
+  - id: 2
+    value: "M"
+    label: "M"
+    option_group_id: 1
+  - id: 3
+    value: "16"
+    label: "16"
+    option_group_id: 1
+  - id: 4
+    value: "Red"
+    label: "Red"
+    option_group_id: 2
+  - id: 5
+    value: "Blue"
+    label: "Blue"
+    option_group_id: 2
+category:
+  - id: 1
+    label: "Electronic"
+    value: "Electronic"
+  - id: 2
+    category_id: 1
+    label: "Laptop"
+    value: "Laptop"
+  - id: 3
+    label: "Update Electronic"
+    value: "Update Electronic"
+  - id: 4
+    category_id: 3
+    label: "Update Laptop"
+    value: "Update Laptop"
+articular_status:
+  - id: 1
+    value: "NEW"
+    label: "NEW"
+  - id: 2
+    value: "COMMON"
+    label: "COMMON"
+item_data:
+  - id: 1
+    item_id: 123
+    description: "{\"par1\":\"desc1\",\"par2\":\"desc2\",\"par3\":\"desc3\"}"
+    brand_id: 1
+    category_id: 2
+    itemtype_id: 1
+articular_item:
+  - id: 1
+    articular_id: 1
+    dateOfCreate: 10000
+    discount_id: 1
+    fullprice_id: 1
+    totalprice_id: 1
+    item_data_id: 1
+    status_id: 1
+    productname: "Mob 1"
+  - id: 2
+    articular_id: 2
+    dateOfCreate: 10000
+    discount_id: 2
+    fullprice_id: 2
+    totalprice_id: 3
+    item_data_id: 1
+    status_id: 1
+    productname: "Laptop 1"
+  - id: 3
+    articular_id: 3
+    dateOfCreate: 10000
+    discount_id: 3
+    fullprice_id: 4
+    totalprice_id: 5
+    item_data_id: 1
+    status_id: 1
+    productname: "Laptop 2"
+articular_item_option_item:
+  - articular_item_id: 1
+    option_item_id: 3
+  - articular_item_id: 1
+    option_item_id: 4
+  - articular_item_id: 2
+    option_item_id: 3
+  - articular_item_id: 2
+    option_item_id: 4
+  - articular_item_id: 3
+    option_item_id: 3
+  - articular_item_id: 3
+    option_item_id: 5
+country_phone_code:
+  - id: 1
+    value: "+11"
+    label: "+11"
+contact_phone:
+  - id: 1
+    phoneNumber: "111-111-111"
+    country_phone_code_id: 1
+contact_info:
+  - id: 1
+    firstName: "Wolter"
+    lastName: "White"
+    email: "wolter@email.com"
+    contact_phone_id: 1
+country:
+  - id: 1
+    label: "USA"
+    value: "USA"
+address:
+  - id: 1
+    street: "street"
+    buildingNumber: 1
+    florNumber: 9
+    apartmentNumber: 101
+    zipCode: 90000
+    city: "city"
+    country_id: 1
+credit_card:
+  - id: 1
+    cardNumber: "4444-1111-2222-3333"
+    monthOfExpire: 6
+    yearOfExpire: 2028
+    cvv: 123
+    ownerName: "John"
+    ownerSecondName: "Doe"
+    isActive: true
+user_details:
+  - id: 1
+    user_id: "123"
+    username: "john.doe"
+    dateOfCreate: 100
+    iscontactphoneverified: false
+    isemailverified: false
+    isActive: false
+    contactinfo_id: 1
+user_credit_card:
+  - id: 1
+    credit_card_id: 1
+    userdetails_id: 1
+    isDefault: true
+item:
+  - id: 1
+    articular_item_id: 1
+  - id: 2
+    articular_item_id: 2
+  - id: 3
+    articular_item_id: 3
+rating:
+  - id: 1
+    value: 1
+  - id: 2
+    value: 2
+  - id: 3
+    value: 3
+  - id: 4
+    value: 4
+  - id: 5
+    value: 5
+review_status:
+  - id: 1
+    label: "Pending"
+    value: "PENDING"
+  - id: 2
+    label: "done"
+    value: "DONE"
+review:
+  - id: 1
+    item_id: 1
+    rating_id: 5
+    reviewId: "review123"
+    review_status_id: 1
+    userdetails_id: 1
+    message: "Really enjoyed using this product. Highly recommend it!"
+    title: "Great Product!"
+    dateOfCreate: 100
+review_comment:
+  - id: 1
+    review_id: 1
+    userdetails_id: 1
+    commentId: "comment121"
+    dateOfCreate: 100
+    title: "Comment Great Product!"
+    message: "Comment really enjoyed using this product. Highly recommend it!"
+  - id: 2
+    review_id: 1
+    userdetails_id: 1
+    commentId: "comment123"
+    dateOfCreate: 100
+    title: "Comment Great Product!"
+    message: "Comment really enjoyed using this product. Highly recommend it!"

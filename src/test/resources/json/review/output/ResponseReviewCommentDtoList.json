@@ -1,0 +1,20 @@
+[
+  {
+    "commentId": "comment123",
+    "authorName": "Wolter",
+    "authorLastName": "White",
+    "authorEmail": "wolter@email.com",
+    "dateOfCreate": 100,
+    "title": "Comment Great Product!",
+    "message": "Comment really enjoyed using this product. Highly recommend it!"
+  },
+  {
+    "commentId": "comment121",
+    "authorName": "Wolter",
+    "authorLastName": "White",
+    "authorEmail": "wolter@email.com",
+    "dateOfCreate": 100,
+    "title": "Comment Great Product!",
+    "message": "Comment really enjoyed using this product. Highly recommend it!"
+  }
+]

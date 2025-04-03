@@ -13,7 +13,6 @@ import com.b2c.prototype.modal.entity.message.MessageTemplate;
 import com.b2c.prototype.modal.entity.message.MessageType;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.query.ISearchService;
-import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
@@ -48,8 +47,6 @@ class MessageManagerTest {
     private ISearchService queryService;
     @Mock
     private ITransformationFunctionService transformationFunctionService;
-    @Mock
-    private ISupplierService supplierService;
     @InjectMocks
     private MessageManager messageManager;
 
@@ -79,9 +76,6 @@ class MessageManagerTest {
         Session session = mock(Session.class);
         NativeQuery<MessageBox> query = mock(NativeQuery.class);
 
-//        when(session.createNativeQuery(any(String.class), eq(MessageBox.class))).thenReturn(query);
-        when(supplierService.parameterStringSupplier(USER_ID, "uniqId"))
-                .thenReturn(supplier);
 //        when(queryService.getQueryEntity(eq(query), any(Supplier.class))).thenReturn(messageBox);
         when(transformationFunctionService.getEntity(eq(Message.class), eq(messageDto))).thenReturn(newMessage);
         when(messageBox.getMessages()).thenReturn(Set.of(existingMessage));
@@ -112,8 +106,7 @@ class MessageManagerTest {
         NativeQuery<MessageBox> query = mock(NativeQuery.class);
 
 //        when(session.createNativeQuery(any(String.class), eq(MessageBox.class))).thenReturn(query);
-        when(supplierService.parameterStringSupplier(USER_ID, userId))
-                .thenReturn(supplier);
+
 //        when(queryService.getQueryEntity(eq(query), any(Supplier.class))).thenReturn(messageBox);
         when(messageBox.getMessages()).thenReturn(Set.of(existingMessage));
 //        when(existingMessage.getMessageUniqNumber()).thenReturn("123");
@@ -141,9 +134,6 @@ class MessageManagerTest {
         Session session = mock(Session.class);
         NativeQuery<MessageBox> query = mock(NativeQuery.class);
 
-//        when(session.createNativeQuery(any(String.class), eq(MessageBox.class))).thenReturn(query);
-        when(supplierService.parameterStringSupplier(USER_ID, uniqueId))
-                .thenReturn(supplier);
 //        when(queryService.getQueryEntity(eq(query), any(Supplier.class))).thenReturn(messageBox);
         when(messageBox.getMessages()).thenReturn(Set.of(existingMessage));
 
@@ -167,8 +157,6 @@ class MessageManagerTest {
         Function<Message, ResponseMessageOverviewDto> transformationFunction = message -> ResponseMessageOverviewDto.builder()
                 .sender(message.getMessageTemplate().getSender())
                 .build();
-        when(supplierService.parameterStringSupplier("sender", senderEmail))
-                .thenReturn(supplier);
         when(transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class))
                 .thenReturn(transformationFunction);
 
@@ -188,8 +176,6 @@ class MessageManagerTest {
         Function<Message, ResponseMessageOverviewDto> transformationFunction = message -> ResponseMessageOverviewDto.builder()
                 .sender(message.getMessageTemplate().getSender())
                 .build();
-        when(supplierService.parameterStringSupplier("receiver", receiverEmail))
-                .thenReturn(supplier);
         when(transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class))
                 .thenReturn(transformationFunction);
 
@@ -212,8 +198,6 @@ class MessageManagerTest {
         Message testMessage = getMessage();
         ResponseMessagePayloadDto expectedResponseMessagePayloadDto = getResponseMessagePayloadDto();
 
-        when(supplierService.parameterStringSupplier("messageUniqNumber", uniqueId))
-                .thenReturn(supplier);
         when(transformationFunctionService.getTransformationFunction(Message.class, ResponseMessagePayloadDto.class))
                 .thenReturn(transformationFunction);
         when(messageDao.getGraphEntity(anyString(), eq(parameter))).thenReturn(testMessage);

@@ -122,7 +122,7 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
         Post parent = Post.builder()
                 .id(1L)
                 .title("parent")
-                .uniquePostId("1")
+                .postId("1")
                 .message("parent")
                 .dateOfCreate(100000)
                 .build();

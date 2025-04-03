@@ -52,7 +52,6 @@ import com.b2c.prototype.manager.item.IBrandManager;
 import com.b2c.prototype.manager.item.ICategoryManager;
 import com.b2c.prototype.manager.item.IDiscountManager;
 import com.b2c.prototype.manager.item.IItemDataManager;
-import com.b2c.prototype.manager.item.IItemManager;
 import com.b2c.prototype.manager.item.IItemStatusManager;
 import com.b2c.prototype.manager.item.IItemTypeManager;
 import com.b2c.prototype.manager.item.base.ArticularItemManager;
@@ -61,7 +60,6 @@ import com.b2c.prototype.manager.item.base.BrandManager;
 import com.b2c.prototype.manager.item.base.CategoryManager;
 import com.b2c.prototype.manager.item.base.DiscountManager;
 import com.b2c.prototype.manager.item.base.ItemDataManager;
-import com.b2c.prototype.manager.item.base.ItemManager;
 import com.b2c.prototype.manager.item.base.ArticularStatusManager;
 import com.b2c.prototype.manager.item.base.ItemTypeManager;
 import com.b2c.prototype.manager.message.IMessageManager;
@@ -163,8 +161,6 @@ import com.b2c.prototype.service.help.calculate.PriceCalculationService;
 import com.b2c.prototype.service.parallel.AsyncProcessor;
 import com.b2c.prototype.service.parallel.IAsyncProcessor;
 import com.b2c.prototype.service.query.ISearchService;
-import com.b2c.prototype.service.supplier.ISupplierService;
-import com.b2c.prototype.service.supplier.SupplierService;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.finder.factory.ParameterFactory;
 import com.tm.core.process.dao.identifier.IQueryService;
@@ -198,13 +194,6 @@ public class ServiceBeanConfiguration {
     @Bean
     public ITransformationFunctionService transformationFunctionService() {
         return new TransformationFunctionService();
-    }
-
-    @Bean
-    public ISupplierService supplierService(IParameterFactory parameterFactory,
-                                            ISearchService searchService,
-                                            ITransformationFunctionService transformationFunctionService) {
-        return new SupplierService(parameterFactory, searchService, transformationFunctionService);
     }
 
     @Bean
@@ -331,9 +320,9 @@ public class ServiceBeanConfiguration {
     @Bean
     public IUserDetailsManager userDetailsManager(IUserDetailsDao userDetailsDao,
                                                   ITransformationFunctionService transformationFunctionService,
-                                                  ISearchService searchService,
+                                                  IFetchHandler fetchHandler,
                                                   IParameterFactory parameterFactory) {
-        return new UserDetailsManager(userDetailsDao, transformationFunctionService, searchService, parameterFactory);
+        return new UserDetailsManager(userDetailsDao, transformationFunctionService, fetchHandler, parameterFactory);
     }
 
     @Bean
@@ -346,51 +335,41 @@ public class ServiceBeanConfiguration {
 
     @Bean
     public IContactInfoManager contactInfoManager(IContactInfoDao contactInfoDao,
-                                                  ISearchService searchService,
+                                                  IFetchHandler fetchHandler,
                                                   ITransformationFunctionService transformationFunctionService,
                                                   IParameterFactory parameterFactory) {
-        return new ContactInfoManager(contactInfoDao, searchService, transformationFunctionService, parameterFactory);
+        return new ContactInfoManager(contactInfoDao, fetchHandler, transformationFunctionService, parameterFactory);
     }
 
     @Bean
     public IDiscountManager discountManager(IDiscountDao discountDao,
-                                            ISearchService searchService,
+                                            IFetchHandler fetchHandler,
                                             ITransformationFunctionService transformationFunctionService,
                                             IParameterFactory parameterFactory) {
-        return new DiscountManager(discountDao, searchService, transformationFunctionService, parameterFactory);
-    }
-
-    @Bean
-    public IItemManager itemManager(IItemDao itemDao,
-                                    ISearchService searchService,
-                                    ITransformationFunctionService transformationFunctionService,
-                                    ISupplierService supplierService,
-                                    IParameterFactory parameterFactory) {
-        return new ItemManager(itemDao, searchService, transformationFunctionService, supplierService, parameterFactory);
+        return new DiscountManager(discountDao, fetchHandler, transformationFunctionService, parameterFactory);
     }
 
     @Bean
     public IItemDataManager itemDataManager(IItemDataDao itemDataDao,
                                             ITransformationFunctionService transformationFunctionService,
-                                            ISupplierService supplierService,
                                             IParameterFactory parameterFactory) {
-        return new ItemDataManager(itemDataDao, transformationFunctionService, supplierService, parameterFactory);
+        return new ItemDataManager(itemDataDao, transformationFunctionService, parameterFactory);
     }
 
     @Bean
     public IArticularItemManager itemDataOptionManager(IItemDataOptionDao itemDataOptionDao,
-                                                       ISearchService searchService,
+                                                       IFetchHandler fetchHandler,
                                                        ITransformationFunctionService transformationFunctionService,
                                                        IParameterFactory parameterFactory) {
-        return new ArticularItemManager(itemDataOptionDao, searchService, transformationFunctionService, parameterFactory);
+        return new ArticularItemManager(itemDataOptionDao, fetchHandler, transformationFunctionService, parameterFactory);
     }
 
     @Bean
     public IOptionItemManager optionItemManager(IOptionItemDao optionItemDao,
-                                                ISearchService searchService,
+                                                IFetchHandler fetchHandler,
                                                 ITransformationFunctionService transformationFunctionService,
                                                 IParameterFactory parameterFactory) {
-        return new OptionItemManager(optionItemDao, searchService, transformationFunctionService, parameterFactory);
+        return new OptionItemManager(optionItemDao, fetchHandler, transformationFunctionService, parameterFactory);
     }
 
     @Bean
@@ -448,10 +427,10 @@ public class ServiceBeanConfiguration {
 
     @Bean
     public IUserAddressManager userAddressManager(IAddressDao addressDao,
-                                              ISearchService searchService,
+                                              IFetchHandler fetchHandler,
                                               ITransformationFunctionService transformationFunctionService,
                                               IParameterFactory parameterFactory) {
-        return new UserAddressManager(addressDao, searchService, transformationFunctionService, parameterFactory);
+        return new UserAddressManager(addressDao, fetchHandler, transformationFunctionService, parameterFactory);
     }
 
 //    @Bean
@@ -466,9 +445,8 @@ public class ServiceBeanConfiguration {
     @Bean
     public IOrderArticularItemQuantityManager orderItemDataManager(IOrderItemDataDao orderItemDao,
                                                                    ITransformationFunctionService transformationFunctionService,
-                                                                   ISupplierService supplierService,
                                                                    IParameterFactory parameterFactory) {
-        return new OrderArticularItemQuantityManager(orderItemDao, transformationFunctionService, supplierService, parameterFactory);
+        return new OrderArticularItemQuantityManager(orderItemDao, transformationFunctionService, parameterFactory);
     }
 
     @Bean
@@ -490,9 +468,10 @@ public class ServiceBeanConfiguration {
     @Bean
     public IReviewManager reviewManager(IReviewDao reviewDao,
                                         IQueryService queryService,
+                                        IFetchHandler fetchHandler,
                                         ITransformationFunctionService transformationFunctionService,
                                         IParameterFactory parameterFactory) {
-        return new ReviewManager(reviewDao, queryService, transformationFunctionService, parameterFactory);
+        return new ReviewManager(reviewDao, queryService, fetchHandler, transformationFunctionService, parameterFactory);
     }
 
     @Bean

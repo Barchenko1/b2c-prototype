@@ -2,17 +2,17 @@ post:
   - id: 1
     title: "parent"
     message: "parent"
-    uniquePostId: "1"
+    postId: "1"
     dateOfCreate: 100000
   - id: 2
     post_id: 1
     title: "root"
     message: "root"
-    uniquePostId: "2"
+    postId: "2"
     dateOfCreate: 100000
   - id: 3
     post_id: 2
     title: "child"
     message: "child"
-    uniquePostId: "3"
+    postId: "3"
     dateOfCreate: 100000

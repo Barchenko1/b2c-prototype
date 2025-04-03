@@ -2,10 +2,8 @@ package com.b2c.prototype.e2e.controller.basic;
 
 import com.b2c.prototype.e2e.BasicE2ETest;
 import com.b2c.prototype.e2e.util.TestUtil;
-import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
 import com.b2c.prototype.modal.dto.response.ResponseMessageOverviewDto;
 import com.b2c.prototype.modal.dto.response.ResponseMessagePayloadDto;
-import com.b2c.prototype.modal.dto.response.ResponseStoreDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,10 +34,6 @@ public class MessageControllerE2ETest extends BasicE2ETest {
         try (Connection connection = connectionHolder.getConnection()) {
             connection.setAutoCommit(false);
             Statement statement = connection.createStatement();
-//            statement.execute("DELETE FROM articular_item_quantity");
-//            statement.execute("DELETE FROM store");
-//            statement.execute("DELETE FROM user_address");
-//            statement.execute("DELETE FROM address");
             statement.execute("DELETE FROM message_box_message");
             statement.execute("DELETE FROM message_box");
             statement.execute("DELETE FROM message_template_receivers");

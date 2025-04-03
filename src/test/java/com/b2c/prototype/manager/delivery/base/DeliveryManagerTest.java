@@ -10,7 +10,6 @@
 //import com.b2c.prototype.modal.entity.order.DeliveryArticularItemQuantity;
 //import com.b2c.prototype.service.function.ITransformationFunctionService;
 //import com.b2c.prototype.service.query.ISearchService;
-//import com.b2c.prototype.service.supplier.ISupplierService;
 //import com.tm.core.finder.parameter.Parameter;
 //import org.hibernate.Session;
 //import org.junit.jupiter.api.BeforeEach;

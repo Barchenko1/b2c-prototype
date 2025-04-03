@@ -14,6 +14,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResponseUserDetailsDto {
+    private String username;
+    private long dateOfCreate;
+    private boolean isEmailVerified;
+    private boolean isContactPhoneVerified;
     private ContactInfoDto contactInfo;
     private List<UserAddressDto> addresses;
     private List<ResponseUserCreditCardDto> creditCards;

@@ -48,13 +48,6 @@ public class CategoryController {
         return ResponseEntity.ok().build();
     }
 
-//    @PutMapping(value = "/inner", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<Void> updateCategory(@RequestParam final Map<String, String> requestParams,
-//                                               @RequestBody final CategoryDto categoryDto) {
-//        categoryProcess.updateCategory(requestParams, categoryDto);
-//        return ResponseEntity.ok().build();
-//    }
-
     @DeleteMapping(produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<Void> deleteCategory(@RequestParam final Map<String, String> requestParams) {
         categoryProcess.deleteCategory(requestParams);

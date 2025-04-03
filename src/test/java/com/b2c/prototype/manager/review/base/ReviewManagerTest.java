@@ -5,11 +5,10 @@ import com.b2c.prototype.modal.dto.payload.review.ReviewDto;
 import com.b2c.prototype.modal.dto.response.ResponseReviewDto;
 import com.b2c.prototype.modal.entity.item.Item;
 import com.b2c.prototype.modal.entity.item.ItemData;
-import com.b2c.prototype.modal.entity.item.Rating;
+import com.b2c.prototype.modal.entity.review.Rating;
 import com.b2c.prototype.modal.entity.review.Review;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.query.ISearchService;
-import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
@@ -19,7 +18,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -30,7 +28,6 @@ import java.util.function.Supplier;
 import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
@@ -45,8 +42,6 @@ class ReviewManagerTest {
     private ISearchService queryService;
     @Mock
     private ITransformationFunctionService transformationFunctionService;
-    @Mock
-    private ISupplierService supplierService;
     @InjectMocks
     private ReviewManager reviewManager;
 
@@ -56,20 +51,20 @@ class ReviewManagerTest {
     }
 
     @Test
-    void testSaveUpdateReview_addsNewReview() {
+    void testSaveReview_addsNewReview() {
         Session session = mock(Session.class);
         ReviewDto reviewDto = getReviewDto();
         String articularId = "articularId";
+        String userId = "userId";
 
         Item item = mock(Item.class);
         Review review = getReview();
-        when(item.getReviews()).thenReturn(new ArrayList<>(){{add(review);}});
+//        when(item.getReviews()).thenReturn(new ArrayList<>(){{add(review);}});
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-        when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
-                .thenReturn(parameterSupplier);
+        
         NativeQuery<Item> query = mock(NativeQuery.class);
 //        when(session.createNativeQuery(anyString(), eq(Item.class))).thenReturn(query);
 //        when(queryService.getQueryEntity(query, parameterSupplier)).thenReturn(item);
@@ -81,27 +76,26 @@ class ReviewManagerTest {
             return null;
         }).when(reviewDao).executeConsumer(any(Consumer.class));
 
-        reviewManager.saveUpdateReview(articularId, reviewDto);
+        reviewManager.saveReview(articularId, userId, reviewDto);
 
         verify(reviewDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
-    void testSaveUpdateReview_updatesExistingReview() {
+    void testSaveReview_updatesExistingReview() {
         Session session = mock(Session.class);
         String articularId = "articularId";
+        String userId = "userId";
         ReviewDto reviewDto = getReviewDto();
-        reviewDto.setReviewId(null);
 
         Item item = mock(Item.class);
         Review review = getReview();
-        when(item.getReviews()).thenReturn(new ArrayList<>(){{add(review);}});
+//        when(item.getReviews()).thenReturn(new ArrayList<>(){{add(review);}});
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-        when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
-                .thenReturn(parameterSupplier);
+        
         NativeQuery<Item> query = mock(NativeQuery.class);
 //        when(session.createNativeQuery(anyString(), eq(Item.class))).thenReturn(query);
 //        when(queryService.getQueryEntity(query, parameterSupplier)).thenReturn(item);
@@ -113,7 +107,7 @@ class ReviewManagerTest {
             return null;
         }).when(reviewDao).executeConsumer(any(Consumer.class));
 
-        reviewManager.saveUpdateReview(articularId, reviewDto);
+        reviewManager.saveReview(articularId, userId, reviewDto);
 
         verify(reviewDao).executeConsumer(any(Consumer.class));
     }
@@ -127,8 +121,7 @@ class ReviewManagerTest {
         Review review = getReview();
         Supplier<Review> reviewSupplier = () -> review;
 
-        when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
-                .thenReturn(parameterSupplier);
+        
         Function<ItemData, Review> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(ItemData.class, Review.class))
                 .thenReturn(function);
@@ -138,7 +131,7 @@ class ReviewManagerTest {
 //                function
 //        )).thenReturn(reviewSupplier);
 
-        reviewManager.deleteReview(articularId);
+//        reviewManager.deleteReview(articularId);
 
         verify(reviewDao).deleteEntity(reviewSupplier);
     }
@@ -153,8 +146,7 @@ class ReviewManagerTest {
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
         List<ResponseReviewDto> expectedResponse = List.of(responseReviewDto);
-        when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
-                .thenReturn(parameterSupplier);
+        
         Function<Review, Collection<ResponseReviewDto>> function = mock(Function.class);
         when(transformationFunctionService.getTransformationCollectionFunction(Review.class, ResponseReviewDto.class))
                 .thenReturn(function);
@@ -175,7 +167,7 @@ class ReviewManagerTest {
 
     private Review getReview() {
         return Review.builder()
-                .uniqueId("review_id")
+                .reviewId("review_id")
                 .title("title")
                 .message("message")
                 .dateOfCreate(100)
@@ -185,7 +177,6 @@ class ReviewManagerTest {
 
     private ReviewDto getReviewDto() {
         return ReviewDto.builder()
-                .reviewId("review_id")
                 .title("title")
                 .message("message")
                 .ratingValue(5)

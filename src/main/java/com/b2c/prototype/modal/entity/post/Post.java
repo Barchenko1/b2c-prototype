@@ -10,6 +10,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -28,6 +30,33 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@NamedQueries({
+        @NamedQuery(
+                name = "Post.getPostByPostId",
+                query = "SELECT p FROM Post p " +
+                        "LEFT JOIN FETCH p.childList p1 " +
+                        "WHERE p.postId = : postId"
+        ),
+        @NamedQuery(
+                name = "Post.allParent",
+                query = "SELECT p FROM Post p " +
+                        "LEFT JOIN FETCH p.childList pl1 " +
+                        "WHERE p.parent IS NULL"
+        ),
+        @NamedQuery(
+                name = "Post.findPostWithByUserId",
+                query = "SELECT DISTINCT p FROM Post p " +
+                        "LEFT JOIN FETCH p.userDetails u " +
+                        "LEFT JOIN FETCH p.childList pl1 " +
+                        "WHERE u.userId = :userId"
+        ),
+        @NamedQuery(
+                name = "Post.findPostWithByEmail",
+                query = "SELECT DISTINCT p FROM Post p " +
+                        "LEFT JOIN FETCH p.childList pl1 " +
+                        "WHERE p.authorEmail = :email"
+        )
+})
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +64,10 @@ public class Post {
     private long id;
     private String title;
     private String message;
-    private String uniquePostId;
+    private String authorEmail;
+    private String authorName;
+    @Column(name = "postId", unique = true, nullable = false)
+    private String postId;
     private long dateOfCreate;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private UserDetails userDetails;

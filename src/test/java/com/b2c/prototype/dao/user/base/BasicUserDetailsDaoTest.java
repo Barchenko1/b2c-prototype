@@ -134,7 +134,7 @@ class BasicUserDetailsDaoTest extends AbstractCustomEntityDaoTest {
         Post parent = Post.builder()
                 .id(1L)
                 .title("parent")
-                .uniquePostId("1")
+                .postId("1")
                 .message("parent")
                 .dateOfCreate(100000)
                 .build();
@@ -257,7 +257,7 @@ class BasicUserDetailsDaoTest extends AbstractCustomEntityDaoTest {
         Post parent = Post.builder()
                 .id(1L)
                 .title("Update parent")
-                .uniquePostId("1")
+                .postId("1")
                 .message("Update parent")
                 .dateOfCreate(100000)
                 .build();

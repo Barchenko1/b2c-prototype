@@ -13,7 +13,6 @@ import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.modal.entity.item.ItemType;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.query.ISearchService;
-import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,8 +44,6 @@ class ItemDataManagerTest {
     private ISearchService queryService;
     @Mock
     private ITransformationFunctionService transformationFunctionService;
-    @Mock
-    private ISupplierService supplierService;
     @InjectMocks
     private ItemDataManager itemDataManager;
 
@@ -83,8 +80,6 @@ class ItemDataManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-        when(supplierService.parameterStringSupplier(ITEM_ID, itemId))
-                .thenReturn(parameterSupplier);
         when(itemDataDao.getNamedQueryEntity("", parameter)).thenReturn(itemData);
         when(transformationFunctionService.getEntity(ItemData.class, itemDataDto))
                 .thenReturn(itemData);
@@ -107,8 +102,6 @@ class ItemDataManagerTest {
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(ITEM_ID, itemId))
-                .thenReturn(parameterSupplier);
 
         itemDataManager.deleteItemData(itemId);
 
@@ -124,8 +117,6 @@ class ItemDataManagerTest {
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
         Function<ItemData, ResponseItemDataDto> function = mock(Function.class);
-        when(supplierService.parameterStringSupplier(ITEM_ID, itemId))
-                .thenReturn(parameterSupplier);
         when(transformationFunctionService.getTransformationFunction(ItemData.class, ResponseItemDataDto.class))
                 .thenReturn(function);
         when(itemDataDao.getGraphEntity(anyString(), eq(parameter))).thenReturn(itemData);

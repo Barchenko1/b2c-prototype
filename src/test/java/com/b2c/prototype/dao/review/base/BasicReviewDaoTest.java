@@ -8,7 +8,7 @@ import com.b2c.prototype.modal.entity.item.Item;
 import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.modal.entity.item.ArticularStatus;
 import com.b2c.prototype.modal.entity.item.ItemType;
-import com.b2c.prototype.modal.entity.item.Rating;
+import com.b2c.prototype.modal.entity.review.Rating;
 import com.b2c.prototype.modal.entity.post.Post;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.review.Review;
@@ -32,7 +32,7 @@ class BasicReviewDaoTest extends AbstractConstantEntityDaoTest {
 
     @Override
     protected String getEmptyDataSetPath() {
-        return "/datasets/review/review/emptyReviewDataSet.yml";
+        return "/datasets/review/review/emptyE2EReview.yml";
     }
 
     @Override
@@ -49,7 +49,7 @@ class BasicReviewDaoTest extends AbstractConstantEntityDaoTest {
                 .rating(rating)
                 .comments(List.of())
                 .build();
-        return new EntityDataSet<>(review, "/datasets/review/review/testReviewDataSet.yml");
+        return new EntityDataSet<>(review, "/datasets/review/review/testE2EReview.yml");
     }
 
     @Override
@@ -59,14 +59,14 @@ class BasicReviewDaoTest extends AbstractConstantEntityDaoTest {
                 .value(5)
                 .build();
         Review review = Review.builder()
-                .uniqueId("123")
+                .reviewId("123")
                 .dateOfCreate(100)
                 .title("title")
                 .message("message")
                 .rating(rating)
                 .comments(List.of())
                 .build();
-        return new EntityDataSet<>(review, "/datasets/review/review/saveReviewDataSet.yml");
+        return new EntityDataSet<>(review, "/datasets/review/review/testE2EReview.yml");
     }
 
     @Override
@@ -77,14 +77,14 @@ class BasicReviewDaoTest extends AbstractConstantEntityDaoTest {
                 .build();
         Review review = Review.builder()
                 .id(1L)
-                .uniqueId("123")
+                .reviewId("123")
                 .dateOfCreate(200)
                 .title("Update title")
                 .message("Update message")
                 .rating(rating)
                 .comments(List.of())
                 .build();
-        return new EntityDataSet<>(review, "/datasets/review/review/updateReviewDataSet.yml");
+        return new EntityDataSet<>(review, "/datasets/review/review/updateE2EReview.yml");
     }
 
     private Category prepareCategories() {
@@ -117,21 +117,21 @@ class BasicReviewDaoTest extends AbstractConstantEntityDaoTest {
         Post parent = Post.builder()
                 .id(1L)
                 .title("parent")
-                .uniquePostId("1")
+                .postId("1")
                 .message("parent")
                 .dateOfCreate(100000)
                 .build();
         Post root = Post.builder()
                 .id(2L)
                 .title("root")
-                .uniquePostId("2")
+                .postId("2")
                 .message("root")
                 .dateOfCreate(100000)
                 .build();
         Post child = Post.builder()
                 .id(3L)
                 .title("child")
-                .uniquePostId("3")
+                .postId("3")
                 .message("child")
                 .dateOfCreate(100000)
                 .build();

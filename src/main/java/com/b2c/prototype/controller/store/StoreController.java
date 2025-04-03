@@ -1,7 +1,7 @@
 package com.b2c.prototype.controller.store;
 
 import com.b2c.prototype.modal.dto.payload.store.StoreDto;
-import com.b2c.prototype.modal.dto.response.ResponseStoreDto;
+import com.b2c.prototype.modal.dto.payload.store.ResponseStoreDto;
 import com.b2c.prototype.processor.store.IStoreProcess;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

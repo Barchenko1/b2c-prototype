@@ -1,0 +1,30 @@
+[
+  {
+    "postId": "post121",
+    "authorName": "Jane Doe",
+    "authorEmail": "janedoe@example.com",
+    "dateOfCreate": 100,
+    "title": "Child Post Title",
+    "message": "This is a reply to the parent post.",
+    "childList": [
+      {
+        "postId": "post122",
+        "authorName": "Jane Doe",
+        "authorEmail": "janedoe@example.com",
+        "dateOfCreate": 100,
+        "title": "Child Post Title",
+        "message": "This is a reply to the parent post.",
+        "childList": []
+      }
+    ]
+  },
+  {
+    "postId": "post122",
+    "authorName": "Jane Doe",
+    "authorEmail": "janedoe@example.com",
+    "dateOfCreate": 100,
+    "title": "Child Post Title",
+    "message": "This is a reply to the parent post.",
+    "childList": []
+  }
+]

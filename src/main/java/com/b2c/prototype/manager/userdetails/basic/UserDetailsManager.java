@@ -10,6 +10,7 @@ import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.userdetails.IUserDetailsManager;
 import com.b2c.prototype.service.query.ISearchService;
 import com.tm.core.finder.factory.IParameterFactory;
+import com.tm.core.process.dao.query.IFetchHandler;
 import com.tm.core.process.manager.common.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
 
@@ -21,16 +22,16 @@ public class UserDetailsManager implements IUserDetailsManager {
 
     private final IEntityOperationManager entityOperationManager;
     private final ITransformationFunctionService transformationFunctionService;
-    private final ISearchService searchService;
+    private final IFetchHandler fetchHandler;
     private final IParameterFactory parameterFactory;
 
     public UserDetailsManager(IUserDetailsDao userDetailsDao,
                               ITransformationFunctionService transformationFunctionService,
-                              ISearchService searchService,
+                              IFetchHandler fetchHandler,
                               IParameterFactory parameterFactory) {
         this.entityOperationManager = new EntityOperationManager(userDetailsDao);
         this.transformationFunctionService = transformationFunctionService;
-        this.searchService = searchService;
+        this.fetchHandler = fetchHandler;
         this.parameterFactory = parameterFactory;
     }
 
@@ -101,7 +102,7 @@ public class UserDetailsManager implements IUserDetailsManager {
     @Override
     public void deleteUserDetailsByUserId(String userId) {
         entityOperationManager.executeConsumer(session -> {
-            UserDetails existingUserDetails = searchService.getNamedQueryEntity(
+            UserDetails existingUserDetails = fetchHandler.getNamedQueryEntity(
                     UserDetails.class,
                     "UserDetails.findByUserId",
                     parameterFactory.createStringParameter(USER_ID, userId));

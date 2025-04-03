@@ -9,10 +9,13 @@ import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.manager.userdetails.IContactInfoManager;
 import com.tm.core.finder.factory.IParameterFactory;
+import com.tm.core.process.dao.query.IFetchHandler;
 import com.tm.core.process.manager.common.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Optional;
 
 import static com.b2c.prototype.util.Constant.ORDER_ID;
 import static com.b2c.prototype.util.Constant.USER_ID;
@@ -22,16 +25,16 @@ public class ContactInfoManager implements IContactInfoManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(ContactInfoManager.class);
 
     private final IEntityOperationManager entityOperationManager;
-    private final ISearchService searchService;
+    private final IFetchHandler fetchHandler;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
     public ContactInfoManager(IContactInfoDao contactInfoDao,
-                              ISearchService searchService,
+                              IFetchHandler fetchHandler,
                               ITransformationFunctionService transformationFunctionService,
                               IParameterFactory parameterFactory) {
         this.entityOperationManager = new EntityOperationManager(contactInfoDao);
-        this.searchService = searchService;
+        this.fetchHandler = fetchHandler;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
     }
@@ -39,7 +42,7 @@ public class ContactInfoManager implements IContactInfoManager {
     @Override
     public void saveUpdateContactInfoByUserId(String userId, ContactInfoDto contactInfoDto) {
         entityOperationManager.executeConsumer(session -> {
-            UserDetails userDetails = searchService.getNamedQueryEntity(
+            UserDetails userDetails = fetchHandler.getNamedQueryEntity(
                     UserDetails.class,
                     "UserDetails.findFullUserDetailsByUserId",
                     parameterFactory.createStringParameter(USER_ID, userId));
@@ -56,7 +59,7 @@ public class ContactInfoManager implements IContactInfoManager {
     @Override
     public void deleteContactInfoByUserId(String userId) {
         entityOperationManager.executeConsumer(session -> {
-            UserDetails userDetails = searchService.getNamedQueryEntity(
+            UserDetails userDetails = fetchHandler.getNamedQueryEntity(
                     UserDetails.class,
                     "UserDetails.findFullUserDetailsByUserId",
                     parameterFactory.createStringParameter(USER_ID, userId));
@@ -71,17 +74,20 @@ public class ContactInfoManager implements IContactInfoManager {
 
     @Override
     public ContactInfoDto getContactInfoByUserId(String userId) {
-        return searchService.getNamedQueryEntityDto(
+        UserDetails userDetails = fetchHandler.getNamedQueryEntity(
                 UserDetails.class,
                 "UserDetails.findFullUserDetailsByUserId",
-                parameterFactory.createStringParameter(USER_ID, userId),
-                transformationFunctionService.getTransformationFunction(UserDetails.class, ContactInfoDto.class));
+                parameterFactory.createStringParameter(USER_ID, userId));
+
+        return Optional.of(userDetails)
+                .map(transformationFunctionService.getTransformationFunction(UserDetails.class, ContactInfoDto.class))
+                .orElseThrow(() -> new RuntimeException(""));
     }
 
     @Override
     public void saveUpdateContactInfoByOrderId(String orderId, ContactInfoDto contactInfoDto) {
         entityOperationManager.executeConsumer(session -> {
-            DeliveryArticularItemQuantity orderItemDataOption = searchService.getNamedQueryEntity(
+            DeliveryArticularItemQuantity orderItemDataOption = fetchHandler.getNamedQueryEntity(
                     DeliveryArticularItemQuantity.class,
                     "DeliveryArticularItemQuantity.findByOrderIdWithBeneficiaries",
                     parameterFactory.createStringParameter(ORDER_ID, orderId));
@@ -102,7 +108,7 @@ public class ContactInfoManager implements IContactInfoManager {
     @Override
     public void deleteContactInfoByOrderId(String orderId) {
         entityOperationManager.executeConsumer(session -> {
-            DeliveryArticularItemQuantity orderItemDataOption = searchService.getNamedQueryEntity(
+            DeliveryArticularItemQuantity orderItemDataOption = fetchHandler.getNamedQueryEntity(
                     DeliveryArticularItemQuantity.class,
                     "DeliveryArticularItemQuantity.findByOrderIdWithBeneficiaries",
                     parameterFactory.createStringParameter(ORDER_ID, orderId));
@@ -113,11 +119,14 @@ public class ContactInfoManager implements IContactInfoManager {
 
     @Override
     public ContactInfoDto getContactInfoByOrderId(String orderId) {
-        return searchService.getNamedQueryEntityDto(
+        DeliveryArticularItemQuantity deliveryArticularItemQuantity = fetchHandler.getNamedQueryEntity(
                 DeliveryArticularItemQuantity.class,
                 "DeliveryArticularItemQuantity.findByOrderIdWithBeneficiaries",
-                parameterFactory.createStringParameter(ORDER_ID, orderId),
-                transformationFunctionService.getTransformationFunction(DeliveryArticularItemQuantity.class, ContactInfoDto.class));
+                parameterFactory.createStringParameter(ORDER_ID, orderId));
+
+        return Optional.of(deliveryArticularItemQuantity)
+                .map(transformationFunctionService.getTransformationFunction(DeliveryArticularItemQuantity.class, ContactInfoDto.class))
+                .orElseThrow(() -> new RuntimeException(""));
     }
 
 }

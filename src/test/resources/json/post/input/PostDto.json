@@ -1,0 +1,9 @@
+{
+  "parentPostId": null,
+  "userId": "user456",
+  "articularId": "art789",
+  "authorName": "Jane Doe",
+  "authorEmail": "janedoe@example.com",
+  "title": "Child Post Title",
+  "message": "This is a reply to the parent post."
+}

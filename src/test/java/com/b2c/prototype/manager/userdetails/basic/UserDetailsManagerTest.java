@@ -17,7 +17,6 @@ import com.b2c.prototype.modal.entity.user.UserCreditCard;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.dao.user.IUserDetailsDao;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.supplier.ISupplierService;
 import com.b2c.prototype.util.CardUtil;
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
@@ -51,8 +50,6 @@ class UserDetailsManagerTest {
     private IUserDetailsDao userDetailsDao;
     @Mock
     private ITransformationFunctionService transformationFunctionService;
-    @Mock
-    private ISupplierService supplierService;
     @InjectMocks
     private UserDetailsManager userDetailsManager;
 
@@ -85,8 +82,6 @@ class UserDetailsManagerTest {
         userDetails.setActive(false);
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(USER_ID, userId))
-                .thenReturn(parameterSupplier);
 //        when(userDetailsDao.getNamedQueryEntity("", parameter))
 //                .thenReturn(userDetails);
         doAnswer(invocation -> {
@@ -108,7 +103,7 @@ class UserDetailsManagerTest {
         String userId = "test-user-id";
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(USER_ID, userId)).thenReturn(parameterSupplier);
+        
 
         userDetailsManager.deleteUserDetailsByUserId(userId);
 
@@ -123,8 +118,6 @@ class UserDetailsManagerTest {
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(USER_ID, userId))
-                .thenReturn(parameterSupplier);
         when(transformationFunctionService.getTransformationFunction(UserDetails.class, UserDetailsDto.class))
                 .thenReturn(transformationFunction);
         when(userDetailsDao.getGraphEntity(anyString(), eq(parameter)))

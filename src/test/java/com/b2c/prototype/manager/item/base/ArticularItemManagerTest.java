@@ -18,7 +18,6 @@ import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.query.ISearchService;
-import com.b2c.prototype.service.supplier.ISupplierService;
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,8 +52,6 @@ class ArticularItemManagerTest {
     private ISearchService queryService;
     @Mock
     private ITransformationFunctionService transformationFunctionService;
-    @Mock
-    private ISupplierService supplierService;
     @InjectMocks
     private ArticularItemManager articularItemManager;
 
@@ -74,8 +71,6 @@ class ArticularItemManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-        when(supplierService.parameterStringSupplier(ITEM_ID, itemId))
-                .thenReturn(parameterSupplier);
 //        when(queryService.getEntity(ItemData.class, parameterSupplier))
 //                .thenReturn(itemData);
         when(transformationFunctionService.getEntity(ArticularItem.class, articularItemDto))
@@ -105,8 +100,6 @@ class ArticularItemManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-        when(supplierService.parameterStringSupplier(ITEM_ID, itemId))
-                .thenReturn(parameterSupplier);
 //        when(queryService.getEntity(ItemData.class, parameterSupplier))
 //                .thenReturn(itemData);
         when(transformationFunctionService.getEntity(ArticularItem.class, articularItemDto))
@@ -129,8 +122,7 @@ class ArticularItemManagerTest {
         String articularId = "testValue";
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
-                .thenReturn(parameterSupplier);
+        
 
         articularItemManager.deleteArticularItem(articularId);
 
@@ -146,8 +138,6 @@ class ArticularItemManagerTest {
         Function<ArticularItem, ResponseArticularItemDto> function = mock(Function.class);
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(supplierService.parameterStringSupplier(ARTICULAR_ID, value))
-                .thenReturn(parameterSupplier);
         when(itemDataOptionDao.getGraphEntity(anyString(), eq(parameter))).thenReturn(articularItem);
         when(transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class))
                 .thenReturn(function);
