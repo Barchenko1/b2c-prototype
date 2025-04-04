@@ -1,7 +1,7 @@
 package com.b2c.prototype.processor.item;
 
-import com.b2c.prototype.modal.dto.payload.ArticularItemDto;
-import com.b2c.prototype.modal.dto.response.ResponseArticularItemDto;
+import com.b2c.prototype.modal.dto.payload.item.ArticularItemDto;
+import com.b2c.prototype.modal.dto.payload.item.ResponseArticularItemDto;
 
 import java.util.List;
 import java.util.Map;

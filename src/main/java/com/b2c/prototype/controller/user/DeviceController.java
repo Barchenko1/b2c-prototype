@@ -1,7 +1,7 @@
 package com.b2c.prototype.controller.user;
 
 import com.b2c.prototype.modal.dto.payload.user.DeviceDto;
-import com.b2c.prototype.modal.dto.response.ResponseDeviceDto;
+import com.b2c.prototype.modal.dto.payload.user.ResponseDeviceDto;
 import com.b2c.prototype.processor.user.IDeviceProcess;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.MediaType;

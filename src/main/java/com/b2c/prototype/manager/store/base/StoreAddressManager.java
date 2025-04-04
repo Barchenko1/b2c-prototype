@@ -2,7 +2,7 @@ package com.b2c.prototype.manager.store.base;
 
 import com.b2c.prototype.dao.address.IAddressDao;
 import com.b2c.prototype.manager.store.IStoreAddressManager;
-import com.b2c.prototype.modal.dto.payload.AddressDto;
+import com.b2c.prototype.modal.dto.payload.order.AddressDto;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.store.Store;
 import com.b2c.prototype.service.function.ITransformationFunctionService;

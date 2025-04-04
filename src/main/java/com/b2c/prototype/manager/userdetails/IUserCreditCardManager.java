@@ -1,8 +1,8 @@
 package com.b2c.prototype.manager.userdetails;
 
 import com.b2c.prototype.modal.dto.payload.user.UserCreditCardDto;
-import com.b2c.prototype.modal.dto.response.ResponseCreditCardDto;
-import com.b2c.prototype.modal.dto.response.ResponseUserCreditCardDto;
+import com.b2c.prototype.modal.dto.payload.order.ResponseCreditCardDto;
+import com.b2c.prototype.modal.dto.payload.user.ResponseUserCreditCardDto;
 
 import java.util.List;
 

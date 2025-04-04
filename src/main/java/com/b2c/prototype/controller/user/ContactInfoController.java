@@ -1,6 +1,6 @@
 package com.b2c.prototype.controller.user;
 
-import com.b2c.prototype.modal.dto.payload.ContactInfoDto;
+import com.b2c.prototype.modal.dto.payload.order.ContactInfoDto;
 import com.b2c.prototype.processor.user.IContactInfoProcess;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

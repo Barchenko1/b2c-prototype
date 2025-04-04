@@ -2,8 +2,8 @@ package com.b2c.prototype.e2e.controller.basic;
 
 import com.b2c.prototype.e2e.BasicE2ETest;
 import com.b2c.prototype.e2e.util.TestUtil;
-import com.b2c.prototype.modal.dto.response.ResponseCreditCardDto;
-import com.b2c.prototype.modal.dto.response.ResponseUserCreditCardDto;
+import com.b2c.prototype.modal.dto.payload.order.ResponseCreditCardDto;
+import com.b2c.prototype.modal.dto.payload.user.ResponseUserCreditCardDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,7 +1,7 @@
 package com.b2c.prototype.controller.item;
 
-import com.b2c.prototype.modal.dto.payload.ItemDataDto;
-import com.b2c.prototype.modal.dto.response.ResponseItemDataDto;
+import com.b2c.prototype.modal.dto.payload.item.ItemDataDto;
+import com.b2c.prototype.modal.dto.payload.item.ResponseItemDataDto;
 import com.b2c.prototype.processor.item.IItemDataProcessor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

@@ -2,9 +2,9 @@ package com.b2c.prototype.manager.message.base;
 
 import com.b2c.prototype.dao.message.IMessageBoxDao;
 import com.b2c.prototype.modal.constant.MessageStatusEnum;
-import com.b2c.prototype.modal.dto.payload.user.MessageDto;
-import com.b2c.prototype.modal.dto.response.ResponseMessageOverviewDto;
-import com.b2c.prototype.modal.dto.response.ResponseMessagePayloadDto;
+import com.b2c.prototype.modal.dto.payload.message.MessageDto;
+import com.b2c.prototype.modal.dto.payload.message.ResponseMessageOverviewDto;
+import com.b2c.prototype.modal.dto.payload.message.ResponseMessagePayloadDto;
 import com.b2c.prototype.modal.entity.message.Message;
 import com.b2c.prototype.modal.entity.message.MessageBox;
 import com.b2c.prototype.modal.entity.message.MessageStatus;

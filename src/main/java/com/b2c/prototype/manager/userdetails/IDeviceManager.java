@@ -1,7 +1,7 @@
 package com.b2c.prototype.manager.userdetails;
 
 import com.b2c.prototype.modal.dto.payload.user.DeviceDto;
-import com.b2c.prototype.modal.dto.response.ResponseDeviceDto;
+import com.b2c.prototype.modal.dto.payload.user.ResponseDeviceDto;
 
 import java.util.List;
 

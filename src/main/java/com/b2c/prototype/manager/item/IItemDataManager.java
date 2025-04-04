@@ -1,7 +1,7 @@
 package com.b2c.prototype.manager.item;
 
-import com.b2c.prototype.modal.dto.payload.ItemDataDto;
-import com.b2c.prototype.modal.dto.response.ResponseItemDataDto;
+import com.b2c.prototype.modal.dto.payload.item.ItemDataDto;
+import com.b2c.prototype.modal.dto.payload.item.ResponseItemDataDto;
 
 import java.util.List;
 

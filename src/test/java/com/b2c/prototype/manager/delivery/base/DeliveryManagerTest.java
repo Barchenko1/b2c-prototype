@@ -1,8 +1,8 @@
 //package com.b2c.prototype.manager.delivery.base;
 //
 //import com.b2c.prototype.dao.delivery.IDeliveryDao;
-//import com.b2c.prototype.modal.dto.payload.AddressDto;
-//import com.b2c.prototype.modal.dto.payload.DeliveryDto;
+//import com.b2c.prototype.modal.dto.payload.order.AddressDto;
+//import com.b2c.prototype.modal.dto.payload.order.DeliveryDto;
 //import com.b2c.prototype.modal.entity.address.Address;
 //import com.b2c.prototype.modal.entity.address.Country;
 //import com.b2c.prototype.modal.entity.delivery.Delivery;

@@ -1,12 +1,12 @@
 package com.b2c.prototype.manager.userdetails.basic;
 
-import com.b2c.prototype.modal.dto.payload.AddressDto;
-import com.b2c.prototype.modal.dto.payload.ContactInfoDto;
-import com.b2c.prototype.modal.dto.payload.ContactPhoneDto;
-import com.b2c.prototype.modal.dto.payload.CreditCardDto;
+import com.b2c.prototype.modal.dto.payload.order.AddressDto;
+import com.b2c.prototype.modal.dto.payload.order.ContactInfoDto;
+import com.b2c.prototype.modal.dto.payload.order.ContactPhoneDto;
+import com.b2c.prototype.modal.dto.payload.order.CreditCardDto;
 import com.b2c.prototype.modal.dto.payload.user.RegistrationUserDetailsDto;
 import com.b2c.prototype.modal.dto.payload.user.UserDetailsDto;
-import com.b2c.prototype.modal.dto.response.ResponseUserDetailsDto;
+import com.b2c.prototype.modal.dto.payload.user.ResponseUserDetailsDto;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
@@ -32,7 +32,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static com.b2c.prototype.util.Constant.USER_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;

@@ -1,9 +1,9 @@
 package com.b2c.prototype.processor.address;
 
 import com.b2c.prototype.manager.address.IUserAddressManager;
-import com.b2c.prototype.modal.dto.payload.AddressDto;
+import com.b2c.prototype.modal.dto.payload.order.AddressDto;
 import com.b2c.prototype.modal.dto.payload.user.UserAddressDto;
-import com.b2c.prototype.modal.dto.response.ResponseUserAddressDto;
+import com.b2c.prototype.modal.dto.payload.user.ResponseUserAddressDto;
 
 import java.util.List;
 import java.util.Map;

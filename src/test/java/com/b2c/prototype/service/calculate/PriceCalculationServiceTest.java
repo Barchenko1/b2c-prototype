@@ -1,6 +1,6 @@
 package com.b2c.prototype.service.calculate;
 
-import com.b2c.prototype.modal.dto.payload.PriceDto;
+import com.b2c.prototype.modal.dto.payload.item.PriceDto;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;

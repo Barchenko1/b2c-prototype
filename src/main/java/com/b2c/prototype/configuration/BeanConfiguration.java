@@ -57,7 +57,7 @@ import com.b2c.prototype.dao.item.base.BasicBrandDao;
 import com.b2c.prototype.dao.payment.base.BasicCreditCardDao;
 import com.b2c.prototype.dao.option.base.BasicOptionItemDao;
 import com.b2c.prototype.dao.option.base.BasicOptionGroupDao;
-import com.b2c.prototype.dao.order.base.BasicOrderArticularItemQuantityDao;
+import com.b2c.prototype.dao.order.base.BasicCustomerOrderDao;
 import com.b2c.prototype.dao.order.base.BasicOrderStatusDao;
 import com.b2c.prototype.dao.payment.base.BasicPaymentDao;
 import com.b2c.prototype.dao.post.base.BasicPostDao;
@@ -68,7 +68,7 @@ import com.b2c.prototype.dao.rating.base.BasicRatingDao;
 import com.b2c.prototype.dao.review.base.BasicReviewDao;
 import com.b2c.prototype.dao.option.IOptionItemDao;
 import com.b2c.prototype.dao.option.IOptionGroupDao;
-import com.b2c.prototype.dao.order.IOrderItemDataDao;
+import com.b2c.prototype.dao.order.ICustomerOrderDao;
 import com.b2c.prototype.dao.order.IOrderStatusDao;
 import com.b2c.prototype.dao.payment.ICreditCardDao;
 import com.b2c.prototype.dao.payment.IPaymentDao;
@@ -255,8 +255,8 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public IOrderItemDataDao orderItemDao(SessionFactory sessionFactory, IQueryService queryService) {
-        return new BasicOrderArticularItemQuantityDao(sessionFactory, queryService);
+    public ICustomerOrderDao orderItemDao(SessionFactory sessionFactory, IQueryService queryService) {
+        return new BasicCustomerOrderDao(sessionFactory, queryService);
     }
 
     @Bean

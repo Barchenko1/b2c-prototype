@@ -4,7 +4,7 @@ import com.b2c.prototype.manager.review.IReviewManager;
 import com.b2c.prototype.modal.dto.payload.review.ResponseReviewCommentDto;
 import com.b2c.prototype.modal.dto.payload.review.ReviewCommentDto;
 import com.b2c.prototype.modal.dto.payload.review.ReviewDto;
-import com.b2c.prototype.modal.dto.response.ResponseReviewDto;
+import com.b2c.prototype.modal.dto.payload.review.ResponseReviewDto;
 
 import java.util.Collections;
 import java.util.List;

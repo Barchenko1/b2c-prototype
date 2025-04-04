@@ -1,9 +1,9 @@
 package com.b2c.prototype.processor.user;
 
-import com.b2c.prototype.modal.dto.payload.user.MessageDto;
-import com.b2c.prototype.modal.dto.payload.user.MessageTemplateDto;
-import com.b2c.prototype.modal.dto.response.ResponseMessageOverviewDto;
-import com.b2c.prototype.modal.dto.response.ResponseMessagePayloadDto;
+import com.b2c.prototype.modal.dto.payload.message.MessageDto;
+import com.b2c.prototype.modal.dto.payload.message.MessageTemplateDto;
+import com.b2c.prototype.modal.dto.payload.message.ResponseMessageOverviewDto;
+import com.b2c.prototype.modal.dto.payload.message.ResponseMessagePayloadDto;
 
 import java.util.List;
 import java.util.Map;

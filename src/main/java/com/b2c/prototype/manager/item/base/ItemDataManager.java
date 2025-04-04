@@ -2,8 +2,8 @@ package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.dao.item.IItemDataDao;
 import com.b2c.prototype.modal.dto.common.SearchFieldUpdateEntityDto;
-import com.b2c.prototype.modal.dto.payload.ItemDataDto;
-import com.b2c.prototype.modal.dto.response.ResponseItemDataDto;
+import com.b2c.prototype.modal.dto.payload.item.ItemDataDto;
+import com.b2c.prototype.modal.dto.payload.item.ResponseItemDataDto;
 import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.item.IItemDataManager;

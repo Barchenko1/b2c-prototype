@@ -1,7 +1,7 @@
 package com.b2c.prototype.manager.payment;
 
 import com.b2c.prototype.modal.dto.payload.commission.CommissionDto;
-import com.b2c.prototype.modal.dto.response.ResponseCommissionDto;
+import com.b2c.prototype.modal.dto.payload.order.ResponseCommissionDto;
 
 import java.util.List;
 

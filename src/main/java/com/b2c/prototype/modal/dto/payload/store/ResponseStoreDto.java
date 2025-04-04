@@ -1,7 +1,7 @@
 package com.b2c.prototype.modal.dto.payload.store;
 
-import com.b2c.prototype.modal.dto.payload.AddressDto;
-import com.b2c.prototype.modal.dto.payload.ArticularItemQuantityDto;
+import com.b2c.prototype.modal.dto.payload.order.AddressDto;
+import com.b2c.prototype.modal.dto.payload.order.ArticularItemQuantityDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

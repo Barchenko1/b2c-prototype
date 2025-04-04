@@ -1,7 +1,7 @@
 package com.b2c.prototype.processor.item;
 
-import com.b2c.prototype.modal.dto.payload.ArticularItemDto;
-import com.b2c.prototype.modal.dto.response.ResponseArticularItemDto;
+import com.b2c.prototype.modal.dto.payload.item.ArticularItemDto;
+import com.b2c.prototype.modal.dto.payload.item.ResponseArticularItemDto;
 import com.b2c.prototype.manager.item.IArticularItemManager;
 
 import java.util.List;

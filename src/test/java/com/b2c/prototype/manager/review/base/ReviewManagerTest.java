@@ -2,7 +2,7 @@ package com.b2c.prototype.manager.review.base;
 
 import com.b2c.prototype.dao.review.IReviewDao;
 import com.b2c.prototype.modal.dto.payload.review.ReviewDto;
-import com.b2c.prototype.modal.dto.response.ResponseReviewDto;
+import com.b2c.prototype.modal.dto.payload.review.ResponseReviewDto;
 import com.b2c.prototype.modal.entity.item.Item;
 import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.modal.entity.review.Rating;
@@ -25,7 +25,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doAnswer;

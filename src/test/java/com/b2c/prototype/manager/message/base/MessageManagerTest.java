@@ -2,10 +2,10 @@ package com.b2c.prototype.manager.message.base;
 
 
 import com.b2c.prototype.dao.message.IMessageDao;
-import com.b2c.prototype.modal.dto.payload.user.MessageDto;
-import com.b2c.prototype.modal.dto.payload.user.MessageTemplateDto;
-import com.b2c.prototype.modal.dto.response.ResponseMessageOverviewDto;
-import com.b2c.prototype.modal.dto.response.ResponseMessagePayloadDto;
+import com.b2c.prototype.modal.dto.payload.message.MessageDto;
+import com.b2c.prototype.modal.dto.payload.message.MessageTemplateDto;
+import com.b2c.prototype.modal.dto.payload.message.ResponseMessageOverviewDto;
+import com.b2c.prototype.modal.dto.payload.message.ResponseMessagePayloadDto;
 import com.b2c.prototype.modal.entity.message.Message;
 import com.b2c.prototype.modal.entity.message.MessageBox;
 import com.b2c.prototype.modal.entity.message.MessageStatus;
@@ -29,7 +29,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static com.b2c.prototype.util.Constant.USER_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;

@@ -7,14 +7,14 @@ import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.dto.common.NumberConstantPayloadDto;
 import com.b2c.prototype.modal.dto.common.SearchFieldUpdateCollectionEntityDto;
 import com.b2c.prototype.modal.dto.common.SearchFieldUpdateEntityDto;
-import com.b2c.prototype.modal.dto.payload.AddressDto;
-import com.b2c.prototype.modal.dto.payload.ArticularItemDto;
-import com.b2c.prototype.modal.dto.payload.ArticularItemQuantityDto;
+import com.b2c.prototype.modal.dto.payload.order.AddressDto;
+import com.b2c.prototype.modal.dto.payload.item.ArticularItemDto;
+import com.b2c.prototype.modal.dto.payload.order.ArticularItemQuantityDto;
 import com.b2c.prototype.modal.dto.payload.commission.CommissionDto;
-import com.b2c.prototype.modal.dto.payload.ContactInfoDto;
-import com.b2c.prototype.modal.dto.payload.ContactPhoneDto;
-import com.b2c.prototype.modal.dto.payload.CreditCardDto;
-import com.b2c.prototype.modal.dto.payload.DeliveryDto;
+import com.b2c.prototype.modal.dto.payload.order.ContactInfoDto;
+import com.b2c.prototype.modal.dto.payload.order.ContactPhoneDto;
+import com.b2c.prototype.modal.dto.payload.order.CreditCardDto;
+import com.b2c.prototype.modal.dto.payload.order.DeliveryDto;
 import com.b2c.prototype.modal.dto.payload.post.PostDto;
 import com.b2c.prototype.modal.dto.payload.post.ResponsePostDto;
 import com.b2c.prototype.modal.dto.payload.review.ResponseReviewCommentDto;
@@ -22,14 +22,14 @@ import com.b2c.prototype.modal.dto.payload.review.ReviewCommentDto;
 import com.b2c.prototype.modal.dto.payload.user.DeviceDto;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.discount.InitDiscountDto;
-import com.b2c.prototype.modal.dto.payload.ItemDataDto;
-import com.b2c.prototype.modal.dto.payload.user.MessageDto;
+import com.b2c.prototype.modal.dto.payload.item.ItemDataDto;
+import com.b2c.prototype.modal.dto.payload.message.MessageDto;
 import com.b2c.prototype.modal.dto.payload.option.OptionGroupDto;
 import com.b2c.prototype.modal.dto.payload.option.OptionGroupOptionItemSetDto;
 import com.b2c.prototype.modal.dto.payload.option.OptionItemDto;
-import com.b2c.prototype.modal.dto.payload.OrderArticularItemQuantityDto;
-import com.b2c.prototype.modal.dto.payload.PaymentDto;
-import com.b2c.prototype.modal.dto.payload.PriceDto;
+import com.b2c.prototype.modal.dto.payload.order.CustomerOrderDto;
+import com.b2c.prototype.modal.dto.payload.order.PaymentDto;
+import com.b2c.prototype.modal.dto.payload.item.PriceDto;
 import com.b2c.prototype.modal.dto.payload.user.RegistrationUserDetailsDto;
 import com.b2c.prototype.modal.dto.payload.review.ReviewDto;
 import com.b2c.prototype.modal.dto.payload.option.SingleOptionItemDto;
@@ -43,19 +43,19 @@ import com.b2c.prototype.modal.dto.payload.constant.BrandDto;
 import com.b2c.prototype.modal.dto.payload.constant.CategoryValueDto;
 import com.b2c.prototype.modal.dto.payload.constant.CountryDto;
 import com.b2c.prototype.modal.dto.payload.constant.ItemTypeDto;
-import com.b2c.prototype.modal.dto.response.ResponseArticularItemDto;
-import com.b2c.prototype.modal.dto.response.ResponseCommissionDto;
-import com.b2c.prototype.modal.dto.response.ResponseCreditCardDto;
-import com.b2c.prototype.modal.dto.response.ResponseDeviceDto;
-import com.b2c.prototype.modal.dto.response.ResponseItemDataDto;
-import com.b2c.prototype.modal.dto.response.ResponseMessageOverviewDto;
-import com.b2c.prototype.modal.dto.response.ResponseMessagePayloadDto;
-import com.b2c.prototype.modal.dto.response.ResponseReviewDto;
+import com.b2c.prototype.modal.dto.payload.item.ResponseArticularItemDto;
+import com.b2c.prototype.modal.dto.payload.order.ResponseCommissionDto;
+import com.b2c.prototype.modal.dto.payload.order.ResponseCreditCardDto;
+import com.b2c.prototype.modal.dto.payload.user.ResponseDeviceDto;
+import com.b2c.prototype.modal.dto.payload.item.ResponseItemDataDto;
+import com.b2c.prototype.modal.dto.payload.message.ResponseMessageOverviewDto;
+import com.b2c.prototype.modal.dto.payload.message.ResponseMessagePayloadDto;
+import com.b2c.prototype.modal.dto.payload.review.ResponseReviewDto;
 import com.b2c.prototype.modal.dto.payload.store.ResponseStoreDto;
-import com.b2c.prototype.modal.dto.response.ResponseTimeDurationOptionDto;
-import com.b2c.prototype.modal.dto.response.ResponseUserAddressDto;
-import com.b2c.prototype.modal.dto.response.ResponseUserCreditCardDto;
-import com.b2c.prototype.modal.dto.response.ResponseUserDetailsDto;
+import com.b2c.prototype.modal.dto.payload.option.ResponseTimeDurationOptionDto;
+import com.b2c.prototype.modal.dto.payload.user.ResponseUserAddressDto;
+import com.b2c.prototype.modal.dto.payload.user.ResponseUserCreditCardDto;
+import com.b2c.prototype.modal.dto.payload.user.ResponseUserDetailsDto;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.address.UserAddress;
@@ -230,7 +230,7 @@ public class TransformationEntityConfiguration {
     }
 
     private void loadOrderFunctions(ITransformationFunctionService transformationFunctionService) {
-        transformationFunctionService.addTransformationFunction(OrderArticularItemQuantityDto.class, DeliveryArticularItemQuantity.class, mapOrderArticularItemQuantityToOrderArticularItem());
+        transformationFunctionService.addTransformationFunction(CustomerOrderDto.class, DeliveryArticularItemQuantity.class, mapOrderArticularItemQuantityToOrderArticularItem());
     }
 
     private void loadUserDetailsFunctions(ITransformationFunctionService transformationFunctionService) {
@@ -1083,7 +1083,7 @@ public class TransformationEntityConfiguration {
                 .collect(Collectors.toSet());
     }
 
-    private BiFunction<Session, OrderArticularItemQuantityDto, DeliveryArticularItemQuantity> mapOrderArticularItemQuantityToOrderArticularItem() {
+    private BiFunction<Session, CustomerOrderDto, DeliveryArticularItemQuantity> mapOrderArticularItemQuantityToOrderArticularItem() {
         return (session, orderArticularItemQuantityDto) -> {
             Optional<UserDetails> userDetailsOptional = Optional.empty();
             if (orderArticularItemQuantityDto.getUser().getUserId() != null) {

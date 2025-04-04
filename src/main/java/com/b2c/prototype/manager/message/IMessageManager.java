@@ -1,10 +1,9 @@
 package com.b2c.prototype.manager.message;
 
 import com.b2c.prototype.modal.constant.MessageStatusEnum;
-import com.b2c.prototype.modal.dto.payload.user.MessageDto;
-import com.b2c.prototype.modal.dto.payload.user.MessageTemplateDto;
-import com.b2c.prototype.modal.dto.response.ResponseMessageOverviewDto;
-import com.b2c.prototype.modal.dto.response.ResponseMessagePayloadDto;
+import com.b2c.prototype.modal.dto.payload.message.MessageDto;
+import com.b2c.prototype.modal.dto.payload.message.ResponseMessageOverviewDto;
+import com.b2c.prototype.modal.dto.payload.message.ResponseMessagePayloadDto;
 
 import java.util.List;
 

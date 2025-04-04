@@ -1,12 +1,11 @@
 package com.b2c.prototype.manager.userdetails.basic;
 
 import com.b2c.prototype.dao.user.IContactInfoDao;
-import com.b2c.prototype.modal.dto.payload.ContactInfoDto;
+import com.b2c.prototype.modal.dto.payload.order.ContactInfoDto;
 import com.b2c.prototype.modal.entity.order.DeliveryArticularItemQuantity;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.manager.userdetails.IContactInfoManager;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.dao.query.IFetchHandler;

@@ -1,6 +1,6 @@
 package com.b2c.prototype.modal.dto.payload.user;
 
-import com.b2c.prototype.modal.dto.payload.CreditCardDto;
+import com.b2c.prototype.modal.dto.payload.order.CreditCardDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

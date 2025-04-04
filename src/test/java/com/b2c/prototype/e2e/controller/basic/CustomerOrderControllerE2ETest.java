@@ -2,7 +2,7 @@ package com.b2c.prototype.e2e.controller.basic;
 
 import com.b2c.prototype.e2e.BasicE2ETest;
 import com.b2c.prototype.e2e.util.TestUtil;
-import com.b2c.prototype.modal.dto.response.ResponseOrderDetails;
+import com.b2c.prototype.modal.dto.payload.order.ResponseCustomerOrderDetails;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.BeforeEach;
@@ -134,9 +134,9 @@ class CustomerOrderControllerE2ETest extends BasicE2ETest {
 
         try {
             String jsonResponse = mvcResult.getResponse().getContentAsString();
-            ResponseOrderDetails actual = objectMapper.readValue(jsonResponse, ResponseOrderDetails.class);
+            ResponseCustomerOrderDetails actual = objectMapper.readValue(jsonResponse, ResponseCustomerOrderDetails.class);
             String expectedResultStr = TestUtil.readFile("json/order/output/ResponseOrderDetails.json");
-            ResponseOrderDetails expected = objectMapper.readValue(expectedResultStr, ResponseOrderDetails.class);
+            ResponseCustomerOrderDetails expected = objectMapper.readValue(expectedResultStr, ResponseCustomerOrderDetails.class);
             assertEquals(expected, actual);
         } catch (JsonProcessingException | UnsupportedEncodingException e) {
             throw new RuntimeException("Error processing the JSON response", e);
@@ -161,9 +161,9 @@ class CustomerOrderControllerE2ETest extends BasicE2ETest {
 
         try {
             String jsonResponse = mvcResult.getResponse().getContentAsString();
-            List<ResponseOrderDetails> actualList = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
+            List<ResponseCustomerOrderDetails> actualList = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
             String expectedResultStr = TestUtil.readFile("json/order/output/ResponseOrderDetails.json");
-            List<ResponseOrderDetails> expectedList = objectMapper.readValue(expectedResultStr, new TypeReference<>() {});
+            List<ResponseCustomerOrderDetails> expectedList = objectMapper.readValue(expectedResultStr, new TypeReference<>() {});
             assertEquals(expectedList, actualList);
         } catch (JsonProcessingException | UnsupportedEncodingException e) {
             throw new RuntimeException("Error processing the JSON response", e);

@@ -1,8 +1,8 @@
 package com.b2c.prototype.controller.user;
 
-import com.b2c.prototype.modal.dto.payload.AddressDto;
+import com.b2c.prototype.modal.dto.payload.order.AddressDto;
 import com.b2c.prototype.modal.dto.payload.user.UserAddressDto;
-import com.b2c.prototype.modal.dto.response.ResponseUserAddressDto;
+import com.b2c.prototype.modal.dto.payload.user.ResponseUserAddressDto;
 import com.b2c.prototype.processor.address.IUserAddressProcess;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

@@ -2,9 +2,9 @@ package com.b2c.prototype.manager.payment.base;
 
 import com.b2c.prototype.dao.payment.ICreditCardDao;
 import com.b2c.prototype.manager.userdetails.basic.UserCreditCardManager;
-import com.b2c.prototype.modal.dto.payload.CreditCardDto;
-import com.b2c.prototype.modal.dto.response.ResponseCreditCardDto;
-import com.b2c.prototype.modal.dto.response.ResponseUserCreditCardDto;
+import com.b2c.prototype.modal.dto.payload.order.CreditCardDto;
+import com.b2c.prototype.modal.dto.payload.order.ResponseCreditCardDto;
+import com.b2c.prototype.modal.dto.payload.user.ResponseUserCreditCardDto;
 import com.b2c.prototype.modal.entity.order.DeliveryArticularItemQuantity;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
 import com.b2c.prototype.modal.entity.payment.Payment;
@@ -26,8 +26,6 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import static com.b2c.prototype.util.Constant.ORDER_ID;
-import static com.b2c.prototype.util.Constant.USER_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;

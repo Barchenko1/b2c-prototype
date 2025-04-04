@@ -1,7 +1,7 @@
 package com.b2c.prototype.modal.dto.payload.option;
 
 import com.b2c.prototype.modal.dto.common.AbstractConstantDto;
-import com.b2c.prototype.modal.dto.payload.PriceDto;
+import com.b2c.prototype.modal.dto.payload.item.PriceDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

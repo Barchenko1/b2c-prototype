@@ -1,7 +1,7 @@
 package com.b2c.prototype.controller.commission;
 
 import com.b2c.prototype.modal.dto.payload.commission.CommissionDto;
-import com.b2c.prototype.modal.dto.response.ResponseCommissionDto;
+import com.b2c.prototype.modal.dto.payload.order.ResponseCommissionDto;
 import com.b2c.prototype.processor.commission.IBuyerCommissionProcess;
 import com.b2c.prototype.processor.commission.ISellerCommissionProcess;
 import org.springframework.http.HttpStatus;

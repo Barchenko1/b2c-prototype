@@ -2,8 +2,8 @@ package com.b2c.prototype.processor.creditcard;
 
 import com.b2c.prototype.manager.userdetails.IUserCreditCardManager;
 import com.b2c.prototype.modal.dto.payload.user.UserCreditCardDto;
-import com.b2c.prototype.modal.dto.response.ResponseCreditCardDto;
-import com.b2c.prototype.modal.dto.response.ResponseUserCreditCardDto;
+import com.b2c.prototype.modal.dto.payload.order.ResponseCreditCardDto;
+import com.b2c.prototype.modal.dto.payload.user.ResponseUserCreditCardDto;
 
 import java.util.List;
 import java.util.Map;

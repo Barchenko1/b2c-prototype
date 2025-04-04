@@ -2,13 +2,11 @@ package com.b2c.prototype.configuration;
 
 import com.b2c.prototype.dao.address.IAddressDao;
 import com.b2c.prototype.dao.address.ICountryDao;
-import com.b2c.prototype.dao.delivery.IDeliveryDao;
 import com.b2c.prototype.dao.delivery.IDeliveryTypeDao;
 import com.b2c.prototype.dao.item.IAvailabilityStatusDao;
 import com.b2c.prototype.dao.item.IBrandDao;
 import com.b2c.prototype.dao.item.ICategoryDao;
 import com.b2c.prototype.dao.item.IDiscountDao;
-import com.b2c.prototype.dao.item.IItemDao;
 import com.b2c.prototype.dao.item.IItemDataDao;
 import com.b2c.prototype.dao.item.IItemDataOptionDao;
 import com.b2c.prototype.dao.item.IItemStatusDao;
@@ -21,11 +19,10 @@ import com.b2c.prototype.dao.option.IOptionItemCostDao;
 import com.b2c.prototype.dao.option.IOptionItemDao;
 import com.b2c.prototype.dao.option.ITimeDurationOptionDao;
 import com.b2c.prototype.dao.option.IZoneOptionDao;
-import com.b2c.prototype.dao.order.IOrderItemDataDao;
+import com.b2c.prototype.dao.order.ICustomerOrderDao;
 import com.b2c.prototype.dao.order.IOrderStatusDao;
 import com.b2c.prototype.dao.payment.IBuyerCommissionDao;
 import com.b2c.prototype.dao.payment.ICreditCardDao;
-import com.b2c.prototype.dao.payment.IPaymentDao;
 import com.b2c.prototype.dao.payment.IPaymentMethodDao;
 import com.b2c.prototype.dao.payment.ISellerCommissionDao;
 import com.b2c.prototype.dao.post.IPostDao;
@@ -78,9 +75,9 @@ import com.b2c.prototype.manager.option.base.OptionItemCostManager;
 import com.b2c.prototype.manager.option.base.OptionItemManager;
 import com.b2c.prototype.manager.option.base.TimeDurationOptionManager;
 import com.b2c.prototype.manager.option.base.ZoneOptionManager;
-import com.b2c.prototype.manager.order.IOrderArticularItemQuantityManager;
+import com.b2c.prototype.manager.order.ICustomerOrderManager;
 import com.b2c.prototype.manager.order.IOrderStatusManager;
-import com.b2c.prototype.manager.order.base.OrderArticularItemQuantityManager;
+import com.b2c.prototype.manager.order.base.CustomerOrderManager;
 import com.b2c.prototype.manager.order.base.OrderStatusManager;
 import com.b2c.prototype.manager.payment.IBuyerCommissionManager;
 import com.b2c.prototype.manager.payment.ISellerCommissionManager;
@@ -140,8 +137,8 @@ import com.b2c.prototype.processor.option.IZoneOptionProcess;
 import com.b2c.prototype.processor.option.OptionItemProcessor;
 import com.b2c.prototype.processor.option.TimeDurationOptionProcess;
 import com.b2c.prototype.processor.option.ZoneOptionProcess;
-import com.b2c.prototype.processor.order.IOrderProcessor;
-import com.b2c.prototype.processor.order.OrderProcessor;
+import com.b2c.prototype.processor.order.ICustomerOrderProcessor;
+import com.b2c.prototype.processor.order.CustomerOrderProcessor;
 import com.b2c.prototype.processor.store.IStoreAddressProcess;
 import com.b2c.prototype.processor.store.IStoreProcess;
 import com.b2c.prototype.processor.store.StoreAddressProcess;
@@ -443,10 +440,10 @@ public class ServiceBeanConfiguration {
 //    }
 
     @Bean
-    public IOrderArticularItemQuantityManager orderItemDataManager(IOrderItemDataDao orderItemDao,
-                                                                   ITransformationFunctionService transformationFunctionService,
-                                                                   IParameterFactory parameterFactory) {
-        return new OrderArticularItemQuantityManager(orderItemDao, transformationFunctionService, parameterFactory);
+    public ICustomerOrderManager orderItemDataManager(ICustomerOrderDao orderItemDao,
+                                                      ITransformationFunctionService transformationFunctionService,
+                                                      IParameterFactory parameterFactory) {
+        return new CustomerOrderManager(orderItemDao, transformationFunctionService, parameterFactory);
     }
 
     @Bean
@@ -566,8 +563,8 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public IOrderProcessor orderProcessor(IOrderArticularItemQuantityManager orderItemDataOptionManager) {
-        return new OrderProcessor(orderItemDataOptionManager);
+    public ICustomerOrderProcessor orderProcessor(ICustomerOrderManager orderItemDataOptionManager) {
+        return new CustomerOrderProcessor(orderItemDataOptionManager);
     }
 
     @Bean

@@ -1,9 +1,8 @@
 package com.b2c.prototype.manager.userdetails.basic;
 
 import com.b2c.prototype.dao.user.IContactInfoDao;
-import com.b2c.prototype.manager.userdetails.basic.ContactInfoManager;
-import com.b2c.prototype.modal.dto.payload.ContactInfoDto;
-import com.b2c.prototype.modal.dto.payload.ContactPhoneDto;
+import com.b2c.prototype.modal.dto.payload.order.ContactInfoDto;
+import com.b2c.prototype.modal.dto.payload.order.ContactPhoneDto;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
@@ -22,7 +21,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static com.b2c.prototype.util.Constant.USER_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
