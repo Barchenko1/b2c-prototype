@@ -1,0 +1,32 @@
+currency:
+  - id: 1
+    value: "USD"
+    label: "USD"
+commission_value:
+  - id: 1
+    fee_type: 'FIXED'
+    amount: 10.5
+    currency_id: 1
+  - id: 2
+    fee_type: 'PERCENTAGE'
+    amount: 5
+  - id: 3
+    fee_type: 'FIXED'
+    amount: 10.5
+    currency_id: 1
+  - id: 4
+    fee_type: 'PERCENTAGE'
+    amount: 5
+min_max_commission:
+  - id: 1
+    mincommission_id: 1
+    maxcommission_id: 2
+    commission_type: 'BUYER'
+    changecommissionvalue: 200
+    lastUpdateTimestamp: "2024-04-01 10:15:30"
+  - id: 2
+    mincommission_id: 3
+    maxcommission_id: 4
+    commission_type: 'SELLER'
+    changecommissionvalue: 200
+    lastUpdateTimestamp: "2024-04-01 10:15:30"

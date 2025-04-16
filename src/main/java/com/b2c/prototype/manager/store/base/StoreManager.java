@@ -7,9 +7,9 @@ import com.b2c.prototype.modal.dto.payload.store.StoreDto;
 import com.b2c.prototype.modal.dto.payload.store.ResponseStoreDto;
 import com.b2c.prototype.modal.entity.store.Store;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.manager.store.IStoreManager;
 import com.tm.core.finder.factory.IParameterFactory;
+import com.tm.core.process.dao.identifier.IQueryService;
 import com.tm.core.process.manager.common.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
 
@@ -22,16 +22,16 @@ import static com.b2c.prototype.util.Constant.VALUE;
 public class StoreManager implements IStoreManager {
 
     private final IEntityOperationManager entityOperationManager;
-    private final ISearchService searchService;
+    private final IQueryService queryService;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
     public StoreManager(IStoreDao storeDao,
-                        ISearchService searchService,
+                        IQueryService queryService,
                         ITransformationFunctionService transformationFunctionService,
                         IParameterFactory parameterFactory) {
         this.entityOperationManager = new EntityOperationManager(storeDao);
-        this.searchService = searchService;
+        this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
     }

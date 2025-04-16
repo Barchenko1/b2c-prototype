@@ -17,8 +17,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
-
 @MappedSuperclass
 @Data
 @SuperBuilder
@@ -34,6 +32,4 @@ public class AbstractCommission {
     private FeeType feeType;
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     private Currency currency;
-    @Column(name = "effective_date", unique = true, nullable = false)
-    private LocalDateTime effectiveDate;
 }

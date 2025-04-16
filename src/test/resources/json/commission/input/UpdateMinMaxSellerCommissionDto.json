@@ -1,0 +1,14 @@
+{
+  "minCommissionValue": {
+    "amount": 5,
+    "feeType": "FIXED",
+    "currency": "USD"
+  },
+  "maxCommissionValue": {
+    "amount": 12,
+    "feeType": "FIXED",
+    "currency": "USD"
+  },
+  "commissionType": "SELLER",
+  "changeCommissionValue": 200
+}

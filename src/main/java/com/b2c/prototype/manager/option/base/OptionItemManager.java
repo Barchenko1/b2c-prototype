@@ -8,7 +8,6 @@ import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.option.IOptionItemManager;
-import com.b2c.prototype.service.query.ISearchService;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.dao.query.IFetchHandler;
 import com.tm.core.process.manager.common.EntityOperationManager;
@@ -44,9 +43,9 @@ public class OptionItemManager implements IOptionItemManager {
             OptionGroup newOptionGroup = transformationFunctionService.getEntity(
                     OptionGroup.class,
                     singleOptionItemDto);
-            OptionGroup existingOptionGroup = fetchHandler.getGraphOptionalEntity(
+            OptionGroup existingOptionGroup = fetchHandler.getNamedQueryOptionalEntity(
                             OptionGroup.class,
-                            "optionGroup.withOptionItems",
+                            "OptionGroup.findByValueWithOptionItems",
                             parameterFactory.createStringParameter(VALUE, singleOptionItemDto.getOptionGroup().getValue()))
                     .orElseGet(() -> {
                         session.persist(newOptionGroup);
@@ -70,9 +69,9 @@ public class OptionItemManager implements IOptionItemManager {
     @Override
     public void saveUpdateOptionItemByOptionGroup(String optionGroupValue, String optionItemValue, SingleOptionItemDto singleOptionItemDto) {
         entityOperationManager.executeConsumer(session -> {
-            OptionGroup existingOptionGroup = fetchHandler.getGraphEntity(
+            OptionGroup existingOptionGroup = fetchHandler.getNamedQueryEntity(
                     OptionGroup.class,
-                    "optionGroup.withOptionItems",
+                    "OptionGroup.findByValueWithOptionItems",
                     parameterFactory.createStringParameter(VALUE, optionGroupValue));
 
             OptionItem existingOptionItem = existingOptionGroup.getOptionItems().stream()
@@ -131,7 +130,7 @@ public class OptionItemManager implements IOptionItemManager {
         entityOperationManager.executeConsumer(session -> {
             OptionGroup existingOptionGroup = fetchHandler.getNamedQueryEntity(
                     OptionGroup.class,
-                    "optionGroup.withOptionItemsAndArticularItems",
+                    "OptionGroup.withOptionItemsAndArticularItems",
                     parameterFactory.createStringParameter(VALUE, optionGroupValue));
             if (existingOptionGroup != null) {
                 existingOptionGroup.getOptionItems().stream()
@@ -155,9 +154,9 @@ public class OptionItemManager implements IOptionItemManager {
 
     @Override
     public OptionGroupOptionItemSetDto getOptionItemListByOptionGroup(String optionGroupValue) {
-        OptionGroup optionGroup = fetchHandler.getGraphEntity(
+        OptionGroup optionGroup = fetchHandler.getNamedQueryEntity(
                 OptionGroup.class,
-                "optionGroup.withOptionItems",
+                "OptionGroup.findByValueWithOptionItems",
                 parameterFactory.createStringParameter(VALUE, optionGroupValue));
         return Optional.of(optionGroup)
                 .map(transformationFunctionService.getTransformationFunction(OptionGroup.class, OptionGroupOptionItemSetDto.class))
@@ -176,18 +175,13 @@ public class OptionItemManager implements IOptionItemManager {
                 OptionGroupOptionItemSetDto.class,
                 "list")
                 .apply(articularItem);
-//        return (List<OptionGroupOptionItemSetDto>) fetchHandler.getGraphEntityDto(
-//                ArticularItem.class,
-//                "articularItem.optionItems",
-//                parameterFactory.createStringParameter(ARTICULAR_ID, articularId),
-//                transformationFunctionService.getTransformationCollectionFunction(ArticularItem.class, OptionGroupOptionItemSetDto.class, "list"));
     }
 
     @Override
     public List<OptionGroupOptionItemSetDto> getOptionItemList() {
-        List<OptionGroup> optionGroupList = fetchHandler.getGraphEntityList(
+        List<OptionGroup> optionGroupList = fetchHandler.getNamedQueryEntityList(
                 OptionGroup.class,
-                "optionGroup.withOptionItems");
+                "OptionGroup.findWithOptionItems");
         return optionGroupList.stream()
                 .map(transformationFunctionService.getTransformationFunction(OptionGroup.class, OptionGroupOptionItemSetDto.class))
                 .toList();

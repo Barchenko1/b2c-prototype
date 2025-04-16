@@ -7,7 +7,7 @@ import com.b2c.prototype.dao.option.IOptionItemDao;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.query.ISearchService;
+
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
@@ -37,8 +37,7 @@ class OptionItemManagerTest {
 
     @Mock
     private IOptionItemDao optionItemDao;
-    @Mock
-    private ISearchService queryService;
+
     @Mock
     private ITransformationFunctionService transformationFunctionService;
     @InjectMocks

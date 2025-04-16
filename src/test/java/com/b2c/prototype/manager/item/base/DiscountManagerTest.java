@@ -7,7 +7,7 @@ import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.query.ISearchService;
+
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,8 +38,7 @@ class DiscountManagerTest {
 
     @Mock
     private IDiscountDao discountDao;
-    @Mock
-    private ISearchService queryService;
+
     @Mock
     private ITransformationFunctionService transformationFunctionService;
     @InjectMocks

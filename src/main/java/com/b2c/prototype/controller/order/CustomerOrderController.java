@@ -1,14 +1,13 @@
 package com.b2c.prototype.controller.order;
 
-import com.b2c.prototype.modal.dto.payload.order.CustomerOrderDto;
-import com.b2c.prototype.modal.dto.payload.order.ResponseCustomerOrderDetails;
+import com.b2c.prototype.modal.dto.payload.order.single.CustomerSingleDeliveryOrderDto;
+import com.b2c.prototype.modal.dto.payload.order.single.ResponseCustomerOrderDetails;
 import com.b2c.prototype.processor.order.ICustomerOrderProcessor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,23 +28,22 @@ public class CustomerOrderController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> saveItemData(@RequestParam final Map<String, String> requestParams,
-                                             @RequestBody final CustomerOrderDto customerOrderDto) {
-        orderProcessor.saveCustomerOrder(requestParams, customerOrderDto);
+    public ResponseEntity<Void> saveCustomerOrder(@RequestParam final Map<String, String> requestParams,
+                                                  @RequestBody final CustomerSingleDeliveryOrderDto customerSingleDeliveryOrderDto) {
+        orderProcessor.saveCustomerOrder(requestParams, customerSingleDeliveryOrderDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(value = "/copy", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> updateCustomerOrderWithCopy(@RequestParam final Map<String, String> requestParams,
+                                                            @RequestBody final CustomerSingleDeliveryOrderDto customerSingleDeliveryOrderDto) {
+        orderProcessor.updateCustomerOrder(requestParams, customerSingleDeliveryOrderDto);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> putItemData(@RequestParam final Map<String, String> requestParams,
-                                            @RequestBody final CustomerOrderDto customerOrderDto) {
-        orderProcessor.updateCustomerOrder(requestParams, customerOrderDto);
-        return ResponseEntity.ok().build();
-    }
-
-    @PatchMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> patchItemData(@RequestParam final Map<String, String> requestParams,
-                                              @RequestBody final CustomerOrderDto customerOrderDto) {
-        orderProcessor.updateCustomerOrder(requestParams, customerOrderDto);
+    public ResponseEntity<Void> putCustomerOrderStatus(@RequestParam final Map<String, String> requestParams) {
+        orderProcessor.updateCustomerOrderStatus(requestParams);
         return ResponseEntity.ok().build();
     }
 

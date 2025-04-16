@@ -6,8 +6,8 @@ import com.b2c.prototype.modal.dto.payload.user.ResponseDeviceDto;
 import com.b2c.prototype.modal.entity.user.Device;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.query.ISearchService;
 import com.tm.core.finder.factory.IParameterFactory;
+import com.tm.core.process.dao.query.IFetchHandler;
 import com.tm.core.process.manager.common.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
 
@@ -21,20 +21,23 @@ public class DeviceManager implements IDeviceManager {
 
     private final IEntityOperationManager entityOperationManager;
     private final ITransformationFunctionService transformationFunctionService;
-    private final ISearchService searchService;
+    private final IFetchHandler fetchHandler;
     private final IParameterFactory parameterFactory;
 
-    public DeviceManager(IDeviceDao deviceDao, ITransformationFunctionService transformationFunctionService,ISearchService searchService, IParameterFactory parameterFactory) {
+    public DeviceManager(IDeviceDao deviceDao,
+                         IFetchHandler fetchHandler,
+                         ITransformationFunctionService transformationFunctionService,
+                         IParameterFactory parameterFactory) {
         this.entityOperationManager = new EntityOperationManager(deviceDao);
+        this.fetchHandler = fetchHandler;
         this.transformationFunctionService = transformationFunctionService;
-        this.searchService = searchService;
         this.parameterFactory = parameterFactory;
     }
 
     @Override
     public void activateCurrentDevice(String userId, String clientIp, DeviceDto deviceDto) {
         entityOperationManager.executeConsumer(session -> {
-            UserDetails userDetails = searchService.getNamedQueryEntity(
+            UserDetails userDetails = fetchHandler.getNamedQueryEntity(
                     UserDetails.class,
                     "UserDetails.findAllDevicesByUserId",
                     parameterFactory.createStringParameter(USER_ID, userId));
@@ -68,7 +71,7 @@ public class DeviceManager implements IDeviceManager {
     @Override
     public void deleteDevice(String userId, DeviceDto deviceDto) {
         entityOperationManager.executeConsumer(session -> {
-            UserDetails userDetails = searchService.getNamedQueryEntity(
+            UserDetails userDetails = fetchHandler.getNamedQueryEntity(
                     UserDetails.class,
                     "UserDetails.findAllDevicesByUserId",
                     parameterFactory.createStringParameter(USER_ID, userId));
@@ -89,7 +92,7 @@ public class DeviceManager implements IDeviceManager {
 
     @Override
     public List<ResponseDeviceDto> getDevicesByUserId(String userId, String clientId) {
-        UserDetails userDetails = searchService.getNamedQueryEntity(
+        UserDetails userDetails = fetchHandler.getNamedQueryEntity(
                 UserDetails.class,
                 "UserDetails.findAllDevicesByUserId",
                 parameterFactory.createStringParameter(USER_ID, userId));

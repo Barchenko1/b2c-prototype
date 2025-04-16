@@ -6,8 +6,8 @@ import com.b2c.prototype.modal.dto.payload.order.AddressDto;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.store.Store;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.query.ISearchService;
 import com.tm.core.finder.factory.IParameterFactory;
+import com.tm.core.process.dao.identifier.IQueryService;
 import com.tm.core.process.manager.common.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
 
@@ -18,13 +18,16 @@ import static com.b2c.prototype.util.Constant.STORE_ID;
 public class StoreAddressManager implements IStoreAddressManager {
 
     private final IEntityOperationManager entityOperationManager;
-    private final ISearchService searchService;
+    private final IQueryService queryService;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public StoreAddressManager(IAddressDao addressDao, ISearchService searchService, ITransformationFunctionService transformationFunctionService, IParameterFactory parameterFactory) {
+    public StoreAddressManager(IAddressDao addressDao,
+                               IQueryService queryService,
+                               ITransformationFunctionService transformationFunctionService,
+                               IParameterFactory parameterFactory) {
         this.entityOperationManager = new EntityOperationManager(addressDao);
-        this.searchService = searchService;
+        this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
     }
@@ -32,7 +35,9 @@ public class StoreAddressManager implements IStoreAddressManager {
     @Override
     public void saveUpdateStoreAddress(String storeId, AddressDto addressDto) {
         entityOperationManager.executeConsumer(session -> {
-            Store existingStore = entityOperationManager.getNamedQueryEntity(
+            Store existingStore = queryService.getNamedQueryEntity(
+                    session,
+                    Store.class,
                     "Store.findStoreWithAddressByStoreId",
                     parameterFactory.createStringParameter(STORE_ID, storeId));
 

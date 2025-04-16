@@ -8,7 +8,7 @@ import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.query.ISearchService;
+
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,8 +31,7 @@ import static org.mockito.Mockito.when;
 class ContactInfoManagerTest {
     @Mock
     private IContactInfoDao contactInfoDao;
-    @Mock
-    private ISearchService queryService;
+
     @Mock
     private ITransformationFunctionService transformationFunctionService;
     @InjectMocks

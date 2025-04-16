@@ -1,0 +1,61 @@
+{
+  "user": {
+    "email": "test@example.com",
+    "userId": "userId1"
+  },
+  "itemDataOptionQuantities": [
+    {
+      "articularId": "A123",
+      "quantity": 2
+    },
+    {
+      "articularId": "A111",
+      "quantity": 1
+    }
+  ],
+  "delivery": {
+    "deliveryAddress": {
+      "country": "USA",
+      "city": "New York",
+      "street": "5th Avenue",
+      "buildingNumber": 1,
+      "florNumber": 9,
+      "apartmentNumber": 101,
+      "zipCode": "10001"
+    },
+    "deliveryType": "Post",
+    "timeDurationOption": "9-11"
+  },
+  "contactInfo": {
+    "firstName": "Jane",
+    "lastName": "Doe",
+    "email": "jane.doe@example.com",
+    "contactPhone": {
+      "countryPhoneCode": "+11",
+      "phoneNumber": "111-111-111"
+    }
+  },
+  "beneficiary": {
+    "firstName": "Jane",
+    "lastName": "Doe",
+    "email": "jane.doe@example.com",
+    "contactPhone": {
+      "countryPhoneCode": "+11",
+      "phoneNumber": "111-111-111"
+    }
+  },
+  "payment": {
+    "paymentMethod": "CreditCard",
+    "creditCard": {
+      "cardNumber": "4444-1111-2222-3333",
+      "monthOfExpire": 6,
+      "yearOfExpire": 28,
+      "isActive": true,
+      "ownerName": "John",
+      "ownerSecondName": "Doe",
+      "cvv": 818
+    },
+    "discountCharSequenceCode": "DISCOUNT10"
+  },
+  "note": "Please deliver between 9 AM and 5 PM."
+}

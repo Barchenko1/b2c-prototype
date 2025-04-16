@@ -1,20 +1,25 @@
 package com.b2c.prototype.configuration.transform;
 
 import com.b2c.prototype.modal.base.constant.AbstractConstantEntity;
+import com.b2c.prototype.modal.constant.CommissionType;
 import com.b2c.prototype.modal.constant.FeeType;
+import com.b2c.prototype.modal.constant.OrderStatusEnum;
 import com.b2c.prototype.modal.constant.ReviewStatusEnum;
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.dto.common.NumberConstantPayloadDto;
 import com.b2c.prototype.modal.dto.common.SearchFieldUpdateCollectionEntityDto;
 import com.b2c.prototype.modal.dto.common.SearchFieldUpdateEntityDto;
+import com.b2c.prototype.modal.dto.payload.commission.MinMaxCommissionDto;
 import com.b2c.prototype.modal.dto.payload.order.AddressDto;
 import com.b2c.prototype.modal.dto.payload.item.ArticularItemDto;
 import com.b2c.prototype.modal.dto.payload.order.ArticularItemQuantityDto;
-import com.b2c.prototype.modal.dto.payload.commission.CommissionDto;
+import com.b2c.prototype.modal.dto.payload.commission.CommissionValueDto;
 import com.b2c.prototype.modal.dto.payload.order.ContactInfoDto;
 import com.b2c.prototype.modal.dto.payload.order.ContactPhoneDto;
 import com.b2c.prototype.modal.dto.payload.order.CreditCardDto;
-import com.b2c.prototype.modal.dto.payload.order.DeliveryDto;
+import com.b2c.prototype.modal.dto.payload.order.PaymentPriceDto;
+import com.b2c.prototype.modal.dto.payload.order.single.DeliveryDto;
+import com.b2c.prototype.modal.dto.payload.order.single.ResponseCustomerOrderDto;
 import com.b2c.prototype.modal.dto.payload.post.PostDto;
 import com.b2c.prototype.modal.dto.payload.post.ResponsePostDto;
 import com.b2c.prototype.modal.dto.payload.review.ResponseReviewCommentDto;
@@ -27,8 +32,7 @@ import com.b2c.prototype.modal.dto.payload.message.MessageDto;
 import com.b2c.prototype.modal.dto.payload.option.OptionGroupDto;
 import com.b2c.prototype.modal.dto.payload.option.OptionGroupOptionItemSetDto;
 import com.b2c.prototype.modal.dto.payload.option.OptionItemDto;
-import com.b2c.prototype.modal.dto.payload.order.CustomerOrderDto;
-import com.b2c.prototype.modal.dto.payload.order.PaymentDto;
+import com.b2c.prototype.modal.dto.payload.order.single.CustomerSingleDeliveryOrderDto;
 import com.b2c.prototype.modal.dto.payload.item.PriceDto;
 import com.b2c.prototype.modal.dto.payload.user.RegistrationUserDetailsDto;
 import com.b2c.prototype.modal.dto.payload.review.ReviewDto;
@@ -44,7 +48,7 @@ import com.b2c.prototype.modal.dto.payload.constant.CategoryValueDto;
 import com.b2c.prototype.modal.dto.payload.constant.CountryDto;
 import com.b2c.prototype.modal.dto.payload.constant.ItemTypeDto;
 import com.b2c.prototype.modal.dto.payload.item.ResponseArticularItemDto;
-import com.b2c.prototype.modal.dto.payload.order.ResponseCommissionDto;
+import com.b2c.prototype.modal.dto.payload.commission.ResponseMinMaxCommissionDto;
 import com.b2c.prototype.modal.dto.payload.order.ResponseCreditCardDto;
 import com.b2c.prototype.modal.dto.payload.user.ResponseDeviceDto;
 import com.b2c.prototype.modal.dto.payload.item.ResponseItemDataDto;
@@ -74,6 +78,9 @@ import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.modal.entity.item.ItemType;
+import com.b2c.prototype.modal.entity.order.CustomerSingleDeliveryOrder;
+import com.b2c.prototype.modal.entity.payment.CommissionValue;
+import com.b2c.prototype.modal.entity.payment.MinMaxCommission;
 import com.b2c.prototype.modal.entity.review.Rating;
 import com.b2c.prototype.modal.entity.message.Message;
 import com.b2c.prototype.modal.entity.message.MessageStatus;
@@ -81,11 +88,8 @@ import com.b2c.prototype.modal.entity.message.MessageType;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.modal.entity.option.ZoneOption;
-import com.b2c.prototype.modal.entity.order.CustomerOrder;
 import com.b2c.prototype.modal.entity.order.DeliveryArticularItemQuantity;
 import com.b2c.prototype.modal.entity.order.OrderStatus;
-import com.b2c.prototype.modal.entity.payment.BuyerCommission;
-import com.b2c.prototype.modal.entity.payment.SellerCommission;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
 import com.b2c.prototype.modal.entity.payment.Payment;
 import com.b2c.prototype.modal.entity.payment.PaymentMethod;
@@ -107,7 +111,6 @@ import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.service.function.ITransformationFunction;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
 import com.b2c.prototype.service.help.calculate.IPriceCalculationService;
-import com.b2c.prototype.service.query.ISearchService;
 import com.b2c.prototype.util.CardUtil;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.finder.parameter.Parameter;
@@ -153,7 +156,7 @@ public class TransformationEntityConfiguration {
     public TransformationEntityConfiguration(ITransformationFunctionService transformationFunctionService,
                                              IQueryService queryService,
                                              IParameterFactory parameterFactory,
-                                             IPriceCalculationService priceCalculationService, ISearchService searchService) {
+                                             IPriceCalculationService priceCalculationService) {
         this.queryService = queryService;
         this.parameterFactory = parameterFactory;
         this.priceCalculationService = priceCalculationService;
@@ -180,7 +183,7 @@ public class TransformationEntityConfiguration {
         loadItemDataFunctions(transformationFunctionService);
         loadArticularItemFunctions(transformationFunctionService);
         loadDiscountFunctions(transformationFunctionService);
-        loadOrderFunctions(transformationFunctionService);
+        loadCustomerOrderFunctions(transformationFunctionService);
         loadUserDetailsFunctions(transformationFunctionService);
         loadContactInfoFunctions(transformationFunctionService);
         loadTimeDurationOptionFunctions(transformationFunctionService);
@@ -229,8 +232,9 @@ public class TransformationEntityConfiguration {
         transformationFunctionService.addTransformationFunction(SingleOptionItemDto.class, OptionGroup.class, mapSingleOptionItemDtoToOptionGroup());
     }
 
-    private void loadOrderFunctions(ITransformationFunctionService transformationFunctionService) {
-        transformationFunctionService.addTransformationFunction(CustomerOrderDto.class, DeliveryArticularItemQuantity.class, mapOrderArticularItemQuantityToOrderArticularItem());
+    private void loadCustomerOrderFunctions(ITransformationFunctionService transformationFunctionService) {
+        transformationFunctionService.addTransformationFunction(CustomerSingleDeliveryOrderDto.class, CustomerSingleDeliveryOrder.class, mapCustomerSingleDeliveryOrderDtoToCustomerOrderFunction());
+        transformationFunctionService.addTransformationFunction(CustomerSingleDeliveryOrder.class, ResponseCustomerOrderDto.class, mapCustomerOrderToResponseCustomerOrderFunction());
     }
 
     private void loadUserDetailsFunctions(ITransformationFunctionService transformationFunctionService) {
@@ -276,10 +280,8 @@ public class TransformationEntityConfiguration {
     }
 
     private void loadCommissionFunctions(ITransformationFunctionService transformationFunctionService) {
-        transformationFunctionService.addTransformationFunction(SellerCommission.class, ResponseCommissionDto.class, mapSellerCommissionToResponseCommissionDtoFunction());
-        transformationFunctionService.addTransformationFunction(CommissionDto.class, SellerCommission.class, mapCommissionDtoToSellerCommissionFunction());
-        transformationFunctionService.addTransformationFunction(BuyerCommission.class, ResponseCommissionDto.class, mapBuyerCommissionToResponseCommissionDtoFunction());
-        transformationFunctionService.addTransformationFunction(CommissionDto.class, BuyerCommission.class, mapCommissionDtoToBuyerCommissionFunction());
+        transformationFunctionService.addTransformationFunction(MinMaxCommissionDto.class, MinMaxCommission.class, mapMinMaxCommissionDtoToMinMaxCommission());
+        transformationFunctionService.addTransformationFunction(MinMaxCommission.class, ResponseMinMaxCommissionDto.class, mapMinMaxCommissionDtoToResponseMinMaxCommissionDto());
     }
 
     private void loadStoreFunctions(ITransformationFunctionService transformationFunctionService) {
@@ -736,9 +738,9 @@ public class TransformationEntityConfiguration {
         };
     }
 
-    private Function<CustomerOrder, PriceDto> mapOrderToFullPriceDtoFunction() {
-        return customerOrder -> {
-            Price fullPrice = customerOrder.getPayment().getCommissionPrice();
+    private Function<CustomerSingleDeliveryOrder, PriceDto> mapOrderToFullPriceDtoFunction() {
+        return customerSingleDeliveryOrder -> {
+            Price fullPrice = customerSingleDeliveryOrder.getPayment().getCommissionPrice();
             return PriceDto.builder()
                     .amount(fullPrice.getAmount())
                     .currency(fullPrice.getCurrency().getValue())
@@ -746,9 +748,9 @@ public class TransformationEntityConfiguration {
         };
     }
 
-    private Function<CustomerOrder, PriceDto> mapOrderToTotalPriceDtoFunction() {
-        return customerOrder -> {
-            Price fullPrice = customerOrder.getPayment().getTotalPrice();
+    private Function<CustomerSingleDeliveryOrder, PriceDto> mapOrderToTotalPriceDtoFunction() {
+        return customerSingleDeliveryOrder -> {
+            Price fullPrice = customerSingleDeliveryOrder.getPayment().getTotalPrice();
             return PriceDto.builder()
                     .amount(fullPrice.getAmount())
                     .currency(fullPrice.getCurrency().getValue())
@@ -789,7 +791,8 @@ public class TransformationEntityConfiguration {
 
     BiFunction<Session, OptionGroupOptionItemSetDto, OptionGroup> mapOptionItemDtoToOptionGroup() {
         return (session, optionItemDto) -> {
-            Optional<OptionGroup> optionalResult = fetchOptionGroup(session, "optionGroup.withOptionItems", optionItemDto.getOptionGroup().getValue());
+            Optional<OptionGroup> optionalResult =
+                    fetchOptionGroup(session, "OptionGroup.withOptionItems", optionItemDto.getOptionGroup().getValue());
             return optionalResult.map(existingOG -> {
                 optionItemDto.getOptionItems().stream()
                         .filter(oi -> existingOG.getOptionItems().stream()
@@ -1083,38 +1086,52 @@ public class TransformationEntityConfiguration {
                 .collect(Collectors.toSet());
     }
 
-    private BiFunction<Session, CustomerOrderDto, DeliveryArticularItemQuantity> mapOrderArticularItemQuantityToOrderArticularItem() {
-        return (session, orderArticularItemQuantityDto) -> {
+    private BiFunction<Session, CustomerSingleDeliveryOrderDto, CustomerSingleDeliveryOrder> mapCustomerSingleDeliveryOrderDtoToCustomerOrderFunction() {
+        return (session, customerSingleDeliveryOrderDto) -> {
             Optional<UserDetails> userDetailsOptional = Optional.empty();
-            if (orderArticularItemQuantityDto.getUser().getUserId() != null) {
+            if (customerSingleDeliveryOrderDto.getUser().getUserId() != null) {
                 userDetailsOptional = queryService.getNamedQueryOptionalEntity(
                         session,
                         UserDetails.class,
                         "UserDetails.findByUserId",
-                        parameterFactory.createStringParameter(USER_ID, orderArticularItemQuantityDto.getUser().getUserId()));
+                        parameterFactory.createStringParameter(USER_ID, customerSingleDeliveryOrderDto.getUser().getUserId()));
             }
+            OrderStatus orderStatus = fetchOrderStatus(session, OrderStatusEnum.CREATED.name());
             List<ArticularItemQuantityPrice> articularItemQuantityPriceList = mapArticularItemQuantityDtoToArticularItemQuantity()
-                    .apply(session, orderArticularItemQuantityDto.getItemDataOptionQuantities());
-            Delivery delivery = mapDeliveryDtoToDelivery().apply(session, orderArticularItemQuantityDto.getDelivery());
-            Payment payment = mapPaymentDtoToPayment().apply(session, orderArticularItemQuantityDto.getPayment());
-            Optional<SellerCommission> commissionOptional = fetchCommission(session);
-//            PaymentPriceDto paymentPriceDto = PaymentPriceDto.builder()
-//                    .articularItemQuantityPriceList(articularItemQuantityPriceList)
-//                    .delivery(delivery)
-//                    .discount(payment.getDiscount())
-//                    .sellerCommission(commissionOptional.get())
-//                    .build();
-
-            return DeliveryArticularItemQuantity.builder()
-//                    .userDetails(userDetailsOptional.orElse(null))
-//                    .dateOfCreate(getCurrentTimeMillis())
-//                    .orderId(getUUID())
-//                    .articularItemQuantityPriceList(articularItemQuantityPriceList)
+                    .apply(session, customerSingleDeliveryOrderDto.getItemDataOptionQuantities());
+            Delivery delivery = mapDeliveryDtoToDelivery().apply(session, customerSingleDeliveryOrderDto.getDelivery());
+            double fullSum = articularItemQuantityPriceList.stream()
+                    .mapToDouble(articularItemQuantityPrice -> articularItemQuantityPrice.getFullPriceSum().getAmount())
+                    .sum();
+            double totalSum = articularItemQuantityPriceList.stream()
+                    .mapToDouble(articularItemQuantityPrice -> articularItemQuantityPrice.getTotalPriceSum().getAmount())
+                    .sum();
+            double discountPriceSum = articularItemQuantityPriceList.stream()
+                    .mapToDouble(articularItemQuantityPrice -> articularItemQuantityPrice.getDiscountPriceSum().getAmount())
+                    .sum();
+            Currency currency = articularItemQuantityPriceList.get(0).getTotalPriceSum().getCurrency();
+            PaymentPriceDto paymentPriceDto = PaymentPriceDto.builder()
+                    .paymentMethod(customerSingleDeliveryOrderDto.getPayment().getPaymentMethod())
+                    .creditCard(customerSingleDeliveryOrderDto.getPayment().getCreditCard())
+                    .discountCharSequenceCode(customerSingleDeliveryOrderDto.getPayment().getDiscountCharSequenceCode())
+                    .fullPaymentPrice(mapPrice().apply(currency, fullSum))
+                    .totalPaymentPrice(mapPrice().apply(currency, totalSum))
+                    .discountPrice(mapPrice().apply(currency, discountPriceSum))
+                    .build();
+            Payment payment = mapPaymentPriceDtoToPayment().apply(session, paymentPriceDto);
+            ContactInfo contactInfo = mapContactInfoDtoToContactInfo().apply(session, customerSingleDeliveryOrderDto.getContactInfo());
+            ContactInfo beneficiary = mapContactInfoDtoToContactInfo().apply(session, customerSingleDeliveryOrderDto.getBeneficiary());
+            return CustomerSingleDeliveryOrder.builder()
+                    .orderId(getUUID())
+                    .dateOfCreate(getCurrentTimeMillis())
+                    .userDetails(userDetailsOptional.orElse(null))
+                    .status(orderStatus)
+                    .contactInfo(contactInfo)
+                    .beneficiary(beneficiary)
                     .delivery(delivery)
-//                    .beneficiaries(mapBeneficiariesDtoToBeneficiaries().apply(session, orderArticularItemQuantityDto.getBeneficiaries()))
-//                    .payment(mapPaymentDtoToPayment().apply(session, orderArticularItemQuantityDto.getPayment()))
-//                    .orderStatus(fetchOrderStatus(session, "CREATED"))
-//                    .note(orderArticularItemQuantityDto.getNote())
+                    .articularItemQuantityPrices(articularItemQuantityPriceList)
+                    .payment(payment)
+                    .note(customerSingleDeliveryOrderDto.getNote())
                     .build();
         };
     }
@@ -1132,35 +1149,84 @@ public class TransformationEntityConfiguration {
         };
     }
 
+    private BiFunction<Session, ContactInfoDto, ContactInfo> mapContactInfoDtoToContactInfo() {
+        return (session, contactInfoDto) -> {
+            ContactPhone contactPhone = mapContactPhoneDtoToContactPhoneFunction().apply(session, contactInfoDto.getContactPhone());
+            return ContactInfo.builder()
+                    .email(contactInfoDto.getEmail())
+                    .firstName(contactInfoDto.getFirstName())
+                    .lastName(contactInfoDto.getLastName())
+                    .contactPhone(contactPhone)
+                    .build();
+        };
+    }
+
+    private Function<CustomerSingleDeliveryOrder, ResponseCustomerOrderDto> mapCustomerOrderToResponseCustomerOrderFunction() {
+        return customerSingleDeliveryOrder -> {
+            return ResponseCustomerOrderDto.builder()
+
+                    .build();
+        };
+    }
+
     private BiFunction<Session, List<ArticularItemQuantityDto>, List<ArticularItemQuantityPrice>> mapArticularItemQuantityDtoToArticularItemQuantity() {
-        return (session, articularItemQuantityDtos) -> articularItemQuantityDtos.stream()
-                .map(articularItemQuantityDto -> {
-                    ArticularItem articularItem = fetchArticularItem(session, articularItemQuantityDto.getArticularId());
-                    ArticularItemQuantity articularItemQuantity = null;
-                    return ArticularItemQuantityPrice.builder()
-                            .articularItemQuantity(articularItemQuantity)
-                            .totalPrice(articularItem.getTotalPrice())
-                            .build();
+        return (session, articularItemQuantityDtos) ->
+                articularItemQuantityDtos.stream()
+                        .map(articularItemQuantityDto -> {
+                            ArticularItem articularItem = fetchArticularItem(session, articularItemQuantityDto.getArticularId());
+                            ArticularItemQuantity articularItemQuantity = ArticularItemQuantity.builder()
+                                    .articularItem(articularItem)
+                                    .quantity(articularItemQuantityDto.getQuantity())
+                                    .build();
+                            Price fullSumPrice = mapPrice().apply(articularItem.getFullPrice().getCurrency(),
+                                    articularItem.getFullPrice().getAmount() * articularItemQuantityDto.getQuantity());
+                            Price totalSumPrice = mapPrice().apply(articularItem.getTotalPrice().getCurrency(),
+                                    articularItem.getTotalPrice().getAmount() * articularItemQuantityDto.getQuantity());
+                            Discount itemDiscount = articularItem.getDiscount();
+                            Price discountSumPrice = null;
+                            if (itemDiscount != null) {
+                                discountSumPrice = mapPrice().apply(itemDiscount.getCurrency(),
+                                        itemDiscount.getAmount() * articularItemQuantityDto.getQuantity());
+                            }
+                            return ArticularItemQuantityPrice.builder()
+                                    .articularItemQuantity(articularItemQuantity)
+                                    .fullPriceSum(fullSumPrice)
+                                    .totalPriceSum(totalSumPrice)
+                                    .discountPriceSum(discountSumPrice)
+                                    .build();
                 })
                 .toList();
     }
 
-    private BiFunction<Session, PaymentDto, Payment> mapPaymentDtoToPayment() {
-        return (session, paymentDto) -> {
+    private BiFunction<Session, PaymentPriceDto, Payment> mapPaymentPriceDtoToPayment() {
+        return (session, paymentPriceDto) -> {
+            Optional<Discount> orderDiscountOptional = paymentPriceDto.getDiscountCharSequenceCode() != null
+                    ? fetchOptionDiscount(session, paymentPriceDto.getDiscountCharSequenceCode())
+                    : Optional.empty();
+            Discount orderDiscount = orderDiscountOptional.orElse(null);
+            Optional<MinMaxCommission> optionalMinMaxCommission = fetchCommission(session);
+            Price commissionPrice = null;
+            if (optionalMinMaxCommission.isPresent()) {
+                if (FeeType.PERCENTAGE.equals(optionalMinMaxCommission.get().getCommissionType())) {
+                    commissionPrice = priceCalculationService.calculateCommissionPrice(paymentPriceDto.getTotalPaymentPrice(), orderDiscount, commissionOptional.get());
+                } else {
+                    commissionPrice = mapPrice().apply(optionalMinMaxCommission.get().getCurrency(), commissionOptional.get().getAmount());
+                }
+            }
 
-
+            Price paymentTotalPrice = priceCalculationService.calculateCurrentPrice(paymentPriceDto.getTotalPaymentPrice(), orderDiscount, commissionPrice);
             return Payment.builder()
                     .paymentId(getUUID())
-                    .paymentMethod(fetchPaymentMethod(session, paymentDto.getPaymentMethod()))
+                    .paymentMethod(fetchPaymentMethod(session, paymentPriceDto.getPaymentMethod()))
                     .paymentStatus(fetchPaymentStatus(session, "Done"))
-                    .creditCard(paymentDto.getCreditCard() != null
-                            ? mapCreditCardDtoToCreditCardFunction().apply(paymentDto.getCreditCard())
+                    .creditCard(paymentPriceDto.getCreditCard() != null
+                            ? mapCreditCardDtoToCreditCardFunction().apply(paymentPriceDto.getCreditCard())
                             : null)
-                    .discount(paymentDto.getDiscount() != null
-                            ? mapDiscountDtoToDiscountFunction().apply(session, paymentDto.getDiscount())
-                            : null)
-//                    .commissionPrice(mapPriceDtoToPriceFunction().apply(session, paymentDto.getFullPrice()))
-//                    .totalPrice(mapPriceDtoToPriceFunction().apply(session, paymentDto.getTotalPrice()))
+                    .discount(orderDiscount)
+                    .commissionPrice(commissionPrice)
+                    .fullPrice(paymentPriceDto.getFullPaymentPrice())
+                    .totalPrice(paymentTotalPrice)
+                    .discountPrice(paymentPriceDto.getDiscountPrice())
                     .build();
         };
     }
@@ -1178,6 +1244,13 @@ public class TransformationEntityConfiguration {
         };
     }
 
+    private BiFunction<Currency, Double, Price> mapPrice() {
+        return (currency, amount) -> Price.builder()
+                .currency(currency)
+                .amount(amount)
+                .build();
+    }
+
     private Function<Discount, InitDiscountDto> mapDiscountToInitDiscountDto() {
         return discount -> InitDiscountDto.builder()
                 .currency(discount.getCurrency().getValue())
@@ -1191,7 +1264,7 @@ public class TransformationEntityConfiguration {
     private BiFunction<Session, Set<OptionGroupOptionItemSetDto>, Set<OptionGroup>> mapOptionGroupOptionItemSetDtoListToOptionGroupSet() {
         return (session, optionItemDtoList) -> optionItemDtoList.stream()
                 .map(optionItemDto -> {
-                    OptionGroup existingOG = fetchOptionGroup(session, "optionGroup.withOptionItemsAndArticularItems", optionItemDto.getOptionGroup().getValue())
+                    OptionGroup existingOG = fetchOptionGroup(session, "OptionGroup.withOptionItemsAndArticularItems", optionItemDto.getOptionGroup().getValue())
                             .orElseGet(() -> OptionGroup.builder()
                                     .label(optionItemDto.getOptionGroup().getLabel())
                                     .value(optionItemDto.getOptionGroup().getValue())
@@ -1415,40 +1488,50 @@ public class TransformationEntityConfiguration {
         };
     }
 
-    private Function<SellerCommission, ResponseCommissionDto> mapSellerCommissionToResponseCommissionDtoFunction() {
-        return sellerCommission -> ResponseCommissionDto.builder()
-                .amount(sellerCommission.getAmount())
-                .currency(sellerCommission.getCurrency() != null ? sellerCommission.getCurrency().getValue() : null)
-                .feeType(sellerCommission.getFeeType().name())
-                .effectiveDate(sellerCommission.getEffectiveDate().atZone(ZoneId.systemDefault()))
+    private Function<MinMaxCommission, ResponseMinMaxCommissionDto> mapMinMaxCommissionDtoToResponseMinMaxCommissionDto() {
+        return minMaxCommission -> ResponseMinMaxCommissionDto.builder()
+                .minCommissionValue(mapCommissionValueToCommissionValueDto().apply(minMaxCommission.getMinCommission()))
+                .maxCommissionValue(mapCommissionValueToCommissionValueDto().apply(minMaxCommission.getMaxCommission()))
+                .commissionType(minMaxCommission.getCommissionType().name())
+                .changeCommissionValue(minMaxCommission.getChangeCommissionValue())
+                .lastUpdateTimestamp(minMaxCommission.getLastUpdateTimestamp().toInstant()
+                        .atZone(ZoneId.of("UTC")))
                 .build();
     }
 
-    private BiFunction<Session, CommissionDto, SellerCommission> mapCommissionDtoToSellerCommissionFunction() {
-        return (session, commissionDto) -> SellerCommission.builder()
-                .amount(commissionDto.getAmount())
-                .currency(commissionDto.getCurrency() != null ? fetchCurrency(session, commissionDto.getCurrency()) : null)
-                .feeType(FeeType.valueOf(commissionDto.getFeeType()))
-                .effectiveDate(LocalDateTime.now())
+    private BiFunction<Session, MinMaxCommissionDto, MinMaxCommission> mapMinMaxCommissionDtoToMinMaxCommission() {
+        return (session, minMaxCommissionDto) -> MinMaxCommission.builder()
+                .minCommission(mapCommissionValueDtoToCommissionValue().apply(session, minMaxCommissionDto.getMinCommissionValue()))
+                .maxCommission(mapCommissionValueDtoToCommissionValue().apply(session, minMaxCommissionDto.getMaxCommissionValue()))
+                .commissionType(CommissionType.valueOf(minMaxCommissionDto.getCommissionType()))
+                .changeCommissionValue(minMaxCommissionDto.getChangeCommissionValue())
                 .build();
     }
 
-    private Function<BuyerCommission, ResponseCommissionDto> mapBuyerCommissionToResponseCommissionDtoFunction() {
-        return buyerCommission -> ResponseCommissionDto.builder()
-                .amount(buyerCommission.getAmount())
-                .currency(buyerCommission.getCurrency() != null ? buyerCommission.getCurrency().getValue() : null)
-                .feeType(buyerCommission.getFeeType().name())
-                .effectiveDate(buyerCommission.getEffectiveDate().atZone(ZoneId.systemDefault()))
+    private Function<CommissionValue, CommissionValueDto> mapCommissionValueToCommissionValueDto() {
+        return cv -> CommissionValueDto.builder()
+                .amount(cv.getAmount())
+                .feeType(cv.getFeeType().name())
+                .currency(cv.getCurrency() != null ? cv.getCurrency().getValue() : null)
                 .build();
     }
 
-    private BiFunction<Session, CommissionDto, BuyerCommission> mapCommissionDtoToBuyerCommissionFunction() {
-        return (session, commissionDto) -> BuyerCommission.builder()
-                .amount(commissionDto.getAmount())
-                .currency(commissionDto.getCurrency() != null ? fetchCurrency(session, commissionDto.getCurrency()) : null)
-                .feeType(FeeType.valueOf(commissionDto.getFeeType()))
-                .effectiveDate(LocalDateTime.now())
-                .build();
+    private BiFunction<Session, CommissionValueDto, CommissionValue> mapCommissionValueDtoToCommissionValue() {
+        return (session, commissionValueDto) -> {
+            FeeType feeType = FeeType.valueOf(commissionValueDto.getFeeType());
+            if (FeeType.FIXED.equals(feeType)) {
+                Currency currency = fetchCurrency(session, commissionValueDto.getCurrency());
+                return CommissionValue.builder()
+                        .amount(commissionValueDto.getAmount())
+                        .feeType(FeeType.valueOf(commissionValueDto.getFeeType()))
+                        .currency(currency)
+                        .build();
+            }
+            return CommissionValue.builder()
+                    .amount(commissionValueDto.getAmount())
+                    .feeType(FeeType.valueOf(commissionValueDto.getFeeType()))
+                    .build();
+        };
     }
 
     private BiFunction<Session, StoreDto, Store> mapStoreDtoToStoreFunction() {
@@ -1522,11 +1605,19 @@ public class TransformationEntityConfiguration {
         );
     }
 
-    private Discount fetchDiscount(Session session, String value) {
-        return queryService.getNamedQueryEntity(
+//    private Discount fetchDiscount(Session session, String value) {
+//        return queryService.getNamedQueryEntity(
+//                session,
+//                Discount.class,
+//                "ArticularItem.findByDiscountCharSequenceCode",
+//                parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, value));
+//    }
+
+    private Optional<Discount> fetchDiscountOptional(Session session, String value) {
+        return queryService.getNamedQueryOptionalEntity(
                 session,
                 Discount.class,
-                "ArticularItem.findByDiscountCharSequenceCode",
+                "Discount.currency",
                 parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, value));
     }
 
@@ -1626,11 +1717,11 @@ public class TransformationEntityConfiguration {
                 parameterFactory.createStringParameter(VALUE, value));
     }
 
-    private Optional<SellerCommission> fetchCommission(Session session) {
+    private Optional<CommissionValue> fetchCommission(Session session) {
         return queryService.getNamedQueryOptionalEntity(
                 session,
-                SellerCommission.class,
-                "SellerCommission.getCommissionList");
+                CommissionValue.class,
+                "CommissionValue.getCommissionList");
     }
 
     private Optional<Post> fetchPost(Session session, String value) {

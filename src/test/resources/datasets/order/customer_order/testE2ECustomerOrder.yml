@@ -1,0 +1,165 @@
+brand:
+  - id: 1
+    value: "Hermes"
+    label: "Hermes"
+item_type:
+  - id: 1
+    value: "Clothes"
+    label: "Clothes"
+currency:
+  - id: 1
+    value: "USD"
+    label: "USD"
+price:
+  - id: 1
+    amount: 27
+    currency_id: 1
+  - id: 2
+    amount: 100
+    currency_id: 1
+  - id: 3
+    amount: 200
+    currency_id: 1
+discount:
+  - id: 1
+    amount: 5
+    charSequenceCode: "abc"
+    isActive: true
+    isPercent: false
+    currency_id: 1
+option_group:
+  - id: 1
+    label: "Size"
+    value: "Size"
+option_item:
+  - id: 1
+    value: "L"
+    label: "L"
+    option_group_id: 1
+  - id: 2
+    value: "M"
+    label: "M"
+    option_group_id: 1
+category:
+  - id: 1
+    label: "parent"
+    value: "parent"
+  - id: 2
+    category_id: 1
+    label: "root"
+    value: "root"
+  - id: 3
+    category_id: 2
+    label: "child"
+    value: "child"
+item_data:
+  - id: 1
+    item_id: 123
+    brand_id: 1
+    category_id: 3
+    itemtype_id: 1
+articular_item:
+  - id: 1
+    articular_id: "A123"
+    dateOfCreate: 10000
+delivery_type:
+  - id: 1
+    value: "Post"
+    label: "Post"
+country:
+  - id: 1
+    label: "USA"
+    value: "USA"
+address:
+  - id: 1
+    city: "New York"
+    street: "5th Avenue"
+    buildingNumber: 1
+    florNumber: 9
+    apartmentNumber: 101
+    zipCode: "10001"
+    country_id: 1
+delivery:
+  - id: 1
+    address_id: 1
+    delivery_type_id: 1
+order_status:
+  - id: 1
+    label: "CREATED"
+    value: "CREATED"
+  - id: 2
+    value: "PENDING"
+    label: "PENDING"
+credit_card:
+  - id: 1
+    cardNumber: "4444-1111-2222-3333"
+    monthOfExpire: 6
+    yearOfExpire: 28
+    cvv: 818
+    ownerName: "John"
+    ownerSecondName: "Doe"
+    isActive: true
+payment_method:
+  - id: 1
+    value: "CreditCard"
+    label: "CreditCard"
+  - id: 2
+    value: "Blik"
+    label: "Blik"
+payment:
+  - id: 1
+    upayment_id: "1"
+    payment_method_id: 1
+    fullprice_id: 1
+    totalprice_id: 1
+    credit_card_id: 1
+country_phone_code:
+  - id: 1
+    value: "+11"
+    label: "+11"
+contact_phone:
+  - id: 1
+    phoneNumber: "111-111-111"
+    country_phone_code_id: 1
+  - id: 2
+    phoneNumber: "111-111-111"
+    country_phone_code_id: 1
+contact_info:
+  - id: 1
+    firstName: "Wolter"
+    lastName: "White"
+    email: "email@email.com"
+  - id: 2
+    firstName: "Jane"
+    lastName: "Doe"
+    email: "jane.doe@example.com"
+  - id: 3
+    firstName: "Jane"
+    lastName: "Doe"
+    email: "jane.doe@example.com"
+user_details:
+  - id: 1
+    user_id: "123"
+    username: "john.doe"
+    dateOfCreate: 100
+    iscontactphoneverified: false
+    isemailverified: false
+    isActive: false
+    contactinfo_id: 1
+customer_single_delivery_order:
+  - id: 1
+    order_id: "100"
+    dateOfCreate: 100
+    delivery_id: 1
+    order_status_id: 1
+    payment_id: 1
+    user_details_id: 1
+    note: "Please deliver between 9 AM and 5 PM."
+articular_item_quantity:
+  - id: 1
+    quantity: 1
+    articular_item_id: 1
+    order_articular_item_id: 1
+articular_item_option_item:
+  - articular_item_id: 1
+    option_item_id: 1

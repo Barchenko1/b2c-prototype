@@ -24,10 +24,8 @@ import com.b2c.prototype.dao.option.IZoneOptionDao;
 import com.b2c.prototype.dao.option.base.BasicOptionItemCostDao;
 import com.b2c.prototype.dao.option.base.BasicTimeDurationOptionDao;
 import com.b2c.prototype.dao.option.base.BasicZoneOptionDao;
-import com.b2c.prototype.dao.payment.IBuyerCommissionDao;
-import com.b2c.prototype.dao.payment.ISellerCommissionDao;
-import com.b2c.prototype.dao.payment.base.BasicBuyerCommissionDao;
-import com.b2c.prototype.dao.payment.base.BasicSellerCommissionDao;
+import com.b2c.prototype.dao.payment.IMinMaxCommissionDao;
+import com.b2c.prototype.dao.payment.base.BasicMinMaxCommissionDao;
 import com.b2c.prototype.dao.price.ICurrencyDao;
 import com.b2c.prototype.dao.price.base.BasicCurrencyDao;
 import com.b2c.prototype.dao.store.ICountTypeDao;
@@ -80,8 +78,6 @@ import com.b2c.prototype.dao.item.IItemTypeDao;
 import com.b2c.prototype.dao.rating.IRatingDao;
 import com.b2c.prototype.dao.review.IReviewDao;
 import com.b2c.prototype.dao.user.IUserDetailsDao;
-import com.b2c.prototype.service.query.ISearchService;
-import com.b2c.prototype.service.query.SearchService;
 import com.tm.core.configuration.manager.DatabaseConfigurationAnnotationClass;
 import com.tm.core.configuration.manager.DatabaseType;
 import com.tm.core.configuration.manager.DatabaseTypeConfiguration;
@@ -169,11 +165,6 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public ISearchService searchService(IFetchHandler fetchHandler) {
-        return new SearchService(fetchHandler);
-    }
-
-    @Bean
     public IGenericOperationManager genericOperationManager(SessionFactory sessionFactory) {
         return new GenericEntityOperationManager(sessionFactory, entityPackagePath);
     }
@@ -225,14 +216,14 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public ISellerCommissionDao sellerCommissionDao(SessionFactory sessionFactory, IQueryService queryService) {
-        return new BasicSellerCommissionDao(sessionFactory, queryService);
+    public IMinMaxCommissionDao appCommissionDao(SessionFactory sessionFactory, IQueryService queryService) {
+        return new BasicMinMaxCommissionDao(sessionFactory, queryService);
     }
 
-    @Bean
-    public IBuyerCommissionDao buyerCommissionDao(SessionFactory sessionFactory, IQueryService queryService) {
-        return new BasicBuyerCommissionDao(sessionFactory, queryService);
-    }
+//    @Bean
+//    public IBuyerCommissionDao buyerCommissionDao(SessionFactory sessionFactory, IQueryService queryService) {
+//        return new BasicBuyerCommissionDao(sessionFactory, queryService);
+//    }
 
     @Bean
     public IPaymentDao paymentDao(SessionFactory sessionFactory, IQueryService queryService) {

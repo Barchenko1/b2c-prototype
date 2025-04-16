@@ -24,25 +24,29 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "option_group")
-@NamedEntityGraphs({
-        @NamedEntityGraph(
-                name = "optionGroup.withOptionItems",
-                attributeNodes = {
-                        @NamedAttributeNode(value = "optionItems")
-                }
-        ),
-})
 @NamedQueries({
         @NamedQuery(
+                name = "OptionGroup.findByValueWithOptionItems",
+                query = "SELECT og FROM OptionGroup og " +
+                        "LEFT JOIN FETCH og.optionItems oi " +
+                        "WHERE og.value = : value"
+        ),
+        @NamedQuery(
+                name = "OptionGroup.findWithOptionItems",
+                query = "SELECT og FROM OptionGroup og " +
+                        "LEFT JOIN FETCH og.optionItems oi"
+        ),
+        @NamedQuery(
                 name = "OptionGroup.findByValue",
-                query = "SELECT og FROM OptionGroup og WHERE og.value = : value"
+                query = "SELECT og FROM OptionGroup og " +
+                        "WHERE og.value = : value"
         ),
         @NamedQuery(
                 name = "OptionGroup.all",
                 query = "SELECT og FROM OptionGroup og"
         ),
         @NamedQuery(
-                name = "optionGroup.withOptionItemsAndArticularItems",
+                name = "OptionGroup.withOptionItemsAndArticularItems",
                 query = "SELECT DISTINCT og FROM OptionGroup og " +
                         "LEFT JOIN FETCH og.optionItems oi " +
                         "LEFT JOIN FETCH oi.articularItems ai " +

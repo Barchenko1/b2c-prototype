@@ -32,5 +32,10 @@ public class ArticularItemQuantityPrice {
     private ArticularItemQuantity articularItemQuantity;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(nullable = false)
-    private Price totalPrice;
+    private Price fullPriceSum;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(nullable = false)
+    private Price totalPriceSum;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Price discountPriceSum;
 }

@@ -2,14 +2,13 @@
 //
 //import com.b2c.prototype.dao.delivery.IDeliveryDao;
 //import com.b2c.prototype.modal.dto.payload.order.AddressDto;
-//import com.b2c.prototype.modal.dto.payload.order.DeliveryDto;
+//import com.b2c.prototype.modal.dto.payload.order.single.DeliveryDto;
 //import com.b2c.prototype.modal.entity.address.Address;
 //import com.b2c.prototype.modal.entity.address.Country;
 //import com.b2c.prototype.modal.entity.delivery.Delivery;
 //import com.b2c.prototype.modal.entity.delivery.DeliveryType;
 //import com.b2c.prototype.modal.entity.order.DeliveryArticularItemQuantity;
 //import com.b2c.prototype.service.function.ITransformationFunctionService;
-//import com.b2c.prototype.service.query.ISearchService;
 //import com.tm.core.finder.parameter.Parameter;
 //import org.hibernate.Session;
 //import org.junit.jupiter.api.BeforeEach;

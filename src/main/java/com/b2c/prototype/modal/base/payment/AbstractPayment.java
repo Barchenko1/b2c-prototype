@@ -38,11 +38,15 @@ public class AbstractPayment {
     @JoinColumn(name = "payment_method_id")
     private PaymentMethod paymentMethod;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(nullable = false)
     private Price commissionPrice;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(nullable = false)
+    private Price fullPrice;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(nullable = false)
     private Price totalPrice;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Price discountPrice;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "payment_status_id")
     private PaymentStatus paymentStatus;

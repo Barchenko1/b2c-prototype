@@ -33,9 +33,6 @@ public class DeliveryArticularItemQuantity {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "delivery_articular_item_id")
     private ArticularItemQuantityPrice articularItemQuantityPrice;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "delivery_status_id")
-    private OrderStatus orderStatus;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;

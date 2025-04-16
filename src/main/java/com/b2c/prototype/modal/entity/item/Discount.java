@@ -24,12 +24,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "discount")
-@NamedEntityGraph(
-        name = "Discount.currency",
-        attributeNodes = {
-                @NamedAttributeNode("currency")
-        }
-)
 @NamedQueries({
         @NamedQuery(
                 name = "Discount.all",

@@ -8,7 +8,6 @@ import com.b2c.prototype.modal.dto.payload.store.ResponseStoreDto;
 import com.b2c.prototype.modal.entity.store.CountType;
 import com.b2c.prototype.modal.entity.store.Store;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.query.ISearchService;
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
@@ -38,8 +37,7 @@ class StoreManagerTest {
 
     @Mock
     private IStoreDao storeDao;
-    @Mock
-    private ISearchService queryService;
+
     @Mock
     private ITransformationFunctionService transformationFunctionService;
     @InjectMocks

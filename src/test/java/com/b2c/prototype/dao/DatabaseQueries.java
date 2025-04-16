@@ -22,6 +22,8 @@ public final class DatabaseQueries {
             statement.execute("DELETE FROM articular_item_quantity");
             statement.execute("DELETE FROM store");
             statement.execute("DELETE FROM user_address");
+            statement.execute("DELETE FROM customer_single_delivery_order");
+            statement.execute("DELETE FROM delivery");
             statement.execute("DELETE FROM address");
             statement.execute("DELETE FROM delivery_articular_item_quantity");
             statement.execute("DELETE FROM post");
@@ -45,12 +47,10 @@ public final class DatabaseQueries {
             statement.execute("DELETE FROM contact_info");
             statement.execute("DELETE FROM contact_phone");
             // Add other child tables in correct order
-            statement.execute("DELETE FROM delivery");
-
             statement.execute("DELETE FROM payment_method");
             statement.execute("DELETE FROM discount");
-            statement.execute("DELETE FROM seller_commission");
-            statement.execute("DELETE FROM buyer_commission");
+            statement.execute("DELETE FROM min_max_commission");
+            statement.execute("DELETE FROM commission_value");
             statement.execute("DELETE FROM currency");
             statement.execute("DELETE FROM item_data");
         } catch (SQLException e) {

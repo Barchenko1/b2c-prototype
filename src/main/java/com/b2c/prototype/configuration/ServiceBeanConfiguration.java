@@ -21,10 +21,9 @@ import com.b2c.prototype.dao.option.ITimeDurationOptionDao;
 import com.b2c.prototype.dao.option.IZoneOptionDao;
 import com.b2c.prototype.dao.order.ICustomerOrderDao;
 import com.b2c.prototype.dao.order.IOrderStatusDao;
-import com.b2c.prototype.dao.payment.IBuyerCommissionDao;
 import com.b2c.prototype.dao.payment.ICreditCardDao;
 import com.b2c.prototype.dao.payment.IPaymentMethodDao;
-import com.b2c.prototype.dao.payment.ISellerCommissionDao;
+import com.b2c.prototype.dao.payment.IMinMaxCommissionDao;
 import com.b2c.prototype.dao.post.IPostDao;
 import com.b2c.prototype.dao.price.ICurrencyDao;
 import com.b2c.prototype.dao.rating.IRatingDao;
@@ -75,14 +74,12 @@ import com.b2c.prototype.manager.option.base.OptionItemCostManager;
 import com.b2c.prototype.manager.option.base.OptionItemManager;
 import com.b2c.prototype.manager.option.base.TimeDurationOptionManager;
 import com.b2c.prototype.manager.option.base.ZoneOptionManager;
-import com.b2c.prototype.manager.order.ICustomerOrderManager;
+import com.b2c.prototype.manager.order.ICustomerSingleDeliveryOrderManager;
 import com.b2c.prototype.manager.order.IOrderStatusManager;
-import com.b2c.prototype.manager.order.base.CustomerOrderManager;
+import com.b2c.prototype.manager.order.base.CustomerSingleDeliveryOrderManager;
 import com.b2c.prototype.manager.order.base.OrderStatusManager;
-import com.b2c.prototype.manager.payment.IBuyerCommissionManager;
-import com.b2c.prototype.manager.payment.ISellerCommissionManager;
-import com.b2c.prototype.manager.payment.base.BuyerCommissionManager;
-import com.b2c.prototype.manager.payment.base.SellerCommissionManager;
+import com.b2c.prototype.manager.payment.ICommissionManager;
+import com.b2c.prototype.manager.payment.base.CommissionManager;
 import com.b2c.prototype.manager.review.IReviewManager;
 import com.b2c.prototype.manager.review.base.ReviewManager;
 import com.b2c.prototype.manager.store.IStoreAddressManager;
@@ -111,10 +108,8 @@ import com.b2c.prototype.manager.userdetails.basic.CountryPhoneCodeManager;
 import com.b2c.prototype.manager.userdetails.basic.UserDetailsManager;
 import com.b2c.prototype.processor.address.UserAddressProcess;
 import com.b2c.prototype.processor.address.IUserAddressProcess;
-import com.b2c.prototype.processor.commission.BuyerCommissionProcess;
-import com.b2c.prototype.processor.commission.IBuyerCommissionProcess;
-import com.b2c.prototype.processor.commission.ISellerCommissionProcess;
-import com.b2c.prototype.processor.commission.SellerCommissionProcess;
+import com.b2c.prototype.processor.commission.ICommissionProcess;
+import com.b2c.prototype.processor.commission.CommissionProcess;
 import com.b2c.prototype.processor.constant.ConstantProcessorService;
 import com.b2c.prototype.processor.constant.IConstantProcessorService;
 import com.b2c.prototype.processor.creditcard.IUserCreditCardProcess;
@@ -157,7 +152,6 @@ import com.b2c.prototype.service.help.calculate.IPriceCalculationService;
 import com.b2c.prototype.service.help.calculate.PriceCalculationService;
 import com.b2c.prototype.service.parallel.AsyncProcessor;
 import com.b2c.prototype.service.parallel.IAsyncProcessor;
-import com.b2c.prototype.service.query.ISearchService;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.finder.factory.ParameterFactory;
 import com.tm.core.process.dao.identifier.IQueryService;
@@ -324,10 +318,10 @@ public class ServiceBeanConfiguration {
 
     @Bean
     public IDeviceManager deviceManager(IDeviceDao deviceDao,
+                                        IFetchHandler fetchHandler,
                                         ITransformationFunctionService transformationFunctionService,
-                                        ISearchService searchService,
                                         IParameterFactory parameterFactory) {
-        return new DeviceManager(deviceDao, transformationFunctionService, searchService, parameterFactory);
+        return new DeviceManager(deviceDao, fetchHandler, transformationFunctionService, parameterFactory);
     }
 
     @Bean
@@ -371,10 +365,10 @@ public class ServiceBeanConfiguration {
 
     @Bean
     public IOptionItemCostManager optionItemCostManager(IOptionItemCostDao optionItemCostDao,
-                                                        ISearchService searchService,
+                                                        IQueryService queryService,
                                                         ITransformationFunctionService transformationFunctionService,
                                                         IParameterFactory parameterFactory) {
-        return new OptionItemCostManager(optionItemCostDao, searchService, transformationFunctionService, parameterFactory);
+        return new OptionItemCostManager(optionItemCostDao, queryService, transformationFunctionService, parameterFactory);
     }
 
     @Bean
@@ -393,34 +387,20 @@ public class ServiceBeanConfiguration {
 
     @Bean
     public IUserCreditCardManager creditCardManager(ICreditCardDao cardDao,
-                                                    ISearchService searchService,
+                                                    IQueryService queryService,
+                                                    IFetchHandler fetchHandler,
                                                     ITransformationFunctionService transformationFunctionService,
                                                     IParameterFactory parameterFactory) {
-        return new UserCreditCardManager(cardDao, searchService, transformationFunctionService, parameterFactory);
+        return new UserCreditCardManager(cardDao, queryService, fetchHandler, transformationFunctionService, parameterFactory);
     }
 
     @Bean
-    public ISellerCommissionManager sellerCommissionManager(ISellerCommissionDao sellerCommissionDao,
-                                                            ITransformationFunctionService transformationFunctionService,
-                                                            IParameterFactory parameterFactory) {
-        return new SellerCommissionManager(sellerCommissionDao, transformationFunctionService, parameterFactory);
+    public ICommissionManager commissionManager(IMinMaxCommissionDao minMaxCommissionDao,
+                                                IQueryService queryService,
+                                                ITransformationFunctionService transformationFunctionService,
+                                                IParameterFactory parameterFactory) {
+        return new CommissionManager(minMaxCommissionDao, queryService, transformationFunctionService, parameterFactory);
     }
-
-    @Bean
-    public IBuyerCommissionManager buyerCommissionManager(IBuyerCommissionDao buyerCommissionDao,
-                                                          ITransformationFunctionService transformationFunctionService,
-                                                          IParameterFactory parameterFactory) {
-        return new BuyerCommissionManager(buyerCommissionDao, transformationFunctionService, parameterFactory);
-    }
-
-//    @Bean
-//    public IPaymentManager paymentManager(IPaymentDao paymentDao,
-//                                          ISearchService searchService,
-//                                          ITransformationFunctionService transformationFunctionService,
-//                                          ISupplierService supplierService,
-//                                          IParameterFactory parameterFactory) {
-//        return new PaymentManager(paymentDao, searchService, transformationFunctionService, supplierService, parameterFactory);
-//    }
 
     @Bean
     public IUserAddressManager userAddressManager(IAddressDao addressDao,
@@ -430,20 +410,13 @@ public class ServiceBeanConfiguration {
         return new UserAddressManager(addressDao, fetchHandler, transformationFunctionService, parameterFactory);
     }
 
-//    @Bean
-//    public IDeliveryManager deliveryManager(IDeliveryDao deliveryDao,
-//                                            ISearchService searchService,
-//                                            ITransformationFunctionService transformationFunctionService,
-//                                            ISupplierService supplierService,
-//                                            IParameterFactory parameterFactory) {
-//        return new DeliveryManager(deliveryDao, searchService, transformationFunctionService, supplierService, parameterFactory);
-//    }
-
     @Bean
-    public ICustomerOrderManager orderItemDataManager(ICustomerOrderDao orderItemDao,
-                                                      ITransformationFunctionService transformationFunctionService,
-                                                      IParameterFactory parameterFactory) {
-        return new CustomerOrderManager(orderItemDao, transformationFunctionService, parameterFactory);
+    public ICustomerSingleDeliveryOrderManager customerOrderManager(ICustomerOrderDao orderItemDao,
+                                                                    IQueryService queryService,
+                                                                    IFetchHandler fetchHandler,
+                                                                    ITransformationFunctionService transformationFunctionService,
+                                                                    IParameterFactory parameterFactory) {
+        return new CustomerSingleDeliveryOrderManager(orderItemDao, queryService, fetchHandler, transformationFunctionService, parameterFactory);
     }
 
     @Bean
@@ -473,18 +446,18 @@ public class ServiceBeanConfiguration {
 
     @Bean
     public IStoreManager storeManager(IStoreDao storeDao,
-                                      ISearchService searchService,
+                                      IQueryService queryService,
                                       ITransformationFunctionService transformationFunctionService,
                                       IParameterFactory parameterFactory) {
-        return new StoreManager(storeDao, searchService, transformationFunctionService, parameterFactory);
+        return new StoreManager(storeDao, queryService, transformationFunctionService, parameterFactory);
     }
 
     @Bean
     public IStoreAddressManager storeAddressManager(IAddressDao addressDao,
-                                                    ISearchService searchService,
+                                                    IQueryService queryService,
                                                     ITransformationFunctionService transformationFunctionService,
                                                     IParameterFactory parameterFactory) {
-        return new StoreAddressManager(addressDao, searchService, transformationFunctionService, parameterFactory);
+        return new StoreAddressManager(addressDao, queryService, transformationFunctionService, parameterFactory);
     }
 
     @Bean
@@ -563,7 +536,7 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public ICustomerOrderProcessor orderProcessor(ICustomerOrderManager orderItemDataOptionManager) {
+    public ICustomerOrderProcessor customerOrderProcessor(ICustomerSingleDeliveryOrderManager orderItemDataOptionManager) {
         return new CustomerOrderProcessor(orderItemDataOptionManager);
     }
 
@@ -593,13 +566,8 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public ISellerCommissionProcess sellerCommissionProcess(ISellerCommissionManager sellerCommissionManager) {
-        return new SellerCommissionProcess(sellerCommissionManager);
-    }
-
-    @Bean
-    public IBuyerCommissionProcess buyerCommissionProcess(IBuyerCommissionManager buyerCommissionManager) {
-        return new BuyerCommissionProcess(buyerCommissionManager);
+    public ICommissionProcess commissionProcess(ICommissionManager commissionManager) {
+        return new CommissionProcess(commissionManager);
     }
 
     @Bean

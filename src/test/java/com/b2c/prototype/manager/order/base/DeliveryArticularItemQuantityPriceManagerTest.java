@@ -6,15 +6,15 @@ import com.b2c.prototype.modal.dto.payload.order.AddressDto;
 import com.b2c.prototype.modal.dto.payload.order.ContactInfoDto;
 import com.b2c.prototype.modal.dto.payload.order.ContactPhoneDto;
 import com.b2c.prototype.modal.dto.payload.order.CreditCardDto;
-import com.b2c.prototype.modal.dto.payload.order.DeliveryDto;
+import com.b2c.prototype.modal.dto.payload.order.single.DeliveryDto;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.order.ArticularItemQuantityDto;
-import com.b2c.prototype.modal.dto.payload.order.CustomerOrderDto;
+import com.b2c.prototype.modal.dto.payload.order.single.CustomerSingleDeliveryOrderDto;
 import com.b2c.prototype.modal.dto.payload.order.PaymentDto;
 import com.b2c.prototype.modal.dto.payload.item.PriceDto;
 import com.b2c.prototype.modal.dto.payload.user.UserDetailsDto;
 import com.b2c.prototype.modal.dto.payload.order.ResponseCreditCardDto;
-import com.b2c.prototype.modal.dto.payload.order.ResponseCustomerOrderDetails;
+import com.b2c.prototype.modal.dto.payload.order.single.ResponseCustomerOrderDetails;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
@@ -69,7 +69,7 @@ class DeliveryArticularItemQuantityPriceManagerTest {
     @Mock
     private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
-    private CustomerOrderManager orderArticularItemQuantityManager;
+    private CustomerSingleDeliveryOrderManager orderArticularItemQuantityManager;
 
     @BeforeEach
     void setUp() {
@@ -78,7 +78,7 @@ class DeliveryArticularItemQuantityPriceManagerTest {
 
     @Test
     void saveOrderItemData_shouldSaveEntityArticular() {
-        CustomerOrderDto dto = getOrderArticularItemQuantityDto();
+        CustomerSingleDeliveryOrderDto dto = getOrderArticularItemQuantityDto();
         DeliveryArticularItemQuantity entity = getOrderItemData();
         when(transformationFunctionService.getEntity(DeliveryArticularItemQuantity.class, dto))
                 .thenReturn(entity);
@@ -99,7 +99,7 @@ class DeliveryArticularItemQuantityPriceManagerTest {
     @Test
     void updateOrderItemData_shouldUpdateEntityArticular() {
         String orderId = "orderId";
-        CustomerOrderDto customerOrderDto = getOrderArticularItemQuantityDto();
+        CustomerSingleDeliveryOrderDto customerSingleDeliveryOrderDto = getOrderArticularItemQuantityDto();
         DeliveryArticularItemQuantity existingEntity = getOrderItemData();
         DeliveryArticularItemQuantity newEntity = getOrderItemData();
 
@@ -107,7 +107,7 @@ class DeliveryArticularItemQuantityPriceManagerTest {
         Supplier<Parameter> parameterSupplier = () -> parameter;
         
         when(orderItemDataDao.getNamedQueryEntity("", parameter)).thenReturn(existingEntity);
-        when(transformationFunctionService.getEntity(DeliveryArticularItemQuantity.class, customerOrderDto))
+        when(transformationFunctionService.getEntity(DeliveryArticularItemQuantity.class, customerSingleDeliveryOrderDto))
                 .thenReturn(newEntity);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -117,7 +117,7 @@ class DeliveryArticularItemQuantityPriceManagerTest {
             return null;
         }).when(orderItemDataDao).executeConsumer(any(Consumer.class));
 
-        orderArticularItemQuantityManager.updateCustomerOrder(orderId, customerOrderDto);
+        orderArticularItemQuantityManager.updateCustomerOrder(orderId, customerSingleDeliveryOrderDto);
 
         verify(orderItemDataDao).executeConsumer(any(Consumer.class));
 //        assertEquals(existingEntity.getOrderId(), newEntity.getOrderId());
@@ -409,9 +409,7 @@ class DeliveryArticularItemQuantityPriceManagerTest {
         return PaymentDto.builder()
                 .paymentMethod(PaymentMethodEnum.CARD.getValue())
                 .creditCard(getCreditCardDto())
-                .fullPrice(getPriceDto(120))
-                .totalPrice(getPriceDto(100))
-                .discount(getDiscountDto())
+                .discountCharSequenceCode("")
                 .build();
     }
 
@@ -450,8 +448,8 @@ class DeliveryArticularItemQuantityPriceManagerTest {
     }
 
 
-    private CustomerOrderDto getOrderArticularItemQuantityDto() {
-        return CustomerOrderDto.builder()
+    private CustomerSingleDeliveryOrderDto getOrderArticularItemQuantityDto() {
+        return CustomerSingleDeliveryOrderDto.builder()
                 .beneficiary(getContactInfoDto())
                 .payment(getPaymentDto())
                 .delivery(getDeliveryDto())

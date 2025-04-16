@@ -9,7 +9,7 @@ import com.b2c.prototype.modal.entity.delivery.Delivery;
 import com.b2c.prototype.modal.entity.order.DeliveryArticularItemQuantity;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.query.ISearchService;
+
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,8 +37,7 @@ class AddressManagerTest {
 
     @Mock
     private IAddressDao addressDao;
-    @Mock
-    private ISearchService queryService;
+
     @Mock
     private ITransformationFunctionService transformationFunctionService;
     @InjectMocks

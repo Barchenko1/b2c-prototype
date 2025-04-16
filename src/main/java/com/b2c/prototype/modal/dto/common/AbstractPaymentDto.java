@@ -21,7 +21,5 @@ import lombok.experimental.SuperBuilder;
 public abstract class AbstractPaymentDto {
     private String paymentMethod;
     private CreditCardDto creditCard;
-    private PriceDto fullPrice;
-    private PriceDto totalPrice;
-    private DiscountDto discount;
+    private String discountCharSequenceCode;
 }

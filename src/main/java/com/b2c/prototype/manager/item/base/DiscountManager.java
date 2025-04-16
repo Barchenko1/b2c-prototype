@@ -57,7 +57,7 @@ public class DiscountManager implements IDiscountManager {
                     parameterFactory.createStringParameter(ARTICULAR_ID, articularId));
 
             Discount discount = (Discount) Optional.ofNullable(discountDto.getCharSequenceCode())
-                    .flatMap(code -> entityOperationManager.getGraphOptionalEntity(
+                    .flatMap(code -> entityOperationManager.getNamedQueryOptionalEntity(
                             "Discount.currency",
                             parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, code)))
                     .orElseGet(() -> transformationFunctionService.getEntity(session, Discount.class, discountDto));
@@ -78,7 +78,7 @@ public class DiscountManager implements IDiscountManager {
                 throw new RuntimeException("Discount code is null");
             }
             Discount newDiscount = transformationFunctionService.getEntity(session, Discount.class, discountDto);
-            Discount oldDiscount = entityOperationManager.getGraphEntity(
+            Discount oldDiscount = entityOperationManager.getNamedQueryEntity(
                     "Discount.currency",
                     parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, charSequenceCode));
             newDiscount.setId(oldDiscount.getId());
@@ -89,7 +89,7 @@ public class DiscountManager implements IDiscountManager {
     @Override
     public void changeDiscountStatus(DiscountStatusDto discountStatusDto) {
         entityOperationManager.executeConsumer(session -> {
-            Discount currencyDiscount = entityOperationManager.getGraphEntity(
+            Discount currencyDiscount = entityOperationManager.getNamedQueryEntity(
                     "Discount.currency",
                     parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, discountStatusDto.getCharSequenceCode()));
             currencyDiscount.setActive(discountStatusDto.isActive());
