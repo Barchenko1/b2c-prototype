@@ -1,0 +1,108 @@
+brand:
+  - id: 1
+    value: "Hermes"
+    label: "Hermes"
+item_type:
+  - id: 1
+    value: "Clothes"
+    label: "Clothes"
+currency:
+  - id: 1
+    value: "USD"
+    label: "USD"
+price:
+  - id: 1
+    amount: 100
+    currency_id: 1
+  - id: 2
+    amount: 20
+    currency_id: 1
+  - id: 3
+    amount: 10
+    currency_id: 1
+  - id: 4
+    amount: 10
+    currency_id: 1
+  - id: 5
+    amount: 8.5
+    currency_id: 1
+  - id: 6
+    amount: 20
+    currency_id: 1
+discount:
+  - id: 1
+    amount: 10
+    charSequenceCode: "abc1"
+    isActive: true
+    isPercent: false
+    currency_id: 1
+  - id: 2
+    amount: 15
+    charSequenceCode: "abc2"
+    isActive: true
+    isPercent: true
+option_group:
+  - id: 1
+    label: "Size"
+    value: "Size"
+option_item:
+  - id: 1
+    value: "L"
+    label: "L"
+    option_group_id: 1
+  - id: 2
+    value: "M"
+    label: "M"
+    option_group_id: 1
+category:
+  - id: 1
+    label: "parent"
+    value: "parent"
+  - id: 2
+    category_id: 1
+    label: "root"
+    value: "root"
+  - id: 3
+    category_id: 2
+    label: "child"
+    value: "child"
+item_data:
+  - id: 1
+    item_id: 123
+    brand_id: 1
+    category_id: 3
+    itemtype_id: 1
+articular_item:
+  - id: 1
+    articular_id: "A12345"
+    dateOfCreate: 10000
+    discount_id: 1
+    fullprice_id: 2
+    totalprice_id: 3
+  - id: 2
+    articular_id: "B67890"
+    dateOfCreate: 10000
+    discount_id: 2
+    fullprice_id: 4
+    totalprice_id: 5
+  - id: 3
+    articular_id: "C54321"
+    dateOfCreate: 10000
+    fullprice_id: 6
+    totalprice_id: 6
+articular_item_quantity: []
+commission_value:
+  - id: 3
+    fee_type: 'PERCENTAGE'
+    amount: 10
+  - id: 4
+    fee_type: 'FIXED'
+    amount: 10.5
+    currency_id: 1
+min_max_commission:
+  - id: 1
+    mincommission_id: 4
+    maxcommission_id: 3
+    commission_type: 'BUYER'
+    changecommissionprice_id: 1
+    lastUpdateTimestamp: "2024-04-01 10:15:30"

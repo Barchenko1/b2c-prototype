@@ -1,5 +1,6 @@
 package com.b2c.prototype.modal.dto.payload.commission;
 
+import com.b2c.prototype.modal.dto.payload.item.PriceDto;
 import com.b2c.prototype.util.ZonedDateTimeDeserializer;
 import com.b2c.prototype.util.ZonedDateTimeSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -23,7 +24,7 @@ public class ResponseMinMaxCommissionDto {
     private CommissionValueDto minCommissionValue;
     private CommissionValueDto maxCommissionValue;
     private String commissionType;
-    private double changeCommissionValue;
+    private PriceDto changeCommissionPrice;
     @JsonSerialize(using = ZonedDateTimeSerializer.class)
     @JsonDeserialize(using = ZonedDateTimeDeserializer.class)
     private ZonedDateTime lastUpdateTimestamp;

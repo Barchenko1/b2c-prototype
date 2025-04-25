@@ -38,7 +38,6 @@ public final class DatabaseQueries {
             statement.execute("DELETE FROM payment");
             statement.execute("DELETE FROM time_duration_option");
             statement.execute("DELETE FROM zone_option");
-            statement.execute("DELETE FROM price");
 
             statement.execute("DELETE FROM user_credit_card");
             statement.execute("DELETE FROM credit_card");
@@ -51,6 +50,7 @@ public final class DatabaseQueries {
             statement.execute("DELETE FROM discount");
             statement.execute("DELETE FROM min_max_commission");
             statement.execute("DELETE FROM commission_value");
+            statement.execute("DELETE FROM price");
             statement.execute("DELETE FROM currency");
             statement.execute("DELETE FROM item_data");
         } catch (SQLException e) {

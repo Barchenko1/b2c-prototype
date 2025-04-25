@@ -56,7 +56,7 @@ class BasicArticularItemQuantityPriceDaoTest extends AbstractConstantEntityDaoTe
 //                .articularItem(prepareTestItemDataOption())
 //                .quantity(1)
                 .build();
-        return new EntityDataSet<>(articularItemQuantityPrice, "/datasets/item/articular_item_quantity/testIArticularItemQuantityDataSet.yml");
+        return new EntityDataSet<>(articularItemQuantityPrice, "/datasets/item/articular_item_quantity/testArticularItemQuantityDataSet.yml");
     }
 
     @Override

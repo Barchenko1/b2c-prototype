@@ -10,7 +10,10 @@
       "feeType": "PERCENTAGE"
     },
     "commissionType": "BUYER",
-    "changeCommissionValue": 200.0,
+    "changeCommissionPrice": {
+      "amount": 100.0,
+      "currency": "USD"
+    },
     "lastUpdateTimestamp": "2024-04-01T08:15:30.000Z"
   },
   {
@@ -24,7 +27,10 @@
       "feeType": "PERCENTAGE"
     },
     "commissionType": "SELLER",
-    "changeCommissionValue": 200.0,
+    "changeCommissionPrice": {
+      "amount": 100.0,
+      "currency": "USD"
+    },
     "lastUpdateTimestamp": "2024-04-01T08:15:30.000Z"
   }
 ]

@@ -138,7 +138,21 @@ import java.util.Set;
                         "JOIN FETCH og.optionItems " +
                         "JOIN FETCH oi.articularItems " +
                         "WHERE ai.articularId = :articularId"
+        ),
+        @NamedQuery(
+                name = "ArticularItem.findByArticularIds",
+                query = "SELECT DISTINCT ai FROM ArticularItem ai " +
+                        "LEFT JOIN FETCH ai.optionItems oi " +
+                        "LEFT JOIN FETCH oi.optionGroup og " +
+                        "LEFT JOIN FETCH ai.fullPrice fp " +
+                        "LEFT JOIN FETCH fp.currency " +
+                        "LEFT JOIN FETCH ai.totalPrice tp " +
+                        "LEFT JOIN FETCH tp.currency " +
+                        "LEFT JOIN FETCH ai.discount d " +
+                        "LEFT JOIN FETCH d.currency " +
+                        "WHERE ai.articularId IN :articularIds"
         )
+
 })
 @Data
 @Builder(toBuilder = true)

@@ -440,7 +440,7 @@ class DeliveryArticularItemQuantityPriceManagerTest {
                 .build();
     }
 
-    private ArticularItemQuantityDto getItemDataOptionQuantityDto() {
+    private ArticularItemQuantityDto getArticularItemQuantityDto() {
         return ArticularItemQuantityDto.builder()
                 .articularId("articularId")
                 .quantity(1)
@@ -453,7 +453,7 @@ class DeliveryArticularItemQuantityPriceManagerTest {
                 .beneficiary(getContactInfoDto())
                 .payment(getPaymentDto())
                 .delivery(getDeliveryDto())
-                .itemDataOptionQuantities(List.of(getItemDataOptionQuantityDto()))
+                .articularItemQuantityList(List.of(getArticularItemQuantityDto()))
                 .user(null)
                 .note("note")
                 .build();
@@ -464,7 +464,7 @@ class DeliveryArticularItemQuantityPriceManagerTest {
                 .beneficiary(getContactInfoDto())
                 .payment(getPaymentDto())
                 .delivery(getDeliveryDto())
-                .itemDataOptionQuantities(Set.of(getItemDataOptionQuantityDto()))
+                .itemDataOptionQuantities(Set.of(getArticularItemQuantityDto()))
                 .userDetails(getUserDetailsDto())
                 .note("note")
                 .build();

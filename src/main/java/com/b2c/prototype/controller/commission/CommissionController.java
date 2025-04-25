@@ -30,7 +30,7 @@ public class CommissionController {
     }
 
     @PostMapping(produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<Void> saveLastCommission(@RequestParam final Map<String, String> requestParams,
+    public ResponseEntity<Void> saveCommission(@RequestParam final Map<String, String> requestParams,
                                                    @RequestBody final MinMaxCommissionDto minMaxCommissionDto) {
         commissionProcess.saveCommission(requestParams, minMaxCommissionDto);
         return ResponseEntity.ok().build();
@@ -60,8 +60,7 @@ public class CommissionController {
     }
 
     // client
-
-    @PostMapping(produces = MediaType.TEXT_PLAIN_VALUE)
+    @PostMapping(value = "/items", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseBuyerCommissionInfoDto> getBuyerCommission(@RequestParam final Map<String, String> requestParams,
                                                                              @RequestBody final List<ArticularItemQuantityDto> articularItemQuantityList) {
         return new ResponseEntity<>(commissionProcess.getBuyerCommission(requestParams, articularItemQuantityList), HttpStatus.OK);

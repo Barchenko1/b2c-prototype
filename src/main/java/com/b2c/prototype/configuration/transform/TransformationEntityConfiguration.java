@@ -1098,7 +1098,7 @@ public class TransformationEntityConfiguration {
             }
             OrderStatus orderStatus = fetchOrderStatus(session, OrderStatusEnum.CREATED.name());
             List<ArticularItemQuantityPrice> articularItemQuantityPriceList = mapArticularItemQuantityDtoToArticularItemQuantity()
-                    .apply(session, customerSingleDeliveryOrderDto.getItemDataOptionQuantities());
+                    .apply(session, customerSingleDeliveryOrderDto.getArticularItemQuantityList());
             Delivery delivery = mapDeliveryDtoToDelivery().apply(session, customerSingleDeliveryOrderDto.getDelivery());
             double fullSum = articularItemQuantityPriceList.stream()
                     .mapToDouble(articularItemQuantityPrice -> articularItemQuantityPrice.getFullPriceSum().getAmount())
@@ -1204,13 +1204,14 @@ public class TransformationEntityConfiguration {
                     ? fetchOptionDiscount(session, paymentPriceDto.getDiscountCharSequenceCode())
                     : Optional.empty();
             Discount orderDiscount = orderDiscountOptional.orElse(null);
-            Optional<MinMaxCommission> optionalMinMaxCommission = fetchCommission(session);
+            Optional<MinMaxCommission> optionalMinMaxCommission = fetchMinMaxCommission(session, CommissionType.SELLER);
             Price commissionPrice = null;
             if (optionalMinMaxCommission.isPresent()) {
-                if (FeeType.PERCENTAGE.equals(optionalMinMaxCommission.get().getCommissionType())) {
-                    commissionPrice = priceCalculationService.calculateCommissionPrice(paymentPriceDto.getTotalPaymentPrice(), orderDiscount, commissionOptional.get());
+                MinMaxCommission minMaxCommission = optionalMinMaxCommission.get();
+                if (FeeType.PERCENTAGE.equals(minMaxCommission.getCommissionType())) {
+//                    commissionPrice = priceCalculationService.calculateCommissionPrice(paymentPriceDto.getTotalPaymentPrice(), orderDiscount, minMaxCommission);
                 } else {
-                    commissionPrice = mapPrice().apply(optionalMinMaxCommission.get().getCurrency(), commissionOptional.get().getAmount());
+//                    commissionPrice = mapPrice().apply(optionalMinMaxCommission.get().getCurrency(), commissionOptional.get().getAmount());
                 }
             }
 
@@ -1493,7 +1494,7 @@ public class TransformationEntityConfiguration {
                 .minCommissionValue(mapCommissionValueToCommissionValueDto().apply(minMaxCommission.getMinCommission()))
                 .maxCommissionValue(mapCommissionValueToCommissionValueDto().apply(minMaxCommission.getMaxCommission()))
                 .commissionType(minMaxCommission.getCommissionType().name())
-                .changeCommissionValue(minMaxCommission.getChangeCommissionValue())
+                .changeCommissionPrice(mapPriceToPriceDtoFunction().apply(minMaxCommission.getChangeCommissionPrice()))
                 .lastUpdateTimestamp(minMaxCommission.getLastUpdateTimestamp().toInstant()
                         .atZone(ZoneId.of("UTC")))
                 .build();
@@ -1504,7 +1505,7 @@ public class TransformationEntityConfiguration {
                 .minCommission(mapCommissionValueDtoToCommissionValue().apply(session, minMaxCommissionDto.getMinCommissionValue()))
                 .maxCommission(mapCommissionValueDtoToCommissionValue().apply(session, minMaxCommissionDto.getMaxCommissionValue()))
                 .commissionType(CommissionType.valueOf(minMaxCommissionDto.getCommissionType()))
-                .changeCommissionValue(minMaxCommissionDto.getChangeCommissionValue())
+                .changeCommissionPrice(mapPriceDtoToPriceFunction().apply(session, minMaxCommissionDto.getChangeCommissionPrice()))
                 .build();
     }
 
@@ -1722,6 +1723,14 @@ public class TransformationEntityConfiguration {
                 session,
                 CommissionValue.class,
                 "CommissionValue.getCommissionList");
+    }
+
+    private Optional<MinMaxCommission> fetchMinMaxCommission(Session session, CommissionType value) {
+        return queryService.getNamedQueryOptionalEntity(
+                session,
+                MinMaxCommission.class,
+                "MinMaxCommission.findByCommissionType",
+                parameterFactory.createEnumParameter("commissionType", value));
     }
 
     private Optional<Post> fetchPost(Session session, String value) {

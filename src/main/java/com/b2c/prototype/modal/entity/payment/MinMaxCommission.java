@@ -1,6 +1,7 @@
 package com.b2c.prototype.modal.entity.payment;
 
 import com.b2c.prototype.modal.constant.CommissionType;
+import com.b2c.prototype.modal.entity.price.Price;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,9 +11,11 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -38,6 +41,8 @@ import java.util.Date;
                         "LEFT JOIN FETCH min.currency minc " +
                         "LEFT JOIN FETCH m.maxCommission max " +
                         "LEFT JOIN FETCH max.currency maxc " +
+                        "LEFT JOIN FETCH m.changeCommissionPrice ccp " +
+                        "LEFT JOIN FETCH ccp.currency ccpc " +
                         "WHERE m.commissionType = :commissionType"
         ),
         @NamedQuery(
@@ -46,7 +51,9 @@ import java.util.Date;
                         "LEFT JOIN FETCH m.minCommission min " +
                         "LEFT JOIN FETCH min.currency minc " +
                         "LEFT JOIN FETCH m.maxCommission max " +
-                        "LEFT JOIN FETCH max.currency maxc"
+                        "LEFT JOIN FETCH max.currency maxc " +
+                        "LEFT JOIN FETCH m.changeCommissionPrice ccp " +
+                        "LEFT JOIN FETCH ccp.currency ccpc "
         ),
 })
 public class MinMaxCommission {
@@ -60,7 +67,9 @@ public class MinMaxCommission {
     @Enumerated(EnumType.STRING)
     @Column(name = "commission_type", nullable = false, unique = true)
     private CommissionType commissionType;
-    private double changeCommissionValue;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(nullable = false)
+    private Price changeCommissionPrice;
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdateTimestamp;

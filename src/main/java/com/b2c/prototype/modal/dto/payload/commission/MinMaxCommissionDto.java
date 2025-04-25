@@ -1,5 +1,6 @@
 package com.b2c.prototype.modal.dto.payload.commission;
 
+import com.b2c.prototype.modal.dto.payload.item.PriceDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -17,5 +18,5 @@ public class MinMaxCommissionDto {
     private CommissionValueDto minCommissionValue;
     private CommissionValueDto maxCommissionValue;
     private String commissionType;
-    private double changeCommissionValue;
+    private PriceDto changeCommissionPrice;
 }

@@ -397,9 +397,11 @@ public class ServiceBeanConfiguration {
     @Bean
     public ICommissionManager commissionManager(IMinMaxCommissionDao minMaxCommissionDao,
                                                 IQueryService queryService,
+                                                IFetchHandler fetchHandler,
                                                 ITransformationFunctionService transformationFunctionService,
-                                                IParameterFactory parameterFactory) {
-        return new CommissionManager(minMaxCommissionDao, queryService, transformationFunctionService, parameterFactory);
+                                                IParameterFactory parameterFactory,
+                                                IPriceCalculationService priceCalculationService) {
+        return new CommissionManager(minMaxCommissionDao, queryService, fetchHandler, transformationFunctionService, parameterFactory, priceCalculationService);
     }
 
     @Bean

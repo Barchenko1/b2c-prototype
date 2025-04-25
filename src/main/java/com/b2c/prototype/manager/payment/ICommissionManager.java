@@ -15,5 +15,5 @@ public interface ICommissionManager {
     List<ResponseMinMaxCommissionDto> getCommissionList();
     ResponseMinMaxCommissionDto getCommissionByCommissionType(String commissionType);
 
-    ResponseBuyerCommissionInfoDto getBuyerCommission(List<ArticularItemQuantityDto> articularItemQuantityDtoList)
+    ResponseBuyerCommissionInfoDto getBuyerCommission(List<ArticularItemQuantityDto> articularItemQuantityDtoList);
 }

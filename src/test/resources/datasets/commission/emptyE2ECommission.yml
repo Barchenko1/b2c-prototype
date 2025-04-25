@@ -2,5 +2,6 @@ currency:
   - id: 1
     value: "USD"
     label: "USD"
+price: []
 commission_value: []
 min_max_commission: []

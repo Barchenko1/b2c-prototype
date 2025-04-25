@@ -1,0 +1,14 @@
+[
+  {
+    "articularId": "A12345",
+    "quantity": 2
+  },
+  {
+    "articularId": "B67890",
+    "quantity": 5
+  },
+  {
+    "articularId": "C54321",
+    "quantity": 1
+  }
+]

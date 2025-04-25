@@ -2,6 +2,10 @@ currency:
   - id: 1
     value: "USD"
     label: "USD"
+price:
+  - id: 1
+    amount: 200
+    currency_id: 1
 commission_value:
   - id: 3
     fee_type: 'FIXED'
@@ -16,5 +20,5 @@ min_max_commission:
     mincommission_id: 4
     maxcommission_id: 3
     commission_type: 'BUYER'
-    changecommissionvalue: 200
+    changecommissionprice_id: 1
     lastUpdateTimestamp: "2024-04-01 10:15:30"

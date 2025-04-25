@@ -9,5 +9,8 @@
     "feeType": "PERCENTAGE"
   },
   "commissionType": "SELLER",
-  "changeCommissionValue": 100
+  "changeCommissionPrice": {
+    "amount": 100.00,
+    "currency": "USD"
+  }
 }
