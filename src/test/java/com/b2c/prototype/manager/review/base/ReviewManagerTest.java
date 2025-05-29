@@ -7,7 +7,7 @@ import com.b2c.prototype.modal.entity.item.Item;
 import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.modal.entity.review.Rating;
 import com.b2c.prototype.modal.entity.review.Review;
-import com.b2c.prototype.service.function.ITransformationFunctionService;
+import com.b2c.prototype.transform.function.ITransformationFunctionService;
 
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
@@ -146,8 +146,8 @@ class ReviewManagerTest {
         List<ResponseReviewDto> expectedResponse = List.of(responseReviewDto);
         
         Function<Review, Collection<ResponseReviewDto>> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationCollectionFunction(Review.class, ResponseReviewDto.class))
-                .thenReturn(function);
+//        when(transformationFunctionService.getTransformationCollectionFunction(Review.class, ResponseReviewDto.class))
+//                .thenReturn(function);
         when(function.apply(review)).thenReturn(expectedResponse);
 //        when(queryService.getEntityDto(Review.class, parameterSupplier, function)).thenReturn(expectedResponse);
 

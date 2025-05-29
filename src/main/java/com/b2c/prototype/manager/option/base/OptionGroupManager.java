@@ -3,7 +3,7 @@ package com.b2c.prototype.manager.option.base;
 
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
-import com.b2c.prototype.service.function.ITransformationFunctionService;
+import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.AbstractConstantEntityManager;
 import com.b2c.prototype.manager.option.IOptionGroupManager;
 import com.tm.core.process.dao.common.IEntityDao;

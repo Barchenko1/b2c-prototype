@@ -11,7 +11,7 @@ import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.modal.entity.item.ItemType;
-import com.b2c.prototype.service.function.ITransformationFunctionService;
+import com.b2c.prototype.transform.function.ITransformationFunctionService;
 
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;

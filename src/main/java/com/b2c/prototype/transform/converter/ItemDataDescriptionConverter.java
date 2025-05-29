@@ -1,4 +1,4 @@
-package com.b2c.prototype.service.converter;
+package com.b2c.prototype.transform.converter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;

@@ -1,5 +1,7 @@
 package com.b2c.prototype.configuration;
 
+import com.b2c.prototype.dao.ISessionEntityFetcher;
+import com.b2c.prototype.dao.SessionEntityFetcher;
 import com.b2c.prototype.dao.address.IAddressDao;
 import com.b2c.prototype.dao.address.ICountryDao;
 import com.b2c.prototype.dao.delivery.IDeliveryTypeDao;
@@ -15,7 +17,6 @@ import com.b2c.prototype.dao.message.IMessageBoxDao;
 import com.b2c.prototype.dao.message.IMessageStatusDao;
 import com.b2c.prototype.dao.message.IMessageTypeDao;
 import com.b2c.prototype.dao.option.IOptionGroupDao;
-import com.b2c.prototype.dao.option.IOptionItemCostDao;
 import com.b2c.prototype.dao.option.IOptionItemDao;
 import com.b2c.prototype.dao.option.ITimeDurationOptionDao;
 import com.b2c.prototype.dao.option.IZoneOptionDao;
@@ -65,12 +66,10 @@ import com.b2c.prototype.manager.message.base.MessageManager;
 import com.b2c.prototype.manager.message.base.MessageStatusManager;
 import com.b2c.prototype.manager.message.base.MessageTypeManager;
 import com.b2c.prototype.manager.option.IOptionGroupManager;
-import com.b2c.prototype.manager.option.IOptionItemCostManager;
 import com.b2c.prototype.manager.option.IOptionItemManager;
 import com.b2c.prototype.manager.option.ITimeDurationOptionManager;
 import com.b2c.prototype.manager.option.IZoneOptionManager;
 import com.b2c.prototype.manager.option.base.OptionGroupManager;
-import com.b2c.prototype.manager.option.base.OptionItemCostManager;
 import com.b2c.prototype.manager.option.base.OptionItemManager;
 import com.b2c.prototype.manager.option.base.TimeDurationOptionManager;
 import com.b2c.prototype.manager.option.base.ZoneOptionManager;
@@ -146,15 +145,14 @@ import com.b2c.prototype.processor.user.IMessageProcess;
 import com.b2c.prototype.processor.user.IUserDetailsProcess;
 import com.b2c.prototype.processor.user.MessageProcess;
 import com.b2c.prototype.processor.user.UserDetailsProcess;
-import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.function.TransformationFunctionService;
-import com.b2c.prototype.service.help.calculate.IPriceCalculationService;
-import com.b2c.prototype.service.help.calculate.PriceCalculationService;
-import com.b2c.prototype.service.parallel.AsyncProcessor;
-import com.b2c.prototype.service.parallel.IAsyncProcessor;
+import com.b2c.prototype.transform.function.ITransformationFunctionService;
+import com.b2c.prototype.transform.function.TransformationFunctionService;
+import com.b2c.prototype.transform.help.calculate.IPriceCalculationService;
+import com.b2c.prototype.transform.help.calculate.PriceCalculationService;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.finder.factory.ParameterFactory;
 import com.tm.core.process.dao.identifier.IQueryService;
+import com.tm.core.process.dao.identifier.QueryService;
 import com.tm.core.process.dao.query.IFetchHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -173,11 +171,6 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public IAsyncProcessor asyncProcessor() {
-        return new AsyncProcessor(threadCount);
-    }
-
-    @Bean
     public IParameterFactory parameterFactory() {
         return new ParameterFactory();
     }
@@ -190,6 +183,11 @@ public class ServiceBeanConfiguration {
     @Bean
     public IPriceCalculationService priceCalculationService() {
         return new PriceCalculationService();
+    }
+
+    @Bean
+    public ISessionEntityFetcher sessionEntityFetcher(IQueryService queryService, IParameterFactory parameterFactory) {
+        return new SessionEntityFetcher(queryService, parameterFactory);
     }
 
     // app service
@@ -363,13 +361,13 @@ public class ServiceBeanConfiguration {
         return new OptionItemManager(optionItemDao, fetchHandler, transformationFunctionService, parameterFactory);
     }
 
-    @Bean
-    public IOptionItemCostManager optionItemCostManager(IOptionItemCostDao optionItemCostDao,
-                                                        IQueryService queryService,
-                                                        ITransformationFunctionService transformationFunctionService,
-                                                        IParameterFactory parameterFactory) {
-        return new OptionItemCostManager(optionItemCostDao, queryService, transformationFunctionService, parameterFactory);
-    }
+//    @Bean
+//    public IOptionItemCostManager optionItemCostManager(IOptionItemCostDao optionItemCostDao,
+//                                                        IQueryService queryService,
+//                                                        ITransformationFunctionService transformationFunctionService,
+//                                                        IParameterFactory parameterFactory) {
+//        return new OptionItemCostManager(optionItemCostDao, queryService, transformationFunctionService, parameterFactory);
+//    }
 
     @Bean
     public ITimeDurationOptionManager timeDurationOptionManager(ITimeDurationOptionDao timeDurationOptionDao,
@@ -416,9 +414,11 @@ public class ServiceBeanConfiguration {
     public ICustomerSingleDeliveryOrderManager customerOrderManager(ICustomerOrderDao orderItemDao,
                                                                     IQueryService queryService,
                                                                     IFetchHandler fetchHandler,
+                                                                    ISessionEntityFetcher sessionEntityFetcher,
                                                                     ITransformationFunctionService transformationFunctionService,
-                                                                    IParameterFactory parameterFactory) {
-        return new CustomerSingleDeliveryOrderManager(orderItemDao, queryService, fetchHandler, transformationFunctionService, parameterFactory);
+                                                                    IParameterFactory parameterFactory,
+                                                                    IPriceCalculationService priceCalculationService) {
+        return new CustomerSingleDeliveryOrderManager(orderItemDao, queryService, fetchHandler, sessionEntityFetcher, transformationFunctionService, parameterFactory, priceCalculationService);
     }
 
     @Bean

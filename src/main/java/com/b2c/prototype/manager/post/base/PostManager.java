@@ -6,7 +6,7 @@ import com.b2c.prototype.modal.dto.payload.post.ResponsePostDto;
 import com.b2c.prototype.modal.entity.item.Item;
 import com.b2c.prototype.modal.entity.post.Post;
 import com.b2c.prototype.manager.post.IPostManager;
-import com.b2c.prototype.service.function.ITransformationFunctionService;
+import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.util.PostUtil;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.dao.identifier.IQueryService;

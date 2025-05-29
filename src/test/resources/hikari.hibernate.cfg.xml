@@ -30,6 +30,8 @@
 
         <mapping class="com.b2c.prototype.modal.entity.payment.PaymentMethod" />
         <mapping class="com.b2c.prototype.modal.entity.payment.PaymentStatus" />
+        <mapping class="com.b2c.prototype.modal.entity.payment.CurrencyCoefficient" />
+        <mapping class="com.b2c.prototype.modal.entity.payment.MultiCurrencyPriceInfo" />
         <mapping class="com.b2c.prototype.modal.entity.payment.Payment" />
 
         <mapping class="com.b2c.prototype.modal.entity.address.Address" />
@@ -49,6 +51,8 @@
         <mapping class="com.b2c.prototype.modal.entity.item.Discount" />
         <mapping class="com.b2c.prototype.modal.entity.payment.CommissionValue" />
         <mapping class="com.b2c.prototype.modal.entity.payment.MinMaxCommission" />
+        <mapping class="com.b2c.prototype.modal.entity.payment.CurrencyCoefficient" />
+        <mapping class="com.b2c.prototype.modal.entity.payment.MultiCurrencyPriceInfo" />
         <mapping class="com.b2c.prototype.modal.entity.payment.Payment" />
 
         <mapping class="com.b2c.prototype.modal.entity.item.AvailabilityStatus" />
@@ -61,7 +65,7 @@
 
         <mapping class="com.b2c.prototype.modal.entity.option.OptionGroup" />
         <mapping class="com.b2c.prototype.modal.entity.option.OptionItem" />
-        <mapping class="com.b2c.prototype.modal.entity.option.OptionItemCost" />
+<!--        <mapping class="com.b2c.prototype.modal.entity.option.OptionItemCost" />-->
 
         <mapping class="com.b2c.prototype.modal.entity.item.ItemData" />
         <mapping class="com.b2c.prototype.modal.entity.item.ArticularItem" />

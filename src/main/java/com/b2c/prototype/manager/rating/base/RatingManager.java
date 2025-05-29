@@ -3,7 +3,7 @@ package com.b2c.prototype.manager.rating.base;
 
 import com.b2c.prototype.modal.dto.common.NumberConstantPayloadDto;
 import com.b2c.prototype.modal.entity.review.Rating;
-import com.b2c.prototype.service.function.ITransformationFunctionService;
+import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.AbstractIntegerConstantEntityManager;
 import com.b2c.prototype.manager.rating.IRatingManager;
 import com.tm.core.process.dao.common.IEntityDao;

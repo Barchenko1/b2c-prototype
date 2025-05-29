@@ -6,7 +6,7 @@ import com.b2c.prototype.modal.dto.payload.discount.DiscountStatusDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.price.Currency;
-import com.b2c.prototype.service.function.ITransformationFunctionService;
+import com.b2c.prototype.transform.function.ITransformationFunctionService;
 
 import com.tm.core.finder.parameter.Parameter;
 import org.hibernate.Session;
@@ -23,8 +23,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
-import static com.b2c.prototype.util.Constant.CHAR_SEQUENCE_CODE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.any;
@@ -231,8 +229,8 @@ class DiscountManagerTest {
 //                anyString(),
 //                eq(function)
 //        )).thenReturn(expectedList);
-        when(transformationFunctionService.getCollectionTransformationCollectionFunction(ArticularItem.class, DiscountDto.class, "list"))
-                .thenReturn(function);
+//        when(transformationFunctionService.getCollectionTransformationCollectionFunction(ArticularItem.class, DiscountDto.class, "list"))
+//                .thenReturn(function);
 
         List<DiscountDto> result = discountManager.getDiscounts();
         assertEquals(expectedList, result);

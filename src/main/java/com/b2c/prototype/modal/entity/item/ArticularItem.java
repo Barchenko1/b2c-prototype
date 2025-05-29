@@ -1,7 +1,6 @@
 package com.b2c.prototype.modal.entity.item;
 
 import com.b2c.prototype.modal.entity.option.OptionItem;
-import com.b2c.prototype.modal.entity.option.OptionItemCost;
 import com.b2c.prototype.modal.entity.price.Price;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -177,16 +176,6 @@ public class ArticularItem {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<OptionItem> optionItems = new HashSet<>();
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinTable(
-            name = "articular_item_option_item_cost",
-            joinColumns = {@JoinColumn(name = "articular_item_id")},
-            inverseJoinColumns = {@JoinColumn(name = "option_item_cost_id")}
-    )
-    @Builder.Default
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private Set<OptionItemCost> optionItemCosts = new HashSet<>();
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(nullable = false)
     private Price fullPrice;
@@ -210,13 +199,4 @@ public class ArticularItem {
         optionItem.getArticularItems().remove(this);
     }
 
-    public void addOptionItemCost(OptionItemCost optionItemCost) {
-        this.optionItemCosts.add(optionItemCost);
-        optionItemCost.getArticularItems().add(this);
-    }
-
-    public void removeOptionItemCost(OptionItemCost optionItemCost) {
-        this.optionItemCosts.remove(optionItemCost);
-        optionItemCost.getArticularItems().remove(this);
-    }
 }

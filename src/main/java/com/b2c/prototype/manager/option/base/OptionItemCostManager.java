@@ -2,7 +2,7 @@ package com.b2c.prototype.manager.option.base;
 
 import com.b2c.prototype.dao.option.IOptionItemCostDao;
 import com.b2c.prototype.manager.option.IOptionItemCostManager;
-import com.b2c.prototype.service.function.ITransformationFunctionService;
+import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.dao.identifier.IQueryService;
 import com.tm.core.process.manager.common.EntityOperationManager;

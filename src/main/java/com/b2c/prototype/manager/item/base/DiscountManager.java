@@ -5,7 +5,7 @@ import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountStatusDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.Discount;
-import com.b2c.prototype.service.function.ITransformationFunctionService;
+import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.item.IDiscountManager;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.dao.query.IFetchHandler;
@@ -119,6 +119,10 @@ public class DiscountManager implements IDiscountManager {
                 ArticularItem.class,
                 ARTICULAR_ITEM_FIND_BY_DISCOUNT_CHAR_SEQUENCE_CODE,
                 parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, charSequenceCode));
+//        return articularItemList.stream()
+//                .map(e-> new DiscountDto())
+//                .findFirst()
+//                .orElseThrow(() -> new RuntimeException(""));
         return transformationFunctionService.getCollectionTransformationFunction(ArticularItem.class, DiscountDto.class)
                 .apply(articularItemList);
     }
@@ -128,6 +132,7 @@ public class DiscountManager implements IDiscountManager {
         List<ArticularItem> articularItemList = fetchHandler.getNamedQueryEntityList(
                 ArticularItem.class,
                 ARTICULAR_ITEM_FIND_BY_DISCOUNT_NOT_NULL);
+
         return (List<DiscountDto>) transformationFunctionService.getCollectionTransformationCollectionFunction(ArticularItem.class, DiscountDto.class, "list")
                 .apply(articularItemList);
     }

@@ -5,7 +5,7 @@ import com.b2c.prototype.modal.dto.common.SearchFieldUpdateEntityDto;
 import com.b2c.prototype.modal.dto.payload.item.ItemDataDto;
 import com.b2c.prototype.modal.dto.payload.item.ResponseItemDataDto;
 import com.b2c.prototype.modal.entity.item.ItemData;
-import com.b2c.prototype.service.function.ITransformationFunctionService;
+import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.item.IItemDataManager;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.manager.common.EntityOperationManager;

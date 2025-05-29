@@ -25,7 +25,7 @@ public class StoreAddressController {
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> updateStoreAddress(@RequestParam final Map<String, String> requestParams,
+    public ResponseEntity<Void> saveUpdateStoreAddress(@RequestParam final Map<String, String> requestParams,
                                                    @RequestBody final AddressDto addressDto) {
         storeAddressProcess.saveUpdateStoreAddress(requestParams, addressDto);
         return ResponseEntity.ok().build();

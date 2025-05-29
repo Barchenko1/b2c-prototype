@@ -40,7 +40,7 @@ class CustomerSingleDeliveryOrderControllerE2ETest extends BasicE2ETest {
 
             statement.execute("ALTER SEQUENCE contact_info_id_seq RESTART WITH 2");
             statement.execute("ALTER SEQUENCE contact_phone_id_seq RESTART WITH 2");
-            statement.execute("ALTER SEQUENCE price_id_seq RESTART WITH 3");
+            statement.execute("ALTER SEQUENCE price_id_seq RESTART WITH 5");
             statement.execute("ALTER SEQUENCE discount_id_seq RESTART WITH 2");
             connection.commit();
         } catch (Exception e) {

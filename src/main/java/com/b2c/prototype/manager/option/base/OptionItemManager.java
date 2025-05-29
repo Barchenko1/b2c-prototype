@@ -6,7 +6,7 @@ import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.dao.option.IOptionItemDao;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
-import com.b2c.prototype.service.function.ITransformationFunctionService;
+import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.option.IOptionItemManager;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.dao.query.IFetchHandler;
@@ -170,10 +170,8 @@ public class OptionItemManager implements IOptionItemManager {
                 "articularItem.optionItems",
                 parameterFactory.createStringParameter(ARTICULAR_ID, articularId));
 
-        return (List<OptionGroupOptionItemSetDto>) transformationFunctionService.getTransformationCollectionFunction(
-                ArticularItem.class,
-                OptionGroupOptionItemSetDto.class,
-                "list")
+        return (List<OptionGroupOptionItemSetDto>) transformationFunctionService
+                .getTransformationCollectionFunction(ArticularItem.class, OptionGroupOptionItemSetDto.class, "list")
                 .apply(articularItem);
     }
 

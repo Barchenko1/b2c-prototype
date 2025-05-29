@@ -4,15 +4,13 @@ import com.b2c.prototype.dao.order.ICustomerOrderDao;
 import com.b2c.prototype.manager.order.ICustomerMultipleDeliveryOrderManager;
 import com.b2c.prototype.modal.dto.payload.order.multi.CustomerMultiDeliveryOrderDto;
 import com.b2c.prototype.modal.dto.payload.order.single.ResponseCustomerOrderDetails;
-import com.b2c.prototype.service.function.ITransformationFunctionService;
+import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.dao.identifier.IQueryService;
 import com.tm.core.process.manager.common.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
 
 import java.util.List;
-
-import static com.b2c.prototype.util.Constant.ORDER_ID;
 
 public class CustomerMultipleDeliveryOrderManager implements ICustomerMultipleDeliveryOrderManager {
 

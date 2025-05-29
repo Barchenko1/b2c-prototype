@@ -3,7 +3,7 @@
     "email": "test@example.com",
     "userId": "userId1"
   },
-  "itemDataOptionQuantities": [
+  "articularItemQuantityList": [
     {
       "articularId": "A123",
       "quantity": 2

@@ -1,10 +1,9 @@
-package com.b2c.prototype.service.function;
+package com.b2c.prototype.transform.function;
 
 import org.hibernate.Session;
 
 import java.util.Collection;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public interface IBiTransformationFunction {
 

@@ -1,6 +1,6 @@
 package com.b2c.prototype.modal.entity.item;
 
-import com.b2c.prototype.service.converter.ItemDataDescriptionConverter;
+import com.b2c.prototype.transform.converter.ItemDataDescriptionConverter;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;

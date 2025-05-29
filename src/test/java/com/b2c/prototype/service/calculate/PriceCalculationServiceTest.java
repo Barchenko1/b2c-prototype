@@ -1,11 +1,10 @@
 package com.b2c.prototype.service.calculate;
 
-import com.b2c.prototype.modal.dto.payload.item.PriceDto;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
-import com.b2c.prototype.service.help.calculate.IPriceCalculationService;
-import com.b2c.prototype.service.help.calculate.PriceCalculationService;
+import com.b2c.prototype.transform.help.calculate.IPriceCalculationService;
+import com.b2c.prototype.transform.help.calculate.PriceCalculationService;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

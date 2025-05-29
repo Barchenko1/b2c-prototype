@@ -3,6 +3,7 @@ package com.b2c.prototype.modal.base.payment;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
 import com.b2c.prototype.modal.entity.payment.PaymentMethod;
 import com.b2c.prototype.modal.entity.payment.PaymentStatus;
+import com.b2c.prototype.modal.entity.payment.MultiCurrencyPriceInfo;
 import com.b2c.prototype.modal.entity.price.Price;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -39,12 +40,18 @@ public class AbstractPayment {
     private PaymentMethod paymentMethod;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Price commissionPrice;
+//    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JoinColumn(nullable = false)
+//    private Price fullPrice;
+//    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JoinColumn(nullable = false)
+//    private Price totalPrice;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(nullable = false)
-    private Price fullPrice;
+    private MultiCurrencyPriceInfo fullMultiCurrencyPriceInfo;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(nullable = false)
-    private Price totalPrice;
+    private MultiCurrencyPriceInfo totalMultiCurrencyPriceInfo;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Price discountPrice;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)

@@ -1,6 +1,5 @@
 package com.b2c.prototype.modal.dto.payload.order;
 
-import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.price.Price;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;

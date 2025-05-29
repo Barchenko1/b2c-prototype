@@ -3,7 +3,6 @@ package com.b2c.prototype.manager.payment.base;
 import com.b2c.prototype.dao.payment.IMinMaxCommissionDao;
 import com.b2c.prototype.manager.payment.ICommissionManager;
 import com.b2c.prototype.modal.constant.CommissionType;
-import com.b2c.prototype.modal.constant.FeeType;
 import com.b2c.prototype.modal.dto.payload.commission.MinMaxCommissionDto;
 import com.b2c.prototype.modal.dto.payload.commission.ResponseBuyerCommissionInfoDto;
 import com.b2c.prototype.modal.dto.payload.commission.ResponseMinMaxCommissionDto;
@@ -14,8 +13,8 @@ import com.b2c.prototype.modal.entity.payment.CommissionValue;
 import com.b2c.prototype.modal.entity.payment.MinMaxCommission;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
-import com.b2c.prototype.service.function.ITransformationFunctionService;
-import com.b2c.prototype.service.help.calculate.IPriceCalculationService;
+import com.b2c.prototype.transform.function.ITransformationFunctionService;
+import com.b2c.prototype.transform.help.calculate.IPriceCalculationService;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.dao.identifier.IQueryService;
 import com.tm.core.process.dao.query.IFetchHandler;
@@ -146,18 +145,17 @@ public class CommissionManager implements ICommissionManager {
                     parameterFactory.createStringParameterList("articularIds", articularIdList));
 
             if (optionalMinMaxCommission.isPresent()) {
-                MinMaxCommission commission = optionalMinMaxCommission.get();
+                MinMaxCommission minMaxCommission = optionalMinMaxCommission.get();
                 Price totalPrice = getPrice(articularItems);
 
-                validateCurrencyMatch(commission, totalPrice);
+                validateCurrencyMatch(minMaxCommission, totalPrice);
 
-                CommissionValue commissionValue = selectCommissionValue(commission, totalPrice);
-                double commissionAmount = calculateCommissionAmount(commissionValue, totalPrice.getAmount());
+                Price commissionPrice = priceCalculationService.calculateCommissionPrice(minMaxCommission, totalPrice);
 
                 return ResponseBuyerCommissionInfoDto.builder()
                         .sumPrice(PriceDto.builder()
-                                .amount(commissionAmount)
-                                .currency(totalPrice.getCurrency().getLabel())
+                                .amount(commissionPrice.getAmount())
+                                .currency(commissionPrice.getCurrency().getLabel())
                                 .build())
                         .build();
             }
@@ -184,14 +182,6 @@ public class CommissionManager implements ICommissionManager {
         return commission.getChangeCommissionPrice().getAmount() > totalPrice.getAmount()
                 ? commission.getMinCommission()
                 : commission.getMaxCommission();
-    }
-
-    private double calculateCommissionAmount(CommissionValue commissionValue, double baseAmount) {
-        if (FeeType.FIXED.equals(commissionValue.getFeeType())) {
-            return commissionValue.getAmount();
-        } else {
-            return (baseAmount / 100) * commissionValue.getAmount();
-        }
     }
 
     private Price getPrice(List<ArticularItem> articularItems) {

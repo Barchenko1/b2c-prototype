@@ -21,7 +21,6 @@ import com.b2c.prototype.dao.message.basic.BasicMessageTypeDao;
 import com.b2c.prototype.dao.option.IOptionItemCostDao;
 import com.b2c.prototype.dao.option.ITimeDurationOptionDao;
 import com.b2c.prototype.dao.option.IZoneOptionDao;
-import com.b2c.prototype.dao.option.base.BasicOptionItemCostDao;
 import com.b2c.prototype.dao.option.base.BasicTimeDurationOptionDao;
 import com.b2c.prototype.dao.option.base.BasicZoneOptionDao;
 import com.b2c.prototype.dao.payment.IMinMaxCommissionDao;
@@ -78,11 +77,11 @@ import com.b2c.prototype.dao.item.IItemTypeDao;
 import com.b2c.prototype.dao.rating.IRatingDao;
 import com.b2c.prototype.dao.review.IReviewDao;
 import com.b2c.prototype.dao.user.IUserDetailsDao;
-import com.tm.core.configuration.manager.DatabaseConfigurationAnnotationClass;
-import com.tm.core.configuration.manager.DatabaseType;
-import com.tm.core.configuration.manager.DatabaseTypeConfiguration;
-import com.tm.core.configuration.manager.ISessionFactoryManager;
-import com.tm.core.configuration.manager.SessionFactoryManager;
+import com.tm.core.configuration.dbType.DatabaseConfigurationAnnotationClass;
+import com.tm.core.configuration.dbType.DatabaseType;
+import com.tm.core.configuration.dbType.DatabaseTypeConfiguration;
+import com.tm.core.configuration.session.ISessionFactoryManager;
+import com.tm.core.configuration.session.SessionFactoryManager;
 import com.tm.core.process.dao.identifier.IQueryService;
 import com.tm.core.process.dao.identifier.QueryService;
 import com.tm.core.process.dao.query.FetchHandler;
@@ -122,19 +121,19 @@ public class BeanConfiguration {
     @Bean
     public SessionFactory sessionFactory() {
         ISessionFactoryManager sessionFactoryManager = SessionFactoryManager.getInstance(getDatabaseTypeConfiguration());
-        return sessionFactoryManager.getSessionFactorySupplier(DatabaseType.WRITE, MAIN_WRITE_DATABASE_CONFIG).get();
+        return sessionFactoryManager.getSessionFactory(DatabaseType.WRITE, MAIN_WRITE_DATABASE_CONFIG);
     }
 
     @Bean
     public SessionFactory readSessionFactory() {
         ISessionFactoryManager sessionFactoryManager = SessionFactoryManager.getInstance(getDatabaseTypeConfiguration());
-        return sessionFactoryManager.getSessionFactorySupplier(DatabaseType.READ, "").get();
+        return sessionFactoryManager.getSessionFactory(DatabaseType.READ, "");
     }
 
     @Bean
     public SessionFactory embededSessionFactory() {
         ISessionFactoryManager sessionFactoryManager = SessionFactoryManager.getInstance(getDatabaseTypeConfiguration());
-        return sessionFactoryManager.getSessionFactorySupplier(DatabaseType.WRITE, CACHE_DATABASE_CONFIG).get();
+        return sessionFactoryManager.getSessionFactory(DatabaseType.WRITE, CACHE_DATABASE_CONFIG);
     }
 
     @Bean
@@ -295,10 +294,10 @@ public class BeanConfiguration {
         return new BasicOptionItemDao(sessionFactory, queryService);
     }
 
-    @Bean
-    public IOptionItemCostDao optionItemCostDao(SessionFactory sessionFactory, IQueryService queryService) {
-        return new BasicOptionItemCostDao(sessionFactory, queryService);
-    }
+//    @Bean
+//    public IOptionItemCostDao optionItemCostDao(SessionFactory sessionFactory, IQueryService queryService) {
+//        return new BasicOptionItemCostDao(sessionFactory, queryService);
+//    }
 
     @Bean
     public ITimeDurationOptionDao timeDurationOptionDao(SessionFactory sessionFactory, IQueryService queryService) {

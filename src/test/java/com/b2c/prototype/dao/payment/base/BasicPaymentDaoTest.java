@@ -101,7 +101,7 @@ class BasicPaymentDaoTest extends AbstractCustomEntityDaoTest {
                 .paymentMethod(paymentMethod)
                 .creditCard(creditCard)
                 .commissionPrice(price)
-                .totalPrice(price)
+//                .totalPrice(price)
                 .build();
     }
 
@@ -147,7 +147,7 @@ class BasicPaymentDaoTest extends AbstractCustomEntityDaoTest {
                 .paymentMethod(paymentMethod)
                 .creditCard(creditCard)
                 .commissionPrice(price)
-                .totalPrice(price)
+//                .totalPrice(price)
                 .build();
     }
 
@@ -193,7 +193,7 @@ class BasicPaymentDaoTest extends AbstractCustomEntityDaoTest {
                 .paymentMethod(paymentMethod)
                 .creditCard(creditCard)
                 .commissionPrice(price)
-                .totalPrice(price)
+//                .totalPrice(price)
                 .build();
     }
 
@@ -297,7 +297,7 @@ class BasicPaymentDaoTest extends AbstractCustomEntityDaoTest {
         Consumer<Session> consumer = (Session s) -> {
             Payment payment = prepareToSavePayment();
             s.persist(payment.getCreditCard());
-            s.persist(payment.getTotalPrice());
+//            s.persist(payment.getTotalPrice());
             s.persist(payment);
         };
 
@@ -349,7 +349,7 @@ class BasicPaymentDaoTest extends AbstractCustomEntityDaoTest {
         loadDataSet("/datasets/payment/payment/testPaymentDataSet.yml");
         Consumer<Session> consumer = (Session s) -> {
             Payment paymentToUpdate = prepareToUpdatePayment();
-            s.merge(paymentToUpdate.getTotalPrice());
+//            s.merge(paymentToUpdate.getTotalPrice());
             s.merge(paymentToUpdate.getCreditCard());
             s.merge(paymentToUpdate);
         };
@@ -387,7 +387,7 @@ class BasicPaymentDaoTest extends AbstractCustomEntityDaoTest {
         loadDataSet("/datasets/payment/payment/testPaymentDataSet.yml");
         Consumer<Session> consumer = (Session s) -> {
             Payment payment = prepareTestPayment();
-            s.remove(payment.getTotalPrice());
+//            s.remove(payment.getTotalPrice());
             s.remove(payment);
         };
 

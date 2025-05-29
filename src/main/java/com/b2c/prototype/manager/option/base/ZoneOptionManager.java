@@ -4,7 +4,7 @@ import com.b2c.prototype.dao.option.IZoneOptionDao;
 import com.b2c.prototype.manager.option.IZoneOptionManager;
 import com.b2c.prototype.modal.dto.payload.option.ZoneOptionDto;
 import com.b2c.prototype.modal.entity.option.ZoneOption;
-import com.b2c.prototype.service.function.ITransformationFunctionService;
+import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.manager.common.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;

@@ -1,10 +1,10 @@
 package com.b2c.prototype.dao;
 
-import com.tm.core.configuration.manager.DatabaseConfigurationAnnotationClass;
-import com.tm.core.configuration.manager.DatabaseType;
-import com.tm.core.configuration.manager.DatabaseTypeConfiguration;
-import com.tm.core.configuration.manager.ISessionFactoryManager;
-import com.tm.core.configuration.manager.SessionFactoryManager;
+import com.tm.core.configuration.dbType.DatabaseConfigurationAnnotationClass;
+import com.tm.core.configuration.dbType.DatabaseType;
+import com.tm.core.configuration.dbType.DatabaseTypeConfiguration;
+import com.tm.core.configuration.session.ISessionFactoryManager;
+import com.tm.core.configuration.session.SessionFactoryManager;
 import org.hibernate.SessionFactory;
 
 public class ConfigureSessionFactoryTest {
@@ -16,7 +16,7 @@ public class ConfigureSessionFactoryTest {
 
     public static SessionFactory getSessionFactory() {
         ISessionFactoryManager sessionFactoryManager = SessionFactoryManager.getInstance(getDatabaseTypeConfiguration());
-        return sessionFactoryManager.getSessionFactorySupplier(DatabaseType.WRITE, CONFIGURATION_FILE_NAME).get();
+        return sessionFactoryManager.getSessionFactory(DatabaseType.WRITE, CONFIGURATION_FILE_NAME);
     }
 
     private static DatabaseTypeConfiguration getDatabaseTypeConfiguration() {

@@ -314,7 +314,7 @@ class BasicCustomerSingleDeliveryOrderDaoTest extends AbstractCustomEntityDaoTes
                 .paymentMethod(paymentMethod)
                 .creditCard(creditCard)
                 .commissionPrice(price)
-                .totalPrice(price)
+//                .totalPrice(price)
                 .build();
     }
 

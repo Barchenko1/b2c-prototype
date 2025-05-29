@@ -5,7 +5,7 @@ import com.b2c.prototype.manager.option.ITimeDurationOptionManager;
 import com.b2c.prototype.modal.dto.payload.option.TimeDurationOptionDto;
 import com.b2c.prototype.modal.dto.payload.option.ResponseTimeDurationOptionDto;
 import com.b2c.prototype.modal.entity.option.TimeDurationOption;
-import com.b2c.prototype.service.function.ITransformationFunctionService;
+import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.manager.common.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;

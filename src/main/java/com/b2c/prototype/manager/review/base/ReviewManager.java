@@ -11,7 +11,7 @@ import com.b2c.prototype.modal.entity.review.Review;
 import com.b2c.prototype.modal.entity.review.ReviewComment;
 import com.b2c.prototype.modal.entity.review.ReviewStatus;
 import com.b2c.prototype.modal.entity.user.UserDetails;
-import com.b2c.prototype.service.function.ITransformationFunctionService;
+import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.dao.identifier.IQueryService;
 import com.tm.core.process.dao.query.IFetchHandler;

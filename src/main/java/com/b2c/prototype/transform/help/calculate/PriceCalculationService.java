@@ -1,7 +1,9 @@
-package com.b2c.prototype.service.help.calculate;
+package com.b2c.prototype.transform.help.calculate;
 
+import com.b2c.prototype.modal.constant.FeeType;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.payment.CommissionValue;
+import com.b2c.prototype.modal.entity.payment.MinMaxCommission;
 import com.b2c.prototype.modal.entity.price.Price;
 
 public class PriceCalculationService implements IPriceCalculationService {
@@ -53,6 +55,23 @@ public class PriceCalculationService implements IPriceCalculationService {
 //    }
 
     @Override
+    public Price calculateCommissionPrice(MinMaxCommission minMaxCommission, Price totalPrice) {
+        CommissionValue commissionValue = getCommissionValue(minMaxCommission, totalPrice);
+        if (FeeType.FIXED.equals(commissionValue.getFeeType())) {
+            return Price.builder()
+                    .amount(commissionValue.getAmount())
+                    .currency(commissionValue.getCurrency())
+                    .build();
+        } else {
+            double calculatePercentAmount = (totalPrice.getAmount() / 100) * commissionValue.getAmount();
+            return Price.builder()
+                    .amount(calculatePercentAmount)
+                    .currency(totalPrice.getCurrency())
+                    .build();
+        }
+    }
+
+    @Override
     public Price calculateCurrentPrice(Price totalPrice, Discount orderDiscount, Price commissionPrice) {
         if (orderDiscount != null) {
             return calculateTotalPrice(totalPrice, orderDiscount, commissionPrice);
@@ -74,7 +93,7 @@ public class PriceCalculationService implements IPriceCalculationService {
         double totalAmount = 0;
         if (totalPrice.getCurrency().equals(orderDiscount.getCurrency())
                 && orderDiscount.getCurrency().equals(commissionPrice.getCurrency())) {
-            totalAmount = ((totalPrice.getAmount() - orderDiscount.getAmount()) / 100) * commissionPrice.getAmount();
+            totalAmount = totalPrice.getAmount() - orderDiscount.getAmount() - commissionPrice.getAmount();
             if (totalAmount < 0) {
                 throw new IllegalArgumentException("Total price cannot be negative");
             }
@@ -88,7 +107,7 @@ public class PriceCalculationService implements IPriceCalculationService {
     private Price calculateTotalPrice(Price totalPrice, Price commissionPrice) {
         double totalAmount = 0;
         if (totalPrice.getCurrency().equals(commissionPrice.getCurrency())) {
-            totalAmount = (totalPrice.getAmount() / 100) * commissionPrice.getAmount();
+            totalAmount = totalPrice.getAmount() - commissionPrice.getAmount();
             if (totalAmount < 0) {
                 throw new IllegalArgumentException("Total price cannot be negative");
             }
@@ -130,6 +149,18 @@ public class PriceCalculationService implements IPriceCalculationService {
                 .currency(commissionValue.getCurrency())
                 .amount(sellerCommissionAmount)
                 .build();
+    }
+
+    private CommissionValue getCommissionValue(MinMaxCommission minMaxCommission, Price totalPrice) {
+        Price changeCommissionPrice = minMaxCommission.getChangeCommissionPrice();
+        if (!changeCommissionPrice.getCurrency().equals(totalPrice.getCurrency())) {
+            throw new IllegalArgumentException("Currency does not match");
+        }
+        if (changeCommissionPrice.getAmount() < totalPrice.getAmount()) {
+            return minMaxCommission.getMaxCommission();
+        } else {
+            return minMaxCommission.getMinCommission();
+        }
     }
 
 }
