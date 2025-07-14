@@ -7,11 +7,12 @@ import com.b2c.prototype.manager.AbstractConstantEntityManager;
 import com.b2c.prototype.manager.item.IItemTypeManager;
 import com.tm.core.process.dao.common.IEntityDao;
 import com.tm.core.finder.factory.IParameterFactory;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
 
 public class ItemTypeManager extends AbstractConstantEntityManager<ConstantPayloadDto, ItemType> implements IItemTypeManager {
 
     public ItemTypeManager(IParameterFactory parameterFactory,
-                           IEntityDao itemTypeDao,
+                           ITransactionEntityDao itemTypeDao,
                            ITransformationFunctionService transformationFunctionService) {
         super(parameterFactory, itemTypeDao,
                 new String[] {"ItemType.findByValue", "ItemType.all"},

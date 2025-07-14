@@ -6,14 +6,15 @@ import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.AbstractConstantEntityManager;
 import com.b2c.prototype.manager.message.IMessageStatusManager;
 
-import com.tm.core.process.dao.common.IEntityDao;
 import com.tm.core.finder.factory.IParameterFactory;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
 
 public class MessageStatusManager extends AbstractConstantEntityManager<ConstantPayloadDto, MessageStatus> implements IMessageStatusManager {
     public MessageStatusManager(IParameterFactory parameterFactory,
-                                IEntityDao dao,
+                                ITransactionEntityDao dao,
                                 ITransformationFunctionService transformationFunctionService) {
-        super(parameterFactory, dao,
+        super(parameterFactory,
+                dao,
                 new String[] {"MessageStatus.findByValue", "MessageStatus.all"},
                 transformationFunctionService.getTransformationFunction(ConstantPayloadDto.class, MessageStatus.class),
                 transformationFunctionService.getTransformationFunction(MessageStatus.class, ConstantPayloadDto.class));

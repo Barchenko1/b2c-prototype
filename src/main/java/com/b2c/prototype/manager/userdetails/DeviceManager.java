@@ -1,15 +1,15 @@
 package com.b2c.prototype.manager.userdetails;
 
-import com.b2c.prototype.dao.user.IDeviceDao;
 import com.b2c.prototype.modal.dto.payload.user.DeviceDto;
 import com.b2c.prototype.modal.dto.payload.user.ResponseDeviceDto;
 import com.b2c.prototype.modal.entity.user.Device;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.query.IFetchHandler;
-import com.tm.core.process.manager.common.EntityOperationManager;
-import com.tm.core.process.manager.common.IEntityOperationManager;
+import com.tm.core.process.dao.IFetchHandler;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
+import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
+import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,16 +19,16 @@ import static com.b2c.prototype.util.Constant.USER_ID;
 
 public class DeviceManager implements IDeviceManager {
 
-    private final IEntityOperationManager entityOperationManager;
+    private final ITransactionEntityOperationManager entityOperationManager;
     private final ITransformationFunctionService transformationFunctionService;
     private final IFetchHandler fetchHandler;
     private final IParameterFactory parameterFactory;
 
-    public DeviceManager(IDeviceDao deviceDao,
+    public DeviceManager(ITransactionEntityDao deviceDao,
                          IFetchHandler fetchHandler,
                          ITransformationFunctionService transformationFunctionService,
                          IParameterFactory parameterFactory) {
-        this.entityOperationManager = new EntityOperationManager(deviceDao);
+        this.entityOperationManager = new TransactionEntityOperationManager(deviceDao);
         this.fetchHandler = fetchHandler;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
@@ -37,7 +37,7 @@ public class DeviceManager implements IDeviceManager {
     @Override
     public void activateCurrentDevice(String userId, String clientIp, DeviceDto deviceDto) {
         entityOperationManager.executeConsumer(session -> {
-            UserDetails userDetails = fetchHandler.getNamedQueryEntity(
+            UserDetails userDetails = fetchHandler.getNamedQueryEntityClose(
                     UserDetails.class,
                     "UserDetails.findAllDevicesByUserId",
                     parameterFactory.createStringParameter(USER_ID, userId));
@@ -71,7 +71,7 @@ public class DeviceManager implements IDeviceManager {
     @Override
     public void deleteDevice(String userId, DeviceDto deviceDto) {
         entityOperationManager.executeConsumer(session -> {
-            UserDetails userDetails = fetchHandler.getNamedQueryEntity(
+            UserDetails userDetails = fetchHandler.getNamedQueryEntityClose(
                     UserDetails.class,
                     "UserDetails.findAllDevicesByUserId",
                     parameterFactory.createStringParameter(USER_ID, userId));
@@ -92,7 +92,7 @@ public class DeviceManager implements IDeviceManager {
 
     @Override
     public List<ResponseDeviceDto> getDevicesByUserId(String userId, String clientId) {
-        UserDetails userDetails = fetchHandler.getNamedQueryEntity(
+        UserDetails userDetails = fetchHandler.getNamedQueryEntityClose(
                 UserDetails.class,
                 "UserDetails.findAllDevicesByUserId",
                 parameterFactory.createStringParameter(USER_ID, userId));
@@ -105,7 +105,5 @@ public class DeviceManager implements IDeviceManager {
                     return responseDeviceDto;
                 })
                 .toList();
-
-
     }
 }

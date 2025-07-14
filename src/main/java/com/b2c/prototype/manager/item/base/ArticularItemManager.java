@@ -1,6 +1,5 @@
 package com.b2c.prototype.manager.item.base;
 
-import com.b2c.prototype.dao.item.IItemDataOptionDao;
 import com.b2c.prototype.modal.dto.common.SearchFieldUpdateCollectionEntityDto;
 import com.b2c.prototype.modal.dto.payload.item.ArticularItemDto;
 import com.b2c.prototype.modal.dto.payload.item.ResponseArticularItemDto;
@@ -10,27 +9,29 @@ import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.item.IArticularItemManager;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.query.IFetchHandler;
-import com.tm.core.process.manager.common.EntityOperationManager;
-import com.tm.core.process.manager.common.IEntityOperationManager;
+import com.tm.core.process.dao.IFetchHandler;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
+import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
+import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
+import org.hibernate.Session;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
-import static com.b2c.prototype.util.Constant.ARTICULAR_ITEM_FULL;
 
 public class ArticularItemManager implements IArticularItemManager {
 
-    private final IEntityOperationManager entityOperationManager;
+    private final ITransactionEntityOperationManager entityOperationManager;
     private final IFetchHandler fetchHandler;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public ArticularItemManager(IItemDataOptionDao itemDataOptionDao,
+    public ArticularItemManager(ITransactionEntityDao itemDataOptionDao,
                                 IFetchHandler fetchHandler,
                                 ITransformationFunctionService transformationFunctionService,
                                 IParameterFactory parameterFactory) {
-        this.entityOperationManager = new EntityOperationManager(itemDataOptionDao);
+        this.entityOperationManager = new TransactionEntityOperationManager(itemDataOptionDao);
         this.fetchHandler = fetchHandler;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
@@ -45,7 +46,7 @@ public class ArticularItemManager implements IArticularItemManager {
                             .updateDtoSet(articularItemDtoList)
                             .build();
             ItemData itemData = transformationFunctionService.getEntity(
-                    session,
+                    (Session) session,
                     ItemData.class,
                     searchFieldUpdateCollectionEntityDto);
 
@@ -56,7 +57,7 @@ public class ArticularItemManager implements IArticularItemManager {
     @Override
     public void deleteArticularItem(String articularId) {
         entityOperationManager.executeConsumer(session -> {
-            ItemData itemData = fetchHandler.getNamedQueryEntity(
+            ItemData itemData = fetchHandler.getNamedQueryEntityClose(
                     ItemData.class,
                     "ArticularItem.findItemDataByArticularId",
                     parameterFactory.createStringParameter(ARTICULAR_ID, articularId));
@@ -79,32 +80,44 @@ public class ArticularItemManager implements IArticularItemManager {
 
     @Override
     public ResponseArticularItemDto getResponseArticularItemDto(String articularId) {
-        return entityOperationManager.getGraphEntityDto(
-                ARTICULAR_ITEM_FULL,
-                parameterFactory.createStringParameter(ARTICULAR_ID, articularId),
-                transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class));
+        ArticularItem articularItem = entityOperationManager.getNamedQueryEntityClose(
+                "",
+                parameterFactory.createStringParameter(ARTICULAR_ID, articularId));
+
+        return Optional.of(articularItem)
+                .map(transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class))
+                .orElseThrow(() -> new RuntimeException(""));
     }
 
     @Override
     public List<ResponseArticularItemDto> getResponseArticularItemDtoList() {
-        return entityOperationManager.getGraphEntityDtoList(
-                ARTICULAR_ITEM_FULL,
-                transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class));
+        List<ArticularItem> articularItemList = entityOperationManager.getNamedQueryEntityListClose(
+                "ArticularItem.full");
 
+        return articularItemList.stream()
+                .map(transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class))
+                .toList();
     }
 
     @Override
     public List<ResponseArticularItemDto> getResponseArticularItemDtoFiltered() {
-        return entityOperationManager.getGraphEntityDtoList(
-                ARTICULAR_ITEM_FULL,
-                transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class));
+        List<ArticularItem> articularItemList= entityOperationManager.getNamedQueryEntityListClose(
+                "ArticularItem.full",
+                parameterFactory.createStringParameter("", ""));
+
+        return articularItemList.stream()
+                .map(transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class))
+                .toList();
     }
 
     @Override
     public List<ResponseArticularItemDto> getResponseArticularItemDtoSorted(String sortType) {
-        return entityOperationManager.getGraphEntityDtoList(
-                ARTICULAR_ITEM_FULL,
-                transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class));
+        List<ArticularItem> articularItemList = entityOperationManager.getNamedQueryEntityListClose(
+                "ArticularItem.full");
+
+        return articularItemList.stream()
+                .map(transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class))
+                .toList();
     }
 
 }

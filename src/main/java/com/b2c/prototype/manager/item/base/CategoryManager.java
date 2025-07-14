@@ -1,14 +1,14 @@
 package com.b2c.prototype.manager.item.base;
 
-import com.b2c.prototype.dao.item.ICategoryDao;
 import com.b2c.prototype.modal.dto.payload.constant.CategoryDto;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.manager.item.ICategoryManager;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.util.CategoryUtil;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.identifier.IQueryService;
-import com.tm.core.process.manager.common.EntityOperationManager;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
+import com.tm.core.process.dao.query.IQueryService;
+import com.tm.core.process.manager.common.operator.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,7 +34,7 @@ public class CategoryManager implements ICategoryManager {
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public CategoryManager(ICategoryDao categoryDao,
+    public CategoryManager(ITransactionEntityDao categoryDao,
                            IQueryService queryService,
                            ITransformationFunctionService transformationFunctionService,
                            IParameterFactory parameterFactory) {

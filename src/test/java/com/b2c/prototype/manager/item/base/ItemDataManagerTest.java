@@ -95,24 +95,11 @@ class ItemDataManagerTest {
     }
 
     @Test
-    void testDeleteItemData() {
-        String itemId = "itemId";
-
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
-
-        itemDataManager.deleteItemData(itemId);
-
-        verify(itemDataDao).findEntityAndDelete(parameter);
-    }
-
-    @Test
     void testGetItemData() {
         String itemId = "itemId";
         ItemData itemData = getItemData();
         ResponseItemDataDto responseDto = getResponseItemDataDto();
         Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
 
         Function<ItemData, ResponseItemDataDto> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(ItemData.class, ResponseItemDataDto.class))

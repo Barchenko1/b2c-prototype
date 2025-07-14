@@ -8,11 +8,12 @@ import com.b2c.prototype.manager.AbstractConstantEntityManager;
 import com.b2c.prototype.manager.order.IOrderStatusManager;
 import com.tm.core.process.dao.common.IEntityDao;
 import com.tm.core.finder.factory.IParameterFactory;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
 
 public class OrderStatusManager extends AbstractConstantEntityManager<ConstantPayloadDto, OrderStatus> implements IOrderStatusManager {
 
     public OrderStatusManager(IParameterFactory parameterFactory,
-                              IEntityDao orderStatusDao,
+                              ITransactionEntityDao orderStatusDao,
                               ITransformationFunctionService transformationFunctionService) {
         super(parameterFactory, orderStatusDao,
                 new String[] {"OrderStatus.findByValue", "OrderStatus.all"},

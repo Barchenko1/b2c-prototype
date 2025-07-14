@@ -114,18 +114,6 @@ class ArticularItemManagerTest {
     }
 
     @Test
-    void deleteItemDataOption_ShouldDeleteEntityByParameter() {
-        String articularId = "testValue";
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
-        
-
-        articularItemManager.deleteArticularItem(articularId);
-
-        verify(itemDataOptionDao).findEntityAndDelete(parameter);
-    }
-
-    @Test
     void getResponseItemDataOptionDto_ShouldReturnDto() {
         String value = "testValue";
         ArticularItem articularItem = getItemDataOption();

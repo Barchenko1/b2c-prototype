@@ -8,12 +8,13 @@ import com.b2c.prototype.modal.entity.payment.PaymentMethod;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.util.CardUtil;
-import com.tm.core.process.dao.common.AbstractEntityDao;
-import com.tm.core.process.dao.identifier.QueryService;
+import com.tm.core.process.dao.common.session.AbstractSessionFactoryDao;
+import com.tm.core.process.dao.query.QueryService;
 import com.tm.core.finder.manager.EntityMappingManager;
 import com.tm.core.finder.manager.IEntityMappingManager;
 import com.tm.core.finder.parameter.Parameter;
 import com.tm.core.finder.table.EntityTable;
+import jakarta.persistence.EntityManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -273,7 +274,7 @@ class BasicPaymentDaoTest extends AbstractCustomEntityDaoTest {
         Transaction transaction = mock(Transaction.class);
 
         try {
-            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionManagerField = AbstractSessionFactoryDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
@@ -294,11 +295,10 @@ class BasicPaymentDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void saveEntityConsumer_success() {
         loadDataSet("/datasets/payment/payment/emptyPaymentWithoutCardDataSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             Payment payment = prepareToSavePayment();
-            s.persist(payment.getCreditCard());
-//            s.persist(payment.getTotalPrice());
-            s.persist(payment);
+            session.persist(payment.getCreditCard());
+            session.persist(payment);
         };
 
         dao.executeConsumer(consumer);
@@ -308,7 +308,7 @@ class BasicPaymentDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void saveEntityConsumer_transactionFailure() {
         loadDataSet("/datasets/payment/payment/emptyPaymentWithoutCardDataSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             throw new RuntimeException();
         };
 
@@ -324,7 +324,7 @@ class BasicPaymentDaoTest extends AbstractCustomEntityDaoTest {
     void updateEntity_success() {
         loadDataSet("/datasets/payment/payment/testPaymentDataSet.yml");
         Supplier<Payment> paymentSupplier = this::prepareToUpdatePayment;
-        dao.updateEntity(paymentSupplier);
+        dao.mergeEntity(paymentSupplier);
         verifyExpectedData("/datasets/payment/payment/updatePaymentDataSet.yml");
     }
 
@@ -338,7 +338,7 @@ class BasicPaymentDaoTest extends AbstractCustomEntityDaoTest {
         };
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            dao.updateEntity(paymentSupplier);
+            dao.mergeEntity(paymentSupplier);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -347,11 +347,10 @@ class BasicPaymentDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void updateEntityConsumer_success() {
         loadDataSet("/datasets/payment/payment/testPaymentDataSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             Payment paymentToUpdate = prepareToUpdatePayment();
-//            s.merge(paymentToUpdate.getTotalPrice());
-            s.merge(paymentToUpdate.getCreditCard());
-            s.merge(paymentToUpdate);
+            session.merge(paymentToUpdate.getCreditCard());
+            session.merge(paymentToUpdate);
         };
         dao.executeConsumer(consumer);
         verifyExpectedData("/datasets/payment/payment/updatePaymentDataSet.yml");
@@ -360,10 +359,10 @@ class BasicPaymentDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void updateEntityConsumer_transactionFailure() {
         loadDataSet("/datasets/payment/payment/testPaymentDataSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             Payment payment = prepareToSavePayment();
             payment.setId(1L);
-            s.merge(payment);
+            session.merge(payment);
             throw new RuntimeException();
         };
 
@@ -374,21 +373,11 @@ class BasicPaymentDaoTest extends AbstractCustomEntityDaoTest {
     }
 
     @Test
-    void deleteEntity_success() {
-        loadDataSet("/datasets/payment/payment/testPaymentDataSet.yml");
-        Parameter parameter = new Parameter("id", 1);
-
-        dao.findEntityAndDelete(parameter);
-        verifyExpectedData("/datasets/payment/payment/emptyPaymentWithCardDataSet.yml");
-    }
-
-    @Test
     void deleteEntityByConsumer_success() {
         loadDataSet("/datasets/payment/payment/testPaymentDataSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             Payment payment = prepareTestPayment();
-//            s.remove(payment.getTotalPrice());
-            s.remove(payment);
+            session.remove(payment);
         };
 
         dao.executeConsumer(consumer);
@@ -398,7 +387,7 @@ class BasicPaymentDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void deleteEntityByConsumer_transactionFailure() {
         loadDataSet("/datasets/payment/payment/testPaymentDataSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             throw new RuntimeException();
         };
 
@@ -426,7 +415,7 @@ class BasicPaymentDaoTest extends AbstractCustomEntityDaoTest {
         Transaction transaction = mock(Transaction.class);
 
         try {
-            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionManagerField = AbstractSessionFactoryDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
@@ -444,42 +433,6 @@ class BasicPaymentDaoTest extends AbstractCustomEntityDaoTest {
         });
 
         assertEquals(RuntimeException.class, exception.getClass());
-    }
-
-    @Test
-    void deleteEntity_transactionFailure() {
-        loadDataSet("/datasets/payment/payment/testPaymentDataSet.yml");
-        Payment payment = new Payment();
-
-        Parameter parameter = new Parameter("id", 1L);
-
-        SessionFactory sessionFactory = mock(SessionFactory.class);
-        Session session = mock(Session.class);
-        Transaction transaction = mock(Transaction.class);
-        NativeQuery<Payment> nativeQuery = mock(NativeQuery.class);
-
-        try {
-            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
-            sessionManagerField.setAccessible(true);
-            sessionManagerField.set(dao, sessionFactory);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        when(sessionFactory.openSession()).thenReturn(session);
-        when(session.beginTransaction()).thenReturn(transaction);
-//        when(session.createNativeQuery(anyString(), eq(Payment.class))).thenReturn(nativeQuery);
-        when(nativeQuery.getSingleResult()).thenReturn(payment);
-        doThrow(new RuntimeException()).when(session).remove(payment);
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.findEntityAndDelete(parameter);
-        });
-
-        assertEquals(RuntimeException.class, exception.getClass());
-        verify(transaction).rollback();
-        verify(transaction, never()).commit();
-        verify(session).close();
     }
 
     @Test

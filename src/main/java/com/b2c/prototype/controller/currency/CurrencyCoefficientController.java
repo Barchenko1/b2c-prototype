@@ -39,7 +39,7 @@ public class CurrencyCoefficientController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value = "/all")
     public ResponseEntity<ResponseCurrencyCoefficientDto> getResponseCurrencyCoefficient(@RequestParam final Map<String, String> requestParams) {
         return new ResponseEntity<>(currencyCoefficientProcessor.getResponseCurrencyCoefficient(requestParams), HttpStatus.OK);
     }

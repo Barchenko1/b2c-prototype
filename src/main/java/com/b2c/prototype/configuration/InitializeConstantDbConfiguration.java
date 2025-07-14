@@ -2,21 +2,6 @@ package com.b2c.prototype.configuration;
 
 import com.b2c.prototype.configuration.modal.ApplicationProperty;
 import com.b2c.prototype.configuration.modal.TransitiveSelfYaml;
-import com.b2c.prototype.dao.address.ICountryDao;
-import com.b2c.prototype.dao.delivery.IDeliveryTypeDao;
-import com.b2c.prototype.dao.item.IBrandDao;
-import com.b2c.prototype.dao.item.ICategoryDao;
-import com.b2c.prototype.dao.item.IItemStatusDao;
-import com.b2c.prototype.dao.item.IItemTypeDao;
-import com.b2c.prototype.dao.message.IMessageStatusDao;
-import com.b2c.prototype.dao.message.IMessageTypeDao;
-import com.b2c.prototype.dao.option.IOptionGroupDao;
-import com.b2c.prototype.dao.order.IOrderStatusDao;
-import com.b2c.prototype.dao.payment.IPaymentMethodDao;
-import com.b2c.prototype.dao.price.ICurrencyDao;
-import com.b2c.prototype.dao.rating.IRatingDao;
-import com.b2c.prototype.dao.store.ICountTypeDao;
-import com.b2c.prototype.dao.user.ICountryPhoneCodeDao;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
 import com.b2c.prototype.modal.entity.item.ArticularStatus;
@@ -32,6 +17,8 @@ import com.b2c.prototype.modal.entity.payment.PaymentMethod;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.store.CountType;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
+import com.tm.core.process.dao.common.IEntityDao;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
 import com.tm.core.process.dao.transaction.ITransactionHandler;
 import jakarta.annotation.PostConstruct;
 import org.springframework.context.annotation.Configuration;
@@ -48,42 +35,42 @@ public class InitializeConstantDbConfiguration {
     private final Set<Locale> availableLocales;
     private final ApplicationPropertyConfiguration applicationPropertyConfiguration;
     private final ITransactionHandler transactionHandler;
-    private final IBrandDao brandDao;
-    private final ICountTypeDao countTypeDao;
-    private final ICountryPhoneCodeDao countryPhoneCodeDao;
-    private final ICountryDao countryDao;
-    private final ICurrencyDao currencyDao;
-    private final IDeliveryTypeDao deliveryTypeDao;
-    private final IItemStatusDao itemStatusDao;
-    private final IItemTypeDao itemTypeDao;
-    private final IMessageStatusDao messageStatusDao;
-    private final IMessageTypeDao messageTypeDao;
-    private final IOptionGroupDao optionGroupDao;
-    private final IOrderStatusDao orderStatusDao;
-    private final IPaymentMethodDao paymentMethodDao;
-    private final IRatingDao ratingDao;
+    private final IEntityDao brandDao;
+    private final IEntityDao countTypeDao;
+    private final IEntityDao countryPhoneCodeDao;
+    private final ITransactionEntityDao countryDao;
+    private final ITransactionEntityDao currencyDao;
+    private final ITransactionEntityDao deliveryTypeDao;
+    private final ITransactionEntityDao itemStatusDao;
+    private final ITransactionEntityDao itemTypeDao;
+    private final ITransactionEntityDao messageStatusDao;
+    private final ITransactionEntityDao messageTypeDao;
+    private final ITransactionEntityDao optionGroupDao;
+    private final ITransactionEntityDao orderStatusDao;
+    private final ITransactionEntityDao paymentMethodDao;
+    private final ITransactionEntityDao ratingDao;
 
-    private final ICategoryDao categoryDao;
+    private final ITransactionEntityDao categoryDao;
 
     public InitializeConstantDbConfiguration(LocalizationInterpreter localizationInterpreter,
                                              Set<Locale> availableLocales,
                                              ApplicationPropertyConfiguration applicationPropertyConfiguration,
                                              ITransactionHandler transactionHandler,
-                                             IBrandDao brandDao,
-                                             ICountTypeDao countTypeDao,
-                                             ICountryPhoneCodeDao countryPhoneCodeDao,
-                                             ICountryDao countryDao,
-                                             ICurrencyDao currencyDao,
-                                             IDeliveryTypeDao deliveryTypeDao,
-                                             IItemStatusDao itemStatusDao,
-                                             IItemTypeDao itemTypeDao,
-                                             IMessageStatusDao messageStatusDao,
-                                             IMessageTypeDao messageTypeDao,
-                                             IOptionGroupDao optionGroupDao,
-                                             IOrderStatusDao orderStatusDao,
-                                             IPaymentMethodDao paymentMethodDao,
-                                             IRatingDao ratingDao,
-                                             ICategoryDao categoryDao) {
+                                             ITransactionEntityDao brandDao,
+                                             ITransactionEntityDao countTypeDao,
+                                             ITransactionEntityDao countryPhoneCodeDao,
+                                             ITransactionEntityDao countryDao,
+                                             ITransactionEntityDao currencyDao,
+                                             ITransactionEntityDao deliveryTypeDao,
+                                             ITransactionEntityDao itemStatusDao,
+                                             ITransactionEntityDao itemTypeDao,
+                                             ITransactionEntityDao messageStatusDao,
+                                             ITransactionEntityDao messageTypeDao,
+                                             ITransactionEntityDao optionGroupDao,
+                                             ITransactionEntityDao orderStatusDao,
+                                             ITransactionEntityDao paymentMethodDao,
+                                             ITransactionEntityDao ratingDao,
+                                             ITransactionEntityDao categoryDao) {
         this.localizationInterpreter = localizationInterpreter;
         this.availableLocales = availableLocales;
         this.applicationPropertyConfiguration = applicationPropertyConfiguration;
@@ -137,7 +124,7 @@ public class InitializeConstantDbConfiguration {
 
     private void initializeCountTypes(Locale defaultLocale) {
         Set<ApplicationProperty> countTypeNames = applicationPropertyConfiguration.getCountTypes();
-        List<CountType> existingCountTypes = countTypeDao.getNamedQueryEntityList("CountType.all");
+        List<CountType> existingCountTypes = countTypeDao.getNamedQueryEntityListClose("CountType.all");
 
         if (countTypeNames != null) {
             countTypeNames.stream()
@@ -147,13 +134,17 @@ public class InitializeConstantDbConfiguration {
                             .label(localizationInterpreter.interpret("country_phone_code", ap.getValue().toLowerCase(), defaultLocale))
                             .value(ap.getValue())
                             .build())
-                    .forEach(countTypeDao::persistEntity);
+                    .forEach(entity -> {
+                        transactionHandler.executeConsumer(entityManager -> {
+                            entityManager.persist(entity);
+                        });
+                    });
         }
     }
 
     private void initializeCountryPhoneCode(Locale defaultLocale) {
         Set<ApplicationProperty> countryPhoneCodes = applicationPropertyConfiguration.getCountryPhoneCodes();
-        List<CountryPhoneCode> existingCountryPhoneCodes = countryPhoneCodeDao.getNamedQueryEntityList("CountryPhoneCode.all");
+        List<CountryPhoneCode> existingCountryPhoneCodes = countryPhoneCodeDao.getNamedQueryEntityListClose("CountryPhoneCode.all");
 
         if (countryPhoneCodes != null) {
             countryPhoneCodes.stream()
@@ -163,13 +154,17 @@ public class InitializeConstantDbConfiguration {
                             .label(localizationInterpreter.interpret("country_phone_code", ap.getValue().toLowerCase(), defaultLocale))
                             .value(ap.getValue())
                             .build())
-                    .forEach(countryPhoneCodeDao::persistEntity);
+                    .forEach(entity -> {
+                        transactionHandler.executeConsumer(entityManager -> {
+                            entityManager.persist(entity);
+                        });
+                    });
         }
     }
 
     private void initializeCountries(Locale defaultLocale) {
         Set<ApplicationProperty> countrySet = applicationPropertyConfiguration.getCountries();
-        List<Country> existingCountries = countryDao.getNamedQueryEntityList("Country.all");
+        List<Country> existingCountries = countryDao.getNamedQueryEntityListClose("Country.all");
 
         if (countrySet != null) {
             countrySet.stream()
@@ -179,13 +174,17 @@ public class InitializeConstantDbConfiguration {
                             .label(localizationInterpreter.interpret("country", ap.getValue().toLowerCase(), defaultLocale))
                             .value(ap.getValue())
                             .build())
-                    .forEach(countryDao::persistEntity);
+                    .forEach(entity -> {
+                        transactionHandler.executeConsumer(entityManager -> {
+                            entityManager.persist(entity);
+                        });
+                    });
         }
     }
 
     private void initializeCurrencies(Locale defaultLocale) {
         Set<ApplicationProperty> currencySet = applicationPropertyConfiguration.getCurrencies();
-        List<Currency> existingCurrencies = currencyDao.getNamedQueryEntityList("Currency.all");
+        List<Currency> existingCurrencies = currencyDao.getNamedQueryEntityListClose("Currency.all");
 
         if (currencySet != null) {
             currencySet.stream()
@@ -195,13 +194,17 @@ public class InitializeConstantDbConfiguration {
                             .label(localizationInterpreter.interpret("currency", ap.getValue().toLowerCase(), defaultLocale))
                             .value(ap.getValue())
                             .build())
-                    .forEach(currencyDao::persistEntity);
+                    .forEach(entity -> {
+                        transactionHandler.executeConsumer(entityManager -> {
+                            entityManager.persist(entity);
+                        });
+                    });
         }
     }
 
     private void initializeDeliveryTypeEntities(Locale defaultLocale) {
         Set<ApplicationProperty> deliveryTypeSet = applicationPropertyConfiguration.getDeliveryTypes();
-        List<DeliveryType> existingDeliveryTypeList = deliveryTypeDao.getNamedQueryEntityList("DeliveryType.all");
+        List<DeliveryType> existingDeliveryTypeList = deliveryTypeDao.getNamedQueryEntityListClose("DeliveryType.all");
 
         if (deliveryTypeSet != null) {
             deliveryTypeSet.stream()
@@ -211,13 +214,17 @@ public class InitializeConstantDbConfiguration {
                             .label(localizationInterpreter.interpret("delivery.type", ap.getValue().toLowerCase(), defaultLocale))
                             .value(ap.getValue())
                             .build())
-                    .forEach(deliveryTypeDao::persistEntity);
+                    .forEach(entity -> {
+                        transactionHandler.executeConsumer(entityManager -> {
+                            entityManager.persist(entity);
+                        });
+                    });
         }
     }
 
     private void initializePaymentMethodEntities(Locale defaultLocale) {
         Set<ApplicationProperty> paymentMethodSet = applicationPropertyConfiguration.getPaymentMethods();
-        List<PaymentMethod> existingPaymentMethodList = paymentMethodDao.getNamedQueryEntityList("PaymentMethod.all");
+        List<PaymentMethod> existingPaymentMethodList = paymentMethodDao.getNamedQueryEntityListClose("PaymentMethod.all");
 
         if (paymentMethodSet != null) {
             paymentMethodSet.stream()
@@ -227,13 +234,17 @@ public class InitializeConstantDbConfiguration {
                             .label(localizationInterpreter.interpret("payment.method", ap.getValue().toLowerCase(), defaultLocale))
                             .value(ap.getValue())
                             .build())
-                    .forEach(paymentMethodDao::persistEntity);
+                    .forEach(entity -> {
+                        transactionHandler.executeConsumer(entityManager -> {
+                            entityManager.persist(entity);
+                        });
+                    });
         }
     }
 
     private void initializeOrderStatusEntities(Locale defaultLocale) {
         Set<ApplicationProperty> applicationPropertySet = applicationPropertyConfiguration.getOrderStatuses();
-        List<OrderStatus> existingOrderStatus = orderStatusDao.getNamedQueryEntityList("OrderStatus.all");
+        List<OrderStatus> existingOrderStatus = orderStatusDao.getNamedQueryEntityListClose("OrderStatus.all");
 
         if (applicationPropertySet != null) {
             applicationPropertySet.stream()
@@ -243,13 +254,17 @@ public class InitializeConstantDbConfiguration {
                             .label(localizationInterpreter.interpret("order.status", ap.getValue().toLowerCase(), defaultLocale))
                             .value(ap.getValue())
                             .build())
-                    .forEach(orderStatusDao::persistEntity);
+                    .forEach(entity -> {
+                        transactionHandler.executeConsumer(entityManager -> {
+                            entityManager.persist(entity);
+                        });
+                    });
         }
     }
 
     private void initializeBrandEntities(Locale defaultLocale) {
         Set<ApplicationProperty> brandSet = applicationPropertyConfiguration.getBrands();
-        List<Brand> existingBrands = brandDao.getNamedQueryEntityList("Brand.all");
+        List<Brand> existingBrands = brandDao.getNamedQueryEntityListClose("Brand.all");
 
         if (brandSet != null) {
             brandSet.stream()
@@ -259,13 +274,17 @@ public class InitializeConstantDbConfiguration {
                             .label(localizationInterpreter.interpret("brand", ap.getValue().toLowerCase(), defaultLocale))
                             .value(ap.getValue())
                             .build())
-                    .forEach(brandDao::persistEntity);
+                    .forEach(entity -> {
+                        transactionHandler.executeConsumer(entityManager -> {
+                            entityManager.persist(entity);
+                        });
+                    });
         }
     }
 
     private void initializeItemStatusEntities(Locale defaultLocale) {
         Set<ApplicationProperty> itemStatuses = applicationPropertyConfiguration.getItemStatuses();
-        List<ArticularStatus> existArticularStatuses = itemStatusDao.getNamedQueryEntityList("ArticularStatus.all");
+        List<ArticularStatus> existArticularStatuses = itemStatusDao.getNamedQueryEntityListClose("ArticularStatus.all");
 
         if (itemStatuses != null) {
             itemStatuses.stream()
@@ -275,13 +294,17 @@ public class InitializeConstantDbConfiguration {
                             .label(localizationInterpreter.interpret("item.status", ap.getValue().toLowerCase(), defaultLocale))
                             .value(ap.getValue())
                             .build())
-                    .forEach(itemStatusDao::persistEntity);
+                    .forEach(entity -> {
+                        transactionHandler.executeConsumer(entityManager -> {
+                            entityManager.persist(entity);
+                        });
+                    });
         }
     }
 
     private void initializeItemTypesEntities(Locale defaultLocale) {
         Set<ApplicationProperty> itemTypeSet = applicationPropertyConfiguration.getItemTypes();
-        List<ItemType> existItemTypes = itemTypeDao.getNamedQueryEntityList("ItemType.all");
+        List<ItemType> existItemTypes = itemTypeDao.getNamedQueryEntityListClose("ItemType.all");
 
         if (itemTypeSet != null) {
             itemTypeSet.stream()
@@ -291,13 +314,17 @@ public class InitializeConstantDbConfiguration {
                             .label(localizationInterpreter.interpret("item.type", ap.getValue().toLowerCase(), defaultLocale))
                             .value(ap.getValue())
                             .build())
-                    .forEach(itemTypeDao::persistEntity);
+                    .forEach(entity -> {
+                        transactionHandler.executeConsumer(entityManager -> {
+                            entityManager.persist(entity);
+                        });
+                    });
         }
     }
 
     private void initializeMessageStatuses(Locale defaultLocale) {
         Set<ApplicationProperty> messageStatuses = applicationPropertyConfiguration.getMessageStatuses();
-        List<MessageStatus> existingMessageStatuses = messageStatusDao.getNamedQueryEntityList("MessageStatus.all");
+        List<MessageStatus> existingMessageStatuses = messageStatusDao.getNamedQueryEntityListClose("MessageStatus.all");
 
         if (messageStatuses != null) {
             messageStatuses.stream()
@@ -307,13 +334,17 @@ public class InitializeConstantDbConfiguration {
                             .label(localizationInterpreter.interpret("message.status", ap.getValue().toLowerCase(), defaultLocale))
                             .value(ap.getValue())
                             .build())
-                    .forEach(messageStatusDao::persistEntity);
+                    .forEach(entity -> {
+                        transactionHandler.executeConsumer(entityManager -> {
+                            entityManager.persist(entity);
+                        });
+                    });
         }
     }
 
     private void initializeMessageTypes(Locale defaultLocale) {
         Set<ApplicationProperty> messageTypes = applicationPropertyConfiguration.getMessageTypes();
-        List<MessageType> existingMessageTypes = messageTypeDao.getNamedQueryEntityList("MessageType.all");
+        List<MessageType> existingMessageTypes = messageTypeDao.getNamedQueryEntityListClose("MessageType.all");
 
         if (messageTypes != null) {
             messageTypes.stream()
@@ -323,13 +354,17 @@ public class InitializeConstantDbConfiguration {
                             .label(localizationInterpreter.interpret("message.type", ap.getValue().toLowerCase(), defaultLocale))
                             .value(ap.getValue())
                             .build())
-                    .forEach(messageStatusDao::persistEntity);
+                    .forEach(entity -> {
+                        transactionHandler.executeConsumer(entityManager -> {
+                            entityManager.persist(entity);
+                        });
+                    });
         }
     }
 
     private void initializeOptionGroupEntities(Locale defaultLocale) {
         Set<ApplicationProperty> optionGroupSet = applicationPropertyConfiguration.getOptionGroups();
-        List<OptionGroup> existOptionGroupList = optionGroupDao.getNamedQueryEntityList("OptionGroup.all");
+        List<OptionGroup> existOptionGroupList = optionGroupDao.getNamedQueryEntityListClose("OptionGroup.all");
 
         if (optionGroupSet != null) {
             optionGroupSet.stream()
@@ -339,13 +374,17 @@ public class InitializeConstantDbConfiguration {
                             .label(localizationInterpreter.interpret("option.group", ap.getValue().toLowerCase(), defaultLocale))
                             .value(ap.getValue())
                             .build())
-                    .forEach(messageStatusDao::persistEntity);
+                    .forEach(entity -> {
+                        transactionHandler.executeConsumer(entityManager -> {
+                            entityManager.persist(entity);
+                        });
+                    });
         }
     }
 
     private void initializeRatingEntities() {
         Set<Integer> ratingList = applicationPropertyConfiguration.getRatings();
-        List<Rating> existRatingList = ratingDao.getNamedQueryEntityList("Rating.all");
+        List<Rating> existRatingList = ratingDao.getNamedQueryEntityListClose("Rating.all");
 
         if (ratingList != null) {
             ratingList.stream()
@@ -355,7 +394,11 @@ public class InitializeConstantDbConfiguration {
                     .map(rating -> Rating.builder()
                             .value(rating)
                             .build())
-                    .forEach(ratingDao::persistEntity);
+                    .forEach(entity -> {
+                        transactionHandler.executeConsumer(entityManager -> {
+                            entityManager.persist(entity);
+                        });
+                    });
         }
     }
 

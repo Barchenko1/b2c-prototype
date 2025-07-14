@@ -1,6 +1,5 @@
 package com.b2c.prototype.manager.address.base;
 
-import com.b2c.prototype.dao.address.IAddressDao;
 import com.b2c.prototype.modal.dto.payload.order.AddressDto;
 import com.b2c.prototype.modal.dto.payload.user.UserAddressDto;
 import com.b2c.prototype.modal.dto.payload.user.ResponseUserAddressDto;
@@ -9,9 +8,11 @@ import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.address.IUserAddressManager;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.query.IFetchHandler;
-import com.tm.core.process.manager.common.EntityOperationManager;
+import com.tm.core.process.dao.IFetchHandler;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
+import com.tm.core.process.manager.common.operator.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
+import org.hibernate.Session;
 
 import java.util.Comparator;
 import java.util.List;
@@ -25,7 +26,7 @@ public class UserAddressManager implements IUserAddressManager {
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public UserAddressManager(IAddressDao addressDao,
+    public UserAddressManager(ITransactionEntityDao addressDao,
                               IFetchHandler fetchHandler,
                               ITransformationFunctionService transformationFunctionService,
                               IParameterFactory parameterFactory) {
@@ -38,11 +39,11 @@ public class UserAddressManager implements IUserAddressManager {
     @Override
     public void saveUserAddress(String userId, UserAddressDto userAddressDto) {
         entityOperationManager.executeConsumer(session -> {
-            UserDetails userDetails = fetchHandler.getNamedQueryEntity(
+            UserDetails userDetails = fetchHandler.getNamedQueryEntityClose(
                     UserDetails.class,
                     "UserDetails.findAddressesByUserId",
                     parameterFactory.createStringParameter(USER_ID, userId));
-            UserAddress newUserAddress = transformationFunctionService.getEntity(session, UserAddress.class, userAddressDto);
+            UserAddress newUserAddress = transformationFunctionService.getEntity((Session) session, UserAddress.class, userAddressDto);
             boolean isAllAddressesFalse = userDetails.getUserAddresses().stream()
                     .noneMatch(UserAddress::isDefault);
 
@@ -57,11 +58,11 @@ public class UserAddressManager implements IUserAddressManager {
     @Override
     public void updateUserAddress(String userId, String addressId, UserAddressDto userAddressDto) {
         entityOperationManager.executeConsumer(session -> {
-            UserDetails userDetails = fetchHandler.getNamedQueryEntity(
+            UserDetails userDetails = fetchHandler.getNamedQueryEntityClose(
                     UserDetails.class,
                     "UserDetails.findAddressesByUserId",
                     parameterFactory.createStringParameter(USER_ID, userId));
-            UserAddress newUserAddress = transformationFunctionService.getEntity(session, UserAddress.class, userAddressDto);
+            UserAddress newUserAddress = transformationFunctionService.getEntity((Session) session, UserAddress.class, userAddressDto);
             boolean isAllAddressesFalse = userDetails.getUserAddresses().stream()
                     .noneMatch(UserAddress::isDefault);
 
@@ -99,7 +100,7 @@ public class UserAddressManager implements IUserAddressManager {
     @Override
     public void setDefaultUserCreditCard(String userId, String addressId) {
         entityOperationManager.executeConsumer(session -> {
-            UserDetails userDetails = fetchHandler.getNamedQueryEntity(
+            UserDetails userDetails = fetchHandler.getNamedQueryEntityClose(
                     UserDetails.class,
                     "UserDetails.findAddressesByUserId",
                     parameterFactory.createStringParameter(USER_ID, userId));
@@ -120,7 +121,7 @@ public class UserAddressManager implements IUserAddressManager {
     @Override
     public void deleteUserAddress(String userId, String addressId) {
         entityOperationManager.executeConsumer(session -> {
-            UserDetails userDetails = fetchHandler.getNamedQueryEntity(
+            UserDetails userDetails = fetchHandler.getNamedQueryEntityClose(
                     UserDetails.class,
                     "UserDetails.findAddressesByUserId",
                     parameterFactory.createStringParameter(USER_ID, userId));
@@ -143,7 +144,7 @@ public class UserAddressManager implements IUserAddressManager {
 
     @Override
     public List<ResponseUserAddressDto> getUserAddressesByUserId(String userId) {
-        UserDetails userDetails = fetchHandler.getNamedQueryEntity(
+        UserDetails userDetails = fetchHandler.getNamedQueryEntityClose(
                 UserDetails.class,
                 "UserDetails.findAddressesByUserId",
                 parameterFactory.createStringParameter(USER_ID, userId));
@@ -155,7 +156,7 @@ public class UserAddressManager implements IUserAddressManager {
 
     @Override
     public ResponseUserAddressDto getDefaultUserAddress(String userId) {
-        UserDetails userDetails = fetchHandler.getNamedQueryEntity(
+        UserDetails userDetails = fetchHandler.getNamedQueryEntityClose(
                 UserDetails.class,
                 "UserDetails.findAddressesByUserId",
                 parameterFactory.createStringParameter(USER_ID, userId));
@@ -169,7 +170,7 @@ public class UserAddressManager implements IUserAddressManager {
 
     @Override
     public List<AddressDto> getAllAddressesByAddressId(String addressId) {
-        List<UserAddress> userAddressList = fetchHandler.getNamedQueryEntityList(
+        List<UserAddress> userAddressList = fetchHandler.getNamedQueryEntityListClose(
                 UserAddress.class,
                 "UserAddress.findByUserAddressCombination",
                 parameterFactory.createStringParameter("userAddressCombination", addressId));

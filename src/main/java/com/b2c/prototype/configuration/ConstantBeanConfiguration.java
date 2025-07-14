@@ -1,12 +1,5 @@
 package com.b2c.prototype.configuration;
 
-import com.b2c.prototype.dao.address.ICountryDao;
-import com.b2c.prototype.dao.delivery.IDeliveryTypeDao;
-import com.b2c.prototype.dao.message.IMessageStatusDao;
-import com.b2c.prototype.dao.message.IMessageTypeDao;
-import com.b2c.prototype.dao.payment.IPaymentMethodDao;
-import com.b2c.prototype.dao.price.ICurrencyDao;
-import com.b2c.prototype.dao.user.ICountryPhoneCodeDao;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
 import com.b2c.prototype.modal.entity.item.ArticularStatus;
@@ -19,15 +12,9 @@ import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.ItemType;
 import com.b2c.prototype.modal.entity.review.Rating;
-import com.b2c.prototype.dao.option.IOptionGroupDao;
-import com.b2c.prototype.dao.order.IOrderStatusDao;
-import com.b2c.prototype.dao.item.IBrandDao;
-import com.b2c.prototype.dao.item.ICategoryDao;
-import com.b2c.prototype.dao.item.IItemStatusDao;
-import com.b2c.prototype.dao.item.IItemTypeDao;
-import com.b2c.prototype.dao.rating.IRatingDao;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -43,119 +30,119 @@ import java.util.stream.Collectors;
 public class ConstantBeanConfiguration {
 
     @Bean
-    public Map<String, DeliveryType> deliveryTypeMap(IDeliveryTypeDao deliveryTypeDao) {
-        List<DeliveryType> userRoleList = deliveryTypeDao.getNamedQueryEntityList("DeliveryType.all");
+    public Map<String, DeliveryType> deliveryTypeMap(ITransactionEntityDao deliveryTypeDao) {
+        List<DeliveryType> userRoleList = deliveryTypeDao.getNamedQueryEntityListClose("DeliveryType.all");
         return userRoleList.stream()
                 .collect(Collectors.toMap(DeliveryType::getValue, Function.identity(), (existing, replacement) -> existing));
     }
 
     @Bean
-    public Map<String, PaymentMethod> paymentMethodMap(IPaymentMethodDao paymentMethodDao) {
-        List<PaymentMethod> paymentMethodList = paymentMethodDao.getNamedQueryEntityList("PaymentMethod.all");
+    public Map<String, PaymentMethod> paymentMethodMap(ITransactionEntityDao paymentMethodDao) {
+        List<PaymentMethod> paymentMethodList = paymentMethodDao.getNamedQueryEntityListClose("PaymentMethod.all");
         return paymentMethodList.stream()
                 .collect(Collectors.toMap(PaymentMethod::getValue, Function.identity(), (existing, replacement) -> existing));
     }
 
     @Bean
-    public Map<String, OrderStatus> orderStatusMap(IOrderStatusDao orderStatusDao) {
-        List<OrderStatus> orderStatusList = orderStatusDao.getNamedQueryEntityList("OrderStatus.all");
+    public Map<String, OrderStatus> orderStatusMap(ITransactionEntityDao orderStatusDao) {
+        List<OrderStatus> orderStatusList = orderStatusDao.getNamedQueryEntityListClose("OrderStatus.all");
         return orderStatusList.stream()
                 .collect(Collectors.toMap(OrderStatus::getValue, Function.identity(), (existing, replacement) -> existing));
     }
 
     @Bean
-    public Map<String, Category> categoryMap(ICategoryDao categoryDao) {
-        List<Category> categoryList = categoryDao.getNamedQueryEntityList("Category.all");
+    public Map<String, Category> categoryMap(ITransactionEntityDao categoryDao) {
+        List<Category> categoryList = categoryDao.getNamedQueryEntityListClose("Category.all");
         return categoryList.stream()
                 .collect(Collectors.toMap(Category::getValue, category -> category, (existing, replacement) -> existing));
     }
 
     @Bean
-    public Map<String, ItemType> itemTypeMap(IItemTypeDao itemTypeDao) {
-        List<ItemType> itemTypeList = itemTypeDao.getNamedQueryEntityList("ItemType.all");
+    public Map<String, ItemType> itemTypeMap(ITransactionEntityDao itemTypeDao) {
+        List<ItemType> itemTypeList = itemTypeDao.getNamedQueryEntityListClose("ItemType.all");
         return itemTypeList.stream()
                 .collect(Collectors.toMap(ItemType::getValue, itemType -> itemType, (existing, replacement) -> existing));
     }
 
     @Bean
-    public Map<String, Brand> brandMap(IBrandDao brandDao) {
-        List<Brand> brandList = brandDao.getNamedQueryEntityList("Brand.all");
+    public Map<String, Brand> brandMap(ITransactionEntityDao brandDao) {
+        List<Brand> brandList = brandDao.getNamedQueryEntityListClose("Brand.all");
         return brandList.stream()
                 .collect(Collectors.toMap(Brand::getValue, brand -> brand, (existing, replacement) -> existing));
     }
 
     @Bean
-    public Map<Object, Rating> ratingMap(IRatingDao ratingDao) {
-        List<Rating> ratingList = ratingDao.getNamedQueryEntityList("Rating.all");
+    public Map<Object, Rating> ratingMap(ITransactionEntityDao ratingDao) {
+        List<Rating> ratingList = ratingDao.getNamedQueryEntityListClose("Rating.all");
         return ratingList.stream()
                 .collect(Collectors.toMap(Rating::getValue, value -> value, (existing, replacement) -> existing));
     }
 
     @Bean
-    public Map<String, ArticularStatus> articularStatusMap(IItemStatusDao itemStatusDao) {
-        List<ArticularStatus> articularStatusList = itemStatusDao.getNamedQueryEntityList("ArticularStatus.all");
+    public Map<String, ArticularStatus> articularStatusMap(ITransactionEntityDao itemStatusDao) {
+        List<ArticularStatus> articularStatusList = itemStatusDao.getNamedQueryEntityListClose("ArticularStatus.all");
         return articularStatusList.stream()
                 .collect(Collectors.toMap(ArticularStatus::getValue, itemStatus -> itemStatus, (existing, replacement) -> existing));
     }
 
     @Bean
-    public Map<String, OptionGroup> optionGroupMap(IOptionGroupDao optionGroupDao) {
-        List<OptionGroup> optionGroupList = optionGroupDao.getNamedQueryEntityList("OptionGroup.all");
+    public Map<String, OptionGroup> optionGroupMap(ITransactionEntityDao optionGroupDao) {
+        List<OptionGroup> optionGroupList = optionGroupDao.getNamedQueryEntityListClose("OptionGroup.all");
         return optionGroupList.stream()
                 .collect(Collectors.toMap(OptionGroup::getValue, optionGroup -> optionGroup, (existing, replacement) -> existing));
     }
 
     @Bean
-    public Map<String, Country> countryMap(ICountryDao countryDao) {
-        List<Country> countryList = countryDao.getNamedQueryEntityList("Country.all");
+    public Map<String, Country> countryMap(ITransactionEntityDao countryDao) {
+        List<Country> countryList = countryDao.getNamedQueryEntityListClose("Country.all");
         return countryList.stream()
                 .collect(Collectors.toMap(Country::getValue, country -> country, (existing, replacement) -> existing));
     }
 
     @Bean
-    public Map<String, Currency> currencyMap(ICurrencyDao currencyDao) {
-        List<Currency> currencyList = currencyDao.getNamedQueryEntityList("Currency.all");
+    public Map<String, Currency> currencyMap(ITransactionEntityDao currencyDao) {
+        List<Currency> currencyList = currencyDao.getNamedQueryEntityListClose("Currency.all");
         return currencyList.stream()
                 .collect(Collectors.toMap(Currency::getValue, currency -> currency, (existing, replacement) -> existing));
     }
 
     @Bean
-    public Map<String, CountryPhoneCode> countryPhoneCodeMap(ICountryPhoneCodeDao countryPhoneCodeDao) {
-        List<CountryPhoneCode> optionGroupList = countryPhoneCodeDao.getNamedQueryEntityList("CountryPhoneCode.all");
+    public Map<String, CountryPhoneCode> countryPhoneCodeMap(ITransactionEntityDao countryPhoneCodeDao) {
+        List<CountryPhoneCode> optionGroupList = countryPhoneCodeDao.getNamedQueryEntityListClose("CountryPhoneCode.all");
         return optionGroupList.stream()
                 .collect(Collectors.toMap(CountryPhoneCode::getValue, countryPhoneCode -> countryPhoneCode, (existing, replacement) -> existing));
     }
 
     @Bean
-    public Map<String, MessageStatus> messageStatusMap(IMessageStatusDao messageStatusDao) {
-        List<MessageStatus> messageStatusList = messageStatusDao.getNamedQueryEntityList("MessageStatus.all");
+    public Map<String, MessageStatus> messageStatusMap(ITransactionEntityDao messageStatusDao) {
+        List<MessageStatus> messageStatusList = messageStatusDao.getNamedQueryEntityListClose("MessageStatus.all");
         return messageStatusList.stream()
                 .collect(Collectors.toMap(MessageStatus::getValue, messageStatus -> messageStatus, (existing, replacement) -> existing));
     }
 
     @Bean
-    public Map<String, MessageType> messageTypeMap(IMessageTypeDao messageTypeDao) {
-        List<MessageType> messageTypeList = messageTypeDao.getNamedQueryEntityList("MessageType.all");
+    public Map<String, MessageType> messageTypeMap(ITransactionEntityDao messageTypeDao) {
+        List<MessageType> messageTypeList = messageTypeDao.getNamedQueryEntityListClose("MessageType.all");
         return messageTypeList.stream()
                 .collect(Collectors.toMap(MessageType::getValue, messageType -> messageType, (existing, replacement) -> existing));
     }
 
     @Bean
     public Map<Class<?>, Map<?, ?>> classEntityMap(
-            IDeliveryTypeDao deliveryTypeDao,
-            IPaymentMethodDao paymentMethodDao,
-            IOrderStatusDao orderStatusDao,
-            ICategoryDao categoryDao,
-            IItemTypeDao itemTypeDao,
-            IBrandDao brandDao,
-            IRatingDao ratingDao,
-            IItemStatusDao itemStatusDao,
-            IOptionGroupDao optionGroupDao,
-            ICountryDao countryDao,
-            ICurrencyDao currencyDao,
-            ICountryPhoneCodeDao countryPhoneCodeDao,
-            IMessageStatusDao messageStatusDao,
-            IMessageTypeDao messageTypeDao) {
+            ITransactionEntityDao deliveryTypeDao,
+            ITransactionEntityDao paymentMethodDao,
+            ITransactionEntityDao orderStatusDao,
+            ITransactionEntityDao categoryDao,
+            ITransactionEntityDao itemTypeDao,
+            ITransactionEntityDao brandDao,
+            ITransactionEntityDao ratingDao,
+            ITransactionEntityDao itemStatusDao,
+            ITransactionEntityDao optionGroupDao,
+            ITransactionEntityDao countryDao,
+            ITransactionEntityDao currencyDao,
+            ITransactionEntityDao countryPhoneCodeDao,
+            ITransactionEntityDao messageStatusDao,
+            ITransactionEntityDao messageTypeDao) {
         return new HashMap<>(){{
             put(DeliveryType.class, deliveryTypeMap(deliveryTypeDao));
             put(PaymentMethod.class, paymentMethodMap(paymentMethodDao));

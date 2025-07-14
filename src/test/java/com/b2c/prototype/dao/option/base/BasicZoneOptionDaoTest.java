@@ -7,7 +7,7 @@ import com.b2c.prototype.modal.entity.option.ZoneOption;
 import com.tm.core.finder.manager.EntityMappingManager;
 import com.tm.core.finder.manager.IEntityMappingManager;
 import com.tm.core.finder.table.EntityTable;
-import com.tm.core.process.dao.identifier.QueryService;
+import com.tm.core.process.dao.query.QueryService;
 import org.junit.jupiter.api.BeforeAll;
 
 class BasicZoneOptionDaoTest extends AbstractConstantEntityDaoTest {

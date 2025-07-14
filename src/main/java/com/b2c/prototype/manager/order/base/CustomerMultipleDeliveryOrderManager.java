@@ -6,8 +6,8 @@ import com.b2c.prototype.modal.dto.payload.order.multi.CustomerMultiDeliveryOrde
 import com.b2c.prototype.modal.dto.payload.order.single.ResponseCustomerOrderDetails;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.identifier.IQueryService;
-import com.tm.core.process.manager.common.EntityOperationManager;
+import com.tm.core.process.dao.query.IQueryService;
+import com.tm.core.process.manager.common.operator.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
 
 import java.util.List;

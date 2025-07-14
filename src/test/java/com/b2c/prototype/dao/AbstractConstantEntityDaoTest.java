@@ -3,12 +3,12 @@ package com.b2c.prototype.dao;
 import com.b2c.prototype.DataBaseLoader;
 import com.github.database.rider.core.api.connection.ConnectionHolder;
 import com.github.database.rider.core.api.dataset.DataSetExecutor;
-import com.tm.core.process.dao.common.AbstractEntityDao;
+import com.tm.core.process.dao.common.session.AbstractSessionFactoryDao;
 import com.tm.core.process.dao.common.IEntityDao;
 import com.tm.core.finder.parameter.Parameter;
 import com.github.database.rider.core.dataset.DataSetExecutorImpl;
 import com.github.database.rider.junit5.api.DBRider;
-import com.tm.core.process.dao.identifier.IQueryService;
+import com.tm.core.process.dao.query.IQueryService;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -76,7 +76,7 @@ public abstract class AbstractConstantEntityDaoTest extends DataBaseLoader {
     @BeforeEach
     public void setUp() {
         try {
-            Field sessionFactoryField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionFactoryField = AbstractSessionFactoryDao.class.getDeclaredField("sessionFactory");
             sessionFactoryField.setAccessible(true);
             sessionFactoryField.set(dao, sessionFactory);
         } catch (Exception e) {
@@ -130,7 +130,7 @@ public abstract class AbstractConstantEntityDaoTest extends DataBaseLoader {
         when(sessionFactory.openSession()).thenReturn(session);
         when(session.beginTransaction()).thenReturn(transaction);
         try {
-            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionManagerField = AbstractSessionFactoryDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
@@ -163,7 +163,7 @@ public abstract class AbstractConstantEntityDaoTest extends DataBaseLoader {
         when(sessionFactory.openSession()).thenReturn(session);
         when(session.beginTransaction()).thenReturn(transaction);
         try {
-            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionManagerField = AbstractSessionFactoryDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
@@ -197,7 +197,7 @@ public abstract class AbstractConstantEntityDaoTest extends DataBaseLoader {
         when(sessionFactory.openSession()).thenReturn(session);
         when(session.beginTransaction()).thenReturn(transaction);
         try {
-            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionManagerField = AbstractSessionFactoryDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
@@ -209,95 +209,6 @@ public abstract class AbstractConstantEntityDaoTest extends DataBaseLoader {
         assertThrows(RuntimeException.class, () -> {
             dao.deleteEntity(testEntityDataSet.getEntity());
         });
-
-        verify(transaction).rollback();
-        verify(transaction, never()).commit();
-        verify(session).close();
-    }
-
-    @Test
-    void findEntityAndUpdate_success() {
-        loadDataSet(testEntityDataSet.getDataSetPath()[0]);
-        Parameter parameter = new Parameter("id", 1L);
-
-        dao.findEntityAndUpdate(updateEntityDataSet.getEntity(), parameter);
-        verifyExpectedData(updateEntityDataSet.getDataSetPath()[0]);
-    }
-
-    @Test
-    void findEntityAndUpdate_transactionFailure() {
-        loadDataSet(testEntityDataSet.getDataSetPath()[0]);
-
-        SessionFactory sessionFactory = mock(SessionFactory.class);
-        Session session = mock(Session.class);
-        Transaction transaction = mock(Transaction.class);
-        NativeQuery<Object> nativeQuery = mock(NativeQuery.class);
-
-        try {
-            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
-            sessionManagerField.setAccessible(true);
-            sessionManagerField.set(dao, sessionFactory);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        when(sessionFactory.openSession()).thenReturn(session);
-        when(session.beginTransaction()).thenReturn(transaction);
-//        when(session.createNativeQuery(anyString(), any(Class.class))).thenReturn(nativeQuery);
-        when(nativeQuery.getSingleResult()).thenReturn(testEntityDataSet.getEntity());
-        doThrow(new RuntimeException()).when(session).merge(testEntityDataSet.getEntity());
-
-        Parameter parameter = new Parameter("id", 1L);
-
-        assertThrows(RuntimeException.class, () -> {
-            dao.findEntityAndUpdate(updateEntityDataSet.getEntity(), parameter);
-        });
-
-        verifyExpectedData(testEntityDataSet.getDataSetPath()[0]);
-
-        verify(transaction).rollback();
-        verify(transaction, never()).commit();
-        verify(session).close();
-    }
-
-    @Test
-    void findEntityAndDelete_success() {
-        loadDataSet(testEntityDataSet.getDataSetPath()[0]);
-        Parameter parameter = new Parameter("id", 1L);
-
-        dao.findEntityAndDelete(parameter);
-        verifyExpectedData(emptyDataSet);
-    }
-
-    @Test
-    void findEntityAndDelete_transactionFailure() {
-        loadDataSet(testEntityDataSet.getDataSetPath()[0]);
-
-        SessionFactory sessionFactory = mock(SessionFactory.class);
-        Session session = mock(Session.class);
-        Transaction transaction = mock(Transaction.class);
-        NativeQuery<Object> nativeQuery = mock(NativeQuery.class);
-
-        try {
-            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
-            sessionManagerField.setAccessible(true);
-            sessionManagerField.set(dao, sessionFactory);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        when(sessionFactory.openSession()).thenReturn(session);
-        when(session.beginTransaction()).thenReturn(transaction);
-//        when(session.createNativeQuery(anyString(), any(Class.class))).thenReturn(nativeQuery);
-        when(nativeQuery.getSingleResult()).thenReturn(testEntityDataSet.getEntity());
-        doThrow(new RuntimeException()).when(session).remove(testEntityDataSet.getEntity());
-
-        Parameter parameter = new Parameter("id", 1L);
-
-        assertThrows(RuntimeException.class, () -> {
-            dao.findEntityAndDelete(parameter);
-        });
-        verifyExpectedData(testEntityDataSet.getDataSetPath()[0]);
 
         verify(transaction).rollback();
         verify(transaction, never()).commit();

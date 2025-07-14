@@ -1,6 +1,5 @@
 package com.b2c.prototype.manager.item.base;
 
-import com.b2c.prototype.dao.item.IItemDataDao;
 import com.b2c.prototype.modal.dto.common.SearchFieldUpdateEntityDto;
 import com.b2c.prototype.modal.dto.payload.item.ItemDataDto;
 import com.b2c.prototype.modal.dto.payload.item.ResponseItemDataDto;
@@ -8,24 +7,27 @@ import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.item.IItemDataManager;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.manager.common.EntityOperationManager;
-import com.tm.core.process.manager.common.IEntityOperationManager;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
+import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
+import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
+import org.hibernate.Session;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.b2c.prototype.util.Constant.ITEM_ID;
 import static com.b2c.prototype.util.Util.getUUID;
 
 public class ItemDataManager implements IItemDataManager {
 
-    private final IEntityOperationManager entityOperationManager;
+    private final ITransactionEntityOperationManager entityOperationManager;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public ItemDataManager(IItemDataDao itemDataDao,
+    public ItemDataManager(ITransactionEntityDao itemDataDao,
                            ITransformationFunctionService transformationFunctionService,
                            IParameterFactory parameterFactory) {
-        this.entityOperationManager = new EntityOperationManager(itemDataDao);
+        this.entityOperationManager = new TransactionEntityOperationManager(itemDataDao);
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
     }
@@ -34,7 +36,7 @@ public class ItemDataManager implements IItemDataManager {
     public void saveItemData(ItemDataDto itemDataDto) {
         entityOperationManager.executeConsumer(session -> {
             ItemData itemData = transformationFunctionService.getEntity(
-                    session,
+                    (Session) session,
                     ItemData.class,
                     itemDataDto);
             itemData.setItemId(getUUID());
@@ -52,7 +54,7 @@ public class ItemDataManager implements IItemDataManager {
                     .updateDto(itemDataDto)
                     .build();
             ItemData itemData = transformationFunctionService.getEntity(
-                    session,
+                    (Session) session,
                     ItemData.class,
                     updateDto);
 
@@ -62,23 +64,34 @@ public class ItemDataManager implements IItemDataManager {
 
     @Override
     public void deleteItemData(String itemId) {
-        entityOperationManager.deleteEntityByParameter(
-                parameterFactory.createStringParameter(ITEM_ID, itemId));
+        entityOperationManager.executeConsumer(session -> {
+            ItemData itemData = entityOperationManager.getNamedQueryEntityClose(
+                    "ItemData.findByValue",
+                    parameterFactory.createStringParameter(ITEM_ID, itemId));
+
+            session.remove(itemData);
+        });
     }
 
     @Override
     public ResponseItemDataDto getItemData(String itemId) {
-        return entityOperationManager.getGraphEntityDto(
-                "itemData.full",
-                parameterFactory.createStringParameter(ITEM_ID, itemId),
-                transformationFunctionService.getTransformationFunction(ItemData.class, ResponseItemDataDto.class));
+        ItemData itemData = entityOperationManager.getNamedQueryEntityClose(
+                "ItemData.findItemDataWithFullRelations",
+                parameterFactory.createStringParameter(ITEM_ID, itemId));
+
+        return Optional.of(itemData)
+                .map(transformationFunctionService.getTransformationFunction(ItemData.class, ResponseItemDataDto.class))
+                .orElseThrow(() -> new RuntimeException(""));
     }
 
     @Override
     public List<ResponseItemDataDto> getItemDataList() {
-        return entityOperationManager.getGraphEntityDtoList(
-                "itemData.full",
-                transformationFunctionService.getTransformationFunction(ItemData.class, ResponseItemDataDto.class));
+        List<ItemData> itemDataList = entityOperationManager.getNamedQueryEntityListClose(
+                "ItemData.findAllWithFullRelations");
+
+        return itemDataList.stream()
+                .map(transformationFunctionService.getTransformationFunction(ItemData.class, ResponseItemDataDto.class))
+                .toList();
     }
 
 }

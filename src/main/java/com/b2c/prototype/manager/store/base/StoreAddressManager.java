@@ -1,15 +1,16 @@
 package com.b2c.prototype.manager.store.base;
 
-import com.b2c.prototype.dao.address.IAddressDao;
 import com.b2c.prototype.manager.store.IStoreAddressManager;
 import com.b2c.prototype.modal.dto.payload.order.AddressDto;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.store.Store;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.identifier.IQueryService;
-import com.tm.core.process.manager.common.EntityOperationManager;
-import com.tm.core.process.manager.common.IEntityOperationManager;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
+import com.tm.core.process.dao.query.IQueryService;
+import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
+import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
+import org.hibernate.Session;
 
 import java.util.Optional;
 
@@ -17,16 +18,16 @@ import static com.b2c.prototype.util.Constant.STORE_ID;
 
 public class StoreAddressManager implements IStoreAddressManager {
 
-    private final IEntityOperationManager entityOperationManager;
+    private final ITransactionEntityOperationManager entityOperationManager;
     private final IQueryService queryService;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public StoreAddressManager(IAddressDao addressDao,
+    public StoreAddressManager(ITransactionEntityDao addressDao,
                                IQueryService queryService,
                                ITransformationFunctionService transformationFunctionService,
                                IParameterFactory parameterFactory) {
-        this.entityOperationManager = new EntityOperationManager(addressDao);
+        this.entityOperationManager = new TransactionEntityOperationManager(addressDao);
         this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
@@ -35,13 +36,11 @@ public class StoreAddressManager implements IStoreAddressManager {
     @Override
     public void saveUpdateStoreAddress(String storeId, AddressDto addressDto) {
         entityOperationManager.executeConsumer(session -> {
-            Store existingStore = queryService.getNamedQueryEntity(
-                    session,
-                    Store.class,
+            Store existingStore = entityOperationManager.getNamedQueryEntityClose(
                     "Store.findStoreWithAddressByStoreId",
                     parameterFactory.createStringParameter(STORE_ID, storeId));
 
-            Address address = transformationFunctionService.getEntity(session, Address.class, addressDto);
+            Address address = transformationFunctionService.getEntity((Session) session, Address.class, addressDto);
             Address existingAddress = existingStore.getAddress();
             existingAddress.setCountry(address.getCountry());
             existingAddress.setCity(address.getCity());
@@ -56,7 +55,7 @@ public class StoreAddressManager implements IStoreAddressManager {
 
     @Override
     public AddressDto getResponseStoreAddressByStoreId(String storeId) {
-        Store store = entityOperationManager.getNamedQueryEntity(
+        Store store = entityOperationManager.getNamedQueryEntityClose(
                 "Store.findStoreWithAddressByStoreId",
                 parameterFactory.createStringParameter(STORE_ID, storeId));
 

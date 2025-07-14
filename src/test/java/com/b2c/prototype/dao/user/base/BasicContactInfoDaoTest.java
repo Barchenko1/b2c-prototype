@@ -4,12 +4,13 @@ import com.b2c.prototype.dao.AbstractCustomEntityDaoTest;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
-import com.tm.core.process.dao.common.AbstractEntityDao;
-import com.tm.core.process.dao.identifier.QueryService;
+import com.tm.core.process.dao.common.session.AbstractSessionFactoryDao;
+import com.tm.core.process.dao.query.QueryService;
 import com.tm.core.finder.manager.EntityMappingManager;
 import com.tm.core.finder.manager.IEntityMappingManager;
 import com.tm.core.finder.parameter.Parameter;
 import com.tm.core.finder.table.EntityTable;
+import jakarta.persistence.EntityManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -170,7 +171,7 @@ class BasicContactInfoDaoTest extends AbstractCustomEntityDaoTest {
         Transaction transaction = mock(Transaction.class);
 
         try {
-            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionManagerField = AbstractSessionFactoryDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
@@ -191,10 +192,10 @@ class BasicContactInfoDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void saveEntityConsumer_success() {
         loadDataSet("/datasets/user/contact_info/emptyContactInfoDataSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             ContactInfo contactInfo = prepareToSaveContactInfo();
-            s.persist(contactInfo.getContactPhone());
-            s.persist(contactInfo);
+            session.persist(contactInfo.getContactPhone());
+            session.persist(contactInfo);
         };
 
         dao.executeConsumer(consumer);
@@ -204,7 +205,7 @@ class BasicContactInfoDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void saveEntityConsumer_transactionFailure() {
         loadDataSet("/datasets/user/contact_info/emptyContactInfoDataSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             throw new RuntimeException();
         };
 
@@ -220,7 +221,7 @@ class BasicContactInfoDaoTest extends AbstractCustomEntityDaoTest {
     void updateEntity_success() {
         loadDataSet("/datasets/user/contact_info/testContactInfoDataSet.yml");
         Supplier<ContactInfo> supplier = this::prepareToUpdateContactInfo;
-        dao.updateEntity(supplier);
+        dao.mergeSupplier(supplier);
         verifyExpectedData("/datasets/user/contact_info/updateContactInfoDataSet.yml");
     }
 
@@ -234,7 +235,7 @@ class BasicContactInfoDaoTest extends AbstractCustomEntityDaoTest {
         };
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            dao.updateEntity(supplier);
+            dao.mergeSupplier(supplier);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -243,10 +244,10 @@ class BasicContactInfoDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void updateEntityConsumer_success() {
         loadDataSet("/datasets/user/contact_info/testContactInfoDataSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             ContactInfo contactInfo = prepareToUpdateContactInfo();
-            s.merge(contactInfo.getContactPhone());
-            s.merge(contactInfo);
+            session.merge(contactInfo.getContactPhone());
+            session.merge(contactInfo);
         };
         dao.executeConsumer(consumer);
         verifyExpectedData("/datasets/user/contact_info/updateContactInfoDataSet.yml");
@@ -255,9 +256,9 @@ class BasicContactInfoDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void updateEntityConsumer_transactionFailure() {
         loadDataSet("/datasets/user/contact_info/testContactInfoDataSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             ContactInfo contactInfo = prepareToUpdateContactInfo();
-            s.merge(contactInfo);
+            session.merge(contactInfo);
             throw new RuntimeException();
         };
 
@@ -269,21 +270,12 @@ class BasicContactInfoDaoTest extends AbstractCustomEntityDaoTest {
     }
 
     @Test
-    void findEntityAndDelete_success() {
-        loadDataSet("/datasets/user/contact_info/testContactInfoDataSet.yml");
-        Parameter parameter = new Parameter("id", 1);
-
-        dao.findEntityAndDelete(parameter);
-        verifyExpectedData("/datasets/user/contact_info/emptyContactInfoDataSet.yml");
-    }
-
-    @Test
     void deleteEntityByConsumer_success() {
         loadDataSet("/datasets/user/contact_info/testContactInfoDataSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             ContactInfo contactInfo = prepareTestContactInfo();
-            s.remove(contactInfo);
-            s.remove(contactInfo.getContactPhone());
+            session.remove(contactInfo);
+            session.remove(contactInfo.getContactPhone());
         };
 
         dao.executeConsumer(consumer);
@@ -293,7 +285,7 @@ class BasicContactInfoDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void deleteEntityByConsumer_transactionFailure() {
         loadDataSet("/datasets/user/contact_info/testContactInfoDataSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             throw new RuntimeException();
         };
 
@@ -321,7 +313,7 @@ class BasicContactInfoDaoTest extends AbstractCustomEntityDaoTest {
         Transaction transaction = mock(Transaction.class);
 
         try {
-            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionManagerField = AbstractSessionFactoryDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
@@ -339,41 +331,6 @@ class BasicContactInfoDaoTest extends AbstractCustomEntityDaoTest {
         });
 
         assertEquals(RuntimeException.class, exception.getClass());
-    }
-
-    @Test
-    void deleteEntity_transactionFailure() {
-        loadDataSet("/datasets/user/contact_info/testContactInfoDataSet.yml");
-        ContactInfo contactInfo = prepareTestContactInfo();
-        Parameter parameter = new Parameter("id", 1L);
-
-        SessionFactory sessionFactory = mock(SessionFactory.class);
-        Session session = mock(Session.class);
-        Transaction transaction = mock(Transaction.class);
-        NativeQuery<ContactInfo> nativeQuery = mock(NativeQuery.class);
-
-        try {
-            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
-            sessionManagerField.setAccessible(true);
-            sessionManagerField.set(dao, sessionFactory);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        when(sessionFactory.openSession()).thenReturn(session);
-        when(session.beginTransaction()).thenReturn(transaction);
-//        when(session.createNativeQuery(anyString(), eq(ContactInfo.class))).thenReturn(nativeQuery);
-        when(nativeQuery.getSingleResult()).thenReturn(contactInfo);
-        doThrow(new RuntimeException()).when(session).remove(contactInfo);
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.findEntityAndDelete(parameter);
-        });
-
-        assertEquals(RuntimeException.class, exception.getClass());
-        verify(transaction).rollback();
-        verify(transaction, never()).commit();
-        verify(session).close();
     }
 
     @Test

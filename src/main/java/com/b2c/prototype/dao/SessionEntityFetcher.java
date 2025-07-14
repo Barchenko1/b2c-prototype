@@ -27,9 +27,8 @@ import com.b2c.prototype.modal.entity.review.ReviewStatus;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.finder.factory.ParameterFactory;
-import com.tm.core.process.dao.identifier.IQueryService;
-import com.tm.core.process.dao.identifier.QueryService;
+import com.tm.core.process.dao.query.IQueryService;
+import com.tm.core.process.dao.query.QueryService;
 import org.hibernate.Session;
 
 import java.util.Collections;
@@ -37,7 +36,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
-import static com.b2c.prototype.util.Constant.ARTICULAR_ITEM_FULL;
 import static com.b2c.prototype.util.Constant.CHAR_SEQUENCE_CODE;
 import static com.b2c.prototype.util.Constant.POST_ID;
 import static com.b2c.prototype.util.Constant.REVIEW_COMMENT_ID;
@@ -162,10 +160,10 @@ public class SessionEntityFetcher implements ISessionEntityFetcher {
 
     @Override
     public ArticularItem fetchArticularItem(Session session, String articularId) {
-        return queryService.getGraphEntity(
+        return queryService.getNamedQueryEntity(
                 session,
                 ArticularItem.class,
-                ARTICULAR_ITEM_FULL,
+                "ArticularItem.full",
                 parameterFactory.createStringParameter(ARTICULAR_ID, articularId));
     }
 

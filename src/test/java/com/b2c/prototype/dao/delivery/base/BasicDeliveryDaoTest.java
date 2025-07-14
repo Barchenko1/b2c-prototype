@@ -5,12 +5,13 @@ import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
-import com.tm.core.process.dao.common.AbstractEntityDao;
-import com.tm.core.process.dao.identifier.QueryService;
+import com.tm.core.process.dao.common.session.AbstractSessionFactoryDao;
+import com.tm.core.process.dao.query.QueryService;
 import com.tm.core.finder.manager.EntityMappingManager;
 import com.tm.core.finder.manager.IEntityMappingManager;
 import com.tm.core.finder.parameter.Parameter;
 import com.tm.core.finder.table.EntityTable;
+import jakarta.persistence.EntityManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -210,7 +211,7 @@ class BasicDeliveryDaoTest extends AbstractCustomEntityDaoTest {
         Transaction transaction = mock(Transaction.class);
 
         try {
-            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionManagerField = AbstractSessionFactoryDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
@@ -231,10 +232,10 @@ class BasicDeliveryDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void saveEntityConsumer_success() {
         loadDataSet("/datasets/delivery/delivery/emptyDeliveryWithoutAddressDataSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             Delivery delivery = prepareToSaveDelivery();
-            s.persist(delivery.getAddress());
-            s.persist(delivery);
+            session.persist(delivery.getAddress());
+            session.persist(delivery);
         };
 
         dao.executeConsumer(consumer);
@@ -244,7 +245,7 @@ class BasicDeliveryDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void saveEntityConsumer_transactionFailure() {
         loadDataSet("/datasets/delivery/delivery/emptyDeliveryWithoutAddressDataSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             throw new RuntimeException();
         };
 
@@ -260,7 +261,7 @@ class BasicDeliveryDaoTest extends AbstractCustomEntityDaoTest {
     void updateEntity_success() {
         loadDataSet("/datasets/delivery/delivery/testDeliveryDataSet.yml");
         Supplier<Delivery> supplier = this::prepareToUpdateDelivery;
-        dao.updateEntity(supplier);
+        dao.mergeSupplier(supplier);
         verifyExpectedData("/datasets/delivery/delivery/updateDeliveryDataSet.yml");
     }
 
@@ -271,7 +272,7 @@ class BasicDeliveryDaoTest extends AbstractCustomEntityDaoTest {
         };
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            dao.updateEntity(supplier);
+            dao.mergeSupplier(supplier);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -280,9 +281,9 @@ class BasicDeliveryDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void updateEntityConsumer_success() {
         loadDataSet("/datasets/delivery/delivery/testDeliveryDataSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             Delivery deliveryToUpdate = prepareToUpdateDelivery();
-            s.merge(deliveryToUpdate);
+            session.merge(deliveryToUpdate);
         };
         dao.executeConsumer(consumer);
         verifyExpectedData("/datasets/delivery/delivery/updateDeliveryDataSet.yml");
@@ -291,9 +292,9 @@ class BasicDeliveryDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void updateEntityConsumer_transactionFailure() {
         loadDataSet("/datasets/delivery/delivery/testDeliveryDataSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             Delivery delivery = prepareToUpdateDelivery();
-            s.merge(delivery);
+            session.merge(delivery);
             throw new RuntimeException();
         };
 
@@ -305,21 +306,12 @@ class BasicDeliveryDaoTest extends AbstractCustomEntityDaoTest {
     }
 
     @Test
-    void findEntityAndDelete_success() {
-        loadDataSet("/datasets/delivery/delivery/testDeliveryDataSet.yml");
-        Parameter parameter = new Parameter("id", 1);
-
-        dao.findEntityAndDelete(parameter);
-        verifyExpectedData("/datasets/delivery/delivery/emptyDeliveryWithAddressDataSet.yml");
-    }
-
-    @Test
     void deleteEntityByConsumer_success() {
         loadDataSet("/datasets/delivery/delivery/testDeliveryDataSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             Delivery delivery = prepareTestDelivery();
-            s.remove(delivery.getAddress());
-            s.remove(delivery);
+            session.remove(delivery.getAddress());
+            session.remove(delivery);
         };
 
         dao.executeConsumer(consumer);
@@ -329,7 +321,7 @@ class BasicDeliveryDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void deleteEntityByConsumer_transactionFailure() {
         loadDataSet("/datasets/delivery/delivery/testDeliveryDataSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             throw new RuntimeException();
         };
 
@@ -357,7 +349,7 @@ class BasicDeliveryDaoTest extends AbstractCustomEntityDaoTest {
         Transaction transaction = mock(Transaction.class);
 
         try {
-            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionManagerField = AbstractSessionFactoryDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
@@ -375,42 +367,6 @@ class BasicDeliveryDaoTest extends AbstractCustomEntityDaoTest {
         });
 
         assertEquals(RuntimeException.class, exception.getClass());
-    }
-
-    @Test
-    void deleteEntity_transactionFailure() {
-        loadDataSet("/datasets/delivery/delivery/testDeliveryDataSet.yml");
-        Delivery delivery = new Delivery();
-
-        Parameter parameter = new Parameter("id", 1L);
-
-        SessionFactory sessionFactory = mock(SessionFactory.class);
-        Session session = mock(Session.class);
-        Transaction transaction = mock(Transaction.class);
-        NativeQuery<Delivery> nativeQuery = mock(NativeQuery.class);
-
-        try {
-            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
-            sessionManagerField.setAccessible(true);
-            sessionManagerField.set(dao, sessionFactory);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        when(sessionFactory.openSession()).thenReturn(session);
-        when(session.beginTransaction()).thenReturn(transaction);
-//        when(session.createNativeQuery(anyString(), eq(Delivery.class))).thenReturn(nativeQuery);
-        when(nativeQuery.getSingleResult()).thenReturn(delivery);
-        doThrow(new RuntimeException()).when(session).remove(delivery);
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.findEntityAndDelete(parameter);
-        });
-
-        assertEquals(RuntimeException.class, exception.getClass());
-        verify(transaction).rollback();
-        verify(transaction, never()).commit();
-        verify(session).close();
     }
 
     @Test

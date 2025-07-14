@@ -9,10 +9,14 @@ import com.b2c.prototype.manager.post.IPostManager;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.util.PostUtil;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.identifier.IQueryService;
-import com.tm.core.process.manager.common.EntityOperationManager;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
+import com.tm.core.process.dao.query.IQueryService;
+import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
+import com.tm.core.process.manager.common.operator.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
+import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Session;
 
 import java.util.List;
 
@@ -28,16 +32,16 @@ import static com.b2c.prototype.util.PostUtil.postMap;
 @Slf4j
 public class PostManager implements IPostManager {
 
-    private final IEntityOperationManager entityOperationManager;
+    private final ITransactionEntityOperationManager entityOperationManager;
     private final IQueryService queryService;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public PostManager(IPostDao postDao,
+    public PostManager(ITransactionEntityDao postDao,
                        IQueryService queryService,
                        ITransformationFunctionService transformationFunctionService,
                        IParameterFactory parameterFactory) {
-        this.entityOperationManager = new EntityOperationManager(postDao);
+        this.entityOperationManager = new TransactionEntityOperationManager(postDao);
         this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
@@ -46,7 +50,7 @@ public class PostManager implements IPostManager {
     @Override
     public void savePost(String articularId, PostDto postDto) {
         entityOperationManager.executeConsumer(session -> {
-            Post newPost = transformationFunctionService.getEntity(session, Post.class, postDto);
+            Post newPost = transformationFunctionService.getEntity((Session) session, Post.class, postDto);
             Item item = queryService.getNamedQueryEntity(
                     session,
                     Item.class,
@@ -61,7 +65,7 @@ public class PostManager implements IPostManager {
     @Override
     public void updatePost(String articularId, String postId, PostDto postDto) {
         entityOperationManager.executeConsumer(session -> {
-            Post newPost = transformationFunctionService.getEntity(session, Post.class, postDto);
+            Post newPost = transformationFunctionService.getEntity((Session) session, Post.class, postDto);
             Item item = queryService.getNamedQueryEntity(
                     session,
                     Item.class,

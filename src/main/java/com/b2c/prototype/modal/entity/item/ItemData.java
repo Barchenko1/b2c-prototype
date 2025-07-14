@@ -11,11 +11,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.NamedAttributeNode;
-import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
-import jakarta.persistence.NamedSubgraph;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -32,46 +29,6 @@ import java.util.Set;
 
 @Entity
 @Table(name = "item_data")
-@NamedEntityGraph(
-        name = "itemData.full",
-        attributeNodes = {
-                @NamedAttributeNode(value = "category"),
-                @NamedAttributeNode(value = "itemType"),
-                @NamedAttributeNode(value = "brand"),
-                @NamedAttributeNode(value = "articularItemSet", subgraph = "articularItem.subgraph")
-        },
-        subgraphs = {
-                @NamedSubgraph(
-                        name = "articularItem.subgraph",
-                        attributeNodes = {
-                                @NamedAttributeNode("articularId"),
-                                @NamedAttributeNode(value = "optionItems", subgraph = "optionItem.subgraph"),
-                                @NamedAttributeNode(value = "fullPrice", subgraph = "price.subgraph"),
-                                @NamedAttributeNode(value = "totalPrice", subgraph = "price.subgraph"),
-                                @NamedAttributeNode(value = "status"),
-                                @NamedAttributeNode(value ="discount", subgraph = "discount.subgraph")
-                        }
-                ),
-                @NamedSubgraph(
-                        name = "price.subgraph",
-                        attributeNodes = {
-                                @NamedAttributeNode("currency")
-                        }
-                ),
-                @NamedSubgraph(
-                        name = "optionItem.subgraph",
-                        attributeNodes = {
-                                @NamedAttributeNode("optionGroup"),
-                        }
-                ),
-                @NamedSubgraph(
-                        name = "discount.subgraph",
-                        attributeNodes = {
-                                @NamedAttributeNode("currency")
-                        }
-                )
-        }
-)
 @NamedQueries({
         @NamedQuery(
                 name = "ItemData.full",
@@ -80,6 +37,41 @@ import java.util.Set;
         @NamedQuery(
                 name = "ItemData.findByValue",
                 query = "SELECT d FROM ItemData d WHERE d.itemId = :itemId"
+        ),
+        @NamedQuery(
+                name = "ItemData.findAllWithFullRelations",
+                query = "SELECT DISTINCT id FROM ItemData id " +
+                        "LEFT JOIN FETCH id.category c " +
+                        "LEFT JOIN FETCH id.itemType it " +
+                        "LEFT JOIN FETCH id.brand b " +
+                        "LEFT JOIN FETCH id.articularItemSet ai " +
+                        "LEFT JOIN FETCH ai.optionItems oi " +
+                        "LEFT JOIN FETCH oi.optionGroup og " +
+                        "LEFT JOIN FETCH ai.fullPrice fp " +
+                        "LEFT JOIN FETCH fp.currency fpc " +
+                        "LEFT JOIN FETCH ai.totalPrice tp " +
+                        "LEFT JOIN FETCH tp.currency tpc " +
+                        "LEFT JOIN FETCH ai.discount d " +
+                        "LEFT JOIN FETCH d.currency dc " +
+                        "LEFT JOIN FETCH d.articularItemList dai"
+        ),
+        @NamedQuery(
+                name = "ItemData.findItemDataWithFullRelations",
+                query = "SELECT DISTINCT id FROM ItemData id " +
+                        "LEFT JOIN FETCH id.category c " +
+                        "LEFT JOIN FETCH id.itemType it " +
+                        "LEFT JOIN FETCH id.brand b " +
+                        "LEFT JOIN FETCH id.articularItemSet ai " +
+                        "LEFT JOIN FETCH ai.optionItems oi " +
+                        "LEFT JOIN FETCH oi.optionGroup og " +
+                        "LEFT JOIN FETCH ai.fullPrice fp " +
+                        "LEFT JOIN FETCH fp.currency fpc " +
+                        "LEFT JOIN FETCH ai.totalPrice tp " +
+                        "LEFT JOIN FETCH tp.currency tpc " +
+                        "LEFT JOIN FETCH ai.discount d " +
+                        "LEFT JOIN FETCH d.currency dc " +
+                        "LEFT JOIN FETCH d.articularItemList dai " +
+                        "WHERE id.itemId = :itemId"
         )
 })
 @Data

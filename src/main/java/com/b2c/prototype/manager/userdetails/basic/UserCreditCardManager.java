@@ -10,10 +10,13 @@ import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.userdetails.IUserCreditCardManager;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.identifier.IQueryService;
-import com.tm.core.process.dao.query.IFetchHandler;
-import com.tm.core.process.manager.common.EntityOperationManager;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
+import com.tm.core.process.dao.query.IQueryService;
+import com.tm.core.process.dao.IFetchHandler;
+import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
+import com.tm.core.process.manager.common.operator.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
+import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,18 +29,18 @@ public class UserCreditCardManager implements IUserCreditCardManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserCreditCardManager.class);
 
-    private final IEntityOperationManager entityOperationManager;
+    private final ITransactionEntityOperationManager entityOperationManager;
     private final IQueryService queryService;
     private final IFetchHandler fetchHandler;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public UserCreditCardManager(ICreditCardDao creditCardDao,
+    public UserCreditCardManager(ITransactionEntityDao creditCardDao,
                                  IQueryService queryService,
                                  IFetchHandler fetchHandler,
                                  ITransformationFunctionService transformationFunctionService,
                                  IParameterFactory parameterFactory) {
-        this.entityOperationManager = new EntityOperationManager(creditCardDao);
+        this.entityOperationManager = new TransactionEntityOperationManager(creditCardDao);
         this.queryService = queryService;
         this.fetchHandler = fetchHandler;
         this.transformationFunctionService = transformationFunctionService;
@@ -161,7 +164,7 @@ public class UserCreditCardManager implements IUserCreditCardManager {
 
     @Override
     public ResponseUserCreditCardDto getDefaultUserCreditCard(String userId) {
-        UserDetails userDetails = fetchHandler.getNamedQueryEntity(
+        UserDetails userDetails = fetchHandler.getNamedQueryEntityClose(
                 UserDetails.class,
                 "UserDetails.findUserCreditCardsByUserId",
                 parameterFactory.createStringParameter(USER_ID, userId));
@@ -175,7 +178,7 @@ public class UserCreditCardManager implements IUserCreditCardManager {
 
     @Override
     public List<ResponseUserCreditCardDto> getCreditCardListByUserId(String userId) {
-        UserDetails userDetails = fetchHandler.getNamedQueryEntity(
+        UserDetails userDetails = fetchHandler.getNamedQueryEntityClose(
                 UserDetails.class,
                 "UserDetails.findUserCreditCardsByUserId",
                 parameterFactory.createStringParameter(USER_ID, userId));
@@ -187,10 +190,13 @@ public class UserCreditCardManager implements IUserCreditCardManager {
 
     @Override
     public List<ResponseCreditCardDto> getAllCreditCardByCardNumber(String cardNumber) {
-        return entityOperationManager.getSubNamedQueryEntityDtoList(
+        List<CreditCard> creditCards = fetchHandler.getNamedQueryEntityListClose(
+                CreditCard.class,
                 "UserCreditCard.findByCreditCardNumber",
-                parameterFactory.createStringParameter("cardNumber", cardNumber),
-                transformationFunctionService.getTransformationFunction(CreditCard.class, ResponseCreditCardDto.class));
+                parameterFactory.createStringParameter("cardNumber", cardNumber));
+        return creditCards.stream()
+                .map(transformationFunctionService.getTransformationFunction(CreditCard.class, ResponseCreditCardDto.class))
+                .toList();
     }
 
 }

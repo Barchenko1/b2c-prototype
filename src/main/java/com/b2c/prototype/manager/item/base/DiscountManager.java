@@ -8,30 +8,32 @@ import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.item.IDiscountManager;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.query.IFetchHandler;
-import com.tm.core.process.manager.common.EntityOperationManager;
+import com.tm.core.process.dao.IFetchHandler;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
+import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
+import com.tm.core.process.manager.common.operator.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
+import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
+import org.hibernate.Session;
 
 import java.util.List;
 import java.util.Optional;
 
 import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 import static com.b2c.prototype.util.Constant.CHAR_SEQUENCE_CODE;
-import static com.b2c.prototype.util.Constant.ARTICULAR_ITEM_FIND_BY_DISCOUNT_NOT_NULL;
-import static com.b2c.prototype.util.Constant.ARTICULAR_ITEM_FIND_BY_DISCOUNT_CHAR_SEQUENCE_CODE;
 
 public class DiscountManager implements IDiscountManager {
 
-    private final IEntityOperationManager entityOperationManager;
+    private final ITransactionEntityOperationManager entityOperationManager;
     private final IFetchHandler fetchHandler;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public DiscountManager(IDiscountDao discountDao,
+    public DiscountManager(ITransactionEntityDao discountDao,
                            IFetchHandler fetchHandler,
                            ITransformationFunctionService transformationFunctionService,
                            IParameterFactory parameterFactory) {
-        this.entityOperationManager = new EntityOperationManager(discountDao);
+        this.entityOperationManager = new TransactionEntityOperationManager(discountDao);
         this.fetchHandler = fetchHandler;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
@@ -40,7 +42,7 @@ public class DiscountManager implements IDiscountManager {
     @Override
     public void saveDiscount(DiscountDto discountDto) {
         entityOperationManager.executeConsumer(session -> {
-            Discount discount = transformationFunctionService.getEntity(session, Discount.class, discountDto);
+            Discount discount = transformationFunctionService.getEntity((Session) session, Discount.class, discountDto);
             session.merge(discount);
         });
     }
@@ -51,16 +53,16 @@ public class DiscountManager implements IDiscountManager {
             if (discountDto.getCharSequenceCode() == null) {
                 throw new RuntimeException("Discount code is null");
             }
-            ArticularItem articularItem = fetchHandler.getGraphEntity(
+            ArticularItem articularItem = fetchHandler.getNamedQueryEntityClose(
                     ArticularItem.class,
-                    "articularItem.discount.currency",
+                    "ArticularItem.discount.currency",
                     parameterFactory.createStringParameter(ARTICULAR_ID, articularId));
 
             Discount discount = (Discount) Optional.ofNullable(discountDto.getCharSequenceCode())
-                    .flatMap(code -> entityOperationManager.getNamedQueryOptionalEntity(
+                    .flatMap(code -> entityOperationManager.getNamedQueryOptionalEntityClose(
                             "Discount.currency",
                             parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, code)))
-                    .orElseGet(() -> transformationFunctionService.getEntity(session, Discount.class, discountDto));
+                    .orElseGet(() -> transformationFunctionService.getEntity((Session) session, Discount.class, discountDto));
 
             if (articularItem.getDiscount() != null) {
                 discount.setId(articularItem.getDiscount().getId());
@@ -77,8 +79,8 @@ public class DiscountManager implements IDiscountManager {
             if (discountDto.getCharSequenceCode() == null) {
                 throw new RuntimeException("Discount code is null");
             }
-            Discount newDiscount = transformationFunctionService.getEntity(session, Discount.class, discountDto);
-            Discount oldDiscount = entityOperationManager.getNamedQueryEntity(
+            Discount newDiscount = transformationFunctionService.getEntity((Session) session, Discount.class, discountDto);
+            Discount oldDiscount = entityOperationManager.getNamedQueryEntityClose(
                     "Discount.currency",
                     parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, charSequenceCode));
             newDiscount.setId(oldDiscount.getId());
@@ -89,7 +91,7 @@ public class DiscountManager implements IDiscountManager {
     @Override
     public void changeDiscountStatus(DiscountStatusDto discountStatusDto) {
         entityOperationManager.executeConsumer(session -> {
-            Discount currencyDiscount = entityOperationManager.getNamedQueryEntity(
+            Discount currencyDiscount = entityOperationManager.getNamedQueryEntityClose(
                     "Discount.currency",
                     parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, discountStatusDto.getCharSequenceCode()));
             currencyDiscount.setActive(discountStatusDto.isActive());
@@ -100,9 +102,9 @@ public class DiscountManager implements IDiscountManager {
     @Override
     public void deleteDiscount(String charSequenceCode) {
         entityOperationManager.executeConsumer(session -> {
-            List<ArticularItem> articularItemList = fetchHandler.getNamedQueryEntityList(
+            List<ArticularItem> articularItemList = fetchHandler.getNamedQueryEntityListClose(
                     ArticularItem.class,
-                    ARTICULAR_ITEM_FIND_BY_DISCOUNT_CHAR_SEQUENCE_CODE,
+                    "ArticularItem.findByDiscountCharSequenceCode",
                     parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, charSequenceCode));
             Discount discount = articularItemList.get(0).getDiscount();
             articularItemList.forEach(itemDataOption -> {
@@ -115,9 +117,9 @@ public class DiscountManager implements IDiscountManager {
 
     @Override
     public DiscountDto getDiscount(String charSequenceCode) {
-        List<ArticularItem> articularItemList = fetchHandler.getNamedQueryEntityList(
+        List<ArticularItem> articularItemList = fetchHandler.getNamedQueryEntityListClose(
                 ArticularItem.class,
-                ARTICULAR_ITEM_FIND_BY_DISCOUNT_CHAR_SEQUENCE_CODE,
+                "ArticularItem.findByDiscountCharSequenceCode",
                 parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, charSequenceCode));
 //        return articularItemList.stream()
 //                .map(e-> new DiscountDto())
@@ -129,9 +131,9 @@ public class DiscountManager implements IDiscountManager {
 
     @Override
     public List<DiscountDto> getDiscounts() {
-        List<ArticularItem> articularItemList = fetchHandler.getNamedQueryEntityList(
+        List<ArticularItem> articularItemList = fetchHandler.getNamedQueryEntityListClose(
                 ArticularItem.class,
-                ARTICULAR_ITEM_FIND_BY_DISCOUNT_NOT_NULL);
+                "ArticularItem.findByDiscountNotNull");
 
         return (List<DiscountDto>) transformationFunctionService.getCollectionTransformationCollectionFunction(ArticularItem.class, DiscountDto.class, "list")
                 .apply(articularItemList);

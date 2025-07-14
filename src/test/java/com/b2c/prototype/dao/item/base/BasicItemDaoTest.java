@@ -16,12 +16,13 @@ import com.b2c.prototype.modal.entity.post.Post;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.modal.entity.review.Review;
-import com.tm.core.process.dao.common.AbstractEntityDao;
-import com.tm.core.process.dao.identifier.QueryService;
+import com.tm.core.process.dao.common.session.AbstractSessionFactoryDao;
+import com.tm.core.process.dao.query.QueryService;
 import com.tm.core.finder.manager.EntityMappingManager;
 import com.tm.core.finder.manager.IEntityMappingManager;
 import com.tm.core.finder.parameter.Parameter;
 import com.tm.core.finder.table.EntityTable;
+import jakarta.persistence.EntityManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -364,7 +365,7 @@ class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
         Transaction transaction = mock(Transaction.class);
 
         try {
-            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionManagerField = AbstractSessionFactoryDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
@@ -385,9 +386,9 @@ class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void saveEntityConsumer_success() {
         loadDataSet("/datasets/item/item/emptyItemSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             Item item = prepareToSaveItem();
-            s.persist(item);
+            session.persist(item);
         };
 
         dao.executeConsumer(consumer);
@@ -397,7 +398,7 @@ class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void saveEntityConsumer_transactionFailure() {
         loadDataSet("/datasets/item/item/emptyItemSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             throw new RuntimeException();
         };
 
@@ -413,7 +414,7 @@ class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
     void updateEntity_success() {
         loadDataSet("/datasets/item/item/testItemSet.yml");
         Supplier<Item> itemSupplier = this::prepareToUpdateItem;
-        dao.updateEntity(itemSupplier);
+        dao.mergeSupplier(itemSupplier);
         verifyExpectedData("/datasets/item/item/updateItemSet.yml");
     }
 
@@ -424,7 +425,7 @@ class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
         };
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            dao.updateEntity(itemSupplier);
+            dao.mergeEntity(itemSupplier);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -433,9 +434,9 @@ class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void updateEntityConsumer_success() {
         loadDataSet("/datasets/item/item/testItemSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             Item itemToUpdate = prepareToUpdateItem();
-            s.merge(itemToUpdate);
+            session.merge(itemToUpdate);
         };
         dao.executeConsumer(consumer);
         verifyExpectedData("/datasets/item/item/updateItemSet.yml");
@@ -444,32 +445,23 @@ class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void updateEntityConsumer_transactionFailure() {
         loadDataSet("/datasets/item/item/testItemSet.yml");
-        Consumer<Session> itemConsumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             throw new RuntimeException();
         };
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.executeConsumer(itemConsumer);
+            dao.executeConsumer(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
     }
 
     @Test
-    void deleteEntity_success() {
-        loadDataSet("/datasets/item/item/testItemSet.yml");
-        Parameter parameter = new Parameter("id", 1);
-
-        dao.findEntityAndDelete(parameter);
-        verifyExpectedData("/datasets/item/item/emptyItemSet.yml");
-    }
-
-    @Test
     void deleteEntityByConsumer_success() {
         loadDataSet("/datasets/item/item/testItemSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             Item item = prepareTestItem();
-            s.remove(item);
+            session.remove(item);
         };
 
         dao.executeConsumer(consumer);
@@ -479,7 +471,7 @@ class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void deleteEntityByConsumer_transactionFailure() {
         loadDataSet("/datasets/item/item/testItemSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             throw new RuntimeException();
         };
 
@@ -507,7 +499,7 @@ class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
         Transaction transaction = mock(Transaction.class);
 
         try {
-            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionManagerField = AbstractSessionFactoryDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
@@ -525,42 +517,6 @@ class BasicItemDaoTest extends AbstractCustomEntityDaoTest {
         });
 
         assertEquals(RuntimeException.class, exception.getClass());
-    }
-
-    @Test
-    void deleteEntity_transactionFailure() {
-        loadDataSet("/datasets/item/item/testItemSet.yml");
-        Item item = new Item();
-
-        Parameter parameter = new Parameter("id", 1L);
-
-        SessionFactory sessionFactory = mock(SessionFactory.class);
-        Session session = mock(Session.class);
-        Transaction transaction = mock(Transaction.class);
-        NativeQuery<Item> nativeQuery = mock(NativeQuery.class);
-
-        try {
-            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
-            sessionManagerField.setAccessible(true);
-            sessionManagerField.set(dao, sessionFactory);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        when(sessionFactory.openSession()).thenReturn(session);
-        when(session.beginTransaction()).thenReturn(transaction);
-//        when(session.createNativeQuery(anyString(), eq(Item.class))).thenReturn(nativeQuery);
-        when(nativeQuery.getSingleResult()).thenReturn(item);
-        doThrow(new RuntimeException()).when(session).remove(item);
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.findEntityAndDelete(parameter);
-        });
-
-        assertEquals(RuntimeException.class, exception.getClass());
-        verify(transaction).rollback();
-        verify(transaction, never()).commit();
-        verify(session).close();
     }
 
     @Test

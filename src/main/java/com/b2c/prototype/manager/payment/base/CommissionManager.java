@@ -1,6 +1,5 @@
 package com.b2c.prototype.manager.payment.base;
 
-import com.b2c.prototype.dao.payment.IMinMaxCommissionDao;
 import com.b2c.prototype.manager.payment.ICommissionManager;
 import com.b2c.prototype.modal.constant.CommissionType;
 import com.b2c.prototype.modal.dto.payload.commission.MinMaxCommissionDto;
@@ -16,10 +15,11 @@ import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.transform.help.calculate.IPriceCalculationService;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.identifier.IQueryService;
-import com.tm.core.process.dao.query.IFetchHandler;
-import com.tm.core.process.manager.common.EntityOperationManager;
-import com.tm.core.process.manager.common.IEntityOperationManager;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
+import com.tm.core.process.dao.query.IQueryService;
+import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
+import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
+import jakarta.persistence.EntityManager;
 import org.hibernate.Session;
 
 import java.time.format.DateTimeFormatter;
@@ -33,22 +33,19 @@ public class CommissionManager implements ICommissionManager {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    private final IEntityOperationManager entityOperationManager;
+    private final ITransactionEntityOperationManager entityOperationManager;
     private final IQueryService queryService;
-    private final IFetchHandler fetchHandler;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
     private final IPriceCalculationService priceCalculationService;
 
-    public CommissionManager(IMinMaxCommissionDao minMaxCommissionDao,
+    public CommissionManager(ITransactionEntityDao appCommissionDao,
                              IQueryService queryService,
-                             IFetchHandler fetchHandler,
                              ITransformationFunctionService transformationFunctionService,
                              IParameterFactory parameterFactory,
                              IPriceCalculationService priceCalculationService) {
-        this.entityOperationManager = new EntityOperationManager(minMaxCommissionDao);
+        this.entityOperationManager = new TransactionEntityOperationManager(appCommissionDao);
         this.queryService = queryService;
-        this.fetchHandler = fetchHandler;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
         this.priceCalculationService = priceCalculationService;
@@ -58,7 +55,7 @@ public class CommissionManager implements ICommissionManager {
     public void saveCommission(MinMaxCommissionDto minMaxCommissionDto) {
         entityOperationManager.executeConsumer(session -> {
             MinMaxCommission minMaxCommission = transformationFunctionService.getEntity(
-                    session, MinMaxCommission.class, minMaxCommissionDto);
+                    (Session) session, MinMaxCommission.class, minMaxCommissionDto);
             session.merge(minMaxCommission);
         });
     }
@@ -67,7 +64,7 @@ public class CommissionManager implements ICommissionManager {
     public void updateCommission(MinMaxCommissionDto minMaxCommissionDto) {
         entityOperationManager.executeConsumer(session -> {
             MinMaxCommission newMinMaxCommission = transformationFunctionService.getEntity(
-                    session, MinMaxCommission.class, minMaxCommissionDto);
+                    (Session) session, MinMaxCommission.class, minMaxCommissionDto);
             CommissionType commissionType = CommissionType.valueOf(minMaxCommissionDto.getCommissionType());
             MinMaxCommission minMaxCommission = queryService.getNamedQueryOptionalEntity(
                     session,
@@ -109,7 +106,7 @@ public class CommissionManager implements ICommissionManager {
 
     @Override
     public List<ResponseMinMaxCommissionDto> getCommissionList() {
-        List<MinMaxCommission> minMaxCommissionList = entityOperationManager.getNamedQueryEntityList(
+        List<MinMaxCommission> minMaxCommissionList = entityOperationManager.getNamedQueryEntityListClose(
                 "MinMaxCommission.getCommissionList");
 
         return minMaxCommissionList.stream()
@@ -120,7 +117,7 @@ public class CommissionManager implements ICommissionManager {
     @Override
     public ResponseMinMaxCommissionDto getCommissionByCommissionType(String commissionTypeValue) {
         CommissionType commissionType = CommissionType.valueOf(commissionTypeValue.toUpperCase());
-        Optional<MinMaxCommission> optionalMinMaxCommission = entityOperationManager.getNamedQueryOptionalEntity(
+        Optional<MinMaxCommission> optionalMinMaxCommission = entityOperationManager.getNamedQueryOptionalEntityClose(
                 "MinMaxCommission.findByCommissionType",
                 parameterFactory.createEnumParameter("commissionType", commissionType));
 
@@ -131,15 +128,15 @@ public class CommissionManager implements ICommissionManager {
 
     @Override
     public ResponseBuyerCommissionInfoDto getBuyerCommission(List<ArticularItemQuantityDto> articularItemQuantityDtoList) {
-        return fetchHandler.getTransactionEntity(session -> {
-            Optional<MinMaxCommission> optionalMinMaxCommission = getOptionalMinMaxCommission(session);
+        return entityOperationManager.executeFunction(entityManager -> {
+            Optional<MinMaxCommission> optionalMinMaxCommission = getOptionalMinMaxCommission(entityManager);
 
             List<String> articularIdList = articularItemQuantityDtoList.stream()
                     .map(ArticularItemQuantityDto::getArticularId)
                     .toList();
 
             List<ArticularItem> articularItems = queryService.getNamedQueryEntityList(
-                    session,
+                    entityManager,
                     ArticularItem.class,
                     "ArticularItem.findByArticularIds",
                     parameterFactory.createStringParameterList("articularIds", articularIdList));
@@ -164,12 +161,12 @@ public class CommissionManager implements ICommissionManager {
         });
     }
 
-    private Optional<MinMaxCommission> getOptionalMinMaxCommission(Session session) {
+    private Optional<MinMaxCommission> getOptionalMinMaxCommission(EntityManager session) {
         return queryService.getNamedQueryOptionalEntity(
-                        session,
-                        MinMaxCommission.class,
-                        "MinMaxCommission.findByCommissionType",
-                        parameterFactory.createEnumParameter("commissionType", CommissionType.BUYER));
+                session,
+                MinMaxCommission.class,
+                "MinMaxCommission.findByCommissionType",
+                parameterFactory.createEnumParameter("commissionType", CommissionType.BUYER));
     }
 
     private void validateCurrencyMatch(MinMaxCommission commission, Price totalPrice) {

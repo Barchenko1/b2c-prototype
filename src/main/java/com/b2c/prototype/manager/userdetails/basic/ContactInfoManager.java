@@ -8,9 +8,13 @@ import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.userdetails.IContactInfoManager;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.query.IFetchHandler;
-import com.tm.core.process.manager.common.EntityOperationManager;
+import com.tm.core.process.dao.IFetchHandler;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
+import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
+import com.tm.core.process.manager.common.operator.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
+import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,16 +27,16 @@ public class ContactInfoManager implements IContactInfoManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ContactInfoManager.class);
 
-    private final IEntityOperationManager entityOperationManager;
+    private final ITransactionEntityOperationManager entityOperationManager;
     private final IFetchHandler fetchHandler;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public ContactInfoManager(IContactInfoDao contactInfoDao,
+    public ContactInfoManager(ITransactionEntityDao contactInfoDao,
                               IFetchHandler fetchHandler,
                               ITransformationFunctionService transformationFunctionService,
                               IParameterFactory parameterFactory) {
-        this.entityOperationManager = new EntityOperationManager(contactInfoDao);
+        this.entityOperationManager = new TransactionEntityOperationManager(contactInfoDao);
         this.fetchHandler = fetchHandler;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
@@ -41,11 +45,11 @@ public class ContactInfoManager implements IContactInfoManager {
     @Override
     public void saveUpdateContactInfoByUserId(String userId, ContactInfoDto contactInfoDto) {
         entityOperationManager.executeConsumer(session -> {
-            UserDetails userDetails = fetchHandler.getNamedQueryEntity(
+            UserDetails userDetails = fetchHandler.getNamedQueryEntityClose(
                     UserDetails.class,
                     "UserDetails.findFullUserDetailsByUserId",
                     parameterFactory.createStringParameter(USER_ID, userId));
-            ContactInfo newContactInfo = transformationFunctionService.getEntity(session, ContactInfo.class, contactInfoDto);
+            ContactInfo newContactInfo = transformationFunctionService.getEntity((Session) session, ContactInfo.class, contactInfoDto);
             ContactInfo contactInfo = userDetails.getContactInfo();
             if (contactInfo != null) {
                 newContactInfo.setId(contactInfo.getId());
@@ -58,7 +62,7 @@ public class ContactInfoManager implements IContactInfoManager {
     @Override
     public void deleteContactInfoByUserId(String userId) {
         entityOperationManager.executeConsumer(session -> {
-            UserDetails userDetails = fetchHandler.getNamedQueryEntity(
+            UserDetails userDetails = fetchHandler.getNamedQueryEntityClose(
                     UserDetails.class,
                     "UserDetails.findFullUserDetailsByUserId",
                     parameterFactory.createStringParameter(USER_ID, userId));
@@ -73,7 +77,7 @@ public class ContactInfoManager implements IContactInfoManager {
 
     @Override
     public ContactInfoDto getContactInfoByUserId(String userId) {
-        UserDetails userDetails = fetchHandler.getNamedQueryEntity(
+        UserDetails userDetails = fetchHandler.getNamedQueryEntityClose(
                 UserDetails.class,
                 "UserDetails.findFullUserDetailsByUserId",
                 parameterFactory.createStringParameter(USER_ID, userId));
@@ -86,13 +90,13 @@ public class ContactInfoManager implements IContactInfoManager {
     @Override
     public void saveUpdateContactInfoByOrderId(String orderId, ContactInfoDto contactInfoDto) {
         entityOperationManager.executeConsumer(session -> {
-            DeliveryArticularItemQuantity orderItemDataOption = fetchHandler.getNamedQueryEntity(
+            DeliveryArticularItemQuantity orderItemDataOption = fetchHandler.getNamedQueryEntityClose(
                     DeliveryArticularItemQuantity.class,
                     "DeliveryArticularItemQuantity.findByOrderIdWithBeneficiaries",
                     parameterFactory.createStringParameter(ORDER_ID, orderId));
 
             ContactInfo existingBeneficiary = orderItemDataOption.getBeneficiary();
-            ContactInfo newBeneficiary = transformationFunctionService.getEntity(session, ContactInfo.class, contactInfoDto);
+            ContactInfo newBeneficiary = transformationFunctionService.getEntity((Session) session, ContactInfo.class, contactInfoDto);
 
             if (existingBeneficiary != null) {
                 newBeneficiary.setId(existingBeneficiary.getId());
@@ -107,7 +111,7 @@ public class ContactInfoManager implements IContactInfoManager {
     @Override
     public void deleteContactInfoByOrderId(String orderId) {
         entityOperationManager.executeConsumer(session -> {
-            DeliveryArticularItemQuantity orderItemDataOption = fetchHandler.getNamedQueryEntity(
+            DeliveryArticularItemQuantity orderItemDataOption = fetchHandler.getNamedQueryEntityClose(
                     DeliveryArticularItemQuantity.class,
                     "DeliveryArticularItemQuantity.findByOrderIdWithBeneficiaries",
                     parameterFactory.createStringParameter(ORDER_ID, orderId));
@@ -118,7 +122,7 @@ public class ContactInfoManager implements IContactInfoManager {
 
     @Override
     public ContactInfoDto getContactInfoByOrderId(String orderId) {
-        DeliveryArticularItemQuantity deliveryArticularItemQuantity = fetchHandler.getNamedQueryEntity(
+        DeliveryArticularItemQuantity deliveryArticularItemQuantity = fetchHandler.getNamedQueryEntityClose(
                 DeliveryArticularItemQuantity.class,
                 "DeliveryArticularItemQuantity.findByOrderIdWithBeneficiaries",
                 parameterFactory.createStringParameter(ORDER_ID, orderId));

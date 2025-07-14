@@ -13,10 +13,12 @@ import com.b2c.prototype.modal.entity.review.ReviewStatus;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.identifier.IQueryService;
-import com.tm.core.process.dao.query.IFetchHandler;
-import com.tm.core.process.manager.common.EntityOperationManager;
-import com.tm.core.process.manager.common.IEntityOperationManager;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
+import com.tm.core.process.dao.query.IQueryService;
+import com.tm.core.process.dao.IFetchHandler;
+import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
+import com.tm.core.process.manager.common.operator.EntityOperationManager;
+import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
 import org.hibernate.Session;
 
 import java.util.List;
@@ -30,18 +32,18 @@ import static com.b2c.prototype.util.Util.getCurrentTimeMillis;
 
 public class ReviewManager implements IReviewManager {
 
-    private final IEntityOperationManager entityOperationManager;
+    private final ITransactionEntityOperationManager entityOperationManager;
     private final IQueryService queryService;
     private final IFetchHandler fetchHandler;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public ReviewManager(IReviewDao reviewDao,
+    public ReviewManager(ITransactionEntityDao reviewDao,
                          IQueryService queryService,
                          IFetchHandler fetchHandler,
                          ITransformationFunctionService transformationFunctionService,
                          IParameterFactory parameterFactory) {
-        this.entityOperationManager = new EntityOperationManager(reviewDao);
+        this.entityOperationManager = new TransactionEntityOperationManager(reviewDao);
         this.queryService = queryService;
         this.fetchHandler = fetchHandler;
         this.transformationFunctionService = transformationFunctionService;
@@ -51,9 +53,9 @@ public class ReviewManager implements IReviewManager {
     @Override
     public void saveReview(String articularId, String userId, ReviewDto reviewDto) {
         entityOperationManager.executeConsumer(session -> {
-            Item item = fetchItem(session, articularId);
-            Review newReview = transformationFunctionService.getEntity(session, Review.class, reviewDto);
-            UserDetails userDetails = fetchUserDetails(session, userId);
+            Item item = fetchItem((Session) session, articularId);
+            Review newReview = transformationFunctionService.getEntity((Session) session, Review.class, reviewDto);
+            UserDetails userDetails = fetchUserDetails((Session) session, userId);
             newReview.setUserDetails(userDetails);
             item.getReviews().add(newReview);
             session.merge(item);
@@ -63,9 +65,9 @@ public class ReviewManager implements IReviewManager {
     @Override
     public void updateReview(String articularId, String userId, String reviewId, ReviewDto reviewDto) {
         entityOperationManager.executeConsumer(session -> {
-            Item item = fetchItem(session, articularId);
-            Review review = transformationFunctionService.getEntity(session, Review.class, reviewDto);
-            UserDetails userDetails = fetchUserDetails(session, userId);
+            Item item = fetchItem((Session) session, articularId);
+            Review review = transformationFunctionService.getEntity((Session) session, Review.class, reviewDto);
+            UserDetails userDetails = fetchUserDetails((Session) session, userId);
             review.setUserDetails(userDetails);
             item.getReviews().stream()
                     .filter(r -> r.getReviewId().equals(reviewId))
@@ -83,7 +85,7 @@ public class ReviewManager implements IReviewManager {
     @Override
     public void deleteReview(String articularId, String reviewId) {
         entityOperationManager.executeConsumer(session -> {
-            Item item = fetchItem(session, articularId);
+            Item item = fetchItem((Session) session, articularId);
 
             item.getReviews().stream()
                     .filter(review -> review.getReviewId().equals(reviewId))
@@ -96,7 +98,7 @@ public class ReviewManager implements IReviewManager {
     @Override
     public void deleteReview(String articularId, String userId, String reviewId) {
         entityOperationManager.executeConsumer(session -> {
-            Item item = fetchItem(session, articularId);
+            Item item = fetchItem((Session) session, articularId);
 
             item.getReviews().stream()
                     .filter(review -> review.getReviewId().equals(reviewId))
@@ -114,12 +116,12 @@ public class ReviewManager implements IReviewManager {
     @Override
     public void changeReviewStatus(String articularId, String reviewId, String statusValue) {
         entityOperationManager.executeConsumer(session -> {
-            Item item = fetchItem(session, articularId);
+            Item item = fetchItem((Session) session, articularId);
             item.getReviews().stream()
                     .filter(review -> review.getReviewId().equals(reviewId))
                     .findFirst()
                     .ifPresent(review -> {
-                        ReviewStatus reviewStatus = fetchReviewStatus(session, statusValue);
+                        ReviewStatus reviewStatus = fetchReviewStatus((Session) session, statusValue);
                         review.setStatus(reviewStatus);
                         session.merge(review);
                     });
@@ -128,7 +130,7 @@ public class ReviewManager implements IReviewManager {
 
     @Override
     public List<ResponseReviewDto> getReviewListByArticularId(String articularId) {
-        Item item = fetchHandler.getNamedQueryEntity(
+        Item item = fetchHandler.getNamedQueryEntityClose(
                 Item.class,
                 "Item.findItemWithReviewCommentsByArticularId",
                 parameterFactory.createStringParameter(ARTICULAR_ID, articularId));
@@ -139,7 +141,7 @@ public class ReviewManager implements IReviewManager {
 
     @Override
     public List<ResponseReviewDto> getReviewListByUserId(String userId) {
-        List<Review> reviewList = fetchHandler.getNamedQueryEntityList(
+        List<Review> reviewList = fetchHandler.getNamedQueryEntityListClose(
                 Review.class,
                 "Review.findByUserId",
                 parameterFactory.createStringParameter(USER_ID, userId));
@@ -151,7 +153,7 @@ public class ReviewManager implements IReviewManager {
 
     @Override
     public ResponseReviewDto getReviewByArticularIdReviewId(String articularId, String reviewId) {
-        Item item = fetchHandler.getNamedQueryEntity(
+        Item item = fetchHandler.getNamedQueryEntityClose(
                 Item.class,
                 "Item.findItemWithReviewCommentsByArticularId",
                 parameterFactory.createStringParameter(ARTICULAR_ID, articularId));
@@ -165,12 +167,12 @@ public class ReviewManager implements IReviewManager {
     @Override
     public void addComment(String articularId, String userId, String reviewId, ReviewCommentDto reviewCommentDto) {
         entityOperationManager.executeConsumer(session -> {
-            Item item = fetchItem(session, articularId);
+            Item item = fetchItem((Session) session, articularId);
             item.getReviews().stream()
                     .filter(r -> r.getReviewId().equals(reviewId))
                     .findFirst()
                     .ifPresent(review -> {
-                        UserDetails userDetails = fetchUserDetails(session, userId);
+                        UserDetails userDetails = fetchUserDetails((Session) session, userId);
                         ReviewComment newReviewComment =
                                 transformationFunctionService.getEntity(ReviewComment.class, reviewCommentDto);
                         newReviewComment.setUserDetails(userDetails);
@@ -189,7 +191,7 @@ public class ReviewManager implements IReviewManager {
     @Override
     public void updateComment(String articularId, String reviewId, String commentId, ReviewCommentDto reviewCommentDto) {
         entityOperationManager.executeConsumer(session -> {
-            Item item = fetchItem(session, articularId);
+            Item item = fetchItem((Session) session, articularId);
             item.getReviews().stream()
                     .filter(r -> r.getReviewId().equals(reviewId))
                     .findFirst()
@@ -210,7 +212,7 @@ public class ReviewManager implements IReviewManager {
     @Override
     public void deleteComment(String articularId, String reviewId, String commentId) {
         entityOperationManager.executeConsumer(session -> {
-            Item item = fetchItem(session, articularId);
+            Item item = fetchItem((Session) session, articularId);
 
             item.getReviews().stream()
                     .filter(review -> review.getReviewId().equals(reviewId))
@@ -229,7 +231,7 @@ public class ReviewManager implements IReviewManager {
 
     @Override
     public List<ResponseReviewCommentDto> getCommentList(String articularId, String reviewId) {
-        Item item = fetchHandler.getNamedQueryEntity(
+        Item item = fetchHandler.getNamedQueryEntityClose(
                 Item.class,
                 "Item.findItemWithReviewCommentsByArticularId",
                 parameterFactory.createStringParameter(ARTICULAR_ID, articularId));

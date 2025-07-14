@@ -24,10 +24,13 @@ import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.order.ICustomerSingleDeliveryOrderManager;
 import com.b2c.prototype.transform.help.calculate.IPriceCalculationService;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.identifier.IQueryService;
-import com.tm.core.process.dao.query.IFetchHandler;
-import com.tm.core.process.manager.common.EntityOperationManager;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
+import com.tm.core.process.dao.query.IQueryService;
+import com.tm.core.process.dao.IFetchHandler;
+import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
+import com.tm.core.process.manager.common.operator.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
+import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
 import org.hibernate.Session;
 
 import java.util.List;
@@ -40,23 +43,17 @@ import static com.b2c.prototype.util.Util.getUUID;
 
 public class CustomerSingleDeliveryOrderManager implements ICustomerSingleDeliveryOrderManager {
 
-    private final IEntityOperationManager entityOperationManager;
-    private final IQueryService queryService;
-    private final IFetchHandler fetchHandler;
+    private final ITransactionEntityOperationManager entityOperationManager;
     private final ISessionEntityFetcher sessionEntityFetcher;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
     private final IPriceCalculationService priceCalculationService;
 
-    public CustomerSingleDeliveryOrderManager(ICustomerOrderDao orderItemDao,
-                                              IQueryService queryService,
-                                              IFetchHandler fetchHandler,
+    public CustomerSingleDeliveryOrderManager(ITransactionEntityDao orderItemDao,
                                               ISessionEntityFetcher sessionEntityFetcher,
                                               ITransformationFunctionService transformationFunctionService,
                                               IParameterFactory parameterFactory, IPriceCalculationService priceCalculationService) {
-        this.entityOperationManager = new EntityOperationManager(orderItemDao);
-        this.queryService = queryService;
-        this.fetchHandler = fetchHandler;
+        this.entityOperationManager = new TransactionEntityOperationManager(orderItemDao);
         this.sessionEntityFetcher = sessionEntityFetcher;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
@@ -66,18 +63,18 @@ public class CustomerSingleDeliveryOrderManager implements ICustomerSingleDelive
     @Override
     public void saveCustomerOrder(CustomerSingleDeliveryOrderDto customerSingleDeliveryOrderDto) {
         entityOperationManager.executeConsumer(session -> {
-            UserDetails userDetails = getUserDetails(session, customerSingleDeliveryOrderDto.getUser().getUserId());
-            OrderStatus orderStatus = sessionEntityFetcher.fetchOrderStatus(session, OrderStatusEnum.CREATED.name());
+            UserDetails userDetails = getUserDetails((Session) session, customerSingleDeliveryOrderDto.getUser().getUserId());
+            OrderStatus orderStatus = sessionEntityFetcher.fetchOrderStatus((Session) session, OrderStatusEnum.CREATED.name());
             List<ArticularItemQuantityPrice> articularItemQuantityPriceList = customerSingleDeliveryOrderDto.getArticularItemQuantityList().stream()
-                            .map(articularItemQuantityDto -> transformationFunctionService.getEntity(session, ArticularItemQuantityPrice.class, articularItemQuantityDto))
+                            .map(articularItemQuantityDto -> transformationFunctionService.getEntity((Session) session, ArticularItemQuantityPrice.class, articularItemQuantityDto))
                             .toList();
             Delivery delivery = transformationFunctionService
-                    .getEntity(session, Delivery.class, customerSingleDeliveryOrderDto.getDelivery());
+                    .getEntity((Session) session, Delivery.class, customerSingleDeliveryOrderDto.getDelivery());
             PaymentPriceDto paymentPriceDto =
                     getPaymentPriceDto(articularItemQuantityPriceList, customerSingleDeliveryOrderDto.getPayment());
-            Payment payment = mapPaymentPriceDtoToPayment().apply(session, paymentPriceDto);
-            ContactInfo contactInfo = transformationFunctionService.getEntity(session, ContactInfo.class, customerSingleDeliveryOrderDto.getContactInfo());
-            ContactInfo beneficiary = transformationFunctionService.getEntity(session, ContactInfo.class, customerSingleDeliveryOrderDto.getBeneficiary());
+            Payment payment = mapPaymentPriceDtoToPayment().apply((Session) session, paymentPriceDto);
+            ContactInfo contactInfo = transformationFunctionService.getEntity((Session) session, ContactInfo.class, customerSingleDeliveryOrderDto.getContactInfo());
+            ContactInfo beneficiary = transformationFunctionService.getEntity((Session) session, ContactInfo.class, customerSingleDeliveryOrderDto.getBeneficiary());
 
             CustomerSingleDeliveryOrder customerSingleDeliveryOrder = CustomerSingleDeliveryOrder.builder()
                     .orderId(getUUID())
@@ -99,11 +96,11 @@ public class CustomerSingleDeliveryOrderManager implements ICustomerSingleDelive
     @Override
     public void updateCustomerOrder(String orderId, CustomerSingleDeliveryOrderDto customerSingleDeliveryOrderDto) {
         entityOperationManager.executeConsumer(session -> {
-            CustomerSingleDeliveryOrder existingCustomerSingleDeliveryOrder = entityOperationManager.getNamedQueryEntity(
+            CustomerSingleDeliveryOrder existingCustomerSingleDeliveryOrder = entityOperationManager.getNamedQueryEntityClose(
                     "CustomerSingleDeliveryOrder.findByOrderIdWithPayment",
                     parameterFactory.createStringParameter(ORDER_ID, orderId));
             CustomerSingleDeliveryOrder newCustomerSingleDeliveryOrder =
-                    transformationFunctionService.getEntity(session, CustomerSingleDeliveryOrder.class, customerSingleDeliveryOrderDto);
+                    transformationFunctionService.getEntity((Session) session, CustomerSingleDeliveryOrder.class, customerSingleDeliveryOrderDto);
             existingCustomerSingleDeliveryOrder.setId(newCustomerSingleDeliveryOrder.getId());
             session.merge(existingCustomerSingleDeliveryOrder);
         });
@@ -111,17 +108,21 @@ public class CustomerSingleDeliveryOrderManager implements ICustomerSingleDelive
 
     @Override
     public void deleteCustomerOrder(String orderId) {
-        entityOperationManager.deleteEntityByParameter(
-                parameterFactory.createStringParameter(ORDER_ID, orderId));
+        entityOperationManager.executeConsumer(session -> {
+            CustomerSingleDeliveryOrder order = entityOperationManager.getNamedQueryEntityClose(
+                    "CustomerSingleDeliveryOrder.findByOrderIdWithPayment",
+                    parameterFactory.createStringParameter(ORDER_ID, orderId));
+            session.remove(order);
+        });
     }
 
     @Override
     public void updateCustomerOrderStatus(String orderId, String statusValue) {
         entityOperationManager.executeConsumer(session -> {
-            CustomerSingleDeliveryOrder existingCustomerSingleDeliveryOrder = entityOperationManager.getNamedQueryEntity(
+            CustomerSingleDeliveryOrder existingCustomerSingleDeliveryOrder = entityOperationManager.getNamedQueryEntityClose(
                     "CustomerSingleDeliveryOrder.findByOrderIdWithPayment",
                     parameterFactory.createStringParameter(ORDER_ID, orderId));
-            OrderStatus orderStatus = transformationFunctionService.getEntity(session, OrderStatus.class, orderId);
+            OrderStatus orderStatus = transformationFunctionService.getEntity((Session) session, OrderStatus.class, orderId);
             existingCustomerSingleDeliveryOrder.setStatus(orderStatus);
             session.merge(existingCustomerSingleDeliveryOrder);
         });

@@ -9,26 +9,31 @@ import com.b2c.prototype.dao.user.IUserDetailsDao;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.userdetails.IUserDetailsManager;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.query.IFetchHandler;
-import com.tm.core.process.manager.common.EntityOperationManager;
+import com.tm.core.process.dao.IFetchHandler;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
+import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
+import com.tm.core.process.manager.common.operator.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
+import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
+import org.hibernate.Session;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.b2c.prototype.util.Constant.USER_ID;
 
 public class UserDetailsManager implements IUserDetailsManager {
 
-    private final IEntityOperationManager entityOperationManager;
+    private final ITransactionEntityOperationManager entityOperationManager;
     private final ITransformationFunctionService transformationFunctionService;
     private final IFetchHandler fetchHandler;
     private final IParameterFactory parameterFactory;
 
-    public UserDetailsManager(IUserDetailsDao userDetailsDao,
+    public UserDetailsManager(ITransactionEntityDao appUserDao,
                               ITransformationFunctionService transformationFunctionService,
                               IFetchHandler fetchHandler,
                               IParameterFactory parameterFactory) {
-        this.entityOperationManager = new EntityOperationManager(userDetailsDao);
+        this.entityOperationManager = new TransactionEntityOperationManager(appUserDao);
         this.transformationFunctionService = transformationFunctionService;
         this.fetchHandler = fetchHandler;
         this.parameterFactory = parameterFactory;
@@ -36,7 +41,7 @@ public class UserDetailsManager implements IUserDetailsManager {
 
     @Override
     public void createNewUser(RegistrationUserDetailsDto registrationUserDetailsDto) {
-        entityOperationManager.updateEntity(
+        entityOperationManager.mergeEntity(
                 transformationFunctionService.getEntity(UserDetails.class, registrationUserDetailsDto));
     }
 
@@ -44,7 +49,7 @@ public class UserDetailsManager implements IUserDetailsManager {
     public void saveUserDetails(UserDetailsDto userDetailsDto) {
         entityOperationManager.executeConsumer(session -> {
             UserDetails userDetails =
-                    transformationFunctionService.getEntity(session, UserDetails.class, userDetailsDto);
+                    transformationFunctionService.getEntity((Session) session, UserDetails.class, userDetailsDto);
             session.merge(userDetails);
         });
     }
@@ -52,11 +57,11 @@ public class UserDetailsManager implements IUserDetailsManager {
     @Override
     public void updateUserDetailsByUserId(String userId, UserDetailsDto userDetailsDto) {
         entityOperationManager.executeConsumer(session -> {
-            UserDetails existingUserDetails = entityOperationManager.getNamedQueryEntity(
+            UserDetails existingUserDetails = entityOperationManager.getNamedQueryEntityClose(
                     "UserDetails.findByUserId",
                     parameterFactory.createStringParameter(USER_ID, userId));
             UserDetails userDetails =
-                    transformationFunctionService.getEntity(session, UserDetails.class, userDetailsDto);
+                    transformationFunctionService.getEntity((Session) session, UserDetails.class, userDetailsDto);
             userDetails.setId(existingUserDetails.getId());
             userDetails.getContactInfo().setId(existingUserDetails.getContactInfo().getId());
             existingUserDetails.getUserAddresses().forEach(session::remove);
@@ -68,7 +73,7 @@ public class UserDetailsManager implements IUserDetailsManager {
     @Override
     public void updateUserStatusByUserId(String userId, boolean status) {
         entityOperationManager.executeConsumer(session -> {
-            UserDetails existingUser = entityOperationManager.getNamedQueryEntity(
+            UserDetails existingUser = entityOperationManager.getNamedQueryEntityClose(
                     "UserDetails.findByUserId",
                     parameterFactory.createStringParameter(USER_ID, userId));
             existingUser.setActive(status);
@@ -79,7 +84,7 @@ public class UserDetailsManager implements IUserDetailsManager {
     @Override
     public void updateUserVerifyEmailByUserId(String userId, boolean verifyEmail) {
         entityOperationManager.executeConsumer(session -> {
-            UserDetails existingUser = entityOperationManager.getNamedQueryEntity(
+            UserDetails existingUser = entityOperationManager.getNamedQueryEntityClose(
                     "UserDetails.findByUserId",
                     parameterFactory.createStringParameter(USER_ID, userId));
             existingUser.setEmailVerified(verifyEmail);
@@ -90,7 +95,7 @@ public class UserDetailsManager implements IUserDetailsManager {
     @Override
     public void updateUserVerifyPhoneByUserId(String userId, boolean verifyPhone) {
         entityOperationManager.executeConsumer(session -> {
-            UserDetails existingUser = entityOperationManager.getNamedQueryEntity(
+            UserDetails existingUser = entityOperationManager.getNamedQueryEntityClose(
                     "UserDetails.findByUserId",
                     parameterFactory.createStringParameter(USER_ID, userId));
             existingUser.setContactPhoneVerified(verifyPhone);
@@ -101,7 +106,7 @@ public class UserDetailsManager implements IUserDetailsManager {
     @Override
     public void deleteUserDetailsByUserId(String userId) {
         entityOperationManager.executeConsumer(session -> {
-            UserDetails existingUserDetails = fetchHandler.getNamedQueryEntity(
+            UserDetails existingUserDetails = fetchHandler.getNamedQueryEntityClose(
                     UserDetails.class,
                     "UserDetails.findByUserId",
                     parameterFactory.createStringParameter(USER_ID, userId));
@@ -111,17 +116,23 @@ public class UserDetailsManager implements IUserDetailsManager {
 
     @Override
     public ResponseUserDetailsDto getUserDetailsByUserId(String userId) {
-        return entityOperationManager.getNamedQueryEntityDto(
+        UserDetails userDetail = entityOperationManager.getNamedQueryEntityClose(
                 "UserDetails.findFullUserDetailsByUserId",
-                parameterFactory.createStringParameter(USER_ID, userId),
-                transformationFunctionService.getTransformationFunction(UserDetails.class, ResponseUserDetailsDto.class));
+                parameterFactory.createStringParameter(USER_ID, userId));
+
+        return Optional.of(userDetail)
+                .map(transformationFunctionService.getTransformationFunction(UserDetails.class, ResponseUserDetailsDto.class))
+                .orElseThrow(() -> new RuntimeException(""));
     }
 
     @Override
     public List<ResponseUserDetailsDto> getResponseUserDetails() {
-        return entityOperationManager.getNamedQueryEntityDtoList(
-                "UserDetails.findAllFullUserDetailsByUserId",
-                transformationFunctionService.getTransformationFunction(UserDetails.class, ResponseUserDetailsDto.class));
+        List<UserDetails> userDetails = entityOperationManager.getNamedQueryEntityListClose(
+                "UserDetails.findAllFullUserDetailsByUserId");
+
+        return userDetails.stream()
+                .map(transformationFunctionService.getTransformationFunction(UserDetails.class, ResponseUserDetailsDto.class))
+                .toList();
     }
 
 }

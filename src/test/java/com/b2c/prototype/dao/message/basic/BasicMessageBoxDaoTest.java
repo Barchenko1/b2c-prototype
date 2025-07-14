@@ -16,12 +16,13 @@ import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.modal.entity.user.UserCreditCard;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.util.CardUtil;
-import com.tm.core.process.dao.common.AbstractEntityDao;
-import com.tm.core.process.dao.identifier.QueryService;
+import com.tm.core.process.dao.common.session.AbstractSessionFactoryDao;
+import com.tm.core.process.dao.query.QueryService;
 import com.tm.core.finder.manager.EntityMappingManager;
 import com.tm.core.finder.manager.IEntityMappingManager;
 import com.tm.core.finder.parameter.Parameter;
 import com.tm.core.finder.table.EntityTable;
+import jakarta.persistence.EntityManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -329,7 +330,7 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
         Transaction transaction = mock(Transaction.class);
 
         try {
-            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionManagerField = AbstractSessionFactoryDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
@@ -350,9 +351,9 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void saveEntityConsumer_success() {
         loadDataSet("/datasets/message/message_box/emptyMessageBoxDataSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             MessageBox messageBox = prepareSaveMessageBox();
-            s.persist(messageBox);
+            session.persist(messageBox);
         };
 
         dao.executeConsumer(consumer);
@@ -362,7 +363,7 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void saveEntityConsumer_transactionFailure() {
         loadDataSet("/datasets/message/message_box/emptyMessageBoxDataSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             throw new RuntimeException();
         };
 
@@ -385,7 +386,7 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
             oldMessageBox.addMessage(newMessage);
             return oldMessageBox;
         };
-        dao.updateEntity(messageBoxSupplier);
+        dao.mergeSupplier(messageBoxSupplier);
         verifyExpectedData("/datasets/message/message_box/updateMessageBoxDataSet.yml");
     }
 
@@ -396,7 +397,7 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
         };
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            dao.updateEntity(messageBoxSupplier);
+            dao.mergeSupplier(messageBoxSupplier);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -406,11 +407,11 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
     void updateEntityConsumer_success() {
         loadDataSet("/datasets/message/message_box/testMessageBoxDataSet.yml");
         Message newMessage = prepareNewMessage();
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             MessageBox messageBox = prepareTestMessageBox();
             messageBox.addMessage(newMessage);
             newMessage.setId(2L);
-            s.merge(messageBox);
+            session.merge(messageBox);
         };
         dao.executeConsumer(consumer);
         verifyExpectedData("/datasets/message/message_box/updateMessageBoxDataSet.yml");
@@ -419,7 +420,7 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void updateEntityConsumer_transactionFailure() {
         loadDataSet("/datasets/message/message_box/testMessageBoxDataSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             throw new RuntimeException();
         };
 
@@ -431,20 +432,11 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
     }
 
     @Test
-    void deleteEntity_success() {
-        loadDataSet("/datasets/message/message_box/testMessageBoxDataSet.yml");
-        Parameter parameter = new Parameter("id", 1);
-
-        dao.findEntityAndDelete(parameter);
-        verifyExpectedData("/datasets/message/message_box/emptyMessageBoxDataSet.yml");
-    }
-
-    @Test
     void deleteEntityByConsumer_success() {
         loadDataSet("/datasets/message/message_box/testMessageBoxDataSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             MessageBox messageBox = prepareTestMessageBox();
-            s.remove(messageBox);
+            session.remove(messageBox);
         };
 
         dao.executeConsumer(consumer);
@@ -454,7 +446,7 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void deleteEntityByConsumer_transactionFailure() {
         loadDataSet("/datasets/message/message_box/testMessageBoxDataSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             throw new RuntimeException();
         };
 
@@ -482,7 +474,7 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
         Transaction transaction = mock(Transaction.class);
 
         try {
-            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionManagerField = AbstractSessionFactoryDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
@@ -500,42 +492,6 @@ class BasicMessageBoxDaoTest extends AbstractCustomEntityDaoTest {
         });
 
         assertEquals(RuntimeException.class, exception.getClass());
-    }
-
-    @Test
-    void deleteEntity_transactionFailure() {
-        loadDataSet("/datasets/message/message_box/testMessageBoxDataSet.yml");
-        MessageBox messageBox = new MessageBox();
-
-        Parameter parameter = new Parameter("id", 1L);
-
-        SessionFactory sessionFactory = mock(SessionFactory.class);
-        Session session = mock(Session.class);
-        Transaction transaction = mock(Transaction.class);
-        NativeQuery<MessageBox> nativeQuery = mock(NativeQuery.class);
-
-        try {
-            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
-            sessionManagerField.setAccessible(true);
-            sessionManagerField.set(dao, sessionFactory);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        when(sessionFactory.openSession()).thenReturn(session);
-        when(session.beginTransaction()).thenReturn(transaction);
-//        when(session.createNativeQuery(anyString(), eq(MessageBox.class))).thenReturn(nativeQuery);
-        when(nativeQuery.getSingleResult()).thenReturn(messageBox);
-        doThrow(new RuntimeException()).when(session).remove(messageBox);
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.findEntityAndDelete(parameter);
-        });
-
-        assertEquals(RuntimeException.class, exception.getClass());
-        verify(transaction).rollback();
-        verify(transaction, never()).commit();
-        verify(session).close();
     }
 
     @Test

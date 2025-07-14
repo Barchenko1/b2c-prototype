@@ -51,13 +51,11 @@ class DiscountManagerTest {
     void savePercentDiscount_shouldSaveDiscount() {
         DiscountDto dto = createTestDto();
         Currency currency = creatTestCurrency();
-        Discount discount = createTestDiscount();
-        Supplier<Discount> supplier = () -> discount;
 
         discountManager.saveDiscount(dto);
 
         ArgumentCaptor<Supplier<Discount>> captor = ArgumentCaptor.forClass(Supplier.class);
-        verify(discountDao).saveEntity(captor.capture());
+        verify(discountDao).persistEntity(captor.capture());
         Discount capturedEntity = captor.getValue().get();
         assertEquals(dto.getCharSequenceCode(), capturedEntity.getCharSequenceCode());
         assertEquals(dto.getAmount(), capturedEntity.getAmount());

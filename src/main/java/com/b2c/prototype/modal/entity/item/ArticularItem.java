@@ -13,12 +13,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.NamedAttributeNode;
-import jakarta.persistence.NamedEntityGraph;
-import jakarta.persistence.NamedEntityGraphs;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
-import jakarta.persistence.NamedSubgraph;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -33,86 +29,36 @@ import java.util.Set;
 
 @Entity
 @Table(name = "articular_item")
-@NamedEntityGraphs({
-        @NamedEntityGraph(
-                name = "articularItem.discount.currency",
-                attributeNodes = {
-                        @NamedAttributeNode(value = "discount", subgraph = "discount.subgraph")
-                },
-                subgraphs = {
-                        @NamedSubgraph(
-                                name = "discount.subgraph",
-                                attributeNodes = {
-                                        @NamedAttributeNode("currency")
-                                }
-                        )
-                }
-        ),
-        @NamedEntityGraph(
-                name = "articularItem.optionItems",
-                attributeNodes = {
-                        @NamedAttributeNode(value = "optionItems", subgraph = "optionItem.subgraph"),
-                        @NamedAttributeNode(value = "fullPrice", subgraph = "price.subgraph"),
-                        @NamedAttributeNode(value = "totalPrice", subgraph = "price.subgraph"),
-                },
-                subgraphs = {
-                        @NamedSubgraph(
-                                name = "optionItem.subgraph",
-                                attributeNodes = {
-                                        @NamedAttributeNode("optionGroup")
-                                }
-                        ),
-                        @NamedSubgraph(
-                                name = "price.subgraph",
-                                attributeNodes = {
-                                        @NamedAttributeNode("currency")
-                                }
-                        ),
-                }
-        ),
-        @NamedEntityGraph(
-                name = "articularItem.full",
-                attributeNodes = {
-                        @NamedAttributeNode(value = "optionItems", subgraph = "optionItem.subgraph"),
-                        @NamedAttributeNode(value = "fullPrice", subgraph = "price.subgraph"),
-                        @NamedAttributeNode(value = "totalPrice", subgraph = "price.subgraph"),
-                        @NamedAttributeNode(value = "status"),
-                        @NamedAttributeNode(value = "discount", subgraph = "discount.subgraph")
-                },
-                subgraphs = {
-                        @NamedSubgraph(
-                                name = "price.subgraph",
-                                attributeNodes = {
-                                        @NamedAttributeNode("currency")
-                                }
-                        ),
-                        @NamedSubgraph(
-                                name = "optionItem.subgraph",
-                                attributeNodes = {
-                                        @NamedAttributeNode("optionGroup"),
-                                }
-                        ),
-                        @NamedSubgraph(
-                                name = "discount.subgraph",
-                                attributeNodes = {
-                                        @NamedAttributeNode("currency")
-                                }
-                        )
-                }
-        )
-})
 @NamedQueries({
         @NamedQuery(
                 name = "ArticularItem.full",
-                query = "SELECT ai FROM ArticularItem ai " +
+                query = "SELECT DISTINCT ai FROM ArticularItem ai " +
                         "LEFT JOIN FETCH ai.optionItems oi " +
+                        "LEFT JOIN FETCH oi.optionGroup og " +
                         "LEFT JOIN FETCH ai.fullPrice fp " +
-                        "LEFT JOIN FETCH ai.totalPrice tp " +
-                        "LEFT JOIN FETCH ai.discount d " +
                         "LEFT JOIN FETCH fp.currency " +
+                        "LEFT JOIN FETCH ai.totalPrice tp " +
                         "LEFT JOIN FETCH tp.currency " +
-                        "LEFT JOIN FETCH d.currency " +
-                        "LEFT JOIN FETCH oi.optionGroup og"
+                        "LEFT JOIN FETCH ai.status s " +
+                        "LEFT JOIN FETCH ai.discount d " +
+                        "LEFT JOIN FETCH d.currency"
+        ),
+        @NamedQuery(
+                name = "ArticularItem.optionItems",
+                query = "SELECT DISTINCT ai FROM ArticularItem ai " +
+                        "LEFT JOIN FETCH ai.optionItems oi " +
+                        "LEFT JOIN FETCH oi.optionGroup og " +
+                        "LEFT JOIN FETCH ai.fullPrice fp " +
+                        "LEFT JOIN FETCH fp.currency " +
+                        "LEFT JOIN FETCH ai.totalPrice tp " +
+                        "LEFT JOIN FETCH tp.currency"
+        ),
+        @NamedQuery(
+                name = "ArticularItem.discount.currency",
+                query = "SELECT DISTINCT ai FROM ArticularItem ai " +
+                        "LEFT JOIN FETCH ai.discount d " +
+                        "LEFT JOIN FETCH d.currency c " +
+                        "WHERE ai.articularId = :articularId"
         ),
         @NamedQuery(
                 name = "ArticularItem.findItemDataByArticularId",

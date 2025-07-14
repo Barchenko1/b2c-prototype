@@ -12,10 +12,14 @@ import com.b2c.prototype.modal.entity.message.MessageTemplate;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.message.IMessageManager;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.identifier.IQueryService;
-import com.tm.core.process.dao.query.IFetchHandler;
-import com.tm.core.process.manager.common.EntityOperationManager;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
+import com.tm.core.process.dao.query.IQueryService;
+import com.tm.core.process.dao.IFetchHandler;
+import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
+import com.tm.core.process.manager.common.operator.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
+import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,18 +36,18 @@ public class MessageManager implements IMessageManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageManager.class);
 
-    private final IEntityOperationManager entityOperationManager;
+    private final ITransactionEntityOperationManager entityOperationManager;
     private final IFetchHandler fetchHandler;
     private final IQueryService queryService;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public MessageManager(IMessageBoxDao messageBoxDao,
+    public MessageManager(ITransactionEntityDao messageBoxDao,
                           IFetchHandler fetchHandler,
                           IQueryService queryService,
                           ITransformationFunctionService transformationFunctionService,
                           IParameterFactory parameterFactory) {
-        this.entityOperationManager = new EntityOperationManager(messageBoxDao);
+        this.entityOperationManager = new TransactionEntityOperationManager(messageBoxDao);
         this.fetchHandler = fetchHandler;
         this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
@@ -61,7 +65,7 @@ public class MessageManager implements IMessageManager {
                     MessageBox.class,
                     "MessageBox.findByEmailListWithMessages",
                     map);
-            Message message = transformationFunctionService.getEntity(session, Message.class, messageDto);
+            Message message = transformationFunctionService.getEntity((Session) session, Message.class, messageDto);
             messageBoxes.forEach(message::addMessageBox);
             session.merge(message);
         });
@@ -75,7 +79,7 @@ public class MessageManager implements IMessageManager {
                     MessageBox.class,
                     "MessageBox.findByUserIdWithMessages",
                     parameterFactory.createStringParameter(USER_ID, messageId));
-            Message newMessage = transformationFunctionService.getEntity(session, Message.class, messageDto);
+            Message newMessage = transformationFunctionService.getEntity((Session) session, Message.class, messageDto);
             Message message = getExistingMessage(messageBox, messageId);
             MessageTemplate messageTemplate = message.getMessageTemplate();
             messageTemplate.setSender(newMessage.getMessageTemplate().getSender());
@@ -166,7 +170,7 @@ public class MessageManager implements IMessageManager {
 
     @Override
     public List<ResponseMessageOverviewDto> getMessageOverviewBySenderEmail(String senderEmail) {
-        List<Message> messages = fetchHandler.getNamedQueryEntityList(
+        List<Message> messages = fetchHandler.getNamedQueryEntityListClose(
                 Message.class,
                 "Message.findMessageBySender",
                 parameterFactory.createStringParameter("sender", senderEmail));
@@ -178,7 +182,7 @@ public class MessageManager implements IMessageManager {
 
     @Override
     public List<ResponseMessageOverviewDto> getMessageOverviewByReceiverEmail(String receiverEmail) {
-        List<Message> messages = fetchHandler.getNamedQueryEntityList(
+        List<Message> messages = fetchHandler.getNamedQueryEntityListClose(
                 Message.class,
                 "Message.findMessageByReceiver",
                 parameterFactory.createStringParameter("receiver", receiverEmail));
@@ -190,7 +194,7 @@ public class MessageManager implements IMessageManager {
 
     @Override
     public List<ResponseMessageOverviewDto> getMessageOverviewListByUserId(String userId) {
-        MessageBox messageBox = fetchHandler.getNamedQueryEntity(
+        MessageBox messageBox = fetchHandler.getNamedQueryEntityClose(
                 MessageBox.class,
                 "MessageBox.findByUserIdWithMessages",
                 parameterFactory.createStringParameter(USER_ID, userId)
@@ -202,7 +206,7 @@ public class MessageManager implements IMessageManager {
 
     @Override
     public ResponseMessagePayloadDto getMessagePayloadDto(String userId, String messageId) {
-        MessageBox messageBox = fetchHandler.getNamedQueryEntity(
+        MessageBox messageBox = fetchHandler.getNamedQueryEntityClose(
                 MessageBox.class,
                 "MessageBox.findByUserId",
                 parameterFactory.createStringParameter(USER_ID, userId));

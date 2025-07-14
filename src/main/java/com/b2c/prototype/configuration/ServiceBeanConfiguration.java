@@ -2,39 +2,11 @@ package com.b2c.prototype.configuration;
 
 import com.b2c.prototype.dao.ISessionEntityFetcher;
 import com.b2c.prototype.dao.SessionEntityFetcher;
-import com.b2c.prototype.dao.address.IAddressDao;
-import com.b2c.prototype.dao.address.ICountryDao;
-import com.b2c.prototype.dao.delivery.IDeliveryTypeDao;
-import com.b2c.prototype.dao.item.IAvailabilityStatusDao;
-import com.b2c.prototype.dao.item.IBrandDao;
-import com.b2c.prototype.dao.item.ICategoryDao;
-import com.b2c.prototype.dao.item.IDiscountDao;
-import com.b2c.prototype.dao.item.IItemDataDao;
-import com.b2c.prototype.dao.item.IItemDataOptionDao;
-import com.b2c.prototype.dao.item.IItemStatusDao;
-import com.b2c.prototype.dao.item.IItemTypeDao;
 import com.b2c.prototype.dao.message.IMessageBoxDao;
-import com.b2c.prototype.dao.message.IMessageStatusDao;
-import com.b2c.prototype.dao.message.IMessageTypeDao;
-import com.b2c.prototype.dao.option.IOptionGroupDao;
 import com.b2c.prototype.dao.option.IOptionItemDao;
 import com.b2c.prototype.dao.option.ITimeDurationOptionDao;
-import com.b2c.prototype.dao.option.IZoneOptionDao;
-import com.b2c.prototype.dao.order.ICustomerOrderDao;
-import com.b2c.prototype.dao.order.IOrderStatusDao;
-import com.b2c.prototype.dao.payment.ICreditCardDao;
-import com.b2c.prototype.dao.payment.IPaymentMethodDao;
-import com.b2c.prototype.dao.payment.IMinMaxCommissionDao;
 import com.b2c.prototype.dao.post.IPostDao;
-import com.b2c.prototype.dao.price.ICurrencyDao;
-import com.b2c.prototype.dao.rating.IRatingDao;
 import com.b2c.prototype.dao.review.IReviewDao;
-import com.b2c.prototype.dao.store.ICountTypeDao;
-import com.b2c.prototype.dao.store.IStoreDao;
-import com.b2c.prototype.dao.user.IContactInfoDao;
-import com.b2c.prototype.dao.user.ICountryPhoneCodeDao;
-import com.b2c.prototype.dao.user.IDeviceDao;
-import com.b2c.prototype.dao.user.IUserDetailsDao;
 import com.b2c.prototype.gateway.IRestClient;
 import com.b2c.prototype.gateway.RestClient;
 import com.b2c.prototype.manager.address.IUserAddressManager;
@@ -78,7 +50,9 @@ import com.b2c.prototype.manager.order.IOrderStatusManager;
 import com.b2c.prototype.manager.order.base.CustomerSingleDeliveryOrderManager;
 import com.b2c.prototype.manager.order.base.OrderStatusManager;
 import com.b2c.prototype.manager.payment.ICommissionManager;
+import com.b2c.prototype.manager.payment.ICurrencyCoefficientManager;
 import com.b2c.prototype.manager.payment.base.CommissionManager;
+import com.b2c.prototype.manager.payment.base.CurrencyCoefficientManager;
 import com.b2c.prototype.manager.review.IReviewManager;
 import com.b2c.prototype.manager.review.base.ReviewManager;
 import com.b2c.prototype.manager.store.IStoreAddressManager;
@@ -133,6 +107,8 @@ import com.b2c.prototype.processor.option.TimeDurationOptionProcess;
 import com.b2c.prototype.processor.option.ZoneOptionProcess;
 import com.b2c.prototype.processor.order.ICustomerOrderProcessor;
 import com.b2c.prototype.processor.order.CustomerOrderProcessor;
+import com.b2c.prototype.processor.payment.CurrencyCoefficientProcessor;
+import com.b2c.prototype.processor.payment.ICurrencyCoefficientProcessor;
 import com.b2c.prototype.processor.store.IStoreAddressProcess;
 import com.b2c.prototype.processor.store.IStoreProcess;
 import com.b2c.prototype.processor.store.StoreAddressProcess;
@@ -151,9 +127,10 @@ import com.b2c.prototype.transform.help.calculate.IPriceCalculationService;
 import com.b2c.prototype.transform.help.calculate.PriceCalculationService;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.finder.factory.ParameterFactory;
-import com.tm.core.process.dao.identifier.IQueryService;
-import com.tm.core.process.dao.identifier.QueryService;
-import com.tm.core.process.dao.query.IFetchHandler;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
+import com.tm.core.process.dao.query.IQueryService;
+import com.tm.core.process.dao.IFetchHandler;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -193,84 +170,90 @@ public class ServiceBeanConfiguration {
     // app service
 
     @Bean
-    public IAvailabilityStatusManager availabilityStatusManager(IAvailabilityStatusDao availabilityStatusDao,
+    public IAvailabilityStatusManager availabilityStatusManager(ITransactionEntityDao availabilityStatusDao,
                                                                 IParameterFactory parameterFactory,
                                                                 ITransformationFunctionService transformationFunctionService) {
         return new AvailabilityStatusManager(parameterFactory, availabilityStatusDao, transformationFunctionService);
     }
 
     @Bean
-    public IBrandManager brandManager(IBrandDao brandDao,
+    public IBrandManager brandManager(ITransactionEntityDao brandDao,
                                       IParameterFactory parameterFactory,
                                       ITransformationFunctionService transformationFunctionService) {
         return new BrandManager(parameterFactory, brandDao, transformationFunctionService);
     }
 
     @Bean
-    public ICountTypeManager countTypeManager(ICountTypeDao countTypeDao,
+    @Qualifier("countTypeDao")
+    public ICountTypeManager countTypeManager(ITransactionEntityDao countTypeDao,
                                               IParameterFactory parameterFactory,
                                               ITransformationFunctionService transformationFunctionService) {
         return new CountTypeManager(parameterFactory, countTypeDao, transformationFunctionService);
     }
 
     @Bean
-    public ICountryPhoneCodeManager countryPhoneCodeManager(ICountryPhoneCodeDao countryPhoneCodeDao,
+    public ICountryPhoneCodeManager countryPhoneCodeManager(ITransactionEntityDao countryPhoneCodeDao,
                                                             IParameterFactory parameterFactory,
                                                             ITransformationFunctionService transformationFunctionService) {
         return new CountryPhoneCodeManager(parameterFactory, countryPhoneCodeDao, transformationFunctionService);
     }
 
     @Bean
-    public ICountryManager countryManager(ICountryDao countryDao,
+    public ICountryManager countryManager(ITransactionEntityDao countryDao,
                                           IParameterFactory parameterFactory,
                                           ITransformationFunctionService transformationFunctionService) {
         return new CountryManager(parameterFactory, countryDao, transformationFunctionService);
     }
 
     @Bean
-    public ICurrencyManager currencyManager(ICurrencyDao currencyDao,
+    @Qualifier("currencyDao")
+    public ICurrencyManager currencyManager(ITransactionEntityDao currencyDao,
                                             IParameterFactory parameterFactory,
                                             ITransformationFunctionService transformationFunctionService) {
         return new CurrencyManager(parameterFactory, currencyDao, transformationFunctionService);
     }
 
     @Bean
-    public IDeliveryTypeManager deliveryTypeManager(IDeliveryTypeDao deliveryTypeDao,
+    @Qualifier("deliveryTypeDao")
+    public IDeliveryTypeManager deliveryTypeManager(ITransactionEntityDao deliveryTypeDao,
                                                     IParameterFactory parameterFactory,
                                                     ITransformationFunctionService transformationFunctionService) {
         return new DeliveryTypeManager(parameterFactory, deliveryTypeDao, transformationFunctionService);
     }
 
     @Bean
-    public IItemStatusManager itemStatusManager(IItemStatusDao itemStatusDao,
+    @Qualifier("itemStatusDao")
+    public IItemStatusManager itemStatusManager(ITransactionEntityDao itemStatusDao,
                                                 IParameterFactory parameterFactory,
                                                 ITransformationFunctionService transformationFunctionService) {
         return new ArticularStatusManager(parameterFactory, itemStatusDao, transformationFunctionService);
     }
 
     @Bean
-    public IItemTypeManager itemTypeManager(IItemTypeDao itemTypeDao,
+    @Qualifier("itemTypeDao")
+    public IItemTypeManager itemTypeManager(ITransactionEntityDao itemTypeDao,
                                             IParameterFactory parameterFactory,
                                             ITransformationFunctionService transformationFunctionService) {
         return new ItemTypeManager(parameterFactory, itemTypeDao, transformationFunctionService);
     }
 
     @Bean
-    public IMessageStatusManager messageStatusManager(IMessageStatusDao messageStatusDao,
+    public IMessageStatusManager messageStatusManager(ITransactionEntityDao messageStatusDao,
                                                       IParameterFactory parameterFactory,
                                                       ITransformationFunctionService transformationFunctionService) {
         return new MessageStatusManager(parameterFactory, messageStatusDao, transformationFunctionService);
     }
 
     @Bean
-    public IMessageTypeManager messageTypeManager(IMessageTypeDao messageTypeDao,
+    @Qualifier("messageTypeDao")
+    public IMessageTypeManager messageTypeManager(ITransactionEntityDao messageTypeDao,
                                                   IParameterFactory parameterFactory,
                                                   ITransformationFunctionService transformationFunctionService) {
         return new MessageTypeManager(parameterFactory, messageTypeDao, transformationFunctionService);
     }
 
     @Bean
-    public IMessageManager messageManager(IMessageBoxDao messageBoxDao,
+    public IMessageManager messageManager(ITransactionEntityDao messageBoxDao,
                                           IFetchHandler fetchHandler,
                                           IQueryService queryService,
                                           ITransformationFunctionService transformationFunctionService,
@@ -279,43 +262,44 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public IOptionGroupManager optionGroupManager(IOptionGroupDao optionGroupDao,
+    @Qualifier("optionGroupDao")
+    public IOptionGroupManager optionGroupManager(ITransactionEntityDao optionGroupDao,
                                                   IParameterFactory parameterFactory,
                                                   ITransformationFunctionService transformationFunctionService) {
         return new OptionGroupManager(parameterFactory, optionGroupDao, transformationFunctionService);
     }
 
     @Bean
-    public IOrderStatusManager orderStatusManager(IOrderStatusDao orderStatusDao,
+    public IOrderStatusManager orderStatusManager(ITransactionEntityDao orderStatusDao,
                                                   IParameterFactory parameterFactory,
                                                   ITransformationFunctionService transformationFunctionService) {
         return new OrderStatusManager(parameterFactory, orderStatusDao, transformationFunctionService);
     }
 
     @Bean
-    public IPaymentMethodManager paymentMethodManager(IPaymentMethodDao paymentMethodDao,
+    public IPaymentMethodManager paymentMethodManager(ITransactionEntityDao paymentMethodDao,
                                                       IParameterFactory parameterFactory,
                                                       ITransformationFunctionService transformationFunctionService) {
         return new PaymentMethodManager(parameterFactory, paymentMethodDao, transformationFunctionService);
     }
 
     @Bean
-    public IRatingManager ratingManager(IRatingDao ratingDao,
+    public IRatingManager ratingManager(ITransactionEntityDao ratingDao,
                                         IParameterFactory parameterFactory,
                                         ITransformationFunctionService transformationFunctionService) {
         return new RatingManager(parameterFactory, ratingDao, transformationFunctionService);
     }
 
     @Bean
-    public IUserDetailsManager userDetailsManager(IUserDetailsDao userDetailsDao,
+    public IUserDetailsManager userDetailsManager(ITransactionEntityDao appUserDao,
                                                   ITransformationFunctionService transformationFunctionService,
                                                   IFetchHandler fetchHandler,
                                                   IParameterFactory parameterFactory) {
-        return new UserDetailsManager(userDetailsDao, transformationFunctionService, fetchHandler, parameterFactory);
+        return new UserDetailsManager(appUserDao, transformationFunctionService, fetchHandler, parameterFactory);
     }
 
     @Bean
-    public IDeviceManager deviceManager(IDeviceDao deviceDao,
+    public IDeviceManager deviceManager(ITransactionEntityDao deviceDao,
                                         IFetchHandler fetchHandler,
                                         ITransformationFunctionService transformationFunctionService,
                                         IParameterFactory parameterFactory) {
@@ -323,7 +307,7 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public IContactInfoManager contactInfoManager(IContactInfoDao contactInfoDao,
+    public IContactInfoManager contactInfoManager(ITransactionEntityDao contactInfoDao,
                                                   IFetchHandler fetchHandler,
                                                   ITransformationFunctionService transformationFunctionService,
                                                   IParameterFactory parameterFactory) {
@@ -331,7 +315,7 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public IDiscountManager discountManager(IDiscountDao discountDao,
+    public IDiscountManager discountManager(ITransactionEntityDao discountDao,
                                             IFetchHandler fetchHandler,
                                             ITransformationFunctionService transformationFunctionService,
                                             IParameterFactory parameterFactory) {
@@ -339,14 +323,14 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public IItemDataManager itemDataManager(IItemDataDao itemDataDao,
+    public IItemDataManager itemDataManager(ITransactionEntityDao itemDataDao,
                                             ITransformationFunctionService transformationFunctionService,
                                             IParameterFactory parameterFactory) {
         return new ItemDataManager(itemDataDao, transformationFunctionService, parameterFactory);
     }
 
     @Bean
-    public IArticularItemManager itemDataOptionManager(IItemDataOptionDao itemDataOptionDao,
+    public IArticularItemManager itemDataOptionManager(ITransactionEntityDao itemDataOptionDao,
                                                        IFetchHandler fetchHandler,
                                                        ITransformationFunctionService transformationFunctionService,
                                                        IParameterFactory parameterFactory) {
@@ -354,7 +338,7 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public IOptionItemManager optionItemManager(IOptionItemDao optionItemDao,
+    public IOptionItemManager optionItemManager(ITransactionEntityDao optionItemDao,
                                                 IFetchHandler fetchHandler,
                                                 ITransformationFunctionService transformationFunctionService,
                                                 IParameterFactory parameterFactory) {
@@ -370,21 +354,21 @@ public class ServiceBeanConfiguration {
 //    }
 
     @Bean
-    public ITimeDurationOptionManager timeDurationOptionManager(ITimeDurationOptionDao timeDurationOptionDao,
+    public ITimeDurationOptionManager timeDurationOptionManager(ITransactionEntityDao timeDurationOptionDao,
                                                                 ITransformationFunctionService transformationFunctionService,
                                                                 IParameterFactory parameterFactory) {
         return new TimeDurationOptionManager(timeDurationOptionDao, transformationFunctionService, parameterFactory);
     }
 
     @Bean
-    public IZoneOptionManager zoneOptionManager(IZoneOptionDao zoneOptionDao,
+    public IZoneOptionManager zoneOptionManager(ITransactionEntityDao zoneOptionDao,
                                                 ITransformationFunctionService transformationFunctionService,
                                                 IParameterFactory parameterFactory) {
         return new ZoneOptionManager(zoneOptionDao, transformationFunctionService, parameterFactory);
     }
 
     @Bean
-    public IUserCreditCardManager creditCardManager(ICreditCardDao cardDao,
+    public IUserCreditCardManager creditCardManager(ITransactionEntityDao cardDao,
                                                     IQueryService queryService,
                                                     IFetchHandler fetchHandler,
                                                     ITransformationFunctionService transformationFunctionService,
@@ -393,17 +377,16 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public ICommissionManager commissionManager(IMinMaxCommissionDao minMaxCommissionDao,
+    public ICommissionManager commissionManager(ITransactionEntityDao appCommissionDao,
                                                 IQueryService queryService,
-                                                IFetchHandler fetchHandler,
                                                 ITransformationFunctionService transformationFunctionService,
                                                 IParameterFactory parameterFactory,
                                                 IPriceCalculationService priceCalculationService) {
-        return new CommissionManager(minMaxCommissionDao, queryService, fetchHandler, transformationFunctionService, parameterFactory, priceCalculationService);
+        return new CommissionManager(appCommissionDao, queryService, transformationFunctionService, parameterFactory, priceCalculationService);
     }
 
     @Bean
-    public IUserAddressManager userAddressManager(IAddressDao addressDao,
+    public IUserAddressManager userAddressManager(ITransactionEntityDao addressDao,
                                               IFetchHandler fetchHandler,
                                               ITransformationFunctionService transformationFunctionService,
                                               IParameterFactory parameterFactory) {
@@ -411,18 +394,16 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public ICustomerSingleDeliveryOrderManager customerOrderManager(ICustomerOrderDao orderItemDao,
-                                                                    IQueryService queryService,
-                                                                    IFetchHandler fetchHandler,
+    public ICustomerSingleDeliveryOrderManager customerOrderManager(ITransactionEntityDao orderItemDao,
                                                                     ISessionEntityFetcher sessionEntityFetcher,
                                                                     ITransformationFunctionService transformationFunctionService,
                                                                     IParameterFactory parameterFactory,
                                                                     IPriceCalculationService priceCalculationService) {
-        return new CustomerSingleDeliveryOrderManager(orderItemDao, queryService, fetchHandler, sessionEntityFetcher, transformationFunctionService, parameterFactory, priceCalculationService);
+        return new CustomerSingleDeliveryOrderManager(orderItemDao, sessionEntityFetcher, transformationFunctionService, parameterFactory, priceCalculationService);
     }
 
     @Bean
-    public ICategoryManager categoryManager(ICategoryDao categoryDao,
+    public ICategoryManager categoryManager(ITransactionEntityDao categoryDao,
                                             IQueryService queryService,
                                             ITransformationFunctionService transformationFunctionService,
                                             IParameterFactory parameterFactory) {
@@ -430,7 +411,7 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public IPostManager postManager(IPostDao postDao,
+    public IPostManager postManager(ITransactionEntityDao postDao,
                                     IQueryService queryService,
                                     ITransformationFunctionService transformationFunctionService,
                                     IParameterFactory parameterFactory) {
@@ -438,7 +419,7 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public IReviewManager reviewManager(IReviewDao reviewDao,
+    public IReviewManager reviewManager(ITransactionEntityDao reviewDao,
                                         IQueryService queryService,
                                         IFetchHandler fetchHandler,
                                         ITransformationFunctionService transformationFunctionService,
@@ -447,7 +428,7 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public IStoreManager storeManager(IStoreDao storeDao,
+    public IStoreManager storeManager(ITransactionEntityDao storeDao,
                                       IQueryService queryService,
                                       ITransformationFunctionService transformationFunctionService,
                                       IParameterFactory parameterFactory) {
@@ -455,11 +436,20 @@ public class ServiceBeanConfiguration {
     }
 
     @Bean
-    public IStoreAddressManager storeAddressManager(IAddressDao addressDao,
+    public IStoreAddressManager storeAddressManager(ITransactionEntityDao addressDao,
                                                     IQueryService queryService,
                                                     ITransformationFunctionService transformationFunctionService,
                                                     IParameterFactory parameterFactory) {
         return new StoreAddressManager(addressDao, queryService, transformationFunctionService, parameterFactory);
+    }
+
+    @Bean
+    public ICurrencyCoefficientManager currencyCoefficientManager(ITransactionEntityDao currencyCoefficientDao,
+                                                                  IQueryService queryService,
+                                                                  IFetchHandler fetchHandler,
+                                                                  ITransformationFunctionService transformationFunctionService,
+                                                                  IParameterFactory parameterFactory) {
+        return new CurrencyCoefficientManager(currencyCoefficientDao, queryService, fetchHandler, transformationFunctionService, parameterFactory);
     }
 
     @Bean
@@ -597,5 +587,8 @@ public class ServiceBeanConfiguration {
         return new ReviewProcessor(reviewManager);
     }
 
-
+    @Bean
+    public ICurrencyCoefficientProcessor currencyCoefficientProcessor(ICurrencyCoefficientManager currencyCoefficientManager) {
+        return new CurrencyCoefficientProcessor(currencyCoefficientManager);
+    }
 }

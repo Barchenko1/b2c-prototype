@@ -4,12 +4,13 @@ import com.b2c.prototype.dao.AbstractCustomEntityDaoTest;
 import com.b2c.prototype.modal.entity.item.Item;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
-import com.tm.core.process.dao.common.AbstractEntityDao;
-import com.tm.core.process.dao.identifier.QueryService;
+import com.tm.core.process.dao.common.session.AbstractSessionFactoryDao;
+import com.tm.core.process.dao.query.QueryService;
 import com.tm.core.finder.manager.EntityMappingManager;
 import com.tm.core.finder.manager.IEntityMappingManager;
 import com.tm.core.finder.parameter.Parameter;
 import com.tm.core.finder.table.EntityTable;
+import jakarta.persistence.EntityManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -164,7 +165,7 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
         Transaction transaction = mock(Transaction.class);
 
         try {
-            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionManagerField = AbstractSessionFactoryDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
@@ -185,9 +186,9 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void saveEntityConsumer_success() {
         loadDataSet("/datasets/option/option_item/emptyOptionItemWithOptionGroupDataSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             OptionItem optionItem = prepareToSaveOptionItem();
-            s.merge(optionItem);
+            session.merge(optionItem);
         };
 
         dao.executeConsumer(consumer);
@@ -197,7 +198,7 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void saveEntityConsumer_transactionFailure() {
         loadDataSet("/datasets/option/option_item/emptyOptionItemDataSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             throw new RuntimeException();
         };
 
@@ -213,7 +214,7 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
     void updateEntity_success() {
         loadDataSet("/datasets/option/option_item/testOptionItemDataSet.yml");
         Supplier<OptionItem> optionItemSupplier = this::prepareToUpdateOptionItem;
-        dao.updateEntity(optionItemSupplier);
+        dao.mergeSupplier(optionItemSupplier);
         verifyExpectedData("/datasets/option/option_item/updateOptionItemDataSet.yml");
     }
 
@@ -224,7 +225,7 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
         };
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            dao.updateEntity(optionItemSupplier);
+            dao.mergeSupplier(optionItemSupplier);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
@@ -233,11 +234,9 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void updateEntityConsumer_success() {
         loadDataSet("/datasets/option/option_item/testOptionItemDataSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             OptionItem optionItemToUpdate = prepareToUpdateOptionItem();
-
-//            s.merge(optionItemToUpdate.getOptionGroup());
-            s.merge(optionItemToUpdate);
+            session.merge(optionItemToUpdate);
         };
         dao.executeConsumer(consumer);
         verifyExpectedData("/datasets/option/option_item/updateOptionItemDataSet.yml");
@@ -246,35 +245,25 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void updateEntityConsumer_transactionFailure() {
         loadDataSet("/datasets/option/option_item/testOptionItemDataSet.yml");
-        Consumer<Session> optionItemConsumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             OptionItem optionItem = prepareToUpdateOptionItem();
             optionItem.setId(0);
-            s.merge(optionItem);
+            session.merge(optionItem);
         };
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.executeConsumer(optionItemConsumer);
+            dao.executeConsumer(consumer);
         });
 
         assertEquals(IllegalStateException.class, exception.getClass());
     }
 
     @Test
-    void deleteEntity_success() {
-        loadDataSet("/datasets/option/option_item/testOptionItemDataSet.yml");
-        Parameter parameter = new Parameter("id", 1);
-
-        dao.findEntityAndDelete(parameter);
-        verifyExpectedData("/datasets/option/option_item/emptyOptionItemWithOptionGroupDataSet.yml");
-    }
-
-    @Test
     void deleteEntityByConsumer_success() {
         loadDataSet("/datasets/option/option_item/testOptionItemDataSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             OptionItem optionItem = prepareTestOptionItem();
-//            s.remove(optionItem.getOptionGroup());
-            s.remove(optionItem);
+            session.remove(optionItem);
         };
 
         dao.executeConsumer(consumer);
@@ -284,7 +273,7 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
     @Test
     void deleteEntityByConsumer_transactionFailure() {
         loadDataSet("/datasets/option/option_item/testOptionItemDataSet.yml");
-        Consumer<Session> consumer = (Session s) -> {
+        Consumer<EntityManager> consumer = (EntityManager session) -> {
             throw new RuntimeException();
         };
 
@@ -312,7 +301,7 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
         Transaction transaction = mock(Transaction.class);
 
         try {
-            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionManagerField = AbstractSessionFactoryDao.class.getDeclaredField("sessionFactory");
             sessionManagerField.setAccessible(true);
             sessionManagerField.set(dao, sessionFactory);
         } catch (Exception e) {
@@ -330,42 +319,6 @@ class BasicOptionItemDaoTest extends AbstractCustomEntityDaoTest {
         });
 
         assertEquals(RuntimeException.class, exception.getClass());
-    }
-
-    @Test
-    void deleteEntity_transactionFailure() {
-        loadDataSet("/datasets/item/item/testItemSet.yml");
-        OptionItem optionItem = new OptionItem();
-
-        Parameter parameter = new Parameter("id", 1L);
-
-        SessionFactory sessionFactory = mock(SessionFactory.class);
-        Session session = mock(Session.class);
-        Transaction transaction = mock(Transaction.class);
-        NativeQuery<OptionItem> nativeQuery = mock(NativeQuery.class);
-
-        try {
-            Field sessionManagerField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
-            sessionManagerField.setAccessible(true);
-            sessionManagerField.set(dao, sessionFactory);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        when(sessionFactory.openSession()).thenReturn(session);
-        when(session.beginTransaction()).thenReturn(transaction);
-//        when(session.createNativeQuery(anyString(), eq(OptionItem.class))).thenReturn(nativeQuery);
-        when(nativeQuery.getSingleResult()).thenReturn(optionItem);
-        doThrow(new RuntimeException()).when(session).remove(optionItem);
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            dao.findEntityAndDelete(parameter);
-        });
-
-        assertEquals(RuntimeException.class, exception.getClass());
-        verify(transaction).rollback();
-        verify(transaction, never()).commit();
-        verify(session).close();
     }
 
     @Test

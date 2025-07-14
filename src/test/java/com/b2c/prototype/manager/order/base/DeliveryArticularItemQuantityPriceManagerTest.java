@@ -124,19 +124,6 @@ class DeliveryArticularItemQuantityPriceManagerTest {
     }
 
     @Test
-    void deleteOrderItemData_shouldDeleteEntity() {
-        String orderId = "test-order-id";
-
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
-        
-
-        orderArticularItemQuantityManager.deleteCustomerOrder(orderId);
-
-        verify(orderItemDataDao).findEntityAndDelete(parameter);
-    }
-
-    @Test
     void getOrderItemData_shouldReturnDto() {
         String orderId = "test-order-id";
         DeliveryArticularItemQuantity entity = getOrderItemData();

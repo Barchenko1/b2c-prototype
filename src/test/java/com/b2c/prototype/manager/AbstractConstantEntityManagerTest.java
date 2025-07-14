@@ -6,6 +6,7 @@ import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.tm.core.process.dao.common.IEntityDao;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.finder.parameter.Parameter;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -22,7 +23,7 @@ public abstract class AbstractConstantEntityManagerTest<E> {
     @Mock
     protected IParameterFactory parameterFactory;
     @Mock
-    protected IEntityDao dao;
+    protected ITransactionEntityDao dao;
     @Mock
     protected ITransformationFunctionService transformationFunctionService;
 

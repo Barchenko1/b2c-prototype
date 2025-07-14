@@ -1,6 +1,5 @@
 package com.b2c.prototype.manager.address.base;
 
-import com.b2c.prototype.dao.address.IAddressDao;
 import com.b2c.prototype.modal.dto.payload.order.AddressDto;
 import com.b2c.prototype.modal.dto.payload.user.UserAddressDto;
 import com.b2c.prototype.modal.entity.address.Address;
@@ -11,6 +10,7 @@ import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 
 import com.tm.core.finder.parameter.Parameter;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,7 +36,7 @@ import static org.mockito.Mockito.when;
 class AddressManagerTest {
 
     @Mock
-    private IAddressDao addressDao;
+    private ITransactionEntityDao addressDao;
 
     @Mock
     private ITransformationFunctionService transformationFunctionService;

@@ -109,7 +109,7 @@ import com.b2c.prototype.transform.function.ITransformationFunction;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.util.CardUtil;
 import com.tm.core.finder.parameter.Parameter;
-import com.tm.core.process.dao.identifier.IQueryService;
+import com.tm.core.process.dao.query.IQueryService;
 import org.hibernate.Session;
 import org.springframework.context.annotation.Configuration;
 
@@ -932,10 +932,10 @@ public class TransformationEntityConfiguration {
             String itemId = searchFieldUpdateCollectionEntityDto.getSearchField();
             List<ArticularItemDto> articularItemDtoList = searchFieldUpdateCollectionEntityDto.getUpdateDtoSet();
             Set<ArticularItemDto> articularItemDtoSet = new HashSet<>(articularItemDtoList);
-            ItemData existingItemData = queryService.getGraphEntity(
+            ItemData existingItemData = queryService.getNamedQueryEntity(
                     session,
                     ItemData.class,
-                    "itemData.full",
+                    "ItemData.findItemDataWithFullRelations",
                     new Parameter("itemId", itemId));
             Map<String, ArticularItem> existingArticularItemMap = existingItemData.getArticularItemSet().stream()
                     .collect(Collectors.toMap(
@@ -976,10 +976,10 @@ public class TransformationEntityConfiguration {
         return (session, itemDataSearchFieldUpdateDto) -> {
             String itemId = itemDataSearchFieldUpdateDto.getSearchField();
             ItemDataDto itemDataDto = itemDataSearchFieldUpdateDto.getUpdateDto();
-            ItemData existingItemData = queryService.getGraphEntity(
+            ItemData existingItemData = queryService.getNamedQueryEntity(
                     session,
                     ItemData.class,
-                    "itemData.full",
+                    "ItemData.findItemDataWithFullRelations",
                     new Parameter("itemId", itemId));
             Map<String, ArticularItem> existingArticularItemMap = existingItemData.getArticularItemSet().stream()
                     .collect(Collectors.toMap(

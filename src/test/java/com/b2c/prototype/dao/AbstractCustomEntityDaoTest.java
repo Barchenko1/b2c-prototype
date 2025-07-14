@@ -6,9 +6,9 @@ import com.github.database.rider.core.api.dataset.YamlDataSet;
 import com.github.database.rider.core.configuration.DataSetConfig;
 import com.github.database.rider.core.dataset.DataSetExecutorImpl;
 import com.github.database.rider.junit5.api.DBRider;
-import com.tm.core.process.dao.common.AbstractEntityDao;
+import com.tm.core.process.dao.common.session.AbstractSessionFactoryDao;
 import com.tm.core.process.dao.common.IEntityDao;
-import com.tm.core.process.dao.identifier.IQueryService;
+import com.tm.core.process.dao.query.IQueryService;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
@@ -59,7 +59,7 @@ public abstract class AbstractCustomEntityDaoTest {
     @BeforeEach
     public void setUp() {
         try {
-            Field sessionFactoryField = AbstractEntityDao.class.getDeclaredField("sessionFactory");
+            Field sessionFactoryField = AbstractSessionFactoryDao.class.getDeclaredField("sessionFactory");
             sessionFactoryField.setAccessible(true);
             sessionFactoryField.set(dao, sessionFactory);
         } catch (Exception e) {

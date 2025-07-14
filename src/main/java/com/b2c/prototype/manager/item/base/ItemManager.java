@@ -1,6 +1,5 @@
 //package com.b2c.prototype.manager.item.base;
 //
-//import com.b2c.prototype.dao.item.IItemDao;
 //import com.b2c.prototype.manager.item.IItemManager;
 //import com.b2c.prototype.modal.dto.payload.ItemDto;
 //import com.b2c.prototype.modal.entity.item.ArticularItem;
@@ -8,7 +7,7 @@
 //import com.b2c.prototype.modal.entity.item.ItemData;
 //import com.b2c.prototype.function.transform.ITransformationFunctionService;
 //import com.tm.core.finder.factory.IParameterFactory;
-//import com.tm.core.process.manager.common.EntityOperationManager;
+//import com.tm.core.process.manager.common.operator.EntityOperationManager;
 //import com.tm.core.process.manager.common.IEntityOperationManager;
 //import lombok.extern.slf4j.Slf4j;
 //
@@ -22,7 +21,7 @@
 //    private final ISupplierService supplierService;
 //    private final IParameterFactory parameterFactory;
 //
-//    public ItemManager(IItemDao itemDao,
+//    public ItemManager(ITransaction itemDao,
 //                       ISearchService searchService,
 //                       ITransformationFunctionService transformationFunctionService,
 //                       ISupplierService supplierService,

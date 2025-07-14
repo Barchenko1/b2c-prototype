@@ -8,12 +8,14 @@ import com.b2c.prototype.manager.AbstractConstantEntityManager;
 import com.b2c.prototype.manager.message.IMessageTypeManager;
 import com.tm.core.process.dao.common.IEntityDao;
 import com.tm.core.finder.factory.IParameterFactory;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
 
 public class MessageTypeManager extends AbstractConstantEntityManager<ConstantPayloadDto, MessageType> implements IMessageTypeManager {
     public MessageTypeManager(IParameterFactory parameterFactory,
-                              IEntityDao dao,
+                              ITransactionEntityDao dao,
                               ITransformationFunctionService transformationFunctionService) {
-        super(parameterFactory, dao,
+        super(parameterFactory,
+                dao,
                 new String[] {"MessageType.findByValue", "MessageType.all"},
                 transformationFunctionService.getTransformationFunction(ConstantPayloadDto.class, MessageType.class),
                 transformationFunctionService.getTransformationFunction(MessageType.class, ConstantPayloadDto.class)

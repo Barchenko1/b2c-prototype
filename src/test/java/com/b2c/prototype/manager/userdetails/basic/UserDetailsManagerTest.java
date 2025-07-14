@@ -98,18 +98,6 @@ class UserDetailsManagerTest {
     }
 
     @Test
-    void deleteUserDetailsByUserId_shouldDeleteEntity() {
-        String userId = "test-user-id";
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
-        
-
-        userDetailsManager.deleteUserDetailsByUserId(userId);
-
-        verify(userDetailsDao).findEntityAndDelete(parameter);
-    }
-
-    @Test
     void getUserDetailsByUserId_shouldReturnUserDetailsDto() {
         String userId = "test-user-id";
         UserDetailsDto userDetailsDto = getUserDetailsDto();
