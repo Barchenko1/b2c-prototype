@@ -105,14 +105,6 @@ public class SessionEntityFetcher implements ISessionEntityFetcher {
         );
     }
 
-//    public Discount fetchDiscount(Session session, String value) {
-//        return queryService.getNamedQueryEntity(
-//                session,
-//                Discount.class,
-//                "ArticularItem.findByDiscountCharSequenceCode",
-//                parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, value));
-//    }
-
     @Override
     public Optional<Discount> fetchDiscountOptional(Session session, String value) {
         return queryService.getNamedQueryOptionalEntity(

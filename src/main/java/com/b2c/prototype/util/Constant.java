@@ -31,9 +31,4 @@ public interface Constant {
     String PAYMENT_METHOD_SERVICE_ID = "paymentMethod";
     String RATING_SERVICE_ID = "rating";
 
-    //graph
-    String ARTICULAR_ITEM_FIND_BY_DISCOUNT_CHAR_SEQUENCE_CODE = "ArticularItem.findByDiscountCharSequenceCode";
-    String ARTICULAR_ITEM_FIND_BY_DISCOUNT_NOT_NULL = "ArticularItem.findByDiscountNotNull";
-    String ARTICULAR_ITEM_FULL = "articularItem.full";
-
 }

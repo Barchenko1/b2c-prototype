@@ -2,11 +2,6 @@ package com.b2c.prototype.configuration;
 
 import com.b2c.prototype.dao.ISessionEntityFetcher;
 import com.b2c.prototype.dao.SessionEntityFetcher;
-import com.b2c.prototype.dao.message.IMessageBoxDao;
-import com.b2c.prototype.dao.option.IOptionItemDao;
-import com.b2c.prototype.dao.option.ITimeDurationOptionDao;
-import com.b2c.prototype.dao.post.IPostDao;
-import com.b2c.prototype.dao.review.IReviewDao;
 import com.b2c.prototype.gateway.IRestClient;
 import com.b2c.prototype.gateway.RestClient;
 import com.b2c.prototype.manager.address.IUserAddressManager;

@@ -26,7 +26,6 @@ import com.b2c.prototype.dao.address.base.BasicAddressDao;
 import com.b2c.prototype.dao.delivery.base.BasicDeliveryDao;
 import com.b2c.prototype.dao.delivery.base.BasicDeliveryTypeDao;
 import com.b2c.prototype.dao.payment.base.BasicPaymentMethodDao;
-import com.b2c.prototype.dao.user.IContactInfoDao;
 import com.b2c.prototype.dao.delivery.IDeliveryDao;
 import com.b2c.prototype.dao.user.base.BasicDeviceDao;
 import com.b2c.prototype.dao.user.base.BasicUserDetailsDao;
@@ -74,7 +73,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.transaction.annotation.Transactional;
 
 @Configuration
 public class BeanConfiguration {
@@ -111,7 +109,7 @@ public class BeanConfiguration {
     @Bean
     public SessionFactory readSessionFactory() {
         ISessionFactoryManager sessionFactoryManager = SessionFactoryManager.getInstance(getDatabaseTypeConfiguration());
-        return sessionFactoryManager.getSessionFactory(DatabaseType.READ, "");
+        return sessionFactoryManager.getSessionFactory(DatabaseType.READ, MAIN_READ_DATABASE_CONFIG);
     }
 
     @Bean
