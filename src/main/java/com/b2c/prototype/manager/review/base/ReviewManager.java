@@ -1,6 +1,5 @@
 package com.b2c.prototype.manager.review.base;
 
-import com.b2c.prototype.dao.review.IReviewDao;
 import com.b2c.prototype.manager.review.IReviewManager;
 import com.b2c.prototype.modal.dto.payload.review.ResponseReviewCommentDto;
 import com.b2c.prototype.modal.dto.payload.review.ReviewCommentDto;
@@ -17,7 +16,6 @@ import com.tm.core.process.dao.common.ITransactionEntityDao;
 import com.tm.core.process.dao.query.IQueryService;
 import com.tm.core.process.dao.IFetchHandler;
 import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
-import com.tm.core.process.manager.common.operator.EntityOperationManager;
 import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
 import org.hibernate.Session;
 

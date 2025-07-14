@@ -1,6 +1,5 @@
 package com.b2c.prototype.manager.item.base;
 
-import com.b2c.prototype.dao.item.IDiscountDao;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountStatusDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
@@ -11,8 +10,6 @@ import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.dao.IFetchHandler;
 import com.tm.core.process.dao.common.ITransactionEntityDao;
 import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
-import com.tm.core.process.manager.common.operator.EntityOperationManager;
-import com.tm.core.process.manager.common.IEntityOperationManager;
 import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
 import org.hibernate.Session;
 

@@ -1,7 +1,6 @@
 package com.b2c.prototype.manager.order.base;
 
 import com.b2c.prototype.dao.ISessionEntityFetcher;
-import com.b2c.prototype.dao.order.ICustomerOrderDao;
 import com.b2c.prototype.modal.constant.CommissionType;
 import com.b2c.prototype.modal.constant.OrderStatusEnum;
 import com.b2c.prototype.modal.dto.payload.order.PaymentDto;
@@ -25,11 +24,7 @@ import com.b2c.prototype.manager.order.ICustomerSingleDeliveryOrderManager;
 import com.b2c.prototype.transform.help.calculate.IPriceCalculationService;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.dao.common.ITransactionEntityDao;
-import com.tm.core.process.dao.query.IQueryService;
-import com.tm.core.process.dao.IFetchHandler;
 import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
-import com.tm.core.process.manager.common.operator.EntityOperationManager;
-import com.tm.core.process.manager.common.IEntityOperationManager;
 import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
 import org.hibernate.Session;
 

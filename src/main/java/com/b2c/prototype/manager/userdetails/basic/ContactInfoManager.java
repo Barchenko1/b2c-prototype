@@ -1,6 +1,5 @@
 package com.b2c.prototype.manager.userdetails.basic;
 
-import com.b2c.prototype.dao.user.IContactInfoDao;
 import com.b2c.prototype.modal.dto.payload.order.ContactInfoDto;
 import com.b2c.prototype.modal.entity.order.DeliveryArticularItemQuantity;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
@@ -11,8 +10,6 @@ import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.dao.IFetchHandler;
 import com.tm.core.process.dao.common.ITransactionEntityDao;
 import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
-import com.tm.core.process.manager.common.operator.EntityOperationManager;
-import com.tm.core.process.manager.common.IEntityOperationManager;
 import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
 import org.hibernate.Session;
 import org.slf4j.Logger;

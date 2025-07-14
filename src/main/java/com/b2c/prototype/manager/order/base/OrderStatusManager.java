@@ -6,7 +6,6 @@ import com.b2c.prototype.modal.entity.order.OrderStatus;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.AbstractConstantEntityManager;
 import com.b2c.prototype.manager.order.IOrderStatusManager;
-import com.tm.core.process.dao.common.IEntityDao;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.dao.common.ITransactionEntityDao;
 

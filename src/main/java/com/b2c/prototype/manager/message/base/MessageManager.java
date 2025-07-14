@@ -1,6 +1,5 @@
 package com.b2c.prototype.manager.message.base;
 
-import com.b2c.prototype.dao.message.IMessageBoxDao;
 import com.b2c.prototype.modal.constant.MessageStatusEnum;
 import com.b2c.prototype.modal.dto.payload.message.MessageDto;
 import com.b2c.prototype.modal.dto.payload.message.ResponseMessageOverviewDto;
@@ -16,8 +15,6 @@ import com.tm.core.process.dao.common.ITransactionEntityDao;
 import com.tm.core.process.dao.query.IQueryService;
 import com.tm.core.process.dao.IFetchHandler;
 import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
-import com.tm.core.process.manager.common.operator.EntityOperationManager;
-import com.tm.core.process.manager.common.IEntityOperationManager;
 import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
 import org.hibernate.Session;
 import org.slf4j.Logger;

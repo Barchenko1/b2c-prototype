@@ -1,7 +1,6 @@
 package com.b2c.prototype.modal.base.address;
 
 import com.b2c.prototype.modal.entity.address.Country;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;

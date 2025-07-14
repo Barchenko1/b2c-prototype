@@ -1,6 +1,5 @@
 package com.b2c.prototype.manager.option.base;
 
-import com.b2c.prototype.dao.option.IZoneOptionDao;
 import com.b2c.prototype.manager.option.IZoneOptionManager;
 import com.b2c.prototype.modal.dto.payload.option.ZoneOptionDto;
 import com.b2c.prototype.modal.entity.option.ZoneOption;

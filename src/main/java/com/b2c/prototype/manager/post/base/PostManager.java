@@ -1,6 +1,5 @@
 package com.b2c.prototype.manager.post.base;
 
-import com.b2c.prototype.dao.post.IPostDao;
 import com.b2c.prototype.modal.dto.payload.post.PostDto;
 import com.b2c.prototype.modal.dto.payload.post.ResponsePostDto;
 import com.b2c.prototype.modal.entity.item.Item;
@@ -12,8 +11,6 @@ import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.dao.common.ITransactionEntityDao;
 import com.tm.core.process.dao.query.IQueryService;
 import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
-import com.tm.core.process.manager.common.operator.EntityOperationManager;
-import com.tm.core.process.manager.common.IEntityOperationManager;
 import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;

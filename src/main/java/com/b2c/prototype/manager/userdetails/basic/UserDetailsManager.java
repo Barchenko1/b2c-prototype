@@ -4,7 +4,6 @@ import com.b2c.prototype.modal.dto.payload.user.RegistrationUserDetailsDto;
 import com.b2c.prototype.modal.dto.payload.user.UserDetailsDto;
 import com.b2c.prototype.modal.dto.payload.user.ResponseUserDetailsDto;
 import com.b2c.prototype.modal.entity.user.UserDetails;
-import com.b2c.prototype.dao.user.IUserDetailsDao;
 
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.userdetails.IUserDetailsManager;
@@ -12,8 +11,6 @@ import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.dao.IFetchHandler;
 import com.tm.core.process.dao.common.ITransactionEntityDao;
 import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
-import com.tm.core.process.manager.common.operator.EntityOperationManager;
-import com.tm.core.process.manager.common.IEntityOperationManager;
 import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
 import org.hibernate.Session;
 
