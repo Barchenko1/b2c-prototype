@@ -15,10 +15,10 @@ import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.modal.entity.user.UserCreditCard;
 import com.b2c.prototype.modal.entity.user.UserDetails;
-import com.b2c.prototype.dao.user.IUserDetailsDao;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.util.CardUtil;
 import com.tm.core.finder.parameter.Parameter;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,7 +46,7 @@ import static org.mockito.Mockito.when;
 class UserDetailsManagerTest {
 
     @Mock
-    private IUserDetailsDao userDetailsDao;
+    private ITransactionEntityDao userDetailsDao;
     @Mock
     private ITransformationFunctionService transformationFunctionService;
     @InjectMocks

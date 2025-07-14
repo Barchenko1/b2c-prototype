@@ -1,6 +1,5 @@
 package com.b2c.prototype.manager.payment.base;
 
-import com.b2c.prototype.dao.payment.ICreditCardDao;
 import com.b2c.prototype.manager.userdetails.basic.UserCreditCardManager;
 import com.b2c.prototype.modal.dto.payload.order.CreditCardDto;
 import com.b2c.prototype.modal.dto.payload.order.ResponseCreditCardDto;
@@ -12,6 +11,7 @@ import com.b2c.prototype.modal.entity.user.UserCreditCard;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.tm.core.finder.parameter.Parameter;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +38,7 @@ import static org.mockito.Mockito.when;
 class CreditCardManagerTest {
 
     @Mock
-    private ICreditCardDao creditCardDao;
+    private ITransactionEntityDao creditCardDao;
     @Mock
     private ITransformationFunctionService transformationFunctionService;
     @InjectMocks

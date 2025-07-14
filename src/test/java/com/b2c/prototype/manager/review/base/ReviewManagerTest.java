@@ -1,6 +1,5 @@
 package com.b2c.prototype.manager.review.base;
 
-import com.b2c.prototype.dao.review.IReviewDao;
 import com.b2c.prototype.modal.dto.payload.review.ReviewDto;
 import com.b2c.prototype.modal.dto.payload.review.ResponseReviewDto;
 import com.b2c.prototype.modal.entity.item.Item;
@@ -10,6 +9,7 @@ import com.b2c.prototype.modal.entity.review.Review;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 
 import com.tm.core.finder.parameter.Parameter;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,7 +36,7 @@ import static org.mockito.Mockito.when;
 class ReviewManagerTest {
 
     @Mock
-    private IReviewDao reviewDao;
+    private ITransactionEntityDao reviewDao;
 
     @Mock
     private ITransformationFunctionService transformationFunctionService;

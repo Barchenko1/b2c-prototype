@@ -1,7 +1,5 @@
 package com.b2c.prototype.manager.message.base;
 
-
-import com.b2c.prototype.dao.message.IMessageDao;
 import com.b2c.prototype.modal.dto.payload.message.MessageDto;
 import com.b2c.prototype.modal.dto.payload.message.MessageTemplateDto;
 import com.b2c.prototype.modal.dto.payload.message.ResponseMessageOverviewDto;
@@ -14,6 +12,7 @@ import com.b2c.prototype.modal.entity.message.MessageType;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 
 import com.tm.core.finder.parameter.Parameter;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +40,7 @@ import static org.mockito.Mockito.when;
 class MessageManagerTest {
 
     @Mock
-    private IMessageDao messageDao;
+    private ITransactionEntityDao messageDao;
 
     @Mock
     private ITransformationFunctionService transformationFunctionService;

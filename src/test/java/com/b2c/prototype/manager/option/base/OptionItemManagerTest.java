@@ -3,12 +3,12 @@ package com.b2c.prototype.manager.option.base;
 import com.b2c.prototype.modal.dto.payload.option.OptionGroupOptionItemSetDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 
-import com.b2c.prototype.dao.option.IOptionItemDao;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 
 import com.tm.core.finder.parameter.Parameter;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +34,7 @@ import static org.mockito.Mockito.when;
 class OptionItemManagerTest {
 
     @Mock
-    private IOptionItemDao optionItemDao;
+    private ITransactionEntityDao optionItemDao;
 
     @Mock
     private ITransformationFunctionService transformationFunctionService;

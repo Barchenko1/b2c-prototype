@@ -2,6 +2,7 @@ package com.b2c.prototype.dao.message.basic;
 
 import com.b2c.prototype.dao.AbstractConstantEntityDaoTest;
 import com.b2c.prototype.dao.EntityDataSet;
+import com.b2c.prototype.dao.message.BasicMessageTypeDao;
 import com.b2c.prototype.modal.entity.message.MessageType;
 import com.tm.core.process.dao.query.QueryService;
 import com.tm.core.finder.manager.EntityMappingManager;

@@ -1,6 +1,5 @@
 package com.b2c.prototype.manager.item.base;
 
-import com.b2c.prototype.dao.item.IItemDataDao;
 import com.b2c.prototype.modal.dto.payload.item.ItemDataDto;
 import com.b2c.prototype.modal.dto.payload.constant.BrandDto;
 import com.b2c.prototype.modal.dto.payload.constant.CategoryValueDto;
@@ -14,6 +13,7 @@ import com.b2c.prototype.modal.entity.item.ItemType;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 
 import com.tm.core.finder.parameter.Parameter;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +38,7 @@ import static org.mockito.Mockito.when;
 class ItemDataManagerTest {
 
     @Mock
-    private IItemDataDao itemDataDao;
+    private ITransactionEntityDao itemDataDao;
 
     @Mock
     private ITransformationFunctionService transformationFunctionService;

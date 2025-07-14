@@ -341,7 +341,7 @@ public class ServiceBeanConfiguration {
     }
 
 //    @Bean
-//    public IOptionItemCostManager optionItemCostManager(IOptionItemCostDao optionItemCostDao,
+//    public IOptionItemCostManager optionItemCostManager(ITransactionEntityDao optionItemCostDao,
 //                                                        IQueryService queryService,
 //                                                        ITransformationFunctionService transformationFunctionService,
 //                                                        IParameterFactory parameterFactory) {

@@ -1,6 +1,5 @@
 package com.b2c.prototype.manager.item.base;
 
-import com.b2c.prototype.dao.item.IDiscountDao;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountStatusDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
@@ -9,6 +8,7 @@ import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 
 import com.tm.core.finder.parameter.Parameter;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ import static org.mockito.Mockito.when;
 class DiscountManagerTest {
 
     @Mock
-    private IDiscountDao discountDao;
+    private ITransactionEntityDao discountDao;
 
     @Mock
     private ITransformationFunctionService transformationFunctionService;

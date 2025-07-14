@@ -2,13 +2,13 @@ package com.b2c.prototype.manager.store.base;
 
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 
-import com.b2c.prototype.dao.store.IStoreDao;
 import com.b2c.prototype.modal.dto.payload.store.StoreDto;
 import com.b2c.prototype.modal.dto.payload.store.ResponseStoreDto;
 import com.b2c.prototype.modal.entity.store.CountType;
 import com.b2c.prototype.modal.entity.store.Store;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.tm.core.finder.parameter.Parameter;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +35,7 @@ import static org.mockito.Mockito.when;
 class StoreManagerTest {
 
     @Mock
-    private IStoreDao storeDao;
+    private ITransactionEntityDao storeDao;
 
     @Mock
     private ITransformationFunctionService transformationFunctionService;

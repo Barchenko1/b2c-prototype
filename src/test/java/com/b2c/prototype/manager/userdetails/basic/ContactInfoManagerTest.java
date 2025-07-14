@@ -1,6 +1,5 @@
 package com.b2c.prototype.manager.userdetails.basic;
 
-import com.b2c.prototype.dao.user.IContactInfoDao;
 import com.b2c.prototype.modal.dto.payload.order.ContactInfoDto;
 import com.b2c.prototype.modal.dto.payload.order.ContactPhoneDto;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
@@ -10,6 +9,7 @@ import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 
 import com.tm.core.finder.parameter.Parameter;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ import static org.mockito.Mockito.when;
 
 class ContactInfoManagerTest {
     @Mock
-    private IContactInfoDao contactInfoDao;
+    private ITransactionEntityDao contactInfoDao;
 
     @Mock
     private ITransformationFunctionService transformationFunctionService;

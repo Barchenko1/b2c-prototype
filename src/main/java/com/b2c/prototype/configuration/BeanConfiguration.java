@@ -1,48 +1,44 @@
 package com.b2c.prototype.configuration;
 
-import com.b2c.prototype.dao.address.base.BasicCountryDao;
-import com.b2c.prototype.dao.item.base.BasicAvailabilityStatusDao;
-import com.b2c.prototype.dao.item.base.BasicDiscountDao;
-import com.b2c.prototype.dao.item.base.BasicArticularItemDao;
-import com.b2c.prototype.dao.item.base.BasicItemDataDao;
-import com.b2c.prototype.dao.message.IMessageDao;
-import com.b2c.prototype.dao.message.basic.BasicMessageBoxDao;
-import com.b2c.prototype.dao.message.basic.BasicMessageDao;
-import com.b2c.prototype.dao.message.basic.BasicMessageStatusDao;
-import com.b2c.prototype.dao.message.basic.BasicMessageTypeDao;
-import com.b2c.prototype.dao.option.base.BasicTimeDurationOptionDao;
-import com.b2c.prototype.dao.option.base.BasicZoneOptionDao;
-import com.b2c.prototype.dao.payment.base.BasicMinMaxCommissionDao;
-import com.b2c.prototype.dao.payment.base.CurrencyCoefficientDao;
-import com.b2c.prototype.dao.price.base.BasicCurrencyDao;
-import com.b2c.prototype.dao.store.base.BasicCountTypeDao;
-import com.b2c.prototype.dao.store.base.BasicStoreDao;
-import com.b2c.prototype.dao.user.IContactPhoneDao;
-import com.b2c.prototype.dao.user.base.BasicContactPhoneDao;
-import com.b2c.prototype.dao.user.base.BasicCountryPhoneCodeDao;
-import com.b2c.prototype.dao.user.base.BasicContactInfoDao;
-import com.b2c.prototype.dao.item.base.BasicCategoryDao;
-import com.b2c.prototype.dao.address.base.BasicAddressDao;
-import com.b2c.prototype.dao.delivery.base.BasicDeliveryDao;
-import com.b2c.prototype.dao.delivery.base.BasicDeliveryTypeDao;
-import com.b2c.prototype.dao.payment.base.BasicPaymentMethodDao;
-import com.b2c.prototype.dao.delivery.IDeliveryDao;
-import com.b2c.prototype.dao.user.base.BasicDeviceDao;
-import com.b2c.prototype.dao.user.base.BasicUserDetailsDao;
-import com.b2c.prototype.dao.item.base.BasicBrandDao;
-import com.b2c.prototype.dao.payment.base.BasicCreditCardDao;
-import com.b2c.prototype.dao.option.base.BasicOptionItemDao;
-import com.b2c.prototype.dao.option.base.BasicOptionGroupDao;
-import com.b2c.prototype.dao.order.base.BasicCustomerOrderDao;
-import com.b2c.prototype.dao.order.base.BasicOrderStatusDao;
-import com.b2c.prototype.dao.payment.base.BasicPaymentDao;
-import com.b2c.prototype.dao.post.base.BasicPostDao;
-import com.b2c.prototype.dao.item.base.BasicItemDao;
-import com.b2c.prototype.dao.item.base.BasicItemStatusDao;
-import com.b2c.prototype.dao.item.base.BasicItemTypeDao;
-import com.b2c.prototype.dao.rating.base.BasicRatingDao;
-import com.b2c.prototype.dao.review.base.BasicReviewDao;
-import com.b2c.prototype.dao.payment.IPaymentDao;
+import com.b2c.prototype.dao.address.BasicCountryDao;
+import com.b2c.prototype.dao.item.BasicAvailabilityStatusDao;
+import com.b2c.prototype.dao.item.BasicDiscountDao;
+import com.b2c.prototype.dao.item.BasicArticularItemDao;
+import com.b2c.prototype.dao.item.BasicItemDataDao;
+import com.b2c.prototype.dao.message.BasicMessageDao;
+import com.b2c.prototype.dao.message.BasicMessageBoxDao;
+import com.b2c.prototype.dao.message.BasicMessageStatusDao;
+import com.b2c.prototype.dao.message.BasicMessageTypeDao;
+import com.b2c.prototype.dao.option.BasicTimeDurationOptionDao;
+import com.b2c.prototype.dao.option.BasicZoneOptionDao;
+import com.b2c.prototype.dao.payment.BasicMinMaxCommissionDao;
+import com.b2c.prototype.dao.payment.CurrencyCoefficientDao;
+import com.b2c.prototype.dao.price.BasicCurrencyDao;
+import com.b2c.prototype.dao.store.BasicCountTypeDao;
+import com.b2c.prototype.dao.store.BasicStoreDao;
+import com.b2c.prototype.dao.user.BasicContactPhoneDao;
+import com.b2c.prototype.dao.user.BasicCountryPhoneCodeDao;
+import com.b2c.prototype.dao.user.BasicContactInfoDao;
+import com.b2c.prototype.dao.item.BasicCategoryDao;
+import com.b2c.prototype.dao.address.BasicAddressDao;
+import com.b2c.prototype.dao.delivery.BasicDeliveryDao;
+import com.b2c.prototype.dao.delivery.BasicDeliveryTypeDao;
+import com.b2c.prototype.dao.payment.BasicPaymentMethodDao;
+import com.b2c.prototype.dao.user.BasicDeviceDao;
+import com.b2c.prototype.dao.user.BasicUserDetailsDao;
+import com.b2c.prototype.dao.item.BasicBrandDao;
+import com.b2c.prototype.dao.payment.BasicCreditCardDao;
+import com.b2c.prototype.dao.option.BasicOptionItemDao;
+import com.b2c.prototype.dao.option.BasicOptionGroupDao;
+import com.b2c.prototype.dao.order.BasicCustomerOrderDao;
+import com.b2c.prototype.dao.order.BasicOrderStatusDao;
+import com.b2c.prototype.dao.payment.BasicPaymentDao;
+import com.b2c.prototype.dao.post.BasicPostDao;
+import com.b2c.prototype.dao.item.BasicItemDao;
+import com.b2c.prototype.dao.item.BasicItemStatusDao;
+import com.b2c.prototype.dao.item.BasicItemTypeDao;
+import com.b2c.prototype.dao.rating.BasicRatingDao;
+import com.b2c.prototype.dao.review.BasicReviewDao;
 import com.tm.core.configuration.dbType.DatabaseConfigurationAnnotationClass;
 import com.tm.core.configuration.dbType.DatabaseType;
 import com.tm.core.configuration.dbType.DatabaseTypeConfiguration;
@@ -181,8 +177,8 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public IMessageDao messageDao(SessionFactory sessionFactory,
-                                      IQueryService queryService) {
+    public ITransactionEntityDao messageDao(SessionFactory sessionFactory,
+                                            IQueryService queryService) {
         return new BasicMessageDao(sessionFactory, queryService);
     }
 
@@ -212,7 +208,7 @@ public class BeanConfiguration {
 //    }
 
     @Bean
-    public IPaymentDao paymentDao(SessionFactory sessionFactory, IQueryService queryService) {
+    public ITransactionEntityDao paymentDao(SessionFactory sessionFactory, IQueryService queryService) {
         return new BasicPaymentDao(sessionFactory, queryService);
     }
 
@@ -222,7 +218,7 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public IContactPhoneDao contactPhoneDao(SessionFactory sessionFactory, IQueryService queryService) {
+    public ITransactionEntityDao contactPhoneDao(SessionFactory sessionFactory, IQueryService queryService) {
         return new BasicContactPhoneDao(sessionFactory, queryService);
     }
 
@@ -282,7 +278,7 @@ public class BeanConfiguration {
     }
 
 //    @Bean
-//    public IOptionItemCostDao optionItemCostDao(SessionFactory sessionFactory, IQueryService queryService) {
+//    public ITransactionEntityDao optionItemCostDao(SessionFactory sessionFactory, IQueryService queryService) {
 //        return new BasicOptionItemCostDao(sessionFactory, queryService);
 //    }
 
@@ -323,7 +319,7 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public IDeliveryDao deliveryDao(SessionFactory sessionFactory, IQueryService queryService) {
+    public ITransactionEntityDao deliveryDao(SessionFactory sessionFactory, IQueryService queryService) {
         return new BasicDeliveryDao(sessionFactory, queryService);
     }
 

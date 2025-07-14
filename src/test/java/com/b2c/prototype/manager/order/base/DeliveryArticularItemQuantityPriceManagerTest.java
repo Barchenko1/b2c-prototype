@@ -1,6 +1,5 @@
 package com.b2c.prototype.manager.order.base;
 
-import com.b2c.prototype.dao.order.ICustomerOrderDao;
 import com.b2c.prototype.modal.constant.PaymentMethodEnum;
 import com.b2c.prototype.modal.dto.payload.order.AddressDto;
 import com.b2c.prototype.modal.dto.payload.order.ContactInfoDto;
@@ -40,6 +39,7 @@ import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.util.CardUtil;
 import com.tm.core.finder.parameter.Parameter;
+import com.tm.core.process.dao.common.ITransactionEntityDao;
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -65,7 +65,7 @@ import static org.mockito.Mockito.when;
 class DeliveryArticularItemQuantityPriceManagerTest {
 
     @Mock
-    private ICustomerOrderDao orderItemDataDao;
+    private ITransactionEntityDao orderItemDataDao;
     @Mock
     private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
