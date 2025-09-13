@@ -46,7 +46,7 @@ class CustomerSingleDeliveryOrderStatusManagerTest extends AbstractConstantEntit
         OrderStatus testValue = createTestValue();
 
         when(mapDtoToEntityFunction.apply(dto)).thenReturn(testValue);
-        when(dao.getEntityClass()).thenAnswer(invocation -> OrderStatus.class);
+//        when(dao.getEntityClass()).thenAnswer(invocation -> OrderStatus.class);
 
         orderStatusManager.saveEntity(dto);
 
@@ -65,7 +65,7 @@ class CustomerSingleDeliveryOrderStatusManagerTest extends AbstractConstantEntit
                 .build();
 
         when(mapDtoToEntityFunction.apply(newDto)).thenReturn(testValue);
-        when(dao.getEntityClass()).thenAnswer(invocation -> OrderStatus.class);
+//        when(dao.getEntityClass()).thenAnswer(invocation -> OrderStatus.class);
 
         orderStatusManager.updateEntity("testValue", newDto);
 

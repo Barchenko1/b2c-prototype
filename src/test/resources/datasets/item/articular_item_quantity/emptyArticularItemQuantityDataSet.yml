@@ -6,6 +6,18 @@ item_type:
   - id: 1
     value: "Clothes"
     label: "Clothes"
+category:
+  - id: 1
+    label: "parent"
+    value: "parent"
+  - id: 2
+    category_id: 1
+    label: "root"
+    value: "root"
+  - id: 3
+    category_id: 2
+    label: "child"
+    value: "child"
 currency:
   - id: 1
     value: "USD"
@@ -20,9 +32,9 @@ price:
 discount:
   - id: 1
     amount: 5
-    charSequenceCode: "abc"
-    isActive: true
-    isPercent: false
+    char_sequence_code: "abc"
+    is_active: true
+    is_percent: false
     currency_id: 1
 option_group:
   - id: 1
@@ -37,44 +49,33 @@ option_item:
     value: "M"
     label: "M"
     option_group_id: 1
-category:
+articular_status:
   - id: 1
-    label: "parent"
-    value: "parent"
+    value: "NEW"
+    label: "NEW"
   - id: 2
-    category_id: 1
-    label: "root"
-    value: "root"
-  - id: 3
-    category_id: 2
-    label: "child"
-    value: "child"
-rating:
+    value: "COMMON"
+    label: "COMMON"
+metadata:
   - id: 1
-    value: 1
-  - id: 2
-    value: 2
-  - id: 3
-    value: 3
-  - id: 4
-    value: 4
-  - id: 5
-    value: 5
-review:
-  - id: 1
-    unique_id: 123
-    title: "title"
-    message: "message"
-    dateOfCreate: 100
-    rating_id: 5
-item_data:
-  - id: 1
-    item_id: 123
+    metadata_uniq_id: "123"
+    description: "{\"desc1\":\"desc1\",\"desc2\":\"desc2\"}"
     brand_id: 1
     category_id: 3
-    itemtype_id: 1
+    item_type_id: 1
 articular_item:
   - id: 1
-    articular_id: 1
-    dateOfCreate: 10000
+    meta_data_id: 1
+    articular_id: "123"
+    product_name: "Mob 1"
+    date_of_create: "2024-03-03 12:00:00"
+    discount_id: 1
+    full_price_id: 1
+    total_price_id: 2
+    status_id: 1
+articular_item_option_item:
+  - articular_item_id: 1
+    option_item_id: 1
+  - articular_item_id: 1
+    option_item_id: 2
 articular_item_quantity: []

@@ -1,12 +1,8 @@
 package com.b2c.prototype.modal.entity.payment;
 
-import com.b2c.prototype.modal.constant.CommissionType;
 import com.b2c.prototype.modal.entity.price.Price;
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,7 +21,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "min_max_commission")
@@ -34,17 +30,6 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @NamedQueries({
-        @NamedQuery(
-                name = "MinMaxCommission.findByCommissionType",
-                query = "SELECT m FROM MinMaxCommission m " +
-                        "LEFT JOIN FETCH m.minCommission min " +
-                        "LEFT JOIN FETCH min.currency minc " +
-                        "LEFT JOIN FETCH m.maxCommission max " +
-                        "LEFT JOIN FETCH max.currency maxc " +
-                        "LEFT JOIN FETCH m.changeCommissionPrice ccp " +
-                        "LEFT JOIN FETCH ccp.currency ccpc " +
-                        "WHERE m.commissionType = :commissionType"
-        ),
         @NamedQuery(
                 name = "MinMaxCommission.getCommissionList",
                 query = "SELECT m FROM MinMaxCommission m " +
@@ -64,13 +49,10 @@ public class MinMaxCommission {
     private CommissionValue minCommission;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private CommissionValue maxCommission;
-    @Enumerated(EnumType.STRING)
-    @Column(name = "commission_type", nullable = false, unique = true)
-    private CommissionType commissionType;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(nullable = false)
     private Price changeCommissionPrice;
-    @UpdateTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date lastUpdateTimestamp;
+//    @UpdateTimestamp
+//    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime lastUpdateTimestamp;
 }

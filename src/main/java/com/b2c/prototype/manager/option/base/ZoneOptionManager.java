@@ -1,11 +1,11 @@
 package com.b2c.prototype.manager.option.base;
 
+import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.manager.option.IZoneOptionManager;
 import com.b2c.prototype.modal.dto.payload.option.ZoneOptionDto;
 import com.b2c.prototype.modal.entity.option.ZoneOption;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.common.ITransactionEntityDao;
 import com.tm.core.process.manager.common.operator.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
 import org.hibernate.Session;
@@ -21,8 +21,8 @@ public class ZoneOptionManager implements IZoneOptionManager {
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public ZoneOptionManager(ITransactionEntityDao zoneOptionDao, ITransformationFunctionService transformationFunctionService, IParameterFactory parameterFactory) {
-        this.entityOperationManager = new EntityOperationManager(zoneOptionDao);
+    public ZoneOptionManager(IGeneralEntityDao zoneOptionDao, ITransformationFunctionService transformationFunctionService, IParameterFactory parameterFactory) {
+        this.entityOperationManager = new EntityOperationManager(null);
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
     }

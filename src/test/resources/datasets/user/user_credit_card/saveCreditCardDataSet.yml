@@ -1,7 +1,0 @@
-credit_card:
-  - cardNumber: "4444-1111-2222-3333"
-    dateOfExpire: "06/28"
-    cvv: 818
-    ownerName: "name"
-    ownerSecondName: "secondName"
-    isActive: true

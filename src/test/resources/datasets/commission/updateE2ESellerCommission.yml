@@ -17,8 +17,8 @@ commission_value:
     currency_id: 1
 min_max_commission:
   - id: 1
-    mincommission_id: 4
-    maxcommission_id: 3
+    min_commission_id: 4
+    max_commission_id: 3
     commission_type: 'SELLER'
-    changecommissionprice_id: 1
+    change_commission_price_id: 1
     lastUpdateTimestamp: "2024-04-01 10:15:30"

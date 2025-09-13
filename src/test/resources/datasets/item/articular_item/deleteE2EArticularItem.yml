@@ -29,15 +29,15 @@ price:
 discount:
   - id: 1
     amount: 100
-    charSequenceCode: "xxx"
-    isActive: true
-    isPercent: false
+    char_sequence_code: "xxx"
+    is_active: true
+    is_percent: false
     currency_id: 1
   - id: 2
     amount: 100
-    charSequenceCode: "abc1"
-    isActive: true
-    isPercent: false
+    char_sequence_code: "abc1"
+    is_active: true
+    is_percent: false
     currency_id: 1
 option_group:
   - id: 1
@@ -95,11 +95,11 @@ item_data:
     description: "{\"par1\":\"desc1\",\"par2\":\"desc2\",\"par3\":\"desc3\"}"
     brand_id: 1
     category_id: 2
-    itemtype_id: 1
+    item_type_id: 1
 articular_item:
   - id: 1
     articular_id: 1
-    dateOfCreate: 10000
+    date_of_create: "2024-03-03 12:00:00"
     discount_id: 1
     fullprice_id: 1
     totalprice_id: 1
@@ -108,7 +108,7 @@ articular_item:
     productname: "Mob 1"
   - id: 2
     articular_id: 2
-    dateOfCreate: 10000
+    date_of_create: "2024-03-03 12:00:00"
     discount_id: 2
     fullprice_id: 2
     totalprice_id: 3

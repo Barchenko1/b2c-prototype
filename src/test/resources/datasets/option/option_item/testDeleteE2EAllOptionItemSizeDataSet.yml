@@ -9,7 +9,7 @@ price:
 articular_item:
   - id: 1
     articular_id: 1234
-    dateOfCreate: 10000
+    date_of_create: "2024-03-03 12:00:00"
     fullprice_id: 1
     totalprice_id: 1
 option_group:

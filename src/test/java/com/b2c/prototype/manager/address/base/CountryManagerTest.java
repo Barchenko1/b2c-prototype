@@ -44,7 +44,7 @@ class CountryManagerTest extends AbstractConstantEntityManagerTest<Country> {
         Country testValue = createTestValue();
 
         when(mapDtoToEntityFunction.apply(countryDto)).thenReturn(testValue);
-        when(dao.getEntityClass()).thenAnswer(invocation -> Country.class);
+//        when(dao.getEntityClass()).thenAnswer(invocation -> Country.class);
 
         countryManager.saveEntity(countryDto);
 
@@ -63,7 +63,7 @@ class CountryManagerTest extends AbstractConstantEntityManagerTest<Country> {
                 .build();
 
         when(mapDtoToEntityFunction.apply(newDto)).thenReturn(testValue);
-        when(dao.getEntityClass()).thenAnswer(invocation -> Country.class);
+//        when(dao.getEntityClass()).thenAnswer(invocation -> Country.class);
 
         countryManager.updateEntity("testValue", newDto);
 

@@ -1,5 +1,6 @@
 package com.b2c.prototype.manager.message.base;
 
+import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.constant.MessageStatusEnum;
 import com.b2c.prototype.modal.dto.payload.message.MessageDto;
 import com.b2c.prototype.modal.dto.payload.message.ResponseMessageOverviewDto;
@@ -11,7 +12,6 @@ import com.b2c.prototype.modal.entity.message.MessageTemplate;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.message.IMessageManager;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.common.ITransactionEntityDao;
 import com.tm.core.process.dao.query.IQueryService;
 import com.tm.core.process.dao.IFetchHandler;
 import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
@@ -39,12 +39,12 @@ public class MessageManager implements IMessageManager {
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public MessageManager(ITransactionEntityDao messageBoxDao,
+    public MessageManager(IGeneralEntityDao messageBoxDao,
                           IFetchHandler fetchHandler,
                           IQueryService queryService,
                           ITransformationFunctionService transformationFunctionService,
                           IParameterFactory parameterFactory) {
-        this.entityOperationManager = new TransactionEntityOperationManager(messageBoxDao);
+        this.entityOperationManager = new TransactionEntityOperationManager(null);
         this.fetchHandler = fetchHandler;
         this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
@@ -79,13 +79,8 @@ public class MessageManager implements IMessageManager {
             Message newMessage = transformationFunctionService.getEntity((Session) session, Message.class, messageDto);
             Message message = getExistingMessage(messageBox, messageId);
             MessageTemplate messageTemplate = message.getMessageTemplate();
-            messageTemplate.setSender(newMessage.getMessageTemplate().getSender());
-            messageTemplate.setReceivers(newMessage.getMessageTemplate().getReceivers());
             messageTemplate.setTitle(newMessage.getMessageTemplate().getTitle());
             messageTemplate.setMessage(newMessage.getMessageTemplate().getMessage());
-            messageTemplate.setSendSystem("APP");
-            messageTemplate.setDateOfSend(newMessage.getMessageTemplate().getDateOfSend());
-            messageTemplate.setType(newMessage.getMessageTemplate().getType());
             message.setStatus(newMessage.getStatus());
 
             session.merge(messageBox);
@@ -216,7 +211,7 @@ public class MessageManager implements IMessageManager {
 
     private Message getExistingMessage(MessageBox messageBox, String uniqMessageId) {
         return messageBox.getMessages().stream()
-                .filter(message -> message.getMessageTemplate().getMessageUniqNumber().equals(uniqMessageId))
+//                .filter(message -> message.getMessageUniqNumber().equals(uniqMessageId))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Message not found"));
     }

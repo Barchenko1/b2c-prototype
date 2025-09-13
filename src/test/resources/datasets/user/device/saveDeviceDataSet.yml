@@ -1,0 +1,9 @@
+device:
+  - login_time: "2024-03-03 12:00:00"
+    user_agent: "agent"
+    ip_address: "ipAddress"
+    language: "language"
+    timezone: "timezone"
+    platform: "platform"
+    screen_height: 1080
+    screen_width: 1920

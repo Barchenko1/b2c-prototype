@@ -1,17 +1,18 @@
 package com.b2c.prototype.manager.message.base;
 
 
+import com.b2c.prototype.dao.IEntityDao;
+import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.entity.message.MessageType;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.AbstractConstantEntityManager;
 import com.b2c.prototype.manager.message.IMessageTypeManager;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.common.ITransactionEntityDao;
 
 public class MessageTypeManager extends AbstractConstantEntityManager<ConstantPayloadDto, MessageType> implements IMessageTypeManager {
     public MessageTypeManager(IParameterFactory parameterFactory,
-                              ITransactionEntityDao dao,
+                              IGeneralEntityDao dao,
                               ITransformationFunctionService transformationFunctionService) {
         super(parameterFactory,
                 dao,

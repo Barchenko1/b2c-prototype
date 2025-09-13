@@ -46,7 +46,7 @@ class CurrencyManagerTest extends AbstractConstantEntityManagerTest<Currency> {
         Currency testValue = createTestValue();
 
         when(mapDtoToEntityFunction.apply(dto)).thenReturn(testValue);
-        when(dao.getEntityClass()).thenAnswer(invocation -> Currency.class);
+//        when(dao.getEntityClass()).thenAnswer(invocation -> Currency.class);
 
         currencyManager.saveEntity(dto);
 
@@ -65,7 +65,7 @@ class CurrencyManagerTest extends AbstractConstantEntityManagerTest<Currency> {
                 .build();
 
         when(mapDtoToEntityFunction.apply(newDto)).thenReturn(testValue);
-        when(dao.getEntityClass()).thenAnswer(invocation -> Currency.class);
+//        when(dao.getEntityClass()).thenAnswer(invocation -> Currency.class);
 
         currencyManager.updateEntity("testValue", newDto);
 

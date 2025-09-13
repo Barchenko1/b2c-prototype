@@ -46,7 +46,7 @@ class ItemTypeManagerTest extends AbstractConstantEntityManagerTest<ItemType> {
         ItemType testValue = createTestValue();
 
         when(mapDtoToEntityFunction.apply(dto)).thenReturn(testValue);
-        when(dao.getEntityClass()).thenAnswer(invocation -> ItemType.class);
+//        when(dao.getEntityClass()).thenAnswer(invocation -> ItemType.class);
 
         itemTypeManager.saveEntity(dto);
 
@@ -65,7 +65,7 @@ class ItemTypeManagerTest extends AbstractConstantEntityManagerTest<ItemType> {
                 .build();
 
         when(mapDtoToEntityFunction.apply(newDto)).thenReturn(testValue);
-        when(dao.getEntityClass()).thenAnswer(invocation -> ItemType.class);
+//        when(dao.getEntityClass()).thenAnswer(invocation -> ItemType.class);
 
         itemTypeManager.updateEntity("testValue", newDto);
 

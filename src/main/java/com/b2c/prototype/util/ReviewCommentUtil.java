@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class ReviewCommentUtil {
     public static Map<String, ReviewComment> reviewCommentMap(List<ReviewComment> reviewComments) {
         return flattenReviewComments(reviewComments).stream()
-                .collect(Collectors.toMap(ReviewComment::getCommentId, Function.identity(), (existing, replacement) -> existing));
+                .collect(Collectors.toMap(ReviewComment::getReviewCommentUniqId, Function.identity(), (existing, replacement) -> existing));
     }
 
     public static List<ReviewComment> flattenReviewComments(List<ReviewComment> reviewComments) {

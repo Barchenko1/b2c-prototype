@@ -2,7 +2,6 @@ package com.b2c.prototype.modal.entity.option;
 
 import com.b2c.prototype.modal.base.constant.AbstractConstantEntity;
 import com.b2c.prototype.modal.entity.price.Price;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,8 +16,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
-import java.time.LocalTime;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -47,12 +44,8 @@ import java.time.LocalTime;
         )
 })
 public class TimeDurationOption extends AbstractConstantEntity {
-    @Column(name = "start_time", nullable = false)
-    private LocalTime startTime;
-    @Column(name = "end_time", nullable = false)
-    private LocalTime endTime;
     @Column(name = "duration_in_min", nullable = false)
-    private int duration;
+    private int durationInMin;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(nullable = false)
     private Price price;

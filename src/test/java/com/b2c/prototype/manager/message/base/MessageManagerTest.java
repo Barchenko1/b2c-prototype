@@ -152,7 +152,6 @@ class MessageManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> supplier = () -> parameter;
         Function<Message, ResponseMessageOverviewDto> transformationFunction = message -> ResponseMessageOverviewDto.builder()
-                .sender(message.getMessageTemplate().getSender())
                 .build();
         when(transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class))
                 .thenReturn(transformationFunction);
@@ -171,7 +170,6 @@ class MessageManagerTest {
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> supplier = () -> parameter;
         Function<Message, ResponseMessageOverviewDto> transformationFunction = message -> ResponseMessageOverviewDto.builder()
-                .sender(message.getMessageTemplate().getSender())
                 .build();
         when(transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class))
                 .thenReturn(transformationFunction);
@@ -209,11 +207,8 @@ class MessageManagerTest {
         MessageStatus messageStatus = mock(MessageStatus.class);
         return Message.builder()
                 .messageTemplate(MessageTemplate.builder()
-                        .sender("sender@domain.com")
-                        .receivers(Collections.singletonList("receiver@domain.com"))
                         .title("Message Content")
                         .message("Message Content")
-                        .type(messageType)
                         .build())
                 .status(messageStatus)
                 .build();

@@ -18,37 +18,37 @@ price:
 discount:
   - id: 1
     amount: 10
-    charSequenceCode: "abc"
-    isActive: true
-    isPercent: false
+    char_sequence_code: "abc"
+    is_active: true
+    is_percent: false
     currency_id: 1
   - id: 2
     amount: 20
-    charSequenceCode: "updateWithNewDiscount"
-    isActive: true
-    isPercent: false
+    char_sequence_code: "updateWithNewDiscount"
+    is_active: true
+    is_percent: false
     currency_id: 1
 articular_item:
   - id: 1
     articular_id: 123
-    dateOfCreate: 10000
+    date_of_create: "2024-03-03 12:00:00"
     discount_id: 1
     fullprice_id: 1
     totalprice_id: 1
   - id: 2
     articular_id: 111
-    dateOfCreate: 10000
+    date_of_create: "2024-03-03 12:00:00"
     discount_id: 2
     fullprice_id: 2
     totalprice_id: 2
   - id: 3
     articular_id: 122
-    dateOfCreate: 10000
+    date_of_create: "2024-03-03 12:00:00"
     discount_id: 2
     fullprice_id: 3
     totalprice_id: 3
   - id: 4
     articular_id: noDiscount
-    dateOfCreate: 10000
+    date_of_create: "2024-03-03 12:00:00"
     fullprice_id: 4
     totalprice_id: 4

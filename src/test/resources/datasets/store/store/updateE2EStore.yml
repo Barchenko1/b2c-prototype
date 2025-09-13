@@ -30,9 +30,9 @@ price:
 discount:
   - id: 1
     amount: 5
-    charSequenceCode: "abc"
-    isActive: true
-    isPercent: false
+    char_sequence_code: "abc"
+    is_active: true
+    is_percent: false
     currency_id: 1
 option_group:
   - id: 1
@@ -60,7 +60,7 @@ item_data:
     item_id: 123
     brand_id: 1
     category_id: 3
-    itemtype_id: 1
+    item_type_id: 1
 country:
   - id: 1
     label: "USA"
@@ -69,39 +69,39 @@ country:
 address:
   - id: 1
     street: "street"
-    buildingNumber: 1
-    florNumber: 9
-    apartmentNumber: 101
-    zipCode: 90000
+    building_number: 1
+    flor_number: 9
+    apartment_number: 101
+    zip_code: 90000
     country_id: 1
   - id: 2
     street: "7th Avenue"
-    buildingNumber: "11A"
-    florNumber: 3
-    apartmentNumber: 12
-    zipCode: 10001
+    building_number: "11A"
+    flor_number: 3
+    apartment_number: 12
+    zip_code: 10001
     city: "New York2"
     country_id: 1
 store:
   - id: 1
     store_id: "exist"
     storeName: "abc"
-    isActive: true
+    is_active: true
     address_id: 1
   - id: 2
-    isActive: true
+    is_active: true
     store_id: "123"
     storeName: "updated name"
     address_id: 2
 articular_item:
   - id: 1
     articular_id: "123"
-    dateOfCreate: 10000
+    date_of_create: "2024-03-03 12:00:00"
     fullprice_id: 1
     totalprice_id: 1
   - id: 2
     articular_id: "125"
-    dateOfCreate: 10000
+    date_of_create: "2024-03-03 12:00:00"
     fullprice_id: 2
     totalprice_id: 2
 articular_item_option_item:

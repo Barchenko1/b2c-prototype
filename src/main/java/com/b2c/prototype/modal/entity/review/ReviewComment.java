@@ -10,8 +10,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -21,6 +19,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,11 +34,11 @@ public class ReviewComment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
-    @Column(name = "commentId", unique = true, nullable = false)
-    private String commentId;
+    @Column(name = "review_comment_uniq_id", unique = true, nullable = false)
+    private String reviewCommentUniqId;
     private String title;
     private String message;
-    private long dateOfCreate;
+    private LocalDateTime dateOfCreate;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private UserDetails userDetails;
     @ManyToOne

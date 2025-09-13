@@ -26,9 +26,9 @@ price:
 discount:
   - id: 1
     amount: 5
-    charSequenceCode: "abc"
-    isActive: true
-    isPercent: false
+    char_sequence_code: "abc"
+    is_active: true
+    is_percent: false
     currency_id: 1
 option_group:
   - id: 1
@@ -67,11 +67,11 @@ item_data:
     item_id: 123
     brand_id: 1
     category_id: 3
-    itemtype_id: 1
+    item_type_id: 1
 articular_item:
   - id: 1
     articular_id: "A123"
-    dateOfCreate: 10000
+    date_of_create: "2024-03-03 12:00:00"
     discount_id: 1
     fullprice_id: 2
     totalprice_id: 3
@@ -80,7 +80,7 @@ articular_item:
     productname: "Mob 1"
   - id: 2
     articular_id: "A111"
-    dateOfCreate: 10000
+    date_of_create: "2024-03-03 12:00:00"
     fullprice_id: 4
     totalprice_id: 4
     item_data_id: 1
@@ -127,18 +127,18 @@ country_phone_code:
 contact_phone: []
 contact_info:
   - id: 1
-    firstName: "Wolter"
-    lastName: "White"
+    first_name: "Wolter"
+    last_name: "White"
     email: "email@email.com"
 user_details:
   - id: 1
     user_id: "123"
     username: "john.doe"
-    dateOfCreate: 100
-    iscontactphoneverified: false
-    isemailverified: false
-    isActive: false
-    contactinfo_id: 1
+    date_of_create: "2024-03-03 12:00:00"
+    is_contact_phone_verified: false
+    is_email_verified: false
+    is_active: false
+    contact_info_id: 1
 commission_value:
   - id: 1
     fee_type: 'FIXED'
@@ -159,12 +159,12 @@ min_max_commission:
     mincommission_id: 1
     maxcommission_id: 2
     commission_type: 'BUYER'
-    changecommissionprice_id: 1
+    change_commission_price_id: 1
     lastUpdateTimestamp: "2024-04-01 10:15:30"
   - id: 2
     mincommission_id: 3
     maxcommission_id: 4
     commission_type: 'SELLER'
-    changecommissionprice_id: 2
+    change_commission_price_id: 2
     lastUpdateTimestamp: "2024-04-01 10:15:30"
 customer_single_delivery_order: []

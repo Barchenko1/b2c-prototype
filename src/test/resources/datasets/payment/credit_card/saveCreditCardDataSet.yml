@@ -1,7 +1,8 @@
 credit_card:
-  - cardNumber: "4444-1111-2222-3333"
-    dateOfExpire: "06/28"
+  - card_number: "4444-1111-2222-3333"
+    month_of_expire: "06"
+    year_of_expire: "28"
     cvv: 818
-    ownerName: "name"
-    ownerSecondName: "secondName"
-    isActive: true
+    owner_name: "name"
+    owner_second_name: "secondName"
+    is_active: true

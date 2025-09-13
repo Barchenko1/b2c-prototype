@@ -22,8 +22,8 @@ public class PostUtil {
                 .message(entity.getMessage())
                 .authorEmail(entity.getAuthorEmail())
                 .authorName(entity.getAuthorName())
-                .postId(entity.getPostId())
-                .dateOfCreate(entity.getDateOfCreate())
+                .postId(entity.getPostUniqId())
+//                .dateOfCreate(entity.getDateOfCreate())
                 .childList(entity.getChildList() != null
                         ? entity.getChildList().stream()
                         .map(PostUtil::toDto)
@@ -40,7 +40,7 @@ public class PostUtil {
 
     private static Stream<String> flattenPost(Post post) {
         return Stream.concat(
-                Stream.of(post.getPostId()),
+                Stream.of(post.getPostUniqId()),
                 post.getChildList() == null ? Stream.empty() :
                         post.getChildList().stream().flatMap(PostUtil::flattenPost)
         );
@@ -48,7 +48,7 @@ public class PostUtil {
 
     public static Map<String, Post> postMap(Set<Post> posts) {
         return flattenPosts(posts).stream()
-                .collect(Collectors.toMap(Post::getPostId, Function.identity(), (existing, replacement) -> existing));
+                .collect(Collectors.toMap(Post::getPostUniqId, Function.identity(), (existing, replacement) -> existing));
     }
 
     public static List<Post> flattenPosts(Set<Post> posts) {

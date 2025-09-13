@@ -1,5 +1,6 @@
 package com.b2c.prototype.manager.userdetails.basic;
 
+import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.dto.payload.order.ContactInfoDto;
 import com.b2c.prototype.modal.entity.order.DeliveryArticularItemQuantity;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
@@ -8,7 +9,6 @@ import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.userdetails.IContactInfoManager;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.dao.IFetchHandler;
-import com.tm.core.process.dao.common.ITransactionEntityDao;
 import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
 import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
 import org.hibernate.Session;
@@ -29,11 +29,11 @@ public class ContactInfoManager implements IContactInfoManager {
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public ContactInfoManager(ITransactionEntityDao contactInfoDao,
+    public ContactInfoManager(IGeneralEntityDao contactInfoDao,
                               IFetchHandler fetchHandler,
                               ITransformationFunctionService transformationFunctionService,
                               IParameterFactory parameterFactory) {
-        this.entityOperationManager = new TransactionEntityOperationManager(contactInfoDao);
+        this.entityOperationManager = new TransactionEntityOperationManager(null);
         this.fetchHandler = fetchHandler;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
@@ -92,15 +92,15 @@ public class ContactInfoManager implements IContactInfoManager {
                     "DeliveryArticularItemQuantity.findByOrderIdWithBeneficiaries",
                     parameterFactory.createStringParameter(ORDER_ID, orderId));
 
-            ContactInfo existingBeneficiary = orderItemDataOption.getBeneficiary();
-            ContactInfo newBeneficiary = transformationFunctionService.getEntity((Session) session, ContactInfo.class, contactInfoDto);
+//            ContactInfo existingBeneficiary = orderItemDataOption.getBeneficiary();
+//            ContactInfo newBeneficiary = transformationFunctionService.getEntity((Session) session, ContactInfo.class, contactInfoDto);
+//
+//            if (existingBeneficiary != null) {
+//                newBeneficiary.setId(existingBeneficiary.getId());
+//                newBeneficiary.getContactPhone().setId(existingBeneficiary.getContactPhone().getId());
+//            }
 
-            if (existingBeneficiary != null) {
-                newBeneficiary.setId(existingBeneficiary.getId());
-                newBeneficiary.getContactPhone().setId(existingBeneficiary.getContactPhone().getId());
-            }
-
-            orderItemDataOption.setBeneficiary(newBeneficiary);
+//            orderItemDataOption.setBeneficiary(newBeneficiary);
             session.merge(orderItemDataOption);
         });
     }
@@ -112,8 +112,8 @@ public class ContactInfoManager implements IContactInfoManager {
                     DeliveryArticularItemQuantity.class,
                     "DeliveryArticularItemQuantity.findByOrderIdWithBeneficiaries",
                     parameterFactory.createStringParameter(ORDER_ID, orderId));
-            ContactInfo beneficiary = orderItemDataOption.getBeneficiary();
-            session.remove(beneficiary);
+//            ContactInfo beneficiary = orderItemDataOption.getBeneficiary();
+//            session.remove(beneficiary);
         });
     }
 

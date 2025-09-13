@@ -1,0 +1,10 @@
+country:
+  - id: 1
+    label: "Country"
+    value: "Country"
+currency:
+  - id: 1
+    value: "USD"
+    label: "USD"
+price: []
+zone_option: []

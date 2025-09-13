@@ -9,10 +9,10 @@ country:
 address:
   - id: 1
     street: "Update street"
-    buildingNumber: 1
-    florNumber: 9
-    apartmentNumber: 101
-    zipCode: 90001
+    building_number: 1
+    flor_number: 9
+    apartment_number: 101
+    zip_code: 90001
     country_id: 1
 delivery:
   - id: 1

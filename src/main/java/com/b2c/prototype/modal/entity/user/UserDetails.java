@@ -1,20 +1,33 @@
 package com.b2c.prototype.modal.entity.user;
 
-import com.b2c.prototype.modal.base.user.AbstractUserDetails;
+import com.b2c.prototype.modal.entity.address.UserAddress;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
-@EqualsAndHashCode(callSuper = true)
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "user_details")
 @Data
-@SuperBuilder
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @NamedQueries({
         @NamedQuery(
@@ -71,6 +84,31 @@ import lombok.experimental.SuperBuilder;
                         "WHERE u.userId = :userId"
         )
 })
-public class UserDetails extends AbstractUserDetails {
-
+public class UserDetails {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false, nullable = false)
+    private long id;
+    @Column(name = "user_id", nullable = false, unique = true, updatable = false)
+    private String userId;
+    @Column(nullable = false, unique = true)
+    private String username;
+    @Column(nullable = false)
+    private LocalDateTime dateOfCreate;
+    private boolean isActive;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "contact_info_id")
+    private ContactInfo contactInfo;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "user_details_id")
+    @Builder.Default
+    private Set<Device> devices = new HashSet<>();
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "user_details_id")
+    @Builder.Default
+    private Set<UserAddress> userAddresses = new HashSet<>();
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "user_details_id")
+    @Builder.Default
+    private Set<UserCreditCard> userCreditCards = new HashSet<>();
 }

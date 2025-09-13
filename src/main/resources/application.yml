@@ -10,11 +10,39 @@ thread:
 entity:
   package:
     path: com.b2c.prototype.modal.entity
+#spring:
+#  web:
+#    locale: en
+#  messages:
+#    basename: ib18n
 spring:
-  web:
-    locale: en
-  messages:
-    basename: ib18n
+  profiles:
+    active: test
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:5433/test_client_db
+    username: admin
+    password: secret
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20         # MAX_POOL_SIZE
+      minimum-idle: 5               # MIN_IDLE
+      connection-timeout: 60000     # CONNECTION_TIMEOUT (ms)
+      idle-timeout: 600000          # IDLE_TIMEOUT (ms)
+      max-lifetime: 1800000         # MAX_LIFETIME (ms)
+      pool-name: test-hikari-pool
+  jpa:
+    hibernate:
+      ddl-auto: create-drop         # or 'validate' / 'update' as you prefer
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        show_sql: false
+    mapping-resources: hikari.hibernate.cfg.xml
+  # If you use schema.sql/data.sql in tests, set to 'always'; otherwise leave default
+  sql:
+    init:
+      mode: never
 enums:
   brands:
     - value: HP

@@ -1,0 +1,33 @@
+message_status:
+  - id: 1
+    label: "New"
+    value: "New"
+message_type:
+  - id: 1
+    label: "InMail"
+    value: "InMail"
+message_template:
+  - id: 1
+    title: "title"
+    message: "message"
+message:
+  - id: 1
+    date_of_send: "2024-03-03 12:00:00"
+    message_template_id: 1
+    message_uniq_number: "messageUniqNumber1"
+    sender: "sender@email.com"
+    status_id: 1
+    type_id: 1
+message_receivers:
+  - message_id: 1
+    receiver_email: "receiver1@email.com"
+  - message_id: 1
+    receiver_email: "receiver2@email.com"
+user_details:
+  - id: 1
+    user_id: "123"
+    username: "username"
+    date_of_create: "2024-03-03 12:00:00"
+    is_active: false
+message_box: []
+message_box_message: []

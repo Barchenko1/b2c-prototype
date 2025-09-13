@@ -1,5 +1,6 @@
 package com.b2c.prototype.manager.review.base;
 
+import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.manager.review.IReviewManager;
 import com.b2c.prototype.modal.dto.payload.review.ResponseReviewCommentDto;
 import com.b2c.prototype.modal.dto.payload.review.ReviewCommentDto;
@@ -12,7 +13,6 @@ import com.b2c.prototype.modal.entity.review.ReviewStatus;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.common.ITransactionEntityDao;
 import com.tm.core.process.dao.query.IQueryService;
 import com.tm.core.process.dao.IFetchHandler;
 import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
@@ -26,7 +26,6 @@ import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 import static com.b2c.prototype.util.Constant.USER_ID;
 import static com.b2c.prototype.util.Constant.VALUE;
 import static com.b2c.prototype.util.ReviewCommentUtil.reviewCommentMap;
-import static com.b2c.prototype.util.Util.getCurrentTimeMillis;
 
 public class ReviewManager implements IReviewManager {
 
@@ -36,12 +35,12 @@ public class ReviewManager implements IReviewManager {
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public ReviewManager(ITransactionEntityDao reviewDao,
+    public ReviewManager(IGeneralEntityDao reviewDao,
                          IQueryService queryService,
                          IFetchHandler fetchHandler,
                          ITransformationFunctionService transformationFunctionService,
                          IParameterFactory parameterFactory) {
-        this.entityOperationManager = new TransactionEntityOperationManager(reviewDao);
+        this.entityOperationManager = new TransactionEntityOperationManager(null);
         this.queryService = queryService;
         this.fetchHandler = fetchHandler;
         this.transformationFunctionService = transformationFunctionService;
@@ -68,13 +67,13 @@ public class ReviewManager implements IReviewManager {
             UserDetails userDetails = fetchUserDetails((Session) session, userId);
             review.setUserDetails(userDetails);
             item.getReviews().stream()
-                    .filter(r -> r.getReviewId().equals(reviewId))
+                    .filter(r -> r.getReviewUniqId().equals(reviewId))
                     .findFirst()
                     .ifPresent(r -> {
                         r.setTitle(review.getTitle());
                         r.setMessage(review.getMessage());
                         r.setRating(review.getRating());
-                        r.setDateOfCreate(getCurrentTimeMillis());
+//                        r.setDateOfCreate(getCurrentTimeMillis());
                         session.merge(r);
                     });
         });
@@ -86,7 +85,7 @@ public class ReviewManager implements IReviewManager {
             Item item = fetchItem((Session) session, articularId);
 
             item.getReviews().stream()
-                    .filter(review -> review.getReviewId().equals(reviewId))
+                    .filter(review -> review.getReviewUniqId().equals(reviewId))
                     .findFirst()
                     .ifPresent(review -> item.getReviews().remove(review));
             session.merge(item);
@@ -99,7 +98,7 @@ public class ReviewManager implements IReviewManager {
             Item item = fetchItem((Session) session, articularId);
 
             item.getReviews().stream()
-                    .filter(review -> review.getReviewId().equals(reviewId))
+                    .filter(review -> review.getReviewUniqId().equals(reviewId))
                     .findFirst()
                     .ifPresent(review -> {
                         UserDetails userDetails = review.getUserDetails();
@@ -116,7 +115,7 @@ public class ReviewManager implements IReviewManager {
         entityOperationManager.executeConsumer(session -> {
             Item item = fetchItem((Session) session, articularId);
             item.getReviews().stream()
-                    .filter(review -> review.getReviewId().equals(reviewId))
+                    .filter(review -> review.getReviewUniqId().equals(reviewId))
                     .findFirst()
                     .ifPresent(review -> {
                         ReviewStatus reviewStatus = fetchReviewStatus((Session) session, statusValue);
@@ -156,7 +155,7 @@ public class ReviewManager implements IReviewManager {
                 "Item.findItemWithReviewCommentsByArticularId",
                 parameterFactory.createStringParameter(ARTICULAR_ID, articularId));
         return item.getReviews().stream()
-                .filter(review -> review.getReviewId().equals(reviewId))
+                .filter(review -> review.getReviewUniqId().equals(reviewId))
                 .map(transformationFunctionService.getTransformationFunction(Review.class, ResponseReviewDto.class))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Review not found"));
@@ -167,7 +166,7 @@ public class ReviewManager implements IReviewManager {
         entityOperationManager.executeConsumer(session -> {
             Item item = fetchItem((Session) session, articularId);
             item.getReviews().stream()
-                    .filter(r -> r.getReviewId().equals(reviewId))
+                    .filter(r -> r.getReviewUniqId().equals(reviewId))
                     .findFirst()
                     .ifPresent(review -> {
                         UserDetails userDetails = fetchUserDetails((Session) session, userId);
@@ -191,7 +190,7 @@ public class ReviewManager implements IReviewManager {
         entityOperationManager.executeConsumer(session -> {
             Item item = fetchItem((Session) session, articularId);
             item.getReviews().stream()
-                    .filter(r -> r.getReviewId().equals(reviewId))
+                    .filter(r -> r.getReviewUniqId().equals(reviewId))
                     .findFirst()
                     .ifPresent(review -> {
                         ReviewComment updateReviewComment =
@@ -213,11 +212,11 @@ public class ReviewManager implements IReviewManager {
             Item item = fetchItem((Session) session, articularId);
 
             item.getReviews().stream()
-                    .filter(review -> review.getReviewId().equals(reviewId))
+                    .filter(review -> review.getReviewUniqId().equals(reviewId))
                     .findFirst()
                     .ifPresent(review -> {
                         ReviewComment reviewComment = review.getComments().stream()
-                                .filter(comment -> comment.getCommentId().equals(commentId))
+                                .filter(comment -> comment.getReviewCommentUniqId().equals(commentId))
                                 .findFirst()
                                 .orElseThrow(() -> new RuntimeException("Comment not found"));
 
@@ -235,7 +234,7 @@ public class ReviewManager implements IReviewManager {
                 parameterFactory.createStringParameter(ARTICULAR_ID, articularId));
 
         return item.getReviews().stream()
-                .filter(review -> review.getReviewId().equals(reviewId))
+                .filter(review -> review.getReviewUniqId().equals(reviewId))
                 .flatMap(review -> review.getComments().stream())
                 .map(transformationFunctionService.getTransformationFunction(ReviewComment.class, ResponseReviewCommentDto.class))
                 .toList();

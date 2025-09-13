@@ -45,7 +45,7 @@ class CountryPhoneCodeManagerTest extends AbstractConstantEntityManagerTest<Coun
                 .build();
         CountryPhoneCode testValue = createTestValue();
         when(mapDtoToEntityFunction.apply(dto)).thenReturn(testValue);
-        when(dao.getEntityClass()).thenAnswer(invocation -> CountryPhoneCode.class);
+//        when(dao.getEntityClass()).thenAnswer(invocation -> CountryPhoneCode.class);
 
         countryPhoneCodeManager.saveEntity(dto);
 
@@ -64,7 +64,7 @@ class CountryPhoneCodeManagerTest extends AbstractConstantEntityManagerTest<Coun
                 .build();
 
         when(mapDtoToEntityFunction.apply(newDto)).thenReturn(testValue);
-        when(dao.getEntityClass()).thenAnswer(invocation -> CountryPhoneCode.class);
+//        when(dao.getEntityClass()).thenAnswer(invocation -> CountryPhoneCode.class);
 
         countryPhoneCodeManager.updateEntity("testValue", newDto);
 

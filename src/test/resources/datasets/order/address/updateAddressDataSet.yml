@@ -4,9 +4,10 @@ country:
     value: "USA"
 address:
   - id: 1
+    city: "new city"
     street: "Update street"
-    buildingNumber: 1
-    florNumber: 9
-    apartmentNumber: 102
-    zipCode: 90001
+    building_number: 1
+    flor_number: 9
+    apartment_number: 102
+    zip_code: 90001
     country_id: 1

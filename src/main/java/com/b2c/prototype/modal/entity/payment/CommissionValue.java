@@ -1,24 +1,33 @@
 package com.b2c.prototype.modal.entity.payment;
 
-import com.b2c.prototype.modal.base.commission.AbstractCommission;
+import com.b2c.prototype.modal.constant.FeeType;
+import com.b2c.prototype.modal.entity.price.Currency;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.SuperBuilder;
+import lombok.NoArgsConstructor;
 
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(
         name = "commission_value"
 //        uniqueConstraints = @UniqueConstraint(columnNames = {"amount", "fee_type", "currency_id"})
 )
 @Data
-@SuperBuilder
+@Builder
+@NoArgsConstructor
 @AllArgsConstructor
 @NamedQueries({
         @NamedQuery(
@@ -29,5 +38,14 @@ import lombok.experimental.SuperBuilder;
                         "AND c.currency = :currency"
         )
 })
-public class CommissionValue extends AbstractCommission {
+public class CommissionValue {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    private double amount;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+    private Currency currency;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "fee_type", nullable = false)
+    private FeeType feeType;
 }

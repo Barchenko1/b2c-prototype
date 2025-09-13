@@ -45,7 +45,7 @@ class MessageTypeManagerTest extends AbstractConstantEntityManagerTest<MessageTy
         MessageType testValue = createTestValue();
 
         when(mapDtoToEntityFunction.apply(dto)).thenReturn(testValue);
-        when(dao.getEntityClass()).thenAnswer(invocation -> MessageType.class);
+//        when(dao.getEntityClass()).thenAnswer(invocation -> MessageType.class);
 
         messageTypeManager.saveEntity(dto);
 
@@ -64,7 +64,7 @@ class MessageTypeManagerTest extends AbstractConstantEntityManagerTest<MessageTy
                 .build();
 
         when(mapDtoToEntityFunction.apply(newDto)).thenReturn(testValue);
-        when(dao.getEntityClass()).thenAnswer(invocation -> MessageType.class);
+//        when(dao.getEntityClass()).thenAnswer(invocation -> MessageType.class);
 
         messageTypeManager.updateEntity("testValue", newDto);
 

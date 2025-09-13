@@ -1,0 +1,22 @@
+currency:
+  - id: 1
+    value: "USD"
+    label: "USD"
+price:
+  - id: 1
+    amount: 20
+    currency_id: 1
+commission_value:
+  - id: 1
+    fee_type: 'FIXED'
+    amount: 20
+    currency_id: 1
+  - id: 2
+    fee_type: 'PERCENTAGE'
+    amount: 5
+min_max_commission:
+  - id: 1
+    min_commission_id: 1
+    max_commission_id: 2
+    change_commission_price_id: 1
+    last_update_timestamp: "2024-03-03 12:00:00"

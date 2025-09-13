@@ -1,5 +1,6 @@
 package com.b2c.prototype.manager.store.base;
 
+import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.entity.address.Address;
 
 import com.b2c.prototype.modal.dto.payload.store.StoreDto;
@@ -8,7 +9,6 @@ import com.b2c.prototype.modal.entity.store.Store;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.store.IStoreManager;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.common.ITransactionEntityDao;
 import com.tm.core.process.dao.query.IQueryService;
 import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
 import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
@@ -27,11 +27,11 @@ public class StoreManager implements IStoreManager {
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public StoreManager(ITransactionEntityDao storeDao,
+    public StoreManager(IGeneralEntityDao storeDao,
                         IQueryService queryService,
                         ITransformationFunctionService transformationFunctionService,
                         IParameterFactory parameterFactory) {
-        this.entityOperationManager = new TransactionEntityOperationManager(storeDao);
+        this.entityOperationManager = new TransactionEntityOperationManager(null);
         this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;

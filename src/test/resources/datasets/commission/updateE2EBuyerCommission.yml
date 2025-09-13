@@ -20,5 +20,5 @@ min_max_commission:
     mincommission_id: 4
     maxcommission_id: 3
     commission_type: 'BUYER'
-    changecommissionprice_id: 1
+    change_commission_price_id: 1
     lastUpdateTimestamp: "2024-04-01 10:15:30"

@@ -1,0 +1,13 @@
+currency:
+  - id: 1
+    value: "USD"
+    label: "USD"
+  - id: 2
+    value: "EUR"
+    label: "EUR"
+currency_coefficient:
+  - id: 1
+    currency_from_id: 1
+    currency_to_id: 2
+    coefficient: 0.97
+    date_of_create: "2024-03-03 12:00:00"

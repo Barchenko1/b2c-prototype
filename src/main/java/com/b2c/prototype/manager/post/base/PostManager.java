@@ -1,5 +1,6 @@
 package com.b2c.prototype.manager.post.base;
 
+import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.dto.payload.post.PostDto;
 import com.b2c.prototype.modal.dto.payload.post.ResponsePostDto;
 import com.b2c.prototype.modal.entity.item.Item;
@@ -8,7 +9,6 @@ import com.b2c.prototype.manager.post.IPostManager;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.util.PostUtil;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.common.ITransactionEntityDao;
 import com.tm.core.process.dao.query.IQueryService;
 import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
 import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
@@ -34,11 +34,11 @@ public class PostManager implements IPostManager {
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public PostManager(ITransactionEntityDao postDao,
+    public PostManager(IGeneralEntityDao postDao,
                        IQueryService queryService,
                        ITransformationFunctionService transformationFunctionService,
                        IParameterFactory parameterFactory) {
-        this.entityOperationManager = new TransactionEntityOperationManager(postDao);
+        this.entityOperationManager = new TransactionEntityOperationManager(null);
         this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
@@ -95,7 +95,7 @@ public class PostManager implements IPostManager {
                     parameterFactory.createStringParameter(ARTICULAR_ID, articularId));
 
             item.getPosts().stream()
-                    .filter(post -> postId.equals(post.getPostId()))
+                    .filter(post -> postId.equals(post.getPostUniqId()))
                     .findFirst()
                     .ifPresent(post -> item.getPosts().remove(post));
             session.merge(item);

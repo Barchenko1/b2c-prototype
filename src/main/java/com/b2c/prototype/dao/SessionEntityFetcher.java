@@ -1,6 +1,5 @@
 package com.b2c.prototype.dao;
 
-import com.b2c.prototype.modal.constant.CommissionType;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
@@ -28,7 +27,6 @@ import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.dao.query.IQueryService;
-import com.tm.core.process.dao.query.QueryService;
 import org.hibernate.Session;
 
 import java.util.Collections;
@@ -231,12 +229,8 @@ public class SessionEntityFetcher implements ISessionEntityFetcher {
     }
 
     @Override
-    public Optional<MinMaxCommission> fetchMinMaxCommission(Session session, CommissionType value) {
-        return queryService.getNamedQueryOptionalEntity(
-                session,
-                MinMaxCommission.class,
-                "MinMaxCommission.findByCommissionType",
-                parameterFactory.createEnumParameter("commissionType", value));
+    public Optional<MinMaxCommission> fetchMinMaxCommission(Session session) {
+        return Optional.empty();
     }
 
     @Override

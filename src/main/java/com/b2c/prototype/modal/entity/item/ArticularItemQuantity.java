@@ -1,6 +1,5 @@
 package com.b2c.prototype.modal.entity.item;
 
-import com.b2c.prototype.modal.entity.store.CountType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

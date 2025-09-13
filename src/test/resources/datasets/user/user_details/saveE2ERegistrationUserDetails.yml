@@ -15,6 +15,6 @@ credit_card: []
 user_details:
   - user_id: "123"
     username: "john.doe"
-    dateOfCreate: 100
-    isActive: false
-    contactinfo_id: 1
+    date_of_create: "2024-03-03 12:00:00"
+    is_active: false
+    contact_info_id: 1

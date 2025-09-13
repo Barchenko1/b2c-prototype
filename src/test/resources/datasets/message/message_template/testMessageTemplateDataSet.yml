@@ -1,0 +1,4 @@
+message_template:
+  - id: 1
+    title: "title"
+    message: "message"

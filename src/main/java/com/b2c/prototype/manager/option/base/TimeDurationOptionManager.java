@@ -1,12 +1,12 @@
 package com.b2c.prototype.manager.option.base;
 
+import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.manager.option.ITimeDurationOptionManager;
 import com.b2c.prototype.modal.dto.payload.option.TimeDurationOptionDto;
 import com.b2c.prototype.modal.dto.payload.option.ResponseTimeDurationOptionDto;
 import com.b2c.prototype.modal.entity.option.TimeDurationOption;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.common.ITransactionEntityDao;
 import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
 import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
 import org.hibernate.Session;
@@ -21,10 +21,10 @@ public class TimeDurationOptionManager implements ITimeDurationOptionManager {
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public TimeDurationOptionManager(ITransactionEntityDao timeDurationOptionDao,
+    public TimeDurationOptionManager(IGeneralEntityDao generalEntityDao,
                                      ITransformationFunctionService transformationFunctionService,
                                      IParameterFactory parameterFactory) {
-        this.entityOperationManager = new TransactionEntityOperationManager(timeDurationOptionDao);
+        this.entityOperationManager = new TransactionEntityOperationManager(null);
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
     }

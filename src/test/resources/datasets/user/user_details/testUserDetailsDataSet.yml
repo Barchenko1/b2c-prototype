@@ -1,0 +1,65 @@
+country_phone_code:
+  - id: 1
+    value: "+11"
+    label: "+11"
+contact_phone:
+  - id: 1
+    phone_number: "111-111-111"
+    country_phone_code_id: 1
+contact_info:
+  - id: 1
+    first_name: "Wolter"
+    last_name: "White"
+    email: "email"
+    contact_phone_id: 1
+    is_contact_phone_verified: false
+    is_email_verified: false
+country:
+  - id: 1
+    label: "USA"
+    value: "USA"
+address:
+  - id: 1
+    street: "street"
+    building_number: 1
+    flor_number: 9
+    apartment_number: 101
+    zip_code: 90000
+    city: "city"
+    country_id: 1
+credit_card:
+  - id: 1
+    card_number: "4444-1111-2222-3333"
+    month_of_expire: "06"
+    year_of_expire: "28"
+    cvv: 818
+    owner_name: "name"
+    owner_second_name: "secondName"
+    is_active: true
+user_details:
+  - id: 1
+    username: "username"
+    user_id: "123"
+    date_of_create: "2024-03-03 12:00:00"
+    is_active: true
+    contact_info_id: 1
+user_address:
+  - id: 1
+    address_id: 1
+    is_default: true
+    user_details_id: 1
+user_credit_card:
+  - id: 1
+    credit_card_id: 1
+    is_default: false
+    user_details_id: 1
+device:
+  - id: 1
+    user_agent: "agent"
+    ip_address: "ipAddress"
+    language: "language"
+    timezone: "timezone"
+    platform: "platform"
+    screen_height: 1080
+    screen_width: 1920
+    user_details_id: 1

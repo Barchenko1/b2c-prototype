@@ -1,7 +1,7 @@
 package com.b2c.prototype.manager.payment.base;
 
+import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.manager.payment.ICommissionManager;
-import com.b2c.prototype.modal.constant.CommissionType;
 import com.b2c.prototype.modal.dto.payload.commission.MinMaxCommissionDto;
 import com.b2c.prototype.modal.dto.payload.commission.ResponseBuyerCommissionInfoDto;
 import com.b2c.prototype.modal.dto.payload.commission.ResponseMinMaxCommissionDto;
@@ -15,7 +15,6 @@ import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.transform.help.calculate.IPriceCalculationService;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.common.ITransactionEntityDao;
 import com.tm.core.process.dao.query.IQueryService;
 import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
 import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
@@ -39,12 +38,12 @@ public class CommissionManager implements ICommissionManager {
     private final IParameterFactory parameterFactory;
     private final IPriceCalculationService priceCalculationService;
 
-    public CommissionManager(ITransactionEntityDao appCommissionDao,
+    public CommissionManager(IGeneralEntityDao appCommissionDao,
                              IQueryService queryService,
                              ITransformationFunctionService transformationFunctionService,
                              IParameterFactory parameterFactory,
                              IPriceCalculationService priceCalculationService) {
-        this.entityOperationManager = new TransactionEntityOperationManager(appCommissionDao);
+        this.entityOperationManager = new TransactionEntityOperationManager(null);
         this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
@@ -65,12 +64,12 @@ public class CommissionManager implements ICommissionManager {
         entityOperationManager.executeConsumer(session -> {
             MinMaxCommission newMinMaxCommission = transformationFunctionService.getEntity(
                     (Session) session, MinMaxCommission.class, minMaxCommissionDto);
-            CommissionType commissionType = CommissionType.valueOf(minMaxCommissionDto.getCommissionType());
+//            CommissionType commissionType = CommissionType.valueOf(minMaxCommissionDto.getCommissionType());
             MinMaxCommission minMaxCommission = queryService.getNamedQueryOptionalEntity(
                     session,
                     MinMaxCommission.class,
                     "MinMaxCommission.findByCommissionType",
-                    parameterFactory.createEnumParameter("commissionType", commissionType))
+                    parameterFactory.createEnumParameter("commissionType", null))
                     .orElseThrow(() -> new RuntimeException("MinMaxCommission not found"));
 
             CommissionValue newMinCommissionValue = newMinMaxCommission.getMinCommission();
@@ -94,11 +93,10 @@ public class CommissionManager implements ICommissionManager {
     @Override
     public void deleteCommissionByTime(String commissionTypeValue) {
         entityOperationManager.executeConsumer(session -> {
-            CommissionType commissionType = CommissionType.valueOf(commissionTypeValue.toUpperCase());
             MinMaxCommission minMaxCommission = queryService.getNamedQueryEntity(session,
                     MinMaxCommission.class,
                     "MinMaxCommission.findByCommissionType",
-                    parameterFactory.createEnumParameter("commissionType", commissionType));
+                    parameterFactory.createEnumParameter("commissionType", null));
 
             session.remove(minMaxCommission);
         });
@@ -116,10 +114,10 @@ public class CommissionManager implements ICommissionManager {
 
     @Override
     public ResponseMinMaxCommissionDto getCommissionByCommissionType(String commissionTypeValue) {
-        CommissionType commissionType = CommissionType.valueOf(commissionTypeValue.toUpperCase());
+//        CommissionType commissionType = CommissionType.valueOf(commissionTypeValue.toUpperCase());
         Optional<MinMaxCommission> optionalMinMaxCommission = entityOperationManager.getNamedQueryOptionalEntityClose(
                 "MinMaxCommission.findByCommissionType",
-                parameterFactory.createEnumParameter("commissionType", commissionType));
+                parameterFactory.createEnumParameter("commissionType", null));
 
         return optionalMinMaxCommission
                 .map(transformationFunctionService.getTransformationFunction(MinMaxCommission.class, ResponseMinMaxCommissionDto.class))
@@ -166,7 +164,7 @@ public class CommissionManager implements ICommissionManager {
                 session,
                 MinMaxCommission.class,
                 "MinMaxCommission.findByCommissionType",
-                parameterFactory.createEnumParameter("commissionType", CommissionType.BUYER));
+                parameterFactory.createEnumParameter("commissionType", null));
     }
 
     private void validateCurrencyMatch(MinMaxCommission commission, Price totalPrice) {

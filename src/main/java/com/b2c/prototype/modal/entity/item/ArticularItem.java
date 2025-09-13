@@ -1,6 +1,7 @@
 package com.b2c.prototype.modal.entity.item;
 
 import com.b2c.prototype.modal.entity.option.OptionItem;
+import com.b2c.prototype.modal.entity.option.OptionItemCost;
 import com.b2c.prototype.modal.entity.price.Price;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -24,6 +25,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -62,7 +64,7 @@ import java.util.Set;
         ),
         @NamedQuery(
                 name = "ArticularItem.findItemDataByArticularId",
-                query = "SELECT DISTINCT id FROM ItemData id " +
+                query = "SELECT DISTINCT id FROM MetaData id " +
                         "LEFT JOIN FETCH id.articularItemSet ai " +
                         "LEFT JOIN FETCH ai.fullPrice fp " +
                         "LEFT JOIN FETCH fp.currency " +
@@ -100,7 +102,7 @@ import java.util.Set;
 
 })
 @Data
-@Builder(toBuilder = true)
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ArticularItem {
@@ -110,7 +112,7 @@ public class ArticularItem {
     private long id;
     @Column(name = "articular_id", unique = true, nullable = false)
     private String articularId;
-    private long dateOfCreate;
+    private LocalDateTime dateOfCreate;
     private String productName;
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
@@ -122,6 +124,18 @@ public class ArticularItem {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<OptionItem> optionItems = new HashSet<>();
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(
+            name = "articular_item_option_item_cost",
+            joinColumns = {@JoinColumn(name = "articular_item_id")},
+            inverseJoinColumns = {@JoinColumn(name = "option_item_cost_id")}
+    )
+    @Builder.Default
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<OptionItemCost> optionItemCosts = new HashSet<>();
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private MetaData metaData;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(nullable = false)
     private Price fullPrice;

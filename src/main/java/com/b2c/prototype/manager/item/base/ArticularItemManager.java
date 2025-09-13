@@ -1,16 +1,16 @@
 package com.b2c.prototype.manager.item.base;
 
+import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.dto.common.SearchFieldUpdateCollectionEntityDto;
 import com.b2c.prototype.modal.dto.payload.item.ArticularItemDto;
 import com.b2c.prototype.modal.dto.payload.item.ResponseArticularItemDto;
 import com.b2c.prototype.modal.entity.item.Discount;
-import com.b2c.prototype.modal.entity.item.ItemData;
+import com.b2c.prototype.modal.entity.item.MetaData;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.item.IArticularItemManager;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.dao.IFetchHandler;
-import com.tm.core.process.dao.common.ITransactionEntityDao;
 import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
 import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
 import org.hibernate.Session;
@@ -27,11 +27,11 @@ public class ArticularItemManager implements IArticularItemManager {
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public ArticularItemManager(ITransactionEntityDao itemDataOptionDao,
+    public ArticularItemManager(IGeneralEntityDao itemDataOptionDao,
                                 IFetchHandler fetchHandler,
                                 ITransformationFunctionService transformationFunctionService,
                                 IParameterFactory parameterFactory) {
-        this.entityOperationManager = new TransactionEntityOperationManager(itemDataOptionDao);
+        this.entityOperationManager = new TransactionEntityOperationManager(null);
         this.fetchHandler = fetchHandler;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
@@ -45,29 +45,29 @@ public class ArticularItemManager implements IArticularItemManager {
                             .searchField(itemId)
                             .updateDtoSet(articularItemDtoList)
                             .build();
-            ItemData itemData = transformationFunctionService.getEntity(
+            MetaData metaData = transformationFunctionService.getEntity(
                     (Session) session,
-                    ItemData.class,
+                    MetaData.class,
                     searchFieldUpdateCollectionEntityDto);
 
-            session.merge(itemData);
+            session.merge(metaData);
         });
     }
 
     @Override
     public void deleteArticularItem(String articularId) {
         entityOperationManager.executeConsumer(session -> {
-            ItemData itemData = fetchHandler.getNamedQueryEntityClose(
-                    ItemData.class,
+            MetaData metaData = fetchHandler.getNamedQueryEntityClose(
+                    MetaData.class,
                     "ArticularItem.findItemDataByArticularId",
                     parameterFactory.createStringParameter(ARTICULAR_ID, articularId));
-            itemData.getArticularItemSet().stream()
+            metaData.getArticularItemSet().stream()
                     .filter(ai -> ai.getArticularId().equals(articularId))
                     .findFirst()
                     .ifPresent(articularItem -> {
                         Discount discount = articularItem.getDiscount();
                         articularItem.setDiscount(null);
-                        itemData.getArticularItemSet().remove(articularItem);
+                        metaData.getArticularItemSet().remove(articularItem);
                         session.remove(articularItem);
                         if (discount != null &&
                             discount.getArticularItemList().size() == 1 &&

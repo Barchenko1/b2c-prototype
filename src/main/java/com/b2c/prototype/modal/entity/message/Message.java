@@ -1,7 +1,9 @@
 package com.b2c.prototype.modal.entity.message;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
@@ -21,7 +23,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -36,17 +41,13 @@ import java.util.Set;
                 name = "Message.findMessageBySender",
                 query = "SELECT DISTINCT m FROM Message m " +
                         "LEFT JOIN FETCH m.messageTemplate mt " +
-                        "LEFT JOIN FETCH mt.type t " +
-                        "LEFT JOIN FETCH m.status s " +
-                        "WHERE mt.sender = : sender"
+                        "LEFT JOIN FETCH m.status s "
         ),
         @NamedQuery(
                 name = "Message.findMessageByReceiver",
                 query = "SELECT DISTINCT m FROM Message m " +
                         "LEFT JOIN FETCH m.messageTemplate mt " +
-                        "LEFT JOIN FETCH mt.type t " +
-                        "LEFT JOIN FETCH m.status s " +
-                        "WHERE :receiver MEMBER OF mt.receivers"
+                        "LEFT JOIN FETCH m.status s "
         )
 })
 public class Message {
@@ -54,26 +55,26 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
-    @JoinColumn(name = "message_template_id", foreignKey = @ForeignKey(name = "fk_message_template"))
-    private MessageTemplate messageTemplate;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinTable(
-            name = "message_box_message",
-            joinColumns = @JoinColumn(name = "message_id"),
-            inverseJoinColumns = @JoinColumn(name = "message_box_id")
-    )
+    private String sender;
+    @Column(name = "message_uniq_number", updatable = false, nullable = false, unique = true)
+    private String messageUniqNumber;
+    @ElementCollection
+    @CollectionTable(name = "message_receivers", joinColumns = @JoinColumn(name = "message_id"))
+    @Column(name = "receiver_email", nullable = false)
+    @Fetch(FetchMode.SUBSELECT)
+    private Set<String> receivers;
+    private LocalDateTime dateOfSend;
+    @ManyToMany(mappedBy = "messages")
     @Builder.Default
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<MessageBox> boxes = new HashSet<>();
-//    @ManyToMany(mappedBy = "messages")
-//    @Builder.Default
-//    @ToString.Exclude
-//    @EqualsAndHashCode.Exclude
-//    private Set<MessageBox> boxes = new HashSet<>();
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private MessageTemplate messageTemplate;
     @ManyToOne(fetch = FetchType.LAZY)
     private MessageStatus status;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private MessageType type;
 
     public void addMessageBox(MessageBox messageBox) {
         this.boxes.add(messageBox);

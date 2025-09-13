@@ -1,5 +1,6 @@
 package com.b2c.prototype.manager.userdetails.basic;
 
+import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.dto.payload.user.RegistrationUserDetailsDto;
 import com.b2c.prototype.modal.dto.payload.user.UserDetailsDto;
 import com.b2c.prototype.modal.dto.payload.user.ResponseUserDetailsDto;
@@ -9,7 +10,6 @@ import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.userdetails.IUserDetailsManager;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.dao.IFetchHandler;
-import com.tm.core.process.dao.common.ITransactionEntityDao;
 import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
 import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
 import org.hibernate.Session;
@@ -26,11 +26,11 @@ public class UserDetailsManager implements IUserDetailsManager {
     private final IFetchHandler fetchHandler;
     private final IParameterFactory parameterFactory;
 
-    public UserDetailsManager(ITransactionEntityDao appUserDao,
+    public UserDetailsManager(IGeneralEntityDao appUserDao,
                               ITransformationFunctionService transformationFunctionService,
                               IFetchHandler fetchHandler,
                               IParameterFactory parameterFactory) {
-        this.entityOperationManager = new TransactionEntityOperationManager(appUserDao);
+        this.entityOperationManager = new TransactionEntityOperationManager(null);
         this.transformationFunctionService = transformationFunctionService;
         this.fetchHandler = fetchHandler;
         this.parameterFactory = parameterFactory;
@@ -84,7 +84,7 @@ public class UserDetailsManager implements IUserDetailsManager {
             UserDetails existingUser = entityOperationManager.getNamedQueryEntityClose(
                     "UserDetails.findByUserId",
                     parameterFactory.createStringParameter(USER_ID, userId));
-            existingUser.setEmailVerified(verifyEmail);
+//            existingUser.setEmailVerified(verifyEmail);
             session.merge(existingUser);
         });
     }
@@ -95,7 +95,7 @@ public class UserDetailsManager implements IUserDetailsManager {
             UserDetails existingUser = entityOperationManager.getNamedQueryEntityClose(
                     "UserDetails.findByUserId",
                     parameterFactory.createStringParameter(USER_ID, userId));
-            existingUser.setContactPhoneVerified(verifyPhone);
+//            existingUser.setContactPhoneVerified(verifyPhone);
             session.merge(existingUser);
         });
     }

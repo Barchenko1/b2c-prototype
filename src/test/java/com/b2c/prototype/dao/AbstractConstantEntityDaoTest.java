@@ -3,16 +3,15 @@ package com.b2c.prototype.dao;
 import com.b2c.prototype.DataBaseLoader;
 import com.github.database.rider.core.api.connection.ConnectionHolder;
 import com.github.database.rider.core.api.dataset.DataSetExecutor;
+import com.nimbusds.jose.util.Pair;
 import com.tm.core.process.dao.common.session.AbstractSessionFactoryDao;
-import com.tm.core.process.dao.common.IEntityDao;
-import com.tm.core.finder.parameter.Parameter;
 import com.github.database.rider.core.dataset.DataSetExecutorImpl;
 import com.github.database.rider.junit5.api.DBRider;
 import com.tm.core.process.dao.query.IQueryService;
+import jakarta.persistence.EntityManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.query.NativeQuery;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,26 +24,26 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
 
-import static com.b2c.prototype.dao.ConfigureSessionFactoryTest.getSessionFactory;
+import static com.b2c.prototype.dao.ConfigureTestDbConnection.getEntityManager;
+import static com.b2c.prototype.dao.ConfigureTestDbConnection.getSessionFactory;
 import static com.b2c.prototype.dao.DataSourcePool.getPostgresDataSource;
 import static com.b2c.prototype.dao.DatabaseQueries.cleanDatabase;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
-@DBRider
+//@ExtendWith(MockitoExtension.class)
+//@DBRider
 public abstract class AbstractConstantEntityDaoTest extends DataBaseLoader {
 
     protected static SessionFactory sessionFactory;
+    protected static EntityManager entityManager;
 
     protected static IQueryService queryService;
     protected static ConnectionHolder connectionHolder;
@@ -71,14 +70,15 @@ public abstract class AbstractConstantEntityDaoTest extends DataBaseLoader {
         executor = DataSetExecutorImpl.instance("executor-name", connectionHolder);
 
         sessionFactory = getSessionFactory();
+        entityManager = getEntityManager();
     }
 
     @BeforeEach
     public void setUp() {
         try {
-            Field sessionFactoryField = AbstractSessionFactoryDao.class.getDeclaredField("sessionFactory");
-            sessionFactoryField.setAccessible(true);
-            sessionFactoryField.set(dao, sessionFactory);
+            Field entityManagerField = AbstractEntityDao.class.getDeclaredField("entityManager");
+            entityManagerField.setAccessible(true);
+            entityManagerField.set(dao, entityManager);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -97,9 +97,9 @@ public abstract class AbstractConstantEntityDaoTest extends DataBaseLoader {
     @Test
     void getEntityList_success() {
         loadDataSet(testEntityDataSet.getDataSetPath()[0]);
-        Parameter parameter = new Parameter("id", 1L);
+        Pair<String, Long> pair = Pair.of("id", 1L);
 
-        List<Object> result = dao.getNamedQueryEntityList("", parameter);
+        List<Object> result = dao.findEntityList("", List.of(pair));
 
         assertEquals(1, result.size());
         verifyExpectedData(testEntityDataSet.getDataSetPath()[0]);
@@ -107,10 +107,9 @@ public abstract class AbstractConstantEntityDaoTest extends DataBaseLoader {
 
     @Test
     void getEntityList_Failure() {
-        Parameter parameter = new Parameter("id1", 1L);
-
+        Pair<String, Long> pair = Pair.of("id1", 1L);
         assertThrows(RuntimeException.class, () -> {
-            dao.getNamedQueryEntityList("", parameter);
+            dao.findEntityList("", List.of(pair));
         });
     }
 
@@ -130,9 +129,9 @@ public abstract class AbstractConstantEntityDaoTest extends DataBaseLoader {
         when(sessionFactory.openSession()).thenReturn(session);
         when(session.beginTransaction()).thenReturn(transaction);
         try {
-            Field sessionManagerField = AbstractSessionFactoryDao.class.getDeclaredField("sessionFactory");
-            sessionManagerField.setAccessible(true);
-            sessionManagerField.set(dao, sessionFactory);
+            Field entityManagerField = AbstractEntityDao.class.getDeclaredField("entityManager");
+            entityManagerField.setAccessible(true);
+            entityManagerField.set(dao, entityManager);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -184,7 +183,7 @@ public abstract class AbstractConstantEntityDaoTest extends DataBaseLoader {
     @Test
     public void deleteEntity_success() {
         loadDataSet(testEntityDataSet.getDataSetPath()[0]);
-        dao.deleteEntity(testEntityDataSet.getEntity());
+        dao.removeEntity(testEntityDataSet.getEntity());
         verifyExpectedData(emptyDataSet);
     }
 
@@ -207,7 +206,7 @@ public abstract class AbstractConstantEntityDaoTest extends DataBaseLoader {
         doThrow(new RuntimeException()).when(session).remove(testEntityDataSet.getEntity());
 
         assertThrows(RuntimeException.class, () -> {
-            dao.deleteEntity(testEntityDataSet.getEntity());
+            dao.removeEntity(testEntityDataSet.getEntity());
         });
 
         verify(transaction).rollback();
@@ -218,9 +217,9 @@ public abstract class AbstractConstantEntityDaoTest extends DataBaseLoader {
     @Test
     void getOptionalEntity_success() {
         loadDataSet(testEntityDataSet.getDataSetPath()[0]);
-        Parameter parameter = new Parameter("id", 1L);
+        Pair<String, Long> pair = Pair.of("id", 1L);
 
-        Optional<Object> result = dao.getNamedQueryOptionalEntity("", parameter);
+        Optional<Object> result = dao.findOptionEntity("", List.of(pair));
 
         assertTrue(result.isPresent());
         Object resultEntity = result.get();
@@ -230,10 +229,9 @@ public abstract class AbstractConstantEntityDaoTest extends DataBaseLoader {
 
     @Test
     void getOptionalEntity_Failure() {
-        Parameter parameter = new Parameter("id1", 1L);
-
+        Pair<String, Long> pair = Pair.of("id1", 1L);
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-           dao.getNamedQueryOptionalEntity("", parameter);
+           dao.findOptionEntity("", List.of(pair));
         });
 
     }
@@ -241,9 +239,9 @@ public abstract class AbstractConstantEntityDaoTest extends DataBaseLoader {
     @Test
     void getOptionalEntity_NoResult() {
         loadDataSet(emptyDataSet);
-        Parameter parameter = new Parameter("id", 100L);
+        Pair<String, Long> pair = Pair.of("id", 100L);
 
-        Optional<Object> result =dao.getNamedQueryOptionalEntity("", parameter);
+        Optional<Object> result = dao.findOptionEntity("", List.of(pair));
 
         assertTrue(result.isEmpty());
         verifyExpectedData(emptyDataSet);
@@ -252,8 +250,8 @@ public abstract class AbstractConstantEntityDaoTest extends DataBaseLoader {
     @Test
     void getEntity_success() {
         loadDataSet(testEntityDataSet.getDataSetPath()[0]);
-        Parameter parameter = new Parameter("id", 1L);
-        Object result = dao.getNamedQueryEntity("", parameter);
+        Pair<String, Long> pair = Pair.of("id", 1L);
+        Object result = dao.findEntity("", List.of(pair));
 
         assertNotNull(result);
         verifyExpectedData(testEntityDataSet.getDataSetPath()[0]);
@@ -261,9 +259,9 @@ public abstract class AbstractConstantEntityDaoTest extends DataBaseLoader {
 
     @Test
     void getEntity_Failure() {
-        Parameter parameter = new Parameter("id", 100L);
+        Pair<String, Long> pair = Pair.of("id", 100L);
         assertThrows(RuntimeException.class, () -> {
-            dao.getNamedQueryEntity("", parameter);
+            dao.findEntity("", List.of(pair));
         });
 
     }

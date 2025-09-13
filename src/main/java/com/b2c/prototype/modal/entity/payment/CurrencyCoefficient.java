@@ -15,7 +15,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "currency_coefficient")
@@ -29,10 +29,10 @@ public class CurrencyCoefficient {
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    private Currency fromCurrency;
+    private Currency currencyFrom;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    private Currency toCurrency;
+    private Currency currencyTo;
     @Column(nullable = false)
     private double coefficient;
-    private Date dateOfCreate;
+    private LocalDateTime dateOfCreate;
 }

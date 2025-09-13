@@ -6,9 +6,8 @@ import com.github.database.rider.core.api.dataset.YamlDataSet;
 import com.github.database.rider.core.configuration.DataSetConfig;
 import com.github.database.rider.core.dataset.DataSetExecutorImpl;
 import com.github.database.rider.junit5.api.DBRider;
-import com.tm.core.process.dao.common.session.AbstractSessionFactoryDao;
-import com.tm.core.process.dao.common.IEntityDao;
 import com.tm.core.process.dao.query.IQueryService;
+import jakarta.persistence.EntityManager;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
@@ -27,7 +26,8 @@ import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.util.Arrays;
 
-import static com.b2c.prototype.dao.ConfigureSessionFactoryTest.getSessionFactory;
+import static com.b2c.prototype.dao.ConfigureTestDbConnection.getEntityManager;
+import static com.b2c.prototype.dao.ConfigureTestDbConnection.getSessionFactory;
 import static com.b2c.prototype.dao.DataSourcePool.getPostgresDataSource;
 import static com.b2c.prototype.dao.DatabaseQueries.cleanDatabase;
 
@@ -36,13 +36,14 @@ import static com.b2c.prototype.dao.DatabaseQueries.cleanDatabase;
 public abstract class AbstractCustomEntityDaoTest {
 
     protected static SessionFactory sessionFactory;
+    protected static EntityManager entityManager;
 
     protected static IQueryService queryService;
 
     protected static ConnectionHolder connectionHolder;
     private static DataSetExecutor executor;
 
-    protected static IEntityDao dao;
+    protected static IGeneralEntityDao dao;
 
     public AbstractCustomEntityDaoTest() {
     }
@@ -54,14 +55,15 @@ public abstract class AbstractCustomEntityDaoTest {
         executor = DataSetExecutorImpl.instance("executor-name", connectionHolder);
 
         sessionFactory = getSessionFactory();
+        entityManager = getEntityManager();
     }
 
     @BeforeEach
     public void setUp() {
         try {
-            Field sessionFactoryField = AbstractSessionFactoryDao.class.getDeclaredField("sessionFactory");
-            sessionFactoryField.setAccessible(true);
-            sessionFactoryField.set(dao, sessionFactory);
+            Field entityManagerField = AbstractEntityDao.class.getDeclaredField("entityManager");
+            entityManagerField.setAccessible(true);
+            entityManagerField.set(dao, entityManager);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

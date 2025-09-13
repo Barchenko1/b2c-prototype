@@ -45,7 +45,7 @@ class MessageStatusManagerTest extends AbstractConstantEntityManagerTest<Message
                 .build();
         MessageStatus testValue = createTestValue();
         when(mapDtoToEntityFunction.apply(dto)).thenReturn(testValue);
-        when(dao.getEntityClass()).thenAnswer(invocation -> MessageStatus.class);
+//        when(dao.getEntityClass()).thenAnswer(invocation -> MessageStatus.class);
 
         messageStatusManager.saveEntity(dto);
 
@@ -63,7 +63,7 @@ class MessageStatusManagerTest extends AbstractConstantEntityManagerTest<Message
                 .value("newValue")
                 .build();
         when(mapDtoToEntityFunction.apply(newDto)).thenReturn(testValue);
-        when(dao.getEntityClass()).thenAnswer(invocation -> MessageStatus.class);
+//        when(dao.getEntityClass()).thenAnswer(invocation -> MessageStatus.class);
 
         messageStatusManager.updateEntity("testValue", newDto);
 

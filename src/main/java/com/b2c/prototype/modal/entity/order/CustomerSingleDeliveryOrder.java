@@ -2,9 +2,7 @@ package com.b2c.prototype.modal.entity.order;
 
 import com.b2c.prototype.modal.entity.delivery.Delivery;
 import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
-import com.b2c.prototype.modal.entity.item.ArticularItemQuantityPrice;
 import com.b2c.prototype.modal.entity.payment.Payment;
-import com.b2c.prototype.modal.entity.post.Post;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import jakarta.persistence.CascadeType;
@@ -77,7 +75,7 @@ public class CustomerSingleDeliveryOrder {
     @JoinColumn(name = "order_articular_item_quantity_price_id")
     @Builder.Default
     @EqualsAndHashCode.Exclude
-    private List<ArticularItemQuantityPrice> articularItemQuantityPrices = new ArrayList<>();
+    private List<ArticularItemQuantity> articularItemQuantities = new ArrayList<>();
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "payment_id", nullable = false)
     private Payment payment;

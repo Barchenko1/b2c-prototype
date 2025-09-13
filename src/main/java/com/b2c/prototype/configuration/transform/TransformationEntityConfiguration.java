@@ -2,8 +2,9 @@ package com.b2c.prototype.configuration.transform;
 
 import com.b2c.prototype.dao.ISessionEntityFetcher;
 import com.b2c.prototype.modal.base.constant.AbstractConstantEntity;
+import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
+import com.b2c.prototype.modal.entity.item.MetaData;
 import com.b2c.prototype.modal.entity.payment.MultiCurrencyPriceInfo;
-import com.b2c.prototype.modal.constant.CommissionType;
 import com.b2c.prototype.modal.constant.FeeType;
 import com.b2c.prototype.modal.constant.ReviewStatusEnum;
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
@@ -64,9 +65,6 @@ import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.address.UserAddress;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
-import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
-import com.b2c.prototype.modal.entity.item.ArticularItemQuantityPrice;
-import com.b2c.prototype.modal.entity.item.AvailabilityStatus;
 import com.b2c.prototype.modal.entity.message.MessageBox;
 import com.b2c.prototype.modal.entity.message.MessageTemplate;
 import com.b2c.prototype.modal.entity.option.TimeDurationOption;
@@ -75,7 +73,6 @@ import com.b2c.prototype.modal.entity.item.ArticularStatus;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.Discount;
-import com.b2c.prototype.modal.entity.item.ItemData;
 import com.b2c.prototype.modal.entity.item.ItemType;
 import com.b2c.prototype.modal.entity.order.CustomerSingleDeliveryOrder;
 import com.b2c.prototype.modal.entity.payment.CommissionValue;
@@ -97,7 +94,6 @@ import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.modal.entity.review.Review;
 import com.b2c.prototype.modal.entity.review.ReviewComment;
 import com.b2c.prototype.modal.entity.review.ReviewStatus;
-import com.b2c.prototype.modal.entity.store.CountType;
 import com.b2c.prototype.modal.entity.store.Store;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
@@ -114,11 +110,8 @@ import org.hibernate.Session;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -130,7 +123,6 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.b2c.prototype.util.Util.getCurrentTimeMillis;
 import static com.b2c.prototype.util.Util.getEmailPrefix;
 import static com.b2c.prototype.util.Util.getUUID;
 
@@ -146,7 +138,6 @@ public class TransformationEntityConfiguration {
         this.sessionEntityFetcher = sessionEntityFetcher;
         this.queryService = queryService;
         addConstantEntityTransformationFunctions(transformationFunctionService, Brand.class, Brand::new);
-        addConstantEntityTransformationFunctions(transformationFunctionService, CountType.class, CountType::new);
         addConstantEntityTransformationFunctions(transformationFunctionService, CountryPhoneCode.class, CountryPhoneCode::new);
         addConstantEntityTransformationFunctions(transformationFunctionService, Currency.class, Currency::new);
         addConstantEntityTransformationFunctions(transformationFunctionService, DeliveryType.class, DeliveryType::new);
@@ -157,7 +148,7 @@ public class TransformationEntityConfiguration {
         addConstantEntityTransformationFunctions(transformationFunctionService, OptionGroup.class, OptionGroup::new);
         addConstantEntityTransformationFunctions(transformationFunctionService, OrderStatus.class, OrderStatus::new);
         addConstantEntityTransformationFunctions(transformationFunctionService, PaymentMethod.class, PaymentMethod::new);
-        addConstantEntityTransformationFunctions(transformationFunctionService, AvailabilityStatus.class, AvailabilityStatus::new);
+//        addConstantEntityTransformationFunctions(transformationFunctionService, AvailabilityStatus.class, AvailabilityStatus::new);
         transformationFunctionService.addTransformationFunction(NumberConstantPayloadDto.class, Rating.class, mapOneIntegerFieldEntityDtoRatingFunction());
 
         loadCountryFunctions(transformationFunctionService);
@@ -197,13 +188,13 @@ public class TransformationEntityConfiguration {
     }
 
     private void loadItemDataFunctions(ITransformationFunctionService transformationFunctionService) {
-        transformationFunctionService.addTransformationFunction(ItemDataDto.class, ItemData.class, mapItemDataDtoToItemDataFunction());
-        transformationFunctionService.addTransformationFunction(SearchFieldUpdateEntityDto.class, ItemData.class, mapSearchFieldUpdateEntityDtoToItemDataFunction());
-        transformationFunctionService.addTransformationFunction(ItemData.class, ResponseItemDataDto.class, mapItemDataToResponseItemDataDtoFunction());
+        transformationFunctionService.addTransformationFunction(ItemDataDto.class, MetaData.class, mapItemDataDtoToItemDataFunction());
+        transformationFunctionService.addTransformationFunction(SearchFieldUpdateEntityDto.class, MetaData.class, mapSearchFieldUpdateEntityDtoToItemDataFunction());
+        transformationFunctionService.addTransformationFunction(MetaData.class, ResponseItemDataDto.class, mapItemDataToResponseItemDataDtoFunction());
     }
 
     private void loadArticularItemFunctions(ITransformationFunctionService transformationFunctionService) {
-        transformationFunctionService.addTransformationFunction(SearchFieldUpdateCollectionEntityDto.class, ItemData.class, mapSearchFieldUpdateCollectionEntityDtoToItemDataFunction());
+        transformationFunctionService.addTransformationFunction(SearchFieldUpdateCollectionEntityDto.class, MetaData.class, mapSearchFieldUpdateCollectionEntityDtoToItemDataFunction());
         transformationFunctionService.addTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class, mapArticularItemToResponseArticularDto());
     }
 
@@ -220,7 +211,7 @@ public class TransformationEntityConfiguration {
     private void loadCustomerOrderFunctions(ITransformationFunctionService transformationFunctionService) {
         transformationFunctionService.addTransformationFunction(ContactInfoDto.class, ContactInfo.class, mapContactInfoDtoToContactInfo());
         transformationFunctionService.addTransformationFunction(DeliveryDto.class, Delivery.class, mapDeliveryDtoToDeliveryFunction());
-        transformationFunctionService.addTransformationFunction(ArticularItemQuantityDto.class, ArticularItemQuantityPrice.class, mapArticularItemQuantityDtoToArticularItemQuantityFunction());
+        transformationFunctionService.addTransformationFunction(ArticularItemQuantityDto.class, ArticularItemQuantity.class, mapArticularItemQuantityDtoToArticularItemQuantityFunction());
         transformationFunctionService.addTransformationFunction(CreditCardDto.class, CreditCard.class, mapCreditCardDtoToCreditCardFunction());
 
         transformationFunctionService.addTransformationFunction(CustomerSingleDeliveryOrder.class, ResponseCustomerOrderDto.class, mapCustomerOrderToResponseCustomerOrderFunction());
@@ -367,7 +358,6 @@ public class TransformationEntityConfiguration {
             return UserAddress.builder()
                     .address(mapAddressDtoToAddressFunction().apply(session, userAddressDto.getAddress()))
                     .isDefault(userAddressDto.isDefault())
-                    .userAddressCombination(userAddressCombination)
                     .build();
         };
     }
@@ -463,14 +453,8 @@ public class TransformationEntityConfiguration {
 
             return Message.builder()
                     .messageTemplate(MessageTemplate.builder()
-                            .sender(messageDto.getMessageTemplate().getSender())
                             .title(messageDto.getMessageTemplate().getTitle())
                             .message(messageDto.getMessageTemplate().getMessage())
-                            .messageUniqNumber(getUUID())
-                            .dateOfSend(getCurrentTimeMillis())
-                            .receivers(messageDto.getMessageTemplate().getReceivers())
-                            .sendSystem("APP")
-                            .type(messageType)
                             .build())
                     .status(messageStatus)
                     .build();
@@ -481,10 +465,8 @@ public class TransformationEntityConfiguration {
         return message -> {
             MessageTemplate messageTemplate = message.getMessageTemplate();
             return ResponseMessageOverviewDto.builder()
-                    .sender(messageTemplate.getSender())
                     .title(messageTemplate.getTitle())
-                    .dateOfSend(messageTemplate.getDateOfSend())
-                    .type(messageTemplate.getType().getValue())
+                    .type(message.getType().getValue())
                     .status(message.getStatus().getValue())
                     .build();
         };
@@ -565,7 +547,7 @@ public class TransformationEntityConfiguration {
             return UserDetails.builder()
                     .username(getEmailPrefix(registrationUserDetailsDto.getEmail()))
                     .userId(getUUID())
-                    .dateOfCreate(getCurrentTimeMillis())
+//                    .dateOfCreate(getCurrentTimeMillis())
                     .contactInfo(contactInfo)
                     .build();
         };
@@ -588,7 +570,7 @@ public class TransformationEntityConfiguration {
             return UserDetails.builder()
                     .username(getEmailPrefix(userDetailsDto.getContactInfo().getEmail()))
                     .userId(getUUID())
-                    .dateOfCreate(getCurrentTimeMillis())
+//                    .dateOfCreate(getCurrentTimeMillis())
                     .contactInfo(contactInfo)
                     .userAddresses(Set.of(userAddress))
                     .userCreditCards(Set.of(userCreditCard))
@@ -649,8 +631,8 @@ public class TransformationEntityConfiguration {
                 .authorEmail(postDto.getAuthorEmail())
                 .authorName(postDto.getAuthorName())
                 .parent(sessionEntityFetcher.fetchPost(session, postDto.getParentPostId()).orElse(null))
-                .postId(getUUID())
-                .dateOfCreate(getCurrentTimeMillis())
+                .postUniqId(getUUID())
+//                .dateOfCreate(getLocalDateTime("2024-03-03 12:00:00"))
                 .build();
     }
 
@@ -661,8 +643,8 @@ public class TransformationEntityConfiguration {
             return Review.builder()
                     .title(reviewDto.getTitle())
                     .message(reviewDto.getMessage())
-                    .dateOfCreate(getCurrentTimeMillis())
-                    .reviewId(getUUID())
+//                    .dateOfCreate(getCurrentTimeMillis())
+                    .reviewUniqId(getUUID())
                     .comments(sessionEntityFetcher.fetchReviewComments(session, reviewDto.getReviewId()))
                     .status(reviewStatus)
                     .rating(rating)
@@ -681,7 +663,7 @@ public class TransformationEntityConfiguration {
                     .title(review.getTitle())
                     .message(review.getMessage())
                     .ratingValue(review.getRating().getValue())
-                    .dateOfCreate(new Date(review.getDateOfCreate()))
+//                    .dateOfCreate(new Date(review.getDateOfCreate()))
                     .status(mapConstantEntityToConstantEntityPayloadDtoFunction().apply(review.getStatus()))
                     .username(userDetails.getUsername())
                     .email(contactInfo.getEmail())
@@ -696,8 +678,8 @@ public class TransformationEntityConfiguration {
         return (reviewCommentDto) -> ReviewComment.builder()
                 .title(reviewCommentDto.getTitle())
                 .message(reviewCommentDto.getMessage())
-                .dateOfCreate(getCurrentTimeMillis())
-                .commentId(getUUID())
+//                .dateOfCreate(getCurrentTimeMillis())
+                .reviewCommentUniqId(getUUID())
                 .build();
     }
 
@@ -708,8 +690,8 @@ public class TransformationEntityConfiguration {
             return ResponseReviewCommentDto.builder()
                     .title(reviewCommentDto.getTitle())
                     .message(reviewCommentDto.getMessage())
-                    .dateOfCreate(reviewCommentDto.getDateOfCreate())
-                    .commentId(reviewCommentDto.getCommentId())
+//                    .dateOfCreate(reviewCommentDto.getDateOfCreate())
+                    .commentId(reviewCommentDto.getReviewCommentUniqId())
                     .authorEmail(contactInfo.getEmail())
                     .authorName(contactInfo.getFirstName())
                     .authorLastName(contactInfo.getLastName())
@@ -729,10 +711,10 @@ public class TransformationEntityConfiguration {
 
     private Function<CustomerSingleDeliveryOrder, PriceDto> mapOrderToFullPriceDtoFunction() {
         return customerSingleDeliveryOrder -> {
-            Price fullPrice = customerSingleDeliveryOrder.getPayment().getCommissionPrice();
+//            Price fullPrice = customerSingleDeliveryOrder.getPayment().getCommissionPriceInfo();
             return PriceDto.builder()
-                    .amount(fullPrice.getAmount())
-                    .currency(fullPrice.getCurrency().getValue())
+//                    .amount(fullPrice.getAmount())
+//                    .currency(fullPrice.getCurrency().getValue())
                     .build();
         };
     }
@@ -741,8 +723,8 @@ public class TransformationEntityConfiguration {
         return customerSingleDeliveryOrder -> {
             MultiCurrencyPriceInfo totalMultiCurrencyPriceInfo = customerSingleDeliveryOrder.getPayment().getTotalMultiCurrencyPriceInfo();
             return PriceDto.builder()
-                    .amount(totalMultiCurrencyPriceInfo.getCurrencyPrice().getAmount())
-                    .currency(totalMultiCurrencyPriceInfo.getCurrencyPrice().getCurrency().getValue())
+                    .amount(totalMultiCurrencyPriceInfo.getCurrentPrice().getAmount())
+                    .currency(totalMultiCurrencyPriceInfo.getCurrentPrice().getCurrency().getValue())
                     .build();
         };
     }
@@ -887,7 +869,7 @@ public class TransformationEntityConfiguration {
                 .collect(Collectors.toSet());
     }
 
-    private BiFunction<Session, ItemDataDto, ItemData> mapItemDataDtoToItemDataFunction() {
+    private BiFunction<Session, ItemDataDto, MetaData> mapItemDataDtoToItemDataFunction() {
         return (session, itemDataDto) -> {
             Category category = sessionEntityFetcher.fetchOptionalCategory(session, itemDataDto.getCategory().getValue())
                     .orElse(Category.builder()
@@ -917,7 +899,7 @@ public class TransformationEntityConfiguration {
                     optionItems,
                     Collections.emptyMap());
 
-            return ItemData.builder()
+            return MetaData.builder()
                     .description(itemDataDto.getDescription())
                     .category(category)
                     .brand(brand)
@@ -927,17 +909,17 @@ public class TransformationEntityConfiguration {
         };
     }
 
-    private BiFunction<Session, SearchFieldUpdateCollectionEntityDto<ArticularItemDto>, ItemData> mapSearchFieldUpdateCollectionEntityDtoToItemDataFunction() {
+    private BiFunction<Session, SearchFieldUpdateCollectionEntityDto<ArticularItemDto>, MetaData> mapSearchFieldUpdateCollectionEntityDtoToItemDataFunction() {
         return ((session, searchFieldUpdateCollectionEntityDto) -> {
             String itemId = searchFieldUpdateCollectionEntityDto.getSearchField();
             List<ArticularItemDto> articularItemDtoList = searchFieldUpdateCollectionEntityDto.getUpdateDtoSet();
             Set<ArticularItemDto> articularItemDtoSet = new HashSet<>(articularItemDtoList);
-            ItemData existingItemData = queryService.getNamedQueryEntity(
+            MetaData existingMetaData = queryService.getNamedQueryEntity(
                     session,
-                    ItemData.class,
-                    "ItemData.findItemDataWithFullRelations",
+                    MetaData.class,
+                    "MetaData.findItemDataWithFullRelations",
                     new Parameter("itemId", itemId));
-            Map<String, ArticularItem> existingArticularItemMap = existingItemData.getArticularItemSet().stream()
+            Map<String, ArticularItem> existingArticularItemMap = existingMetaData.getArticularItemSet().stream()
                     .collect(Collectors.toMap(
                             ArticularItem::getArticularId,
                             articularItem -> articularItem
@@ -953,35 +935,35 @@ public class TransformationEntityConfiguration {
                     articularItemDtoSet,
                     optionItems,
                     existingArticularItemMap);
-            List<ArticularItem> nonUpdatedArticularList = existingItemData.getArticularItemSet().stream()
+            List<ArticularItem> nonUpdatedArticularList = existingMetaData.getArticularItemSet().stream()
                     .filter(existingItem -> articularItemSet.stream()
                             .noneMatch(newItem -> newItem.getArticularId().equals(existingItem.getArticularId())))
                     .toList();
             Set<ArticularItem> mergedArticularItemSet = Stream.concat(articularItemSet.stream(), nonUpdatedArticularList.stream())
                             .collect(Collectors.toSet());
 
-            return ItemData.builder()
-                    .id(existingItemData.getId())
-                    .itemId(existingItemData.getItemId())
-                    .description(existingItemData.getDescription())
-                    .category(existingItemData.getCategory())
-                    .brand(existingItemData.getBrand())
-                    .itemType(existingItemData.getItemType())
+            return MetaData.builder()
+                    .id(existingMetaData.getId())
+//                    .itemId(existingMetaData.getItemId())
+                    .description(existingMetaData.getDescription())
+                    .category(existingMetaData.getCategory())
+                    .brand(existingMetaData.getBrand())
+                    .itemType(existingMetaData.getItemType())
                     .articularItemSet(mergedArticularItemSet)
                     .build();
         });
     }
 
-    private BiFunction<Session, SearchFieldUpdateEntityDto<ItemDataDto>, ItemData> mapSearchFieldUpdateEntityDtoToItemDataFunction() {
+    private BiFunction<Session, SearchFieldUpdateEntityDto<ItemDataDto>, MetaData> mapSearchFieldUpdateEntityDtoToItemDataFunction() {
         return (session, itemDataSearchFieldUpdateDto) -> {
             String itemId = itemDataSearchFieldUpdateDto.getSearchField();
             ItemDataDto itemDataDto = itemDataSearchFieldUpdateDto.getUpdateDto();
-            ItemData existingItemData = queryService.getNamedQueryEntity(
+            MetaData existingMetaData = queryService.getNamedQueryEntity(
                     session,
-                    ItemData.class,
-                    "ItemData.findItemDataWithFullRelations",
+                    MetaData.class,
+                    "MetaData.findItemDataWithFullRelations",
                     new Parameter("itemId", itemId));
-            Map<String, ArticularItem> existingArticularItemMap = existingItemData.getArticularItemSet().stream()
+            Map<String, ArticularItem> existingArticularItemMap = existingMetaData.getArticularItemSet().stream()
                     .collect(Collectors.toMap(
                             ArticularItem::getArticularId,
                             articularItem -> articularItem
@@ -1015,9 +997,9 @@ public class TransformationEntityConfiguration {
                     optionItems,
                     existingArticularItemMap);
 
-            return ItemData.builder()
-                    .id(existingItemData.getId())
-                    .itemId(existingItemData.getItemId())
+            return MetaData.builder()
+                    .id(existingMetaData.getId())
+//                    .itemId(existingMetaData.getItemId())
                     .description(itemDataDto.getDescription())
                     .category(category)
                     .brand(brand)
@@ -1045,7 +1027,7 @@ public class TransformationEntityConfiguration {
                     ArticularItem articularItem = ArticularItem.builder()
                             .id(articularId)
                             .articularId(articularItemDto.getArticularId() != null ? articularItemDto.getArticularId() : getUUID())
-                            .dateOfCreate(getCurrentTimeMillis())
+//                            .dateOfCreate(getCurrentTimeMillis())
                             .productName(articularItemDto.getProductName())
                             .status(articularStatus)
                             .fullPrice(mapPriceDtoToPriceFunction().apply(session, articularItemDto.getFullPrice()))
@@ -1106,13 +1088,13 @@ public class TransformationEntityConfiguration {
                 .build();
     }
 
-    private BiFunction<Session, ArticularItemQuantityDto, ArticularItemQuantityPrice> mapArticularItemQuantityDtoToArticularItemQuantityFunction() {
+    private BiFunction<Session, ArticularItemQuantityDto, ArticularItemQuantity> mapArticularItemQuantityDtoToArticularItemQuantityFunction() {
         return (session, articularItemQuantityDto) -> {
             ArticularItem articularItem = sessionEntityFetcher.fetchArticularItem(session, articularItemQuantityDto.getArticularId());
-            ArticularItemQuantity articularItemQuantity = ArticularItemQuantity.builder()
-                    .articularItem(articularItem)
-                    .quantity(articularItemQuantityDto.getQuantity())
-                    .build();
+//            ArticularItemQuantity articularItemQuantity = ArticularItemQuantity.builder()
+//                    .articularItem(articularItem)
+//                    .quantity(articularItemQuantityDto.getQuantity())
+//                    .build();
             Price fullSumPrice = mapPrice().apply(articularItem.getFullPrice().getCurrency(),
                     articularItem.getFullPrice().getAmount() * articularItemQuantityDto.getQuantity());
             Price totalSumPrice = mapPrice().apply(articularItem.getTotalPrice().getCurrency(),
@@ -1123,11 +1105,11 @@ public class TransformationEntityConfiguration {
                 discountSumPrice = mapPrice().apply(itemDiscount.getCurrency(),
                         itemDiscount.getAmount() * articularItemQuantityDto.getQuantity());
             }
-            return ArticularItemQuantityPrice.builder()
-                    .articularItemQuantity(articularItemQuantity)
-                    .fullPriceSum(fullSumPrice)
-                    .totalPriceSum(totalSumPrice)
-                    .discountPriceSum(discountSumPrice)
+            return ArticularItemQuantity.builder()
+//                    .articularItemQuantity(articularItemQuantity)
+//                    .fullPriceSum(fullSumPrice)
+//                    .totalPriceSum(totalSumPrice)
+//                    .discountPriceSum(discountSumPrice)
                     .build();
         };
     }
@@ -1246,9 +1228,9 @@ public class TransformationEntityConfiguration {
     }
 
 
-    private Function<ItemData, ResponseItemDataDto> mapItemDataToResponseItemDataDtoFunction() {
+    private Function<MetaData, ResponseItemDataDto> mapItemDataToResponseItemDataDtoFunction() {
         return itemData -> ResponseItemDataDto.builder()
-                .itemId(itemData.getItemId())
+//                .itemId(itemData.getItemId())
                 .description(itemData.getDescription())
                 .brand(BrandDto.builder()
                         .label(itemData.getBrand().getLabel())
@@ -1337,9 +1319,7 @@ public class TransformationEntityConfiguration {
         return (session, timeDurationOptionDto) -> {
             Price price = mapPriceDtoToPriceFunction().apply(session, timeDurationOptionDto.getPrice());
             return TimeDurationOption.builder()
-                    .startTime(timeDurationOptionDto.getStartTime())
-                    .endTime(timeDurationOptionDto.getEndTime())
-                    .duration(timeDurationOptionDto.getDuration())
+                    .durationInMin(timeDurationOptionDto.getDuration())
                     .label(timeDurationOptionDto.getLabel())
                     .value(timeDurationOptionDto.getValue())
                     .price(price)
@@ -1350,12 +1330,8 @@ public class TransformationEntityConfiguration {
     private Function<TimeDurationOption, ResponseTimeDurationOptionDto> mapTimeDurationOptionToResponseTimeDurationOptionDtoFunction() {
         return timeDurationOption -> {
             PriceDto price = mapPriceToPriceDtoFunction().apply(timeDurationOption.getPrice());
-            LocalTime startTime = timeDurationOption.getStartTime();
-            LocalTime endTime = timeDurationOption.getEndTime();
             return ResponseTimeDurationOptionDto.builder()
-                    .startTime(startTime.format(DateTimeFormatter.ofPattern("HH:mm:ss")))
-                    .endTime(endTime.format(DateTimeFormatter.ofPattern("HH:mm:ss")))
-                    .duration(timeDurationOption.getDuration())
+                    .durationInMinutes(timeDurationOption.getDurationInMin())
                     .label(timeDurationOption.getLabel())
                     .value(timeDurationOption.getValue())
                     .price(price)
@@ -1369,8 +1345,6 @@ public class TransformationEntityConfiguration {
             return ZoneOption.builder()
                     .zoneName(zoneOptionDto.getZoneName())
                     .city(zoneOptionDto.getCity())
-                    .label(zoneOptionDto.getLabel())
-                    .value(zoneOptionDto.getValue())
                     .price(price)
                     .build();
         };
@@ -1382,8 +1356,6 @@ public class TransformationEntityConfiguration {
             return ZoneOptionDto.builder()
                     .city(zoneOption.getCity())
                     .zoneName(zoneOption.getZoneName())
-                    .label(zoneOption.getLabel())
-                    .value(zoneOption.getValue())
                     .price(price)
                     .build();
         };
@@ -1393,10 +1365,8 @@ public class TransformationEntityConfiguration {
         return minMaxCommission -> ResponseMinMaxCommissionDto.builder()
                 .minCommissionValue(mapCommissionValueToCommissionValueDto().apply(minMaxCommission.getMinCommission()))
                 .maxCommissionValue(mapCommissionValueToCommissionValueDto().apply(minMaxCommission.getMaxCommission()))
-                .commissionType(minMaxCommission.getCommissionType().name())
+//                .commissionType(minMaxCommission.getCommissionType().name())
                 .changeCommissionPrice(mapPriceToPriceDtoFunction().apply(minMaxCommission.getChangeCommissionPrice()))
-                .lastUpdateTimestamp(minMaxCommission.getLastUpdateTimestamp().toInstant()
-                        .atZone(ZoneId.of("UTC")))
                 .build();
     }
 
@@ -1404,7 +1374,7 @@ public class TransformationEntityConfiguration {
         return (session, minMaxCommissionDto) -> MinMaxCommission.builder()
                 .minCommission(mapCommissionValueDtoToCommissionValue().apply(session, minMaxCommissionDto.getMinCommissionValue()))
                 .maxCommission(mapCommissionValueDtoToCommissionValue().apply(session, minMaxCommissionDto.getMaxCommissionValue()))
-                .commissionType(CommissionType.valueOf(minMaxCommissionDto.getCommissionType()))
+//                .commissionType(CommissionType.valueOf(minMaxCommissionDto.getCommissionType()))
                 .changeCommissionPrice(mapPriceDtoToPriceFunction().apply(session, minMaxCommissionDto.getChangeCommissionPrice()))
                 .build();
     }
@@ -1446,23 +1416,16 @@ public class TransformationEntityConfiguration {
 
     private Function<Store, ResponseStoreDto> mapStoreToResponseStoreDtoFunction() {
         return store -> {
-            List<ArticularItemQuantityDto> articularItemQuantityList = store.getArticularItemQuantities().stream()
-                    .map(mapArticularItemQuantityToArticularItemQuantityDtoFunction())
-                    .toList();
+//            List<ArticularItemQuantityDto> articularItemQuantityList = store.getArticularItemQuantities().stream()
+//                    .map(mapArticularItemQuantityToArticularItemQuantityDtoFunction())
+//                    .toList();
             return ResponseStoreDto.builder()
                     .storeName(store.getStoreName())
                     .storeId(store.getStoreId())
                     .address(mapAddressToAddressDtoFunction().apply(store.getAddress()))
-                    .articularItemQuantityList(articularItemQuantityList)
+                    .articularItemQuantityList(null)
                     .build();
         };
-    }
-
-    private Function<ArticularItemQuantity, ArticularItemQuantityDto> mapArticularItemQuantityToArticularItemQuantityDtoFunction() {
-        return articularItemQuantity -> ArticularItemQuantityDto.builder()
-                .articularId(articularItemQuantity.getArticularItem().getArticularId())
-                .quantity(articularItemQuantity.getQuantity())
-                .build();
     }
 
     private String combineUserAddress(String country, String city, String street, String buildingNumber, int flatNumber) {

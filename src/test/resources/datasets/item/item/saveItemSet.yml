@@ -17,9 +17,9 @@ price:
 discount:
   - id: 1
     amount: 10
-    charSequenceCode: "abc"
-    isActive: true
-    isPercent: false
+    char_sequence_code: "abc"
+    is_active: true
+    is_percent: false
     currency_id: 1
 option_group:
   - id: 1
@@ -51,19 +51,19 @@ post:
     title: "parent"
     message: "parent"
     postId: "1"
-    dateOfCreate: 100000
+    date_of_create: "2024-03-03 12:00:00"
   - id: 2
     post_id: 1
     title: "root"
     message: "root"
     postId: "2"
-    dateOfCreate: 100000
+    date_of_create: "2024-03-03 12:00:00"
   - id: 3
     post_id: 2
     title: "child"
     message: "child"
     postId: "3"
-    dateOfCreate: 100000
+    date_of_create: "2024-03-03 12:00:00"
 rating:
   - id: 1
     value: 1
@@ -80,17 +80,17 @@ review:
     unique_id: 123
     title: "title"
     message: "message"
-    dateOfCreate: 100
+    date_of_create: "2024-03-03 12:00:00"
     rating_id: 5
 item_data:
   - id: 1
     item_id: 123
     brand_id: 1
     category_id: 3
-    itemtype_id: 1
+    item_type_id: 1
 articular_item:
   - id: 1
     articular_id: 1
-    dateOfCreate: 10000
+    date_of_create: "2024-03-03 12:00:00"
 item:
   - articular_item_id: 1

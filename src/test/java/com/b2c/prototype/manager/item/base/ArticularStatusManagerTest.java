@@ -47,7 +47,7 @@ class ArticularStatusManagerTest extends AbstractConstantEntityManagerTest<Artic
         ArticularStatus testValue = createTestValue();
 
         when(mapDtoToEntityFunction.apply(dto)).thenReturn(testValue);
-        when(dao.getEntityClass()).thenAnswer(invocation -> ArticularStatus.class);
+//        when(dao.getEntityClass()).thenAnswer(invocation -> ArticularStatus.class);
 
         articularStatusManager.saveEntity(dto);
 
@@ -66,7 +66,7 @@ class ArticularStatusManagerTest extends AbstractConstantEntityManagerTest<Artic
                 .build();
 
         when(mapDtoToEntityFunction.apply(newDto)).thenReturn(testValue);
-        when(dao.getEntityClass()).thenAnswer(invocation -> ArticularStatus.class);
+//        when(dao.getEntityClass()).thenAnswer(invocation -> ArticularStatus.class);
 
         articularStatusManager.updateEntity("testValue", newDto);
 

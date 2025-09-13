@@ -29,11 +29,11 @@ min_max_commission:
     mincommission_id: 1
     maxcommission_id: 2
     commission_type: 'BUYER'
-    changecommissionprice_id: 1
+    change_commission_price_id: 1
     lastUpdateTimestamp: "2024-04-01 10:15:30"
   - id: 2
     mincommission_id: 3
     maxcommission_id: 4
     commission_type: 'SELLER'
-    changecommissionprice_id: 2
+    change_commission_price_id: 2
     lastUpdateTimestamp: "2024-04-01 10:15:30"

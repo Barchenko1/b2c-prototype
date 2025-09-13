@@ -1,0 +1,46 @@
+credit_card:
+  - id: 1
+    card_number: "4444-1111-2222-3333"
+    month_of_expire: "06"
+    year_of_expire: "28"
+    cvv: 818
+    owner_name: "name"
+    owner_second_name: "secondName"
+    is_active: true
+payment_method:
+  - id: 1
+    value: "Card"
+    label: "Card"
+  - id: 2
+    value: "Blik"
+    label: "Blik"
+payment_status:
+  - id: 1
+    value: "Done"
+    label: "Done"
+  - id: 2
+    value: "Approved"
+    label: "Approved"
+currency:
+  - id: 1
+    value: "USD"
+    label: "USD"
+  - id: 2
+    value: "EUR"
+    label: "EUR"
+discount:
+  - id: 1
+    amount: 5
+    char_sequence_code: "abc"
+    is_active: true
+    is_percent: false
+    currency_id: 1
+price: []
+currency_coefficient:
+  - id: 1
+    currency_from_id: 1
+    currency_to_id: 2
+    coefficient: 0.95
+    date_of_create: "2024-03-03 12:00:00"
+multi_currency_price_info: []
+payment: []

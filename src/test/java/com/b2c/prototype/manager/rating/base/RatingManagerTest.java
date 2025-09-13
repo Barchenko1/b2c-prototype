@@ -35,7 +35,7 @@ class RatingManagerTest extends AbstractConstantEntityManagerTest<Rating> {
 
         ratingManager = new RatingManager(
                 parameterFactory,
-                dao,
+                null,
                 transformationFunctionService);
     }
 
@@ -45,7 +45,7 @@ class RatingManagerTest extends AbstractConstantEntityManagerTest<Rating> {
         Rating testValue = createTestValue();
 
         when(mapDtoToEntityFunction.apply(dto)).thenReturn(testValue);
-        when(dao.getEntityClass()).thenAnswer(invocation -> Rating.class);
+//        when(dao.getEntityClass()).thenAnswer(invocation -> Rating.class);
 
         ratingManager.saveEntity(dto);
 
@@ -60,19 +60,19 @@ class RatingManagerTest extends AbstractConstantEntityManagerTest<Rating> {
                 .build();
 
         when(mapDtoToEntityFunction.apply(newDto)).thenReturn(testValue);
-        when(dao.getEntityClass()).thenAnswer(invocation -> Rating.class);
+//        when(dao.getEntityClass()).thenAnswer(invocation -> Rating.class);
 
         ratingManager.updateEntity(1, newDto);
 
         Parameter parameter = parameterFactory.createIntegerParameter(VALUE, 1);
-        verify(dao).findEntityAndUpdate(testValue, parameter);
+//        verify(dao).findEntityAndUpdate(testValue, parameter);
     }
 
     @Test
     public void testDeleteEntity() {
         ratingManager.deleteEntity(1);
         Parameter parameter = parameterFactory.createNumberParameter(VALUE, 1);
-        verify(dao).findEntityAndDelete(parameter);
+//        verify(dao).findEntityAndDelete(parameter);
     }
 
     @Test

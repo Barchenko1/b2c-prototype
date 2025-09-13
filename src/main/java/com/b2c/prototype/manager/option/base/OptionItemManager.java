@@ -1,5 +1,6 @@
 package com.b2c.prototype.manager.option.base;
 
+import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.dto.payload.option.OptionGroupOptionItemSetDto;
 import com.b2c.prototype.modal.dto.payload.option.SingleOptionItemDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
@@ -9,7 +10,6 @@ import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.option.IOptionItemManager;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.dao.IFetchHandler;
-import com.tm.core.process.dao.common.ITransactionEntityDao;
 import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
 import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
 import org.hibernate.Session;
@@ -28,11 +28,11 @@ public class OptionItemManager implements IOptionItemManager {
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public OptionItemManager(ITransactionEntityDao optionItemDao,
+    public OptionItemManager(IGeneralEntityDao optionItemDao,
                              IFetchHandler fetchHandler,
                              ITransformationFunctionService transformationFunctionService,
                              IParameterFactory parameterFactory) {
-        this.entityOperationManager = new TransactionEntityOperationManager(optionItemDao);
+        this.entityOperationManager = new TransactionEntityOperationManager(null);
         this.fetchHandler = fetchHandler;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
@@ -58,9 +58,9 @@ public class OptionItemManager implements IOptionItemManager {
                     "ArticularItem.optionItems",
                     parameterFactory.createStringParameter(ARTICULAR_ID, articularId));
 
-            OptionItem optionItem = newOptionGroup.getOptionItems().get(0);
-            existingOptionGroup.addOptionItem(optionItem);
-            articularItem.addOptionItem(optionItem);
+//            OptionItem optionItem = newOptionGroup.getOptionItems().get(0);
+//            existingOptionGroup.addOptionItem(optionItem);
+//            articularItem.addOptionItem(optionItem);
 
             session.merge(articularItem);
         });
@@ -81,12 +81,12 @@ public class OptionItemManager implements IOptionItemManager {
                     .orElseThrow(() -> new RuntimeException("Option item with value " + optionItemValue + " not found"));
 
             OptionGroup newOptionGroup = transformationFunctionService.getEntity(OptionGroup.class, singleOptionItemDto);
-            OptionItem newOptionItem = newOptionGroup.getOptionItems().get(0);
-            newOptionItem.setId(existingOptionItem.getId());
+//            OptionItem newOptionItem = newOptionGroup.getOptionItems().get(0);
+//            newOptionItem.setId(existingOptionItem.getId());
 
             if (existingOptionGroup.getValue().equals(newOptionGroup.getValue())) {
                 existingOptionGroup.getOptionItems().remove(existingOptionItem);
-                existingOptionGroup.addOptionItem(newOptionItem);
+//                existingOptionGroup.addOptionItem(newOptionItem);
                 session.merge(existingOptionGroup);
             } else {
                 session.merge(newOptionGroup);

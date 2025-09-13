@@ -1,0 +1,101 @@
+brand:
+  - id: 1
+    value: "TechBrand"
+    label: "TechBrand"
+  - id: 2
+    value: "Update TechBrand"
+    label: "Update TechBrand"
+item_type:
+  - id: 1
+    value: "Electronic"
+    label: "Electronic"
+  - id: 2
+    value: "Update Electronic"
+    label: "Update Electronic"
+currency:
+  - id: 1
+    value: "USD"
+    label: "USD"
+price:
+  - id: 1
+    amount: 1000
+    currency_id: 1
+discount:
+  - id: 1
+    amount: 100
+    char_sequence_code: "xxx"
+    is_active: true
+    is_percent: false
+    currency_id: 1
+option_group:
+  - id: 1
+    label: "Size"
+    value: "Size"
+  - id: 2
+    label: "Color"
+    value: "Color"
+option_item:
+  - id: 1
+    value: "L"
+    label: "L"
+    option_group_id: 1
+  - id: 2
+    value: "M"
+    label: "M"
+    option_group_id: 1
+  - id: 3
+    value: "16"
+    label: "16"
+    option_group_id: 1
+  - id: 4
+    value: "Red"
+    label: "Red"
+    option_group_id: 2
+  - id: 5
+    value: "Blue"
+    label: "Blue"
+    option_group_id: 2
+category:
+  - id: 1
+    label: "Electronic"
+    value: "Electronic"
+  - id: 2
+    category_id: 1
+    label: "Laptop"
+    value: "Laptop"
+  - id: 3
+    label: "Update Electronic"
+    value: "Update Electronic"
+  - id: 4
+    category_id: 3
+    label: "Update Laptop"
+    value: "Update Laptop"
+articular_status:
+  - id: 1
+    value: "NEW"
+    label: "NEW"
+  - id: 2
+    value: "COMMON"
+    label: "COMMON"
+item_data:
+  - id: 1
+    item_id: 122
+    description: "{\"par1\":\"desc1\",\"par2\":\"desc2\",\"par3\":\"desc3\"}"
+    brand_id: 1
+    category_id: 2
+    item_type_id: 1
+articular_item:
+  - id: 1
+    articular_id: 1
+    date_of_create: "2024-03-03 12:00:00"
+    discount_id: 1
+    fullprice_id: 1
+    totalprice_id: 1
+    item_data_id: 1
+    status_id: 1
+    productname: "Mob 1"
+articular_item_option_item:
+  - articular_item_id: 1
+    option_item_id: 4
+  - articular_item_id: 1
+    option_item_id: 3

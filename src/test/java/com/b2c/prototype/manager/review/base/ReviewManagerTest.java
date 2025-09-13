@@ -3,7 +3,7 @@ package com.b2c.prototype.manager.review.base;
 import com.b2c.prototype.modal.dto.payload.review.ReviewDto;
 import com.b2c.prototype.modal.dto.payload.review.ResponseReviewDto;
 import com.b2c.prototype.modal.entity.item.Item;
-import com.b2c.prototype.modal.entity.item.ItemData;
+import com.b2c.prototype.modal.entity.item.MetaData;
 import com.b2c.prototype.modal.entity.review.Rating;
 import com.b2c.prototype.modal.entity.review.Review;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
@@ -25,6 +25,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static com.b2c.prototype.util.Converter.getLocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doAnswer;
@@ -120,11 +121,11 @@ class ReviewManagerTest {
         Supplier<Review> reviewSupplier = () -> review;
 
         
-        Function<ItemData, Review> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(ItemData.class, Review.class))
+        Function<MetaData, Review> function = mock(Function.class);
+        when(transformationFunctionService.getTransformationFunction(MetaData.class, Review.class))
                 .thenReturn(function);
 //        when(supplierService.entityFieldSupplier(
-//                ItemData.class,
+//                MetaData.class,
 //                parameterSupplier,
 //                function
 //        )).thenReturn(reviewSupplier);
@@ -165,10 +166,10 @@ class ReviewManagerTest {
 
     private Review getReview() {
         return Review.builder()
-                .reviewId("review_id")
+                .reviewUniqId("review_id")
                 .title("title")
                 .message("message")
-                .dateOfCreate(100)
+                .dateOfCreate(getLocalDateTime("2024-03-03 12:00:00"))
                 .rating(getRating())
                 .build();
     }

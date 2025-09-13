@@ -1,5 +1,7 @@
 package com.b2c.prototype.manager.item.base;
 
+import com.b2c.prototype.dao.IEntityDao;
+import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountStatusDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
@@ -8,7 +10,6 @@ import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.item.IDiscountManager;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.dao.IFetchHandler;
-import com.tm.core.process.dao.common.ITransactionEntityDao;
 import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
 import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
 import org.hibernate.Session;
@@ -26,11 +27,11 @@ public class DiscountManager implements IDiscountManager {
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public DiscountManager(ITransactionEntityDao discountDao,
+    public DiscountManager(IGeneralEntityDao discountDao,
                            IFetchHandler fetchHandler,
                            ITransformationFunctionService transformationFunctionService,
                            IParameterFactory parameterFactory) {
-        this.entityOperationManager = new TransactionEntityOperationManager(discountDao);
+        this.entityOperationManager = new TransactionEntityOperationManager(null);
         this.fetchHandler = fetchHandler;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;

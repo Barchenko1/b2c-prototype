@@ -14,8 +14,6 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResponseTimeDurationOptionDto extends AbstractConstantDto {
-    private String startTime;
-    private String endTime;
-    private int duration;
+    private int durationInMinutes;
     private PriceDto price;
 }

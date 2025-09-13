@@ -1,0 +1,18 @@
+country:
+  - id: 1
+    label: "Country"
+    value: "Country"
+currency:
+  - id: 1
+    value: "USD"
+    label: "USD"
+price:
+  - id: 1
+    amount: 10
+    currency_id: 1
+zone_option:
+  - id: 1
+    zone_name: "Zone A"
+    country_id: 1
+    price_id: 1
+    city: "City"

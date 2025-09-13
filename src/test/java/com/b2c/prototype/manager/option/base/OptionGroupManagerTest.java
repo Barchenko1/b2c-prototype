@@ -46,7 +46,7 @@ class OptionGroupManagerTest extends AbstractConstantEntityManagerTest<OptionGro
         OptionGroup testValue = createTestValue();
 
         when(mapDtoToEntityFunction.apply(dto)).thenReturn(testValue);
-        when(dao.getEntityClass()).thenAnswer(invocation -> OptionGroup.class);
+//        when(dao.getEntityClass()).thenAnswer(invocation -> OptionGroup.class);
 
         optionGroupManager.saveEntity(dto);
 
@@ -65,7 +65,7 @@ class OptionGroupManagerTest extends AbstractConstantEntityManagerTest<OptionGro
                 .build();
 
         when(mapDtoToEntityFunction.apply(newDto)).thenReturn(testValue);
-        when(dao.getEntityClass()).thenAnswer(invocation -> OptionGroup.class);
+//        when(dao.getEntityClass()).thenAnswer(invocation -> OptionGroup.class);
 
         optionGroupManager.updateEntity("testValue", newDto);
 

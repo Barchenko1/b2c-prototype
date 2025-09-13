@@ -15,10 +15,7 @@ public final class DataSourcePool {
     private static final long IDLE_TIMEOUT = 600000; // 10 minutes
     private static final long MAX_LIFETIME = 1800000; // 30 minutes
 
-    private static final String SQLITE_DRIVER = "org.sqlite.JDBC";
-
     private static HikariDataSource postgresDataSource;
-    private static HikariDataSource sqliteDataSource;
 
     private DataSourcePool() {}
 

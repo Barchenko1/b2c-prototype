@@ -4,7 +4,6 @@ import com.b2c.prototype.modal.entity.item.ArticularItem;
 
 import com.b2c.prototype.modal.dto.payload.store.StoreDto;
 import com.b2c.prototype.modal.dto.payload.store.ResponseStoreDto;
-import com.b2c.prototype.modal.entity.store.CountType;
 import com.b2c.prototype.modal.entity.store.Store;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.tm.core.finder.parameter.Parameter;
@@ -162,13 +161,6 @@ class StoreManagerTest {
 //        List<ResponseStoreDto> result = storeManager.getAllResponseStore();
 
 //        assertEquals(responseStoreDtoList, result);
-    }
-
-    private CountType getCountType() {
-        return CountType.builder()
-                .id(1L)
-                .value("LIMITED")
-                .build();
     }
 
     private Store getStore() {

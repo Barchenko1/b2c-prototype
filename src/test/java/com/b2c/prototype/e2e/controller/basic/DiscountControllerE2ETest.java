@@ -54,7 +54,7 @@ class DiscountControllerE2ETest extends BasicE2ETest {
     @Test
     void testSaveDiscount() {
         DiscountDto discountDto = discountDto();
-        loadDataSet("/datasets/item/discount/emptyDiscountDataSet.yml");
+        loadDataSet("/datasets/item/discount/fix/emptyDiscountDataSet.yml");
         try {
             mockMvc.perform(post(URL_TEMPLATE)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -64,7 +64,7 @@ class DiscountControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/item/discount/testDiscountDataSet.yml");
+        verifyExpectedData("/datasets/item/discount/fix/testDiscountDataSet.yml");
     }
 
     @Test

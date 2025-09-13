@@ -1,0 +1,15 @@
+brand: []
+item_type: []
+category: []
+currency:
+  - id: 1
+    value: "USD"
+    label: "USD"
+price: []
+discount: []
+option_group: []
+option_item: []
+articular_status: []
+metadata: []
+articular_item: []
+articular_item_option_item: []

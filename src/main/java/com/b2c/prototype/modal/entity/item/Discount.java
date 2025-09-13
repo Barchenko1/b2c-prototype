@@ -1,25 +1,28 @@
 package com.b2c.prototype.modal.entity.item;
 
-import com.b2c.prototype.modal.base.discount.AbstractDiscount;
 import com.b2c.prototype.modal.entity.price.Currency;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "discount")
 @NamedQueries({
@@ -51,13 +54,24 @@ import java.util.List;
         )
 })
 @Data
-@SuperBuilder
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
-public class Discount extends AbstractDiscount {
+public class Discount {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false, nullable = false)
+    private long id;
+    @Column(name = "char_sequence_code", unique = true, nullable = false)
+    private String charSequenceCode;
+    private double amount;
+    private boolean isActive;
     private boolean isPercent;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private Currency currency;
     @OneToMany(mappedBy = "discount", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
     @Builder.Default
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<ArticularItem> articularItemList = new ArrayList<>();
 }

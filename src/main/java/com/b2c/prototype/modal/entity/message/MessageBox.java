@@ -53,7 +53,6 @@ import java.util.Set;
                         "JOIN FETCH mb.userDetails ud " +
                         "LEFT JOIN FETCH mb.messages m " +
                         "LEFT JOIN FETCH m.messageTemplate mt " +
-                        "LEFT JOIN FETCH mt.type t " +
                         "LEFT JOIN FETCH m.status " +
                         "WHERE ud.userId = :userId"
         ),
@@ -64,22 +63,17 @@ public class MessageBox {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private UserDetails userDetails;
-//    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-//    @JoinTable(
-//            name = "message_box_message",
-//            joinColumns = {@JoinColumn(name = "message_box_id")},
-//            inverseJoinColumns = {@JoinColumn(name = "message_id")}
-//    )
-//    @Builder.Default
-//    @ToString.Exclude
-//    @EqualsAndHashCode.Exclude
-//    private Set<Message> messages = new HashSet<>();
-    @ManyToMany(mappedBy = "boxes")
-    @Builder.Default
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "message_box_message",
+            joinColumns = {@JoinColumn(name = "message_box_id")},
+            inverseJoinColumns = {@JoinColumn(name = "message_id")}
+    )
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    @Builder.Default
     private Set<Message> messages = new HashSet<>();
 
     public void addMessage(Message message) {

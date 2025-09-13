@@ -1,7 +1,0 @@
-count_type:
-  - id: 1
-    value: "LIMITED"
-    label: "limited"
-  - id: 2
-    value: "UNLIMITED"
-    label: "unlimited"

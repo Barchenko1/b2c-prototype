@@ -1,6 +1,5 @@
 package com.b2c.prototype.dao;
 
-import com.b2c.prototype.modal.constant.CommissionType;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
 import com.b2c.prototype.modal.entity.item.*;
@@ -47,7 +46,7 @@ public interface ISessionEntityFetcher {
     Optional<Brand> fetchOptionalBrand(Session session, String value);
     Optional<ItemType> fetchOptionalItemType(Session session, String value);
     Optional<CommissionValue> fetchCommission(Session session);
-    Optional<MinMaxCommission> fetchMinMaxCommission(Session session, CommissionType value);
+    Optional<MinMaxCommission> fetchMinMaxCommission(Session session);
     Optional<Post> fetchPost(Session session, String value);
     List<ReviewComment> fetchReviewComments(Session session, String value);
     ReviewStatus fetchReviewStatus(Session session, String value);

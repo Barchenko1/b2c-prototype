@@ -46,7 +46,7 @@ class BrandManagerTest extends AbstractConstantEntityManagerTest<Brand> {
         Brand testValue = createTestValue();
 
         when(mapDtoToEntityFunction.apply(dto)).thenReturn(testValue);
-        when(dao.getEntityClass()).thenAnswer(invocation -> Brand.class);
+//        when(dao.getEntityClass()).thenAnswer(invocation -> Brand.class);
 
         brandManager.saveEntity(dto);
 
@@ -65,7 +65,7 @@ class BrandManagerTest extends AbstractConstantEntityManagerTest<Brand> {
                 .build();
 
         when(mapDtoToEntityFunction.apply(newDto)).thenReturn(testValue);
-        when(dao.getEntityClass()).thenAnswer(invocation -> Brand.class);
+//        when(dao.getEntityClass()).thenAnswer(invocation -> Brand.class);
 
         brandManager.updateEntity("testValue", newDto);
 

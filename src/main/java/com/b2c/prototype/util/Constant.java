@@ -17,7 +17,6 @@ public interface Constant {
     // serviceId
     String AVAILABILITY_STATUS_ID = "availabilityStatus";
     String BRAND_SERVICE_ID = "brand";
-    String COUNT_TYPE_SERVICE_ID = "countType";
     String COUNTRY_PHONE_CODE_SERVICE_ID = "countryPhoneCode";
     String COUNTRY_SERVICE_ID = "country";
     String CURRENCY_SERVICE_ID = "currency";

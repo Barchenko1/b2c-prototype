@@ -1,7 +1,6 @@
 package com.b2c.prototype.modal.entity.store;
 
 import com.b2c.prototype.modal.entity.address.Address;
-import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,7 +9,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
@@ -48,7 +46,8 @@ import java.util.List;
                 query = "SELECT s FROM Store s " +
                         "LEFT JOIN FETCH s.address a " +
                         "LEFT JOIN FETCH a.country c " +
-                        "LEFT JOIN FETCH s.articularItemQuantities aiq " +
+                        "LEFT JOIN FETCH s.articularStocks sas " +
+                        "LEFT JOIN FETCH sas.articularItemQuantities aiq " +
                         "LEFT JOIN FETCH aiq.articularItem ai " +
                         "WHERE s.storeId = :storeId"
         ),
@@ -57,7 +56,8 @@ import java.util.List;
                 query = "SELECT s FROM Store s " +
                         "LEFT JOIN FETCH s.address a " +
                         "LEFT JOIN FETCH a.country c " +
-                        "LEFT JOIN FETCH s.articularItemQuantities aiq " +
+                        "LEFT JOIN FETCH s.articularStocks sas " +
+                        "LEFT JOIN FETCH sas.articularItemQuantities aiq " +
                         "LEFT JOIN FETCH aiq.articularItem ai " +
                         "WHERE c.value = :value"
         ),
@@ -66,7 +66,8 @@ import java.util.List;
                 query = "SELECT s FROM Store s " +
                         "LEFT JOIN FETCH s.address a " +
                         "LEFT JOIN FETCH a.country c " +
-                        "LEFT JOIN FETCH s.articularItemQuantities aiq " +
+                        "LEFT JOIN FETCH s.articularStocks sas " +
+                        "LEFT JOIN FETCH sas.articularItemQuantities aiq " +
                         "LEFT JOIN FETCH aiq.articularItem ai " +
                         "WHERE c.value = :value " +
                         "AND a.city =: value"
@@ -76,7 +77,8 @@ import java.util.List;
                 query = "SELECT s FROM Store s " +
                         "LEFT JOIN FETCH s.address a " +
                         "LEFT JOIN FETCH a.country c " +
-                        "LEFT JOIN FETCH s.articularItemQuantities aiq " +
+                        "LEFT JOIN FETCH s.articularStocks sas " +
+                        "LEFT JOIN FETCH sas.articularItemQuantities aiq " +
                         "LEFT JOIN FETCH aiq.articularItem ai " +
                         "WHERE ai.articularId = : articularId"
         )
@@ -93,7 +95,7 @@ public class Store {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "store_id")
     @Builder.Default
-    private List<ArticularItemQuantity> articularItemQuantities = new ArrayList<>();
+    private List<ArticularStock> articularStocks = new ArrayList<>();
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "address_id", nullable = false)
     private Address address;

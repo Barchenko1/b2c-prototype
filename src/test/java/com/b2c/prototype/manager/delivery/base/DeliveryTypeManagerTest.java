@@ -46,7 +46,7 @@ class DeliveryTypeManagerTest extends AbstractConstantEntityManagerTest<Delivery
         DeliveryType testValue = createTestValue();
 
         when(mapDtoToEntityFunction.apply(dto)).thenReturn(testValue);
-        when(dao.getEntityClass()).thenAnswer(invocation -> DeliveryType.class);
+//        when(dao.getEntityClass()).thenAnswer(invocation -> DeliveryType.class);
 
         deliveryTypeManager.saveEntity(dto);
 
@@ -65,7 +65,7 @@ class DeliveryTypeManagerTest extends AbstractConstantEntityManagerTest<Delivery
                 .build();
 
         when(mapDtoToEntityFunction.apply(newDto)).thenReturn(testValue);
-        when(dao.getEntityClass()).thenAnswer(invocation -> DeliveryType.class);
+//        when(dao.getEntityClass()).thenAnswer(invocation -> DeliveryType.class);
 
         deliveryTypeManager.updateEntity("testValue", newDto);
 

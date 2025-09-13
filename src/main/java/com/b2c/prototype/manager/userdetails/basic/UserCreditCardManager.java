@@ -1,5 +1,6 @@
 package com.b2c.prototype.manager.userdetails.basic;
 
+import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.dto.payload.user.UserCreditCardDto;
 import com.b2c.prototype.modal.dto.payload.order.ResponseCreditCardDto;
 import com.b2c.prototype.modal.dto.payload.user.ResponseUserCreditCardDto;
@@ -9,7 +10,6 @@ import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.userdetails.IUserCreditCardManager;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.common.ITransactionEntityDao;
 import com.tm.core.process.dao.query.IQueryService;
 import com.tm.core.process.dao.IFetchHandler;
 import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
@@ -32,12 +32,12 @@ public class UserCreditCardManager implements IUserCreditCardManager {
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public UserCreditCardManager(ITransactionEntityDao creditCardDao,
+    public UserCreditCardManager(IGeneralEntityDao creditCardDao,
                                  IQueryService queryService,
                                  IFetchHandler fetchHandler,
                                  ITransformationFunctionService transformationFunctionService,
                                  IParameterFactory parameterFactory) {
-        this.entityOperationManager = new TransactionEntityOperationManager(creditCardDao);
+        this.entityOperationManager = new TransactionEntityOperationManager(null);
         this.queryService = queryService;
         this.fetchHandler = fetchHandler;
         this.transformationFunctionService = transformationFunctionService;

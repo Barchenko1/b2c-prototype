@@ -1,0 +1,14 @@
+currency:
+  - id: 1
+    value: "USD"
+    label: "USD"
+price:
+  - id: 1
+    amount: 10
+    currency_id: 1
+time_duration_option:
+  - id: 1
+    value: "1-10"
+    label: "1-10"
+    duration_in_min: 120
+    price_id: 1

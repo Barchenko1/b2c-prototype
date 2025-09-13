@@ -1,0 +1,18 @@
+brand:
+  - id: 1
+    value: "Hermes"
+    label: "Hermes"
+item_type:
+  - id: 1
+    value: "Clothes"
+    label: "Clothes"
+category:
+  - id: 1
+    label: "parent"
+    value: "parent"
+metadata:
+  - id: 1
+    metadata_uniq_id: "123"
+    brand_id: 1
+    category_id: 1
+    item_type_id: 1

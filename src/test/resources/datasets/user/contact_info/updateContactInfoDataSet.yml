@@ -7,10 +7,10 @@ country_phone_code:
     label: "+22"
 contact_phone:
   - id: 1
-    phoneNumber: "222-222-222"
+    phone_number: "222-222-222"
     country_phone_code_id: 2
 contact_info:
   - id: 1
-    firstName: "Update Wolter"
-    lastName: "Update White"
+    first_name: "Update Wolter"
+    last_name: "Update White"
     contact_phone_id: 1

@@ -7,6 +7,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +17,9 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -62,7 +65,10 @@ import java.util.List;
 public class OptionGroup extends AbstractConstantEntity {
     @OneToMany(mappedBy = "optionGroup", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    private List<OptionItem> optionItems = new ArrayList<>();
+    private Set<OptionItem> optionItems = new HashSet<>();
+    @OneToMany(mappedBy = "optionGroup", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private Set<OptionItemCost> optionItemCosts = new HashSet<>();
 
     public void addOptionItem(OptionItem optionItem) {
         this.optionItems.add(optionItem);
@@ -71,6 +77,16 @@ public class OptionGroup extends AbstractConstantEntity {
 
     public void removeOptionItem(OptionItem optionItem) {
         this.optionItems.remove(optionItem);
+        optionItem.setOptionGroup(null);
+    }
+
+    public void addOptionItemCost(OptionItemCost optionItem) {
+        this.optionItemCosts.add(optionItem);
+        optionItem.setOptionGroup(this);
+    }
+
+    public void removeOptionItemCost(OptionItemCost optionItem) {
+        this.optionItemCosts.remove(optionItem);
         optionItem.setOptionGroup(null);
     }
 }

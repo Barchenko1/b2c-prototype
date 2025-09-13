@@ -18,7 +18,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "price_details")
+@Table(name = "multi_currency_price_info")
 @Data
 @Builder
 @AllArgsConstructor
@@ -31,10 +31,10 @@ public class MultiCurrencyPriceInfo {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(nullable = false)
     private Price originalPrice;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(nullable = false)
     private CurrencyCoefficient currencyCoefficient;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(nullable = false)
-    private Price currencyPrice;
+    private Price currentPrice;
 }

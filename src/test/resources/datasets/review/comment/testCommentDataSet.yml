@@ -1,18 +1,18 @@
-comment:
+review_comment:
   - id: 1
     title: "parent"
     message: "parent"
-    unique_comment_id: "1"
-    dateOfCreate: 100000
+    review_comment_uniq_id: "1"
+    date_of_create: "2024-03-03 12:00:00"
   - id: 2
     comment_id: 1
     title: "root"
     message: "root"
-    unique_comment_id: "2"
-    dateOfCreate: 100000
+    review_comment_uniq_id: "2"
+    date_of_create: "2024-03-03 12:00:00"
   - id: 3
     comment_id: 2
     title: "child"
     message: "child"
-    unique_comment_id: "3"
-    dateOfCreate: 100000
+    review_comment_uniq_id: "3"
+    date_of_create: "2024-03-03 12:00:00"

@@ -20,6 +20,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +34,7 @@ import java.util.List;
         @NamedQuery(
                 name = "Review.findByReviewId",
                 query = "SELECT r FROM Review r " +
-                        "WHERE r.reviewId = :reviewId"
+                        "WHERE r.reviewUniqId = :reviewUniqId"
         ),
         @NamedQuery(
                 name = "Review.findByUserId",
@@ -52,11 +53,11 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
-    @Column(name = "reviewId", unique = true, nullable = false)
-    private String reviewId;
+    @Column(name = "review_uniq_id", unique = true, nullable = false)
+    private String reviewUniqId;
     private String title;
     private String message;
-    private long dateOfCreate;
+    private LocalDateTime dateOfCreate;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private UserDetails userDetails;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)

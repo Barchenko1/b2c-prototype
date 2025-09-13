@@ -1,37 +1,97 @@
 credit_card:
   - id: 1
-    cardNumber: "4444-1111-2222-3333"
-    dateOfExpire: "06/28"
+    card_number: "4444-1111-2222-3333"
+    month_of_expire: "06"
+    year_of_expire: "28"
     cvv: 818
-    ownerName: "Update name"
-    ownerSecondName: "Update secondName"
-    isActive: true
+    owner_name: "name"
+    owner_second_name: "secondName"
+    is_active: true
 payment_method:
   - id: 1
     value: "Card"
     label: "Card"
   - id: 2
     value: "Blik"
-    label: "Blil"
+    label: "Blik"
+payment_status:
+  - id: 1
+    value: "Done"
+    label: "Done"
+  - id: 2
+    value: "Approved"
+    label: "Approved"
 currency:
   - id: 1
     value: "USD"
     label: "USD"
+  - id: 2
+    value: "EUR"
+    label: "EUR"
 discount:
   - id: 1
     amount: 5
-    charSequenceCode: "abc"
-    isActive: true
-    isPercent: false
+    char_sequence_code: "abc"
+    is_active: true
+    is_percent: false
     currency_id: 1
 price:
   - id: 1
     currency_id: 1
-    amount: 20
+    amount: 100
+  - id: 2
+    amount: 95
+    currency_id: 2
+  - id: 3
+    amount: 85
+    currency_id: 1
+  - id: 4
+    currency_id: 2
+    amount: 80.75
+  - id: 5
+    amount: 10
+    currency_id: 1
+  - id: 6
+    amount: 9.5
+    currency_id: 2
+  - id: 7
+    amount: 5
+    currency_id: 1
+  - id: 8
+    amount: 4.75
+    currency_id: 2
+currency_coefficient:
+  - id: 1
+    currency_from_id: 1
+    currency_to_id: 2
+    coefficient: 0.95
+    date_of_create: "2024-03-03 12:00:00"
+multi_currency_price_info:
+  - id: 1
+    original_price_id: 1
+    currency_coefficient_id: 1
+    current_price_id: 2
+  - id: 2
+    original_price_id: 3
+    currency_coefficient_id: 1
+    current_price_id: 4
+  - id: 3
+    original_price_id: 5
+    currency_coefficient_id: 1
+    current_price_id: 6
+  - id: 4
+    original_price_id: 7
+    currency_coefficient_id: 1
+    current_price_id: 8
 payment:
   - id: 1
-    upayment_id: "Update 1"
+    payment_uniq_id: "123"
+    payment_time: "2024-03-03 12:00:00"
     payment_method_id: 1
-    fullprice_id: 1
-    totalprice_id: 1
+    full_multi_currency_price_info_id: 1
+    total_multi_currency_price_info_id: 2
+    discount_multi_currency_price_info_id: 3
+    commission_price_info_id: 4
+    payment_status_id: 2
     credit_card_id: 1
+    discount_id: 1

@@ -11,8 +11,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "reservation_duration")
+import java.time.LocalDateTime;
+
+//@Entity
+//@Table(name = "reservation_duration")
 @Data
 @Builder
 @NoArgsConstructor
@@ -22,6 +24,6 @@ public class ReservationDuration {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
-    private long startTime;
-    private long endTime;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
 }

@@ -44,12 +44,12 @@ public class OptionItem extends AbstractConstantEntity {
     @JoinColumn(name = "option_group_id", nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private OptionGroup optionGroup;
+    protected OptionGroup optionGroup;
     @ManyToMany(mappedBy = "optionItems")
     @Builder.Default
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Set<ArticularItem> articularItems = new HashSet<>();
+    protected Set<ArticularItem> articularItems = new HashSet<>();
 
     public void addArticularItem(ArticularItem articularItem) {
         this.articularItems.add(articularItem);

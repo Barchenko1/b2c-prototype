@@ -1,0 +1,15 @@
+country_phone_code:
+  - id: 1
+    value: "+11"
+    label: "+11"
+contact_phone: []
+contact_info: []
+country:
+  - id: 1
+    label: "USA"
+    value: "USA"
+address: []
+credit_card: []
+user_details: []
+user_address: []
+user_credit_card: []

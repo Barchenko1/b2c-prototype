@@ -46,7 +46,7 @@ class PaymentMethodManagerTest extends AbstractConstantEntityManagerTest<Payment
         PaymentMethod testValue = createTestValue();
 
         when(mapDtoToEntityFunction.apply(dto)).thenReturn(testValue);
-        when(dao.getEntityClass()).thenAnswer(invocation -> PaymentMethod.class);
+//        when(dao.getEntityClass()).thenAnswer(invocation -> PaymentMethod.class);
 
         paymentMethodManager.saveEntity(dto);
 
@@ -65,7 +65,7 @@ class PaymentMethodManagerTest extends AbstractConstantEntityManagerTest<Payment
                 .build();
 
         when(mapDtoToEntityFunction.apply(newDto)).thenReturn(testValue);
-        when(dao.getEntityClass()).thenAnswer(invocation -> PaymentMethod.class);
+//        when(dao.getEntityClass()).thenAnswer(invocation -> PaymentMethod.class);
 
         paymentMethodManager.updateEntity("testValue", newDto);
 

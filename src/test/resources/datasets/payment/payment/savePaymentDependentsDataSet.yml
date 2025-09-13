@@ -1,17 +1,18 @@
 credit_card:
-  - cardNumber: "4444-1111-2222-3333"
-    dateOfExpire: "06/28"
+  - card_number: "4444-1111-2222-3333"
+    month_of_expire: "06"
+    year_of_expire: "28"
     cvv: 818
-    ownerName: "name"
-    ownerSecondName: "secondName"
-    isActive: true
+    owner_name: "name"
+    owner_second_name: "secondName"
+    is_active: true
 payment_method:
   - id: 1
     value: "Card"
     label: "Card"
   - id: 2
     value: "Blik"
-    label: "Blil"
+    label: "Blik"
 currency:
   - id: 1
     value: "USD"
@@ -22,9 +23,9 @@ price:
 discount:
   - id: 1
     amount: 5
-    charSequenceCode: "abc"
-    isActive: true
-    isPercent: false
+    char_sequence_code: "abc"
+    is_active: true
+    is_percent: false
     currency_id: 1
 payment:
   - upayment_id: "1"

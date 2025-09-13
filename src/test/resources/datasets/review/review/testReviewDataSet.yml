@@ -1,0 +1,26 @@
+rating:
+  - id: 1
+    value: 1
+  - id: 2
+    value: 2
+  - id: 3
+    value: 3
+  - id: 4
+    value: 4
+  - id: 5
+    value: 5
+review_status:
+  - id: 1
+    label: "Pending"
+    value: "PENDING"
+  - id: 2
+    label: "done"
+    value: "DONE"
+review:
+  - id: 1
+    rating_id: 5
+    review_uniq_id: "review123"
+    review_status_id: 1
+    message: "Really enjoyed using this product. Highly recommend it!"
+    title: "Great Product!"
+    date_of_create: "2024-03-03 12:00:00"

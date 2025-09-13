@@ -13,9 +13,9 @@ currency:
 discount:
   - id: 1
     amount: 5
-    charSequenceCode: "abc"
-    isActive: true
-    isPercent: false
+    char_sequence_code: "abc"
+    is_active: true
+    is_percent: false
     currency_id: 1
 option_group:
   - id: 1
@@ -47,11 +47,11 @@ item_data:
     item_id: 123
     brand_id: 1
     category_id: 3
-    itemtype_id: 1
+    item_type_id: 1
 articular_item:
   - id: 1
     articular_id: 1
-    dateOfCreate: 10000
+    date_of_create: "2024-03-03 12:00:00"
 delivery_type:
   - id: 1
     value: "Post"
@@ -78,14 +78,14 @@ country_phone_code:
 contact_phone: []
 contact_info:
   - id: 1
-    firstName: "Wolter"
-    lastName: "White"
+    first_name: "Wolter"
+    last_name: "White"
 user_details:
   - id: 1
     username: "username"
     user_id: "123"
     email: "email"
-    dateOfCreate: 100
-    isActive: true
-    contactinfo_id: 1
+    date_of_create: "2024-03-03 12:00:00"
+    is_active: true
+    contact_info_id: 1
 order_articular_item: []

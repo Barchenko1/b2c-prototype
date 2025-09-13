@@ -21,6 +21,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,10 +33,10 @@ import java.util.List;
 @Builder
 @NamedQueries({
         @NamedQuery(
-                name = "Post.getPostByPostId",
+                name = "Post.getPostByPostUniqId",
                 query = "SELECT p FROM Post p " +
                         "LEFT JOIN FETCH p.childList p1 " +
-                        "WHERE p.postId = : postId"
+                        "WHERE p.postUniqId = : postUniqId"
         ),
         @NamedQuery(
                 name = "Post.allParent",
@@ -66,9 +67,9 @@ public class Post {
     private String message;
     private String authorEmail;
     private String authorName;
-    @Column(name = "postId", unique = true, nullable = false)
-    private String postId;
-    private long dateOfCreate;
+    @Column(name = "postUniqId", unique = true, nullable = false)
+    private String postUniqId;
+    private LocalDateTime dateOfCreate;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private UserDetails userDetails;
     @ManyToOne

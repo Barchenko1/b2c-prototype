@@ -6,4 +6,6 @@ message_type:
   - id: 1
     label: "InMail"
     value: "InMail"
+message_template: []
 message: []
+message_receivers: []

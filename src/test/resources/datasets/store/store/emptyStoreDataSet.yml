@@ -21,9 +21,9 @@ price:
 discount:
   - id: 1
     amount: 5
-    charSequenceCode: "abc"
-    isActive: true
-    isPercent: false
+    char_sequence_code: "abc"
+    is_active: true
+    is_percent: false
     currency_id: 1
 option_group:
   - id: 1
@@ -51,11 +51,11 @@ item_data:
     item_id: 123
     brand_id: 1
     category_id: 3
-    itemtype_id: 1
+    item_type_id: 1
 articular_item:
   - id: 1
     articular_id: 1
-    dateOfCreate: 10000
+    date_of_create: "2024-03-03 12:00:00"
 articular_item_option_item:
   - articular_item_id: 1
     option_item_id: 1

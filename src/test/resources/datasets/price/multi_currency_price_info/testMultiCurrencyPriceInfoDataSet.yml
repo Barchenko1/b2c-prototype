@@ -1,0 +1,25 @@
+currency:
+  - id: 1
+    value: "USD"
+    label: "USD"
+  - id: 2
+    value: "EUR"
+    label: "EUR"
+price:
+  - id: 1
+    amount: 100
+    currency_id: 1
+  - id: 2
+    amount: 95
+    currency_id: 2
+currency_coefficient:
+  - id: 1
+    currency_from_id: 1
+    currency_to_id: 2
+    coefficient: 0.95
+    date_of_create: "2024-03-03 12:00:00"
+multi_currency_price_info:
+  - id: 1
+    original_price_id: 1
+    currency_coefficient_id: 1
+    current_price_id: 2

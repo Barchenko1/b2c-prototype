@@ -28,8 +28,7 @@ import lombok.NoArgsConstructor;
                 name = "UserAddress.findByUserAddressCombination",
                 query = "SELECT DISTINCT u FROM UserAddress u " +
                         "LEFT JOIN FETCH u.address a " +
-                        "LEFT JOIN FETCH a.country c " +
-                        "WHERE u.userAddressCombination =: userAddressCombination"
+                        "LEFT JOIN FETCH a.country c"
         )
 })
 public class UserAddress {
@@ -41,5 +40,4 @@ public class UserAddress {
     @JoinColumn(name = "address_id")
     private Address address;
     private boolean isDefault;
-    private String userAddressCombination;
 }

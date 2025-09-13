@@ -9,7 +9,7 @@ import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.Discount;
-import com.b2c.prototype.modal.entity.item.ItemData;
+import com.b2c.prototype.modal.entity.item.MetaData;
 import com.b2c.prototype.modal.entity.item.ItemType;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
@@ -32,6 +32,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static com.b2c.prototype.util.Converter.getLocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -61,14 +62,14 @@ class ArticularItemManagerTest {
         String itemId = "itemId";
         ArticularItemDto articularItemDto = getItemDataOptionDto();
         List<ArticularItemDto> articularItemDtoList = List.of(articularItemDto);
-        ItemData itemData = getItemData();
+        MetaData metaData = getItemData();
         ArticularItem newArticularItem = updateItemDataOption();
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-//        when(queryService.getEntity(ItemData.class, parameterSupplier))
-//                .thenReturn(itemData);
+//        when(queryService.getEntity(MetaData.class, parameterSupplier))
+//                .thenReturn(metaData);
         when(transformationFunctionService.getEntity(ArticularItem.class, articularItemDto))
                 .thenReturn(newArticularItem);
         doAnswer(invocation -> {
@@ -89,15 +90,15 @@ class ArticularItemManagerTest {
         String itemId = "itemId";
         ArticularItemDto articularItemDto = getItemDataOptionDto();
         List<ArticularItemDto> articularItemDtoList = List.of(articularItemDto);
-        ItemData itemData = getItemData();
-        itemData.setArticularItemSet(new HashSet<>());
+        MetaData metaData = getItemData();
+        metaData.setArticularItemSet(new HashSet<>());
         ArticularItem newArticularItem = updateItemDataOption();
 
         Parameter parameter = mock(Parameter.class);
         Supplier<Parameter> parameterSupplier = () -> parameter;
 
-//        when(queryService.getEntity(ItemData.class, parameterSupplier))
-//                .thenReturn(itemData);
+//        when(queryService.getEntity(MetaData.class, parameterSupplier))
+//                .thenReturn(metaData);
         when(transformationFunctionService.getEntity(ArticularItem.class, articularItemDto))
                 .thenReturn(newArticularItem);
         doAnswer(invocation -> {
@@ -218,7 +219,7 @@ class ArticularItemManagerTest {
                 .build();
         return ArticularItem.builder()
                 .articularId("articularId")
-                .dateOfCreate(100)
+                .dateOfCreate(getLocalDateTime("2024-03-03 12:00:00"))
                 .fullPrice(getPrice(10))
                 .totalPrice(getPrice(8))
                 .discount(Discount.builder()
@@ -232,8 +233,8 @@ class ArticularItemManagerTest {
                 .build();
     }
 
-    private ItemData getItemData() {
-        return ItemData.builder()
+    private MetaData getItemData() {
+        return MetaData.builder()
                 .category(Category.builder()
                         .label("categoryLabel")
                         .value("categoryValue").build())
@@ -261,7 +262,7 @@ class ArticularItemManagerTest {
                 .build();
         return ArticularItem.builder()
                 .articularId("articularId")
-                .dateOfCreate(100)
+                .dateOfCreate(getLocalDateTime("2024-03-03 12:00:00"))
                 .fullPrice(getPrice(10))
                 .totalPrice(getPrice(8))
                 .discount(Discount.builder()

@@ -32,15 +32,15 @@ price:
 discount:
   - id: 1
     amount: 10
-    charSequenceCode: "abc1"
-    isActive: true
-    isPercent: false
+    char_sequence_code: "abc1"
+    is_active: true
+    is_percent: false
     currency_id: 1
   - id: 2
     amount: 15
-    charSequenceCode: "abc2"
-    isActive: true
-    isPercent: true
+    char_sequence_code: "abc2"
+    is_active: true
+    is_percent: true
 option_group:
   - id: 1
     label: "Size"
@@ -71,23 +71,23 @@ item_data:
     item_id: 123
     brand_id: 1
     category_id: 3
-    itemtype_id: 1
+    item_type_id: 1
 articular_item:
   - id: 1
     articular_id: "A12345"
-    dateOfCreate: 10000
+    date_of_create: "2024-03-03 12:00:00"
     discount_id: 1
     fullprice_id: 2
     totalprice_id: 3
   - id: 2
     articular_id: "B67890"
-    dateOfCreate: 10000
+    date_of_create: "2024-03-03 12:00:00"
     discount_id: 2
     fullprice_id: 4
     totalprice_id: 5
   - id: 3
     articular_id: "C54321"
-    dateOfCreate: 10000
+    date_of_create: "2024-03-03 12:00:00"
     fullprice_id: 6
     totalprice_id: 6
 articular_item_quantity: []
@@ -104,5 +104,5 @@ min_max_commission:
     mincommission_id: 4
     maxcommission_id: 3
     commission_type: 'BUYER'
-    changecommissionprice_id: 1
+    change_commission_price_id: 1
     lastUpdateTimestamp: "2024-04-01 10:15:30"

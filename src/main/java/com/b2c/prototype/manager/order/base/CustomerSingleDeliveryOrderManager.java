@@ -1,14 +1,14 @@
 package com.b2c.prototype.manager.order.base;
 
+import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.dao.ISessionEntityFetcher;
-import com.b2c.prototype.modal.constant.CommissionType;
 import com.b2c.prototype.modal.constant.OrderStatusEnum;
 import com.b2c.prototype.modal.dto.payload.order.PaymentDto;
 import com.b2c.prototype.modal.dto.payload.order.PaymentPriceDto;
 import com.b2c.prototype.modal.dto.payload.order.single.CustomerSingleDeliveryOrderDto;
 import com.b2c.prototype.modal.dto.payload.order.single.ResponseCustomerOrderDetails;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
-import com.b2c.prototype.modal.entity.item.ArticularItemQuantityPrice;
+import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.order.CustomerSingleDeliveryOrder;
 import com.b2c.prototype.modal.entity.order.OrderStatus;
@@ -23,7 +23,6 @@ import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.order.ICustomerSingleDeliveryOrderManager;
 import com.b2c.prototype.transform.help.calculate.IPriceCalculationService;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.common.ITransactionEntityDao;
 import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
 import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
 import org.hibernate.Session;
@@ -44,11 +43,11 @@ public class CustomerSingleDeliveryOrderManager implements ICustomerSingleDelive
     private final IParameterFactory parameterFactory;
     private final IPriceCalculationService priceCalculationService;
 
-    public CustomerSingleDeliveryOrderManager(ITransactionEntityDao orderItemDao,
+    public CustomerSingleDeliveryOrderManager(IGeneralEntityDao orderItemDao,
                                               ISessionEntityFetcher sessionEntityFetcher,
                                               ITransformationFunctionService transformationFunctionService,
                                               IParameterFactory parameterFactory, IPriceCalculationService priceCalculationService) {
-        this.entityOperationManager = new TransactionEntityOperationManager(orderItemDao);
+        this.entityOperationManager = new TransactionEntityOperationManager(null);
         this.sessionEntityFetcher = sessionEntityFetcher;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
@@ -60,13 +59,13 @@ public class CustomerSingleDeliveryOrderManager implements ICustomerSingleDelive
         entityOperationManager.executeConsumer(session -> {
             UserDetails userDetails = getUserDetails((Session) session, customerSingleDeliveryOrderDto.getUser().getUserId());
             OrderStatus orderStatus = sessionEntityFetcher.fetchOrderStatus((Session) session, OrderStatusEnum.CREATED.name());
-            List<ArticularItemQuantityPrice> articularItemQuantityPriceList = customerSingleDeliveryOrderDto.getArticularItemQuantityList().stream()
-                            .map(articularItemQuantityDto -> transformationFunctionService.getEntity((Session) session, ArticularItemQuantityPrice.class, articularItemQuantityDto))
+            List<ArticularItemQuantity> articularItemQuantityList = customerSingleDeliveryOrderDto.getArticularItemQuantityList().stream()
+                            .map(articularItemQuantityDto -> transformationFunctionService.getEntity((Session) session, ArticularItemQuantity.class, articularItemQuantityDto))
                             .toList();
             Delivery delivery = transformationFunctionService
                     .getEntity((Session) session, Delivery.class, customerSingleDeliveryOrderDto.getDelivery());
             PaymentPriceDto paymentPriceDto =
-                    getPaymentPriceDto(articularItemQuantityPriceList, customerSingleDeliveryOrderDto.getPayment());
+                    getPaymentPriceDto(articularItemQuantityList, customerSingleDeliveryOrderDto.getPayment());
             Payment payment = mapPaymentPriceDtoToPayment().apply((Session) session, paymentPriceDto);
             ContactInfo contactInfo = transformationFunctionService.getEntity((Session) session, ContactInfo.class, customerSingleDeliveryOrderDto.getContactInfo());
             ContactInfo beneficiary = transformationFunctionService.getEntity((Session) session, ContactInfo.class, customerSingleDeliveryOrderDto.getBeneficiary());
@@ -79,7 +78,7 @@ public class CustomerSingleDeliveryOrderManager implements ICustomerSingleDelive
                     .contactInfo(contactInfo)
                     .beneficiary(beneficiary)
                     .delivery(delivery)
-                    .articularItemQuantityPrices(articularItemQuantityPriceList)
+                    .articularItemQuantities(articularItemQuantityList)
                     .payment(payment)
                     .note(customerSingleDeliveryOrderDto.getNote())
                     .build();
@@ -152,11 +151,11 @@ public class CustomerSingleDeliveryOrderManager implements ICustomerSingleDelive
         return userDetailsOptional.orElse(null);
     }
 
-    private PaymentPriceDto getPaymentPriceDto(List<ArticularItemQuantityPrice> articularItemQuantityPriceList, PaymentDto paymentDto) {
-        Currency currency = articularItemQuantityPriceList.get(0).getTotalPriceSum().getCurrency();
-        Price fullPaymentPrice = getFullPriceSum(articularItemQuantityPriceList, currency);
-        Price totalPaymentPrice = getTotalPriceSum(articularItemQuantityPriceList, currency);
-        Price discountPriceSum = getDiscountPriceSum(articularItemQuantityPriceList, currency);
+    private PaymentPriceDto getPaymentPriceDto(List<ArticularItemQuantity> articularItemQuantityList, PaymentDto paymentDto) {
+        Currency currency = null;
+        Price fullPaymentPrice = getFullPriceSum(articularItemQuantityList, currency);
+        Price totalPaymentPrice = getTotalPriceSum(articularItemQuantityList, currency);
+        Price discountPriceSum = getDiscountPriceSum(articularItemQuantityList, currency);
 
         return PaymentPriceDto.builder()
                 .paymentMethod(paymentDto.getPaymentMethod())
@@ -168,26 +167,26 @@ public class CustomerSingleDeliveryOrderManager implements ICustomerSingleDelive
                 .build();
     }
 
-    private Price getFullPriceSum(List<ArticularItemQuantityPrice> articularItemQuantityPriceList, Currency currency) {
-        double fullSum = articularItemQuantityPriceList.stream()
-                .mapToDouble(articularItemQuantityPrice -> articularItemQuantityPrice.getFullPriceSum().getAmount())
+    private Price getFullPriceSum(List<ArticularItemQuantity> articularItemQuantityList, Currency currency) {
+        double fullSum = articularItemQuantityList.stream()
+                .mapToDouble(articularItemQuantityPrice -> 0)
                 .sum();
 
         return mapToPrice(fullSum, currency);
     }
 
-    private Price getTotalPriceSum(List<ArticularItemQuantityPrice> articularItemQuantityPriceList, Currency currency) {
-        double totalSum = articularItemQuantityPriceList.stream()
-                .mapToDouble(articularItemQuantityPrice -> articularItemQuantityPrice.getTotalPriceSum().getAmount())
+    private Price getTotalPriceSum(List<ArticularItemQuantity> articularItemQuantityList, Currency currency) {
+        double totalSum = articularItemQuantityList.stream()
+                .mapToDouble(articularItemQuantityPrice -> Double.parseDouble(null))
                 .sum();
 
         return mapToPrice(totalSum, currency);
     }
 
-    private Price getDiscountPriceSum(List<ArticularItemQuantityPrice> articularItemQuantityPriceList, Currency currency) {
-        double discountPriceSum = articularItemQuantityPriceList.stream()
-                .filter(articularItemQuantityPrice -> articularItemQuantityPrice.getDiscountPriceSum() != null)
-                .mapToDouble(articularItemQuantityPrice -> articularItemQuantityPrice.getDiscountPriceSum().getAmount())
+    private Price getDiscountPriceSum(List<ArticularItemQuantity> articularItemQuantityList, Currency currency) {
+        double discountPriceSum = articularItemQuantityList.stream()
+                .filter(articularItemQuantityPrice -> Boolean.parseBoolean(null))
+                .mapToDouble(articularItemQuantityPrice -> Double.parseDouble(null))
                 .sum();
 
         return mapToPrice(discountPriceSum, currency);
@@ -206,7 +205,7 @@ public class CustomerSingleDeliveryOrderManager implements ICustomerSingleDelive
                     ? sessionEntityFetcher.fetchDiscountOptional(session, paymentPriceDto.getDiscountCharSequenceCode())
                     : Optional.empty();
             Discount orderDiscount = orderDiscountOptional.orElse(null);
-            Optional<MinMaxCommission> optionalMinMaxCommission = sessionEntityFetcher.fetchMinMaxCommission(session, CommissionType.SELLER);
+            Optional<MinMaxCommission> optionalMinMaxCommission = sessionEntityFetcher.fetchMinMaxCommission(session);
             Price commissionPrice = null;
             if (optionalMinMaxCommission.isPresent()) {
                 MinMaxCommission minMaxCommission = optionalMinMaxCommission.get();
@@ -217,17 +216,17 @@ public class CustomerSingleDeliveryOrderManager implements ICustomerSingleDelive
             Price paymentTotalPrice = priceCalculationService
                     .calculateCurrentPrice(paymentPriceDto.getTotalPaymentPrice(), orderDiscount, commissionPrice);
             return Payment.builder()
-                    .paymentId(getUUID())
+                    .paymentUniqId(getUUID())
                     .paymentMethod(sessionEntityFetcher.fetchPaymentMethod(session, paymentPriceDto.getPaymentMethod()))
                     .paymentStatus(sessionEntityFetcher.fetchPaymentStatus(session, "Done"))
                     .creditCard(paymentPriceDto.getCreditCard() != null
                             ? transformationFunctionService.getEntity(CreditCard.class, paymentPriceDto.getCreditCard())
                             : null)
                     .discount(orderDiscount)
-                    .commissionPrice(commissionPrice)
+//                    .commissionPrice(commissionPrice)
 //                    .fullPrice(paymentPriceDto.getFullPaymentPrice())
 //                    .totalPrice(paymentTotalPrice)
-                    .discountPrice(paymentPriceDto.getDiscountPrice())
+//                    .discountMultiCurrencyPriceInfo(paymentPriceDto.getDiscountPrice())
                     .build();
         };
     }

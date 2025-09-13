@@ -1,5 +1,6 @@
 package com.b2c.prototype.manager.userdetails;
 
+import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.dto.payload.user.DeviceDto;
 import com.b2c.prototype.modal.dto.payload.user.ResponseDeviceDto;
 import com.b2c.prototype.modal.entity.user.Device;
@@ -7,7 +8,6 @@ import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.dao.IFetchHandler;
-import com.tm.core.process.dao.common.ITransactionEntityDao;
 import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
 import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
 
@@ -24,11 +24,11 @@ public class DeviceManager implements IDeviceManager {
     private final IFetchHandler fetchHandler;
     private final IParameterFactory parameterFactory;
 
-    public DeviceManager(ITransactionEntityDao deviceDao,
+    public DeviceManager(IGeneralEntityDao deviceDao,
                          IFetchHandler fetchHandler,
                          ITransformationFunctionService transformationFunctionService,
                          IParameterFactory parameterFactory) {
-        this.entityOperationManager = new TransactionEntityOperationManager(deviceDao);
+        this.entityOperationManager = new TransactionEntityOperationManager(null);
         this.fetchHandler = fetchHandler;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;

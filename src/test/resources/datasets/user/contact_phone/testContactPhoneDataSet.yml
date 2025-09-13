@@ -7,5 +7,5 @@ country_phone_code:
     label: "+22"
 contact_phone:
   - id: 1
-    phoneNumber: "111-111-111"
+    phone_number: "111-111-111"
     country_phone_code_id: 1

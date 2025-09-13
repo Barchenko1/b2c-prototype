@@ -32,6 +32,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static com.b2c.prototype.util.Converter.getLocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -209,7 +210,7 @@ class UserDetailsManagerTest {
         return UserDetails.builder()
                 .id(1L)
                 .username("username")
-                .dateOfCreate(100)
+                .dateOfCreate(getLocalDateTime("2024-03-03 12:00:00"))
                 .isActive(true)
                 .contactInfo(contactInfo)
 //                .addresses(Set.of(address))

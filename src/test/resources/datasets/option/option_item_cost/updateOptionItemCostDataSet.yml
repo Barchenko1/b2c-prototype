@@ -1,0 +1,18 @@
+currency:
+  - id: 1
+    label: "USD"
+    value: "USD"
+price:
+  - id: 1
+    amount: 100
+    currency_id: 1
+option_group:
+  - id: 1
+    value: "Size"
+    label: "Size"
+option_item_cost:
+  - id: 1
+    label: "XL"
+    value: "XL"
+    price_id: 1
+    option_group_id: 1

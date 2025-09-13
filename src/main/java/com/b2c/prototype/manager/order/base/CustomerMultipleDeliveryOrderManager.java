@@ -1,11 +1,11 @@
 package com.b2c.prototype.manager.order.base;
 
+import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.manager.order.ICustomerMultipleDeliveryOrderManager;
 import com.b2c.prototype.modal.dto.payload.order.multi.CustomerMultiDeliveryOrderDto;
 import com.b2c.prototype.modal.dto.payload.order.single.ResponseCustomerOrderDetails;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.common.ITransactionEntityDao;
 import com.tm.core.process.dao.query.IQueryService;
 import com.tm.core.process.manager.common.operator.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
@@ -19,11 +19,11 @@ public class CustomerMultipleDeliveryOrderManager implements ICustomerMultipleDe
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public CustomerMultipleDeliveryOrderManager(ITransactionEntityDao orderItemDao,
+    public CustomerMultipleDeliveryOrderManager(IGeneralEntityDao orderItemDao,
                                                 IQueryService queryService,
                                                 ITransformationFunctionService transformationFunctionService,
                                                 IParameterFactory parameterFactory) {
-        this.entityOperationManager = new EntityOperationManager(orderItemDao);
+        this.entityOperationManager = new EntityOperationManager(null);
         this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;

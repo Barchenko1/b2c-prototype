@@ -1,0 +1,13 @@
+credit_card:
+  - id: 1
+    card_number: "4444-1111-2222-3333"
+    month_of_expire: "06"
+    year_of_expire: "28"
+    cvv: 818
+    owner_name: "Update name"
+    owner_second_name: "secondName"
+    is_active: true
+user_credit_card:
+  - id: 1
+    credit_card_id: 1
+    is_default: true

@@ -7,7 +7,7 @@
 //import com.b2c.prototype.modal.entity.item.Category;
 //import com.b2c.prototype.modal.entity.item.Discount;
 //import com.b2c.prototype.modal.entity.item.Item;
-//import com.b2c.prototype.modal.entity.item.ItemData;
+//import com.b2c.prototype.modal.entity.item.MetaData;
 //import com.b2c.prototype.modal.entity.item.ItemType;
 //import com.b2c.prototype.modal.entity.option.OptionGroup;
 //import com.b2c.prototype.modal.entity.option.OptionItem;
@@ -55,7 +55,7 @@
 //    void saveUpdateItem_shouldSaveOrUpdateItem() {
 //        Item item = mock(Item.class);
 //        ItemDto itemDto = mock(ItemDto.class);
-//        ItemData itemData = mock(ItemData.class);
+//        MetaData itemData = mock(MetaData.class);
 //        String articularId = "articularId";
 //
 //        Parameter parameter = mock(Parameter.class);
@@ -63,7 +63,7 @@
 //
 //        when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
 //                .thenReturn(parameterSupplier);
-////        when(queryService.getEntity(ItemData.class, parameterSupplier))
+////        when(queryService.getEntity(MetaData.class, parameterSupplier))
 ////                .thenReturn(itemData);
 //        when(transformationFunctionService.getEntity(Item.class, itemDto))
 //                .thenReturn(item);
@@ -92,11 +92,11 @@
 //
 //        when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
 //                .thenReturn(parameterSupplier);
-//        Function<ItemData, Item> function = mock(Function.class);
-//        when(transformationFunctionService.getTransformationFunction(ItemData.class, Item.class))
+//        Function<MetaData, Item> function = mock(Function.class);
+//        when(transformationFunctionService.getTransformationFunction(MetaData.class, Item.class))
 //                .thenReturn(function);
 ////        when(supplierService.entityFieldSupplier(
-////                ItemData.class,
+////                MetaData.class,
 ////                parameterSupplier,
 ////                function
 ////        )).thenReturn(itemSupplier);
@@ -115,11 +115,11 @@
 //        Item item = mock(Item.class);
 //        when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
 //                .thenReturn(parameterSupplier);
-//        Function<ItemData, Item> function = mock(Function.class);
-//        when(transformationFunctionService.getTransformationFunction(ItemData.class, Item.class))
+//        Function<MetaData, Item> function = mock(Function.class);
+//        when(transformationFunctionService.getTransformationFunction(MetaData.class, Item.class))
 //                .thenReturn(function);
 ////        when(queryService.getEntityDto(
-////                ItemData.class,
+////                MetaData.class,
 ////                parameterSupplier,
 ////                function)).thenReturn(item);
 //
@@ -128,7 +128,7 @@
 //        assertNotNull(result);
 //        assertEquals(item, result);
 ////        verify(queryService).getEntityDto(
-////                eq(ItemData.class),
+////                eq(MetaData.class),
 ////                any(),
 ////                any());
 //    }
@@ -172,7 +172,7 @@
 //        return child;
 //    }
 //
-//    private ItemData prepareToItemData() {
+//    private MetaData prepareToItemData() {
 //        Brand brand = Brand.builder()
 //                .id(1L)
 //                .value("Hermes")
@@ -220,7 +220,7 @@
 //                .currency(currency)
 //                .build();
 //
-//        return ItemData.builder()
+//        return MetaData.builder()
 //                .id(1L)
 //                .category(category)
 //                .brand(brand)

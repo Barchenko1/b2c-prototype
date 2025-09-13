@@ -4,7 +4,7 @@
 //import com.b2c.prototype.modal.dto.payload.ItemDto;
 //import com.b2c.prototype.modal.entity.item.ArticularItem;
 //import com.b2c.prototype.modal.entity.item.Item;
-//import com.b2c.prototype.modal.entity.item.ItemData;
+//import com.b2c.prototype.modal.entity.item.MetaData;
 //import com.b2c.prototype.function.transform.ITransformationFunctionService;
 //import com.tm.core.finder.factory.IParameterFactory;
 //import com.tm.core.process.manager.common.operator.EntityOperationManager;
@@ -50,19 +50,19 @@
 //    public void deleteItem(String articularId) {
 //        entityOperationManager.deleteEntity(
 //                supplierService.entityFieldSupplier(
-//                        ItemData.class,
+//                        MetaData.class,
 //                        "",
 //                        supplierService.parameterStringSupplier(ARTICULAR_ID, articularId),
-//                        transformationFunctionService.getTransformationFunction(ItemData.class, Item.class)));
+//                        transformationFunctionService.getTransformationFunction(MetaData.class, Item.class)));
 //    }
 //
 //    @Override
 //    public Item getItemByItemId(String articularId) {
 //        return searchService.getGraphEntityDto(
-//                ItemData.class,
+//                MetaData.class,
 //                "",
 //                parameterFactory.createStringParameter(ARTICULAR_ID, articularId),
-//                transformationFunctionService.getTransformationFunction(ItemData.class, Item.class));
+//                transformationFunctionService.getTransformationFunction(MetaData.class, Item.class));
 //    }
 //
 //}

@@ -6,17 +6,20 @@ message_type:
   - id: 1
     label: "InMail"
     value: "InMail"
-message:
+message_template:
   - id: 1
-    dateOfSend: 100
     title: "title"
-    message: "message"
-    messageUniqNumber: "messageUniqNumber1"
+    message: "Update message"
+message:
+  - id : 1
+    date_of_send: "2024-03-03 12:00:00"
+    message_template_id: 1
+    message_uniq_number: "messageUniqNumber1"
     sender: "sender@email.com"
-    subscribe: "system"
-    sendSystem: "system"
-    
+    status_id: 1
     type_id: 1
 message_receivers:
-  - receiver_email: "receiver1@email.com"
-  - receiver_email: "receiver2@email.com"
+  - message_id: 1
+    receiver_email: "receiver1@email.com"
+  - message_id: 1
+    receiver_email: "receiver2@email.com"

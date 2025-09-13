@@ -4,23 +4,23 @@ country_phone_code:
     label: "+11"
 contact_phone:
   - id: 1
-    phoneNumber: "111-111-111"
+    phone_number: "111-111-111"
     country_phone_code_id: 1
 contact_info:
   - id: 1
-    firstName: "John"
-    lastName: "Doe"
+    first_name: "John"
+    last_name: "Doe"
     email: "john.doe@mail.com"
     contact_phone_id: 1
 user_details:
   - id: 1
     user_id: "123"
     username: "john.doe"
-    dateOfCreate: 100
-    iscontactphoneverified: false
-    isemailverified: false
-    isActive: false
-    contactinfo_id: 1
+    date_of_create: "2024-03-03 12:00:00"
+    is_contact_phone_verified: false
+    is_email_verified: false
+    is_active: false
+    contact_info_id: 1
 country:
   - id: 1
     label: "USA"
@@ -28,60 +28,60 @@ country:
 address:
   - id: 1
     street: "street"
-    buildingNumber: 10
-    florNumber: 9
-    apartmentNumber: 201
-    zipCode: 90000
+    building_number: 10
+    flor_number: 9
+    apartment_number: 201
+    zip_code: 90000
     city: "city"
     country_id: 1
   - id: 2
     street: "street"
-    buildingNumber: 10
-    florNumber: 9
-    apartmentNumber: 202
-    zipCode: 90000
+    building_number: 10
+    flor_number: 9
+    apartment_number: 202
+    zip_code: 90000
     city: "city"
     country_id: 1
 user_address:
   - id: 1
     address_id: 1
-    isDefault: false
-    userdetails_id: 1
+    is_default: false
+    user_details_id: 1
   - id: 2
     address_id: 2
-    isDefault: false
-    userdetails_id: 1
+    is_default: false
+    user_details_id: 1
 credit_card:
   - id: 1
-    cardNumber: "4444-1111-2222-3333"
+    card_number: "4444-1111-2222-3333"
     monthOfExpire: 6
     yearOfExpire: 2028
     cvv: 123
-    ownerName: "John"
-    ownerSecondName: "Doe"
-    isActive: true
+    owner_name: "John"
+    owner_second_name: "Doe"
+    is_active: true
   - id: 2
-    cardNumber: "4444-1111-2222-3331"
+    card_number: "4444-1111-2222-3331"
     monthOfExpire: 6
     yearOfExpire: 2028
     cvv: 123
-    ownerName: "John"
-    ownerSecondName: "Doe"
-    isActive: true
+    owner_name: "John"
+    owner_second_name: "Doe"
+    is_active: true
 user_credit_card:
   - id: 1
     credit_card_id: 1
-    userdetails_id: 1
-    isDefault: true
+    user_details_id: 1
+    is_default: true
   - id: 2
     credit_card_id: 2
-    userdetails_id: 1
-    isDefault: false
+    user_details_id: 1
+    is_default: false
 device:
   - id: 1
-    loginTime: "2024-03-03 12:00:00"
+    login_time: "2024-03-03 12:00:00"
     ipAddress: "127.0.0.1"
-    userdetails_id: 1
+    user_details_id: 1
     userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     screenWidth: 1920
     screenHeight: 1080
@@ -89,9 +89,9 @@ device:
     language: "en-US"
     platform: "Win32"
   - id: 2
-    loginTime: "2024-03-03 15:30:00"
+    login_time: "2024-03-03 15:30:00"
     ipAddress: "127.0.0.2"
-    userdetails_id: 1
+    user_details_id: 1
     userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     screenWidth: 2560
     screenHeight: 1600
@@ -99,9 +99,9 @@ device:
     language: "en-US"
     platform: "MacIntel"
   - id: 3
-    loginTime: "2024-03-03 12:00:00"
+    login_time: "2024-03-03 12:00:00"
     ipAddress: "127.0.0.3"
-    userdetails_id: 1
+    user_details_id: 1
     userAgent: "Mozilla/5.0 (iPhone; CPU iPhone OS 16_2 like Mac OS X) AppleWebKit/537.36 (KHTML, like Gecko) Version/16.2 Mobile/15E148 Safari/537.36"
     screenWidth: 1170
     screenHeight: 2532

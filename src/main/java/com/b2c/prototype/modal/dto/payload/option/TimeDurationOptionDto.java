@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -18,9 +18,9 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class TimeDurationOptionDto extends AbstractConstantDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
-    private LocalTime startTime;
+    private LocalDateTime startTime;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
-    private LocalTime endTime;
+    private LocalDateTime endTime;
     private int duration;
     private PriceDto price;
 }

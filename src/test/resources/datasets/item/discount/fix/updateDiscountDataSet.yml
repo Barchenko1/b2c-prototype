@@ -1,0 +1,11 @@
+currency:
+  - id: 1
+    value: "USD"
+    label: "USD"
+discount:
+  - id: 1
+    amount: 20
+    char_sequence_code: "abc"
+    is_active: true
+    is_percent: false
+    currency_id: 1

@@ -11,8 +11,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "reservation_date")
+import java.time.LocalDateTime;
+
+//@Entity
+//@Table(name = "reservation_date")
 @Data
 @Builder
 @NoArgsConstructor
@@ -22,5 +24,5 @@ public class ReservationDate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
-    private long dateOfReceipt;
+    private LocalDateTime dateOfReceipt;
 }

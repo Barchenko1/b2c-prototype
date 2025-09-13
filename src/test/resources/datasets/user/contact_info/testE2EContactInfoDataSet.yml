@@ -7,20 +7,20 @@ country_phone_code:
     label: "+22"
 contact_phone:
   - id: 1
-    phoneNumber: "111-111-111"
+    phone_number: "111-111-111"
     country_phone_code_id: 1
 contact_info:
   - id : 1
-    firstName: "John"
-    lastName: "Doe"
+    first_name: "John"
+    last_name: "Doe"
     email: "john.doe@example.com"
     contact_phone_id: 1
 user_details:
   - id: 1
     user_id: "123"
     username: "john.doe"
-    dateOfCreate: 100
-    iscontactphoneverified: false
-    isemailverified: false
-    isActive: false
-    contactinfo_id: 1
+    date_of_create: "2024-03-03 12:00:00"
+    is_contact_phone_verified: false
+    is_email_verified: false
+    is_active: false
+    contact_info_id: 1
