@@ -14,6 +14,7 @@ import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
 import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -27,6 +28,7 @@ import static com.b2c.prototype.util.Constant.USER_ID;
 import static com.b2c.prototype.util.PostUtil.postMap;
 
 @Slf4j
+@Service
 public class PostManager implements IPostManager {
 
     private final ITransactionEntityOperationManager entityOperationManager;

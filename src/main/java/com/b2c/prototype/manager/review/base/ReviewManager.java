@@ -18,6 +18,7 @@ import com.tm.core.process.dao.IFetchHandler;
 import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
 import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
 import org.hibernate.Session;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +28,7 @@ import static com.b2c.prototype.util.Constant.USER_ID;
 import static com.b2c.prototype.util.Constant.VALUE;
 import static com.b2c.prototype.util.ReviewCommentUtil.reviewCommentMap;
 
+@Service
 public class ReviewManager implements IReviewManager {
 
     private final ITransactionEntityOperationManager entityOperationManager;
@@ -35,7 +37,7 @@ public class ReviewManager implements IReviewManager {
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public ReviewManager(IGeneralEntityDao reviewDao,
+    public ReviewManager(IGeneralEntityDao generalEntityDao,
                          IQueryService queryService,
                          IFetchHandler fetchHandler,
                          ITransformationFunctionService transformationFunctionService,

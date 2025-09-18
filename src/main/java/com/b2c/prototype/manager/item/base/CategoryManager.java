@@ -11,6 +11,7 @@ import com.tm.core.process.dao.query.IQueryService;
 import com.tm.core.process.manager.common.operator.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,20 +28,18 @@ import static com.b2c.prototype.util.CategoryUtil.validateNoDuplicates;
 import static com.b2c.prototype.util.Constant.VALUE;
 
 @Slf4j
+@Service
 public class CategoryManager implements ICategoryManager {
 
     private final IEntityOperationManager entityOperationManager;
     private final IQueryService queryService;
-    private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public CategoryManager(IGeneralEntityDao categoryDao,
+    public CategoryManager(IGeneralEntityDao generalEntityDao,
                            IQueryService queryService,
-                           ITransformationFunctionService transformationFunctionService,
                            IParameterFactory parameterFactory) {
         this.entityOperationManager = new EntityOperationManager(null);
         this.queryService = queryService;
-        this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
     }
 

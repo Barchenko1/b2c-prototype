@@ -1,6 +1,5 @@
 package com.b2c.prototype.manager;
 
-import com.b2c.prototype.dao.IEntityDao;
 import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.base.constant.AbstractConstantEntity;
 import com.tm.core.finder.factory.IParameterFactory;
@@ -17,18 +16,15 @@ public abstract class AbstractConstantEntityManager<T, E extends AbstractConstan
 
     private final IParameterFactory parameterFactory;
     private final IGeneralEntityDao dao;
-    private final String[] namedQueries;
     private final Function<T, E> mapDtoToEntityFunction;
     private final Function<E, T> mapEntityToDtoFunction;
 
     public AbstractConstantEntityManager(IParameterFactory parameterFactory,
                                          IGeneralEntityDao dao,
-                                         String[] namedQueries,
                                          Function<T, E> mapDtoToEntityFunction,
                                          Function<E, T> mapEntityToDtoFunction) {
         this.parameterFactory = parameterFactory;
         this.dao = dao;
-        this.namedQueries = namedQueries;
         this.mapDtoToEntityFunction = mapDtoToEntityFunction;
         this.mapEntityToDtoFunction = mapEntityToDtoFunction;
     }

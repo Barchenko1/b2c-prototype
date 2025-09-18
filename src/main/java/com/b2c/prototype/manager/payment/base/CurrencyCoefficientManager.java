@@ -20,7 +20,6 @@ import java.util.List;
 public class CurrencyCoefficientManager implements ICurrencyCoefficientManager {
 
     private final ITransactionEntityOperationManager entityOperationManager;
-    private final IQueryService queryService;
     private final IFetchHandler fetchHandler;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
@@ -30,7 +29,6 @@ public class CurrencyCoefficientManager implements ICurrencyCoefficientManager {
                                       ITransformationFunctionService transformationFunctionService,
                                       IParameterFactory parameterFactory) {
         this.entityOperationManager = new TransactionEntityOperationManager(null);
-        this.queryService = queryService;
         this.fetchHandler = fetchHandler;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;

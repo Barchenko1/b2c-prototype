@@ -9,12 +9,14 @@ import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.manager.common.operator.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
 import org.hibernate.Session;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 import static com.b2c.prototype.util.Constant.VALUE;
 
+@Service
 public class ZoneOptionManager implements IZoneOptionManager {
 
     private final IEntityOperationManager entityOperationManager;

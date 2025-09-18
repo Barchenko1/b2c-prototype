@@ -7,7 +7,9 @@ import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.AbstractConstantEntityManager;
 import com.b2c.prototype.manager.item.IBrandManager;
 import com.tm.core.finder.factory.IParameterFactory;
+import org.springframework.stereotype.Service;
 
+@Service
 public class BrandManager extends AbstractConstantEntityManager<ConstantPayloadDto, Brand> implements IBrandManager {
 
     public BrandManager(IParameterFactory parameterFactory,

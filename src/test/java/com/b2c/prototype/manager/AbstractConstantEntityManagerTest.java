@@ -1,12 +1,10 @@
 package com.b2c.prototype.manager;
 
-import com.b2c.prototype.dao.IEntityDao;
 import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.finder.parameter.Parameter;
-import com.tm.core.process.dao.common.ITransactionEntityDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;

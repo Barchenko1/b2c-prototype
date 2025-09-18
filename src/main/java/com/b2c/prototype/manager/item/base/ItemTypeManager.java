@@ -7,7 +7,9 @@ import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.AbstractConstantEntityManager;
 import com.b2c.prototype.manager.item.IItemTypeManager;
 import com.tm.core.finder.factory.IParameterFactory;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ItemTypeManager extends AbstractConstantEntityManager<ConstantPayloadDto, ItemType> implements IItemTypeManager {
 
     public ItemTypeManager(IParameterFactory parameterFactory,

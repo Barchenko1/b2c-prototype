@@ -10,28 +10,49 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class AbstractEntityDao {
+public abstract class AbstractEntityDao implements IGeneralEntityDao{
 
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Override
     @Transactional
     public <E> E persistEntity(E entity) {
         entityManager.persist(entity);
         return entity;
     }
 
+    @Override
     @Transactional
     public <E> E mergeEntity(E entity) {
         return entityManager.merge(entity);
     }
 
+    @Override
     @Transactional
     public <E> void removeEntity(E entity) {
         E ref = getRef(entity);
         entityManager.remove(ref);
     }
 
+    @Override
+    @Transactional
+    public <E> E findAndUpdateEntity(String namedQuery, Pair<String, ?> pair, E updatedEntity) {
+        Query query = getQuery(namedQuery, pair);
+        E result = (E) query.getSingleResult();
+//        updatedEntity.set
+        return result;
+    }
+
+    @Override
+    @Transactional
+    public <E> void findAndRemoveEntity(String namedQuery, Pair<String, ?> pair) {
+        Query query = getQuery(namedQuery, pair);
+        E result = (E) query.getSingleResult();
+        entityManager.remove(result);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public <E> E findEntity(String namedQuery, Pair<String, ?> pair) {
         Query query = getQuery(namedQuery, pair);
@@ -39,6 +60,7 @@ public abstract class AbstractEntityDao {
         return result;
     }
 
+    @Override
     @Transactional(readOnly = true)
     public <E> Optional<E> findOptionEntity(String namedQuery, Pair<String, ?> pair) {
         Query query = getQuery(namedQuery, pair);
@@ -46,6 +68,7 @@ public abstract class AbstractEntityDao {
         return Optional.of(result);
     }
 
+    @Override
     @Transactional(readOnly = true)
     public <E> List<E> findEntityList(String namedQuery, Pair<String, ?> pair) {
         Query query = getQuery(namedQuery, pair);
@@ -53,6 +76,7 @@ public abstract class AbstractEntityDao {
         return resultList;
     }
 
+    @Override
     @Transactional(readOnly = true)
     public <E> E findEntity(String namedQuery, List<Pair<String, ?>> pairs) {
         Query query = getQuery(namedQuery, pairs);
@@ -60,6 +84,7 @@ public abstract class AbstractEntityDao {
         return result;
     }
 
+    @Override
     @Transactional(readOnly = true)
     public <E> Optional<E> findOptionEntity(String namedQuery, List<Pair<String, ?>> pairs) {
         Query query = getQuery(namedQuery, pairs);
@@ -67,6 +92,7 @@ public abstract class AbstractEntityDao {
         return Optional.of(result);
     }
 
+    @Override
     @Transactional(readOnly = true)
     public <E> List<E> findEntityList(String namedQuery, List<Pair<String, ?>> pairs) {
         Query query = getQuery(namedQuery, pairs);

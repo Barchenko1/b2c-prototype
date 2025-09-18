@@ -1,6 +1,7 @@
-package com.b2c.prototype.manager.userdetails;
+package com.b2c.prototype.manager.userdetails.basic;
 
 import com.b2c.prototype.dao.IGeneralEntityDao;
+import com.b2c.prototype.manager.userdetails.IDeviceManager;
 import com.b2c.prototype.modal.dto.payload.user.DeviceDto;
 import com.b2c.prototype.modal.dto.payload.user.ResponseDeviceDto;
 import com.b2c.prototype.modal.entity.user.Device;
@@ -10,6 +11,7 @@ import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.dao.IFetchHandler;
 import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
 import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,6 +19,7 @@ import java.util.Optional;
 
 import static com.b2c.prototype.util.Constant.USER_ID;
 
+@Service
 public class DeviceManager implements IDeviceManager {
 
     private final ITransactionEntityOperationManager entityOperationManager;

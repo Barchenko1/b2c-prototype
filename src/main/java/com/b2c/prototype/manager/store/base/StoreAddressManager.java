@@ -7,28 +7,26 @@ import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.store.Store;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.query.IQueryService;
 import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
 import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
 import org.hibernate.Session;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 import static com.b2c.prototype.util.Constant.STORE_ID;
 
+@Service
 public class StoreAddressManager implements IStoreAddressManager {
 
     private final ITransactionEntityOperationManager entityOperationManager;
-    private final IQueryService queryService;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public StoreAddressManager(IGeneralEntityDao addressDao,
-                               IQueryService queryService,
+    public StoreAddressManager(IGeneralEntityDao generalEntityDao,
                                ITransformationFunctionService transformationFunctionService,
                                IParameterFactory parameterFactory) {
         this.entityOperationManager = new TransactionEntityOperationManager(null);
-        this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
     }

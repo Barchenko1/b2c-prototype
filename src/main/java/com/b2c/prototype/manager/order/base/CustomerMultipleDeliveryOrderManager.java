@@ -9,13 +9,14 @@ import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.dao.query.IQueryService;
 import com.tm.core.process.manager.common.operator.EntityOperationManager;
 import com.tm.core.process.manager.common.IEntityOperationManager;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class CustomerMultipleDeliveryOrderManager implements ICustomerMultipleDeliveryOrderManager {
 
     private final IEntityOperationManager entityOperationManager;
-    private final IQueryService queryService;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
@@ -24,7 +25,6 @@ public class CustomerMultipleDeliveryOrderManager implements ICustomerMultipleDe
                                                 ITransformationFunctionService transformationFunctionService,
                                                 IParameterFactory parameterFactory) {
         this.entityOperationManager = new EntityOperationManager(null);
-        this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
     }

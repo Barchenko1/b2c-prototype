@@ -1,6 +1,5 @@
 package com.b2c.prototype.manager.message.base;
 
-import com.b2c.prototype.dao.IEntityDao;
 import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.entity.message.MessageStatus;
@@ -9,7 +8,9 @@ import com.b2c.prototype.manager.AbstractConstantEntityManager;
 import com.b2c.prototype.manager.message.IMessageStatusManager;
 
 import com.tm.core.finder.factory.IParameterFactory;
+import org.springframework.stereotype.Service;
 
+@Service
 public class MessageStatusManager extends AbstractConstantEntityManager<ConstantPayloadDto, MessageStatus> implements IMessageStatusManager {
     public MessageStatusManager(IParameterFactory parameterFactory,
                                 IGeneralEntityDao dao,

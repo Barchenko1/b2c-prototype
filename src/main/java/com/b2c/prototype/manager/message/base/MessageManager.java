@@ -19,6 +19,7 @@ import com.tm.core.process.manager.common.operator.TransactionEntityOperationMan
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +30,7 @@ import java.util.Optional;
 import static com.b2c.prototype.util.Constant.USER_ID;
 import static com.b2c.prototype.util.Constant.VALUE;
 
+@Service
 public class MessageManager implements IMessageManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageManager.class);

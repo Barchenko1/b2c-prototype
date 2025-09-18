@@ -7,7 +7,9 @@ import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.AbstractConstantEntityManager;
 import com.b2c.prototype.manager.payment.IPaymentMethodManager;
 import com.tm.core.finder.factory.IParameterFactory;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PaymentMethodManager extends AbstractConstantEntityManager<ConstantPayloadDto, PaymentMethod> implements IPaymentMethodManager {
 
     public PaymentMethodManager(IParameterFactory parameterFactory,

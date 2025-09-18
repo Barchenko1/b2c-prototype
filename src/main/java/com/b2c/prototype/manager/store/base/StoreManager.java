@@ -13,6 +13,7 @@ import com.tm.core.process.dao.query.IQueryService;
 import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
 import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
 import org.hibernate.Session;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -20,19 +21,17 @@ import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 import static com.b2c.prototype.util.Constant.STORE_ID;
 import static com.b2c.prototype.util.Constant.VALUE;
 
+@Service
 public class StoreManager implements IStoreManager {
 
     private final ITransactionEntityOperationManager entityOperationManager;
-    private final IQueryService queryService;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
     public StoreManager(IGeneralEntityDao storeDao,
-                        IQueryService queryService,
                         ITransformationFunctionService transformationFunctionService,
                         IParameterFactory parameterFactory) {
         this.entityOperationManager = new TransactionEntityOperationManager(null);
-        this.queryService = queryService;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;
     }

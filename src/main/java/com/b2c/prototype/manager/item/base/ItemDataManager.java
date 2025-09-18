@@ -11,6 +11,7 @@ import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
 import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
 import org.hibernate.Session;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,13 +19,14 @@ import java.util.Optional;
 import static com.b2c.prototype.util.Constant.ITEM_ID;
 import static com.b2c.prototype.util.Util.getUUID;
 
+@Service
 public class ItemDataManager implements IItemDataManager {
 
     private final ITransactionEntityOperationManager entityOperationManager;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public ItemDataManager(IGeneralEntityDao itemDataDao,
+    public ItemDataManager(IGeneralEntityDao generalEntityDao,
                            ITransformationFunctionService transformationFunctionService,
                            IParameterFactory parameterFactory) {
         this.entityOperationManager = new TransactionEntityOperationManager(null);

@@ -1,6 +1,6 @@
 package com.b2c.prototype.manager;
 
-import com.b2c.prototype.dao.IEntityDao;
+import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.base.constant.AbstractNumberConstantEntity;
 import com.b2c.prototype.modal.dto.common.NumberConstantPayloadDto;
 import com.tm.core.finder.factory.IParameterFactory;
@@ -16,27 +16,24 @@ import static com.b2c.prototype.util.Constant.VALUE;
 public abstract class AbstractIntegerConstantEntityManager<T, E extends AbstractNumberConstantEntity> implements IIntegerConstantEntityManager<T> {
 
     private final IParameterFactory parameterFactory;
-    private final IEntityDao transactionEntityDao;
-    private final String namedQuery;
+    private final IGeneralEntityDao generalEntityDao;
     private final Function<T, E> mapDtoToEntityFunction;
     private final Function<E, T> mapEntityToDtoFunction;
 
     public AbstractIntegerConstantEntityManager(IParameterFactory parameterFactory,
-                                                IEntityDao transactionEntityDao,
-                                                String namedQuery,
+                                                IGeneralEntityDao generalEntityDao,
                                                 Function<T, E> mapDtoToEntityFunction,
                                                 Function<E, T> mapEntityToDtoFunction) {
         this.parameterFactory = parameterFactory;
-        this.transactionEntityDao = transactionEntityDao;
-        this.namedQuery = namedQuery;
+        this.generalEntityDao = generalEntityDao;
         this.mapDtoToEntityFunction = mapDtoToEntityFunction;
         this.mapEntityToDtoFunction = mapEntityToDtoFunction;
     }
 
     @Override
     public void saveEntity(T numberConstantPayloadDto) {
-        E entity = mapDtoToEntityFunction.apply((T) numberConstantPayloadDto);
-        transactionEntityDao.persistEntity(entity);
+        E entity = mapDtoToEntityFunction.apply(numberConstantPayloadDto);
+        generalEntityDao.persistEntity(entity);
     }
 
     @Override

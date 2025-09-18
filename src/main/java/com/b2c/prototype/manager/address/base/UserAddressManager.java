@@ -10,25 +10,24 @@ import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.address.IUserAddressManager;
 import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.dao.IFetchHandler;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
 import java.util.List;
 
 import static com.b2c.prototype.util.Constant.USER_ID;
 
+@Service
 public class UserAddressManager implements IUserAddressManager {
 
-//    private final IEntityOperationManager entityOperationManager;
     private final IFetchHandler fetchHandler;
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public UserAddressManager(IGeneralEntityDao addressDao,
+    public UserAddressManager(IGeneralEntityDao generalEntityDao,
                               IFetchHandler fetchHandler,
                               ITransformationFunctionService transformationFunctionService,
                               IParameterFactory parameterFactory) {
-//        this.entityOperationManager = new EntityOperationManager(addressDao);
         this.fetchHandler = fetchHandler;
         this.transformationFunctionService = transformationFunctionService;
         this.parameterFactory = parameterFactory;

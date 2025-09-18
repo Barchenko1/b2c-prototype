@@ -1,18 +1,17 @@
 //package com.b2c.prototype.manager.item.base;
 //
-//import com.b2c.prototype.manager.item.IItemManager;
-//import com.b2c.prototype.modal.dto.payload.ItemDto;
 //import com.b2c.prototype.modal.entity.item.ArticularItem;
 //import com.b2c.prototype.modal.entity.item.Item;
 //import com.b2c.prototype.modal.entity.item.MetaData;
-//import com.b2c.prototype.function.transform.ITransformationFunctionService;
 //import com.tm.core.finder.factory.IParameterFactory;
 //import com.tm.core.process.manager.common.operator.EntityOperationManager;
 //import com.tm.core.process.manager.common.IEntityOperationManager;
 //import lombok.extern.slf4j.Slf4j;
+//import org.springframework.stereotype.Service;
 //
 //import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 //
+//@Service
 //public class ItemManager implements IItemManager {
 //
 //    private final IEntityOperationManager entityOperationManager;

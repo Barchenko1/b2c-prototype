@@ -1,6 +1,5 @@
 package com.b2c.prototype.manager.option.base;
 
-import com.b2c.prototype.dao.IEntityDao;
 import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
@@ -8,7 +7,9 @@ import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.AbstractConstantEntityManager;
 import com.b2c.prototype.manager.option.IOptionGroupManager;
 import com.tm.core.finder.factory.IParameterFactory;
+import org.springframework.stereotype.Service;
 
+@Service
 public class OptionGroupManager extends AbstractConstantEntityManager<ConstantPayloadDto, OptionGroup> implements IOptionGroupManager {
 
     public OptionGroupManager(IParameterFactory parameterFactory,

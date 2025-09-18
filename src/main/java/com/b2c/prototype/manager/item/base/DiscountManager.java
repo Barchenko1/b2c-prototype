@@ -1,6 +1,5 @@
 package com.b2c.prototype.manager.item.base;
 
-import com.b2c.prototype.dao.IEntityDao;
 import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountStatusDto;
@@ -13,6 +12,7 @@ import com.tm.core.process.dao.IFetchHandler;
 import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
 import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
 import org.hibernate.Session;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +20,7 @@ import java.util.Optional;
 import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 import static com.b2c.prototype.util.Constant.CHAR_SEQUENCE_CODE;
 
+@Service
 public class DiscountManager implements IDiscountManager {
 
     private final ITransactionEntityOperationManager entityOperationManager;

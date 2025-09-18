@@ -7,7 +7,9 @@ import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.AbstractConstantEntityManager;
 import com.b2c.prototype.manager.item.IItemStatusManager;
 import com.tm.core.finder.factory.IParameterFactory;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ArticularStatusManager extends AbstractConstantEntityManager<ConstantPayloadDto, ArticularStatus> implements IItemStatusManager {
     public ArticularStatusManager(IParameterFactory parameterFactory,
                                   IGeneralEntityDao itemStatusDao,
