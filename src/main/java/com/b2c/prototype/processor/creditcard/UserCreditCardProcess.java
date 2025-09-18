@@ -4,10 +4,12 @@ import com.b2c.prototype.manager.userdetails.IUserCreditCardManager;
 import com.b2c.prototype.modal.dto.payload.user.UserCreditCardDto;
 import com.b2c.prototype.modal.dto.payload.order.ResponseCreditCardDto;
 import com.b2c.prototype.modal.dto.payload.user.ResponseUserCreditCardDto;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class UserCreditCardProcess implements IUserCreditCardProcess {
 
     private final IUserCreditCardManager creditCardManager;

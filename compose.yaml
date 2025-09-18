@@ -1,5 +1,6 @@
 services:
   postgres_client:
+    profiles: ["dev"]
     image: 'postgres:latest'
     environment:
       - 'POSTGRES_DB=client_db'
@@ -8,6 +9,7 @@ services:
     ports:
       - '5432:5432'
   postgres_test_client:
+    profiles: ["test"]
     image: 'postgres:latest'
     environment:
       - 'POSTGRES_DB=test_client_db'

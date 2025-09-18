@@ -3,10 +3,12 @@ package com.b2c.prototype.processor.discount;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountStatusDto;
 import com.b2c.prototype.manager.item.IDiscountManager;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class DiscountProcess implements IDiscountProcess {
 
     private final IDiscountManager discountManager;

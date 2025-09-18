@@ -26,15 +26,16 @@ import com.tm.core.finder.factory.IParameterFactory;
 import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
 import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
 import org.hibernate.Session;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
 import static com.b2c.prototype.util.Constant.ORDER_ID;
-import static com.b2c.prototype.util.Util.getCurrentTimeMillis;
 import static com.b2c.prototype.util.Util.getUUID;
 
+@Service
 public class CustomerSingleDeliveryOrderManager implements ICustomerSingleDeliveryOrderManager {
 
     private final ITransactionEntityOperationManager entityOperationManager;

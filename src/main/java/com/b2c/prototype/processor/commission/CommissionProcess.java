@@ -5,10 +5,12 @@ import com.b2c.prototype.modal.dto.payload.commission.MinMaxCommissionDto;
 import com.b2c.prototype.modal.dto.payload.commission.ResponseBuyerCommissionInfoDto;
 import com.b2c.prototype.modal.dto.payload.commission.ResponseMinMaxCommissionDto;
 import com.b2c.prototype.modal.dto.payload.order.ArticularItemQuantityDto;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class CommissionProcess implements ICommissionProcess {
     private final ICommissionManager commissionManager;
 

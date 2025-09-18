@@ -14,12 +14,14 @@ import com.tm.core.process.manager.common.operator.TransactionEntityOperationMan
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 import static com.b2c.prototype.util.Constant.ORDER_ID;
 import static com.b2c.prototype.util.Constant.USER_ID;
 
+@Service
 public class ContactInfoManager implements IContactInfoManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ContactInfoManager.class);

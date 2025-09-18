@@ -16,12 +16,14 @@ import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
 import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
 
 import static com.b2c.prototype.util.Constant.USER_ID;
 
+@Service
 public class UserCreditCardManager implements IUserCreditCardManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserCreditCardManager.class);
@@ -32,7 +34,7 @@ public class UserCreditCardManager implements IUserCreditCardManager {
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public UserCreditCardManager(IGeneralEntityDao creditCardDao,
+    public UserCreditCardManager(IGeneralEntityDao generalEntityDao,
                                  IQueryService queryService,
                                  IFetchHandler fetchHandler,
                                  ITransformationFunctionService transformationFunctionService,

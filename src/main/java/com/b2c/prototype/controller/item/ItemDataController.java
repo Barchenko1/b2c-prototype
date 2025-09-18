@@ -2,7 +2,7 @@ package com.b2c.prototype.controller.item;
 
 import com.b2c.prototype.modal.dto.payload.item.ItemDataDto;
 import com.b2c.prototype.modal.dto.payload.item.ResponseItemDataDto;
-import com.b2c.prototype.processor.item.IItemDataProcessor;
+import com.b2c.prototype.processor.item.IMetaDataProcessor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,47 +22,47 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/itemdata")
 public class ItemDataController {
-    private final IItemDataProcessor itemDataProcessor;
+    private final IMetaDataProcessor itemDataProcessor;
 
-    public ItemDataController(IItemDataProcessor itemDataProcessor) {
+    public ItemDataController(IMetaDataProcessor itemDataProcessor) {
         this.itemDataProcessor = itemDataProcessor;
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> saveItemData(@RequestParam final Map<String, String> requestParams,
                                              @RequestBody final ItemDataDto itemDataDto) {
-        itemDataProcessor.saveItemData(requestParams, itemDataDto);
+        itemDataProcessor.saveMetaData(requestParams, itemDataDto);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> putItemData(@RequestParam final Map<String, String> requestParams,
                                             @RequestBody final ItemDataDto itemDataDto) {
-        itemDataProcessor.updateItemData(requestParams, itemDataDto);
+        itemDataProcessor.updateMetaData(requestParams, itemDataDto);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> patchItemData(@RequestParam final Map<String, String> requestParams,
                                               @RequestBody final ItemDataDto itemDataDto) {
-        itemDataProcessor.updateItemData(requestParams, itemDataDto);
+        itemDataProcessor.updateMetaData(requestParams, itemDataDto);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<Void> deleteItemData(@RequestParam final Map<String, String> requestParams) {
-        itemDataProcessor.deleteItemData(requestParams);
+        itemDataProcessor.deleteMetaData(requestParams);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ResponseItemDataDto> getItemDataList(@RequestParam final Map<String, String> requestParams) {
 
-        return itemDataProcessor.getItemDataList(requestParams);
+        return itemDataProcessor.getMetaDataList(requestParams);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseItemDataDto> getItemData(@RequestParam final Map<String, String> requestParams) {
-        return new ResponseEntity<>(itemDataProcessor.getItemData(requestParams), HttpStatus.OK);
+        return new ResponseEntity<>(itemDataProcessor.getMetaData(requestParams), HttpStatus.OK);
     }
 }

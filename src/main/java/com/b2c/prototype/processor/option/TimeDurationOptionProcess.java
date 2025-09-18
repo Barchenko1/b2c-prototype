@@ -3,10 +3,12 @@ package com.b2c.prototype.processor.option;
 import com.b2c.prototype.manager.option.ITimeDurationOptionManager;
 import com.b2c.prototype.modal.dto.payload.option.TimeDurationOptionDto;
 import com.b2c.prototype.modal.dto.payload.option.ResponseTimeDurationOptionDto;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class TimeDurationOptionProcess implements ITimeDurationOptionProcess {
 
     private final ITimeDurationOptionManager timeDurationOptionManager;

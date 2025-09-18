@@ -107,7 +107,7 @@ payment:
     discount_multi_currency_price_info_id: 3
     commission_price_info_id: 4
     payment_status_id: 1
-    credit_card_id: 1
+    credit_card_id: 2
     discount_id: 1
 country_phone_code:
   - id: 1
@@ -121,6 +121,9 @@ contact_phone:
     phone_number: "111-111-111"
     country_phone_code_id: 1
   - id: 2
+    phone_number: "111-111-111"
+    country_phone_code_id: 1
+  - id: 3
     phone_number: "111-111-222"
     country_phone_code_id: 1
 contact_info:
@@ -133,10 +136,18 @@ contact_info:
     is_contact_phone_verified: false
     is_email_verified: false
   - id: 2
+    first_name: "Wolter"
+    last_name: "White"
+    email: "email"
+    contact_phone_id: 2
+    birthday_date: "2024-03-03 00:00:00"
+    is_contact_phone_verified: false
+    is_email_verified: false
+  - id: 3
     first_name: "Wolter2"
     last_name: "White2"
     email: "email"
-    contact_phone_id: 2
+    contact_phone_id: 3
     birthday_date: "2024-03-03 00:00:00"
     is_contact_phone_verified: false
     is_email_verified: false
@@ -174,7 +185,7 @@ address:
     country_id: 1
 delivery:
   - id: 1
-    address_id: 1
+    address_id: 2
     delivery_type_id: 1
 
 brand:
@@ -279,8 +290,8 @@ order_history:
 customer_single_delivery_order:
   - id: 1
     order_uniq_id: "123"
-    contact_info_id: 1
-    beneficiary_id: 2
+    contact_info_id: 2
+    beneficiary_id: 3
     date_of_create: "2024-03-03 12:00:00"
     delivery_id: 1
     order_status_id: 1

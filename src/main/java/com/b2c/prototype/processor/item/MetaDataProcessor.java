@@ -3,25 +3,27 @@ package com.b2c.prototype.processor.item;
 import com.b2c.prototype.modal.dto.payload.item.ItemDataDto;
 import com.b2c.prototype.modal.dto.payload.item.ResponseItemDataDto;
 import com.b2c.prototype.manager.item.IItemDataManager;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
-public class ItemDataProcessor implements IItemDataProcessor {
+@Service
+public class MetaDataProcessor implements IMetaDataProcessor {
 
     private final IItemDataManager itemDataManager;
 
-    public ItemDataProcessor(IItemDataManager itemDataManager) {
+    public MetaDataProcessor(IItemDataManager itemDataManager) {
         this.itemDataManager = itemDataManager;
     }
 
     @Override
-    public void saveItemData(Map<String, String> requestParams, ItemDataDto itemDataDto) {
+    public void saveMetaData(Map<String, String> requestParams, ItemDataDto itemDataDto) {
         itemDataManager.saveItemData(itemDataDto);
     }
 
     @Override
-    public void updateItemData(Map<String, String> requestParams, ItemDataDto itemDataDto) {
+    public void updateMetaData(Map<String, String> requestParams, ItemDataDto itemDataDto) {
         String itemId = requestParams.get("itemId");
         if (itemId != null) {
             itemDataManager.updateItemData(itemId, itemDataDto);
@@ -29,19 +31,19 @@ public class ItemDataProcessor implements IItemDataProcessor {
     }
 
     @Override
-    public void deleteItemData(Map<String, String> requestParams) {
+    public void deleteMetaData(Map<String, String> requestParams) {
         String itemId = requestParams.get("itemId");
         itemDataManager.deleteItemData(itemId);
     }
 
     @Override
-    public ResponseItemDataDto getItemData(Map<String, String> requestParams) {
+    public ResponseItemDataDto getMetaData(Map<String, String> requestParams) {
         String itemId = requestParams.get("itemId");
         return itemDataManager.getItemData(itemId);
     }
 
     @Override
-    public List<ResponseItemDataDto> getItemDataList(Map<String, String> requestParams) {
+    public List<ResponseItemDataDto> getMetaDataList(Map<String, String> requestParams) {
         return itemDataManager.getItemDataList();
     }
 }

@@ -2,9 +2,11 @@ package com.b2c.prototype.processor.user;
 
 import com.b2c.prototype.manager.userdetails.IContactInfoManager;
 import com.b2c.prototype.modal.dto.payload.order.ContactInfoDto;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+@Service
 public class ContactInfoProcess implements IContactInfoProcess {
 
     private final IContactInfoManager contactInfoManager;

@@ -4,10 +4,12 @@ import com.b2c.prototype.manager.userdetails.IDeviceManager;
 import com.b2c.prototype.modal.dto.payload.user.DeviceDto;
 import com.b2c.prototype.modal.dto.payload.user.ResponseDeviceDto;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class DeviceProcess implements IDeviceProcess {
     private final IDeviceManager deviceManager;
 

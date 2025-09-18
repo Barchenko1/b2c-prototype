@@ -5,11 +5,13 @@ import com.b2c.prototype.modal.dto.payload.review.ResponseReviewCommentDto;
 import com.b2c.prototype.modal.dto.payload.review.ReviewCommentDto;
 import com.b2c.prototype.modal.dto.payload.review.ReviewDto;
 import com.b2c.prototype.modal.dto.payload.review.ResponseReviewDto;
+import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class ReviewProcessor implements IReviewProcessor {
 
     private final IReviewManager reviewManager;

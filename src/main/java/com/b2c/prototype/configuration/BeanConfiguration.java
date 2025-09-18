@@ -23,7 +23,6 @@ public class BeanConfiguration {
     @Value("${entity.package.path}")
     private String entityPackagePath;
     private static final String MAIN_WRITE_DATABASE_CONFIG = "hikari.hibernate.cfg.xml";
-    private static final String CACHE_DATABASE_CONFIG = "";
     private static final String MAIN_READ_DATABASE_CONFIG = "";
 
     public DatabaseTypeConfiguration getDatabaseTypeConfiguration() {

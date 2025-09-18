@@ -17,9 +17,9 @@ entity:
 #    basename: ib18n
 spring:
   profiles:
-    active: test
+    active: dev
   datasource:
-    url: jdbc:postgresql://127.0.0.1:5433/test_client_db
+    url: jdbc:postgresql://127.0.0.1:5432/client_db
     username: admin
     password: secret
     driver-class-name: org.postgresql.Driver
@@ -38,42 +38,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
         show_sql: false
-    mapping-resources: hikari.hibernate.cfg.xml
   # If you use schema.sql/data.sql in tests, set to 'always'; otherwise leave default
   sql:
     init:
       mode: never
-enums:
-  brands:
-    - value: HP
-      label: "HP"
-    - value: APPLE
-      label: "APPLE"
-    - value: ANDROID
-      label: "ANDROID"
-#  countTypes: LIMITED, UNLIMITED
-#  countryPhoneCodes: +48
-#  countries: POLAND
-  currencies:
-    - value: "USD"
-      label: "USD"
-    - value: "PLN"
-      label: "PLN"
-    - value: "EUR"
-      label: "EUR"
-#  deliveryTypes: IN_POST, COURIER
-#  itemStatuses: NEW, EXIST, COMING_SOON, OUT_OF_STOCK
-#  itemTypes: TECHNIQUE
-#  messageStatuses: unread, read, delete
-#  messageTypes: SYSTEM
-#  optionGroups: TECHNIQUE
-#  orderStatuses: NEW, PENDING, COMPLETE, TERMINATED
-#  paymentMethods: CARD, CASH, BLIK
-  ratings: 1, 2, 3, 4, 5
-  categories:
-    - name: "Electronics"
-      sub:
-        - name: "Computers"
-          sub:
-            - name: "Laptops"
-            - name: "Desktops"

@@ -4,131 +4,114 @@ import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.dto.payload.user.RegistrationUserDetailsDto;
 import com.b2c.prototype.modal.dto.payload.user.UserDetailsDto;
 import com.b2c.prototype.modal.dto.payload.user.ResponseUserDetailsDto;
+import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 
-import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.userdetails.IUserDetailsManager;
-import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.IFetchHandler;
-import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
-import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
-import org.hibernate.Session;
+import com.b2c.prototype.transform.IUserDetailsTransformService;
+import com.nimbusds.jose.util.Pair;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 import static com.b2c.prototype.util.Constant.USER_ID;
 
+@Service
 public class UserDetailsManager implements IUserDetailsManager {
 
-    private final ITransactionEntityOperationManager entityOperationManager;
-    private final ITransformationFunctionService transformationFunctionService;
-    private final IFetchHandler fetchHandler;
-    private final IParameterFactory parameterFactory;
+    private final IGeneralEntityDao generalEntityDao;
+    private final IUserDetailsTransformService userDetailsTransformService;
 
-    public UserDetailsManager(IGeneralEntityDao appUserDao,
-                              ITransformationFunctionService transformationFunctionService,
-                              IFetchHandler fetchHandler,
-                              IParameterFactory parameterFactory) {
-        this.entityOperationManager = new TransactionEntityOperationManager(null);
-        this.transformationFunctionService = transformationFunctionService;
-        this.fetchHandler = fetchHandler;
-        this.parameterFactory = parameterFactory;
+    public UserDetailsManager(IGeneralEntityDao generalEntityDao,
+                              IUserDetailsTransformService userDetailsTransformService) {
+        this.generalEntityDao = generalEntityDao;
+        this.userDetailsTransformService = userDetailsTransformService;
     }
 
     @Override
+    @Transactional
     public void createNewUser(RegistrationUserDetailsDto registrationUserDetailsDto) {
-        entityOperationManager.mergeEntity(
-                transformationFunctionService.getEntity(UserDetails.class, registrationUserDetailsDto));
+        UserDetails userDetails =
+                userDetailsTransformService.mapRegistrationUserDetailsDtoToUserDetails(registrationUserDetailsDto);
+        generalEntityDao.persistEntity(userDetails);
     }
 
     @Override
+    @Transactional
     public void saveUserDetails(UserDetailsDto userDetailsDto) {
-        entityOperationManager.executeConsumer(session -> {
-            UserDetails userDetails =
-                    transformationFunctionService.getEntity((Session) session, UserDetails.class, userDetailsDto);
-            session.merge(userDetails);
-        });
+        UserDetails userDetails =
+                userDetailsTransformService.mapUserDetailsDtoToUserDetails(userDetailsDto);
+        generalEntityDao.persistEntity(userDetails);
     }
 
     @Override
+    @Transactional
     public void updateUserDetailsByUserId(String userId, UserDetailsDto userDetailsDto) {
-        entityOperationManager.executeConsumer(session -> {
-            UserDetails existingUserDetails = entityOperationManager.getNamedQueryEntityClose(
-                    "UserDetails.findByUserId",
-                    parameterFactory.createStringParameter(USER_ID, userId));
-            UserDetails userDetails =
-                    transformationFunctionService.getEntity((Session) session, UserDetails.class, userDetailsDto);
-            userDetails.setId(existingUserDetails.getId());
-            userDetails.getContactInfo().setId(existingUserDetails.getContactInfo().getId());
-            existingUserDetails.getUserAddresses().forEach(session::remove);
-            existingUserDetails.getUserCreditCards().forEach(session::remove);
-            session.merge(userDetails);
-        });
+        UserDetails existingUserDetails = generalEntityDao.findEntity(
+                "UserDetails.findByUserId",
+                Pair.of(USER_ID, userId));
+        UserDetails userDetails = userDetailsTransformService.mapUserDetailsDtoToUserDetails(userDetailsDto);
+        userDetails.setId(existingUserDetails.getId());
+        userDetails.getContactInfo().setId(existingUserDetails.getContactInfo().getId());
+        generalEntityDao.mergeEntity(userDetails);
     }
 
     @Override
+    @Transactional
     public void updateUserStatusByUserId(String userId, boolean status) {
-        entityOperationManager.executeConsumer(session -> {
-            UserDetails existingUser = entityOperationManager.getNamedQueryEntityClose(
-                    "UserDetails.findByUserId",
-                    parameterFactory.createStringParameter(USER_ID, userId));
-            existingUser.setActive(status);
-            session.merge(existingUser);
-        });
+        UserDetails existingUser = generalEntityDao.findEntity("UserDetails.findByUserId", Pair.of(USER_ID, userId));
+        existingUser.setActive(status);
+        generalEntityDao.mergeEntity(existingUser);
     }
 
     @Override
+    @Transactional
     public void updateUserVerifyEmailByUserId(String userId, boolean verifyEmail) {
-        entityOperationManager.executeConsumer(session -> {
-            UserDetails existingUser = entityOperationManager.getNamedQueryEntityClose(
-                    "UserDetails.findByUserId",
-                    parameterFactory.createStringParameter(USER_ID, userId));
-//            existingUser.setEmailVerified(verifyEmail);
-            session.merge(existingUser);
-        });
+        UserDetails existingUser = generalEntityDao.findEntity("UserDetails.findByUserId", Pair.of(USER_ID, userId));
+        ContactInfo contactInfo = existingUser.getContactInfo();
+        contactInfo.setEmailVerified(verifyEmail);
+        generalEntityDao.mergeEntity(existingUser);
     }
 
     @Override
+    @Transactional
     public void updateUserVerifyPhoneByUserId(String userId, boolean verifyPhone) {
-        entityOperationManager.executeConsumer(session -> {
-            UserDetails existingUser = entityOperationManager.getNamedQueryEntityClose(
-                    "UserDetails.findByUserId",
-                    parameterFactory.createStringParameter(USER_ID, userId));
-//            existingUser.setContactPhoneVerified(verifyPhone);
-            session.merge(existingUser);
-        });
+        UserDetails existingUser = generalEntityDao.findEntity("UserDetails.findByUserId", Pair.of(USER_ID, userId));
+        ContactInfo contactInfo = existingUser.getContactInfo();
+        contactInfo.setContactPhoneVerified(verifyPhone);
+        generalEntityDao.mergeEntity(existingUser);
     }
 
     @Override
+    @Transactional
     public void deleteUserDetailsByUserId(String userId) {
-        entityOperationManager.executeConsumer(session -> {
-            UserDetails existingUserDetails = fetchHandler.getNamedQueryEntityClose(
-                    UserDetails.class,
-                    "UserDetails.findByUserId",
-                    parameterFactory.createStringParameter(USER_ID, userId));
-            session.remove(existingUserDetails);
-        });
+        UserDetails existingUserDetails = generalEntityDao.findEntity(
+                "UserDetails.findByUserId",
+                Pair.of(USER_ID, userId));
+        generalEntityDao.removeEntity(existingUserDetails);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ResponseUserDetailsDto getUserDetailsByUserId(String userId) {
-        UserDetails userDetail = entityOperationManager.getNamedQueryEntityClose(
-                "UserDetails.findFullUserDetailsByUserId",
-                parameterFactory.createStringParameter(USER_ID, userId));
+        UserDetails userDetail = generalEntityDao.findEntity(
+                "UserDetails.findFullUserDetailsByUserId", Pair.of(USER_ID, userId));
 
         return Optional.of(userDetail)
-                .map(transformationFunctionService.getTransformationFunction(UserDetails.class, ResponseUserDetailsDto.class))
+                .map(userDetailsTransformService::mapUserDetailsToResponseUserDetailsDto)
                 .orElseThrow(() -> new RuntimeException(""));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ResponseUserDetailsDto> getResponseUserDetails() {
-        List<UserDetails> userDetails = entityOperationManager.getNamedQueryEntityListClose(
-                "UserDetails.findAllFullUserDetailsByUserId");
+        List<UserDetails> userDetailsList =
+                generalEntityDao.findEntityList("UserDetails.findAllFullUserDetailsByUserId", (Pair<String, ?>) null);
 
-        return userDetails.stream()
-                .map(transformationFunctionService.getTransformationFunction(UserDetails.class, ResponseUserDetailsDto.class))
+        return userDetailsList.stream()
+                .map(userDetailsTransformService::mapUserDetailsToResponseUserDetailsDto)
                 .toList();
     }
 

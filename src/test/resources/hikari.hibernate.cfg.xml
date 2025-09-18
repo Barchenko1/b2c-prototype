@@ -154,29 +154,6 @@
             LEFT JOIN FETCH a.country c
 
             LEFT JOIN FETCH e.articularStocks s
-
-<!--            LEFT JOIN FETCH s.articularItemQuantities aiq-->
-
-<!--            LEFT JOIN FETCH s.availabilityState st-->
-
-<!--            LEFT JOIN FETCH aiq.articularItem ai-->
-<!--            LEFT JOIN FETCH ai.metaData md-->
-<!--            LEFT JOIN FETCH md.category-->
-<!--            LEFT JOIN FETCH md.itemType-->
-<!--            LEFT JOIN FETCH md.brand-->
-<!--            LEFT JOIN FETCH md.articularItemSet mds-->
-
-<!--            LEFT JOIN FETCH ai.optionItems oi-->
-<!--            LEFT JOIN FETCH oi.optionGroup-->
-
-<!--            LEFT JOIN FETCH ai.fullPrice fp-->
-<!--            LEFT JOIN FETCH fp.currency-->
-<!--            LEFT JOIN FETCH ai.totalPrice tp-->
-<!--            LEFT JOIN FETCH tp.currency-->
-
-<!--            LEFT JOIN FETCH ai.status-->
-<!--            LEFT JOIN FETCH ai.discount d-->
-<!--            LEFT JOIN FETCH d.currency-->
             WHERE e.id = :id
         </query>
     </named-query>

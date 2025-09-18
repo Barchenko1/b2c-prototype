@@ -33,6 +33,27 @@ public abstract class AbstractEntityDao {
     }
 
     @Transactional(readOnly = true)
+    public <E> E findEntity(String namedQuery, Pair<String, ?> pair) {
+        Query query = getQuery(namedQuery, pair);
+        E result = (E) query.getSingleResult();
+        return result;
+    }
+
+    @Transactional(readOnly = true)
+    public <E> Optional<E> findOptionEntity(String namedQuery, Pair<String, ?> pair) {
+        Query query = getQuery(namedQuery, pair);
+        E result = (E) query.getSingleResult();
+        return Optional.of(result);
+    }
+
+    @Transactional(readOnly = true)
+    public <E> List<E> findEntityList(String namedQuery, Pair<String, ?> pair) {
+        Query query = getQuery(namedQuery, pair);
+        List<E> resultList = query.getResultList();
+        return resultList;
+    }
+
+    @Transactional(readOnly = true)
     public <E> E findEntity(String namedQuery, List<Pair<String, ?>> pairs) {
         Query query = getQuery(namedQuery, pairs);
         E result = (E) query.getSingleResult();
@@ -51,6 +72,19 @@ public abstract class AbstractEntityDao {
         Query query = getQuery(namedQuery, pairs);
         List<E> resultList = query.getResultList();
         return resultList;
+    }
+
+    private Query getQuery(String namedQuery, Pair<String, ?> pair) {
+        Query query = entityManager.createNamedQuery(namedQuery);
+        if (pair != null) {
+            if (pair.getLeft() != null && pair.getRight() != null) {
+                query.setParameter(pair.getLeft(), pair.getRight());
+            } else {
+                throw new IllegalArgumentException("Parameter '" + pair.getLeft() + "' is null or empty.");
+            }
+        }
+
+        return query;
     }
 
     private Query getQuery(String namedQuery, List<Pair<String, ?>> pairs) {

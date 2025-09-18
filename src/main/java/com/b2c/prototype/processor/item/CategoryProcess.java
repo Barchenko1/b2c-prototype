@@ -2,10 +2,12 @@ package com.b2c.prototype.processor.item;
 
 import com.b2c.prototype.manager.item.ICategoryManager;
 import com.b2c.prototype.modal.dto.payload.constant.CategoryDto;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class CategoryProcess implements ICategoryProcess {
 
     private final ICategoryManager categoryManager;

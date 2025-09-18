@@ -4,10 +4,12 @@ import com.b2c.prototype.manager.payment.ICurrencyCoefficientManager;
 import com.b2c.prototype.modal.dto.payload.order.CurrencyConvertDateDto;
 import com.b2c.prototype.modal.dto.payload.order.CurrencyConvertDto;
 import com.b2c.prototype.modal.dto.payload.order.ResponseCurrencyCoefficientDto;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class CurrencyCoefficientProcessor implements ICurrencyCoefficientProcessor {
 
     private final ICurrencyCoefficientManager currencyCoefficientManager;

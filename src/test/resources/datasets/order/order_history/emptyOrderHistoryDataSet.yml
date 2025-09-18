@@ -88,13 +88,6 @@ address:
     zip_code: 90000
     city: "city"
     country_id: 1
-  - street: "street"
-    building_number: 1
-    flor_number: 9
-    apartment_number: 101
-    zip_code: 90000
-    city: "city"
-    country_id: 1
 delivery: []
 
 brand:

@@ -7,6 +7,14 @@ credit_card:
     owner_name: "name"
     owner_second_name: "secondName"
     is_active: true
+  - id: 2
+    card_number: "4444-1111-2222-3333"
+    month_of_expire: "06"
+    year_of_expire: "28"
+    cvv: 818
+    owner_name: "name"
+    owner_second_name: "secondName"
+    is_active: true
 payment_method:
   - id: 1
     value: "Card"
@@ -113,6 +121,9 @@ contact_phone:
     phone_number: "111-111-111"
     country_phone_code_id: 1
   - id: 2
+    phone_number: "111-111-111"
+    country_phone_code_id: 1
+  - id: 3
     phone_number: "111-111-222"
     country_phone_code_id: 1
 contact_info:
@@ -125,10 +136,18 @@ contact_info:
     is_contact_phone_verified: false
     is_email_verified: false
   - id: 2
+    first_name: "Wolter"
+    last_name: "White"
+    email: "email"
+    contact_phone_id: 2
+    birthday_date: "2024-03-03 00:00:00"
+    is_contact_phone_verified: false
+    is_email_verified: false
+  - id: 3
     first_name: "Wolter2"
     last_name: "White2"
     email: "email"
-    contact_phone_id: 2
+    contact_phone_id: 3
     birthday_date: "2024-03-03 00:00:00"
     is_contact_phone_verified: false
     is_email_verified: false
@@ -154,21 +173,21 @@ address:
     flor_number: 9
     apartment_number: 101
     zip_code: 90000
+    city: "city"
+    country_id: 1
+  - id: 2
+    street: "street"
+    building_number: 1
+    flor_number: 9
+    apartment_number: 101
+    zip_code: 90000
+    city: "city"
     country_id: 1
 delivery:
   - id: 1
     address_id: 1
     delivery_type_id: 1
-customer_single_delivery_order:
-  - id: 1
-    order_uniq_id: "123"
-    contact_info_id: 1
-    beneficiary_id: 2
-    date_of_create: "2024-03-03 12:00:00"
-    delivery_id: 1
-    order_status_id: 2
-    payment_id: 1
-    note: "note"
+
 brand:
   - id: 1
     value: "Hermes"
@@ -236,3 +255,46 @@ articular_item_quantity:
     quantity: 1
     articular_item_id: 1
     customer_single_delivery_order_id: 1
+
+user_details:
+  - id: 1
+    username: "username"
+    user_id: "123"
+    date_of_create: "2024-03-03 12:00:00"
+    is_active: true
+    contact_info_id: 1
+user_address:
+  - id: 1
+    address_id: 1
+    is_default: true
+    user_details_id: 1
+user_credit_card:
+  - id: 1
+    credit_card_id: 1
+    is_default: false
+    user_details_id: 1
+device:
+  - id: 1
+    user_agent: "agent"
+    ip_address: "ipAddress"
+    language: "language"
+    timezone: "timezone"
+    platform: "platform"
+    screen_height: 1080
+    screen_width: 1920
+    user_details_id: 1
+order_history:
+  - id: 1
+    user_details_id: 1
+
+customer_single_delivery_order:
+  - id: 1
+    order_uniq_id: "123"
+    contact_info_id: 2
+    beneficiary_id: 3
+    date_of_create: "2024-03-03 12:00:00"
+    delivery_id: 1
+    order_status_id: 2
+    payment_id: 1
+    note: "note"
+    order_history_id: 1

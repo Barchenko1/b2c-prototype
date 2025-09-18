@@ -5,7 +5,9 @@ import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.payment.CommissionValue;
 import com.b2c.prototype.modal.entity.payment.MinMaxCommission;
 import com.b2c.prototype.modal.entity.price.Price;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PriceCalculationService implements IPriceCalculationService {
 
     @Override

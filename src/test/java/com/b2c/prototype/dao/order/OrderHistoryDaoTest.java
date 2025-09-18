@@ -53,7 +53,7 @@ class OrderHistoryDaoTest extends AbstractDaoTest {
     @Autowired
     private IGeneralEntityDao generalEntityDao;
 
-    private static final Map<String, Currency> CACHE = new HashMap<>(){{
+    private static final Map<String, Currency> CURRENCY_CACHE = new HashMap<>(){{
         put("USD", Currency.builder().id(1L).label("USD").value("USD").build());
         put("EUR", Currency.builder().id(2L).label("EUR").value("EUR").build());
     }};
@@ -62,6 +62,10 @@ class OrderHistoryDaoTest extends AbstractDaoTest {
     @DataSet(value = "datasets/order/order_history/emptyOrderHistoryDataSet.yml", cleanBefore = true,
             executeStatementsBefore = {
                     "TRUNCATE TABLE price RESTART IDENTITY CASCADE",
+                    "TRUNCATE TABLE contact_phone RESTART IDENTITY CASCADE",
+                    "TRUNCATE TABLE contact_info RESTART IDENTITY CASCADE",
+                    "TRUNCATE TABLE address RESTART IDENTITY CASCADE",
+                    "TRUNCATE TABLE credit_card RESTART IDENTITY CASCADE",
             })
     @ExpectedDataSet(value = "datasets/order/order_history/saveOrderHistoryDataSet.yml", orderBy = "id", ignoreCols = {"id", "amount", "currency_id", "original_price_id", "current_price_id", "commission_price_info_id", "full_multi_currency_price_info_id", "total_multi_currency_price_info_id", "discount_multi_currency_price_info_id", "phone_number", "first_name", "last_name", "contact_info_id", "beneficiary_id", "full_price_id", "address_id", "credit_card_id", "contact_phone_id"})
     public void persistEntity_success() {
@@ -233,6 +237,7 @@ class OrderHistoryDaoTest extends AbstractDaoTest {
                 .apartmentNumber(101)
                 .florNumber(9)
                 .zipCode("90000")
+                .city("city")
                 .build();
         DeliveryType deliveryType = DeliveryType.builder()
                 .id(1L)
@@ -248,7 +253,7 @@ class OrderHistoryDaoTest extends AbstractDaoTest {
     }
 
     private ArticularItem getArticularItem() {
-        Currency currency = CACHE.get("USD");
+        Currency currency = CURRENCY_CACHE.get("USD");
         OptionGroup optionGroup = OptionGroup.builder()
                 .id(1L)
                 .value("Size")
@@ -328,8 +333,8 @@ class OrderHistoryDaoTest extends AbstractDaoTest {
                 .value("Card")
                 .label("Card")
                 .build();
-        Currency currencyUsd = CACHE.get("USD");
-        Currency currencyEur = CACHE.get("EUR");
+        Currency currencyUsd = CURRENCY_CACHE.get("USD");
+        Currency currencyEur = CURRENCY_CACHE.get("EUR");
         Discount discount = Discount.builder()
                 .id(1L)
                 .amount(5)
@@ -435,13 +440,48 @@ class OrderHistoryDaoTest extends AbstractDaoTest {
     }
 
     private CustomerSingleDeliveryOrder getCustomerSingleDeliveryOrder() {
+        CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
+                .id(1L)
+                .value("+11")
+                .label("+11")
+                .build();
+        ContactPhone contactPhone1 = ContactPhone.builder()
+                .id(2L)
+                .countryPhoneCode(countryPhoneCode)
+                .phoneNumber("111-111-111")
+                .build();
+        ContactInfo contactInfo = ContactInfo.builder()
+                .id(2L)
+                .firstName("Wolter")
+                .lastName("White")
+                .email("email")
+                .birthdayDate(getDate("2024-03-03"))
+                .contactPhone(contactPhone1)
+                .isEmailVerified(false)
+                .isContactPhoneVerified(false)
+                .build();
 
+        ContactPhone contactPhone = ContactPhone.builder()
+                .id(3L)
+                .countryPhoneCode(countryPhoneCode)
+                .phoneNumber("111-111-222")
+                .build();
+        ContactInfo beneficiary = ContactInfo.builder()
+                .id(3L)
+                .firstName("Wolter2")
+                .lastName("White2")
+                .email("email")
+                .birthdayDate(getDate("2024-03-03"))
+                .contactPhone(contactPhone)
+                .isEmailVerified(false)
+                .isContactPhoneVerified(false)
+                .build();
         return CustomerSingleDeliveryOrder.builder()
                 .id(1L)
                 .orderUniqId("123")
-                .contactInfo(getContactInfo())
+                .contactInfo(contactInfo)
                 .dateOfCreate(getLocalDateTime("2024-03-03 12:00:00"))
-                .beneficiary(getBeneficiaryInfo())
+                .beneficiary(beneficiary)
                 .status(getOrderStatus())
                 .delivery(getDelivery())
                 .articularItemQuantities(List.of(getArticularItemQuantity()))

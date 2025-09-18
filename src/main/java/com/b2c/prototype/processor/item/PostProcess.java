@@ -3,10 +3,12 @@ package com.b2c.prototype.processor.item;
 import com.b2c.prototype.manager.post.IPostManager;
 import com.b2c.prototype.modal.dto.payload.post.PostDto;
 import com.b2c.prototype.modal.dto.payload.post.ResponsePostDto;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class PostProcess implements IPostProcess {
 
     private final IPostManager postManager;

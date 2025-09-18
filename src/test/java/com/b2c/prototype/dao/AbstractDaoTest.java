@@ -16,7 +16,6 @@ import static com.b2c.prototype.dao.DataSourcePool.getPostgresDataSource;
 @DBRider
 @DBUnit(schema = "public", caseSensitiveTableNames = true)
 @SpringBootTest
-//@ExtendWith(DBUnitExtension.class)
 public abstract class AbstractDaoTest {
     @Autowired
     private DataSource dataSource;

@@ -34,7 +34,7 @@ public class PostManager implements IPostManager {
     private final ITransformationFunctionService transformationFunctionService;
     private final IParameterFactory parameterFactory;
 
-    public PostManager(IGeneralEntityDao postDao,
+    public PostManager(IGeneralEntityDao generalEntityDao,
                        IQueryService queryService,
                        ITransformationFunctionService transformationFunctionService,
                        IParameterFactory parameterFactory) {

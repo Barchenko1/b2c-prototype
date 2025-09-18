@@ -6,10 +6,12 @@ import com.b2c.prototype.modal.dto.payload.message.MessageDto;
 import com.b2c.prototype.modal.dto.payload.message.MessageTemplateDto;
 import com.b2c.prototype.modal.dto.payload.message.ResponseMessageOverviewDto;
 import com.b2c.prototype.modal.dto.payload.message.ResponseMessagePayloadDto;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class MessageProcess implements IMessageProcess {
 
     private final IMessageManager messageManager;

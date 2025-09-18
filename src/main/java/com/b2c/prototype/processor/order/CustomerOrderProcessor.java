@@ -3,10 +3,12 @@ package com.b2c.prototype.processor.order;
 import com.b2c.prototype.manager.order.ICustomerSingleDeliveryOrderManager;
 import com.b2c.prototype.modal.dto.payload.order.single.CustomerSingleDeliveryOrderDto;
 import com.b2c.prototype.modal.dto.payload.order.single.ResponseCustomerOrderDetails;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class CustomerOrderProcessor implements ICustomerOrderProcessor {
 
     private final ICustomerSingleDeliveryOrderManager customerOrderManager;

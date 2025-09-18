@@ -3,10 +3,12 @@ package com.b2c.prototype.processor.item;
 import com.b2c.prototype.modal.dto.payload.item.ArticularItemDto;
 import com.b2c.prototype.modal.dto.payload.item.ResponseArticularItemDto;
 import com.b2c.prototype.manager.item.IArticularItemManager;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class ArticularItemProcessor implements IArticularItemProcessor {
 
     private final IArticularItemManager articularItemManager;

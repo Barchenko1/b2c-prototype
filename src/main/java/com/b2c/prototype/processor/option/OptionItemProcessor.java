@@ -3,11 +3,13 @@ package com.b2c.prototype.processor.option;
 import com.b2c.prototype.manager.option.IOptionItemManager;
 import com.b2c.prototype.modal.dto.payload.option.OptionGroupOptionItemSetDto;
 import com.b2c.prototype.modal.dto.payload.option.SingleOptionItemDto;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@Service
 public class OptionItemProcessor implements IOptionItemProcessor {
 
     private final IOptionItemManager optionItemManager;

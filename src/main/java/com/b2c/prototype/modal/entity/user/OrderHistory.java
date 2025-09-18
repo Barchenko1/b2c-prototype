@@ -36,7 +36,7 @@ public class OrderHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_details_id")
     private UserDetails userDetails;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

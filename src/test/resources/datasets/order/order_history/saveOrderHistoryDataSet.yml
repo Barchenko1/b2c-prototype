@@ -1,14 +1,12 @@
 credit_card:
-  - id: 1
-    card_number: "4444-1111-2222-3333"
+  - card_number: "4444-1111-2222-3333"
     month_of_expire: "06"
     year_of_expire: "28"
     cvv: 818
     owner_name: "name"
     owner_second_name: "secondName"
     is_active: true
-  - id: 2
-    card_number: "4444-1111-2222-3333"
+  - card_number: "4444-1111-2222-3333"
     month_of_expire: "06"
     year_of_expire: "28"
     cvv: 818
@@ -139,7 +137,7 @@ contact_info:
     first_name: "Wolter"
     last_name: "White"
     email: "email"
-    contact_phone_id: 1
+    contact_phone_id: 2
     birthday_date: "2024-03-03 00:00:00"
     is_contact_phone_verified: false
     is_email_verified: false
@@ -147,7 +145,7 @@ contact_info:
     first_name: "Wolter2"
     last_name: "White2"
     email: "email"
-    contact_phone_id: 2
+    contact_phone_id: 3
     birthday_date: "2024-03-03 00:00:00"
     is_contact_phone_verified: false
     is_email_verified: false
@@ -290,8 +288,8 @@ order_history:
 customer_single_delivery_order:
   - id: 1
     order_uniq_id: "123"
-    contact_info_id: 1
-    beneficiary_id: 2
+    contact_info_id: 2
+    beneficiary_id: 3
     date_of_create: "2024-03-03 12:00:00"
     delivery_id: 1
     order_status_id: 1
