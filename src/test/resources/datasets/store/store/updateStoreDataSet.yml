@@ -1,7 +1,7 @@
-count_type:
+availability_status:
   - id: 1
-    value: "LIMITED"
-    label: "limited"
+    value: "Available"
+    label: "Available"
 brand:
   - id: 1
     value: "Hermes"
@@ -10,6 +10,18 @@ item_type:
   - id: 1
     value: "Clothes"
     label: "Clothes"
+category:
+  - id: 1
+    label: "parent"
+    value: "parent"
+  - id: 2
+    category_id: 1
+    label: "root"
+    value: "root"
+  - id: 3
+    category_id: 2
+    label: "child"
+    value: "child"
 currency:
   - id: 1
     value: "USD"
@@ -17,6 +29,9 @@ currency:
 price:
   - id: 1
     amount: 100
+    currency_id: 1
+  - id: 2
+    amount: 20
     currency_id: 1
 discount:
   - id: 1
@@ -34,30 +49,65 @@ option_item:
     value: "L"
     label: "L"
     option_group_id: 1
-category:
-  - id: 1
-    label: "parent"
-    value: "parent"
   - id: 2
-    category_id: 1
-    label: "root"
-    value: "root"
-  - id: 3
-    category_id: 2
-    label: "child"
-    value: "child"
-item_data:
+    value: "M"
+    label: "M"
+    option_group_id: 1
+articular_status:
   - id: 1
-    item_id: 123
+    value: "NEW"
+    label: "NEW"
+  - id: 2
+    value: "COMMON"
+    label: "COMMON"
+metadata:
+  - id: 1
+    metadata_uniq_id: "123"
+    description: "{\"desc1\":\"desc1\",\"desc2\":\"desc2\"}"
     brand_id: 1
     category_id: 3
     item_type_id: 1
 articular_item:
   - id: 1
-    articular_id: 1
+    meta_data_id: 1
+    articular_uniq_id: "123"
+    product_name: "Mob 1"
     date_of_create: "2024-03-03 12:00:00"
+    discount_id: 1
+    full_price_id: 1
+    total_price_id: 2
+    status_id: 1
+articular_item_option_item:
+  - articular_item_id: 1
+    option_item_id: 1
+  - articular_item_id: 1
+    option_item_id: 2
+country:
+  - id: 1
+    label: "USA"
+    value: "USA"
+address:
+  - id: 1
+    city: "city"
+    street: "street"
+    building_number: 1
+    flor_number: 9
+    apartment_number: 101
+    zip_code: 90000
+    country_id: 1
+articular_item_quantity:
+  - id: 1
+    quantity: 1
+    articular_item_id: 1
+    articular_stock_id: 1
 store:
   - id: 1
-    count: 9
-    count_type: 1
-    articular_item_id: 1
+    store_name: "Update Store Name"
+    address_id: 1
+    store_id: "123"
+    is_active: true
+articular_stock:
+  - id: 1
+    availability_status_id: 1
+    count_type: "LIMITED"
+    store_id: 1

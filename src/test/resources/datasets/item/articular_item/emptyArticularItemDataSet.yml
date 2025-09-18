@@ -1,6 +1,3 @@
-brand: []
-item_type: []
-category: []
 currency:
   - id: 1
     value: "USD"

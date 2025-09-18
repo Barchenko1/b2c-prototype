@@ -6,9 +6,14 @@ import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.ArticularStatus;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
+import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.item.Item;
 import com.b2c.prototype.modal.entity.item.MetaData;
 import com.b2c.prototype.modal.entity.item.ItemType;
+import com.b2c.prototype.modal.entity.option.OptionGroup;
+import com.b2c.prototype.modal.entity.option.OptionItem;
+import com.b2c.prototype.modal.entity.price.Currency;
+import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.modal.entity.review.Rating;
 import com.b2c.prototype.modal.entity.post.Post;
 import com.b2c.prototype.modal.entity.review.Review;
@@ -18,8 +23,11 @@ import com.nimbusds.jose.util.Pair;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import static com.b2c.prototype.util.Converter.getLocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,11 +39,40 @@ class ItemDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/item/item/emptyItemDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/item/item/saveItemDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/item/item/emptyItemDataSet.yml", cleanBefore = true,
+    executeStatementsBefore = {
+            "TRUNCATE TABLE option_item RESTART IDENTITY CASCADE",
+    })
+    @ExpectedDataSet(value = "datasets/item/item/saveItemDataSet.yml", orderBy = "id", ignoreCols = {"label", "value", "id", "message", "title", "post_id", "post_uniq_id", "category_id", "option_group_id", "brand_id", "discount_id", "full_price_id", "total_price_id", "status_id"})
     public void persistEntity_success() {
         Item entity = getItem();
         entity.setId(0);
+        entity.getMetaData().setId(0);
+        entity.getMetaData().getBrand().setId(0);
+        entity.getMetaData().getItemType().setId(0);
+        entity.getMetaData().getCategory().setId(0);
+        entity.getArticularItems().forEach(articularItem -> {
+            articularItem.setId(0);
+
+            articularItem.getStatus().setId(0);
+
+            articularItem.getDiscount().setId(0);
+            articularItem.getFullPrice().setId(0);
+            articularItem.getTotalPrice().setId(0);
+
+            articularItem.getOptionItems().forEach(optionItem -> {
+                optionItem.setId(0);
+                optionItem.getOptionGroup().setId(0);
+            });
+
+            articularItem.getStatus().setId(0);
+        });
+        entity.getPosts().forEach(post -> {
+            post.setId(0);
+        });
+        entity.getReviews().forEach(review -> {
+            review.setId(0);
+        });
 
         generalEntityDao.persistEntity(entity);
     }
@@ -45,14 +82,14 @@ class ItemDaoTest extends AbstractDaoTest {
     @ExpectedDataSet(value = "datasets/item/item/updateItemDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         Item entity = getItem();
-//        entity.setValue("Update New");
+        entity.setItemUniqId("Update 123");
 
         generalEntityDao.mergeEntity(entity);
     }
 
     @Test
     @DataSet(value = "datasets/item/item/testItemDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/item/item/emptyItemDataSet.yml", orderBy = "id")
+    @ExpectedDataSet(value = "datasets/item/item/removeItemDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         Item entity = getItem();
 
@@ -96,29 +133,100 @@ class ItemDaoTest extends AbstractDaoTest {
     }
 
     private Category getCategory() {
-        Category parent = Category.builder()
+        return Category.builder()
                 .id(1L)
-                .label("parent")
-                .value("parent")
+                .label("category")
+                .value("category")
                 .build();
-        Category root = Category.builder()
+    }
+
+    private MetaData getMetaData() {
+        Brand brand = Brand.builder()
+                .id(1L)
+                .value("Hermes")
+                .label("Hermes")
+                .build();
+        Category category = getCategory();
+        ItemType itemType = ItemType.builder()
+                .id(1L)
+                .value("Clothes")
+                .label("Clothes")
+                .build();
+
+        Map<String, String> description = new HashMap<>(){{
+            put("desc1", "desc1");
+            put("desc2", "desc2");
+        }};
+
+        return MetaData.builder()
+                .id(1L)
+                .metadataUniqId("123")
+                .description(description)
+                .category(category)
+                .brand(brand)
+                .itemType(itemType)
+                .build();
+    }
+
+    private ArticularItem getArticularItem() {
+        Currency currency = Currency.builder()
+                .id(1L)
+                .label("USD")
+                .value("USD")
+                .build();
+        OptionGroup optionGroup = OptionGroup.builder()
+                .id(1L)
+                .value("Size")
+                .label("Size")
+                .build();
+        OptionItem optionItemL = OptionItem.builder()
+                .id(1L)
+                .value("L")
+                .label("L")
+                .build();
+        OptionItem optionItemM = OptionItem.builder()
                 .id(2L)
-                .label("root")
-                .value("root")
-                .parent(parent)
-                .build();
-        Category child = Category.builder()
-                .id(3L)
-                .label("child")
-                .value("child")
+                .value("M")
+                .label("M")
                 .build();
 
-        parent.setChildList(List.of(root));
-        root.setParent(parent);
-        root.setChildList(List.of(child));
-        child.setParent(root);
+        optionGroup.addOptionItem(optionItemL);
+        optionGroup.addOptionItem(optionItemM);
+        Price price1 = Price.builder()
+                .id(1L)
+                .amount(100)
+                .currency(currency)
+                .build();
+        Price price2 = Price.builder()
+                .id(2L)
+                .amount(20)
+                .currency(currency)
+                .build();
+        Discount discount = Discount.builder()
+                .id(1L)
+                .amount(10)
+                .charSequenceCode("abc")
+                .isActive(true)
+                .isPercent(false)
+                .currency(currency)
+                .build();
+        ArticularStatus articularStatus = ArticularStatus.builder()
+                .id(1L)
+                .label("NEW")
+                .value("NEW")
+                .build();
 
-        return child;
+        return ArticularItem.builder()
+                .id(1L)
+                .articularUniqId("123")
+                .productName("Mob 1")
+                .dateOfCreate(getLocalDateTime("2024-03-03 12:00:00"))
+                .optionItems(Set.of(optionItemL, optionItemM))
+                .status(articularStatus)
+                .fullPrice(price1)
+                .discount(discount)
+                .totalPrice(price2)
+                .build();
     }
 
     private void addReview(Item item) {
@@ -129,13 +237,14 @@ class ItemDaoTest extends AbstractDaoTest {
 
         Review review = Review.builder()
                 .id(1L)
+                .reviewUniqId("123")
                 .title("title")
                 .message("message")
                 .dateOfCreate(getLocalDateTime("2024-03-03 12:00:00"))
                 .rating(rating)
                 .build();
 
-//        item.addReview(review);
+        item.addReview(review);
     }
 
     private void addPosts(Item item) {
@@ -164,42 +273,20 @@ class ItemDaoTest extends AbstractDaoTest {
         parent.addChildPost(root);
         root.addChildPost(child);
 
-//        item.addPost(parent);
-//        item.addPost(root);
-//        item.addPost(child);
+        item.addPost(parent);
+        item.addPost(root);
+        item.addPost(child);
     }
 
     private Item getItem() {
-        Brand brand = Brand.builder()
-                .id(1L)
-                .value("Hermes")
-                .label("Hermes")
-                .build();
-        Category category = getCategory();
-        ArticularStatus articularStatus = ArticularStatus.builder()
-                .id(1L)
-                .value("NEW")
-                .label("NEW")
-                .build();
-        ItemType itemType = ItemType.builder()
-                .id(1L)
-                .value("Clothes")
-                .label("Clothes")
-                .build();
-
-        MetaData itemData = MetaData.builder()
-                .id(1L)
-                .category(category)
-                .brand(brand)
-                .itemType(itemType)
-                .build();
-        ArticularItem articularItem = ArticularItem.builder()
-
-                .build();
+        MetaData metaData = getMetaData();
+        ArticularItem articularItem = getArticularItem();
 
         Item item = Item.builder()
                 .id(1L)
-                .articularItem(articularItem)
+                .itemUniqId("123")
+                .metaData(metaData)
+                .articularItems(List.of(articularItem))
                 .build();
         addReview(item);
         addPosts(item);

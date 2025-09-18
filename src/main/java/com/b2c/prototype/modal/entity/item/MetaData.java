@@ -99,7 +99,7 @@ public class MetaData {
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Brand brand;
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
-    @JoinColumn(name = "item_data_id")
+    @JoinColumn(name = "meta_data_id")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @Builder.Default

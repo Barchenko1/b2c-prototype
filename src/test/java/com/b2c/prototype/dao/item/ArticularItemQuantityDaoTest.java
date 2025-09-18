@@ -5,11 +5,7 @@ import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
 import com.b2c.prototype.modal.entity.item.ArticularStatus;
-import com.b2c.prototype.modal.entity.item.Brand;
-import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.Discount;
-import com.b2c.prototype.modal.entity.item.ItemType;
-import com.b2c.prototype.modal.entity.item.MetaData;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.modal.entity.price.Currency;
@@ -20,9 +16,7 @@ import com.nimbusds.jose.util.Pair;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -100,60 +94,6 @@ class ArticularItemQuantityDaoTest extends AbstractDaoTest {
         assertEquals(List.of(entity), entityList);
     }
 
-    private Category getCategory() {
-        Category parent = Category.builder()
-                .id(1L)
-                .label("parent")
-                .value("parent")
-                .build();
-        Category root = Category.builder()
-                .id(2L)
-                .label("root")
-                .value("root")
-                .parent(parent)
-                .build();
-        Category child = Category.builder()
-                .id(3L)
-                .label("child")
-                .value("child")
-                .build();
-
-        parent.setChildList(List.of(root));
-        root.setParent(parent);
-        root.setChildList(List.of(child));
-        child.setParent(root);
-
-        return child;
-    }
-
-    private MetaData getMetaData() {
-        Brand brand = Brand.builder()
-                .id(1L)
-                .value("Hermes")
-                .label("Hermes")
-                .build();
-        Category category = getCategory();
-        ItemType itemType = ItemType.builder()
-                .id(1L)
-                .value("Clothes")
-                .label("Clothes")
-                .build();
-
-        Map<String, String> description = new HashMap<>(){{
-            put("desc1", "desc1");
-            put("desc2", "desc2");
-        }};
-
-        return MetaData.builder()
-                .id(1L)
-                .metadataUniqId("123")
-                .description(description)
-                .category(category)
-                .brand(brand)
-                .itemType(itemType)
-                .build();
-    }
-
     private ArticularItem getArticularItem() {
         Currency currency = Currency.builder()
                 .id(1L)
@@ -202,13 +142,10 @@ class ArticularItemQuantityDaoTest extends AbstractDaoTest {
                 .value("NEW")
                 .build();
 
-        MetaData metaData = getMetaData();
-
         return ArticularItem.builder()
                 .id(1L)
-                .articularId("123")
+                .articularUniqId("123")
                 .productName("Mob 1")
-                .metaData(metaData)
                 .dateOfCreate(getLocalDateTime("2024-03-03 12:00:00"))
                 .optionItems(Set.of(optionItemL, optionItemM))
                 .status(articularStatus)

@@ -27,7 +27,7 @@ public class ContactPhone {
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
     private String phoneNumber;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "country_phone_code_id")
     private CountryPhoneCode countryPhoneCode;
 }

@@ -1,6 +1,5 @@
 package com.b2c.prototype.manager.item.base;
 
-import com.b2c.prototype.dao.IEntityDao;
 import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.dto.common.SearchFieldUpdateEntityDto;
 import com.b2c.prototype.modal.dto.payload.item.ItemDataDto;
@@ -42,7 +41,7 @@ public class ItemDataManager implements IItemDataManager {
                     itemDataDto);
 //            metaData.setItemId(getUUID());
             metaData.getArticularItemSet().forEach(articularItem ->
-                    articularItem.setArticularId(getUUID()));
+                    articularItem.setArticularUniqId(getUUID()));
             session.merge(metaData);
         });
     }

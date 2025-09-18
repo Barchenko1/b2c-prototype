@@ -1,5 +1,6 @@
 package com.b2c.prototype.modal.entity.item;
 
+import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.modal.entity.post.Post;
 import com.b2c.prototype.modal.entity.review.Review;
 import jakarta.persistence.CascadeType;
@@ -34,28 +35,28 @@ import java.util.Set;
 @AllArgsConstructor
 @NamedQueries({
         @NamedQuery(
-                name = "Item.findItemByArticularId",
+                name = "Item.findItemByArticularUniqId",
                 query = "SELECT i FROM Item i " +
                         "LEFT JOIN FETCH i.reviews r " +
-                        "LEFT JOIN FETCH i.articularItem ai " +
-                        "WHERE ai.articularId = : articularId"
+                        "LEFT JOIN FETCH i.articularItems ai " +
+                        "WHERE ai.articularUniqId = : articularUniqId"
         ),
         @NamedQuery(
-                name = "Item.findItemWithReviewCommentsByArticularId",
+                name = "Item.findItemWithReviewCommentsByArticularUniqId",
                 query = "SELECT i FROM Item i " +
                         "LEFT JOIN FETCH i.reviews r " +
                         "LEFT JOIN FETCH r.comments c " +
                         "LEFT JOIN FETCH c.userDetails ud " +
                         "LEFT JOIN FETCH ud.contactInfo ci " +
-                        "LEFT JOIN FETCH i.articularItem ai " +
-                        "WHERE ai.articularId = : articularId AND c.parent IS NULL"
+                        "LEFT JOIN FETCH i.articularItems ai " +
+                        "WHERE ai.articularUniqId = : articularUniqId AND c.parent IS NULL"
         ),
         @NamedQuery(
-                name = "Item.findItemWithTopLevelPostsByArticularId",
+                name = "Item.findItemWithTopLevelPostsByArticularUniqId",
                 query = "SELECT DISTINCT i FROM Item i " +
                         "LEFT JOIN FETCH i.posts p " +
-                        "LEFT JOIN FETCH i.articularItem ai " +
-                        "WHERE ai.articularId = :articularId AND p.parent IS NULL"
+                        "LEFT JOIN FETCH i.articularItems ai " +
+                        "WHERE ai.articularUniqId = :articularUniqId AND p.parent IS NULL"
         )
 })
 public class Item {
@@ -63,9 +64,16 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
+    @Column(name = "item_uniq_id", unique = true, nullable = false)
+    private String itemUniqId;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "articular_item_id")
-    private ArticularItem articularItem;
+    @JoinColumn(name = "meta_data_id")
+    private MetaData metaData;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "item_id")
+    @Builder.Default
+    @EqualsAndHashCode.Exclude
+    private List<ArticularItem> articularItems = new ArrayList<>();
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "item_id")
     @Builder.Default
@@ -76,5 +84,21 @@ public class Item {
     @Builder.Default
     @EqualsAndHashCode.Exclude
     private Set<Post> posts = new HashSet<>();
+
+    public void addReview(Review review) {
+        this.reviews.add(review);
+    }
+
+    public void removeReview(Review review) {
+        this.reviews.remove(review);
+    }
+
+    public void addPost(Post post) {
+        this.posts.add(post);
+    }
+
+    public void removeReview(Post post) {
+        this.posts.remove(post);
+    }
 
 }

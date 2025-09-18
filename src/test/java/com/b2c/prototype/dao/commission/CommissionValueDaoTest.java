@@ -23,7 +23,10 @@ public class CommissionValueDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/commission/commission_value/emptyCommissionValueDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/commission/commission_value/emptyCommissionValueDataSet.yml", cleanBefore = true,
+    executeStatementsBefore = {
+            "TRUNCATE TABLE commission_value RESTART IDENTITY CASCADE",
+    })
     @ExpectedDataSet(value = "datasets/commission/commission_value/saveCommissionValueDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         CommissionValue entity = getCommissionValue();

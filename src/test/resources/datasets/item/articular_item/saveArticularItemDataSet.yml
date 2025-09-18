@@ -1,15 +1,3 @@
-brand:
-  - id: 1
-    value: "Hermes"
-    label: "Hermes"
-item_type:
-  - id: 1
-    value: "Clothes"
-    label: "Clothes"
-category:
-  - id: 1
-    label: "parent"
-    value: "parent"
 currency:
   - id: 1
     value: "USD"
@@ -43,17 +31,9 @@ articular_status:
   - id: 1
     value: "NEW"
     label: "NEW"
-metadata:
-  - id: 1
-    metadata_uniq_id: "123"
-    description: "{\"desc1\":\"desc1\",\"desc2\":\"desc2\"}"
-    brand_id: 1
-    category_id: 1
-    item_type_id: 1
 articular_item:
   - id: 1
-    meta_data_id: 1
-    articular_id: "123"
+    articular_uniq_id: "123"
     product_name: "Mob 1"
     date_of_create: "2024-03-03 12:00:00"
     discount_id: 1

@@ -46,16 +46,16 @@ articular_status:
   - id: 1
     value: "NEW"
     label: "NEW"
-item_data:
+metadata:
   - id: 1
-    item_id: 122
+    metadata_uniq_id: 122
     description: "{\"par1\":\"desc1\",\"par2\":\"desc2\",\"par3\":\"desc3\"}"
     brand_id: 1
     category_id: 2
     item_type_id: 1
 articular_item:
   - id: 1
-    articular_id: 1
+    articular_uniq_id: 1
     date_of_create: "2024-03-03 12:00:00"
     discount_id: 1
     fullprice_id: 1

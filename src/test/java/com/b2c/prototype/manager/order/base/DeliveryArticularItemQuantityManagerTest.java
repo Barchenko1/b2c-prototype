@@ -267,7 +267,7 @@ class DeliveryArticularItemQuantityManagerTest {
 //        MetaData itemData = prepareTestItemData();
         ArticularItem articularItem = ArticularItem.builder()
                 .optionItems(Set.of(optionItem))
-                .articularId("1")
+                .articularUniqId("1")
                 .build();
         return ArticularItemQuantity.builder()
                 .id(1L)

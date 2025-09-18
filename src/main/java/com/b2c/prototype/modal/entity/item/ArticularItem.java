@@ -60,7 +60,7 @@ import java.util.Set;
                 query = "SELECT DISTINCT ai FROM ArticularItem ai " +
                         "LEFT JOIN FETCH ai.discount d " +
                         "LEFT JOIN FETCH d.currency c " +
-                        "WHERE ai.articularId = :articularId"
+                        "WHERE ai.articularUniqId = :articularId"
         ),
         @NamedQuery(
                 name = "ArticularItem.findItemDataByArticularId",
@@ -73,7 +73,7 @@ import java.util.Set;
                         "LEFT JOIN FETCH ai.discount d " +
                         "LEFT JOIN FETCH d.currency " +
                         "LEFT JOIN FETCH d.articularItemList da " +
-                        "WHERE :articularId IN (SELECT a.articularId FROM id.articularItemSet a)"
+                        "WHERE :articularUniqId IN (SELECT a.articularUniqId FROM id.articularItemSet a)"
         ),
         @NamedQuery(
                 name = "ArticularItem.findByOptionItemValueAndGroup",
@@ -84,7 +84,7 @@ import java.util.Set;
                         "JOIN FETCH ai.totalPrice t " +
                         "JOIN FETCH og.optionItems " +
                         "JOIN FETCH oi.articularItems " +
-                        "WHERE ai.articularId = :articularId"
+                        "WHERE ai.articularUniqId = :articularId"
         ),
         @NamedQuery(
                 name = "ArticularItem.findByArticularIds",
@@ -97,7 +97,7 @@ import java.util.Set;
                         "LEFT JOIN FETCH tp.currency " +
                         "LEFT JOIN FETCH ai.discount d " +
                         "LEFT JOIN FETCH d.currency " +
-                        "WHERE ai.articularId IN :articularIds"
+                        "WHERE ai.articularUniqId IN :articularIds"
         )
 
 })
@@ -110,8 +110,8 @@ public class ArticularItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
-    @Column(name = "articular_id", unique = true, nullable = false)
-    private String articularId;
+    @Column(name = "articular_uniq_id", unique = true, nullable = false)
+    private String articularUniqId;
     private LocalDateTime dateOfCreate;
     private String productName;
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
@@ -134,8 +134,6 @@ public class ArticularItem {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<OptionItemCost> optionItemCosts = new HashSet<>();
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private MetaData metaData;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(nullable = false)
     private Price fullPrice;

@@ -1,0 +1,228 @@
+credit_card:
+  - id: 1
+    card_number: "4444-1111-2222-3333"
+    month_of_expire: "06"
+    year_of_expire: "28"
+    cvv: 818
+    owner_name: "name"
+    owner_second_name: "secondName"
+    is_active: true
+payment_method:
+  - id: 1
+    value: "Card"
+    label: "Card"
+  - id: 2
+    value: "Blik"
+    label: "Blik"
+payment_status:
+  - id: 1
+    value: "Done"
+    label: "Done"
+  - id: 2
+    value: "Approved"
+    label: "Approved"
+currency:
+  - id: 1
+    value: "USD"
+    label: "USD"
+  - id: 2
+    value: "EUR"
+    label: "EUR"
+discount:
+  - id: 1
+    amount: 5
+    char_sequence_code: "abc"
+    is_active: true
+    is_percent: false
+    currency_id: 1
+price:
+  - currency_id: 1
+    amount: 100
+  - amount: 95
+    currency_id: 2
+  - amount: 85
+    currency_id: 1
+  - currency_id: 2
+    amount: 80.75
+  - amount: 10
+    currency_id: 1
+  - amount: 9.5
+    currency_id: 2
+  - amount: 5
+    currency_id: 1
+  - amount: 4.75
+    currency_id: 2
+  - amount: 100
+    currency_id: 1
+  - amount: 20
+    currency_id: 1
+currency_coefficient:
+  - id: 1
+    currency_from_id: 1
+    currency_to_id: 2
+    coefficient: 0.95
+    date_of_create: "2024-03-03 12:00:00"
+multi_currency_price_info:
+  - id: 1
+    original_price_id: 1
+    currency_coefficient_id: 1
+    current_price_id: 2
+  - id: 2
+    original_price_id: 3
+    currency_coefficient_id: 1
+    current_price_id: 4
+  - id: 3
+    original_price_id: 5
+    currency_coefficient_id: 1
+    current_price_id: 6
+  - id: 4
+    original_price_id: 7
+    currency_coefficient_id: 1
+    current_price_id: 8
+payment:
+  - id: 1
+    payment_uniq_id: "123"
+    payment_time: "2024-03-03 12:00:00"
+    payment_method_id: 1
+    full_multi_currency_price_info_id: 1
+    total_multi_currency_price_info_id: 2
+    discount_multi_currency_price_info_id: 3
+    commission_price_info_id: 4
+    payment_status_id: 1
+    credit_card_id: 1
+    discount_id: 1
+country_phone_code:
+  - id: 1
+    value: "+11"
+    label: "+11"
+  - id: 2
+    value: "+22"
+    label: "+22"
+contact_phone:
+  - id: 1
+    phone_number: "111-111-111"
+    country_phone_code_id: 1
+  - id: 2
+    phone_number: "111-111-222"
+    country_phone_code_id: 1
+contact_info:
+  - id: 1
+    first_name: "Wolter"
+    last_name: "White"
+    email: "email"
+    contact_phone_id: 1
+    birthday_date: "2024-03-03 00:00:00"
+    is_contact_phone_verified: false
+    is_email_verified: false
+  - id: 2
+    first_name: "Wolter2"
+    last_name: "White2"
+    email: "email"
+    contact_phone_id: 2
+    birthday_date: "2024-03-03 00:00:00"
+    is_contact_phone_verified: false
+    is_email_verified: false
+order_status:
+  - id: 1
+    value: "Pending"
+    label: "Pending"
+  - id: 2
+    value: "Done"
+    label: "Done"
+delivery_type:
+  - id: 1
+    label: "Type"
+    value: "Type"
+country:
+  - id: 1
+    label: "USA"
+    value: "USA"
+address:
+  - id: 1
+    street: "street"
+    building_number: 1
+    flor_number: 9
+    apartment_number: 101
+    zip_code: 90000
+    country_id: 1
+delivery:
+  - id: 1
+    address_id: 1
+    delivery_type_id: 1
+customer_single_delivery_order:
+  - id: 1
+    order_uniq_id: "123"
+    contact_info_id: 1
+    beneficiary_id: 2
+    date_of_create: "2024-03-03 12:00:00"
+    delivery_id: 1
+    order_status_id: 1
+    payment_id: 1
+    note: "note"
+brand:
+  - id: 1
+    value: "Hermes"
+    label: "Hermes"
+item_type:
+  - id: 1
+    value: "Clothes"
+    label: "Clothes"
+category:
+  - id: 1
+    label: "parent"
+    value: "parent"
+  - id: 2
+    category_id: 1
+    label: "root"
+    value: "root"
+  - id: 3
+    category_id: 2
+    label: "child"
+    value: "child"
+option_group:
+  - id: 1
+    label: "Size"
+    value: "Size"
+option_item:
+  - id: 1
+    value: "L"
+    label: "L"
+    option_group_id: 1
+  - id: 2
+    value: "M"
+    label: "M"
+    option_group_id: 1
+articular_status:
+  - id: 1
+    value: "NEW"
+    label: "NEW"
+  - id: 2
+    value: "COMMON"
+    label: "COMMON"
+metadata:
+  - id: 1
+    metadata_uniq_id: "123"
+    description: "{\"desc1\":\"desc1\",\"desc2\":\"desc2\"}"
+    brand_id: 1
+    category_id: 3
+    item_type_id: 1
+articular_item:
+  - id: 1
+    meta_data_id: 1
+    articular_uniq_id: "123"
+    product_name: "Mob 1"
+    date_of_create: "2024-03-03 12:00:00"
+    discount_id: 1
+    full_price_id: 1
+    total_price_id: 2
+    status_id: 1
+articular_item_option_item:
+  - articular_item_id: 1
+    option_item_id: 1
+  - articular_item_id: 1
+    option_item_id: 2
+articular_item_quantity:
+  - id: 1
+    quantity: 1
+    articular_item_id: 1
+    customer_single_delivery_order_id: 1

@@ -2,11 +2,13 @@ package com.b2c.prototype.dao.store;
 
 import com.b2c.prototype.dao.AbstractDaoTest;
 import com.b2c.prototype.dao.IGeneralEntityDao;
+import com.b2c.prototype.modal.constant.CountType;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
+import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.item.MetaData;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.ArticularStatus;
@@ -15,6 +17,8 @@ import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
+import com.b2c.prototype.modal.entity.store.ArticularStock;
+import com.b2c.prototype.modal.entity.store.AvailabilityStatus;
 import com.b2c.prototype.modal.entity.store.Store;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
@@ -22,8 +26,11 @@ import com.nimbusds.jose.util.Pair;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import static com.b2c.prototype.util.Converter.getLocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,11 +42,21 @@ class StoreDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/store/store/emptyStoreDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/store/store/emptyStoreDataSet.yml", cleanBefore = true,
+            executeStatementsBefore = {
+                    "TRUNCATE TABLE address RESTART IDENTITY CASCADE",
+            })
     @ExpectedDataSet(value = "datasets/store/store/saveStoreDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         Store entity = getStore();
         entity.setId(0L);
+        entity.getAddress().setId(0);
+        entity.getArticularStocks().forEach(stock -> {
+            stock.setId(0);
+            stock.getArticularItemQuantities().forEach(itemQuantities -> {
+                itemQuantities.setId(0);
+            });
+        });
 
         generalEntityDao.persistEntity(entity);
     }
@@ -49,6 +66,7 @@ class StoreDaoTest extends AbstractDaoTest {
     @ExpectedDataSet(value = "datasets/store/store/updateStoreDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         Store entity = getStore();
+        entity.setStoreName("Update Store Name");
 
         generalEntityDao.mergeEntity(entity);
     }
@@ -97,13 +115,92 @@ class StoreDaoTest extends AbstractDaoTest {
 
         assertEquals(List.of(entity), entityList);
     }
-    
-    private Store getStore() {
-        ArticularItemQuantity articularItemQuantity = ArticularItemQuantity.builder()
+
+
+    private ArticularItem getArticularItem() {
+        Currency currency = Currency.builder()
+                .id(1L)
+                .label("USD")
+                .value("USD")
+                .build();
+        OptionGroup optionGroup = OptionGroup.builder()
+                .id(1L)
+                .value("Size")
+                .label("Size")
+                .build();
+        OptionItem optionItemL = OptionItem.builder()
+                .id(1L)
+                .value("L")
+                .label("L")
+                .build();
+        OptionItem optionItemM = OptionItem.builder()
+                .id(2L)
+                .value("M")
+                .label("M")
+                .build();
+
+        optionGroup.addOptionItem(optionItemL);
+        optionGroup.addOptionItem(optionItemM);
+        Price price1 = Price.builder()
+                .id(1L)
+                .amount(100)
+                .currency(currency)
+                .build();
+        Price price2 = Price.builder()
+                .id(2L)
+                .amount(20)
+                .currency(currency)
+                .build();
+        Discount discount = Discount.builder()
+                .id(1L)
+                .amount(5)
+                .charSequenceCode("abc")
+                .isActive(true)
+                .isPercent(false)
+                .currency(currency)
+                .build();
+        ArticularStatus articularStatus = ArticularStatus.builder()
+                .id(1L)
+                .label("NEW")
+                .value("NEW")
+                .build();
+
+        return ArticularItem.builder()
+                .id(1L)
+                .articularUniqId("123")
+                .productName("Mob 1")
+                .dateOfCreate(getLocalDateTime("2024-03-03 12:00:00"))
+                .optionItems(Set.of(optionItemL, optionItemM))
+                .status(articularStatus)
+                .fullPrice(price1)
+                .discount(discount)
+                .totalPrice(price2)
+                .build();
+    }
+
+    private ArticularItemQuantity getArticularItemQuantity() {
+        return ArticularItemQuantity.builder()
                 .id(1L)
                 .articularItem(getArticularItem())
                 .quantity(1)
                 .build();
+    }
+
+    private ArticularStock getArticularStock() {
+        AvailabilityStatus availabilityStatus = AvailabilityStatus.builder()
+                .id(1L)
+                .value("Available")
+                .label("Available")
+                .build();
+        return ArticularStock.builder()
+                .id(1L)
+                .articularItemQuantities(List.of(getArticularItemQuantity()))
+                .availabilityState(availabilityStatus)
+                .countType(CountType.LIMITED)
+                .build();
+    }
+
+    private Store getStore() {
         Country country = Country.builder()
                 .id(1L)
                 .label("USA")
@@ -121,7 +218,7 @@ class StoreDaoTest extends AbstractDaoTest {
                 .build();
         return Store.builder()
                 .id(1L)
-//                .articularStocks(List.of(articularItemQuantity))
+                .articularStocks(List.of(getArticularStock()))
                 .address(address)
                 .storeId("123")
                 .storeName("Store")
@@ -129,85 +226,4 @@ class StoreDaoTest extends AbstractDaoTest {
                 .build();
     }
 
-    private Category prepareCategories() {
-        Category parent = Category.builder()
-                .id(1L)
-                .label("parent")
-                .value("parent")
-                .build();
-        Category root = Category.builder()
-                .id(2L)
-                .label("root")
-                .value("root")
-                .parent(parent)
-                .build();
-        Category child = Category.builder()
-                .id(3L)
-                .label("child")
-                .value("child")
-                .build();
-
-        parent.setChildList(List.of(root));
-        root.setParent(parent);
-        root.setChildList(List.of(child));
-        child.setParent(root);
-
-        return child;
-    }
-
-    private ArticularItem getArticularItem() {
-        Brand brand = Brand.builder()
-                .id(1L)
-                .value("Hermes")
-                .label("Hermes")
-                .build();
-        Category category = prepareCategories();
-        Currency currency = Currency.builder()
-                .id(1L)
-                .label("USD")
-                .value("USD")
-                .build();
-        ArticularStatus articularStatus = ArticularStatus.builder()
-                .id(1L)
-                .value("NEW")
-                .label("NEW")
-                .build();
-        ItemType itemType = ItemType.builder()
-                .id(1L)
-                .value("Clothes")
-                .label("Clothes")
-                .build();
-        OptionItem optionItem = OptionItem.builder()
-                .id(1L)
-                .value("L")
-                .label("L")
-                .build();
-        OptionGroup optionGroup = OptionGroup.builder()
-                .id(1L)
-                .value("Size")
-                .label("Size")
-                .build();
-        optionGroup.addOptionItem(optionItem);
-        Price price = Price.builder()
-                .id(1L)
-                .amount(100)
-                .currency(currency)
-                .build();
-
-        MetaData metaData = MetaData.builder()
-                .id(1L)
-                .category(category)
-                .brand(brand)
-                .itemType(itemType)
-                .build();
-        ArticularItem articularItem = ArticularItem.builder()
-                .id(1L)
-                .articularId("1")
-                .dateOfCreate(getLocalDateTime("2024-03-03 12:00:00"))
-                .articularId("1")
-                .build();
-        articularItem.addOptionItem(optionItem);
-
-        return articularItem;
-    }
 }

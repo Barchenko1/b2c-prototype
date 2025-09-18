@@ -31,7 +31,11 @@ class PaymentDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/payment/payment/emptyPaymentDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/payment/payment/emptyPaymentDataSet.yml", cleanBefore = true,
+            executeStatementsBefore = {
+                    "TRUNCATE TABLE contact_phone RESTART IDENTITY CASCADE",
+                    "TRUNCATE TABLE credit_card RESTART IDENTITY CASCADE"
+            })
     @ExpectedDataSet(value = "datasets/payment/payment/savePaymentDataSet.yml", orderBy = "id", ignoreCols = {"id", "amount", "currency_id", "current_price_id", "original_price_id", "commission_price_info_id", "discount_multi_currency_price_info_id", "full_multi_currency_price_info_id", "total_multi_currency_price_info_id"})
     public void persistEntity_success() {
         Payment entity = getPayment();

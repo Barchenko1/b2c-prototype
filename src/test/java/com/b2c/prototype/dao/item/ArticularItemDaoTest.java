@@ -37,23 +37,18 @@ class ArticularItemDaoTest extends AbstractDaoTest {
     @Test
     @DataSet(value = "datasets/item/articular_item/emptyArticularItemDataSet.yml", cleanBefore = true,
             executeStatementsBefore = {
+                    "TRUNCATE TABLE price RESTART IDENTITY CASCADE",
                     "TRUNCATE TABLE brand RESTART IDENTITY CASCADE",
                     "TRUNCATE TABLE item_type RESTART IDENTITY CASCADE",
                     "TRUNCATE TABLE category RESTART IDENTITY CASCADE",
+                    "TRUNCATE TABLE discount RESTART IDENTITY CASCADE",
+                    "TRUNCATE TABLE option_group RESTART IDENTITY CASCADE",
+                    "TRUNCATE TABLE articular_status RESTART IDENTITY CASCADE",
             })
     @ExpectedDataSet(value = "datasets/item/articular_item/saveArticularItemDataSet.yml", orderBy = "id", ignoreCols = {"label", "value"})
     public void persistEntity_success() {
         ArticularItem entity = getArticularItem();
         entity.setId(0);
-        entity.getMetaData().setId(0);
-        entity.getMetaData().getBrand().setId(0);
-        entity.getMetaData().getItemType().setId(0);
-        Category category = Category.builder()
-                .id(0L)
-                .value("parent")
-                .label("parent")
-                .build();
-        entity.getMetaData().setCategory(category);
 
         entity.getStatus().setId(0);
 
@@ -227,13 +222,10 @@ class ArticularItemDaoTest extends AbstractDaoTest {
                 .value("NEW")
                 .build();
 
-        MetaData metaData = getMetaData();
-
         return ArticularItem.builder()
                 .id(1L)
-                .articularId("123")
+                .articularUniqId("123")
                 .productName("Mob 1")
-                .metaData(metaData)
                 .dateOfCreate(getLocalDateTime("2024-03-03 12:00:00"))
                 .optionItems(Set.of(optionItemL, optionItemM))
                 .status(articularStatus)

@@ -1,0 +1,51 @@
+brand:
+  - id: 1
+    value: "Hermes"
+    label: "Hermes"
+item_type:
+  - id: 1
+    value: "Clothes"
+    label: "Clothes"
+category:
+  - id: 1
+    label: "category"
+    value: "category"
+currency:
+  - id: 1
+    value: "USD"
+    label: "USD"
+price: []
+discount: []
+option_group:
+  - id: 1
+    label: "Size"
+    value: "Size"
+option_item:
+  - id: 1
+    value: "L"
+    label: "L"
+    option_group_id: 1
+  - id: 2
+    value: "M"
+    label: "M"
+    option_group_id: 1
+articular_status:
+  - id: 1
+    value: "NEW"
+    label: "NEW"
+metadata: []
+articular_item: []
+post: []
+rating:
+  - id: 1
+    value: 1
+  - id: 2
+    value: 2
+  - id: 3
+    value: 3
+  - id: 4
+    value: 4
+  - id: 5
+    value: 5
+review: []
+item: []

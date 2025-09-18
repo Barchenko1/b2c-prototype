@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static com.b2c.prototype.util.Converter.getDate;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ContactInfoDaoTest extends AbstractDaoTest {
@@ -126,12 +127,6 @@ class ContactInfoDaoTest extends AbstractDaoTest {
                 .isEmailVerified(false)
                 .isContactPhoneVerified(false)
                 .build();
-    }
-
-    private Date getDate(String date) {
-        ZoneId zone = ZoneId.systemDefault();
-        return Date.from(
-                LocalDate.parse(date).atStartOfDay(zone).toInstant());
     }
 
 }

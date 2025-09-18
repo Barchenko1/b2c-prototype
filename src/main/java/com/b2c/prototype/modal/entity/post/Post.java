@@ -67,7 +67,7 @@ public class Post {
     private String message;
     private String authorEmail;
     private String authorName;
-    @Column(name = "postUniqId", unique = true, nullable = false)
+    @Column(name = "post_uniq_id", unique = true, nullable = false)
     private String postUniqId;
     private LocalDateTime dateOfCreate;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)

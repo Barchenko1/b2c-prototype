@@ -48,7 +48,7 @@ public class CustomerMultiDeliveryOrder {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private ContactInfo beneficiary;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "order_articular_item_quantity_id")
+    @JoinColumn(name = "delivery_articular_item_quantity_id")
     @Builder.Default
     @EqualsAndHashCode.Exclude
     private List<DeliveryArticularItemQuantity> deliveryArticularItemQuantities = new ArrayList<>();

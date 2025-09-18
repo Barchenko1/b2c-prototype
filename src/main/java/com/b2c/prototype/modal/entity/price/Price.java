@@ -26,6 +26,6 @@ public class Price {
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
     private double amount;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Currency currency;
 }

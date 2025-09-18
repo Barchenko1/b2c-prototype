@@ -49,10 +49,9 @@ public class Payment {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(nullable = false, name = "payment_status_id")
     private PaymentStatus paymentStatus;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinColumn(name = "credit_card_id")
     private CreditCard creditCard;
-    @ManyToOne(fetch = FetchType.LAZY, cascade =  CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Discount discount;
 }

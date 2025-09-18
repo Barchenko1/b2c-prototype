@@ -26,6 +26,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +42,7 @@ import java.util.List;
                 query = "SELECT c FROM CustomerSingleDeliveryOrder c " +
                         "LEFT JOIN FETCH c.payment p " +
                         "LEFT JOIN FETCH p.creditCard " +
-                        "WHERE c.orderId = :orderId"
+                        "WHERE c.orderUniqId = :orderUniqId"
         ),
         @NamedQuery(
                 name = "CustomerSingleDeliveryOrder.all",
@@ -55,28 +56,27 @@ public class CustomerSingleDeliveryOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
-    @Column(name = "order_id", unique = true, nullable = false)
-    private String orderId;
-    private long dateOfCreate;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "user_details_id")
-    private UserDetails userDetails;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @Column(name = "order_uniq_id", unique = true, nullable = false)
+    private String orderUniqId;
+    private LocalDateTime dateOfCreate;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "contact_info_id")
+    private ContactInfo contactInfo;
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_status_id")
     private OrderStatus status;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private ContactInfo contactInfo;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "beneficiary_id")
     private ContactInfo beneficiary;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "order_articular_item_quantity_price_id")
+    @JoinColumn(name = "customer_single_delivery_order_id")
     @Builder.Default
     @EqualsAndHashCode.Exclude
     private List<ArticularItemQuantity> articularItemQuantities = new ArrayList<>();
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "payment_id", nullable = false)
     private Payment payment;
     private String note;

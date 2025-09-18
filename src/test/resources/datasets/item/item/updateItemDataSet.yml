@@ -14,6 +14,9 @@ price:
   - id: 1
     amount: 100
     currency_id: 1
+  - id: 2
+    amount: 20
+    currency_id: 1
 discount:
   - id: 1
     amount: 10
@@ -36,34 +39,8 @@ option_item:
     option_group_id: 1
 category:
   - id: 1
-    label: "parent"
-    value: "parent"
-  - id: 2
-    category_id: 1
-    label: "root"
-    value: "root"
-  - id: 3
-    category_id: 2
-    label: "child"
-    value: "child"
-post:
-  - id: 1
-    title: "parent"
-    message: "parent"
-    postId: "1"
-    date_of_create: "2024-03-03 12:00:00"
-  - id: 2
-    post_id: 1
-    title: "root"
-    message: "root"
-    postId: "2"
-    date_of_create: "2024-03-03 12:00:00"
-  - id: 3
-    post_id: 2
-    title: "child"
-    message: "child"
-    postId: "3"
-    date_of_create: "2024-03-03 12:00:00"
+    label: "category"
+    value: "category"
 rating:
   - id: 1
     value: 1
@@ -75,21 +52,57 @@ rating:
     value: 4
   - id: 5
     value: 5
-review:
+metadata:
   - id: 1
-    title: "title"
-    message: "message"
-    unique_id: 123
-    date_of_create: "2024-03-03 12:00:00"
-    rating_id: 5
-item_data:
-  - id: 1
+    metadata_uniq_id: 123
+    description: "{\"desc1\":\"desc1\",\"desc2\":\"desc2\"}"
     brand_id: 1
-    item_id: 123
-    category_id: 3
+    category_id: 1
     item_type_id: 1
+articular_status:
+  - id: 1
+    value: "NEW"
+    label: "NEW"
+item:
+  - id: 1
+    meta_data_id: 1
+    item_uniq_id: "Update 123"
 articular_item:
   - id: 1
-    articular_id: 1
+    articular_uniq_id: "123"
+    product_name: "Mob 1"
     date_of_create: "2024-03-03 12:00:00"
-item: []
+    discount_id: 1
+    full_price_id: 1
+    total_price_id: 2
+    status_id: 1
+    item_id: 1
+post:
+  - id: 1
+    title: "parent"
+    message: "parent"
+    post_uniq_id: "1"
+    date_of_create: "2024-03-03 12:00:00"
+    item_id: 1
+  - id: 2
+    post_id: 1
+    title: "root"
+    message: "root"
+    post_uniq_id: "2"
+    date_of_create: "2024-03-03 12:00:00"
+    item_id: 1
+  - id: 3
+    post_id: 2
+    title: "child"
+    message: "child"
+    post_uniq_id: "3"
+    date_of_create: "2024-03-03 12:00:00"
+    item_id: 1
+review:
+  - id: 1
+    review_uniq_id: 123
+    title: "title"
+    message: "message"
+    date_of_create: "2024-03-03 12:00:00"
+    rating_id: 5
+    item_id: 1

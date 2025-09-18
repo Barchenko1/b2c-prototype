@@ -26,8 +26,11 @@ public class MinMaxCommissionDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/commission/min_max_commission/emptyMinMaxCommissionDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/commission/min_max_commission/saveMinMaxCommissionDataSet.yml", orderBy = "amount", ignoreCols = {"id", "min_commission_id", "max_commission_id"})
+    @DataSet(value = "datasets/commission/min_max_commission/emptyMinMaxCommissionDataSet.yml", cleanBefore = true,
+    executeStatementsBefore = {
+            "TRUNCATE TABLE min_max_commission RESTART IDENTITY CASCADE",
+    })
+    @ExpectedDataSet(value = "datasets/commission/min_max_commission/saveMinMaxCommissionDataSet.yml", orderBy = "amount", ignoreCols = {"id", "min_commission_id", "max_commission_id", "change_commission_price_id"})
     public void persistEntity_success() {
         MinMaxCommission entity = getMinMaxCommission();
         entity.setId(0);

@@ -24,7 +24,12 @@ class DeliveryDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/delivery/delivery/emptyDeliveryDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/delivery/delivery/emptyDeliveryDataSet.yml", cleanBefore = true,
+            executeStatementsBefore = {
+                    "TRUNCATE TABLE contact_phone RESTART IDENTITY CASCADE",
+                    "TRUNCATE TABLE address RESTART IDENTITY CASCADE",
+                    "TRUNCATE TABLE credit_card RESTART IDENTITY CASCADE"
+    })
     @ExpectedDataSet(value = "datasets/delivery/delivery/saveDeliveryDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         Delivery entity = getDelivery();

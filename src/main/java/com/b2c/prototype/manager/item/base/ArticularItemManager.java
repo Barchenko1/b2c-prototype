@@ -62,7 +62,7 @@ public class ArticularItemManager implements IArticularItemManager {
                     "ArticularItem.findItemDataByArticularId",
                     parameterFactory.createStringParameter(ARTICULAR_ID, articularId));
             metaData.getArticularItemSet().stream()
-                    .filter(ai -> ai.getArticularId().equals(articularId))
+                    .filter(ai -> ai.getArticularUniqId().equals(articularId))
                     .findFirst()
                     .ifPresent(articularItem -> {
                         Discount discount = articularItem.getDiscount();
@@ -71,7 +71,7 @@ public class ArticularItemManager implements IArticularItemManager {
                         session.remove(articularItem);
                         if (discount != null &&
                             discount.getArticularItemList().size() == 1 &&
-                            discount.getArticularItemList().get(0).getArticularId().equals(articularId)) {
+                            discount.getArticularItemList().get(0).getArticularUniqId().equals(articularId)) {
                             session.remove(discount);
                         }
                     });

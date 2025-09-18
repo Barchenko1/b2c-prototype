@@ -66,7 +66,7 @@ metadata:
 articular_item:
   - id: 1
     meta_data_id: 1
-    articular_id: "123"
+    articular_uniq_id: "123"
     product_name: "Mob 1"
     date_of_create: "2024-03-03 12:00:00"
     discount_id: 1

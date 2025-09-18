@@ -71,9 +71,9 @@ public class CustomerSingleDeliveryOrderManager implements ICustomerSingleDelive
             ContactInfo beneficiary = transformationFunctionService.getEntity((Session) session, ContactInfo.class, customerSingleDeliveryOrderDto.getBeneficiary());
 
             CustomerSingleDeliveryOrder customerSingleDeliveryOrder = CustomerSingleDeliveryOrder.builder()
-                    .orderId(getUUID())
-                    .dateOfCreate(getCurrentTimeMillis())
-                    .userDetails(userDetails)
+                    .orderUniqId(getUUID())
+//                    .dateOfCreate(getLocalDateTime("2024-03-03 12:00:00"))
+//                    .userDetails(userDetails)
                     .status(orderStatus)
                     .contactInfo(contactInfo)
                     .beneficiary(beneficiary)

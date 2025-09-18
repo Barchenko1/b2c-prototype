@@ -183,7 +183,7 @@ class MetaDataManagerTest {
 
     private ArticularItem getItemDataOption() {
         return ArticularItem.builder()
-                .articularId("articularIdValue")
+                .articularUniqId("articularIdValue")
                 .build();
     }
 }

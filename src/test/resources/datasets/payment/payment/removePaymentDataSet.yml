@@ -1,12 +1,4 @@
-credit_card:
-  - id: 1
-    card_number: "4444-1111-2222-3333"
-    month_of_expire: "06"
-    year_of_expire: "28"
-    cvv: 818
-    owner_name: "name"
-    owner_second_name: "secondName"
-    is_active: true
+credit_card: []
 payment_method:
   - id: 1
     value: "Card"

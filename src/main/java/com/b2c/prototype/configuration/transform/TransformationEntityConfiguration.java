@@ -921,7 +921,7 @@ public class TransformationEntityConfiguration {
                     new Parameter("itemId", itemId));
             Map<String, ArticularItem> existingArticularItemMap = existingMetaData.getArticularItemSet().stream()
                     .collect(Collectors.toMap(
-                            ArticularItem::getArticularId,
+                            ArticularItem::getArticularUniqId,
                             articularItem -> articularItem
                     ));
             Set<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoSet = getOptionGroupOptionItemSetDtoSet(articularItemDtoSet);
@@ -937,7 +937,7 @@ public class TransformationEntityConfiguration {
                     existingArticularItemMap);
             List<ArticularItem> nonUpdatedArticularList = existingMetaData.getArticularItemSet().stream()
                     .filter(existingItem -> articularItemSet.stream()
-                            .noneMatch(newItem -> newItem.getArticularId().equals(existingItem.getArticularId())))
+                            .noneMatch(newItem -> newItem.getArticularUniqId().equals(existingItem.getArticularUniqId())))
                     .toList();
             Set<ArticularItem> mergedArticularItemSet = Stream.concat(articularItemSet.stream(), nonUpdatedArticularList.stream())
                             .collect(Collectors.toSet());
@@ -965,7 +965,7 @@ public class TransformationEntityConfiguration {
                     new Parameter("itemId", itemId));
             Map<String, ArticularItem> existingArticularItemMap = existingMetaData.getArticularItemSet().stream()
                     .collect(Collectors.toMap(
-                            ArticularItem::getArticularId,
+                            ArticularItem::getArticularUniqId,
                             articularItem -> articularItem
                     ));
 
@@ -1026,7 +1026,7 @@ public class TransformationEntityConfiguration {
                     long discountId = Optional.ofNullable(existingArticularItem).map(item -> item.getDiscount().getId()).orElse(0L);
                     ArticularItem articularItem = ArticularItem.builder()
                             .id(articularId)
-                            .articularId(articularItemDto.getArticularId() != null ? articularItemDto.getArticularId() : getUUID())
+                            .articularUniqId(articularItemDto.getArticularId() != null ? articularItemDto.getArticularId() : getUUID())
 //                            .dateOfCreate(getCurrentTimeMillis())
                             .productName(articularItemDto.getProductName())
                             .status(articularStatus)
@@ -1041,7 +1041,7 @@ public class TransformationEntityConfiguration {
                             )
                             .forEach(optionItem -> {
                                 optionItem.getArticularItems().stream()
-                                        .filter(ai -> ai.getArticularId().equals(articularItem.getArticularId()))
+                                        .filter(ai -> ai.getArticularUniqId().equals(articularItem.getArticularUniqId()))
                                         .collect(Collectors.toSet())
                                         .forEach(optionItem::removeArticularItem);
 
@@ -1199,7 +1199,7 @@ public class TransformationEntityConfiguration {
                     .currency(discount.getCurrency() != null ? discount.getCurrency().getValue() : null)
                     .articularIdSet(
                             itemDataOptionList.stream()
-                                    .map(ArticularItem::getArticularId)
+                                    .map(ArticularItem::getArticularUniqId)
                                     .collect(Collectors.toSet())
                     )
                     .build();
@@ -1213,7 +1213,7 @@ public class TransformationEntityConfiguration {
                 .map(entry -> {
                     Discount discount = entry.getKey();
                     Set<String> articularIdSet = entry.getValue().stream()
-                            .map(ArticularItem::getArticularId)
+                            .map(ArticularItem::getArticularUniqId)
                             .collect(Collectors.toSet());
 
                     return DiscountDto.builder()
@@ -1252,7 +1252,7 @@ public class TransformationEntityConfiguration {
 
     private Function<ArticularItem, ResponseArticularItemDto> mapArticularItemToResponseArticularDto() {
         return articularItem -> ResponseArticularItemDto.builder()
-                .articularId(articularItem.getArticularId())
+                .articularId(articularItem.getArticularUniqId())
                 .productName(articularItem.getProductName())
                 .fullPrice(mapPriceToPriceDtoFunction().apply(articularItem.getFullPrice()))
                 .totalPrice(mapPriceToPriceDtoFunction().apply(articularItem.getTotalPrice()))

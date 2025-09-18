@@ -105,22 +105,22 @@ articular_status:
   - id: 2
     value: "COMMON"
     label: "COMMON"
-item_data:
+metadata:
   - id: 1
-    item_id: 122
+    metadata_uniq_id: 122
     description: "{\"par1\":\"desc1\",\"par2\":\"desc2\",\"par3\":\"desc3\"}"
     brand_id: 1
     category_id: 2
     item_type_id: 1
   - id: 2
-    item_id: 123
+    metadata_uniq_id: 123
     description: "{\"Update par1\":\"Update desc1\",\"Update par2\":\"Update desc2\",\"Update par3\":\"Update desc3\"}"
     brand_id: 2
     category_id: 4
     item_type_id: 2
 articular_item:
   - id: 1
-    articular_id: 1
+    articular_uniq_id: 1
     date_of_create: "2024-03-03 12:00:00"
     discount_id: 1
     fullprice_id: 1
@@ -129,7 +129,7 @@ articular_item:
     status_id: 1
     productname: "Mob 1"
   - id: 2
-    articular_id: 2
+    articular_uniq_id: 2
     date_of_create: "2024-03-03 12:00:00"
     discount_id: 2
     fullprice_id: 2
@@ -138,7 +138,7 @@ articular_item:
     status_id: 2
     productname: "Update Laptop 1"
   - id: 3
-    articular_id: 3
+    articular_uniq_id: 3
     date_of_create: "2024-03-03 12:00:00"
     discount_id: 3
     fullprice_id: 4

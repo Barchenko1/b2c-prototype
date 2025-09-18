@@ -218,7 +218,7 @@ class ArticularItemManagerTest {
                 .optionGroup(optionGroup)
                 .build();
         return ArticularItem.builder()
-                .articularId("articularId")
+                .articularUniqId("articularId")
                 .dateOfCreate(getLocalDateTime("2024-03-03 12:00:00"))
                 .fullPrice(getPrice(10))
                 .totalPrice(getPrice(8))
@@ -261,7 +261,7 @@ class ArticularItemManagerTest {
                 .optionGroup(optionGroup)
                 .build();
         return ArticularItem.builder()
-                .articularId("articularId")
+                .articularUniqId("articularId")
                 .dateOfCreate(getLocalDateTime("2024-03-03 12:00:00"))
                 .fullPrice(getPrice(10))
                 .totalPrice(getPrice(8))

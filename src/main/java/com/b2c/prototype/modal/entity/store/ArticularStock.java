@@ -18,7 +18,9 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,11 +36,13 @@ public class ArticularStock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "articular_item_quantity_id")
+    @JoinColumn(name = "articular_stock_id")
     @Builder.Default
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<ArticularItemQuantity> articularItemQuantities = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "articular_status_id")
+    @JoinColumn(name = "availability_status_id")
     private AvailabilityStatus availabilityState;
     @Enumerated(EnumType.STRING)
     @Column(name = "count_type", nullable = false)

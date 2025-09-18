@@ -30,25 +30,25 @@ discount:
     currency_id: 1
 articular_item:
   - id: 1
-    articular_id: 123
+    articular_uniq_id: 123
     date_of_create: "2024-03-03 12:00:00"
     discount_id: 1
     fullprice_id: 1
     totalprice_id: 1
   - id: 2
-    articular_id: 111
+    articular_uniq_id: 111
     date_of_create: "2024-03-03 12:00:00"
     discount_id: 2
     fullprice_id: 2
     totalprice_id: 2
   - id: 3
-    articular_id: 122
+    articular_uniq_id: 122
     date_of_create: "2024-03-03 12:00:00"
     discount_id: 2
     fullprice_id: 3
     totalprice_id: 3
   - id: 4
-    articular_id: noDiscount
+    articular_uniq_id: noDiscount
     date_of_create: "2024-03-03 12:00:00"
     fullprice_id: 4
     totalprice_id: 4

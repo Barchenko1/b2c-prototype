@@ -42,15 +42,15 @@ category:
     category_id: 2
     label: "child"
     value: "child"
-item_data:
+metadata:
   - id: 1
-    item_id: 123
+    metadata_uniq_id: 123
     brand_id: 1
     category_id: 3
     item_type_id: 1
 articular_item:
   - id: 1
-    articular_id: 1
+    articular_uniq_id: 1
     date_of_create: "2024-03-03 12:00:00"
 articular_item_quantity:
   - id: 1

@@ -56,12 +56,37 @@
         </query>
     </named-query>
     <named-query name="ArticularItem.findById">
-        <query>SELECT ai FROM ArticularItem ai
-            LEFT JOIN FETCH ai.metaData md
-            LEFT JOIN FETCH md.category
-            LEFT JOIN FETCH md.itemType
-            LEFT JOIN FETCH md.brand
-            LEFT JOIN FETCH md.articularItemSet mds
+        <query>SELECT e FROM ArticularItem e
+
+            LEFT JOIN FETCH e.optionItems oi
+            LEFT JOIN FETCH oi.optionGroup
+
+            LEFT JOIN FETCH e.fullPrice fp
+            LEFT JOIN FETCH fp.currency
+            LEFT JOIN FETCH e.totalPrice tp
+            LEFT JOIN FETCH tp.currency
+
+            LEFT JOIN FETCH e.status
+            LEFT JOIN FETCH e.discount d
+            LEFT JOIN FETCH d.currency
+            LEFT JOIN FETCH d.articularItemList aid
+            WHERE e.id = :id
+        </query>
+    </named-query>
+    <named-query name="Item.findById">
+        <query>SELECT e FROM Item e
+
+            LEFT JOIN FETCH e.articularItems ai
+
+            LEFT JOIN FETCH e.metaData md
+            LEFT JOIN FETCH md.category c
+            LEFT JOIN FETCH md.itemType it
+            LEFT JOIN FETCH md.brand b
+
+            LEFT JOIN FETCH e.posts p
+            LEFT JOIN FETCH e.reviews re
+            LEFT JOIN FETCH re.status s
+            LEFT JOIN FETCH re.rating rr
 
             LEFT JOIN FETCH ai.optionItems oi
             LEFT JOIN FETCH oi.optionGroup
@@ -74,19 +99,14 @@
             LEFT JOIN FETCH ai.status
             LEFT JOIN FETCH ai.discount d
             LEFT JOIN FETCH d.currency
-            LEFT JOIN FETCH d.articularItemList aid
-            WHERE ai.id = :id
+            WHERE e.id = :id
         </query>
     </named-query>
+
     <named-query name="ArticularItemQuantity.findById">
         <query>SELECT e
             FROM ArticularItemQuantity e
             LEFT JOIN FETCH e.articularItem ai
-            LEFT JOIN FETCH ai.metaData md
-            LEFT JOIN FETCH md.category
-            LEFT JOIN FETCH md.itemType
-            LEFT JOIN FETCH md.brand
-            LEFT JOIN FETCH md.articularItemSet mds
 
             LEFT JOIN FETCH ai.optionItems oi
             LEFT JOIN FETCH oi.optionGroup
@@ -103,6 +123,64 @@
             WHERE e.id = :id
         </query>
     </named-query>
+    <named-query name="ArticularStock.findById">
+        <query>SELECT e FROM ArticularStock e
+
+            LEFT JOIN FETCH e.articularItemQuantities aiq
+
+            LEFT JOIN FETCH e.availabilityState st
+
+            LEFT JOIN FETCH aiq.articularItem ai
+
+            LEFT JOIN FETCH ai.optionItems oi
+            LEFT JOIN FETCH oi.optionGroup
+
+            LEFT JOIN FETCH ai.fullPrice fp
+            LEFT JOIN FETCH fp.currency
+            LEFT JOIN FETCH ai.totalPrice tp
+            LEFT JOIN FETCH tp.currency
+
+            LEFT JOIN FETCH ai.status
+            LEFT JOIN FETCH ai.discount d
+            LEFT JOIN FETCH d.currency
+            WHERE e.id = :id
+        </query>
+    </named-query>
+
+    <named-query name="Store.findById">
+        <query>SELECT e from Store e
+
+            LEFT JOIN FETCH e.address a
+            LEFT JOIN FETCH a.country c
+
+            LEFT JOIN FETCH e.articularStocks s
+
+<!--            LEFT JOIN FETCH s.articularItemQuantities aiq-->
+
+<!--            LEFT JOIN FETCH s.availabilityState st-->
+
+<!--            LEFT JOIN FETCH aiq.articularItem ai-->
+<!--            LEFT JOIN FETCH ai.metaData md-->
+<!--            LEFT JOIN FETCH md.category-->
+<!--            LEFT JOIN FETCH md.itemType-->
+<!--            LEFT JOIN FETCH md.brand-->
+<!--            LEFT JOIN FETCH md.articularItemSet mds-->
+
+<!--            LEFT JOIN FETCH ai.optionItems oi-->
+<!--            LEFT JOIN FETCH oi.optionGroup-->
+
+<!--            LEFT JOIN FETCH ai.fullPrice fp-->
+<!--            LEFT JOIN FETCH fp.currency-->
+<!--            LEFT JOIN FETCH ai.totalPrice tp-->
+<!--            LEFT JOIN FETCH tp.currency-->
+
+<!--            LEFT JOIN FETCH ai.status-->
+<!--            LEFT JOIN FETCH ai.discount d-->
+<!--            LEFT JOIN FETCH d.currency-->
+            WHERE e.id = :id
+        </query>
+    </named-query>
+
 
     <named-query name="OptionGroup.findById">
         <query>SELECT e FROM OptionGroup e
@@ -219,6 +297,147 @@
 
             WHERE p.id = :id</query>
     </named-query>
+    <named-query name="CustomerSingleDeliveryOrder.findById">
+        <query>SELECT o
+            FROM CustomerSingleDeliveryOrder o
+            LEFT JOIN FETCH o.contactInfo ci
+            LEFT JOIN FETCH o.beneficiary ben
+
+            LEFT JOIN FETCH ci.contactPhone ccp
+            LEFT JOIN FETCH ben.contactPhone bcp
+
+            LEFT JOIN FETCH ccp.countryPhoneCode ccpc
+            LEFT JOIN FETCH bcp.countryPhoneCode bcpc
+
+            LEFT JOIN FETCH o.status st
+            LEFT JOIN FETCH o.delivery del
+
+            LEFT JOIN FETCH del.address dela
+            LEFT JOIN FETCH dela.country delac
+            LEFT JOIN FETCH del.zoneOption delz
+            LEFT JOIN FETCH delz.price delzp
+            LEFT JOIN FETCH delzp.currency delzpc
+            LEFT JOIN FETCH delz.country delzc
+
+            LEFT JOIN FETCH del.deliveryType delt
+
+            LEFT JOIN FETCH o.payment pay
+            LEFT JOIN FETCH pay.creditCard cc
+            LEFT JOIN FETCH pay.paymentMethod paym
+            LEFT JOIN FETCH pay.paymentStatus pays
+
+            LEFT JOIN FETCH pay.commissionPriceInfo paycpi
+            LEFT JOIN FETCH paycpi.originalPrice paycpiop
+            LEFT JOIN FETCH paycpi.currentPrice paycpicp
+            LEFT JOIN FETCH paycpiop.currency paycpiopc
+
+            LEFT JOIN FETCH pay.fullMultiCurrencyPriceInfo payfcpi
+            LEFT JOIN FETCH payfcpi.originalPrice payfcpiop
+            LEFT JOIN FETCH payfcpi.currentPrice payfcpicp
+            LEFT JOIN FETCH payfcpiop.currency payfcpiopc
+
+
+            LEFT JOIN FETCH payfcpi.currencyCoefficient payfcpicc
+            LEFT JOIN FETCH payfcpicc.currencyFrom payfcpicccf
+            LEFT JOIN FETCH payfcpicc.currencyTo payfcpiccct
+
+            LEFT JOIN FETCH pay.totalMultiCurrencyPriceInfo paytcpi
+            LEFT JOIN FETCH paytcpi.originalPrice paytcpiop
+            LEFT JOIN FETCH paytcpi.currentPrice paytcpicp
+            LEFT JOIN FETCH paytcpiop.currency paytcpiopc
+
+            LEFT JOIN FETCH pay.discountMultiCurrencyPriceInfo paydcpi
+            LEFT JOIN FETCH paydcpi.originalPrice paydcpiop
+            LEFT JOIN FETCH paydcpi.currentPrice paydcpicp
+            LEFT JOIN FETCH paydcpiop.currency paydcpiopc
+
+            LEFT JOIN FETCH pay.discount payd
+
+            LEFT JOIN FETCH o.articularItemQuantities aiq
+            LEFT JOIN FETCH aiq.articularItem ai
+
+            LEFT JOIN FETCH ai.fullPrice fp
+            LEFT JOIN FETCH fp.currency
+            LEFT JOIN FETCH ai.totalPrice tp
+            LEFT JOIN FETCH tp.currency
+            LEFT JOIN FETCH ai.status aist
+            LEFT JOIN FETCH ai.discount disc
+            LEFT JOIN FETCH disc.currency
+            WHERE o.id = :id</query>
+    </named-query>
+    <named-query name="OrderHistory.findById">
+        <query>SELECT oh
+            FROM OrderHistory oh
+            /* user details */
+            LEFT JOIN FETCH oh.userDetails ud
+            LEFT JOIN FETCH ud.devices udd
+            LEFT JOIN FETCH ud.userAddresses uda
+            LEFT JOIN FETCH ud.userCreditCards udc
+
+            LEFT JOIN FETCH uda.address udaa
+            LEFT JOIN FETCH udc.creditCard udcc
+
+            LEFT JOIN FETCH ud.contactInfo uci
+            LEFT JOIN FETCH uci.contactPhone ucp
+            LEFT JOIN FETCH ucp.countryPhoneCode ucpc
+
+            /* orders (the ONLY collection we fetch-join here) */
+            LEFT JOIN FETCH oh.customerOrders o
+
+            /* order -> contact beneficiary (single-valued) */
+            LEFT JOIN FETCH o.contactInfo ci
+            LEFT JOIN FETCH ci.contactPhone ccp
+            LEFT JOIN FETCH ccp.countryPhoneCode ccpc
+
+            LEFT JOIN FETCH o.beneficiary ben
+            LEFT JOIN FETCH ben.contactPhone bcp
+            LEFT JOIN FETCH bcp.countryPhoneCode bcpc
+
+            /* order -> status, delivery (single-valued) */
+            LEFT JOIN FETCH o.status st
+            LEFT JOIN FETCH o.delivery del
+            LEFT JOIN FETCH del.address dela
+            LEFT JOIN FETCH dela.country delac
+            LEFT JOIN FETCH del.zoneOption delz
+            LEFT JOIN FETCH delz.price delzp
+            LEFT JOIN FETCH delzp.currency delzpc
+            LEFT JOIN FETCH delz.country delzc
+            LEFT JOIN FETCH del.deliveryType delt
+
+            /* payment (+ its single-valued graph) */
+            LEFT JOIN FETCH o.payment pay
+            LEFT JOIN FETCH pay.creditCard cc
+            LEFT JOIN FETCH pay.paymentMethod paym
+            LEFT JOIN FETCH pay.paymentStatus pays
+
+            LEFT JOIN FETCH pay.commissionPriceInfo paycpi
+            LEFT JOIN FETCH paycpi.originalPrice paycpiop
+            LEFT JOIN FETCH paycpi.currentPrice paycpicp
+            LEFT JOIN FETCH paycpiop.currency paycpiopc
+
+            LEFT JOIN FETCH pay.fullMultiCurrencyPriceInfo payfcpi
+            LEFT JOIN FETCH payfcpi.originalPrice payfcpiop
+            LEFT JOIN FETCH payfcpi.currentPrice payfcpicp
+            LEFT JOIN FETCH payfcpiop.currency payfcpiopc
+            LEFT JOIN FETCH payfcpi.currencyCoefficient payfcpicc
+            LEFT JOIN FETCH payfcpicc.currencyFrom payfcpicccf
+            LEFT JOIN FETCH payfcpicc.currencyTo payfcpiccct
+
+            LEFT JOIN FETCH pay.totalMultiCurrencyPriceInfo paytcpi
+            LEFT JOIN FETCH paytcpi.originalPrice paytcpiop
+            LEFT JOIN FETCH paytcpi.currentPrice paytcpicp
+            LEFT JOIN FETCH paytcpiop.currency paytcpiopc
+
+            LEFT JOIN FETCH pay.discountMultiCurrencyPriceInfo paydcpi
+            LEFT JOIN FETCH paydcpi.originalPrice paydcpiop
+            LEFT JOIN FETCH paydcpi.currentPrice paydcpicp
+            LEFT JOIN FETCH paydcpiop.currency paydcpiopc
+
+            LEFT JOIN FETCH pay.discount payd
+
+            WHERE oh.id = :id
+        </query>
+    </named-query>
     <named-query name="CurrencyCoefficient.findById">
         <query>SELECT e FROM CurrencyCoefficient e LEFT JOIN FETCH e.currencyFrom ecf LEFT JOIN FETCH e.currencyTo ect WHERE e.id = :id</query>
     </named-query>
@@ -279,7 +498,7 @@
         <query>SELECT e FROM ContactInfo e LEFT JOIN FETCH e.contactPhone cp LEFT JOIN FETCH cp.countryPhoneCode cpc WHERE e.id = :id</query>
     </named-query>
     <named-query name="UserDetails.findById">
-        <query>SELECT DISTINCT e FROM UserDetails e
+        <query>SELECT e FROM UserDetails e
             LEFT JOIN FETCH e.contactInfo ci
             LEFT JOIN FETCH ci.contactPhone cp
             LEFT JOIN FETCH cp.countryPhoneCode cpc
@@ -294,11 +513,6 @@
     <named-query name="Device.findById">
         <query>select e from Device e where e.id = :id</query>
     </named-query>
-
-    <named-query name="Store.findById">
-        <query>select e from Store e where e.id = :id</query>
-    </named-query>
-
     <named-query name="Currency.findById">
         <query>select e from Currency e where e.id = :id</query>
     </named-query>

@@ -24,8 +24,12 @@ class OptionItemCostDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/option/option_item_cost/emptyOptionItemCostDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/option/option_item_cost/saveOptionItemCostDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/option/option_item_cost/emptyOptionItemCostDataSet.yml", cleanBefore = true,
+            executeStatementsBefore = {
+                    "TRUNCATE TABLE price RESTART IDENTITY CASCADE",
+                    "TRUNCATE TABLE option_item_cost RESTART IDENTITY CASCADE",
+            })
+    @ExpectedDataSet(value = "datasets/option/option_item_cost/saveOptionItemCostDataSet.yml", orderBy = "id", ignoreCols = {"option_group_id"})
     public void persistEntity_success() {
         OptionItemCost entity = getOptionItemCost();
         entity.setId(0);
