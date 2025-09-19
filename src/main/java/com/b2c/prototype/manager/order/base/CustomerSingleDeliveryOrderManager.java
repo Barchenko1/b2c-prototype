@@ -18,9 +18,9 @@ import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.UserDetails;
-import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.order.ICustomerSingleDeliveryOrderManager;
 import com.b2c.prototype.transform.help.calculate.IPriceCalculationService;
+import com.b2c.prototype.transform.order.IOrderTransformService;
 import com.nimbusds.jose.util.Pair;
 import org.hibernate.Session;
 import org.springframework.stereotype.Service;
@@ -37,13 +37,12 @@ import static com.b2c.prototype.util.Util.getUUID;
 public class CustomerSingleDeliveryOrderManager implements ICustomerSingleDeliveryOrderManager {
 
     private final IGeneralEntityDao generalEntityDao;
-    private final ITransformationFunctionService transformationFunctionService;
+    private final IOrderTransformService orderTransformService;
 
     public CustomerSingleDeliveryOrderManager(IGeneralEntityDao generalEntityDao,
-                                              ITransformationFunctionService transformationFunctionService,
-                                              IPriceCalculationService priceCalculationService) {
+                                              IOrderTransformService orderTransformService) {
         this.generalEntityDao = generalEntityDao;
-        this.transformationFunctionService = transformationFunctionService;
+        this.orderTransformService = orderTransformService;
     }
 
     @Override
@@ -127,8 +126,7 @@ public class CustomerSingleDeliveryOrderManager implements ICustomerSingleDelive
         List<CustomerSingleDeliveryOrder> customerSingleDeliveryOrders = generalEntityDao.findEntityList("CustomerSingleDeliveryOrder.all", (Pair<String, ?>) null);
 
         return customerSingleDeliveryOrders.stream()
-                .map(transformationFunctionService.getTransformationFunction(
-                        CustomerSingleDeliveryOrder.class, ResponseCustomerOrderDetails.class))
+                .map(orderTransformService::mapCustomerSingleDeliveryOrderToResponseCustomerOrderDetails)
                 .toList();
     }
 
@@ -209,9 +207,9 @@ public class CustomerSingleDeliveryOrderManager implements ICustomerSingleDelive
                     .paymentUniqId(getUUID())
 //                    .paymentMethod(sessionEntityFetcher.fetchPaymentMethod(session, paymentPriceDto.getPaymentMethod()))
 //                    .paymentStatus(sessionEntityFetcher.fetchPaymentStatus(session, "Done"))
-                    .creditCard(paymentPriceDto.getCreditCard() != null
-                            ? transformationFunctionService.getEntity(CreditCard.class, paymentPriceDto.getCreditCard())
-                            : null)
+//                    .creditCard(paymentPriceDto.getCreditCard() != null
+//                            ? transformationFunctionService.getEntity(CreditCard.class, paymentPriceDto.getCreditCard())
+//                            : null)
 //                    .discount(orderDiscount)
 //                    .commissionPrice(commissionPrice)
 //                    .fullPrice(paymentPriceDto.getFullPaymentPrice())

@@ -9,7 +9,6 @@ import com.b2c.prototype.modal.entity.message.MessageBox;
 import com.b2c.prototype.modal.entity.message.MessageStatus;
 import com.b2c.prototype.modal.entity.message.MessageTemplate;
 import com.b2c.prototype.modal.entity.message.MessageType;
-import com.b2c.prototype.transform.function.ITransformationFunctionService;
 
 
 import org.hibernate.Session;
@@ -37,9 +36,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class MessageManagerTest {
-
-    @Mock
-    private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
     private MessageManager messageManager;
 
@@ -68,8 +64,6 @@ class MessageManagerTest {
         Session session = mock(Session.class);
         NativeQuery<MessageBox> query = mock(NativeQuery.class);
 
-//        when(queryService.getQueryEntity(eq(query), any(Supplier.class))).thenReturn(messageBox);
-        when(transformationFunctionService.getEntity(eq(Message.class), eq(messageDto))).thenReturn(newMessage);
         when(messageBox.getMessages()).thenReturn(Set.of(existingMessage));
 //        when(existingMessage.getMessageUniqNumber()).thenReturn("123");
 
@@ -145,9 +139,6 @@ class MessageManagerTest {
 
         Function<Message, ResponseMessageOverviewDto> transformationFunction = message -> ResponseMessageOverviewDto.builder()
                 .build();
-        when(transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class))
-                .thenReturn(transformationFunction);
-
 //        when(messageDao.getNamedQueryEntityList("", parameter))
 //                .thenReturn(Collections.singletonList(getMessage()));
 
@@ -162,9 +153,6 @@ class MessageManagerTest {
 
         Function<Message, ResponseMessageOverviewDto> transformationFunction = message -> ResponseMessageOverviewDto.builder()
                 .build();
-        when(transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class))
-                .thenReturn(transformationFunction);
-
 //        when(messageDao.getNamedQueryEntityList("", parameter))
 //                .thenReturn(Collections.singletonList(getMessage()));
 
@@ -182,10 +170,6 @@ class MessageManagerTest {
                 .build();
         Message testMessage = getMessage();
         ResponseMessagePayloadDto expectedResponseMessagePayloadDto = getResponseMessagePayloadDto();
-
-        when(transformationFunctionService.getTransformationFunction(Message.class, ResponseMessagePayloadDto.class))
-                .thenReturn(transformationFunction);
-//        when(messageDao.getGraphEntity(anyString(), eq(parameter))).thenReturn(testMessage);
 
         ResponseMessagePayloadDto result = messageManager.getMessagePayloadDto("", uniqueId);
 

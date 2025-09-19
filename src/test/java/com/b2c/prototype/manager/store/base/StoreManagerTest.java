@@ -5,7 +5,6 @@ import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.dto.payload.store.StoreDto;
 import com.b2c.prototype.modal.dto.payload.store.ResponseStoreDto;
 import com.b2c.prototype.modal.entity.store.Store;
-import com.b2c.prototype.transform.function.ITransformationFunctionService;
 
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
@@ -31,9 +30,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class StoreManagerTest {
-
-    @Mock
-    private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
     private StoreManager storeManager;
 
@@ -99,8 +95,6 @@ class StoreManagerTest {
         String articularId = "articularId";
         
         Function<ArticularItem, Store> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(ArticularItem.class, Store.class))
-                .thenReturn(function);
 //        when(supplierService.entityFieldSupplier(
 //                ArticularItem.class,
 //                parameterSupplier,
@@ -120,8 +114,6 @@ class StoreManagerTest {
 
         
         Function<Store, ResponseStoreDto> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(Store.class, ResponseStoreDto.class))
-                .thenReturn(function);
         when(function.apply(store)).thenReturn(responseStoreDto);
 
         List<ResponseStoreDto> result = storeManager.getAllResponseStoresByArticularId(articularId);
@@ -137,9 +129,6 @@ class StoreManagerTest {
         Store store = getStore();
 
         Function<Store, ResponseStoreDto> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(Store.class, ResponseStoreDto.class))
-                .thenReturn(function);
-//        when(storeDao.getEntityList()).thenReturn(List.of(store));
         when(function.apply(store)).thenReturn(responseStoreDto);
 
 //        List<ResponseStoreDto> result = storeManager.getAllResponseStore();

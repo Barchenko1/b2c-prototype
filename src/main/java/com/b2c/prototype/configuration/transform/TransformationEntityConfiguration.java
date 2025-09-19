@@ -1,6 +1,7 @@
 package com.b2c.prototype.configuration.transform;
 
 import com.b2c.prototype.modal.base.constant.AbstractConstantEntity;
+import com.b2c.prototype.modal.dto.payload.item.ResponseMetaDataDto;
 import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
 import com.b2c.prototype.modal.entity.item.MetaData;
 import com.b2c.prototype.modal.entity.payment.MultiCurrencyPriceInfo;
@@ -20,13 +21,12 @@ import com.b2c.prototype.modal.dto.payload.order.CreditCardDto;
 import com.b2c.prototype.modal.dto.payload.order.single.DeliveryDto;
 import com.b2c.prototype.modal.dto.payload.order.single.ResponseCustomerOrderDto;
 import com.b2c.prototype.modal.dto.payload.post.PostDto;
-import com.b2c.prototype.modal.dto.payload.post.ResponsePostDto;
 import com.b2c.prototype.modal.dto.payload.review.ResponseReviewCommentDto;
 import com.b2c.prototype.modal.dto.payload.review.ReviewCommentDto;
 import com.b2c.prototype.modal.dto.payload.user.DeviceDto;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.discount.InitDiscountDto;
-import com.b2c.prototype.modal.dto.payload.item.ItemDataDto;
+import com.b2c.prototype.modal.dto.payload.item.MetaDataDto;
 import com.b2c.prototype.modal.dto.payload.message.MessageDto;
 import com.b2c.prototype.modal.dto.payload.option.OptionGroupDto;
 import com.b2c.prototype.modal.dto.payload.option.OptionGroupOptionItemSetDto;
@@ -49,7 +49,6 @@ import com.b2c.prototype.modal.dto.payload.item.ResponseArticularItemDto;
 import com.b2c.prototype.modal.dto.payload.commission.ResponseMinMaxCommissionDto;
 import com.b2c.prototype.modal.dto.payload.order.ResponseCreditCardDto;
 import com.b2c.prototype.modal.dto.payload.user.ResponseDeviceDto;
-import com.b2c.prototype.modal.dto.payload.item.ResponseItemDataDto;
 import com.b2c.prototype.modal.dto.payload.message.ResponseMessageOverviewDto;
 import com.b2c.prototype.modal.dto.payload.message.ResponseMessagePayloadDto;
 import com.b2c.prototype.modal.dto.payload.review.ResponseReviewDto;
@@ -62,30 +61,21 @@ import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.address.UserAddress;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
-import com.b2c.prototype.modal.entity.delivery.DeliveryType;
-import com.b2c.prototype.modal.entity.message.MessageBox;
 import com.b2c.prototype.modal.entity.message.MessageTemplate;
 import com.b2c.prototype.modal.entity.option.TimeDurationOption;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.ArticularStatus;
-import com.b2c.prototype.modal.entity.item.Brand;
-import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.Discount;
-import com.b2c.prototype.modal.entity.item.ItemType;
 import com.b2c.prototype.modal.entity.order.CustomerSingleDeliveryOrder;
 import com.b2c.prototype.modal.entity.payment.CommissionValue;
 import com.b2c.prototype.modal.entity.payment.MinMaxCommission;
 import com.b2c.prototype.modal.entity.review.Rating;
 import com.b2c.prototype.modal.entity.message.Message;
-import com.b2c.prototype.modal.entity.message.MessageStatus;
-import com.b2c.prototype.modal.entity.message.MessageType;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.modal.entity.option.ZoneOption;
 import com.b2c.prototype.modal.entity.order.DeliveryArticularItemQuantity;
-import com.b2c.prototype.modal.entity.order.OrderStatus;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
-import com.b2c.prototype.modal.entity.payment.PaymentMethod;
 import com.b2c.prototype.modal.entity.post.Post;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
@@ -94,12 +84,9 @@ import com.b2c.prototype.modal.entity.review.ReviewComment;
 import com.b2c.prototype.modal.entity.store.Store;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
-import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.modal.entity.user.Device;
 import com.b2c.prototype.modal.entity.user.UserCreditCard;
 import com.b2c.prototype.modal.entity.user.UserDetails;
-import com.b2c.prototype.transform.function.ITransformationFunction;
-import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.util.CardUtil;
 import org.hibernate.Session;
 import org.springframework.context.annotation.Configuration;
@@ -124,158 +111,158 @@ import static com.b2c.prototype.util.Util.getUUID;
 @Configuration
 public class TransformationEntityConfiguration {
 
-    public TransformationEntityConfiguration(ITransformationFunctionService transformationFunctionService) {
-        addConstantEntityTransformationFunctions(transformationFunctionService, Brand.class, Brand::new);
-        addConstantEntityTransformationFunctions(transformationFunctionService, CountryPhoneCode.class, CountryPhoneCode::new);
-        addConstantEntityTransformationFunctions(transformationFunctionService, Currency.class, Currency::new);
-        addConstantEntityTransformationFunctions(transformationFunctionService, DeliveryType.class, DeliveryType::new);
-        addConstantEntityTransformationFunctions(transformationFunctionService, ItemType.class, ItemType::new);
-        addConstantEntityTransformationFunctions(transformationFunctionService, ArticularStatus.class, ArticularStatus::new);
-        addConstantEntityTransformationFunctions(transformationFunctionService, MessageStatus.class, MessageStatus::new);
-        addConstantEntityTransformationFunctions(transformationFunctionService, MessageType.class, MessageType::new);
-        addConstantEntityTransformationFunctions(transformationFunctionService, OptionGroup.class, OptionGroup::new);
-        addConstantEntityTransformationFunctions(transformationFunctionService, OrderStatus.class, OrderStatus::new);
-        addConstantEntityTransformationFunctions(transformationFunctionService, PaymentMethod.class, PaymentMethod::new);
-//        addConstantEntityTransformationFunctions(transformationFunctionService, AvailabilityStatus.class, AvailabilityStatus::new);
-        transformationFunctionService.addTransformationFunction(NumberConstantPayloadDto.class, Rating.class, mapOneIntegerFieldEntityDtoRatingFunction());
-
-        loadCountryFunctions(transformationFunctionService);
-
-        transformationFunctionService.addTransformationFunction(DeliveryArticularItemQuantity.class, AddressDto.class, mapOrderItemToAddressDtoFunction());
-
-        loadOptionItemFunctions(transformationFunctionService);
-        loadItemDataFunctions(transformationFunctionService);
-        loadArticularItemFunctions(transformationFunctionService);
-        loadDiscountFunctions(transformationFunctionService);
-        loadCustomerOrderFunctions(transformationFunctionService);
-        loadUserDetailsFunctions(transformationFunctionService);
-        loadContactInfoFunctions(transformationFunctionService);
-        loadTimeDurationOptionFunctions(transformationFunctionService);
-        loadZoneOptionFunctions(transformationFunctionService);
-        loadAddressFunctions(transformationFunctionService);
-        loadCreditCardFunctions(transformationFunctionService);
-        loadDeviceFunctions(transformationFunctionService);
-        loadCommissionFunctions(transformationFunctionService);
-        loadStoreFunctions(transformationFunctionService);
-        loadMessageFunctions(transformationFunctionService);
-        loadPostFunctions(transformationFunctionService);
-        loadReviewFunctions(transformationFunctionService);
-
-    }
-
-    private void loadCountryFunctions(ITransformationFunctionService transformationFunctionService) {
-        transformationFunctionService.addTransformationFunction(CountryDto.class, Country.class, mapCountryDtoCountryFunction());
-        transformationFunctionService.addTransformationFunction(Country.class, CountryDto.class, mapCountryEntityCountryDtoFunction());
-    }
-
-    private void loadDiscountFunctions(ITransformationFunction transformationFunctionService) {
-        transformationFunctionService.addTransformationFunction(DiscountDto.class, Discount.class, mapDiscountDtoToDiscountFunction());
-        transformationFunctionService.addTransformationFunction(Discount.class, DiscountDto.class, mapDiscountToDiscountDtoFunction());
-        transformationFunctionService.addTransformationFunction(ArticularItem.class, DiscountDto.class, mapItemDataOptionListToDiscountDtoFunction());
-        transformationFunctionService.addTransformationFunction(ArticularItem.class, DiscountDto.class, "list", mapItemDataOptionListToDiscountDtoListFunction());
-    }
-
-    private void loadItemDataFunctions(ITransformationFunctionService transformationFunctionService) {
-        transformationFunctionService.addTransformationFunction(ItemDataDto.class, MetaData.class, mapItemDataDtoToItemDataFunction());
-        transformationFunctionService.addTransformationFunction(SearchFieldUpdateEntityDto.class, MetaData.class, mapSearchFieldUpdateEntityDtoToItemDataFunction());
-        transformationFunctionService.addTransformationFunction(MetaData.class, ResponseItemDataDto.class, mapItemDataToResponseItemDataDtoFunction());
-    }
-
-    private void loadArticularItemFunctions(ITransformationFunctionService transformationFunctionService) {
-        transformationFunctionService.addTransformationFunction(SearchFieldUpdateCollectionEntityDto.class, MetaData.class, mapSearchFieldUpdateCollectionEntityDtoToItemDataFunction());
-        transformationFunctionService.addTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class, mapArticularItemToResponseArticularDto());
-    }
-
-    private void loadOptionItemFunctions(ITransformationFunctionService transformationFunctionService) {
-        transformationFunctionService.addTransformationFunction(OptionGroupOptionItemSetDto.class, OptionGroup.class, mapOptionItemDtoToOptionGroup());
-        transformationFunctionService.addTransformationFunction(OptionGroupOptionItemSetDto.class, OptionGroup.class, "set", mapOptionGroupOptionItemSetDtoListToOptionGroupSet());
-        transformationFunctionService.addTransformationFunction(ArticularItem.class, OptionItem.class, mapItemDataOptionToOptionItemFunction());
-        transformationFunctionService.addTransformationFunction(OptionGroup.class, OptionGroupOptionItemSetDto.class, mapOptionGroupToOptionItemDto());
-        transformationFunctionService.addTransformationFunction(ArticularItem.class, OptionGroupOptionItemSetDto.class, "list", mapArticularItemToOptionItemDtoList());
-
-        transformationFunctionService.addTransformationFunction(SingleOptionItemDto.class, OptionGroup.class, mapSingleOptionItemDtoToOptionGroup());
-    }
-
-    private void loadCustomerOrderFunctions(ITransformationFunctionService transformationFunctionService) {
-        transformationFunctionService.addTransformationFunction(ContactInfoDto.class, ContactInfo.class, mapContactInfoDtoToContactInfo());
-        transformationFunctionService.addTransformationFunction(DeliveryDto.class, Delivery.class, mapDeliveryDtoToDeliveryFunction());
-        transformationFunctionService.addTransformationFunction(ArticularItemQuantityDto.class, ArticularItemQuantity.class, mapArticularItemQuantityDtoToArticularItemQuantityFunction());
-        transformationFunctionService.addTransformationFunction(CreditCardDto.class, CreditCard.class, mapCreditCardDtoToCreditCardFunction());
-
-        transformationFunctionService.addTransformationFunction(CustomerSingleDeliveryOrder.class, ResponseCustomerOrderDto.class, mapCustomerOrderToResponseCustomerOrderFunction());
-    }
-
-    private void loadUserDetailsFunctions(ITransformationFunctionService transformationFunctionService) {
-        transformationFunctionService.addTransformationFunction(RegistrationUserDetailsDto.class, UserDetails.class, mapRegistrationUserDetailsDtoToUserDetailsFunction());
-        transformationFunctionService.addTransformationFunction(UserDetailsDto.class, UserDetails.class, mapUserDetailsDtoToUserDetailsFunction());
-        transformationFunctionService.addTransformationFunction(SearchFieldUpdateEntityDto.class, UserDetails.class, mapSearchFieldUpdateEntityDtoToUserDetailsFunction());
-        transformationFunctionService.addTransformationFunction(UserDetails.class, ResponseUserDetailsDto.class, mapUserDetailsToUserResponseUserDetailsDtoFunction());
-    }
-
-    private void loadContactInfoFunctions(ITransformationFunctionService transformationFunctionService) {
-        transformationFunctionService.addTransformationFunction(ContactInfoDto.class, ContactInfo.class, mapContactInfoDtoToContactInfoFunction());
-        transformationFunctionService.addTransformationFunction(ContactInfo.class, ContactInfoDto.class, mapContactInfoToContactInfoDtoFunction());
-        transformationFunctionService.addTransformationFunction(UserDetails.class, ContactInfoDto.class, mapUserDetailsToContactInfoDtoFunction());
-    }
-
-    private void loadTimeDurationOptionFunctions(ITransformationFunctionService transformationFunctionService) {
-        transformationFunctionService.addTransformationFunction(TimeDurationOptionDto.class, TimeDurationOption.class, mapTimeDurationOptionDtoToTimeDurationOptionFunction());
-        transformationFunctionService.addTransformationFunction(TimeDurationOption.class, ResponseTimeDurationOptionDto.class, mapTimeDurationOptionToResponseTimeDurationOptionDtoFunction());
-    }
-
-    private void loadZoneOptionFunctions(ITransformationFunctionService transformationFunctionService) {
-        transformationFunctionService.addTransformationFunction(ZoneOptionDto.class, ZoneOption.class, mapZoneOptionDtoToZoneOptionFunction());
-        transformationFunctionService.addTransformationFunction(ZoneOption.class, ZoneOptionDto.class, mapZoneOptionToZoneOptionDtoFunction());
-    }
-
-    private void loadAddressFunctions(ITransformationFunctionService transformationFunctionService) {
-        transformationFunctionService.addTransformationFunction(UserAddressDto.class, UserAddress.class, mapUserAddressDtoToUserAddressFunction());
-        transformationFunctionService.addTransformationFunction(UserAddress.class, ResponseUserAddressDto.class, mapUserAddressToResponseUserAddressDtoFunction());
-        transformationFunctionService.addTransformationFunction(UserAddress.class, AddressDto.class, mapUserAddressToAddressDtoDtoFunction());
-        transformationFunctionService.addTransformationFunction(AddressDto.class, Address.class, mapAddressDtoToAddressFunction());
-        transformationFunctionService.addTransformationFunction(Address.class, AddressDto.class, mapAddressToAddressDtoFunction());
-    }
-
-    private void loadCreditCardFunctions(ITransformationFunctionService transformationFunctionService) {
-        transformationFunctionService.addTransformationFunction(UserCreditCardDto.class, UserCreditCard.class, mapUserCreditCardDtoToUserCreditCardFunction());
-        transformationFunctionService.addTransformationFunction(UserCreditCard.class, ResponseUserCreditCardDto.class, mapUserCreditCardToResponseUserCardDtoFunction());
-        transformationFunctionService.addTransformationFunction(CreditCard.class, ResponseCreditCardDto.class, mapCreditCardToResponseCardDtoFunction());
-    }
-
-    private void loadDeviceFunctions(ITransformationFunctionService transformationFunctionService) {
-        transformationFunctionService.addTransformationFunction(DeviceDto.class, Device.class, mapDeviceDtoToDeviceFunction());
-        transformationFunctionService.addTransformationFunction(Device.class, ResponseDeviceDto.class, mapDeviceToResponseDeviceDtoFunction());
-    }
-
-    private void loadCommissionFunctions(ITransformationFunctionService transformationFunctionService) {
-        transformationFunctionService.addTransformationFunction(MinMaxCommissionDto.class, MinMaxCommission.class, mapMinMaxCommissionDtoToMinMaxCommission());
-        transformationFunctionService.addTransformationFunction(MinMaxCommission.class, ResponseMinMaxCommissionDto.class, mapMinMaxCommissionDtoToResponseMinMaxCommissionDto());
-    }
-
-    private void loadStoreFunctions(ITransformationFunctionService transformationFunctionService) {
-        transformationFunctionService.addTransformationFunction(StoreDto.class, Store.class, mapStoreDtoToStoreFunction());
-        transformationFunctionService.addTransformationFunction(Store.class, ResponseStoreDto.class, mapStoreToResponseStoreDtoFunction());
-    }
-
-    private void loadMessageFunctions(ITransformationFunctionService transformationFunctionService) {
-        transformationFunctionService.addTransformationFunction(MessageDto.class, Message.class, mapMessageDtoToMessageFunction());
-        transformationFunctionService.addTransformationFunction(MessageBox.class, ResponseMessageOverviewDto.class, mapMessageToResponseMessageOverviewDtoFunction());
-        transformationFunctionService.addTransformationFunction(Message.class, ResponseMessageOverviewDto.class, mapMessageToResponseMessageOverviewDtoFunction());
-        transformationFunctionService.addTransformationFunction(Message.class, ResponseMessagePayloadDto.class, mapMessageToResponseMessagePayloadDtoFunction());
-
-    }
-
-    private void loadPostFunctions(ITransformationFunctionService transformationFunctionService) {
-        transformationFunctionService.addTransformationFunction(PostDto.class, Post.class, mapPostDtoToPostFunction());
-        transformationFunctionService.addTransformationFunction(Post.class, ResponsePostDto.class, mapReviewDtoToReviewFunction());
-        transformationFunctionService.addTransformationFunction(ReviewCommentDto.class, ReviewComment.class, mapReviewCommentDtoToReviewCommentFunction());
-        transformationFunctionService.addTransformationFunction(ReviewComment.class, ResponseReviewCommentDto.class, mapReviewCommentToResponseReviewCommentDtoFunction());
-    }
-
-    private void loadReviewFunctions(ITransformationFunctionService transformationFunctionService) {
-        transformationFunctionService.addTransformationFunction(ReviewDto.class, Review.class, mapReviewDtoToReviewFunction());
-        transformationFunctionService.addTransformationFunction(Review.class, ResponseReviewDto.class, mapReviewToResponseReviewDtoFunction());
-    }
+//    public TransformationEntityConfiguration(ITransformationFunctionService transformationFunctionService) {
+//        addConstantEntityTransformationFunctions(transformationFunctionService, Brand.class, Brand::new);
+//        addConstantEntityTransformationFunctions(transformationFunctionService, CountryPhoneCode.class, CountryPhoneCode::new);
+//        addConstantEntityTransformationFunctions(transformationFunctionService, Currency.class, Currency::new);
+//        addConstantEntityTransformationFunctions(transformationFunctionService, DeliveryType.class, DeliveryType::new);
+//        addConstantEntityTransformationFunctions(transformationFunctionService, ItemType.class, ItemType::new);
+//        addConstantEntityTransformationFunctions(transformationFunctionService, ArticularStatus.class, ArticularStatus::new);
+//        addConstantEntityTransformationFunctions(transformationFunctionService, MessageStatus.class, MessageStatus::new);
+//        addConstantEntityTransformationFunctions(transformationFunctionService, MessageType.class, MessageType::new);
+//        addConstantEntityTransformationFunctions(transformationFunctionService, OptionGroup.class, OptionGroup::new);
+//        addConstantEntityTransformationFunctions(transformationFunctionService, OrderStatus.class, OrderStatus::new);
+//        addConstantEntityTransformationFunctions(transformationFunctionService, PaymentMethod.class, PaymentMethod::new);
+////        addConstantEntityTransformationFunctions(transformationFunctionService, AvailabilityStatus.class, AvailabilityStatus::new);
+//        transformationFunctionService.addTransformationFunction(NumberConstantPayloadDto.class, Rating.class, mapOneIntegerFieldEntityDtoRatingFunction());
+//
+//        loadCountryFunctions(transformationFunctionService);
+//
+//        transformationFunctionService.addTransformationFunction(DeliveryArticularItemQuantity.class, AddressDto.class, mapOrderItemToAddressDtoFunction());
+//
+//        loadOptionItemFunctions(transformationFunctionService);
+//        loadItemDataFunctions(transformationFunctionService);
+//        loadArticularItemFunctions(transformationFunctionService);
+//        loadDiscountFunctions(transformationFunctionService);
+//        loadCustomerOrderFunctions(transformationFunctionService);
+//        loadUserDetailsFunctions(transformationFunctionService);
+//        loadContactInfoFunctions(transformationFunctionService);
+//        loadTimeDurationOptionFunctions(transformationFunctionService);
+//        loadZoneOptionFunctions(transformationFunctionService);
+//        loadAddressFunctions(transformationFunctionService);
+//        loadCreditCardFunctions(transformationFunctionService);
+//        loadDeviceFunctions(transformationFunctionService);
+//        loadCommissionFunctions(transformationFunctionService);
+//        loadStoreFunctions(transformationFunctionService);
+//        loadMessageFunctions(transformationFunctionService);
+//        loadPostFunctions(transformationFunctionService);
+//        loadReviewFunctions(transformationFunctionService);
+//
+//    }
+//
+//    private void loadCountryFunctions(ITransformationFunctionService transformationFunctionService) {
+//        transformationFunctionService.addTransformationFunction(CountryDto.class, Country.class, mapCountryDtoCountryFunction());
+//        transformationFunctionService.addTransformationFunction(Country.class, CountryDto.class, mapCountryEntityCountryDtoFunction());
+//    }
+//
+//    private void loadDiscountFunctions(ITransformationFunction transformationFunctionService) {
+//        transformationFunctionService.addTransformationFunction(DiscountDto.class, Discount.class, mapDiscountDtoToDiscountFunction());
+//        transformationFunctionService.addTransformationFunction(Discount.class, DiscountDto.class, mapDiscountToDiscountDtoFunction());
+//        transformationFunctionService.addTransformationFunction(ArticularItem.class, DiscountDto.class, mapItemDataOptionListToDiscountDtoFunction());
+//        transformationFunctionService.addTransformationFunction(ArticularItem.class, DiscountDto.class, "list", mapItemDataOptionListToDiscountDtoListFunction());
+//    }
+//
+//    private void loadItemDataFunctions(ITransformationFunctionService transformationFunctionService) {
+//        transformationFunctionService.addTransformationFunction(MetaDataDto.class, MetaData.class, mapItemDataDtoToItemDataFunction());
+//        transformationFunctionService.addTransformationFunction(SearchFieldUpdateEntityDto.class, MetaData.class, mapSearchFieldUpdateEntityDtoToItemDataFunction());
+//        transformationFunctionService.addTransformationFunction(MetaData.class, ResponseMetaDataDto.class, mapItemDataToResponseItemDataDtoFunction());
+//    }
+//
+//    private void loadArticularItemFunctions(ITransformationFunctionService transformationFunctionService) {
+//        transformationFunctionService.addTransformationFunction(SearchFieldUpdateCollectionEntityDto.class, MetaData.class, mapSearchFieldUpdateCollectionEntityDtoToItemDataFunction());
+//        transformationFunctionService.addTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class, mapArticularItemToResponseArticularDto());
+//    }
+//
+//    private void loadOptionItemFunctions(ITransformationFunctionService transformationFunctionService) {
+//        transformationFunctionService.addTransformationFunction(OptionGroupOptionItemSetDto.class, OptionGroup.class, mapOptionItemDtoToOptionGroup());
+//        transformationFunctionService.addTransformationFunction(OptionGroupOptionItemSetDto.class, OptionGroup.class, "set", mapOptionGroupOptionItemSetDtoListToOptionGroupSet());
+//        transformationFunctionService.addTransformationFunction(ArticularItem.class, OptionItem.class, mapItemDataOptionToOptionItemFunction());
+//        transformationFunctionService.addTransformationFunction(OptionGroup.class, OptionGroupOptionItemSetDto.class, mapOptionGroupToOptionItemDto());
+//        transformationFunctionService.addTransformationFunction(ArticularItem.class, OptionGroupOptionItemSetDto.class, "list", mapArticularItemToOptionItemDtoList());
+//
+//        transformationFunctionService.addTransformationFunction(SingleOptionItemDto.class, OptionGroup.class, mapSingleOptionItemDtoToOptionGroup());
+//    }
+//
+//    private void loadCustomerOrderFunctions(ITransformationFunctionService transformationFunctionService) {
+//        transformationFunctionService.addTransformationFunction(ContactInfoDto.class, ContactInfo.class, mapContactInfoDtoToContactInfo());
+//        transformationFunctionService.addTransformationFunction(DeliveryDto.class, Delivery.class, mapDeliveryDtoToDeliveryFunction());
+//        transformationFunctionService.addTransformationFunction(ArticularItemQuantityDto.class, ArticularItemQuantity.class, mapArticularItemQuantityDtoToArticularItemQuantityFunction());
+//        transformationFunctionService.addTransformationFunction(CreditCardDto.class, CreditCard.class, mapCreditCardDtoToCreditCardFunction());
+//
+//        transformationFunctionService.addTransformationFunction(CustomerSingleDeliveryOrder.class, ResponseCustomerOrderDto.class, mapCustomerOrderToResponseCustomerOrderFunction());
+//    }
+//
+//    private void loadUserDetailsFunctions(ITransformationFunctionService transformationFunctionService) {
+//        transformationFunctionService.addTransformationFunction(RegistrationUserDetailsDto.class, UserDetails.class, mapRegistrationUserDetailsDtoToUserDetailsFunction());
+//        transformationFunctionService.addTransformationFunction(UserDetailsDto.class, UserDetails.class, mapUserDetailsDtoToUserDetailsFunction());
+//        transformationFunctionService.addTransformationFunction(SearchFieldUpdateEntityDto.class, UserDetails.class, mapSearchFieldUpdateEntityDtoToUserDetailsFunction());
+//        transformationFunctionService.addTransformationFunction(UserDetails.class, ResponseUserDetailsDto.class, mapUserDetailsToUserResponseUserDetailsDtoFunction());
+//    }
+//
+//    private void loadContactInfoFunctions(ITransformationFunctionService transformationFunctionService) {
+//        transformationFunctionService.addTransformationFunction(ContactInfoDto.class, ContactInfo.class, mapContactInfoDtoToContactInfoFunction());
+//        transformationFunctionService.addTransformationFunction(ContactInfo.class, ContactInfoDto.class, mapContactInfoToContactInfoDtoFunction());
+//        transformationFunctionService.addTransformationFunction(UserDetails.class, ContactInfoDto.class, mapUserDetailsToContactInfoDtoFunction());
+//    }
+//
+//    private void loadTimeDurationOptionFunctions(ITransformationFunctionService transformationFunctionService) {
+//        transformationFunctionService.addTransformationFunction(TimeDurationOptionDto.class, TimeDurationOption.class, mapTimeDurationOptionDtoToTimeDurationOptionFunction());
+//        transformationFunctionService.addTransformationFunction(TimeDurationOption.class, ResponseTimeDurationOptionDto.class, mapTimeDurationOptionToResponseTimeDurationOptionDtoFunction());
+//    }
+//
+//    private void loadZoneOptionFunctions(ITransformationFunctionService transformationFunctionService) {
+//        transformationFunctionService.addTransformationFunction(ZoneOptionDto.class, ZoneOption.class, mapZoneOptionDtoToZoneOptionFunction());
+//        transformationFunctionService.addTransformationFunction(ZoneOption.class, ZoneOptionDto.class, mapZoneOptionToZoneOptionDtoFunction());
+//    }
+//
+//    private void loadAddressFunctions(ITransformationFunctionService transformationFunctionService) {
+//        transformationFunctionService.addTransformationFunction(UserAddressDto.class, UserAddress.class, mapUserAddressDtoToUserAddressFunction());
+//        transformationFunctionService.addTransformationFunction(UserAddress.class, ResponseUserAddressDto.class, mapUserAddressToResponseUserAddressDtoFunction());
+//        transformationFunctionService.addTransformationFunction(UserAddress.class, AddressDto.class, mapUserAddressToAddressDtoDtoFunction());
+//        transformationFunctionService.addTransformationFunction(AddressDto.class, Address.class, mapAddressDtoToAddressFunction());
+//        transformationFunctionService.addTransformationFunction(Address.class, AddressDto.class, mapAddressToAddressDtoFunction());
+//    }
+//
+//    private void loadCreditCardFunctions(ITransformationFunctionService transformationFunctionService) {
+//        transformationFunctionService.addTransformationFunction(UserCreditCardDto.class, UserCreditCard.class, mapUserCreditCardDtoToUserCreditCardFunction());
+//        transformationFunctionService.addTransformationFunction(UserCreditCard.class, ResponseUserCreditCardDto.class, mapUserCreditCardToResponseUserCardDtoFunction());
+//        transformationFunctionService.addTransformationFunction(CreditCard.class, ResponseCreditCardDto.class, mapCreditCardToResponseCardDtoFunction());
+//    }
+//
+//    private void loadDeviceFunctions(ITransformationFunctionService transformationFunctionService) {
+//        transformationFunctionService.addTransformationFunction(DeviceDto.class, Device.class, mapDeviceDtoToDeviceFunction());
+//        transformationFunctionService.addTransformationFunction(Device.class, ResponseDeviceDto.class, mapDeviceToResponseDeviceDtoFunction());
+//    }
+//
+//    private void loadCommissionFunctions(ITransformationFunctionService transformationFunctionService) {
+//        transformationFunctionService.addTransformationFunction(MinMaxCommissionDto.class, MinMaxCommission.class, mapMinMaxCommissionDtoToMinMaxCommission());
+//        transformationFunctionService.addTransformationFunction(MinMaxCommission.class, ResponseMinMaxCommissionDto.class, mapMinMaxCommissionDtoToResponseMinMaxCommissionDto());
+//    }
+//
+//    private void loadStoreFunctions(ITransformationFunctionService transformationFunctionService) {
+//        transformationFunctionService.addTransformationFunction(StoreDto.class, Store.class, mapStoreDtoToStoreFunction());
+//        transformationFunctionService.addTransformationFunction(Store.class, ResponseStoreDto.class, mapStoreToResponseStoreDtoFunction());
+//    }
+//
+//    private void loadMessageFunctions(ITransformationFunctionService transformationFunctionService) {
+//        transformationFunctionService.addTransformationFunction(MessageDto.class, Message.class, mapMessageDtoToMessageFunction());
+//        transformationFunctionService.addTransformationFunction(MessageBox.class, ResponseMessageOverviewDto.class, mapMessageToResponseMessageOverviewDtoFunction());
+//        transformationFunctionService.addTransformationFunction(Message.class, ResponseMessageOverviewDto.class, mapMessageToResponseMessageOverviewDtoFunction());
+//        transformationFunctionService.addTransformationFunction(Message.class, ResponseMessagePayloadDto.class, mapMessageToResponseMessagePayloadDtoFunction());
+//
+//    }
+//
+//    private void loadPostFunctions(ITransformationFunctionService transformationFunctionService) {
+//        transformationFunctionService.addTransformationFunction(PostDto.class, Post.class, mapPostDtoToPostFunction());
+//        transformationFunctionService.addTransformationFunction(Post.class, ResponsePostDto.class, mapReviewDtoToReviewFunction());
+//        transformationFunctionService.addTransformationFunction(ReviewCommentDto.class, ReviewComment.class, mapReviewCommentDtoToReviewCommentFunction());
+//        transformationFunctionService.addTransformationFunction(ReviewComment.class, ResponseReviewCommentDto.class, mapReviewCommentToResponseReviewCommentDtoFunction());
+//    }
+//
+//    private void loadReviewFunctions(ITransformationFunctionService transformationFunctionService) {
+//        transformationFunctionService.addTransformationFunction(ReviewDto.class, Review.class, mapReviewDtoToReviewFunction());
+//        transformationFunctionService.addTransformationFunction(Review.class, ResponseReviewDto.class, mapReviewToResponseReviewDtoFunction());
+//    }
 
     private <T extends AbstractConstantEntity> Function<ConstantPayloadDto, T> mapConstantEntityPayloadDtoToConstantEntityFunction(Supplier<T> entitySupplier) {
         return constantPayloadDto -> {
@@ -293,12 +280,12 @@ public class TransformationEntityConfiguration {
                 .build();
     }
 
-    private <T extends AbstractConstantEntity> void addConstantEntityTransformationFunctions(ITransformationFunctionService transformationFunctionService,
-                                                                                             Class<T> entityClass,
-                                                                                             Supplier<T> entitySupplier) {
-        transformationFunctionService.addTransformationFunction(ConstantPayloadDto.class, entityClass, mapConstantEntityPayloadDtoToConstantEntityFunction(entitySupplier));
-        transformationFunctionService.addTransformationFunction(entityClass, ConstantPayloadDto.class, mapConstantEntityToConstantEntityPayloadDtoFunction());
-    }
+//    private <T extends AbstractConstantEntity> void addConstantEntityTransformationFunctions(ITransformationFunctionService transformationFunctionService,
+//                                                                                             Class<T> entityClass,
+//                                                                                             Supplier<T> entitySupplier) {
+//        transformationFunctionService.addTransformationFunction(ConstantPayloadDto.class, entityClass, mapConstantEntityPayloadDtoToConstantEntityFunction(entitySupplier));
+//        transformationFunctionService.addTransformationFunction(entityClass, ConstantPayloadDto.class, mapConstantEntityToConstantEntityPayloadDtoFunction());
+//    }
 
     private Function<NumberConstantPayloadDto, Rating> mapOneIntegerFieldEntityDtoRatingFunction() {
         return constantIntegerEntityPayloadDto -> Rating.builder()
@@ -856,7 +843,7 @@ public class TransformationEntityConfiguration {
                 .collect(Collectors.toSet());
     }
 
-    private BiFunction<Session, ItemDataDto, MetaData> mapItemDataDtoToItemDataFunction() {
+    private BiFunction<Session, MetaDataDto, MetaData> mapItemDataDtoToItemDataFunction() {
         return (session, itemDataDto) -> {
 //            Category category = sessionEntityFetcher.fetchOptionalCategory(session, itemDataDto.getCategory().getValue())
 //                    .orElse(Category.builder()
@@ -942,10 +929,10 @@ public class TransformationEntityConfiguration {
         });
     }
 
-    private BiFunction<Session, SearchFieldUpdateEntityDto<ItemDataDto>, MetaData> mapSearchFieldUpdateEntityDtoToItemDataFunction() {
+    private BiFunction<Session, SearchFieldUpdateEntityDto<MetaDataDto>, MetaData> mapSearchFieldUpdateEntityDtoToItemDataFunction() {
         return (session, itemDataSearchFieldUpdateDto) -> {
             String itemId = itemDataSearchFieldUpdateDto.getSearchField();
-            ItemDataDto itemDataDto = itemDataSearchFieldUpdateDto.getUpdateDto();
+            MetaDataDto metaDataDto = itemDataSearchFieldUpdateDto.getUpdateDto();
 //            MetaData existingMetaData = queryService.getNamedQueryEntity(
 //                    session,
 //                    MetaData.class,
@@ -958,23 +945,23 @@ public class TransformationEntityConfiguration {
                             articularItem -> articularItem
                     ));
 
-//            Category category = sessionEntityFetcher.fetchOptionalCategory(session, itemDataDto.getCategory().getValue())
+//            Category category = sessionEntityFetcher.fetchOptionalCategory(session, metaDataDto.getCategory().getValue())
 //                    .orElse(Category.builder()
-//                            .label(itemDataDto.getCategory().getLabel())
-//                            .value(itemDataDto.getCategory().getValue())
+//                            .label(metaDataDto.getCategory().getLabel())
+//                            .value(metaDataDto.getCategory().getValue())
 //                            .build());
-//            Brand brand = sessionEntityFetcher.fetchOptionalBrand(session, itemDataDto.getBrand().getValue())
+//            Brand brand = sessionEntityFetcher.fetchOptionalBrand(session, metaDataDto.getBrand().getValue())
 //                    .orElse(Brand.builder()
-//                            .label(itemDataDto.getBrand().getLabel())
-//                            .value(itemDataDto.getBrand().getValue())
+//                            .label(metaDataDto.getBrand().getLabel())
+//                            .value(metaDataDto.getBrand().getValue())
 //                            .build());
-//            ItemType itemType = sessionEntityFetcher.fetchOptionalItemType(session, itemDataDto.getItemType().getValue())
+//            ItemType itemType = sessionEntityFetcher.fetchOptionalItemType(session, metaDataDto.getItemType().getValue())
 //                    .orElse(ItemType.builder()
-//                            .label(itemDataDto.getItemType().getLabel())
-//                            .value(itemDataDto.getItemType().getValue())
+//                            .label(metaDataDto.getItemType().getLabel())
+//                            .value(metaDataDto.getItemType().getValue())
 //                            .build());
 
-            Set<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoSet = getOptionGroupOptionItemSetDtoSet(itemDataDto.getArticularItemSet());
+            Set<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoSet = getOptionGroupOptionItemSetDtoSet(metaDataDto.getArticularItemSet());
             Set<OptionGroup> optionGroups = mapOptionGroupOptionItemSetDtoListToOptionGroupSet().apply(session, optionGroupOptionItemSetDtoSet);
             Set<OptionItem> optionItems = optionGroups.stream()
                     .flatMap(og -> og.getOptionItems().stream())
@@ -982,14 +969,14 @@ public class TransformationEntityConfiguration {
 
             Set<ArticularItem> articularItemSet = mapArticularItemSet(
                     session,
-                    itemDataDto.getArticularItemSet(),
+                    metaDataDto.getArticularItemSet(),
                     optionItems,
                     existingArticularItemMap);
 
             return MetaData.builder()
                     .id(existingMetaData.getId())
 //                    .itemId(existingMetaData.getItemId())
-                    .description(itemDataDto.getDescription())
+                    .description(metaDataDto.getDescription())
 //                    .category(category)
 //                    .brand(brand)
 //                    .itemType(itemType)
@@ -1218,8 +1205,8 @@ public class TransformationEntityConfiguration {
     }
 
 
-    private Function<MetaData, ResponseItemDataDto> mapItemDataToResponseItemDataDtoFunction() {
-        return itemData -> ResponseItemDataDto.builder()
+    private Function<MetaData, ResponseMetaDataDto> mapItemDataToResponseItemDataDtoFunction() {
+        return itemData -> ResponseMetaDataDto.builder()
 //                .itemId(itemData.getItemId())
                 .description(itemData.getDescription())
                 .brand(BrandDto.builder()

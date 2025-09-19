@@ -11,7 +11,7 @@ import com.b2c.prototype.modal.entity.review.Review;
 import com.b2c.prototype.modal.entity.review.ReviewComment;
 import com.b2c.prototype.modal.entity.review.ReviewStatus;
 import com.b2c.prototype.modal.entity.user.UserDetails;
-import com.b2c.prototype.transform.function.ITransformationFunctionService;
+import com.b2c.prototype.transform.item.IItemTransformService;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
@@ -27,18 +27,18 @@ import static com.b2c.prototype.util.ReviewCommentUtil.reviewCommentMap;
 public class ReviewManager implements IReviewManager {
 
     private final IGeneralEntityDao generalEntityDao;
-    private final ITransformationFunctionService transformationFunctionService;
+    private final IItemTransformService itemTransformService;
 
     public ReviewManager(IGeneralEntityDao generalEntityDao,
-                         ITransformationFunctionService transformationFunctionService) {
+                         IItemTransformService itemTransformService) {
         this.generalEntityDao = generalEntityDao;
-        this.transformationFunctionService = transformationFunctionService;
+        this.itemTransformService = itemTransformService;
     }
 
     @Override
     public void saveReview(String articularId, String userId, ReviewDto reviewDto) {
         Item item = fetchItem(articularId);
-        Review newReview = transformationFunctionService.getEntity(Review.class, reviewDto);
+        Review newReview = itemTransformService.mapReviewDtoToReview(reviewDto);
         UserDetails userDetails = fetchUserDetails(userId);
         newReview.setUserDetails(userDetails);
         item.getReviews().add(newReview);
@@ -48,7 +48,7 @@ public class ReviewManager implements IReviewManager {
     @Override
     public void updateReview(String articularId, String userId, String reviewId, ReviewDto reviewDto) {
         Item item = fetchItem(articularId);
-        Review review = transformationFunctionService.getEntity(Review.class, reviewDto);
+        Review review = itemTransformService.mapReviewDtoToReview(reviewDto);
         UserDetails userDetails = fetchUserDetails(userId);
         review.setUserDetails(userDetails);
         item.getReviews().stream()
@@ -109,7 +109,7 @@ public class ReviewManager implements IReviewManager {
                 "Item.findItemWithReviewCommentsByArticularId",
                 Pair.of(ARTICULAR_ID, articularId));
         return item.getReviews().stream()
-                .map(transformationFunctionService.getTransformationFunction(Review.class, ResponseReviewDto.class))
+                .map(itemTransformService::mapReviewToResponseReviewDto)
                 .toList();
     }
 
@@ -120,7 +120,7 @@ public class ReviewManager implements IReviewManager {
                 Pair.of(USER_ID, userId));
 
         return reviewList.stream()
-                .map(transformationFunctionService.getTransformationFunction(Review.class, ResponseReviewDto.class))
+                .map(itemTransformService::mapReviewToResponseReviewDto)
                 .toList();
     }
 
@@ -131,7 +131,7 @@ public class ReviewManager implements IReviewManager {
                 Pair.of(ARTICULAR_ID, articularId));
         return item.getReviews().stream()
                 .filter(review -> review.getReviewUniqId().equals(reviewId))
-                .map(transformationFunctionService.getTransformationFunction(Review.class, ResponseReviewDto.class))
+                .map(itemTransformService::mapReviewToResponseReviewDto)
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Review not found"));
     }
@@ -144,15 +144,15 @@ public class ReviewManager implements IReviewManager {
                 .findFirst()
                 .ifPresent(review -> {
                     UserDetails userDetails = fetchUserDetails(userId);
-                    ReviewComment newReviewComment =
-                            transformationFunctionService.getEntity(ReviewComment.class, reviewCommentDto);
-                    newReviewComment.setUserDetails(userDetails);
+//                    ReviewComment newReviewComment =
+//                            transformationFunctionService.getEntity(ReviewComment.class, reviewCommentDto);
+//                    newReviewComment.setUserDetails(userDetails);
                     Optional<ReviewComment> optionalReviewComment = findOptionalReviewComment(review.getComments(), reviewId);
                     if (optionalReviewComment.isPresent()) {
                         ReviewComment parentReviewComment = optionalReviewComment.get();
-                        parentReviewComment.addChildComment(newReviewComment);
+//                        parentReviewComment.addChildComment(newReviewComment);
                     } else {
-                        review.getComments().add(newReviewComment);
+//                        review.getComments().add(newReviewComment);
                     }
                 });
         generalEntityDao.mergeEntity(item);
@@ -165,13 +165,13 @@ public class ReviewManager implements IReviewManager {
                 .filter(r -> r.getReviewUniqId().equals(reviewId))
                 .findFirst()
                 .ifPresent(review -> {
-                    ReviewComment updateReviewComment =
-                            transformationFunctionService.getEntity(ReviewComment.class, reviewCommentDto);
+//                    ReviewComment updateReviewComment =
+//                            transformationFunctionService.getEntity(ReviewComment.class, reviewCommentDto);
                     Optional<ReviewComment> optionalReviewComment = findOptionalReviewComment(review.getComments(), commentId);
                     if (optionalReviewComment.isPresent()) {
                         ReviewComment existingReviewComment = optionalReviewComment.get();
-                        existingReviewComment.setTitle(updateReviewComment.getTitle());
-                        existingReviewComment.setMessage(updateReviewComment.getMessage());
+//                        existingReviewComment.setTitle(updateReviewComment.getTitle());
+//                        existingReviewComment.setMessage(updateReviewComment.getMessage());
                         generalEntityDao.mergeEntity(review);
                     }
                 });
@@ -201,11 +201,12 @@ public class ReviewManager implements IReviewManager {
                 "Item.findItemWithReviewCommentsByArticularId",
                 Pair.of(ARTICULAR_ID, articularId));
 
-        return item.getReviews().stream()
-                .filter(review -> review.getReviewUniqId().equals(reviewId))
-                .flatMap(review -> review.getComments().stream())
-                .map(transformationFunctionService.getTransformationFunction(ReviewComment.class, ResponseReviewCommentDto.class))
-                .toList();
+        return null;
+//        return item.getReviews().stream()
+//                .filter(review -> review.getReviewUniqId().equals(reviewId))
+//                .flatMap(review -> review.getComments().stream())
+//                .map(transformationFunctionService.getTransformationFunction(ReviewComment.class, ResponseReviewCommentDto.class))
+//                .toList();
     }
 
     private Optional<ReviewComment> findOptionalReviewComment(List<ReviewComment> reviewComments, String reviewId) {

@@ -15,7 +15,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ItemDataDto {
+public class MetaDataDto {
     private Map<String, String> description;
     private CategoryValueDto category;
     private ItemTypeDto itemType;

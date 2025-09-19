@@ -6,7 +6,7 @@ import com.b2c.prototype.modal.dto.payload.post.ResponsePostDto;
 import com.b2c.prototype.modal.entity.item.Item;
 import com.b2c.prototype.modal.entity.post.Post;
 import com.b2c.prototype.manager.post.IPostManager;
-import com.b2c.prototype.transform.function.ITransformationFunctionService;
+import com.b2c.prototype.transform.item.IItemTransformService;
 import com.b2c.prototype.util.PostUtil;
 import com.nimbusds.jose.util.Pair;
 import lombok.extern.slf4j.Slf4j;
@@ -28,17 +28,17 @@ import static com.b2c.prototype.util.PostUtil.postMap;
 public class PostManager implements IPostManager {
 
     private final IGeneralEntityDao generalEntityDao;
-    private final ITransformationFunctionService transformationFunctionService;
+    private final IItemTransformService itemTransformService;
 
     public PostManager(IGeneralEntityDao generalEntityDao,
-                       ITransformationFunctionService transformationFunctionService) {
+                       IItemTransformService itemTransformService) {
         this.generalEntityDao = generalEntityDao;
-        this.transformationFunctionService = transformationFunctionService;
+        this.itemTransformService = itemTransformService;
     }
 
     @Override
     public void savePost(String articularId, PostDto postDto) {
-        Post newPost = transformationFunctionService.getEntity(Post.class, postDto);
+        Post newPost = itemTransformService.mapPostDtoToPost(postDto);
         Item item = generalEntityDao.findEntity(
                 "Item.findItemByArticularId",
                 Pair.of(ARTICULAR_ID, articularId));
@@ -49,7 +49,7 @@ public class PostManager implements IPostManager {
 
     @Override
     public void updatePost(String articularId, String postId, PostDto postDto) {
-        Post newPost = transformationFunctionService.getEntity(Post.class, postDto);
+        Post newPost = itemTransformService.mapPostDtoToPost(postDto);
         Item item = generalEntityDao.findEntity(
                 "Item.findItemByArticularId",
                 Pair.of(ARTICULAR_ID, articularId));

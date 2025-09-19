@@ -1,7 +1,7 @@
 package com.b2c.prototype.controller.item;
 
-import com.b2c.prototype.modal.dto.payload.item.ItemDataDto;
-import com.b2c.prototype.modal.dto.payload.item.ResponseItemDataDto;
+import com.b2c.prototype.modal.dto.payload.item.MetaDataDto;
+import com.b2c.prototype.modal.dto.payload.item.ResponseMetaDataDto;
 import com.b2c.prototype.processor.item.IMetaDataProcessor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,22 +30,22 @@ public class ItemDataController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> saveItemData(@RequestParam final Map<String, String> requestParams,
-                                             @RequestBody final ItemDataDto itemDataDto) {
-        itemDataProcessor.saveMetaData(requestParams, itemDataDto);
+                                             @RequestBody final MetaDataDto metaDataDto) {
+        itemDataProcessor.saveMetaData(requestParams, metaDataDto);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> putItemData(@RequestParam final Map<String, String> requestParams,
-                                            @RequestBody final ItemDataDto itemDataDto) {
-        itemDataProcessor.updateMetaData(requestParams, itemDataDto);
+                                            @RequestBody final MetaDataDto metaDataDto) {
+        itemDataProcessor.updateMetaData(requestParams, metaDataDto);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> patchItemData(@RequestParam final Map<String, String> requestParams,
-                                              @RequestBody final ItemDataDto itemDataDto) {
-        itemDataProcessor.updateMetaData(requestParams, itemDataDto);
+                                              @RequestBody final MetaDataDto metaDataDto) {
+        itemDataProcessor.updateMetaData(requestParams, metaDataDto);
         return ResponseEntity.ok().build();
     }
 
@@ -56,13 +56,13 @@ public class ItemDataController {
     }
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ResponseItemDataDto> getItemDataList(@RequestParam final Map<String, String> requestParams) {
+    public List<ResponseMetaDataDto> getItemDataList(@RequestParam final Map<String, String> requestParams) {
 
         return itemDataProcessor.getMetaDataList(requestParams);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseItemDataDto> getItemData(@RequestParam final Map<String, String> requestParams) {
+    public ResponseEntity<ResponseMetaDataDto> getItemData(@RequestParam final Map<String, String> requestParams) {
         return new ResponseEntity<>(itemDataProcessor.getMetaData(requestParams), HttpStatus.OK);
     }
 }

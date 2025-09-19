@@ -5,8 +5,9 @@ import com.b2c.prototype.modal.dto.payload.order.ContactInfoDto;
 import com.b2c.prototype.modal.entity.order.DeliveryArticularItemQuantity;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.UserDetails;
-import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.userdetails.IContactInfoManager;
+import com.b2c.prototype.transform.constant.IGeneralEntityTransformService;
+import com.b2c.prototype.transform.userdetails.IUserDetailsTransformService;
 import com.nimbusds.jose.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,12 +24,12 @@ public class ContactInfoManager implements IContactInfoManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(ContactInfoManager.class);
 
     private final IGeneralEntityDao generalEntityDao;
-    private final ITransformationFunctionService transformationFunctionService;
+    private final IGeneralEntityTransformService generalEntityTransformService;
 
     public ContactInfoManager(IGeneralEntityDao generalEntityDao,
-                              ITransformationFunctionService transformationFunctionService) {
+                              IGeneralEntityTransformService generalEntityTransformService) {
         this.generalEntityDao = generalEntityDao;
-        this.transformationFunctionService = transformationFunctionService;
+        this.generalEntityTransformService = generalEntityTransformService;
     }
 
     @Override
@@ -36,7 +37,7 @@ public class ContactInfoManager implements IContactInfoManager {
         UserDetails userDetails = generalEntityDao.findEntity(
                 "UserDetails.findFullUserDetailsByUserId",
                 Pair.of(USER_ID, userId));
-        ContactInfo newContactInfo = transformationFunctionService.getEntity(ContactInfo.class, contactInfoDto);
+        ContactInfo newContactInfo = generalEntityTransformService.mapContactInfoDtoToContactInfo(contactInfoDto);
         ContactInfo contactInfo = userDetails.getContactInfo();
         if (contactInfo != null) {
             newContactInfo.setId(contactInfo.getId());
@@ -65,7 +66,7 @@ public class ContactInfoManager implements IContactInfoManager {
                 Pair.of(USER_ID, userId));
 
         return Optional.of(userDetails)
-                .map(transformationFunctionService.getTransformationFunction(UserDetails.class, ContactInfoDto.class))
+                .map(ud -> generalEntityTransformService.mapContactInfoToContactInfoDto(ud.getContactInfo()))
                 .orElseThrow(() -> new RuntimeException(""));
     }
 
@@ -98,13 +99,8 @@ public class ContactInfoManager implements IContactInfoManager {
 
     @Override
     public ContactInfoDto getContactInfoByOrderId(String orderId) {
-        DeliveryArticularItemQuantity deliveryArticularItemQuantity = generalEntityDao.findEntity(
-                "DeliveryArticularItemQuantity.findByOrderIdWithBeneficiaries",
-                Pair.of(ORDER_ID, orderId));
 
-        return Optional.of(deliveryArticularItemQuantity)
-                .map(transformationFunctionService.getTransformationFunction(DeliveryArticularItemQuantity.class, ContactInfoDto.class))
-                .orElseThrow(() -> new RuntimeException(""));
+        return null;
     }
 
 }

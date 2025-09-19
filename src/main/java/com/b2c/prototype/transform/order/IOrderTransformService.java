@@ -1,7 +1,9 @@
 package com.b2c.prototype.transform.order;
 
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
+import com.b2c.prototype.modal.dto.payload.order.single.ResponseCustomerOrderDetails;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
+import com.b2c.prototype.modal.entity.order.CustomerSingleDeliveryOrder;
 import com.b2c.prototype.modal.entity.order.OrderStatus;
 import com.b2c.prototype.modal.entity.payment.PaymentMethod;
 
@@ -14,4 +16,6 @@ public interface IOrderTransformService {
 
     DeliveryType mapConstantPayloadDtoToDeliveryType(ConstantPayloadDto constantPayloadDto);
     ConstantPayloadDto mapDeliveryTypeToConstantPayloadDto(DeliveryType deliveryType);
+
+    ResponseCustomerOrderDetails mapCustomerSingleDeliveryOrderToResponseCustomerOrderDetails(CustomerSingleDeliveryOrder customerSingleDeliveryOrder);
 }

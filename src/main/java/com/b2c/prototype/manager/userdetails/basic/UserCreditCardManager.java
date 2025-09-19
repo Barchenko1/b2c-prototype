@@ -7,8 +7,8 @@ import com.b2c.prototype.modal.dto.payload.user.ResponseUserCreditCardDto;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
 import com.b2c.prototype.modal.entity.user.UserCreditCard;
 import com.b2c.prototype.modal.entity.user.UserDetails;
-import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.userdetails.IUserCreditCardManager;
+import com.b2c.prototype.transform.userdetails.IUserDetailsTransformService;
 import com.nimbusds.jose.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,12 +25,11 @@ public class UserCreditCardManager implements IUserCreditCardManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserCreditCardManager.class);
 
     private final IGeneralEntityDao generalEntityDao;
-    private final ITransformationFunctionService transformationFunctionService;
+    private final IUserDetailsTransformService userDetailsTransformService;
 
-    public UserCreditCardManager(IGeneralEntityDao generalEntityDao,
-                                 ITransformationFunctionService transformationFunctionService) {
+    public UserCreditCardManager(IGeneralEntityDao generalEntityDao, IUserDetailsTransformService userDetailsTransformService) {
         this.generalEntityDao = generalEntityDao;
-        this.transformationFunctionService = transformationFunctionService;
+        this.userDetailsTransformService = userDetailsTransformService;
     }
 
     @Override
@@ -38,7 +37,7 @@ public class UserCreditCardManager implements IUserCreditCardManager {
         UserDetails userDetails = generalEntityDao.findEntity(
                 "UserDetails.findUserCreditCardsByUserId",
                 Pair.of(USER_ID, userId));
-        UserCreditCard newUserCreditCard = transformationFunctionService.getEntity(UserCreditCard.class, userCreditCardDto);
+        UserCreditCard newUserCreditCard = userDetailsTransformService.mapUserCreditCardToUserCreditCardDto(userCreditCardDto);
         boolean isAllCreditCardsFalse = userDetails.getUserCreditCards().stream()
                 .noneMatch(UserCreditCard::isDefault);
 
@@ -60,7 +59,7 @@ public class UserCreditCardManager implements IUserCreditCardManager {
         UserDetails userDetails = generalEntityDao.findEntity(
                 "UserDetails.findUserCreditCardsByUserId",
                 Pair.of(USER_ID, userId));
-        UserCreditCard newUserCreditCard = transformationFunctionService.getEntity(UserCreditCard.class, userCreditCardDto);
+        UserCreditCard newUserCreditCard = userDetailsTransformService.mapUserCreditCardToUserCreditCardDto(userCreditCardDto);
         boolean isAllCreditCardsFalse = userDetails.getUserCreditCards().stream()
                 .noneMatch(UserCreditCard::isDefault);
 
@@ -140,7 +139,7 @@ public class UserCreditCardManager implements IUserCreditCardManager {
 
         return userDetails.getUserCreditCards().stream()
                 .filter(UserCreditCard::isDefault)
-                .map(transformationFunctionService.getTransformationFunction(UserCreditCard.class, ResponseUserCreditCardDto.class))
+                .map(userDetailsTransformService::mapUserCreditCardToResponseUserCreditCard)
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("User has no such default credit card"));
     }
@@ -152,7 +151,7 @@ public class UserCreditCardManager implements IUserCreditCardManager {
                 Pair.of(USER_ID, userId));
 
         return userDetails.getUserCreditCards().stream()
-                .map(transformationFunctionService.getTransformationFunction(UserCreditCard.class, ResponseUserCreditCardDto.class))
+                .map(userDetailsTransformService::mapUserCreditCardToResponseUserCreditCard)
                 .toList();
     }
 
@@ -162,7 +161,7 @@ public class UserCreditCardManager implements IUserCreditCardManager {
                 "UserCreditCard.findByCreditCardNumber",
                 Pair.of("cardNumber", cardNumber));
         return creditCards.stream()
-                .map(transformationFunctionService.getTransformationFunction(CreditCard.class, ResponseCreditCardDto.class))
+                .map(userDetailsTransformService::mapUserCreditCardToResponseCreditCard)
                 .toList();
     }
 

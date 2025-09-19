@@ -15,7 +15,6 @@ import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
-import com.b2c.prototype.transform.function.ITransformationFunctionService;
 
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,9 +41,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class ArticularItemManagerTest {
-
-    @Mock
-    private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
     private ArticularItemManager articularItemManager;
 
@@ -61,12 +57,6 @@ class ArticularItemManagerTest {
         MetaData metaData = getItemData();
         ArticularItem newArticularItem = updateItemDataOption();
 
-
-
-//        when(queryService.getEntity(MetaData.class, parameterSupplier))
-//                .thenReturn(metaData);
-        when(transformationFunctionService.getEntity(ArticularItem.class, articularItemDto))
-                .thenReturn(newArticularItem);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
             Session session = mock(Session.class);
@@ -89,12 +79,6 @@ class ArticularItemManagerTest {
         metaData.setArticularItemSet(new HashSet<>());
         ArticularItem newArticularItem = updateItemDataOption();
 
-
-
-//        when(queryService.getEntity(MetaData.class, parameterSupplier))
-//                .thenReturn(metaData);
-        when(transformationFunctionService.getEntity(ArticularItem.class, articularItemDto))
-                .thenReturn(newArticularItem);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
             Session session = mock(Session.class);
@@ -116,8 +100,6 @@ class ArticularItemManagerTest {
 
         Function<ArticularItem, ResponseArticularItemDto> function = mock(Function.class);
 
-        when(transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class))
-                .thenReturn(function);
         when(function.apply(articularItem)).thenReturn(responseDto);
 
         ResponseArticularItemDto result = articularItemManager.getResponseArticularItemDto(value);
@@ -131,8 +113,7 @@ class ArticularItemManagerTest {
         ResponseArticularItemDto responseDto = responseItemDataOptionDto();
         List<ResponseArticularItemDto> responseDtoList = List.of(responseDto);
         Function<ArticularItem, ResponseArticularItemDto> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class))
-                .thenReturn(function);
+
 //        when(itemDataOptionDao.getEntityList()).thenReturn(List.of(getItemDataOption()));
         when(function.apply(articularItem)).thenReturn(responseDto);
 
@@ -147,8 +128,7 @@ class ArticularItemManagerTest {
         ResponseArticularItemDto responseDto = responseItemDataOptionDto();
         List<ResponseArticularItemDto> responseDtoList = List.of(responseDto);
         Function<ArticularItem, ResponseArticularItemDto> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class))
-                .thenReturn(function);
+
 //        when(itemDataOptionDao.getEntityList()).thenReturn(List.of(getItemDataOption()));
         when(function.apply(articularItem)).thenReturn(responseDto);
 
@@ -164,8 +144,7 @@ class ArticularItemManagerTest {
         ResponseArticularItemDto responseDto = responseItemDataOptionDto();
         List<ResponseArticularItemDto> responseDtoList = List.of(responseDto);
         Function<ArticularItem, ResponseArticularItemDto> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class))
-                .thenReturn(function);
+
 //        when(itemDataOptionDao.getEntityList()).thenReturn(List.of(articularItem));
         when(function.apply(articularItem)).thenReturn(responseDto);
 

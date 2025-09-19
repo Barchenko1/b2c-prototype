@@ -1,11 +1,10 @@
 package com.b2c.prototype.manager.address.base;
 
 import com.b2c.prototype.dao.IGeneralEntityDao;
-import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.dto.payload.constant.CountryDto;
 import com.b2c.prototype.modal.entity.address.Country;
-import com.b2c.prototype.transform.address.IAddressTransformService;
 import com.b2c.prototype.manager.address.ICountryManager;
+import com.b2c.prototype.transform.constant.IGeneralEntityTransformService;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
@@ -18,15 +17,16 @@ import static com.b2c.prototype.util.Constant.VALUE;
 public class CountryManager implements ICountryManager {
     
     private final IGeneralEntityDao generalEntityDao;
-    private final IAddressTransformService addressTransformService;
+    private final IGeneralEntityTransformService generalEntityTransformService;
 
-    public CountryManager(IGeneralEntityDao generalEntityDao, IAddressTransformService addressTransformService) {
+    public CountryManager(IGeneralEntityDao generalEntityDao,
+                          IGeneralEntityTransformService generalEntityTransformService) {
         this.generalEntityDao = generalEntityDao;
-        this.addressTransformService = addressTransformService;
+        this.generalEntityTransformService = generalEntityTransformService;
     }
 
     public void saveEntity(CountryDto payload) {
-        Country entity = addressTransformService.mapConstantPayloadDtoToCountry(payload);
+        Country entity = generalEntityTransformService.mapConstantPayloadDtoToCountry(payload);
         generalEntityDao.persistEntity(entity);
     }
 
@@ -45,18 +45,18 @@ public class CountryManager implements ICountryManager {
 
     public CountryDto getEntity(String value) {
         Country entity = generalEntityDao.findEntity("Country.findByValue", Pair.of(VALUE, value));
-        return addressTransformService.mapCountryToConstantPayloadDto(entity);
+        return generalEntityTransformService.mapCountryToConstantPayloadDto(entity);
     }
 
     public Optional<CountryDto> getEntityOptional(String value) {
         Country entity = generalEntityDao.findEntity("Country.findByValue", Pair.of(VALUE, value));
-        return Optional.of(addressTransformService.mapCountryToConstantPayloadDto(entity));
+        return Optional.of(generalEntityTransformService.mapCountryToConstantPayloadDto(entity));
     }
 
 
     public List<CountryDto> getEntities() {
         return generalEntityDao.findEntityList("Country.all", (Pair<String, ?>) null).stream()
-                .map(e -> addressTransformService.mapCountryToConstantPayloadDto((Country) e))
+                .map(e -> generalEntityTransformService.mapCountryToConstantPayloadDto((Country) e))
                 .toList();
     }
 }

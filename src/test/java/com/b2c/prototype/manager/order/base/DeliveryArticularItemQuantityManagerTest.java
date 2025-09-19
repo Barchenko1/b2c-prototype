@@ -35,7 +35,6 @@ import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.modal.entity.user.UserCreditCard;
 import com.b2c.prototype.modal.entity.user.UserDetails;
-import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.util.CardUtil;
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,16 +50,12 @@ import java.util.function.Function;
 
 import static com.b2c.prototype.util.Converter.getLocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class DeliveryArticularItemQuantityManagerTest {
-
-    @Mock
-    private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
     private CustomerSingleDeliveryOrderManager orderArticularItemQuantityManager;
 
@@ -73,8 +68,6 @@ class DeliveryArticularItemQuantityManagerTest {
     void saveOrderItemData_shouldSaveEntityArticular() {
         CustomerSingleDeliveryOrderDto dto = getOrderArticularItemQuantityDto();
         DeliveryArticularItemQuantity entity = getOrderItemData();
-        when(transformationFunctionService.getEntity(DeliveryArticularItemQuantity.class, dto))
-                .thenReturn(entity);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
             Session session = mock(Session.class);
@@ -96,12 +89,8 @@ class DeliveryArticularItemQuantityManagerTest {
         CustomerSingleDeliveryOrderDto customerSingleDeliveryOrderDto = getOrderArticularItemQuantityDto();
         DeliveryArticularItemQuantity existingEntity = getOrderItemData();
         DeliveryArticularItemQuantity newEntity = getOrderItemData();
-
-
         
 //        when(orderItemDataDao.getNamedQueryEntity("", parameter)).thenReturn(existingEntity);
-        when(transformationFunctionService.getEntity(DeliveryArticularItemQuantity.class, customerSingleDeliveryOrderDto))
-                .thenReturn(newEntity);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
             Session session = mock(Session.class);
@@ -125,11 +114,7 @@ class DeliveryArticularItemQuantityManagerTest {
 
 
         Function<DeliveryArticularItemQuantity, ResponseCustomerOrderDetails> function = mock(Function.class);
-//        when(orderItemDataDao.getGraphEntity(anyString(), eq(parameter)))
-//                .thenReturn(entity);
-        
-        when(transformationFunctionService.getTransformationFunction(DeliveryArticularItemQuantity.class, ResponseCustomerOrderDetails.class))
-                .thenReturn(function);
+
         when(function.apply(entity)).thenReturn(responseCustomerOrderDetails);
 
         ResponseCustomerOrderDetails result = orderArticularItemQuantityManager.getResponseCustomerOrderDetails(orderId);
@@ -143,8 +128,6 @@ class DeliveryArticularItemQuantityManagerTest {
         DeliveryArticularItemQuantity orderItemDataOption = getOrderItemData();
 //        when(orderItemDataDao.getEntityList()).thenReturn(List.of(orderItemDataOption));
         Function<DeliveryArticularItemQuantity, ResponseCustomerOrderDetails> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(DeliveryArticularItemQuantity.class, ResponseCustomerOrderDetails.class))
-                .thenReturn(function);
         when(function.apply(orderItemDataOption)).thenReturn(responseCustomerOrderDetails);
         List<ResponseCustomerOrderDetails> list = orderArticularItemQuantityManager.getResponseCustomerOrderDetailsList();
 

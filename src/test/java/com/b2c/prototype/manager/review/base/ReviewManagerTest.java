@@ -6,7 +6,6 @@ import com.b2c.prototype.modal.entity.item.Item;
 import com.b2c.prototype.modal.entity.item.MetaData;
 import com.b2c.prototype.modal.entity.review.Rating;
 import com.b2c.prototype.modal.entity.review.Review;
-import com.b2c.prototype.transform.function.ITransformationFunctionService;
 
 
 import org.hibernate.Session;
@@ -34,9 +33,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class ReviewManagerTest {
-
-    @Mock
-    private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
     private ReviewManager reviewManager;
 
@@ -60,9 +56,6 @@ class ReviewManagerTest {
 
         
         NativeQuery<Item> query = mock(NativeQuery.class);
-//        when(session.createNativeQuery(anyString(), eq(Item.class))).thenReturn(query);
-//        when(queryService.getQueryEntity(query, parameterSupplier)).thenReturn(item);
-        when(transformationFunctionService.getEntity(Review.class, reviewDto)).thenReturn(review);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
             consumer.accept(session);
@@ -89,9 +82,6 @@ class ReviewManagerTest {
 
         
         NativeQuery<Item> query = mock(NativeQuery.class);
-//        when(session.createNativeQuery(anyString(), eq(Item.class))).thenReturn(query);
-//        when(queryService.getQueryEntity(query, parameterSupplier)).thenReturn(item);
-        when(transformationFunctionService.getEntity(Review.class, reviewDto)).thenReturn(review);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
             consumer.accept(session);
@@ -113,8 +103,6 @@ class ReviewManagerTest {
 
         
         Function<MetaData, Review> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(MetaData.class, Review.class))
-                .thenReturn(function);
 //        when(supplierService.entityFieldSupplier(
 //                MetaData.class,
 //                parameterSupplier,

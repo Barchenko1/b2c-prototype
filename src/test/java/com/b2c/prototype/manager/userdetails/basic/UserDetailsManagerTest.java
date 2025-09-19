@@ -15,7 +15,6 @@ import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.modal.entity.user.UserCreditCard;
 import com.b2c.prototype.modal.entity.user.UserDetails;
-import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.util.CardUtil;
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,9 +39,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class UserDetailsManagerTest {
-
-    @Mock
-    private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
     private UserDetailsManager userDetailsManager;
 
@@ -58,9 +54,6 @@ class UserDetailsManagerTest {
                 .password("password")
                 .build();
         UserDetails userDetails = new UserDetails();
-
-        when(transformationFunctionService.getEntity(UserDetails.class, registrationUserDetailsDto))
-                .thenReturn(userDetails);
 
         userDetailsManager.createNewUser(registrationUserDetailsDto);
 
@@ -95,12 +88,6 @@ class UserDetailsManagerTest {
         UserDetailsDto userDetailsDto = getUserDetailsDto();
         UserDetails userDetails = getUserDetails();
 
-
-        when(transformationFunctionService.getTransformationFunction(UserDetails.class, UserDetailsDto.class))
-                .thenReturn(transformationFunction);
-//        when(userDetailsDao.getGraphEntity(anyString(), eq(parameter)))
-//                .thenReturn(userDetails);
-
         ResponseUserDetailsDto result = userDetailsManager.getUserDetailsByUserId(userId);
 
         assertEquals(userDetailsDto, result);
@@ -110,10 +97,6 @@ class UserDetailsManagerTest {
     void getUserDetails_shouldReturnListOfUserDetailsDto() {
         UserDetailsDto userDetailsDto = getUserDetailsDto();
         UserDetails userDetails = getUserDetails();
-
-        when(transformationFunctionService.getTransformationFunction(UserDetails.class, UserDetailsDto.class))
-                .thenReturn(transformationFunction);
-//        when(userDetailsDao.getEntityList()).thenReturn(Collections.singletonList(userDetails));
 
         List<ResponseUserDetailsDto> result = userDetailsManager.getResponseUserDetails();
 

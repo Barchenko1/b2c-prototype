@@ -5,7 +5,6 @@ import com.b2c.prototype.modal.dto.payload.discount.DiscountStatusDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.price.Currency;
-import com.b2c.prototype.transform.function.ITransformationFunctionService;
 
 
 import org.hibernate.Session;
@@ -23,18 +22,12 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class DiscountManagerTest {
-
-    @Mock
-    private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
     private DiscountManager discountManager;
 
@@ -64,12 +57,7 @@ class DiscountManagerTest {
         DiscountDto dto = createTestDto();
         ArticularItem mockArticularItem = mock(ArticularItem.class);
         Discount discount = createTestDiscount();
-        
-//        when(queryService.getEntity(ArticularItem.class, parameterSupplier))
-//                .thenReturn(mockArticularItem);
-//        when(discountDao.getOptionalEntity(mockParameter)).thenReturn(Optional.of(discount));
-        when(transformationFunctionService.getEntity(Discount.class, dto))
-                .thenReturn(discount);
+
         when(mockArticularItem.getDiscount()).thenReturn(discount);
 
         doAnswer(invocation -> {
@@ -91,9 +79,6 @@ class DiscountManagerTest {
         ArticularItem mockArticularItem = mock(ArticularItem.class);
         Discount discount = createTestDiscount();
 
-//        when(discountDao.getEntity(mockParameter)).thenReturn(discount);
-        when(transformationFunctionService.getEntity(Discount.class, dto))
-                .thenReturn(discount);
         when(mockArticularItem.getDiscount()).thenReturn(discount);
 
         doAnswer(invocation -> {
@@ -165,9 +150,6 @@ class DiscountManagerTest {
 //                eq(mockParameter),
 //                eq(function)
 //        )).thenReturn(expectedDto);
-        when(transformationFunctionService.getCollectionTransformationFunction(ArticularItem.class, DiscountDto.class))
-                .thenReturn(function);
-        when(function.apply(anyList())).thenReturn(expectedDto);
 
         DiscountDto result = discountManager.getDiscount(code);
         assertEquals(expectedDto.getCurrency(), result.getCurrency());

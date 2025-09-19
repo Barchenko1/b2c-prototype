@@ -10,7 +10,7 @@ import com.b2c.prototype.modal.entity.message.MessageBox;
 import com.b2c.prototype.modal.entity.message.MessageStatus;
 import com.b2c.prototype.modal.entity.message.MessageTemplate;
 import com.b2c.prototype.manager.message.IMessageManager;
-import com.b2c.prototype.transform.message.IMessageTransformService;
+import com.b2c.prototype.transform.userdetails.IUserDetailsTransformService;
 import com.nimbusds.jose.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,12 +30,12 @@ public class MessageManager implements IMessageManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageManager.class);
 
     private final IGeneralEntityDao generalEntityDao;
-    private final IMessageTransformService messageTransformService;
+    private final IUserDetailsTransformService userDetailsTransformService;
 
     public MessageManager(IGeneralEntityDao generalEntityDao,
-                          IMessageTransformService messageTransformService) {
+                          IUserDetailsTransformService userDetailsTransformService) {
         this.generalEntityDao = generalEntityDao;
-        this.messageTransformService = messageTransformService;
+        this.userDetailsTransformService = userDetailsTransformService;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class MessageManager implements IMessageManager {
         List<MessageBox> messageBoxes = generalEntityDao.findEntityList(
                 "MessageBox.findByEmailListWithMessages",
                 Pair.of("emails", messageDto.getMessageTemplate().getReceivers()));
-        Message message = messageTransformService.mapMessageDtoToMessage(messageDto);
+        Message message = userDetailsTransformService.mapMessageDtoToMessage(messageDto);
         messageBoxes.forEach(message::addMessageBox);
         generalEntityDao.mergeEntity(message);
     }
@@ -56,7 +56,7 @@ public class MessageManager implements IMessageManager {
                 Pair.of(USER_ID, messageId));
         generalEntityDao.findEntity("MessageBox.findByUserIdWithMessages",
                 Pair.of(USER_ID, messageId));
-        Message newMessage = messageTransformService.mapMessageDtoToMessage(messageDto);
+        Message newMessage = userDetailsTransformService.mapMessageDtoToMessage(messageDto);
         Message message = getExistingMessage(messageBox, messageId);
         MessageTemplate messageTemplate = message.getMessageTemplate();
         messageTemplate.setTitle(newMessage.getMessageTemplate().getTitle());
@@ -130,7 +130,7 @@ public class MessageManager implements IMessageManager {
                 Pair.of("sender", senderEmail));
 
         return messages.stream()
-                .map(messageTransformService::mapMessageToResponseMessageOverviewDto)
+                .map(userDetailsTransformService::mapMessageToResponseMessageOverviewDto)
                 .toList();
     }
 
@@ -141,7 +141,7 @@ public class MessageManager implements IMessageManager {
                 Pair.of("receiver", receiverEmail));
 
         return messages.stream()
-                .map(messageTransformService::mapMessageToResponseMessageOverviewDto)
+                .map(userDetailsTransformService::mapMessageToResponseMessageOverviewDto)
                 .toList();
     }
 
@@ -151,7 +151,7 @@ public class MessageManager implements IMessageManager {
                 "MessageBox.findByUserIdWithMessages",
                 Pair.of(USER_ID, userId));
         return messageBox.getMessages().stream()
-                .map(messageTransformService::mapMessageToResponseMessageOverviewDto)
+                .map(userDetailsTransformService::mapMessageToResponseMessageOverviewDto)
                 .toList();
     }
 
@@ -162,7 +162,7 @@ public class MessageManager implements IMessageManager {
                 Pair.of(USER_ID, userId));
         Message message = getExistingMessage(messageBox, messageId);
         ResponseMessagePayloadDto responseMessagePayloadDto =
-                messageTransformService.mapResponseMessagePayloadDtoToMessage(message);
+                userDetailsTransformService.mapResponseMessagePayloadDtoToMessage(message);
 
         return responseMessagePayloadDto;
     }

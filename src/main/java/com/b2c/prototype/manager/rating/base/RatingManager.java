@@ -2,10 +2,9 @@ package com.b2c.prototype.manager.rating.base;
 
 import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.manager.rating.IRatingManager;
-import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.dto.common.NumberConstantPayloadDto;
 import com.b2c.prototype.modal.entity.review.Rating;
-import com.b2c.prototype.transform.review.IReviewTransformService;
+import com.b2c.prototype.transform.item.IItemTransformService;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
@@ -18,15 +17,16 @@ import static com.b2c.prototype.util.Constant.VALUE;
 public class RatingManager implements IRatingManager {
     
     private final IGeneralEntityDao generalEntityDao;
-    private final IReviewTransformService reviewTransformService;
+    private final IItemTransformService itemTransformService;
 
-    public RatingManager(IGeneralEntityDao generalEntityDao, IReviewTransformService reviewTransformService) {
+    public RatingManager(IGeneralEntityDao generalEntityDao,
+                         IItemTransformService itemTransformService) {
         this.generalEntityDao = generalEntityDao;
-        this.reviewTransformService = reviewTransformService;
+        this.itemTransformService = itemTransformService;
     }
 
     public void saveEntity(NumberConstantPayloadDto payload) {
-        Rating entity = reviewTransformService.mapNumberConstantPayloadDtoToRating(payload);
+        Rating entity = itemTransformService.mapNumberConstantPayloadDtoToRating(payload);
         generalEntityDao.persistEntity(entity);
     }
 
@@ -44,18 +44,18 @@ public class RatingManager implements IRatingManager {
 
     public NumberConstantPayloadDto getEntity(int value) {
         Rating entity = generalEntityDao.findEntity("Rating.findByValue", Pair.of(VALUE, value));
-        return reviewTransformService.mapRatingToNumberConstantPayloadDto(entity);
+        return itemTransformService.mapRatingToNumberConstantPayloadDto(entity);
     }
 
     public Optional<NumberConstantPayloadDto> getEntityOptional(int value) {
         Rating entity = generalEntityDao.findEntity("Rating.findByValue", Pair.of(VALUE, value));
-        return Optional.of(reviewTransformService.mapRatingToNumberConstantPayloadDto(entity));
+        return Optional.of(itemTransformService.mapRatingToNumberConstantPayloadDto(entity));
     }
 
 
     public List<NumberConstantPayloadDto> getEntities() {
         return generalEntityDao.findEntityList("Rating.all", (Pair<String, ?>) null).stream()
-                .map(e -> reviewTransformService.mapRatingToNumberConstantPayloadDto((Rating) e))
+                .map(e -> itemTransformService.mapRatingToNumberConstantPayloadDto((Rating) e))
                 .toList();
     }
 }

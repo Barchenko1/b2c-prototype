@@ -4,7 +4,7 @@ import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.manager.option.IZoneOptionManager;
 import com.b2c.prototype.modal.dto.payload.option.ZoneOptionDto;
 import com.b2c.prototype.modal.entity.option.ZoneOption;
-import com.b2c.prototype.transform.function.ITransformationFunctionService;
+import com.b2c.prototype.transform.item.IItemTransformService;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
@@ -17,17 +17,17 @@ import static com.b2c.prototype.util.Constant.VALUE;
 public class ZoneOptionManager implements IZoneOptionManager {
 
     private final IGeneralEntityDao generalEntityDao;
-    private final ITransformationFunctionService transformationFunctionService;
+    private final IItemTransformService itemTransformService;
 
     public ZoneOptionManager(IGeneralEntityDao generalEntityDao,
-                             ITransformationFunctionService transformationFunctionService) {
+                             IItemTransformService itemTransformService) {
         this.generalEntityDao = generalEntityDao;
-        this.transformationFunctionService = transformationFunctionService;
+        this.itemTransformService = itemTransformService;
     }
 
     @Override
     public void saveUpdateZoneOption(String zoneValue, ZoneOptionDto zoneOptionDto) {
-        ZoneOption zoneOption = transformationFunctionService.getEntity(ZoneOption.class, zoneOptionDto);
+        ZoneOption zoneOption = itemTransformService.mapZoneOptionDtoToZoneOption(zoneOptionDto);
         if (zoneValue != null) {
             ZoneOption existingZoneOption = generalEntityDao.findEntity(
                     "ZoneOption.findAllWithPriceAndCurrency",
@@ -55,7 +55,7 @@ public class ZoneOptionManager implements IZoneOptionManager {
         );
 
         return Optional.ofNullable(zoneOption)
-                .map(transformationFunctionService.getTransformationFunction(ZoneOption.class, ZoneOptionDto.class))
+                .map(itemTransformService::mapZoneOptionToZoneOptionDto)
                 .orElseThrow(() -> new RuntimeException(""));
     }
 
@@ -65,7 +65,7 @@ public class ZoneOptionManager implements IZoneOptionManager {
                 "ZoneOption.all", (Pair<String, ?>) null);
 
         return zoneOptionList.stream()
-                .map(transformationFunctionService.getTransformationFunction(ZoneOption.class, ZoneOptionDto.class))
+                .map(itemTransformService::mapZoneOptionToZoneOptionDto)
                 .toList();
     }
 }

@@ -5,7 +5,6 @@ import com.b2c.prototype.modal.entity.item.ArticularItem;
 
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
-import com.b2c.prototype.transform.function.ITransformationFunctionService;
 
 
 import org.hibernate.Session;
@@ -29,8 +28,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class OptionItemManagerTest {
-    @Mock
-    private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
     private OptionItemManager optionItemManager;
 
@@ -46,14 +43,6 @@ class OptionItemManagerTest {
         OptionItem optionItem = getOptionItem();
         ArticularItem articularItem = mock(ArticularItem.class);
         when(articularItem.getOptionItems()).thenReturn(Set.of(optionItem));
-
-
-
-        when(transformationFunctionService.getEntity(OptionItem.class, optionGroupOptionItemSetDto))
-                .thenReturn(optionItem);
-        
-//        when(queryService.getEntity(ArticularItem.class, parameterSupplier))
-//                .thenReturn(articularItem);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
             Session session = mock(Session.class);
@@ -96,14 +85,7 @@ class OptionItemManagerTest {
 
 
         Function<ArticularItem, OptionItem> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(ArticularItem.class, OptionItem.class))
-                .thenReturn(function);
-//        when(supplierService.entityFieldSupplier(
-//                ArticularItem.class,
-//                parameterSupplier,
-//                function
-//        ))
-//                .thenReturn(optionItemSupplier);
+
         optionItemManager.deleteOptionItemByArticularId(articularId, optionValue);
 
     }
@@ -139,8 +121,6 @@ class OptionItemManagerTest {
 
         
         Function<ArticularItem, OptionGroupOptionItemSetDto> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(ArticularItem.class, OptionGroupOptionItemSetDto.class))
-                .thenReturn(function);
         when(function.apply(articularItem)).thenReturn(optionGroupOptionItemSetDto);
 //        when(queryService.getEntityDto(ArticularItem.class, parameterSupplier, function))
 //                .thenReturn(optionGroupOptionItemSetDto);
@@ -161,8 +141,7 @@ class OptionItemManagerTest {
 //        when(queryService.getSubEntityList(OptionItem.class, parameter))
 //                .thenReturn(List.of(optionItem));
         Function<OptionItem, OptionGroupOptionItemSetDto> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(OptionItem.class, OptionGroupOptionItemSetDto.class))
-                .thenReturn(function);
+
         when(function.apply(optionItem)).thenReturn(optionGroupOptionItemSetDto);
         OptionGroupOptionItemSetDto result = optionItemManager.getOptionItemListByOptionGroup(optionGroupName);
 
@@ -174,8 +153,6 @@ class OptionItemManagerTest {
     void testGetOptionItemList() {
         OptionGroupOptionItemSetDto dto = mock(OptionGroupOptionItemSetDto.class);
         Function<OptionItem, OptionGroupOptionItemSetDto> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(OptionItem.class, OptionGroupOptionItemSetDto.class, "set"))
-                .thenReturn(function);
 
         List<OptionGroupOptionItemSetDto> list = optionItemManager.getOptionItemList();
 

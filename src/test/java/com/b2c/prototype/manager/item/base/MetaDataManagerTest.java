@@ -1,32 +1,28 @@
 package com.b2c.prototype.manager.item.base;
 
-import com.b2c.prototype.modal.dto.payload.item.ItemDataDto;
+import com.b2c.prototype.modal.dto.payload.item.MetaDataDto;
 import com.b2c.prototype.modal.dto.payload.constant.BrandDto;
 import com.b2c.prototype.modal.dto.payload.constant.CategoryValueDto;
 import com.b2c.prototype.modal.dto.payload.constant.ItemTypeDto;
-import com.b2c.prototype.modal.dto.payload.item.ResponseItemDataDto;
+import com.b2c.prototype.modal.dto.payload.item.ResponseMetaDataDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.MetaData;
 import com.b2c.prototype.modal.entity.item.ItemType;
-import com.b2c.prototype.transform.function.ITransformationFunctionService;
 
 
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.eq;
@@ -35,10 +31,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class MetaDataManagerTest {
-    @Mock
-    private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
-    private ItemDataManager itemDataManager;
+    private MetaDataManager itemDataManager;
 
     @BeforeEach
     void setUp() {
@@ -46,12 +40,10 @@ class MetaDataManagerTest {
     }
 
     @Test
-    void testSaveItemData() {
-        ItemDataDto itemDataDto = getItemDataDto();
-        MetaData metaData = getItemData();
+    void testSaveMetaData() {
+        MetaDataDto metaDataDto = getMetaDataDto();
+        MetaData metaData = getMetaData();
 
-        when(transformationFunctionService.getEntity(MetaData.class, itemDataDto))
-                .thenReturn(metaData);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
             Session session = mock(Session.class);
@@ -60,19 +52,16 @@ class MetaDataManagerTest {
             return null;
         });
 
-        itemDataManager.saveItemData(itemDataDto);
+        itemDataManager.saveMetaData(metaDataDto);
 
     }
 
     @Test
-    void testUpdateItemData() {
+    void testUpdateMetaData() {
         String itemId = "itemId";
-        ItemDataDto itemDataDto = getItemDataDto();
-        MetaData metaData = getItemData();
+        MetaDataDto metaDataDto = getMetaDataDto();
+        MetaData metaData = getMetaData();
 
-
-        when(transformationFunctionService.getEntity(MetaData.class, itemDataDto))
-                .thenReturn(metaData);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
             Session session = mock(Session.class);
@@ -81,47 +70,44 @@ class MetaDataManagerTest {
             return null;
         });
 
-        itemDataManager.updateItemData(itemId, itemDataDto);
+        itemDataManager.updateMetaData(itemId, metaDataDto);
 
     }
 
     @Test
-    void testGetItemData() {
+    void testGetMetaData() {
         String itemId = "itemId";
-        MetaData metaData = getItemData();
-        ResponseItemDataDto responseDto = getResponseItemDataDto();
+        MetaData metaData = getMetaData();
+        ResponseMetaDataDto responseDto = getResponseItemDataDto();
 
 
-        Function<MetaData, ResponseItemDataDto> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(MetaData.class, ResponseItemDataDto.class))
-                .thenReturn(function);
-        
+        Function<MetaData, ResponseMetaDataDto> function = mock(Function.class);
+
         when(function.apply(metaData)).thenReturn(responseDto);
-        ResponseItemDataDto result = itemDataManager.getItemData(itemId);
+        ResponseMetaDataDto result = itemDataManager.getMetaData(itemId);
 
         assertEquals(responseDto, result);
     }
 
     @Test
-    void testGetItemDataList() {
-        ResponseItemDataDto responseItemDataDto = getResponseItemDataDto();
-        List<ResponseItemDataDto> responseDtoList = List.of(responseItemDataDto);
-        MetaData metaData = getItemData();
-        ResponseItemDataDto responseDto = getResponseItemDataDto();
+    void testGetMetaDataList() {
+        ResponseMetaDataDto responseMetaDataDto = getResponseItemDataDto();
+        List<ResponseMetaDataDto> responseDtoList = List.of(responseMetaDataDto);
+        MetaData metaData = getMetaData();
+        ResponseMetaDataDto responseDto = getResponseItemDataDto();
 
-        Function<MetaData, ResponseItemDataDto> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(MetaData.class, ResponseItemDataDto.class))
-                .thenReturn(function);
+        Function<MetaData, ResponseMetaDataDto> function = mock(Function.class);
+
 //        when(itemDataDao.getEntityList()).thenReturn(List.of(metaData));
         when(function.apply(metaData)).thenReturn(responseDto);
 
-        List<ResponseItemDataDto> result = itemDataManager.getItemDataList();
+        List<ResponseMetaDataDto> result = itemDataManager.getMetaDataList();
 
         assertEquals(responseDtoList, result);
     }
 
-    private ResponseItemDataDto getResponseItemDataDto() {
-        return ResponseItemDataDto.builder()
+    private ResponseMetaDataDto getResponseItemDataDto() {
+        return ResponseMetaDataDto.builder()
                 .category(CategoryValueDto.builder()
                         .label("categoryLabel")
                         .value("categoryValue")
@@ -138,7 +124,7 @@ class MetaDataManagerTest {
                 .build();
     }
 
-    private MetaData getItemData() {
+    private MetaData getMetaData() {
         return MetaData.builder()
                 .category(Category.builder()
                         .label("categoryLabel")
@@ -155,8 +141,8 @@ class MetaDataManagerTest {
                 .build();
     }
 
-    private ItemDataDto getItemDataDto() {
-        return ItemDataDto.builder()
+    private MetaDataDto getMetaDataDto() {
+        return MetaDataDto.builder()
                 .category(CategoryValueDto.builder()
                         .label("categoryLabel")
                         .value("categoryValue")
@@ -172,7 +158,7 @@ class MetaDataManagerTest {
                 .build();
     }
 
-    private ArticularItem getItemDataOption() {
+    private ArticularItem getMetaDataOption() {
         return ArticularItem.builder()
                 .articularUniqId("articularIdValue")
                 .build();

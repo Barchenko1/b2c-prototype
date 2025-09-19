@@ -4,7 +4,7 @@ import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.entity.message.MessageType;
 import com.b2c.prototype.manager.message.IMessageTypeManager;
-import com.b2c.prototype.transform.message.IMessageTransformService;
+import com.b2c.prototype.transform.userdetails.IUserDetailsTransformService;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
@@ -17,16 +17,16 @@ import static com.b2c.prototype.util.Constant.VALUE;
 public class MessageTypeManager implements IMessageTypeManager {
 
     private final IGeneralEntityDao generalEntityDao;
-    private final IMessageTransformService messageTransformService;
+    private final IUserDetailsTransformService userDetailsTransformService;
 
     public MessageTypeManager(IGeneralEntityDao generalEntityDao,
-                              IMessageTransformService messageTransformService) {
+                              IUserDetailsTransformService userDetailsTransformService) {
         this.generalEntityDao = generalEntityDao;
-        this.messageTransformService = messageTransformService;
+        this.userDetailsTransformService = userDetailsTransformService;
     }
 
     public void saveEntity(ConstantPayloadDto payload) {
-        MessageType entity = messageTransformService.mapConstantPayloadDtoToMessageType(payload);
+        MessageType entity = userDetailsTransformService.mapConstantPayloadDtoToMessageType(payload);
         generalEntityDao.persistEntity(entity);
     }
 
@@ -45,18 +45,18 @@ public class MessageTypeManager implements IMessageTypeManager {
 
     public ConstantPayloadDto getEntity(String value) {
         MessageType entity = generalEntityDao.findEntity("MessageType.findByValue", Pair.of(VALUE, value));
-        return messageTransformService.mapMessageTypeToConstantPayloadDto(entity);
+        return userDetailsTransformService.mapMessageTypeToConstantPayloadDto(entity);
     }
 
     public Optional<ConstantPayloadDto> getEntityOptional(String value) {
         MessageType entity = generalEntityDao.findEntity("MessageType.findByValue", Pair.of(VALUE, value));
-        return Optional.of(messageTransformService.mapMessageTypeToConstantPayloadDto(entity));
+        return Optional.of(userDetailsTransformService.mapMessageTypeToConstantPayloadDto(entity));
     }
 
 
     public List<ConstantPayloadDto> getEntities() {
         return generalEntityDao.findEntityList("MessageType.all", (Pair<String, ?>) null).stream()
-                .map(e -> messageTransformService.mapMessageTypeToConstantPayloadDto((MessageType) e))
+                .map(e -> userDetailsTransformService.mapMessageTypeToConstantPayloadDto((MessageType) e))
                 .toList();
     }
 }

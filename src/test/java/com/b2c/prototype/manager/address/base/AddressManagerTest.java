@@ -7,7 +7,6 @@ import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
 import com.b2c.prototype.modal.entity.order.DeliveryArticularItemQuantity;
 import com.b2c.prototype.modal.entity.user.UserDetails;
-import com.b2c.prototype.transform.function.ITransformationFunctionService;
 
 
 import org.hibernate.Session;
@@ -21,20 +20,12 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class AddressManagerTest {
-    @Mock
-    private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
     private UserAddressManager addressManager;
 
@@ -94,11 +85,6 @@ class AddressManagerTest {
 
 //        when(userDetails.getAddresses()).thenReturn(Set.of(address));
 
-
-        Supplier<Address> addressSupplier = () -> address;
-        Function<UserDetails, Address> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(UserDetails.class, Address.class))
-                .thenReturn(function);
 //        when(supplierService.entityFieldSupplier(
 //                UserDetails.class,
 //                parameterSupplier,
@@ -133,8 +119,6 @@ class AddressManagerTest {
         when(delivery.getAddress()).thenReturn(address);
         Supplier<Address> addressSupplier = () -> address;
         Function<DeliveryArticularItemQuantity, Address> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(DeliveryArticularItemQuantity.class, Address.class))
-                .thenReturn(function);
 //        when(supplierService.entityFieldSupplier(
 //                DeliveryArticularItemQuantity.class,
 //                parameterSupplier,
@@ -152,9 +136,6 @@ class AddressManagerTest {
         Address address = getAddress();
 
         Function<UserDetails, AddressDto> transformationFunction = user -> getAddressDto();
-        when(transformationFunctionService.getTransformationFunction(UserDetails.class, AddressDto.class))
-                .thenReturn(transformationFunction);
-
 //        when(queryService.getEntityDto(eq(UserDetails.class), eq(parameterSupplier), eq(transformationFunction)))
 //                .thenAnswer(invocation -> {
 //                    Supplier<Parameter> supplierArg = invocation.getArgument(1);
@@ -178,9 +159,6 @@ class AddressManagerTest {
         Address address = getAddress();
 
         Function<DeliveryArticularItemQuantity, AddressDto> transformationFunction = user -> getAddressDto();
-        when(transformationFunctionService.getTransformationFunction(DeliveryArticularItemQuantity.class, AddressDto.class))
-                .thenReturn(transformationFunction);
-
 //        when(queryService.getEntityDto(eq(DeliveryArticularItemQuantity.class), eq(parameterSupplier), eq(transformationFunction)))
 //                .thenAnswer(invocation -> {
 //                    Supplier<Parameter> supplierArg = invocation.getArgument(1);
@@ -213,8 +191,6 @@ class AddressManagerTest {
         when(address2.getCountry()).thenReturn(mock(Country.class));
 
         Function<Address, AddressDto> mockFunction = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(Address.class, AddressDto.class))
-                .thenReturn(mockFunction);
 //        when(addressDao.getEntityList()).thenReturn(List.of(address1, address2));
 //        List<AddressDto> result = addressManager.getAddresses();
 

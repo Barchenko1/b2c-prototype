@@ -15,7 +15,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseItemDataDto {
+public class ResponseMetaDataDto {
     private String itemId;
     private Map<String, String> description;
     private CategoryValueDto category;

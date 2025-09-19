@@ -6,8 +6,8 @@ import com.b2c.prototype.modal.dto.payload.option.SingleOptionItemDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
-import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.option.IOptionItemManager;
+import com.b2c.prototype.transform.item.IItemTransformService;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
@@ -22,19 +22,20 @@ import static com.b2c.prototype.util.Constant.VALUE;
 public class OptionItemManager implements IOptionItemManager {
 
     private final IGeneralEntityDao generalEntityDao;
-    private final ITransformationFunctionService transformationFunctionService;
+    private final IItemTransformService itemTransformService;
 
     public OptionItemManager(IGeneralEntityDao generalEntityDao,
-                             ITransformationFunctionService transformationFunctionService) {
+                             IItemTransformService itemTransformService) {
         this.generalEntityDao = generalEntityDao;
-        this.transformationFunctionService = transformationFunctionService;
+        this.itemTransformService = itemTransformService;
     }
 
     @Override
     public void saveUpdateOptionItemByArticularId(String articularId, String optionItemValue, SingleOptionItemDto singleOptionItemDto) {
-        OptionGroup newOptionGroup = transformationFunctionService.getEntity(
-                OptionGroup.class,
-                singleOptionItemDto);
+//        OptionGroup newOptionGroup = itemTransformService.getEntity(
+//                OptionGroup.class,
+//                singleOptionItemDto);
+        OptionGroup newOptionGroup = new OptionGroup();
         OptionGroup existingOptionGroup = (OptionGroup) generalEntityDao.findOptionEntity(
                         "OptionGroup.findByValueWithOptionItems",
                         Pair.of(VALUE, singleOptionItemDto.getOptionGroup().getValue()))
@@ -66,7 +67,8 @@ public class OptionItemManager implements IOptionItemManager {
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Option item with value " + optionItemValue + " not found"));
 
-        OptionGroup newOptionGroup = transformationFunctionService.getEntity(OptionGroup.class, singleOptionItemDto);
+        OptionGroup newOptionGroup = new OptionGroup();
+//        OptionGroup newOptionGroup = transformationFunctionService.getEntity(OptionGroup.class, singleOptionItemDto);
 //            OptionItem newOptionItem = newOptionGroup.getOptionItems().get(0);
 //            newOptionItem.setId(existingOptionItem.getId());
 
@@ -133,32 +135,35 @@ public class OptionItemManager implements IOptionItemManager {
 
     @Override
     public OptionGroupOptionItemSetDto getOptionItemListByOptionGroup(String optionGroupValue) {
-        OptionGroup optionGroup = generalEntityDao.findEntity(
-                "OptionGroup.findByValueWithOptionItems",
-                Pair.of(VALUE, optionGroupValue));
-        return Optional.of(optionGroup)
-                .map(transformationFunctionService.getTransformationFunction(OptionGroup.class, OptionGroupOptionItemSetDto.class))
-                .orElseThrow(() -> new RuntimeException(""));
+//        OptionGroup optionGroup = generalEntityDao.findEntity(
+//                "OptionGroup.findByValueWithOptionItems",
+//                Pair.of(VALUE, optionGroupValue));
+//        return Optional.of(optionGroup)
+//                .map(transformationFunctionService.getTransformationFunction(OptionGroup.class, OptionGroupOptionItemSetDto.class))
+//                .orElseThrow(() -> new RuntimeException(""));
+        return null;
     }
 
     @Override
     public List<OptionGroupOptionItemSetDto> getOptionItemByItemArticularId(String articularId) {
-        ArticularItem articularItem = generalEntityDao.findEntity(
-                "ArticularItem.optionItems",
-                Pair.of(ARTICULAR_ID, articularId));
-
-        return (List<OptionGroupOptionItemSetDto>) transformationFunctionService
-                .getTransformationCollectionFunction(ArticularItem.class, OptionGroupOptionItemSetDto.class, "list")
-                .apply(articularItem);
+//        ArticularItem articularItem = generalEntityDao.findEntity(
+//                "ArticularItem.optionItems",
+//                Pair.of(ARTICULAR_ID, articularId));
+//
+//        return (List<OptionGroupOptionItemSetDto>) transformationFunctionService
+//                .getTransformationCollectionFunction(ArticularItem.class, OptionGroupOptionItemSetDto.class, "list")
+//                .apply(articularItem);
+        return null;
     }
 
     @Override
     public List<OptionGroupOptionItemSetDto> getOptionItemList() {
-        List<OptionGroup> optionGroupList = generalEntityDao.findEntityList(
-                "OptionGroup.findWithOptionItems", (Pair<String, ?>) null);
-        return optionGroupList.stream()
-                .map(transformationFunctionService.getTransformationFunction(OptionGroup.class, OptionGroupOptionItemSetDto.class))
-                .toList();
+//        List<OptionGroup> optionGroupList = generalEntityDao.findEntityList(
+//                "OptionGroup.findWithOptionItems", (Pair<String, ?>) null);
+//        return optionGroupList.stream()
+//                .map(itemTransformService::mapOptionGroupToConstantPayloadDto)
+//                .toList();
+        return null;
     }
 
 }

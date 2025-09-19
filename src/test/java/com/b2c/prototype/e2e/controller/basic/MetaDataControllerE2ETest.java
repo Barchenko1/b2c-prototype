@@ -3,7 +3,7 @@ package com.b2c.prototype.e2e.controller.basic;
 import com.b2c.prototype.e2e.BasicE2ETest;
 import com.b2c.prototype.e2e.util.TestUtil;
 import com.b2c.prototype.modal.dto.payload.item.ResponseArticularItemDto;
-import com.b2c.prototype.modal.dto.payload.item.ResponseItemDataDto;
+import com.b2c.prototype.modal.dto.payload.item.ResponseMetaDataDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.BeforeEach;
@@ -147,10 +147,10 @@ class MetaDataControllerE2ETest extends BasicE2ETest {
 
         try {
             String jsonResponse = mvcResult.getResponse().getContentAsString();
-            ResponseItemDataDto actual = objectMapper.readValue(jsonResponse, ResponseItemDataDto.class);
+            ResponseMetaDataDto actual = objectMapper.readValue(jsonResponse, ResponseMetaDataDto.class);
 
             String expectedResultStr = TestUtil.readFile("json/itemdata/output/ResponseItemDataDto.json");
-            ResponseItemDataDto expected = objectMapper.readValue(expectedResultStr, ResponseItemDataDto.class);
+            ResponseMetaDataDto expected = objectMapper.readValue(expectedResultStr, ResponseMetaDataDto.class);
 
             assertEquals(expected, actual);
             assertEquals(expected.getItemId(), actual.getItemId());
@@ -187,9 +187,9 @@ class MetaDataControllerE2ETest extends BasicE2ETest {
 
         try {
             String jsonResponse = mvcResult.getResponse().getContentAsString();
-            List<ResponseItemDataDto> actualList = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
+            List<ResponseMetaDataDto> actualList = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
             String expectedResultStr = TestUtil.readFile("json/itemdata/output/ResponseItemDataDtoList.json");
-            List<ResponseItemDataDto> expectedList = objectMapper.readValue(expectedResultStr, new TypeReference<>() {});
+            List<ResponseMetaDataDto> expectedList = objectMapper.readValue(expectedResultStr, new TypeReference<>() {});
             assertEquals(expectedList, actualList);
             List<ResponseArticularItemDto> expectedResponseArticularDto0 = new ArrayList<>(expectedList.get(0).getArticularItems());
             expectedResponseArticularDto0.sort(Comparator.comparing(ResponseArticularItemDto::getArticularId));

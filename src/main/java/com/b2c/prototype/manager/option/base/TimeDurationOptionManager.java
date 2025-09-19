@@ -5,7 +5,7 @@ import com.b2c.prototype.manager.option.ITimeDurationOptionManager;
 import com.b2c.prototype.modal.dto.payload.option.TimeDurationOptionDto;
 import com.b2c.prototype.modal.dto.payload.option.ResponseTimeDurationOptionDto;
 import com.b2c.prototype.modal.entity.option.TimeDurationOption;
-import com.b2c.prototype.transform.function.ITransformationFunctionService;
+import com.b2c.prototype.transform.item.IItemTransformService;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
@@ -17,17 +17,17 @@ import static com.b2c.prototype.util.Constant.VALUE;
 public class TimeDurationOptionManager implements ITimeDurationOptionManager {
 
     private final IGeneralEntityDao generalEntityDao;
-    private final ITransformationFunctionService transformationFunctionService;
+    private final IItemTransformService itemTransformService;
 
     public TimeDurationOptionManager(IGeneralEntityDao generalEntityDao,
-                                     ITransformationFunctionService transformationFunctionService) {
+                                     IItemTransformService itemTransformService) {
         this.generalEntityDao = generalEntityDao;
-        this.transformationFunctionService = transformationFunctionService;
+        this.itemTransformService = itemTransformService;
     }
 
     @Override
     public void saveUpdateTimeDurationOption(String timeDurationValue, TimeDurationOptionDto timeDurationOptionDto) {
-        TimeDurationOption timeDurationOption = transformationFunctionService.getEntity(TimeDurationOption.class, timeDurationOptionDto);
+        TimeDurationOption timeDurationOption = itemTransformService.mapTimeDurationOptionDtoToTimeDurationOption(timeDurationOptionDto);
         if (timeDurationValue != null) {
             TimeDurationOption existingZoneOption = generalEntityDao.findEntity(
                     "TimeDurationOption.findAllWithPriceAndCurrency",
@@ -53,8 +53,7 @@ public class TimeDurationOptionManager implements ITimeDurationOptionManager {
                 "TimeDurationOption.findAllWithPriceAndCurrency",
                 Pair.of(VALUE, timeDurationValue));
 
-        return transformationFunctionService.getTransformationFunction(TimeDurationOption.class, ResponseTimeDurationOptionDto.class)
-                .apply(timeDurationOption);
+        return itemTransformService.mapTimeDurationOptionToResponseTimeDurationOption(timeDurationOption);
     }
 
     @Override
@@ -63,7 +62,7 @@ public class TimeDurationOptionManager implements ITimeDurationOptionManager {
                 "TimeDurationOption.all", (Pair<String, ?>) null);
 
         return timeDurationOptionList.stream()
-                .map(transformationFunctionService.getTransformationFunction(TimeDurationOption.class, ResponseTimeDurationOptionDto.class))
+                .map(itemTransformService::mapTimeDurationOptionToResponseTimeDurationOption)
                 .toList();
     }
 }

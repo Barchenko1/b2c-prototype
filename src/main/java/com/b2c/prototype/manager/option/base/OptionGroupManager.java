@@ -4,7 +4,7 @@ import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.manager.option.IOptionGroupManager;
-import com.b2c.prototype.transform.option.IOptionTransformService;
+import com.b2c.prototype.transform.item.IItemTransformService;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
@@ -17,16 +17,16 @@ import static com.b2c.prototype.util.Constant.VALUE;
 public class OptionGroupManager implements IOptionGroupManager {
 
     private final IGeneralEntityDao generalEntityDao;
-    private final IOptionTransformService optionTransformService;
+    private final IItemTransformService itemTransformService;
 
     public OptionGroupManager(IGeneralEntityDao generalEntityDao,
-                              IOptionTransformService optionTransformService) {
+                              IItemTransformService itemTransformService) {
         this.generalEntityDao = generalEntityDao;
-        this.optionTransformService = optionTransformService;
+        this.itemTransformService = itemTransformService;
     }
 
     public void saveEntity(ConstantPayloadDto payload) {
-        OptionGroup entity = optionTransformService.mapConstantPayloadDtoToOptionGroup(payload);
+        OptionGroup entity = itemTransformService.mapConstantPayloadDtoToOptionGroup(payload);
         generalEntityDao.persistEntity(entity);
     }
 
@@ -45,18 +45,18 @@ public class OptionGroupManager implements IOptionGroupManager {
 
     public ConstantPayloadDto getEntity(String value) {
         OptionGroup entity = generalEntityDao.findEntity("OptionGroup.findByValue", Pair.of(VALUE, value));
-        return optionTransformService.mapOptionGroupToConstantPayloadDto(entity);
+        return itemTransformService.mapOptionGroupToConstantPayloadDto(entity);
     }
 
     public Optional<ConstantPayloadDto> getEntityOptional(String value) {
         OptionGroup entity = generalEntityDao.findEntity("OptionGroup.findByValue", Pair.of(VALUE, value));
-        return Optional.of(optionTransformService.mapOptionGroupToConstantPayloadDto(entity));
+        return Optional.of(itemTransformService.mapOptionGroupToConstantPayloadDto(entity));
     }
 
 
     public List<ConstantPayloadDto> getEntities() {
         return generalEntityDao.findEntityList("OptionGroup.all", (Pair<String, ?>) null).stream()
-                .map(e -> optionTransformService.mapOptionGroupToConstantPayloadDto((OptionGroup) e))
+                .map(e -> itemTransformService.mapOptionGroupToConstantPayloadDto((OptionGroup) e))
                 .toList();
     }
 }

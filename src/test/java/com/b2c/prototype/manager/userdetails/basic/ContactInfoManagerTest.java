@@ -6,7 +6,6 @@ import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.modal.entity.user.UserDetails;
-import com.b2c.prototype.transform.function.ITransformationFunctionService;
 
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,9 +26,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class ContactInfoManagerTest {
-
-    @Mock
-    private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
     private ContactInfoManager contactInfoManager;
 
@@ -46,10 +42,6 @@ class ContactInfoManagerTest {
         ContactInfo contactInfo = mock(ContactInfo.class);
         when(userDetails.getContactInfo()).thenReturn(contactInfo);
 
-//        when(queryService.getEntity(UserDetails.class, parameterSupplier))
-//                .thenReturn(userDetails);
-        when(transformationFunctionService.getEntity(ContactInfo.class, contactInfoDto))
-                .thenReturn(contactInfo);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
             Session session = mock(Session.class);
@@ -71,10 +63,6 @@ class ContactInfoManagerTest {
         ContactInfo contactInfo = mock(ContactInfo.class);
         when(userDetails.getContactInfo()).thenReturn(null);
 
-//        when(queryService.getEntity(UserDetails.class, parameterSupplier))
-//                .thenReturn(userDetails);
-        when(transformationFunctionService.getEntity(ContactInfo.class, contactInfoDto))
-                .thenReturn(contactInfo);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
             Session session = mock(Session.class);
@@ -98,13 +86,6 @@ class ContactInfoManagerTest {
 
 
         Function<UserDetails, ContactInfo> function = mock(Function.class);
-        when(transformationFunctionService.getTransformationFunction(UserDetails.class, ContactInfo.class))
-                .thenReturn(function);
-//        when(supplierService.entityFieldSupplier(
-//                UserDetails.class,
-//                parameterSupplier,
-//                function
-//        )).thenReturn(supplier);
 
         contactInfoManager.deleteContactInfoByUserId(userId);
 
@@ -120,8 +101,6 @@ class ContactInfoManagerTest {
         
 
         Function<UserDetails, ContactInfoDto> transformationFunction = user -> contactInfoDto;
-        when(transformationFunctionService.getTransformationFunction(UserDetails.class, ContactInfoDto.class))
-                .thenReturn(transformationFunction);
 
 //        when(queryService.getEntityDto(eq(UserDetails.class), eq(parameterSupplier), eq(transformationFunction)))
 //                .thenAnswer(invocation -> {

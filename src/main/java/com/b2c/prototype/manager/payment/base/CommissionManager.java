@@ -12,7 +12,7 @@ import com.b2c.prototype.modal.entity.payment.CommissionValue;
 import com.b2c.prototype.modal.entity.payment.MinMaxCommission;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
-import com.b2c.prototype.transform.function.ITransformationFunctionService;
+import com.b2c.prototype.transform.constant.IGeneralEntityTransformService;
 import com.b2c.prototype.transform.help.calculate.IPriceCalculationService;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
@@ -30,28 +30,26 @@ public class CommissionManager implements ICommissionManager {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     private final IGeneralEntityDao generalEntityDao;
-    private final ITransformationFunctionService transformationFunctionService;
+    private final IGeneralEntityTransformService generalEntityTransformService;
     private final IPriceCalculationService priceCalculationService;
 
     public CommissionManager(IGeneralEntityDao generalEntityDao,
-                             ITransformationFunctionService transformationFunctionService,
+                             IGeneralEntityTransformService generalEntityTransformService,
                              IPriceCalculationService priceCalculationService) {
         this.generalEntityDao = generalEntityDao;
-        this.transformationFunctionService = transformationFunctionService;
+        this.generalEntityTransformService = generalEntityTransformService;
         this.priceCalculationService = priceCalculationService;
     }
 
     @Override
     public void saveCommission(MinMaxCommissionDto minMaxCommissionDto) {
-        MinMaxCommission minMaxCommission = transformationFunctionService.getEntity(
-                MinMaxCommission.class, minMaxCommissionDto);
+        MinMaxCommission minMaxCommission = generalEntityTransformService.mapMinMaxCommissionDtoToMinMaxCommission(minMaxCommissionDto);
         generalEntityDao.mergeEntity(minMaxCommission);
     }
 
     @Override
     public void updateCommission(MinMaxCommissionDto minMaxCommissionDto) {
-        MinMaxCommission newMinMaxCommission = transformationFunctionService.getEntity(
-                MinMaxCommission.class, minMaxCommissionDto);
+        MinMaxCommission newMinMaxCommission = generalEntityTransformService.mapMinMaxCommissionDtoToMinMaxCommission(minMaxCommissionDto);
 //            CommissionType commissionType = CommissionType.valueOf(minMaxCommissionDto.getCommissionType());
         MinMaxCommission minMaxCommission = (MinMaxCommission) generalEntityDao.findOptionEntity(
                         "MinMaxCommission.findByCommissionType",
@@ -90,7 +88,7 @@ public class CommissionManager implements ICommissionManager {
                 "MinMaxCommission.getCommissionList", (Pair<String, ?>) null);
 
         return minMaxCommissionList.stream()
-                .map(transformationFunctionService.getTransformationFunction(MinMaxCommission.class, ResponseMinMaxCommissionDto.class))
+                .map(generalEntityTransformService::mapMinMaxCommissionToResponseMinMaxCommissionDto)
                 .toList();
     }
 
@@ -102,7 +100,7 @@ public class CommissionManager implements ICommissionManager {
                 Pair.of("commissionType", null));
 
         return optionalMinMaxCommission
-                .map(transformationFunctionService.getTransformationFunction(MinMaxCommission.class, ResponseMinMaxCommissionDto.class))
+                .map(generalEntityTransformService::mapMinMaxCommissionToResponseMinMaxCommissionDto)
                 .orElseThrow(() -> new RuntimeException("MinMaxCommission not found"));
     }
 

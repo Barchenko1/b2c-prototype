@@ -5,8 +5,8 @@ import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountStatusDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.Discount;
-import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.item.IDiscountManager;
+import com.b2c.prototype.transform.constant.IGeneralEntityTransformService;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
@@ -20,17 +20,17 @@ import static com.b2c.prototype.util.Constant.CHAR_SEQUENCE_CODE;
 public class DiscountManager implements IDiscountManager {
 
     private final IGeneralEntityDao generalEntityDao;
-    private final ITransformationFunctionService transformationFunctionService;
+    private final IGeneralEntityTransformService generalEntityTransformService;
 
     public DiscountManager(IGeneralEntityDao generalEntityDao,
-                           ITransformationFunctionService transformationFunctionService) {
+                           IGeneralEntityTransformService generalEntityTransformService) {
         this.generalEntityDao = generalEntityDao;
-        this.transformationFunctionService = transformationFunctionService;
+        this.generalEntityTransformService = generalEntityTransformService;
     }
 
     @Override
     public void saveDiscount(DiscountDto discountDto) {
-        Discount discount = transformationFunctionService.getEntity(Discount.class, discountDto);
+        Discount discount = generalEntityTransformService.mapDiscountDtoToDiscount(discountDto);
         generalEntityDao.mergeEntity(discount);
     }
 
@@ -47,7 +47,7 @@ public class DiscountManager implements IDiscountManager {
                 .flatMap(code -> generalEntityDao.findOptionEntity(
                         "Discount.currency",
                         Pair.of(CHAR_SEQUENCE_CODE, code)))
-                .orElseGet(() -> transformationFunctionService.getEntity(Discount.class, discountDto));
+                .orElseGet(() -> generalEntityTransformService.mapDiscountDtoToDiscount(discountDto));
 
         if (articularItem.getDiscount() != null) {
             discount.setId(articularItem.getDiscount().getId());
@@ -62,7 +62,7 @@ public class DiscountManager implements IDiscountManager {
         if (discountDto.getCharSequenceCode() == null) {
             throw new RuntimeException("Discount code is null");
         }
-        Discount newDiscount = transformationFunctionService.getEntity(Discount.class, discountDto);
+        Discount newDiscount = generalEntityTransformService.mapDiscountDtoToDiscount(discountDto);
         Discount oldDiscount = generalEntityDao.findEntity(
                 "Discount.currency",
                 Pair.of(CHAR_SEQUENCE_CODE, charSequenceCode));
@@ -97,12 +97,10 @@ public class DiscountManager implements IDiscountManager {
         List<ArticularItem> articularItemList = generalEntityDao.findEntity(
                 "ArticularItem.findByDiscountCharSequenceCode",
                 Pair.of(CHAR_SEQUENCE_CODE, charSequenceCode));
-//        return articularItemList.stream()
-//                .map(e-> new DiscountDto())
-//                .findFirst()
-//                .orElseThrow(() -> new RuntimeException(""));
-        return transformationFunctionService.getCollectionTransformationFunction(ArticularItem.class, DiscountDto.class)
-                .apply(articularItemList);
+        return articularItemList.stream()
+                .map(s -> generalEntityTransformService.mapDiscountToDiscountDto(s.getDiscount()))
+                .findFirst()
+                .orElseThrow();
     }
 
     @Override
@@ -110,8 +108,9 @@ public class DiscountManager implements IDiscountManager {
         List<ArticularItem> articularItemList = generalEntityDao.findEntityList(
                 "ArticularItem.findByDiscountNotNull", (Pair<String, ?>) null);
 
-        return (List<DiscountDto>) transformationFunctionService.getCollectionTransformationCollectionFunction(ArticularItem.class, DiscountDto.class, "list")
-                .apply(articularItemList);
+        return articularItemList.stream()
+                .map(s -> generalEntityTransformService.mapDiscountToDiscountDto(s.getDiscount()))
+                .toList();
     }
 
 }

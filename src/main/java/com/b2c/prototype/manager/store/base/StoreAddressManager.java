@@ -5,7 +5,8 @@ import com.b2c.prototype.manager.store.IStoreAddressManager;
 import com.b2c.prototype.modal.dto.payload.order.AddressDto;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.store.Store;
-import com.b2c.prototype.transform.function.ITransformationFunctionService;
+import com.b2c.prototype.transform.constant.IGeneralEntityTransformService;
+import com.b2c.prototype.transform.item.IItemTransformService;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +18,15 @@ import static com.b2c.prototype.util.Constant.STORE_ID;
 public class StoreAddressManager implements IStoreAddressManager {
 
     private final IGeneralEntityDao generalEntityDao;
-    private final ITransformationFunctionService transformationFunctionService;
+    private final IItemTransformService itemTransformService;
+    private final IGeneralEntityTransformService generalEntityTransformService;
 
     public StoreAddressManager(IGeneralEntityDao generalEntityDao,
-                               ITransformationFunctionService transformationFunctionService) {
+                               IItemTransformService itemTransformService,
+                               IGeneralEntityTransformService generalEntityTransformService) {
         this.generalEntityDao = generalEntityDao;
-        this.transformationFunctionService = transformationFunctionService;
+        this.itemTransformService = itemTransformService;
+        this.generalEntityTransformService = generalEntityTransformService;
     }
 
     @Override
@@ -31,7 +35,7 @@ public class StoreAddressManager implements IStoreAddressManager {
                 "Store.findStoreWithAddressByStoreId",
                 Pair.of(STORE_ID, storeId));
 
-        Address address = transformationFunctionService.getEntity(Address.class, addressDto);
+        Address address = generalEntityTransformService.mapAddressDtoToAddress(addressDto);
         Address existingAddress = existingStore.getAddress();
         existingAddress.setCountry(address.getCountry());
         existingAddress.setCity(address.getCity());
@@ -50,7 +54,7 @@ public class StoreAddressManager implements IStoreAddressManager {
                 Pair.of(STORE_ID, storeId));
 
         return Optional.ofNullable(store)
-                .map(s -> transformationFunctionService.getTransformationFunction(Address.class, AddressDto.class).apply(s.getAddress()))
+                .map(s -> generalEntityTransformService.mapAddressToAddressDto(s.getAddress()))
                 .orElse(null);
     }
 }

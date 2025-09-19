@@ -3,8 +3,8 @@ package com.b2c.prototype.manager.price.base;
 import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.entity.price.Currency;
-import com.b2c.prototype.transform.constant.IConstantTransformService;
 import com.b2c.prototype.manager.price.ICurrencyManager;
+import com.b2c.prototype.transform.constant.IGeneralEntityTransformService;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
@@ -17,16 +17,16 @@ import static com.b2c.prototype.util.Constant.VALUE;
 public class CurrencyManager implements ICurrencyManager {
     
     private final IGeneralEntityDao generalEntityDao;
-    private final IConstantTransformService constantTransformService;
+    private final IGeneralEntityTransformService generalEntityTransformService;
 
-    public CurrencyManager(IGeneralEntityDao generalEntityDao, 
-                           IConstantTransformService constantTransformService) {
+    public CurrencyManager(IGeneralEntityDao generalEntityDao,
+                           IGeneralEntityTransformService generalEntityTransformService) {
         this.generalEntityDao = generalEntityDao;
-        this.constantTransformService = constantTransformService;
+        this.generalEntityTransformService = generalEntityTransformService;
     }
 
     public void saveEntity(ConstantPayloadDto payload) {
-        Currency entity = constantTransformService.mapConstantPayloadDtoToCurrency(payload);
+        Currency entity = generalEntityTransformService.mapConstantPayloadDtoToCurrency(payload);
         generalEntityDao.persistEntity(entity);
     }
 
@@ -45,18 +45,18 @@ public class CurrencyManager implements ICurrencyManager {
 
     public ConstantPayloadDto getEntity(String value) {
         Currency entity = generalEntityDao.findEntity("Currency.findByValue", Pair.of(VALUE, value));
-        return constantTransformService.mapCurrencyToConstantPayloadDto(entity);
+        return generalEntityTransformService.mapCurrencyToConstantPayloadDto(entity);
     }
 
     public Optional<ConstantPayloadDto> getEntityOptional(String value) {
         Currency entity = generalEntityDao.findEntity("Currency.findByValue", Pair.of(VALUE, value));
-        return Optional.of(constantTransformService.mapCurrencyToConstantPayloadDto(entity));
+        return Optional.of(generalEntityTransformService.mapCurrencyToConstantPayloadDto(entity));
     }
 
 
     public List<ConstantPayloadDto> getEntities() {
         return generalEntityDao.findEntityList("Currency.all", (Pair<String, ?>) null).stream()
-                .map(e -> constantTransformService.mapCurrencyToConstantPayloadDto((Currency) e))
+                .map(e -> generalEntityTransformService.mapCurrencyToConstantPayloadDto((Currency) e))
                 .toList();
     }
 }

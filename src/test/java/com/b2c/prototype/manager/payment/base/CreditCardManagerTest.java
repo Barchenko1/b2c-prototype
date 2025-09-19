@@ -9,7 +9,6 @@ import com.b2c.prototype.modal.entity.payment.CreditCard;
 import com.b2c.prototype.modal.entity.payment.Payment;
 import com.b2c.prototype.modal.entity.user.UserCreditCard;
 import com.b2c.prototype.modal.entity.user.UserDetails;
-import com.b2c.prototype.transform.function.ITransformationFunctionService;
 
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,9 +32,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class CreditCardManagerTest {
-
-    @Mock
-    private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
     private UserCreditCardManager creditCardManager;
 
@@ -53,12 +49,6 @@ class CreditCardManagerTest {
         CreditCard newCreditCard = mock(CreditCard.class);
         Set<UserCreditCard> existingUserCreditCards = new HashSet<>();
 
-
-        
-//        when(queryService.getEntity(UserDetails.class, supplier))
-//                .thenReturn(userDetails);
-        when(transformationFunctionService.getEntity(CreditCard.class, creditCardDto))
-                .thenReturn(newCreditCard);
         when(userDetails.getUserCreditCards()).thenReturn(existingUserCreditCards);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -85,11 +75,6 @@ class CreditCardManagerTest {
             add(userCreditCard);
         }};
 
-        
-//        when(queryService.getEntity(UserDetails.class, supplier))
-//                .thenReturn(userDetails);
-        when(transformationFunctionService.getEntity(CreditCard.class, creditCardDto))
-                .thenReturn(newCreditCard);
         when(userDetails.getUserCreditCards()).thenReturn(existingUserCreditCards);
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
@@ -113,12 +98,6 @@ class CreditCardManagerTest {
         Payment payment = mock(Payment.class);
         CreditCard creditCard = mock(CreditCard.class);
 
-
-
-//        when(queryService.getEntity(DeliveryArticularItemQuantity.class, supplier))
-//                .thenReturn(orderItemDataOption);
-        when(transformationFunctionService.getEntity(CreditCard.class, creditCardDto))
-                .thenReturn(creditCard);
 //        when(orderItemDataOption.getPayment()).thenReturn(payment);
         when(payment.getCreditCard()).thenReturn(creditCard);
         doAnswer(invocation -> {
@@ -145,10 +124,6 @@ class CreditCardManagerTest {
                 .isDefault(false)
                 .build();
         Set<UserCreditCard> creditCardList = Set.of(userCreditCard);
-//        when(queryService.getEntity(eq(UserDetails.class), any(Supplier.class)))
-//                .thenReturn(userDetails);
-        when(transformationFunctionService.getEntity(CreditCard.class, userCreditCard))
-                .thenReturn(creditCard);
         when(userDetails.getUserCreditCards()).thenReturn(creditCardList);
 
         doAnswer(invocation -> {
@@ -172,10 +147,6 @@ class CreditCardManagerTest {
         Payment payment = mock(Payment.class);
         CreditCard creditCard = getTestCreditCard();
 
-//        when(queryService.getEntity(eq(DeliveryArticularItemQuantity.class), any(Supplier.class)))
-//                .thenReturn(orderItemDataOption);
-        when(transformationFunctionService.getEntity(CreditCard.class, creditCardDto))
-                .thenReturn(creditCard);
 //        when(orderItemDataOption.getPayment()).thenReturn(payment);
         when(payment.getCreditCard()).thenReturn(creditCard);
 
@@ -200,11 +171,6 @@ class CreditCardManagerTest {
         Payment payment = mock(Payment.class);
         CreditCard creditCard = getTestCreditCard();
 
-//        when(queryService.getEntity(eq(DeliveryArticularItemQuantity.class), any(Supplier.class)))
-//                .thenReturn(orderItemDataOption);
-        when(transformationFunctionService.getEntity(CreditCard.class, creditCardDto))
-                .thenReturn(creditCard);
-//        when(orderItemDataOption.getPayment()).thenReturn(payment);
         when(payment.getCreditCard()).thenReturn(CreditCard.builder()
                 .cardNumber("111")
                 .build());
@@ -258,15 +224,15 @@ class CreditCardManagerTest {
         CreditCard creditCard = getTestCreditCard();
 
 
-        when(transformationFunctionService.getTransformationFunction(CreditCard.class, ResponseCreditCardDto.class))
-                .thenReturn(creditCard1 -> ResponseCreditCardDto.builder()
-                        .isActive(creditCard1.isActive())
-                        .cardNumber(creditCard1.getCardNumber())
-                        .monthOfExpire(creditCard1.getMonthOfExpire())
-                        .yearOfExpire(creditCard1.getYearOfExpire())
-                        .ownerName(creditCard1.getOwnerName())
-                        .ownerSecondName(creditCard1.getOwnerSecondName())
-                        .build());
+//        when(transformationFunctionService.getTransformationFunction(CreditCard.class, ResponseCreditCardDto.class))
+//                .thenReturn(creditCard1 -> ResponseCreditCardDto.builder()
+//                        .isActive(creditCard1.isActive())
+//                        .cardNumber(creditCard1.getCardNumber())
+//                        .monthOfExpire(creditCard1.getMonthOfExpire())
+//                        .yearOfExpire(creditCard1.getYearOfExpire())
+//                        .ownerName(creditCard1.getOwnerName())
+//                        .ownerSecondName(creditCard1.getOwnerSecondName())
+//                        .build());
 
         List<ResponseUserCreditCardDto> responseCreditCardDtoList = creditCardManager.getCreditCardListByUserId(userId);
 
@@ -314,15 +280,15 @@ class CreditCardManagerTest {
     void getAllCreditCards_shouldReturnResponseCardDtoList() {
         CreditCard creditCard = getTestCreditCard();
 
-        when(transformationFunctionService.getTransformationFunction(CreditCard.class, ResponseCreditCardDto.class))
-                .thenReturn(creditCard1 -> ResponseCreditCardDto.builder()
-                        .isActive(creditCard1.isActive())
-                        .cardNumber(creditCard1.getCardNumber())
-                        .monthOfExpire(creditCard1.getMonthOfExpire())
-                        .yearOfExpire(creditCard1.getYearOfExpire())
-                        .ownerName(creditCard1.getOwnerName())
-                        .ownerSecondName(creditCard1.getOwnerSecondName())
-                        .build());
+//        when(transformationFunctionService.getTransformationFunction(CreditCard.class, ResponseCreditCardDto.class))
+//                .thenReturn(creditCard1 -> ResponseCreditCardDto.builder()
+//                        .isActive(creditCard1.isActive())
+//                        .cardNumber(creditCard1.getCardNumber())
+//                        .monthOfExpire(creditCard1.getMonthOfExpire())
+//                        .yearOfExpire(creditCard1.getYearOfExpire())
+//                        .ownerName(creditCard1.getOwnerName())
+//                        .ownerSecondName(creditCard1.getOwnerSecondName())
+//                        .build());
 
         List<ResponseCreditCardDto> responseCreditCardDtoList = creditCardManager.getAllCreditCardByCardNumber("");
 

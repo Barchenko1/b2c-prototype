@@ -1,8 +1,8 @@
 package com.b2c.prototype.processor.item;
 
-import com.b2c.prototype.modal.dto.payload.item.ItemDataDto;
-import com.b2c.prototype.modal.dto.payload.item.ResponseItemDataDto;
-import com.b2c.prototype.manager.item.IItemDataManager;
+import com.b2c.prototype.modal.dto.payload.item.MetaDataDto;
+import com.b2c.prototype.modal.dto.payload.item.ResponseMetaDataDto;
+import com.b2c.prototype.manager.item.IMetaDataManager;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,39 +11,39 @@ import java.util.Map;
 @Service
 public class MetaDataProcessor implements IMetaDataProcessor {
 
-    private final IItemDataManager itemDataManager;
+    private final IMetaDataManager itemDataManager;
 
-    public MetaDataProcessor(IItemDataManager itemDataManager) {
+    public MetaDataProcessor(IMetaDataManager itemDataManager) {
         this.itemDataManager = itemDataManager;
     }
 
     @Override
-    public void saveMetaData(Map<String, String> requestParams, ItemDataDto itemDataDto) {
-        itemDataManager.saveItemData(itemDataDto);
+    public void saveMetaData(Map<String, String> requestParams, MetaDataDto metaDataDto) {
+        itemDataManager.saveMetaData(metaDataDto);
     }
 
     @Override
-    public void updateMetaData(Map<String, String> requestParams, ItemDataDto itemDataDto) {
+    public void updateMetaData(Map<String, String> requestParams, MetaDataDto metaDataDto) {
         String itemId = requestParams.get("itemId");
         if (itemId != null) {
-            itemDataManager.updateItemData(itemId, itemDataDto);
+            itemDataManager.updateMetaData(itemId, metaDataDto);
         }
     }
 
     @Override
     public void deleteMetaData(Map<String, String> requestParams) {
         String itemId = requestParams.get("itemId");
-        itemDataManager.deleteItemData(itemId);
+        itemDataManager.deleteMetaData(itemId);
     }
 
     @Override
-    public ResponseItemDataDto getMetaData(Map<String, String> requestParams) {
+    public ResponseMetaDataDto getMetaData(Map<String, String> requestParams) {
         String itemId = requestParams.get("itemId");
-        return itemDataManager.getItemData(itemId);
+        return itemDataManager.getMetaData(itemId);
     }
 
     @Override
-    public List<ResponseItemDataDto> getMetaDataList(Map<String, String> requestParams) {
-        return itemDataManager.getItemDataList();
+    public List<ResponseMetaDataDto> getMetaDataList(Map<String, String> requestParams) {
+        return itemDataManager.getMetaDataList();
     }
 }

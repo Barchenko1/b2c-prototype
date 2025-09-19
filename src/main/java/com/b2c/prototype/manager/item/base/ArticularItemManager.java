@@ -7,8 +7,8 @@ import com.b2c.prototype.modal.dto.payload.item.ResponseArticularItemDto;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.item.MetaData;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
-import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.item.IArticularItemManager;
+import com.b2c.prototype.transform.item.IItemTransformService;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
@@ -21,12 +21,12 @@ import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 public class ArticularItemManager implements IArticularItemManager {
 
     private final IGeneralEntityDao generalEntityDao;
-    private final ITransformationFunctionService transformationFunctionService;
+    private final IItemTransformService itemTransformService;
 
     public ArticularItemManager(IGeneralEntityDao generalEntityDao,
-                                ITransformationFunctionService transformationFunctionService) {
+                                IItemTransformService itemTransformService) {
         this.generalEntityDao = generalEntityDao;
-        this.transformationFunctionService = transformationFunctionService;
+        this.itemTransformService = itemTransformService;
     }
 
     @Override
@@ -36,11 +36,11 @@ public class ArticularItemManager implements IArticularItemManager {
                         .searchField(itemId)
                         .updateDtoSet(articularItemDtoList)
                         .build();
-        MetaData metaData = transformationFunctionService.getEntity(
-                MetaData.class,
-                searchFieldUpdateCollectionEntityDto);
+//        MetaData metaData = transformationFunctionService.getEntity(
+//                MetaData.class,
+//                searchFieldUpdateCollectionEntityDto);
 
-        generalEntityDao.mergeEntity(metaData);
+//        generalEntityDao.mergeEntity(metaData);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class ArticularItemManager implements IArticularItemManager {
                 Pair.of(ARTICULAR_ID, articularId));
 
         return Optional.of(articularItem)
-                .map(transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class))
+                .map(itemTransformService::mapArticularItemToResponseArticularItem)
                 .orElseThrow(() -> new RuntimeException(""));
     }
 
@@ -81,7 +81,7 @@ public class ArticularItemManager implements IArticularItemManager {
                 "ArticularItem.full", (Pair<String, ?>) null);
 
         return articularItemList.stream()
-                .map(transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class))
+                .map(itemTransformService::mapArticularItemToResponseArticularItem)
                 .toList();
     }
 
@@ -92,7 +92,7 @@ public class ArticularItemManager implements IArticularItemManager {
                 (Pair<String, ?>) null);
 
         return articularItemList.stream()
-                .map(transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class))
+                .map(itemTransformService::mapArticularItemToResponseArticularItem)
                 .toList();
     }
 
@@ -102,7 +102,7 @@ public class ArticularItemManager implements IArticularItemManager {
                 "ArticularItem.full", (Pair<String, ?>) null);
 
         return articularItemList.stream()
-                .map(transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class))
+                .map(itemTransformService::mapArticularItemToResponseArticularItem)
                 .toList();
     }
 

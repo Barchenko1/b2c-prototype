@@ -6,8 +6,8 @@ import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.dto.payload.store.StoreDto;
 import com.b2c.prototype.modal.dto.payload.store.ResponseStoreDto;
 import com.b2c.prototype.modal.entity.store.Store;
-import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.store.IStoreManager;
+import com.b2c.prototype.transform.item.IItemTransformService;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
@@ -21,17 +21,17 @@ import static com.b2c.prototype.util.Constant.VALUE;
 public class StoreManager implements IStoreManager {
 
     private final IGeneralEntityDao generalEntityDao;
-    private final ITransformationFunctionService transformationFunctionService;
+    private final IItemTransformService itemTransformService;
 
     public StoreManager(IGeneralEntityDao generalEntityDao,
-                        ITransformationFunctionService transformationFunctionService) {
+                        IItemTransformService itemTransformService) {
         this.generalEntityDao = generalEntityDao;
-        this.transformationFunctionService = transformationFunctionService;
+        this.itemTransformService = itemTransformService;
     }
 
     @Override
     public void saveStore(StoreDto storeDto) {
-        Store store = transformationFunctionService.getEntity(Store.class, storeDto);
+        Store store = itemTransformService.mapStoreDtoToStore(storeDto);
         generalEntityDao.mergeEntity(store);
     }
 
@@ -41,7 +41,7 @@ public class StoreManager implements IStoreManager {
                 "Store.findStoreWithAddressByStoreId",
                 Pair.of(STORE_ID, storeId));
 
-        Store store = transformationFunctionService.getEntity(Store.class, storeDto);
+        Store store = itemTransformService.mapStoreDtoToStore(storeDto);
         existingStore.setStoreName(store.getStoreName());
         existingStore.setActive(store.isActive());
         Address existingAddress = existingStore.getAddress();
@@ -70,8 +70,7 @@ public class StoreManager implements IStoreManager {
         Store store = generalEntityDao.findEntity(
                 "Store.findStoreWithAddressArticularItemQuantityByStoreId",
                 Pair.of(STORE_ID, storeId));
-        return transformationFunctionService.getTransformationFunction(Store.class, ResponseStoreDto.class)
-                .apply(store);
+        return itemTransformService.mapStoreToResponseStoreDto(store);
     }
 
     @Override
@@ -80,7 +79,7 @@ public class StoreManager implements IStoreManager {
                 "Store.findStoreWithAddressArticularItemQuantityByArticularId",
                 Pair.of(ARTICULAR_ID, articularId));
         return stores.stream()
-                .map(transformationFunctionService.getTransformationFunction(Store.class, ResponseStoreDto.class))
+                .map(itemTransformService::mapStoreToResponseStoreDto)
                 .toList();
     }
 
@@ -91,7 +90,7 @@ public class StoreManager implements IStoreManager {
                 Pair.of(VALUE, countryName));
 
         return stores.stream()
-                .map(transformationFunctionService.getTransformationFunction(Store.class, ResponseStoreDto.class))
+                .map(itemTransformService::mapStoreToResponseStoreDto)
                 .toList();
     }
 
@@ -103,7 +102,7 @@ public class StoreManager implements IStoreManager {
                 Pair.of(VALUE, countryName));
 
         return stores.stream()
-                .map(transformationFunctionService.getTransformationFunction(Store.class, ResponseStoreDto.class))
+                .map(itemTransformService::mapStoreToResponseStoreDto)
                 .toList();
     }
 }
