@@ -3,7 +3,6 @@ package com.b2c.prototype.manager.price.base;
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.manager.AbstractConstantEntityManagerTest;
-import com.tm.core.finder.parameter.Parameter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -26,15 +25,12 @@ class CurrencyManagerTest extends AbstractConstantEntityManagerTest<Currency> {
 
     @BeforeEach
     void setUp() {
-        when(transformationFunctionService.getTransformationFunction(ConstantPayloadDto.class, Currency.class))
-                .thenReturn(mapDtoToEntityFunction);
-        when(transformationFunctionService.getTransformationFunction(Currency.class, ConstantPayloadDto.class))
-                .thenReturn(mapEntityToDtoFunction);
+//        when(transformationFunctionService.getTransformationFunction(ConstantPayloadDto.class, Currency.class))
+//                .thenReturn(mapDtoToEntityFunction);
+//        when(transformationFunctionService.getTransformationFunction(Currency.class, ConstantPayloadDto.class))
+//                .thenReturn(mapEntityToDtoFunction);
 
-        currencyManager = new CurrencyManager(
-                parameterFactory,
-                dao,
-                transformationFunctionService);
+        currencyManager = null;
     }
 
     @Test
@@ -81,12 +77,12 @@ class CurrencyManagerTest extends AbstractConstantEntityManagerTest<Currency> {
 
     @Test
     public void testGetEntity() {
-        Parameter parameter = parameterFactory.createStringParameter(VALUE, "testValue");
+        
         Currency testValue = createTestValue();
         ConstantPayloadDto constantPayloadDto = getResponseOneFieldEntityDto();
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
-        when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
+        
         //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
         ConstantPayloadDto result = currencyManager.getEntity("testValue");
@@ -96,12 +92,12 @@ class CurrencyManagerTest extends AbstractConstantEntityManagerTest<Currency> {
 
     @Test
     public void testGetEntityOptional() {
-        Parameter parameter = parameterFactory.createStringParameter(VALUE, "testValue");
+        
         Currency testValue = createTestValue();
         ConstantPayloadDto constantPayloadDto = getResponseOneFieldEntityDto();
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
-        when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
+        
         //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
         Optional<ConstantPayloadDto> result = currencyManager.getEntityOptional("testValue");

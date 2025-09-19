@@ -3,7 +3,6 @@ package com.b2c.prototype.manager.message.base;
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.entity.message.MessageStatus;
 import com.b2c.prototype.manager.AbstractConstantEntityManagerTest;
-import com.tm.core.finder.parameter.Parameter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -26,15 +25,12 @@ class MessageStatusManagerTest extends AbstractConstantEntityManagerTest<Message
 
     @BeforeEach
     void setUp() {
-        when(transformationFunctionService.getTransformationFunction(ConstantPayloadDto.class, MessageStatus.class))
-                .thenReturn(mapDtoToEntityFunction);
-        when(transformationFunctionService.getTransformationFunction(MessageStatus.class, ConstantPayloadDto.class))
-                .thenReturn(mapEntityToDtoFunction);
+//        when(transformationFunctionService.getTransformationFunction(ConstantPayloadDto.class, MessageStatus.class))
+//                .thenReturn(mapDtoToEntityFunction);
+//        when(transformationFunctionService.getTransformationFunction(MessageStatus.class, ConstantPayloadDto.class))
+//                .thenReturn(mapEntityToDtoFunction);
 
-        messageStatusManager = new MessageStatusManager(
-                parameterFactory,
-                dao,
-                transformationFunctionService);
+        messageStatusManager = null;
     }
 
     @Test
@@ -80,12 +76,12 @@ class MessageStatusManagerTest extends AbstractConstantEntityManagerTest<Message
     @Test
     public void testGetEntity() {
         
-        Parameter parameter = parameterFactory.createStringParameter(VALUE, "testValue");
+        
         MessageStatus testValue = createTestValue();
         ConstantPayloadDto constantPayloadDto = getResponseOneFieldEntityDto();
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
-        when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
+        
         //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
         ConstantPayloadDto result = messageStatusManager.getEntity("testValue");
@@ -96,12 +92,12 @@ class MessageStatusManagerTest extends AbstractConstantEntityManagerTest<Message
     @Test
     public void testGetEntityOptional() {
         
-        Parameter parameter = parameterFactory.createStringParameter(VALUE, "testValue");
+        
         MessageStatus testValue = createTestValue();
         ConstantPayloadDto constantPayloadDto = getResponseOneFieldEntityDto();
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
-        when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
+        
         //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
         Optional<ConstantPayloadDto> result = messageStatusManager.getEntityOptional("testValue");

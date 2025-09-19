@@ -7,11 +7,7 @@ import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.userdetails.IContactInfoManager;
-import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.IFetchHandler;
-import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
-import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
-import org.hibernate.Session;
+import com.nimbusds.jose.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -26,60 +22,47 @@ public class ContactInfoManager implements IContactInfoManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ContactInfoManager.class);
 
-    private final ITransactionEntityOperationManager entityOperationManager;
-    private final IFetchHandler fetchHandler;
+    private final IGeneralEntityDao generalEntityDao;
     private final ITransformationFunctionService transformationFunctionService;
-    private final IParameterFactory parameterFactory;
 
-    public ContactInfoManager(IGeneralEntityDao contactInfoDao,
-                              IFetchHandler fetchHandler,
-                              ITransformationFunctionService transformationFunctionService,
-                              IParameterFactory parameterFactory) {
-        this.entityOperationManager = new TransactionEntityOperationManager(null);
-        this.fetchHandler = fetchHandler;
+    public ContactInfoManager(IGeneralEntityDao generalEntityDao,
+                              ITransformationFunctionService transformationFunctionService) {
+        this.generalEntityDao = generalEntityDao;
         this.transformationFunctionService = transformationFunctionService;
-        this.parameterFactory = parameterFactory;
     }
 
     @Override
     public void saveUpdateContactInfoByUserId(String userId, ContactInfoDto contactInfoDto) {
-        entityOperationManager.executeConsumer(session -> {
-            UserDetails userDetails = fetchHandler.getNamedQueryEntityClose(
-                    UserDetails.class,
-                    "UserDetails.findFullUserDetailsByUserId",
-                    parameterFactory.createStringParameter(USER_ID, userId));
-            ContactInfo newContactInfo = transformationFunctionService.getEntity((Session) session, ContactInfo.class, contactInfoDto);
-            ContactInfo contactInfo = userDetails.getContactInfo();
-            if (contactInfo != null) {
-                newContactInfo.setId(contactInfo.getId());
-            }
-            userDetails.setContactInfo(newContactInfo);
-            session.merge(userDetails);
-        });
+        UserDetails userDetails = generalEntityDao.findEntity(
+                "UserDetails.findFullUserDetailsByUserId",
+                Pair.of(USER_ID, userId));
+        ContactInfo newContactInfo = transformationFunctionService.getEntity(ContactInfo.class, contactInfoDto);
+        ContactInfo contactInfo = userDetails.getContactInfo();
+        if (contactInfo != null) {
+            newContactInfo.setId(contactInfo.getId());
+        }
+        userDetails.setContactInfo(newContactInfo);
+        generalEntityDao.mergeEntity(userDetails);
     }
 
     @Override
     public void deleteContactInfoByUserId(String userId) {
-        entityOperationManager.executeConsumer(session -> {
-            UserDetails userDetails = fetchHandler.getNamedQueryEntityClose(
-                    UserDetails.class,
-                    "UserDetails.findFullUserDetailsByUserId",
-                    parameterFactory.createStringParameter(USER_ID, userId));
-            ContactInfo contactInfo = userDetails.getContactInfo();
-            if (contactInfo != null) {
-                userDetails.setContactInfo(null);
-                session.remove(contactInfo);
-                session.merge(userDetails);
-            }
-        });
+        UserDetails userDetails = generalEntityDao.findEntity(
+                "UserDetails.findFullUserDetailsByUserId",
+                Pair.of(USER_ID, userId));
+        ContactInfo contactInfo = userDetails.getContactInfo();
+        if (contactInfo != null) {
+            userDetails.setContactInfo(null);
+            generalEntityDao.removeEntity(contactInfo);
+            generalEntityDao.mergeEntity(userDetails);
+        }
     }
 
     @Override
     public ContactInfoDto getContactInfoByUserId(String userId) {
-        UserDetails userDetails = fetchHandler.getNamedQueryEntityClose(
-                UserDetails.class,
+        UserDetails userDetails = generalEntityDao.findEntity(
                 "UserDetails.findFullUserDetailsByUserId",
-                parameterFactory.createStringParameter(USER_ID, userId));
+                Pair.of(USER_ID, userId));
 
         return Optional.of(userDetails)
                 .map(transformationFunctionService.getTransformationFunction(UserDetails.class, ContactInfoDto.class))
@@ -88,11 +71,9 @@ public class ContactInfoManager implements IContactInfoManager {
 
     @Override
     public void saveUpdateContactInfoByOrderId(String orderId, ContactInfoDto contactInfoDto) {
-        entityOperationManager.executeConsumer(session -> {
-            DeliveryArticularItemQuantity orderItemDataOption = fetchHandler.getNamedQueryEntityClose(
-                    DeliveryArticularItemQuantity.class,
-                    "DeliveryArticularItemQuantity.findByOrderIdWithBeneficiaries",
-                    parameterFactory.createStringParameter(ORDER_ID, orderId));
+        DeliveryArticularItemQuantity orderItemDataOption = generalEntityDao.findEntity(
+                "DeliveryArticularItemQuantity.findByOrderIdWithBeneficiaries",
+                Pair.of(ORDER_ID, orderId));
 
 //            ContactInfo existingBeneficiary = orderItemDataOption.getBeneficiary();
 //            ContactInfo newBeneficiary = transformationFunctionService.getEntity((Session) session, ContactInfo.class, contactInfoDto);
@@ -103,28 +84,23 @@ public class ContactInfoManager implements IContactInfoManager {
 //            }
 
 //            orderItemDataOption.setBeneficiary(newBeneficiary);
-            session.merge(orderItemDataOption);
-        });
+        generalEntityDao.mergeEntity(orderItemDataOption);
     }
 
     @Override
     public void deleteContactInfoByOrderId(String orderId) {
-        entityOperationManager.executeConsumer(session -> {
-            DeliveryArticularItemQuantity orderItemDataOption = fetchHandler.getNamedQueryEntityClose(
-                    DeliveryArticularItemQuantity.class,
-                    "DeliveryArticularItemQuantity.findByOrderIdWithBeneficiaries",
-                    parameterFactory.createStringParameter(ORDER_ID, orderId));
+        DeliveryArticularItemQuantity orderItemDataOption = generalEntityDao.findEntity(
+                "DeliveryArticularItemQuantity.findByOrderIdWithBeneficiaries",
+                Pair.of(ORDER_ID, orderId));
 //            ContactInfo beneficiary = orderItemDataOption.getBeneficiary();
 //            session.remove(beneficiary);
-        });
     }
 
     @Override
     public ContactInfoDto getContactInfoByOrderId(String orderId) {
-        DeliveryArticularItemQuantity deliveryArticularItemQuantity = fetchHandler.getNamedQueryEntityClose(
-                DeliveryArticularItemQuantity.class,
+        DeliveryArticularItemQuantity deliveryArticularItemQuantity = generalEntityDao.findEntity(
                 "DeliveryArticularItemQuantity.findByOrderIdWithBeneficiaries",
-                parameterFactory.createStringParameter(ORDER_ID, orderId));
+                Pair.of(ORDER_ID, orderId));
 
         return Optional.of(deliveryArticularItemQuantity)
                 .map(transformationFunctionService.getTransformationFunction(DeliveryArticularItemQuantity.class, ContactInfoDto.class))

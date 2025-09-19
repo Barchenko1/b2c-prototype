@@ -8,7 +8,7 @@ import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 
 import com.b2c.prototype.manager.userdetails.IUserDetailsManager;
-import com.b2c.prototype.transform.IUserDetailsTransformService;
+import com.b2c.prototype.transform.userdetails.IUserDetailsTransformService;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

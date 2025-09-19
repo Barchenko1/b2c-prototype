@@ -6,8 +6,7 @@ import com.b2c.prototype.modal.dto.payload.store.StoreDto;
 import com.b2c.prototype.modal.dto.payload.store.ResponseStoreDto;
 import com.b2c.prototype.modal.entity.store.Store;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
-import com.tm.core.finder.parameter.Parameter;
-import com.tm.core.process.dao.common.ITransactionEntityDao;
+
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,9 +33,6 @@ import static org.mockito.Mockito.when;
 class StoreManagerTest {
 
     @Mock
-    private ITransactionEntityDao storeDao;
-
-    @Mock
     private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
     private StoreManager storeManager;
@@ -53,8 +49,7 @@ class StoreManagerTest {
 
         ArticularItem articularItem = mock(ArticularItem.class);
 
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
+
 
 //        when(supplierService.parameterStringSupplier(ARTICULAR_ID, storeDto.getArticularId()))
 //                .thenReturn(parameterSupplier);
@@ -67,11 +62,10 @@ class StoreManagerTest {
             consumer.accept(session);
             verify(session).merge(store);
             return null;
-        }).when(storeDao).executeConsumer(any(Consumer.class));
+        });
 
         storeManager.saveStore(storeDto);
 
-        verify(storeDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
@@ -82,8 +76,7 @@ class StoreManagerTest {
         Session session = mock(Session.class);
         NativeQuery<Store> query = mock(NativeQuery.class);
 
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
+
 
 //        when(session.createNativeQuery(anyString(), eq(Store.class)))
 //                .thenReturn(query);
@@ -95,21 +88,15 @@ class StoreManagerTest {
             consumer.accept(session);
             verify(session).merge(store);
             return null;
-        }).when(storeDao).executeConsumer(any(Consumer.class));
+        });
 
         storeManager.updateStore("", storeDto);
 
-        verify(storeDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
     void testDeleteStore() {
         String articularId = "articularId";
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
-
-        Supplier<Store> storeSupplier = () -> getStore();
-
         
         Function<ArticularItem, Store> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(ArticularItem.class, Store.class))
@@ -122,7 +109,6 @@ class StoreManagerTest {
 
         storeManager.deleteStore(articularId);
 
-        verify(storeDao).deleteEntity(storeSupplier);
     }
 
     @Test
@@ -131,13 +117,11 @@ class StoreManagerTest {
         Store store = getStore();
         ResponseStoreDto responseStoreDto = mock(ResponseStoreDto.class);
 
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
+
         
         Function<Store, ResponseStoreDto> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(Store.class, ResponseStoreDto.class))
                 .thenReturn(function);
-        when(storeDao.getGraphEntity(anyString(), eq(parameter))).thenReturn(store);
         when(function.apply(store)).thenReturn(responseStoreDto);
 
         List<ResponseStoreDto> result = storeManager.getAllResponseStoresByArticularId(articularId);

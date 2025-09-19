@@ -9,8 +9,7 @@ public interface IIntegerConstantEntityManager<T> {
     void saveEntity(T numberConstantPayloadDto);
     void updateEntity(Integer searchValue, T numberConstantPayloadDto);
     void deleteEntity(int ratingValue);
-    NumberConstantPayloadDto getEntity(int ratingValue);
-    Optional<NumberConstantPayloadDto> getEntityOptional(int ratingValue);
-    List<NumberConstantPayloadDto> getEntities();
-
+    T getEntity(int ratingValue);
+    Optional<T> getEntityOptional(int ratingValue);
+    List<T> getEntities();
 }

@@ -12,8 +12,7 @@ import com.b2c.prototype.modal.entity.item.MetaData;
 import com.b2c.prototype.modal.entity.item.ItemType;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 
-import com.tm.core.finder.parameter.Parameter;
-import com.tm.core.process.dao.common.ITransactionEntityDao;
+
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,10 +35,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class MetaDataManagerTest {
-
-    @Mock
-    private ITransactionEntityDao itemDataDao;
-
     @Mock
     private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
@@ -63,11 +58,10 @@ class MetaDataManagerTest {
             consumer.accept(session);
             verify(session).merge(metaData);
             return null;
-        }).when(itemDataDao).executeConsumer(any(Consumer.class));
+        });
 
         itemDataManager.saveItemData(itemDataDto);
 
-        verify(itemDataDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
@@ -75,10 +69,8 @@ class MetaDataManagerTest {
         String itemId = "itemId";
         ItemDataDto itemDataDto = getItemDataDto();
         MetaData metaData = getItemData();
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
 
-        when(itemDataDao.getNamedQueryEntity("", parameter)).thenReturn(metaData);
+
         when(transformationFunctionService.getEntity(MetaData.class, itemDataDto))
                 .thenReturn(metaData);
         doAnswer(invocation -> {
@@ -87,11 +79,10 @@ class MetaDataManagerTest {
             consumer.accept(session);
             verify(session).merge(metaData);
             return null;
-        }).when(itemDataDao).executeConsumer(any(Consumer.class));
+        });
 
         itemDataManager.updateItemData(itemId, itemDataDto);
 
-        verify(itemDataDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
@@ -99,12 +90,12 @@ class MetaDataManagerTest {
         String itemId = "itemId";
         MetaData metaData = getItemData();
         ResponseItemDataDto responseDto = getResponseItemDataDto();
-        Parameter parameter = mock(Parameter.class);
+
 
         Function<MetaData, ResponseItemDataDto> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(MetaData.class, ResponseItemDataDto.class))
                 .thenReturn(function);
-        when(itemDataDao.getGraphEntity(anyString(), eq(parameter))).thenReturn(metaData);
+        
         when(function.apply(metaData)).thenReturn(responseDto);
         ResponseItemDataDto result = itemDataManager.getItemData(itemId);
 

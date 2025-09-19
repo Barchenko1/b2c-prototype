@@ -7,10 +7,7 @@ import com.b2c.prototype.modal.dto.payload.item.ResponseItemDataDto;
 import com.b2c.prototype.modal.entity.item.MetaData;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.item.IItemDataManager;
-import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
-import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
-import org.hibernate.Session;
+import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,64 +19,53 @@ import static com.b2c.prototype.util.Util.getUUID;
 @Service
 public class ItemDataManager implements IItemDataManager {
 
-    private final ITransactionEntityOperationManager entityOperationManager;
+    private final IGeneralEntityDao generalEntityDao;
     private final ITransformationFunctionService transformationFunctionService;
-    private final IParameterFactory parameterFactory;
 
     public ItemDataManager(IGeneralEntityDao generalEntityDao,
-                           ITransformationFunctionService transformationFunctionService,
-                           IParameterFactory parameterFactory) {
-        this.entityOperationManager = new TransactionEntityOperationManager(null);
+                           ITransformationFunctionService transformationFunctionService) {
+        this.generalEntityDao = generalEntityDao;
         this.transformationFunctionService = transformationFunctionService;
-        this.parameterFactory = parameterFactory;
     }
 
     @Override
     public void saveItemData(ItemDataDto itemDataDto) {
-        entityOperationManager.executeConsumer(session -> {
-            MetaData metaData = transformationFunctionService.getEntity(
-                    (Session) session,
-                    MetaData.class,
-                    itemDataDto);
+        MetaData metaData = transformationFunctionService.getEntity(
+                MetaData.class,
+                itemDataDto);
 //            metaData.setItemId(getUUID());
-            metaData.getArticularItemSet().forEach(articularItem ->
-                    articularItem.setArticularUniqId(getUUID()));
-            session.merge(metaData);
-        });
+        metaData.getArticularItemSet().forEach(articularItem ->
+                articularItem.setArticularUniqId(getUUID()));
+        generalEntityDao.mergeEntity(metaData);
     }
 
     @Override
     public void updateItemData(String itemId, ItemDataDto itemDataDto) {
-        entityOperationManager.executeConsumer(session -> {
-            SearchFieldUpdateEntityDto<ItemDataDto> updateDto = SearchFieldUpdateEntityDto.<ItemDataDto>builder()
-                    .searchField(itemId)
-                    .updateDto(itemDataDto)
-                    .build();
-            MetaData metaData = transformationFunctionService.getEntity(
-                    (Session) session,
-                    MetaData.class,
-                    updateDto);
+        SearchFieldUpdateEntityDto<ItemDataDto> updateDto = SearchFieldUpdateEntityDto.<ItemDataDto>builder()
+                .searchField(itemId)
+                .updateDto(itemDataDto)
+                .build();
+        MetaData metaData = transformationFunctionService.getEntity(
+                MetaData.class,
+                updateDto);
 
-            session.merge(metaData);
-        });
+        generalEntityDao.mergeEntity(metaData);
     }
 
     @Override
     public void deleteItemData(String itemId) {
-        entityOperationManager.executeConsumer(session -> {
-            MetaData metaData = entityOperationManager.getNamedQueryEntityClose(
-                    "MetaData.findByValue",
-                    parameterFactory.createStringParameter(ITEM_ID, itemId));
+        MetaData metaData = generalEntityDao.findEntity(
+                "MetaData.findByValue",
+                Pair.of(ITEM_ID, itemId));
 
-            session.remove(metaData);
-        });
+        generalEntityDao.removeEntity(metaData);
     }
 
     @Override
     public ResponseItemDataDto getItemData(String itemId) {
-        MetaData metaData = entityOperationManager.getNamedQueryEntityClose(
+        MetaData metaData = generalEntityDao.findEntity(
                 "MetaData.findItemDataWithFullRelations",
-                parameterFactory.createStringParameter(ITEM_ID, itemId));
+                Pair.of(ITEM_ID, itemId));
 
         return Optional.of(metaData)
                 .map(transformationFunctionService.getTransformationFunction(MetaData.class, ResponseItemDataDto.class))
@@ -88,8 +74,8 @@ public class ItemDataManager implements IItemDataManager {
 
     @Override
     public List<ResponseItemDataDto> getItemDataList() {
-        List<MetaData> metaDataList = entityOperationManager.getNamedQueryEntityListClose(
-                "MetaData.findAllWithFullRelations");
+        List<MetaData> metaDataList = generalEntityDao.findEntityList(
+                "MetaData.findAllWithFullRelations", (Pair<String, ?>) null);
 
         return metaDataList.stream()
                 .map(transformationFunctionService.getTransformationFunction(MetaData.class, ResponseItemDataDto.class))

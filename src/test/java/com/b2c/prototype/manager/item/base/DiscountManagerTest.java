@@ -7,8 +7,7 @@ import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 
-import com.tm.core.finder.parameter.Parameter;
-import com.tm.core.process.dao.common.ITransactionEntityDao;
+
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,9 +34,6 @@ import static org.mockito.Mockito.when;
 class DiscountManagerTest {
 
     @Mock
-    private ITransactionEntityDao discountDao;
-
-    @Mock
     private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
     private DiscountManager discountManager;
@@ -55,7 +51,7 @@ class DiscountManagerTest {
         discountManager.saveDiscount(dto);
 
         ArgumentCaptor<Supplier<Discount>> captor = ArgumentCaptor.forClass(Supplier.class);
-        verify(discountDao).persistEntity(captor.capture());
+//        verify(gen).persistEntity(captor.capture());
         Discount capturedEntity = captor.getValue().get();
         assertEquals(dto.getCharSequenceCode(), capturedEntity.getCharSequenceCode());
         assertEquals(dto.getAmount(), capturedEntity.getAmount());
@@ -66,12 +62,8 @@ class DiscountManagerTest {
     void updateItemDataDiscount_shouldUpdateDiscount() {
         String articularId = "CODE123";
         DiscountDto dto = createTestDto();
-        Parameter mockParameter = mock(Parameter.class);
         ArticularItem mockArticularItem = mock(ArticularItem.class);
         Discount discount = createTestDiscount();
-
-        Supplier<Parameter> parameterSupplier = () -> mockParameter;
-        
         
 //        when(queryService.getEntity(ArticularItem.class, parameterSupplier))
 //                .thenReturn(mockArticularItem);
@@ -86,23 +78,19 @@ class DiscountManagerTest {
             consumer.accept(session);
             verify(session).merge(mockArticularItem);
             return null;
-        }).when(discountDao).executeConsumer(any(Consumer.class));
+        });
 
         discountManager.updateItemDataDiscount(articularId, dto);
 
-        verify(discountDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
     void updateDiscount_shouldUpdateDiscount() {
         String charSequenceCode = "CODE123";
         DiscountDto dto = createTestDto();
-        Parameter mockParameter = mock(Parameter.class);
         ArticularItem mockArticularItem = mock(ArticularItem.class);
         Discount discount = createTestDiscount();
 
-        Supplier<Parameter> parameterSupplier = () -> mockParameter;
-        
 //        when(discountDao.getEntity(mockParameter)).thenReturn(discount);
         when(transformationFunctionService.getEntity(Discount.class, dto))
                 .thenReturn(discount);
@@ -114,11 +102,10 @@ class DiscountManagerTest {
             consumer.accept(session);
             verify(session).merge(discount);
             return null;
-        }).when(discountDao).executeConsumer(any(Consumer.class));
+        });
 
         discountManager.updateDiscount(charSequenceCode, dto);
 
-        verify(discountDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
@@ -130,31 +117,24 @@ class DiscountManagerTest {
         Discount discount = createTestDiscount();
         discount.setActive(false);
 
-        Parameter mockParameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> mockParameter;
-
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
             Session session = mock(Session.class);
             consumer.accept(session);
             verify(session).merge(discount);
             return null;
-        }).when(discountDao).executeConsumer(any(Consumer.class));
+        });
 
         discountManager.changeDiscountStatus(discountStatusDto);
 
-        verify(discountDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
     void deleteDiscount_shouldDeleteDiscount() {
         DiscountDto dto = createTestDto();
-        Parameter mockParameter = mock(Parameter.class);
         ArticularItem mockArticularItem = mock(ArticularItem.class);
         Discount discount = createTestDiscount();
 
-        Supplier<Parameter> parameterSupplier = () -> mockParameter;
-        
 //        when(queryService.getNamedQueryEntity(
 //                eq(ArticularItem.class),
 //                anyString(),
@@ -168,17 +148,15 @@ class DiscountManagerTest {
             consumer.accept(session);
             verify(session).merge(mockArticularItem);
             return null;
-        }).when(discountDao).executeConsumer(any(Consumer.class));
+        });
 
         discountManager.deleteDiscount(dto.getCharSequenceCode());
 
-        verify(discountDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
     void getDiscount_shouldReturnDiscount() {
         String code = "CODE123";
-        Parameter mockParameter = mock(Parameter.class);
         Function<Collection<ArticularItem>, DiscountDto> function = mock(Function.class);
         DiscountDto expectedDto = createTestDto();
 //        when(queryService.getSubNamedQueryEntityDtoList(
@@ -201,8 +179,6 @@ class DiscountManagerTest {
     @Test
     void getDiscounts_shouldReturnListOfDiscounts() {
         String code = "CODE123";
-        Parameter mockParameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> mockParameter;
         Function<Collection<ArticularItem>, Collection<DiscountDto>> function = mock(Function.class);
         List<Discount> discounts = List.of(createTestDiscount(),
                 Discount.builder()

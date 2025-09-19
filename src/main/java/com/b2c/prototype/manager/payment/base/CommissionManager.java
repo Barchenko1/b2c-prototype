@@ -14,12 +14,7 @@ import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.transform.help.calculate.IPriceCalculationService;
-import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.query.IQueryService;
-import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
-import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
-import jakarta.persistence.EntityManager;
-import org.hibernate.Session;
+import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
@@ -34,80 +29,65 @@ public class CommissionManager implements ICommissionManager {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    private final ITransactionEntityOperationManager entityOperationManager;
-    private final IQueryService queryService;
+    private final IGeneralEntityDao generalEntityDao;
     private final ITransformationFunctionService transformationFunctionService;
-    private final IParameterFactory parameterFactory;
     private final IPriceCalculationService priceCalculationService;
 
-    public CommissionManager(IGeneralEntityDao appCommissionDao,
-                             IQueryService queryService,
+    public CommissionManager(IGeneralEntityDao generalEntityDao,
                              ITransformationFunctionService transformationFunctionService,
-                             IParameterFactory parameterFactory,
                              IPriceCalculationService priceCalculationService) {
-        this.entityOperationManager = new TransactionEntityOperationManager(null);
-        this.queryService = queryService;
+        this.generalEntityDao = generalEntityDao;
         this.transformationFunctionService = transformationFunctionService;
-        this.parameterFactory = parameterFactory;
         this.priceCalculationService = priceCalculationService;
     }
 
     @Override
     public void saveCommission(MinMaxCommissionDto minMaxCommissionDto) {
-        entityOperationManager.executeConsumer(session -> {
-            MinMaxCommission minMaxCommission = transformationFunctionService.getEntity(
-                    (Session) session, MinMaxCommission.class, minMaxCommissionDto);
-            session.merge(minMaxCommission);
-        });
+        MinMaxCommission minMaxCommission = transformationFunctionService.getEntity(
+                MinMaxCommission.class, minMaxCommissionDto);
+        generalEntityDao.mergeEntity(minMaxCommission);
     }
 
     @Override
     public void updateCommission(MinMaxCommissionDto minMaxCommissionDto) {
-        entityOperationManager.executeConsumer(session -> {
-            MinMaxCommission newMinMaxCommission = transformationFunctionService.getEntity(
-                    (Session) session, MinMaxCommission.class, minMaxCommissionDto);
+        MinMaxCommission newMinMaxCommission = transformationFunctionService.getEntity(
+                MinMaxCommission.class, minMaxCommissionDto);
 //            CommissionType commissionType = CommissionType.valueOf(minMaxCommissionDto.getCommissionType());
-            MinMaxCommission minMaxCommission = queryService.getNamedQueryOptionalEntity(
-                    session,
-                    MinMaxCommission.class,
-                    "MinMaxCommission.findByCommissionType",
-                    parameterFactory.createEnumParameter("commissionType", null))
-                    .orElseThrow(() -> new RuntimeException("MinMaxCommission not found"));
+        MinMaxCommission minMaxCommission = (MinMaxCommission) generalEntityDao.findOptionEntity(
+                        "MinMaxCommission.findByCommissionType",
+                        Pair.of("commissionType", null))
+                .orElseThrow(() -> new RuntimeException("MinMaxCommission not found"));
 
-            CommissionValue newMinCommissionValue = newMinMaxCommission.getMinCommission();
-            minMaxCommission.getMinCommission().setAmount(newMinCommissionValue.getAmount());
-            minMaxCommission.getMinCommission().setCurrency(newMinCommissionValue.getCurrency());
-            minMaxCommission.getMinCommission().setFeeType(newMinCommissionValue.getFeeType());
+        CommissionValue newMinCommissionValue = newMinMaxCommission.getMinCommission();
+        minMaxCommission.getMinCommission().setAmount(newMinCommissionValue.getAmount());
+        minMaxCommission.getMinCommission().setCurrency(newMinCommissionValue.getCurrency());
+        minMaxCommission.getMinCommission().setFeeType(newMinCommissionValue.getFeeType());
 
-            CommissionValue newMaxCommissionValue = newMinMaxCommission.getMaxCommission();
-            minMaxCommission.getMaxCommission().setAmount(newMaxCommissionValue.getAmount());
-            minMaxCommission.getMaxCommission().setCurrency(newMaxCommissionValue.getCurrency());
-            minMaxCommission.getMaxCommission().setFeeType(newMaxCommissionValue.getFeeType());
+        CommissionValue newMaxCommissionValue = newMinMaxCommission.getMaxCommission();
+        minMaxCommission.getMaxCommission().setAmount(newMaxCommissionValue.getAmount());
+        minMaxCommission.getMaxCommission().setCurrency(newMaxCommissionValue.getCurrency());
+        minMaxCommission.getMaxCommission().setFeeType(newMaxCommissionValue.getFeeType());
 
-            Price changeCommissionPrice = minMaxCommission.getChangeCommissionPrice();
-            changeCommissionPrice.setAmount(newMinMaxCommission.getChangeCommissionPrice().getAmount());
-            changeCommissionPrice.setCurrency(newMinMaxCommission.getChangeCommissionPrice().getCurrency());
+        Price changeCommissionPrice = minMaxCommission.getChangeCommissionPrice();
+        changeCommissionPrice.setAmount(newMinMaxCommission.getChangeCommissionPrice().getAmount());
+        changeCommissionPrice.setCurrency(newMinMaxCommission.getChangeCommissionPrice().getCurrency());
 
-            session.merge(minMaxCommission);
-        });
+        generalEntityDao.mergeEntity(minMaxCommission);
     }
 
     @Override
     public void deleteCommissionByTime(String commissionTypeValue) {
-        entityOperationManager.executeConsumer(session -> {
-            MinMaxCommission minMaxCommission = queryService.getNamedQueryEntity(session,
-                    MinMaxCommission.class,
-                    "MinMaxCommission.findByCommissionType",
-                    parameterFactory.createEnumParameter("commissionType", null));
+        MinMaxCommission minMaxCommission = generalEntityDao.findEntity(
+                "MinMaxCommission.findByCommissionType",
+                Pair.of("commissionType", null));
 
-            session.remove(minMaxCommission);
-        });
+        generalEntityDao.removeEntity(minMaxCommission);
     }
 
     @Override
     public List<ResponseMinMaxCommissionDto> getCommissionList() {
-        List<MinMaxCommission> minMaxCommissionList = entityOperationManager.getNamedQueryEntityListClose(
-                "MinMaxCommission.getCommissionList");
+        List<MinMaxCommission> minMaxCommissionList = generalEntityDao.findEntityList(
+                "MinMaxCommission.getCommissionList", (Pair<String, ?>) null);
 
         return minMaxCommissionList.stream()
                 .map(transformationFunctionService.getTransformationFunction(MinMaxCommission.class, ResponseMinMaxCommissionDto.class))
@@ -117,9 +97,9 @@ public class CommissionManager implements ICommissionManager {
     @Override
     public ResponseMinMaxCommissionDto getCommissionByCommissionType(String commissionTypeValue) {
 //        CommissionType commissionType = CommissionType.valueOf(commissionTypeValue.toUpperCase());
-        Optional<MinMaxCommission> optionalMinMaxCommission = entityOperationManager.getNamedQueryOptionalEntityClose(
+        Optional<MinMaxCommission> optionalMinMaxCommission = generalEntityDao.findOptionEntity(
                 "MinMaxCommission.findByCommissionType",
-                parameterFactory.createEnumParameter("commissionType", null));
+                Pair.of("commissionType", null));
 
         return optionalMinMaxCommission
                 .map(transformationFunctionService.getTransformationFunction(MinMaxCommission.class, ResponseMinMaxCommissionDto.class))
@@ -128,45 +108,39 @@ public class CommissionManager implements ICommissionManager {
 
     @Override
     public ResponseBuyerCommissionInfoDto getBuyerCommission(List<ArticularItemQuantityDto> articularItemQuantityDtoList) {
-        return entityOperationManager.executeFunction(entityManager -> {
-            Optional<MinMaxCommission> optionalMinMaxCommission = getOptionalMinMaxCommission(entityManager);
+        Optional<MinMaxCommission> optionalMinMaxCommission = getOptionalMinMaxCommission();
 
-            List<String> articularIdList = articularItemQuantityDtoList.stream()
-                    .map(ArticularItemQuantityDto::getArticularId)
-                    .toList();
+        List<String> articularIdList = articularItemQuantityDtoList.stream()
+                .map(ArticularItemQuantityDto::getArticularId)
+                .toList();
 
-            List<ArticularItem> articularItems = queryService.getNamedQueryEntityList(
-                    entityManager,
-                    ArticularItem.class,
-                    "ArticularItem.findByArticularIds",
-                    parameterFactory.createStringParameterList("articularIds", articularIdList));
+        List<ArticularItem> articularItems = generalEntityDao.findEntityList(
+                "ArticularItem.findByArticularIds",
+                Pair.of("articularId", articularIdList));
 
-            if (optionalMinMaxCommission.isPresent()) {
-                MinMaxCommission minMaxCommission = optionalMinMaxCommission.get();
-                Price totalPrice = getPrice(articularItems);
+        if (optionalMinMaxCommission.isPresent()) {
+            MinMaxCommission minMaxCommission = optionalMinMaxCommission.get();
+            Price totalPrice = getPrice(articularItems);
 
-                validateCurrencyMatch(minMaxCommission, totalPrice);
+            validateCurrencyMatch(minMaxCommission, totalPrice);
 
-                Price commissionPrice = priceCalculationService.calculateCommissionPrice(minMaxCommission, totalPrice);
+            Price commissionPrice = priceCalculationService.calculateCommissionPrice(minMaxCommission, totalPrice);
 
-                return ResponseBuyerCommissionInfoDto.builder()
-                        .sumPrice(PriceDto.builder()
-                                .amount(commissionPrice.getAmount())
-                                .currency(commissionPrice.getCurrency().getLabel())
-                                .build())
-                        .build();
-            }
+            return ResponseBuyerCommissionInfoDto.builder()
+                    .sumPrice(PriceDto.builder()
+                            .amount(commissionPrice.getAmount())
+                            .currency(commissionPrice.getCurrency().getLabel())
+                            .build())
+                    .build();
+        }
 
-            return null;
-        });
+        return null;
     }
 
-    private Optional<MinMaxCommission> getOptionalMinMaxCommission(EntityManager session) {
-        return queryService.getNamedQueryOptionalEntity(
-                session,
-                MinMaxCommission.class,
+    private Optional<MinMaxCommission> getOptionalMinMaxCommission() {
+        return generalEntityDao.findOptionEntity(
                 "MinMaxCommission.findByCommissionType",
-                parameterFactory.createEnumParameter("commissionType", null));
+                Pair.of("commissionType", null));
     }
 
     private void validateCurrencyMatch(MinMaxCommission commission, Price totalPrice) {

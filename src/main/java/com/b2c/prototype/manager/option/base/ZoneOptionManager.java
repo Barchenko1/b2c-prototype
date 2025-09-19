@@ -5,10 +5,7 @@ import com.b2c.prototype.manager.option.IZoneOptionManager;
 import com.b2c.prototype.modal.dto.payload.option.ZoneOptionDto;
 import com.b2c.prototype.modal.entity.option.ZoneOption;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
-import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.manager.common.operator.EntityOperationManager;
-import com.tm.core.process.manager.common.IEntityOperationManager;
-import org.hibernate.Session;
+import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,47 +16,42 @@ import static com.b2c.prototype.util.Constant.VALUE;
 @Service
 public class ZoneOptionManager implements IZoneOptionManager {
 
-    private final IEntityOperationManager entityOperationManager;
+    private final IGeneralEntityDao generalEntityDao;
     private final ITransformationFunctionService transformationFunctionService;
-    private final IParameterFactory parameterFactory;
 
-    public ZoneOptionManager(IGeneralEntityDao zoneOptionDao, ITransformationFunctionService transformationFunctionService, IParameterFactory parameterFactory) {
-        this.entityOperationManager = new EntityOperationManager(null);
+    public ZoneOptionManager(IGeneralEntityDao generalEntityDao,
+                             ITransformationFunctionService transformationFunctionService) {
+        this.generalEntityDao = generalEntityDao;
         this.transformationFunctionService = transformationFunctionService;
-        this.parameterFactory = parameterFactory;
     }
 
     @Override
     public void saveUpdateZoneOption(String zoneValue, ZoneOptionDto zoneOptionDto) {
-        entityOperationManager.executeConsumer(session -> {
-            ZoneOption zoneOption = transformationFunctionService.getEntity((Session) session, ZoneOption.class, zoneOptionDto);
-            if (zoneValue != null) {
-                ZoneOption existingZoneOption = entityOperationManager.getNamedQueryEntityClose(
-                        "ZoneOption.findAllWithPriceAndCurrency",
-                        parameterFactory.createStringParameter(VALUE, zoneValue));
-                zoneOption.setId(existingZoneOption.getId());
-                zoneOption.getPrice().setId(existingZoneOption.getPrice().getId());
-                zoneOption.getPrice().getCurrency().setId(existingZoneOption.getPrice().getCurrency().getId());
-            }
-            session.merge(zoneOption);
-        });
+        ZoneOption zoneOption = transformationFunctionService.getEntity(ZoneOption.class, zoneOptionDto);
+        if (zoneValue != null) {
+            ZoneOption existingZoneOption = generalEntityDao.findEntity(
+                    "ZoneOption.findAllWithPriceAndCurrency",
+                    Pair.of(VALUE, zoneValue));
+            zoneOption.setId(existingZoneOption.getId());
+            zoneOption.getPrice().setId(existingZoneOption.getPrice().getId());
+            zoneOption.getPrice().getCurrency().setId(existingZoneOption.getPrice().getCurrency().getId());
+        }
+        generalEntityDao.mergeEntity(zoneOption);
     }
 
     @Override
     public void deleteZoneOption(String zoneValue) {
-        entityOperationManager.executeConsumer(session -> {
-            ZoneOption zoneOption = entityOperationManager.getNamedQueryEntityClose(
-                    "ZoneOption.findByValue",
-                    parameterFactory.createStringParameter(VALUE, zoneValue));
-            session.remove(zoneOption);
-        });
+        ZoneOption zoneOption = generalEntityDao.findEntity(
+                "ZoneOption.findByValue",
+                Pair.of(VALUE, zoneValue));
+        generalEntityDao.removeEntity(zoneOption);
     }
 
     @Override
     public ZoneOptionDto getZoneOptionDto(String zoneValue) {
-        ZoneOption zoneOption = entityOperationManager.getNamedQueryEntityClose(
+        ZoneOption zoneOption = generalEntityDao.findEntity(
                 "ZoneOption.findAllWithPriceAndCurrency",
-                parameterFactory.createStringParameter(VALUE, zoneValue)
+                Pair.of(VALUE, zoneValue)
         );
 
         return Optional.ofNullable(zoneOption)
@@ -69,8 +61,8 @@ public class ZoneOptionManager implements IZoneOptionManager {
 
     @Override
     public List<ZoneOptionDto> getZoneOptionDtoList() {
-        List<ZoneOption> zoneOptionList = entityOperationManager.getNamedQueryEntityListClose(
-                "ZoneOption.all");
+        List<ZoneOption> zoneOptionList = generalEntityDao.findEntityList(
+                "ZoneOption.all", (Pair<String, ?>) null);
 
         return zoneOptionList.stream()
                 .map(transformationFunctionService.getTransformationFunction(ZoneOption.class, ZoneOptionDto.class))

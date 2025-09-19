@@ -8,11 +8,7 @@ import com.b2c.prototype.modal.dto.payload.store.ResponseStoreDto;
 import com.b2c.prototype.modal.entity.store.Store;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.store.IStoreManager;
-import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.query.IQueryService;
-import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
-import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
-import org.hibernate.Session;
+import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,74 +20,65 @@ import static com.b2c.prototype.util.Constant.VALUE;
 @Service
 public class StoreManager implements IStoreManager {
 
-    private final ITransactionEntityOperationManager entityOperationManager;
+    private final IGeneralEntityDao generalEntityDao;
     private final ITransformationFunctionService transformationFunctionService;
-    private final IParameterFactory parameterFactory;
 
-    public StoreManager(IGeneralEntityDao storeDao,
-                        ITransformationFunctionService transformationFunctionService,
-                        IParameterFactory parameterFactory) {
-        this.entityOperationManager = new TransactionEntityOperationManager(null);
+    public StoreManager(IGeneralEntityDao generalEntityDao,
+                        ITransformationFunctionService transformationFunctionService) {
+        this.generalEntityDao = generalEntityDao;
         this.transformationFunctionService = transformationFunctionService;
-        this.parameterFactory = parameterFactory;
     }
 
     @Override
     public void saveStore(StoreDto storeDto) {
-        entityOperationManager.executeConsumer(session -> {
-            Store store = transformationFunctionService.getEntity((Session) session, Store.class, storeDto);
-            session.merge(store);
-        });
+        Store store = transformationFunctionService.getEntity(Store.class, storeDto);
+        generalEntityDao.mergeEntity(store);
     }
 
     @Override
     public void updateStore(String storeId, StoreDto storeDto) {
-        entityOperationManager.executeConsumer(session -> {
-            Store existingStore = entityOperationManager.getNamedQueryEntityClose(
-                    "Store.findStoreWithAddressByStoreId",
-                    parameterFactory.createStringParameter(STORE_ID, storeId));
+        Store existingStore = generalEntityDao.findEntity(
+                "Store.findStoreWithAddressByStoreId",
+                Pair.of(STORE_ID, storeId));
 
-            Store store = transformationFunctionService.getEntity((Session) session, Store.class, storeDto);
-            existingStore.setStoreName(store.getStoreName());
-            existingStore.setActive(store.isActive());
-            Address existingAddress = existingStore.getAddress();
-            Address address = store.getAddress();
-            existingAddress.setCountry(address.getCountry());
-            existingAddress.setCity(address.getCity());
-            existingAddress.setStreet(address.getStreet());
-            existingAddress.setBuildingNumber(address.getBuildingNumber());
-            existingAddress.setFlorNumber(address.getFlorNumber());
-            existingAddress.setApartmentNumber(address.getApartmentNumber());
-            existingAddress.setZipCode(address.getZipCode());
-            session.merge(existingStore);
-        });
+        Store store = transformationFunctionService.getEntity(Store.class, storeDto);
+        existingStore.setStoreName(store.getStoreName());
+        existingStore.setActive(store.isActive());
+        Address existingAddress = existingStore.getAddress();
+        Address address = store.getAddress();
+        existingAddress.setCountry(address.getCountry());
+        existingAddress.setCity(address.getCity());
+        existingAddress.setStreet(address.getStreet());
+        existingAddress.setBuildingNumber(address.getBuildingNumber());
+        existingAddress.setFlorNumber(address.getFlorNumber());
+        existingAddress.setApartmentNumber(address.getApartmentNumber());
+        existingAddress.setZipCode(address.getZipCode());
+        generalEntityDao.mergeEntity(existingStore);
     }
 
     @Override
     public void deleteStore(String storeId) {
-        entityOperationManager.executeConsumer(session -> {
-            Store existingStore = entityOperationManager.getNamedQueryEntityClose(
-                    "Store.findStoreByStoreId",
-                    parameterFactory.createStringParameter(STORE_ID, storeId));
+        Store existingStore = generalEntityDao.findEntity(
+                "Store.findStoreByStoreId",
+                Pair.of(STORE_ID, storeId));
 
-            session.remove(existingStore);
-        });
+        generalEntityDao.removeEntity(existingStore);
     }
 
     @Override
     public ResponseStoreDto getResponseStoreByStoreId(String storeId) {
-        Store store = entityOperationManager.getNamedQueryEntityClose(
+        Store store = generalEntityDao.findEntity(
                 "Store.findStoreWithAddressArticularItemQuantityByStoreId",
-                parameterFactory.createStringParameter(STORE_ID, storeId));
+                Pair.of(STORE_ID, storeId));
         return transformationFunctionService.getTransformationFunction(Store.class, ResponseStoreDto.class)
                 .apply(store);
     }
 
     @Override
     public List<ResponseStoreDto> getAllResponseStoresByArticularId(String articularId) {
-        List<Store> stores = entityOperationManager.getNamedQueryEntityListClose(
+        List<Store> stores = generalEntityDao.findEntityList(
                 "Store.findStoreWithAddressArticularItemQuantityByArticularId",
-                parameterFactory.createStringParameter(ARTICULAR_ID, articularId));
+                Pair.of(ARTICULAR_ID, articularId));
         return stores.stream()
                 .map(transformationFunctionService.getTransformationFunction(Store.class, ResponseStoreDto.class))
                 .toList();
@@ -99,9 +86,9 @@ public class StoreManager implements IStoreManager {
 
     @Override
     public List<ResponseStoreDto> getAllResponseStoreByCountry(String countryName) {
-        List<Store> stores = entityOperationManager.getNamedQueryEntityListClose(
+        List<Store> stores = generalEntityDao.findEntityList(
                 "Store.findStoreWithAddressArticularItemQuantityByCountry",
-                parameterFactory.createStringParameter(VALUE, countryName));
+                Pair.of(VALUE, countryName));
 
         return stores.stream()
                 .map(transformationFunctionService.getTransformationFunction(Store.class, ResponseStoreDto.class))
@@ -111,9 +98,9 @@ public class StoreManager implements IStoreManager {
     // fix next
     @Override
     public List<ResponseStoreDto> getAllResponseStoreByCountryAndCity(String countryName, String cityName) {
-        List<Store> stores = entityOperationManager.getNamedQueryEntityClose(
+        List<Store> stores = generalEntityDao.findEntityList(
                 "Store.findStoreWithAddressArticularItemQuantityByCountryCity",
-                parameterFactory.createStringParameter(VALUE, countryName));
+                Pair.of(VALUE, countryName));
 
         return stores.stream()
                 .map(transformationFunctionService.getTransformationFunction(Store.class, ResponseStoreDto.class))

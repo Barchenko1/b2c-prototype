@@ -3,7 +3,6 @@ package com.b2c.prototype.manager.address.base;
 import com.b2c.prototype.modal.dto.payload.constant.CountryDto;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.manager.AbstractConstantEntityManagerTest;
-import com.tm.core.finder.parameter.Parameter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -27,15 +26,12 @@ class CountryManagerTest extends AbstractConstantEntityManagerTest<Country> {
 
     @BeforeEach
     void setUp() {
-        when(transformationFunctionService.getTransformationFunction(CountryDto.class, Country.class))
-                .thenReturn(mapDtoToEntityFunction);
-        when(transformationFunctionService.getTransformationFunction(Country.class, CountryDto.class))
-                .thenReturn(mapEntityToDtoFunction);
+//        when(transformationFunctionService.getTransformationFunction(CountryDto.class, Country.class))
+//                .thenReturn(mapDtoToEntityFunction);
+//        when(transformationFunctionService.getTransformationFunction(Country.class, CountryDto.class))
+//                .thenReturn(mapEntityToDtoFunction);
 
-        countryManager = new CountryManager(
-                parameterFactory,
-                dao,
-                transformationFunctionService);
+        countryManager = null;
     }
 
     @Test
@@ -79,12 +75,12 @@ class CountryManagerTest extends AbstractConstantEntityManagerTest<Country> {
 
     @Test
     public void testGetEntity() {
-        Parameter parameter = parameterFactory.createStringParameter(VALUE, "testValue");
+//        
         Country testValue = createTestValue();
         CountryDto countryDto = getCountryDto();
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(countryDto);
-        when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
+//        
         //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
         CountryDto result = countryManager.getEntity("testValue");
@@ -94,12 +90,12 @@ class CountryManagerTest extends AbstractConstantEntityManagerTest<Country> {
 
     @Test
     public void testGetEntityOptional() {
-        Parameter parameter = parameterFactory.createStringParameter(VALUE, "testValue");
+//        
         Country testValue = createTestValue();
         CountryDto countryDto = getCountryDto();
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(countryDto);
-        when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
+//        
         //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
         Optional<CountryDto> result = countryManager.getEntityOptional("testValue");

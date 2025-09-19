@@ -6,10 +6,9 @@ import com.b2c.prototype.modal.dto.payload.user.UserAddressDto;
 import com.b2c.prototype.modal.dto.payload.user.ResponseUserAddressDto;
 import com.b2c.prototype.modal.entity.address.UserAddress;
 import com.b2c.prototype.modal.entity.user.UserDetails;
-import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.address.IUserAddressManager;
-import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.IFetchHandler;
+import com.b2c.prototype.transform.userdetails.IUserDetailsTransformService;
+import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,17 +19,13 @@ import static com.b2c.prototype.util.Constant.USER_ID;
 @Service
 public class UserAddressManager implements IUserAddressManager {
 
-    private final IFetchHandler fetchHandler;
-    private final ITransformationFunctionService transformationFunctionService;
-    private final IParameterFactory parameterFactory;
+    private final IGeneralEntityDao generalEntityDao;
+    private final IUserDetailsTransformService userDetailsTransformService;
 
     public UserAddressManager(IGeneralEntityDao generalEntityDao,
-                              IFetchHandler fetchHandler,
-                              ITransformationFunctionService transformationFunctionService,
-                              IParameterFactory parameterFactory) {
-        this.fetchHandler = fetchHandler;
-        this.transformationFunctionService = transformationFunctionService;
-        this.parameterFactory = parameterFactory;
+                              IUserDetailsTransformService userDetailsTransformService) {
+        this.generalEntityDao = generalEntityDao;
+        this.userDetailsTransformService = userDetailsTransformService;
     }
 
     @Transactional
@@ -140,39 +135,36 @@ public class UserAddressManager implements IUserAddressManager {
 
     @Override
     public List<ResponseUserAddressDto> getUserAddressesByUserId(String userId) {
-        UserDetails userDetails = fetchHandler.getNamedQueryEntityClose(
-                UserDetails.class,
+        UserDetails userDetails = generalEntityDao.findEntity(
                 "UserDetails.findAddressesByUserId",
-                parameterFactory.createStringParameter(USER_ID, userId));
+                Pair.of(USER_ID, userId));
 
         return userDetails.getUserAddresses().stream()
-                .map(transformationFunctionService.getTransformationFunction(UserAddress.class, ResponseUserAddressDto.class))
+                .map(userDetailsTransformService::mapUserAddressToResponseUserAddressDto)
                 .toList();
     }
 
     @Override
     public ResponseUserAddressDto getDefaultUserAddress(String userId) {
-        UserDetails userDetails = fetchHandler.getNamedQueryEntityClose(
-                UserDetails.class,
+        UserDetails userDetails = generalEntityDao.findEntity(
                 "UserDetails.findAddressesByUserId",
-                parameterFactory.createStringParameter(USER_ID, userId));
+                Pair.of(USER_ID, userId));
 
         return userDetails.getUserAddresses().stream()
                 .filter(UserAddress::isDefault)
-                .map(transformationFunctionService.getTransformationFunction(UserAddress.class, ResponseUserAddressDto.class))
+                .map(userDetailsTransformService::mapUserAddressToResponseUserAddressDto)
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("User has no such default address"));
     }
 
     @Override
     public List<AddressDto> getAllAddressesByAddressId(String addressId) {
-        List<UserAddress> userAddressList = fetchHandler.getNamedQueryEntityListClose(
-                UserAddress.class,
+        List<UserAddress> userAddressList = generalEntityDao.findEntityList(
                 "UserAddress.findByUserAddressCombination",
-                parameterFactory.createStringParameter("userAddressCombination", addressId));
+                Pair.of("userAddressCombination", addressId));
 
         return userAddressList.stream()
-                .map(transformationFunctionService.getTransformationFunction(UserAddress.class, AddressDto.class))
+                .map(userDetailsTransformService::mapUserAddressToAddressDto)
                 .toList();
     }
 

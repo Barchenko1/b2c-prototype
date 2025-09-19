@@ -7,11 +7,7 @@ import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.item.IDiscountManager;
-import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.IFetchHandler;
-import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
-import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
-import org.hibernate.Session;
+import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,103 +19,84 @@ import static com.b2c.prototype.util.Constant.CHAR_SEQUENCE_CODE;
 @Service
 public class DiscountManager implements IDiscountManager {
 
-    private final ITransactionEntityOperationManager entityOperationManager;
-    private final IFetchHandler fetchHandler;
+    private final IGeneralEntityDao generalEntityDao;
     private final ITransformationFunctionService transformationFunctionService;
-    private final IParameterFactory parameterFactory;
 
-    public DiscountManager(IGeneralEntityDao discountDao,
-                           IFetchHandler fetchHandler,
-                           ITransformationFunctionService transformationFunctionService,
-                           IParameterFactory parameterFactory) {
-        this.entityOperationManager = new TransactionEntityOperationManager(null);
-        this.fetchHandler = fetchHandler;
+    public DiscountManager(IGeneralEntityDao generalEntityDao,
+                           ITransformationFunctionService transformationFunctionService) {
+        this.generalEntityDao = generalEntityDao;
         this.transformationFunctionService = transformationFunctionService;
-        this.parameterFactory = parameterFactory;
     }
 
     @Override
     public void saveDiscount(DiscountDto discountDto) {
-        entityOperationManager.executeConsumer(session -> {
-            Discount discount = transformationFunctionService.getEntity((Session) session, Discount.class, discountDto);
-            session.merge(discount);
-        });
+        Discount discount = transformationFunctionService.getEntity(Discount.class, discountDto);
+        generalEntityDao.mergeEntity(discount);
     }
 
     @Override
     public void updateItemDataDiscount(String articularId, DiscountDto discountDto) {
-        entityOperationManager.executeConsumer(session -> {
-            if (discountDto.getCharSequenceCode() == null) {
-                throw new RuntimeException("Discount code is null");
-            }
-            ArticularItem articularItem = fetchHandler.getNamedQueryEntityClose(
-                    ArticularItem.class,
-                    "ArticularItem.discount.currency",
-                    parameterFactory.createStringParameter(ARTICULAR_ID, articularId));
+        if (discountDto.getCharSequenceCode() == null) {
+            throw new RuntimeException("Discount code is null");
+        }
+        ArticularItem articularItem = generalEntityDao.findEntity(
+                "ArticularItem.discount.currency",
+                Pair.of(ARTICULAR_ID, articularId));
 
-            Discount discount = (Discount) Optional.ofNullable(discountDto.getCharSequenceCode())
-                    .flatMap(code -> entityOperationManager.getNamedQueryOptionalEntityClose(
-                            "Discount.currency",
-                            parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, code)))
-                    .orElseGet(() -> transformationFunctionService.getEntity((Session) session, Discount.class, discountDto));
+        Discount discount = (Discount) Optional.ofNullable(discountDto.getCharSequenceCode())
+                .flatMap(code -> generalEntityDao.findOptionEntity(
+                        "Discount.currency",
+                        Pair.of(CHAR_SEQUENCE_CODE, code)))
+                .orElseGet(() -> transformationFunctionService.getEntity(Discount.class, discountDto));
 
-            if (articularItem.getDiscount() != null) {
-                discount.setId(articularItem.getDiscount().getId());
-            }
+        if (articularItem.getDiscount() != null) {
+            discount.setId(articularItem.getDiscount().getId());
+        }
 
-            articularItem.setDiscount(discount);
-            session.merge(articularItem);
-        });
+        articularItem.setDiscount(discount);
+        generalEntityDao.mergeEntity(articularItem);
     }
 
     @Override
     public void updateDiscount(String charSequenceCode, DiscountDto discountDto) {
-        entityOperationManager.executeConsumer(session -> {
-            if (discountDto.getCharSequenceCode() == null) {
-                throw new RuntimeException("Discount code is null");
-            }
-            Discount newDiscount = transformationFunctionService.getEntity((Session) session, Discount.class, discountDto);
-            Discount oldDiscount = entityOperationManager.getNamedQueryEntityClose(
-                    "Discount.currency",
-                    parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, charSequenceCode));
-            newDiscount.setId(oldDiscount.getId());
-            session.merge(newDiscount);
-        });
+        if (discountDto.getCharSequenceCode() == null) {
+            throw new RuntimeException("Discount code is null");
+        }
+        Discount newDiscount = transformationFunctionService.getEntity(Discount.class, discountDto);
+        Discount oldDiscount = generalEntityDao.findEntity(
+                "Discount.currency",
+                Pair.of(CHAR_SEQUENCE_CODE, charSequenceCode));
+        newDiscount.setId(oldDiscount.getId());
+        generalEntityDao.mergeEntity(newDiscount);
     }
 
     @Override
     public void changeDiscountStatus(DiscountStatusDto discountStatusDto) {
-        entityOperationManager.executeConsumer(session -> {
-            Discount currencyDiscount = entityOperationManager.getNamedQueryEntityClose(
-                    "Discount.currency",
-                    parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, discountStatusDto.getCharSequenceCode()));
-            currencyDiscount.setActive(discountStatusDto.isActive());
-            session.merge(currencyDiscount);
-        });
+        Discount currencyDiscount = generalEntityDao.findEntity(
+                "Discount.currency",
+                Pair.of(CHAR_SEQUENCE_CODE, discountStatusDto.getCharSequenceCode()));
+        currencyDiscount.setActive(discountStatusDto.isActive());
+        generalEntityDao.mergeEntity(currencyDiscount);
     }
 
     @Override
     public void deleteDiscount(String charSequenceCode) {
-        entityOperationManager.executeConsumer(session -> {
-            List<ArticularItem> articularItemList = fetchHandler.getNamedQueryEntityListClose(
-                    ArticularItem.class,
-                    "ArticularItem.findByDiscountCharSequenceCode",
-                    parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, charSequenceCode));
-            Discount discount = articularItemList.get(0).getDiscount();
-            articularItemList.forEach(itemDataOption -> {
-                itemDataOption.setDiscount(null);
-                session.merge(itemDataOption);
-            });
-            session.remove(session.merge(discount));
+        List<ArticularItem> articularItemList = generalEntityDao.findEntity(
+                "ArticularItem.findByDiscountCharSequenceCode",
+                Pair.of(CHAR_SEQUENCE_CODE, charSequenceCode));
+        Discount discount = articularItemList.get(0).getDiscount();
+        articularItemList.forEach(itemDataOption -> {
+            itemDataOption.setDiscount(null);
+            generalEntityDao.mergeEntity(itemDataOption);
         });
+        generalEntityDao.removeEntity(generalEntityDao.mergeEntity(discount));
     }
 
     @Override
     public DiscountDto getDiscount(String charSequenceCode) {
-        List<ArticularItem> articularItemList = fetchHandler.getNamedQueryEntityListClose(
-                ArticularItem.class,
+        List<ArticularItem> articularItemList = generalEntityDao.findEntity(
                 "ArticularItem.findByDiscountCharSequenceCode",
-                parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, charSequenceCode));
+                Pair.of(CHAR_SEQUENCE_CODE, charSequenceCode));
 //        return articularItemList.stream()
 //                .map(e-> new DiscountDto())
 //                .findFirst()
@@ -130,9 +107,8 @@ public class DiscountManager implements IDiscountManager {
 
     @Override
     public List<DiscountDto> getDiscounts() {
-        List<ArticularItem> articularItemList = fetchHandler.getNamedQueryEntityListClose(
-                ArticularItem.class,
-                "ArticularItem.findByDiscountNotNull");
+        List<ArticularItem> articularItemList = generalEntityDao.findEntityList(
+                "ArticularItem.findByDiscountNotNull", (Pair<String, ?>) null);
 
         return (List<DiscountDto>) transformationFunctionService.getCollectionTransformationCollectionFunction(ArticularItem.class, DiscountDto.class, "list")
                 .apply(articularItemList);

@@ -56,7 +56,7 @@
 //        DeliveryArticularItemQuantity orderItemDataOption = mock(DeliveryArticularItemQuantity.class);
 //        Delivery existingDelivery = getDelivery();
 //        Delivery newDelivery = getDelivery();
-//        Parameter parameter = mock(Parameter.class);
+//        
 //        Supplier<Parameter> parameterSupplier = () -> parameter;
 //
 //
@@ -89,7 +89,7 @@
 //        DeliveryArticularItemQuantity orderItemDataOption = mock(DeliveryArticularItemQuantity.class);
 //        Delivery existingDelivery = null;
 //        Delivery newDelivery = getDelivery();
-//        Parameter parameter = mock(Parameter.class);
+//        
 //        Supplier<Parameter> parameterSupplier = () -> parameter;
 //
 //        when(orderItemDataOption.getDelivery()).thenReturn(existingDelivery);
@@ -115,7 +115,7 @@
 //    @Test
 //    void testDeleteDelivery() {
 //        String orderId = "123";
-//        Parameter parameter = mock(Parameter.class);
+//        
 //        Supplier<Parameter> parameterSupplier = () -> parameter;
 //        Delivery delivery = getDelivery();
 //        Supplier<Delivery> deliverySupplier = () -> delivery;
@@ -139,7 +139,7 @@
 //    @Test
 //    void testGetDelivery() {
 //        String orderId = "123";
-//        Parameter parameter = mock(Parameter.class);
+//        
 //        Supplier<Parameter> parameterSupplier = () -> parameter;
 //
 //        DeliveryDto deliveryDto =  getDeliveryDto();

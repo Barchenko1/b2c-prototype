@@ -4,12 +4,6 @@ management:
       export:
         apiKey: "your-api-key"
         accountId: "your-account-id"
-thread:
-  pool:
-    size: 4
-entity:
-  package:
-    path: com.b2c.prototype.modal.entity
 #spring:
 #  web:
 #    locale: en

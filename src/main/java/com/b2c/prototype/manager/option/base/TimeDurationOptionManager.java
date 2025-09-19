@@ -6,10 +6,7 @@ import com.b2c.prototype.modal.dto.payload.option.TimeDurationOptionDto;
 import com.b2c.prototype.modal.dto.payload.option.ResponseTimeDurationOptionDto;
 import com.b2c.prototype.modal.entity.option.TimeDurationOption;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
-import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
-import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
-import org.hibernate.Session;
+import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,49 +16,42 @@ import static com.b2c.prototype.util.Constant.VALUE;
 @Service
 public class TimeDurationOptionManager implements ITimeDurationOptionManager {
 
-    private final ITransactionEntityOperationManager entityOperationManager;
+    private final IGeneralEntityDao generalEntityDao;
     private final ITransformationFunctionService transformationFunctionService;
-    private final IParameterFactory parameterFactory;
 
     public TimeDurationOptionManager(IGeneralEntityDao generalEntityDao,
-                                     ITransformationFunctionService transformationFunctionService,
-                                     IParameterFactory parameterFactory) {
-        this.entityOperationManager = new TransactionEntityOperationManager(null);
+                                     ITransformationFunctionService transformationFunctionService) {
+        this.generalEntityDao = generalEntityDao;
         this.transformationFunctionService = transformationFunctionService;
-        this.parameterFactory = parameterFactory;
     }
 
     @Override
     public void saveUpdateTimeDurationOption(String timeDurationValue, TimeDurationOptionDto timeDurationOptionDto) {
-        entityOperationManager.executeConsumer(session -> {
-            TimeDurationOption timeDurationOption = transformationFunctionService.getEntity((Session) session, TimeDurationOption.class, timeDurationOptionDto);
-            if (timeDurationValue != null) {
-                TimeDurationOption existingZoneOption = entityOperationManager.getNamedQueryEntityClose(
-                        "TimeDurationOption.findAllWithPriceAndCurrency",
-                        parameterFactory.createStringParameter(VALUE, timeDurationValue));
-                timeDurationOption.setId(existingZoneOption.getId());
-                timeDurationOption.getPrice().setId(existingZoneOption.getPrice().getId());
-                timeDurationOption.getPrice().getCurrency().setId(existingZoneOption.getPrice().getCurrency().getId());
-            }
-            session.merge(timeDurationOption);
-        });
+        TimeDurationOption timeDurationOption = transformationFunctionService.getEntity(TimeDurationOption.class, timeDurationOptionDto);
+        if (timeDurationValue != null) {
+            TimeDurationOption existingZoneOption = generalEntityDao.findEntity(
+                    "TimeDurationOption.findAllWithPriceAndCurrency",
+                    Pair.of(VALUE, timeDurationValue));
+            timeDurationOption.setId(existingZoneOption.getId());
+            timeDurationOption.getPrice().setId(existingZoneOption.getPrice().getId());
+            timeDurationOption.getPrice().getCurrency().setId(existingZoneOption.getPrice().getCurrency().getId());
+        }
+        generalEntityDao.mergeEntity(timeDurationOption);
     }
 
     @Override
     public void deleteTimeDurationOption(String timeDurationValue) {
-        entityOperationManager.executeConsumer(session -> {
-            TimeDurationOption timeDurationOption = entityOperationManager.getNamedQueryEntityClose(
-                    "TimeDurationOption.findAllWithPriceAndCurrency",
-                    parameterFactory.createStringParameter(VALUE, timeDurationValue));
-            entityOperationManager.deleteEntity(timeDurationOption);
-        });
+        TimeDurationOption timeDurationOption = generalEntityDao.findEntity(
+                "TimeDurationOption.findAllWithPriceAndCurrency",
+                Pair.of(VALUE, timeDurationValue));
+        generalEntityDao.removeEntity(timeDurationOption);
     }
 
     @Override
     public ResponseTimeDurationOptionDto getTimeDurationOptionDto(String timeDurationValue) {
-        TimeDurationOption timeDurationOption = entityOperationManager.getNamedQueryEntityClose(
+        TimeDurationOption timeDurationOption = generalEntityDao.findEntity(
                 "TimeDurationOption.findAllWithPriceAndCurrency",
-                parameterFactory.createStringParameter(VALUE, timeDurationValue));
+                Pair.of(VALUE, timeDurationValue));
 
         return transformationFunctionService.getTransformationFunction(TimeDurationOption.class, ResponseTimeDurationOptionDto.class)
                 .apply(timeDurationOption);
@@ -69,8 +59,8 @@ public class TimeDurationOptionManager implements ITimeDurationOptionManager {
 
     @Override
     public List<ResponseTimeDurationOptionDto> getTimeDurationOptionDtoList() {
-        List<TimeDurationOption> timeDurationOptionList = entityOperationManager.getNamedQueryEntityListClose(
-                "TimeDurationOption.all");
+        List<TimeDurationOption> timeDurationOptionList = generalEntityDao.findEntityList(
+                "TimeDurationOption.all", (Pair<String, ?>) null);
 
         return timeDurationOptionList.stream()
                 .map(transformationFunctionService.getTransformationFunction(TimeDurationOption.class, ResponseTimeDurationOptionDto.class))

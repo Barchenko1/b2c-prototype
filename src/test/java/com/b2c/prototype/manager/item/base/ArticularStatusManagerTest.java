@@ -3,7 +3,6 @@ package com.b2c.prototype.manager.item.base;
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.entity.item.ArticularStatus;
 import com.b2c.prototype.manager.AbstractConstantEntityManagerTest;
-import com.tm.core.finder.parameter.Parameter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -26,16 +25,12 @@ class ArticularStatusManagerTest extends AbstractConstantEntityManagerTest<Artic
 
     @BeforeEach
     void setUp() {
-        when(transformationFunctionService.getTransformationFunction(ConstantPayloadDto.class, ArticularStatus.class))
-                .thenReturn(mapDtoToEntityFunction);
-        when(transformationFunctionService.getTransformationFunction(ArticularStatus.class, ConstantPayloadDto.class))
-                .thenReturn(mapEntityToDtoFunction);
+//        when(transformationFunctionService.getTransformationFunction(ConstantPayloadDto.class, ArticularStatus.class))
+//                .thenReturn(mapDtoToEntityFunction);
+//        when(transformationFunctionService.getTransformationFunction(ArticularStatus.class, ConstantPayloadDto.class))
+//                .thenReturn(mapEntityToDtoFunction);
 
-        articularStatusManager = new ArticularStatusManager(
-                parameterFactory,
-                dao,
-                transformationFunctionService
-        );
+        articularStatusManager = null;
     }
 
     @Test
@@ -83,12 +78,12 @@ class ArticularStatusManagerTest extends AbstractConstantEntityManagerTest<Artic
     @Test
     public void testGetEntity() {
         
-        Parameter parameter = parameterFactory.createStringParameter(VALUE, "testValue");
+//        
         ArticularStatus testValue = createTestValue();
         ConstantPayloadDto constantPayloadDto = getResponseOneFieldEntityDto();
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
-        when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
+//        
         //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
         ConstantPayloadDto result = articularStatusManager.getEntity("testValue");
@@ -99,12 +94,12 @@ class ArticularStatusManagerTest extends AbstractConstantEntityManagerTest<Artic
     @Test
     public void testGetEntityOptional() {
         
-        Parameter parameter = parameterFactory.createStringParameter(VALUE, "testValue");
+//        
         ArticularStatus testValue = createTestValue();
         ConstantPayloadDto constantPayloadDto = getResponseOneFieldEntityDto();
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
-        when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
+//        
         //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
         Optional<ConstantPayloadDto> result = articularStatusManager.getEntityOptional("testValue");

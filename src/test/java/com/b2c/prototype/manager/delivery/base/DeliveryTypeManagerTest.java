@@ -3,7 +3,6 @@ package com.b2c.prototype.manager.delivery.base;
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
 import com.b2c.prototype.manager.AbstractConstantEntityManagerTest;
-import com.tm.core.finder.parameter.Parameter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -26,15 +25,12 @@ class DeliveryTypeManagerTest extends AbstractConstantEntityManagerTest<Delivery
 
     @BeforeEach
     void setUp() {
-        when(transformationFunctionService.getTransformationFunction(ConstantPayloadDto.class, DeliveryType.class))
-                .thenReturn(mapDtoToEntityFunction);
-        when(transformationFunctionService.getTransformationFunction(DeliveryType.class, ConstantPayloadDto.class))
-                .thenReturn(mapEntityToDtoFunction);
+//        when(transformationFunctionService.getTransformationFunction(ConstantPayloadDto.class, DeliveryType.class))
+//                .thenReturn(mapDtoToEntityFunction);
+//        when(transformationFunctionService.getTransformationFunction(DeliveryType.class, ConstantPayloadDto.class))
+//                .thenReturn(mapEntityToDtoFunction);
 
-        deliveryTypeManager = new DeliveryTypeManager(
-                parameterFactory,
-                dao,
-                transformationFunctionService);
+        deliveryTypeManager = null;
     }
 
     @Test
@@ -81,12 +77,12 @@ class DeliveryTypeManagerTest extends AbstractConstantEntityManagerTest<Delivery
 
     @Test
     public void testGetEntity() {
-        Parameter parameter = parameterFactory.createStringParameter(VALUE, "testValue");
+        
         DeliveryType testValue = createTestValue();
         ConstantPayloadDto constantPayloadDto = getResponseOneFieldEntityDto();
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
-        when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
+        
         //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
         ConstantPayloadDto result = deliveryTypeManager.getEntity("testValue");
@@ -97,12 +93,12 @@ class DeliveryTypeManagerTest extends AbstractConstantEntityManagerTest<Delivery
     @Test
     public void testGetEntityOptional() {
         
-        Parameter parameter = parameterFactory.createStringParameter(VALUE, "testValue");
+        
         DeliveryType testValue = createTestValue();
         ConstantPayloadDto constantPayloadDto = getResponseOneFieldEntityDto();
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
-        when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
+        
         //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
         Optional<ConstantPayloadDto> result = deliveryTypeManager.getEntityOptional("testValue");

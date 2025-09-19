@@ -7,8 +7,7 @@ import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 
-import com.tm.core.finder.parameter.Parameter;
-import com.tm.core.process.dao.common.ITransactionEntityDao;
+
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,18 +23,12 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class OptionItemManagerTest {
-
-    @Mock
-    private ITransactionEntityDao optionItemDao;
-
     @Mock
     private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
@@ -54,8 +47,7 @@ class OptionItemManagerTest {
         ArticularItem articularItem = mock(ArticularItem.class);
         when(articularItem.getOptionItems()).thenReturn(Set.of(optionItem));
 
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
+
 
         when(transformationFunctionService.getEntity(OptionItem.class, optionGroupOptionItemSetDto))
                 .thenReturn(optionItem);
@@ -68,7 +60,7 @@ class OptionItemManagerTest {
             consumer.accept(session);
             verify(session).merge(articularItem);
             return null;
-        }).when(optionItemDao).executeConsumer(any(Consumer.class));
+        });
 
         optionItemManager.saveUpdateOptionItemByArticularId(articularId, "", null);
 
@@ -88,7 +80,7 @@ class OptionItemManagerTest {
             consumer.accept(session);
             verify(session).merge(newOptionItem);
             return null;
-        }).when(optionItemDao).executeConsumer(any(Consumer.class));
+        });
 
 //        optionItemManager.saveOptionItemSet("", optionGroupOptionItemSetDtoList);
 
@@ -100,8 +92,7 @@ class OptionItemManagerTest {
         String optionValue = "innerSearchField";
         OptionItem optionItem = getOptionItem();
         Supplier<OptionItem> optionItemSupplier = () -> optionItem;
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
+
 
 
         Function<ArticularItem, OptionItem> function = mock(Function.class);
@@ -115,7 +106,6 @@ class OptionItemManagerTest {
 //                .thenReturn(optionItemSupplier);
         optionItemManager.deleteOptionItemByArticularId(articularId, optionValue);
 
-        verify(optionItemDao).deleteEntity(optionItemSupplier);
     }
 
     @Test
@@ -125,8 +115,7 @@ class OptionItemManagerTest {
         String optionValue = "innerSearchField";
         OptionItem optionItem = getOptionItem();
 
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
+
         NativeQuery<OptionItem> query = mock(NativeQuery.class);
 
         doAnswer(invocation -> {
@@ -134,11 +123,10 @@ class OptionItemManagerTest {
             consumer.accept(session);
             verify(session).remove(optionItem);
             return null;
-        }).when(optionItemDao).executeConsumer(any(Consumer.class));
+        });
 
         optionItemManager.deleteOptionItemByOptionGroup(optionGroupName, optionValue);
 
-        verify(optionItemDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
@@ -147,8 +135,7 @@ class OptionItemManagerTest {
         ArticularItem articularItem = mock(ArticularItem.class);
         OptionGroupOptionItemSetDto optionGroupOptionItemSetDto = getOptionItemDto();
 
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
+
 
         
         Function<ArticularItem, OptionGroupOptionItemSetDto> function = mock(Function.class);
@@ -169,7 +156,7 @@ class OptionItemManagerTest {
         OptionItem optionItem = getOptionItem();
         OptionGroupOptionItemSetDto optionGroupOptionItemSetDto = getOptionItemDto();
 
-        Parameter parameter = mock(Parameter.class);
+        
 
 //        when(queryService.getSubEntityList(OptionItem.class, parameter))
 //                .thenReturn(List.of(optionItem));

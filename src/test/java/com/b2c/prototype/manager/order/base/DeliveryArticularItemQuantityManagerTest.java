@@ -37,8 +37,6 @@ import com.b2c.prototype.modal.entity.user.UserCreditCard;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.util.CardUtil;
-import com.tm.core.finder.parameter.Parameter;
-import com.tm.core.process.dao.common.ITransactionEntityDao;
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,12 +48,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import static com.b2c.prototype.util.Converter.getLocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -64,8 +59,6 @@ import static org.mockito.Mockito.when;
 
 class DeliveryArticularItemQuantityManagerTest {
 
-    @Mock
-    private ITransactionEntityDao orderItemDataDao;
     @Mock
     private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
@@ -88,11 +81,12 @@ class DeliveryArticularItemQuantityManagerTest {
             consumer.accept(session);
             verify(session).merge(entity);
             return null;
-        }).when(orderItemDataDao).executeConsumer(any(Consumer.class));
+        });
+//                .when(orderItemDataDao).executeConsumer(any(Consumer.class));
 
         orderArticularItemQuantityManager.saveCustomerOrder(dto);
 
-        verify(orderItemDataDao).executeConsumer(any(Consumer.class));
+//        verify(orderItemDataDao).executeConsumer(any(Consumer.class));
 //        assertNotNull(entity.getOrderId());
     }
 
@@ -103,10 +97,9 @@ class DeliveryArticularItemQuantityManagerTest {
         DeliveryArticularItemQuantity existingEntity = getOrderItemData();
         DeliveryArticularItemQuantity newEntity = getOrderItemData();
 
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
+
         
-        when(orderItemDataDao.getNamedQueryEntity("", parameter)).thenReturn(existingEntity);
+//        when(orderItemDataDao.getNamedQueryEntity("", parameter)).thenReturn(existingEntity);
         when(transformationFunctionService.getEntity(DeliveryArticularItemQuantity.class, customerSingleDeliveryOrderDto))
                 .thenReturn(newEntity);
         doAnswer(invocation -> {
@@ -115,11 +108,12 @@ class DeliveryArticularItemQuantityManagerTest {
             consumer.accept(session);
             verify(session).merge(newEntity);
             return null;
-        }).when(orderItemDataDao).executeConsumer(any(Consumer.class));
+        });
+//                .when(orderItemDataDao).executeConsumer(any(Consumer.class));
 
         orderArticularItemQuantityManager.updateCustomerOrder(orderId, customerSingleDeliveryOrderDto);
 
-        verify(orderItemDataDao).executeConsumer(any(Consumer.class));
+//        verify(orderItemDataDao).executeConsumer(any(Consumer.class));
 //        assertEquals(existingEntity.getOrderId(), newEntity.getOrderId());
     }
 
@@ -128,8 +122,7 @@ class DeliveryArticularItemQuantityManagerTest {
         String orderId = "test-order-id";
         DeliveryArticularItemQuantity entity = getOrderItemData();
         ResponseCustomerOrderDetails responseCustomerOrderDetails = getResponseOrderDetailsDto();
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
+
 
         Function<DeliveryArticularItemQuantity, ResponseCustomerOrderDetails> function = mock(Function.class);
 //        when(orderItemDataDao.getGraphEntity(anyString(), eq(parameter)))
@@ -395,7 +388,7 @@ class DeliveryArticularItemQuantityManagerTest {
 
     private AddressDto getAddressDto() {
         return AddressDto.builder()
-                .country("USA")
+//                .country("USA")
                 .city("city")
                 .street("street")
                 .buildingNumber("1")

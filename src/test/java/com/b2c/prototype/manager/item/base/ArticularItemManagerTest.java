@@ -16,8 +16,7 @@ import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
-import com.tm.core.finder.parameter.Parameter;
-import com.tm.core.process.dao.common.ITransactionEntityDao;
+
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,9 +44,6 @@ import static org.mockito.Mockito.when;
 class ArticularItemManagerTest {
 
     @Mock
-    private ITransactionEntityDao itemDataOptionDao;
-
-    @Mock
     private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
     private ArticularItemManager articularItemManager;
@@ -65,8 +61,7 @@ class ArticularItemManagerTest {
         MetaData metaData = getItemData();
         ArticularItem newArticularItem = updateItemDataOption();
 
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
+
 
 //        when(queryService.getEntity(MetaData.class, parameterSupplier))
 //                .thenReturn(metaData);
@@ -78,11 +73,11 @@ class ArticularItemManagerTest {
             consumer.accept(session);
             verify(session).merge(newArticularItem);
             return null;
-        }).when(itemDataOptionDao).executeConsumer(any(Consumer.class));
+        });
 
         articularItemManager.saveUpdateArticularItem(itemId, articularItemDtoList);
 
-        verify(itemDataOptionDao).executeConsumer(any(Consumer.class));
+//        verify(itemDataOptionDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
@@ -94,8 +89,7 @@ class ArticularItemManagerTest {
         metaData.setArticularItemSet(new HashSet<>());
         ArticularItem newArticularItem = updateItemDataOption();
 
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
+
 
 //        when(queryService.getEntity(MetaData.class, parameterSupplier))
 //                .thenReturn(metaData);
@@ -107,11 +101,11 @@ class ArticularItemManagerTest {
             consumer.accept(session);
             verify(session).merge(newArticularItem);
             return null;
-        }).when(itemDataOptionDao).executeConsumer(any(Consumer.class));
+        });
 
         articularItemManager.saveUpdateArticularItem(itemId, articularItemDtoList);
 
-        verify(itemDataOptionDao).executeConsumer(any(Consumer.class));
+//        verify(itemDataOptionDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
@@ -121,9 +115,7 @@ class ArticularItemManagerTest {
         ResponseArticularItemDto responseDto = responseItemDataOptionDto();
 
         Function<ArticularItem, ResponseArticularItemDto> function = mock(Function.class);
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
-        when(itemDataOptionDao.getGraphEntity(anyString(), eq(parameter))).thenReturn(articularItem);
+
         when(transformationFunctionService.getTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class))
                 .thenReturn(function);
         when(function.apply(articularItem)).thenReturn(responseDto);

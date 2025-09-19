@@ -58,7 +58,7 @@
 //        MetaData itemData = mock(MetaData.class);
 //        String articularId = "articularId";
 //
-//        Parameter parameter = mock(Parameter.class);
+//        
 //        Supplier<Parameter> parameterSupplier = () -> parameter;
 //
 //        when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
@@ -87,7 +87,7 @@
 //        Supplier<Item> itemSupplier = () -> item;
 //        String articularId = "test-articular-id";
 //
-//        Parameter parameter = mock(Parameter.class);
+//        
 //        Supplier<Parameter> parameterSupplier = () -> parameter;
 //
 //        when(supplierService.parameterStringSupplier(ARTICULAR_ID, articularId))
@@ -109,7 +109,7 @@
 //    void getItemByItemId_shouldReturnItem() {
 //        String articularId = "test-articular-id";
 //
-//        Parameter parameter = mock(Parameter.class);
+//        
 //        Supplier<Parameter> parameterSupplier = () -> parameter;
 //
 //        Item item = mock(Item.class);

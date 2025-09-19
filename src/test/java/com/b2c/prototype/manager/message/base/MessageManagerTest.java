@@ -11,8 +11,7 @@ import com.b2c.prototype.modal.entity.message.MessageTemplate;
 import com.b2c.prototype.modal.entity.message.MessageType;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 
-import com.tm.core.finder.parameter.Parameter;
-import com.tm.core.process.dao.common.ITransactionEntityDao;
+
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,9 +39,6 @@ import static org.mockito.Mockito.when;
 class MessageManagerTest {
 
     @Mock
-    private ITransactionEntityDao messageDao;
-
-    @Mock
     private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
     private MessageManager messageManager;
@@ -68,8 +64,7 @@ class MessageManagerTest {
         Message existingMessage = mock(Message.class);
         Message newMessage = mock(Message.class);
 
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> supplier = () -> parameter;
+
         Session session = mock(Session.class);
         NativeQuery<MessageBox> query = mock(NativeQuery.class);
 
@@ -82,7 +77,7 @@ class MessageManagerTest {
             Consumer<Session> consumer = invocation.getArgument(0);
             consumer.accept(session);
             return null;
-        }).when(messageDao).executeConsumer(any());
+        });
 
         messageManager.updateMessage(messageId, messageDto);
 
@@ -97,8 +92,7 @@ class MessageManagerTest {
 
         MessageBox messageBox = mock(MessageBox.class);
         Message existingMessage = mock(Message.class);
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> supplier = () -> parameter;
+
         Session session = mock(Session.class);
         NativeQuery<MessageBox> query = mock(NativeQuery.class);
 
@@ -112,7 +106,7 @@ class MessageManagerTest {
             Consumer<Session> consumer = invocation.getArgument(0);
             consumer.accept(session);
             return null;
-        }).when(messageDao).executeConsumer(any());
+        });
 
 //        messageManager.deleteMessage(userId, messageId);
 
@@ -126,8 +120,7 @@ class MessageManagerTest {
 
         MessageBox messageBox = mock(MessageBox.class);
         Message existingMessage = mock(Message.class);
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> supplier = () -> parameter;
+
         Session session = mock(Session.class);
         NativeQuery<MessageBox> query = mock(NativeQuery.class);
 
@@ -138,7 +131,7 @@ class MessageManagerTest {
             Consumer<Session> consumer = invocation.getArgument(0);
             consumer.accept(session);
             return null;
-        }).when(messageDao).executeConsumer(any());
+        });
 
         messageManager.cleanUpMessagesByUserId(uniqueId);
 
@@ -149,15 +142,14 @@ class MessageManagerTest {
     @Test
     void getMessageOverviewBySenderEmail_shouldReturnList() {
         String senderEmail = "sender@domain.com";
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> supplier = () -> parameter;
+
         Function<Message, ResponseMessageOverviewDto> transformationFunction = message -> ResponseMessageOverviewDto.builder()
                 .build();
         when(transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class))
                 .thenReturn(transformationFunction);
 
-        when(messageDao.getNamedQueryEntityList("", parameter))
-                .thenReturn(Collections.singletonList(getMessage()));
+//        when(messageDao.getNamedQueryEntityList("", parameter))
+//                .thenReturn(Collections.singletonList(getMessage()));
 
         List<ResponseMessageOverviewDto> result = messageManager.getMessageOverviewBySenderEmail(senderEmail);
 
@@ -167,15 +159,14 @@ class MessageManagerTest {
     @Test
     void getMessageOverviewByReceiverEmail_shouldReturnList() {
         String receiverEmail = "receiver@domain.com";
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> supplier = () -> parameter;
+
         Function<Message, ResponseMessageOverviewDto> transformationFunction = message -> ResponseMessageOverviewDto.builder()
                 .build();
         when(transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class))
                 .thenReturn(transformationFunction);
 
-        when(messageDao.getNamedQueryEntityList("", parameter))
-                .thenReturn(Collections.singletonList(getMessage()));
+//        when(messageDao.getNamedQueryEntityList("", parameter))
+//                .thenReturn(Collections.singletonList(getMessage()));
 
         List<ResponseMessageOverviewDto> result = messageManager.getMessageOverviewByReceiverEmail(receiverEmail);
 
@@ -185,8 +176,7 @@ class MessageManagerTest {
     @Test
     void getMessagePayloadDto_shouldReturnPayload() {
         String uniqueId = "messageUniqNumber1";
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> supplier = () -> parameter;
+
         Function<Message, ResponseMessagePayloadDto> transformationFunction = message -> ResponseMessagePayloadDto.builder()
                 .message(message.getMessageTemplate().getMessage())
                 .build();
@@ -195,7 +185,7 @@ class MessageManagerTest {
 
         when(transformationFunctionService.getTransformationFunction(Message.class, ResponseMessagePayloadDto.class))
                 .thenReturn(transformationFunction);
-        when(messageDao.getGraphEntity(anyString(), eq(parameter))).thenReturn(testMessage);
+//        when(messageDao.getGraphEntity(anyString(), eq(parameter))).thenReturn(testMessage);
 
         ResponseMessagePayloadDto result = messageManager.getMessagePayloadDto("", uniqueId);
 

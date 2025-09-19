@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/usercreditcard")
+@RequestMapping("/api/v1/user/creditcard")
 public class UserCreditCardController {
     private final IUserCreditCardProcess userCreditCardProcess;
 

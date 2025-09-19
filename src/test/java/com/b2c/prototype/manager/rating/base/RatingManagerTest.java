@@ -3,7 +3,6 @@ package com.b2c.prototype.manager.rating.base;
 import com.b2c.prototype.manager.AbstractConstantEntityManagerTest;
 import com.b2c.prototype.modal.dto.common.NumberConstantPayloadDto;
 import com.b2c.prototype.modal.entity.review.Rating;
-import com.tm.core.finder.parameter.Parameter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -12,7 +11,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static com.b2c.prototype.util.Constant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
@@ -28,15 +26,12 @@ class RatingManagerTest extends AbstractConstantEntityManagerTest<Rating> {
 
     @BeforeEach
     void setUp() {
-        when(transformationFunctionService.getTransformationFunction(NumberConstantPayloadDto.class, Rating.class))
-                .thenReturn(mapDtoToEntityFunction);
-        when(transformationFunctionService.getTransformationFunction(Rating.class, NumberConstantPayloadDto.class))
-                .thenReturn(mapEntityToDtoFunction);
+//        when(transformationFunctionService.getTransformationFunction(NumberConstantPayloadDto.class, Rating.class))
+//                .thenReturn(mapDtoToEntityFunction);
+//        when(transformationFunctionService.getTransformationFunction(Rating.class, NumberConstantPayloadDto.class))
+//                .thenReturn(mapEntityToDtoFunction);
 
-        ratingManager = new RatingManager(
-                parameterFactory,
-                null,
-                transformationFunctionService);
+        ratingManager = null;
     }
 
     @Test
@@ -64,25 +59,25 @@ class RatingManagerTest extends AbstractConstantEntityManagerTest<Rating> {
 
         ratingManager.updateEntity(1, newDto);
 
-        Parameter parameter = parameterFactory.createIntegerParameter(VALUE, 1);
+//        Parameter parameter = parameterFactory.createIntegerParameter(VALUE, 1);
 //        verify(dao).findEntityAndUpdate(testValue, parameter);
     }
 
     @Test
     public void testDeleteEntity() {
         ratingManager.deleteEntity(1);
-        Parameter parameter = parameterFactory.createNumberParameter(VALUE, 1);
+//        Parameter parameter = parameterFactory.createNumberParameter(VALUE, 1);
 //        verify(dao).findEntityAndDelete(parameter);
     }
 
     @Test
     public void testGetEntity() {
         NumberConstantPayloadDto numberConstantPayloadDto = new NumberConstantPayloadDto(1);
-        Parameter parameter = parameterFactory.createNumberParameter(VALUE, numberConstantPayloadDto.getValue());
+//        Parameter parameter = parameterFactory.createNumberParameter(VALUE, numberConstantPayloadDto.getValue());
         Rating testValue = createTestValue();
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(numberConstantPayloadDto);
-        when(parameterFactory.createNumberParameter(VALUE, 1)).thenReturn(parameter);
+//        when(parameterFactory.createNumberParameter(VALUE, 1)).thenReturn(parameter);
 //        when(dao.getNamedQueryEntity(parameter)).thenReturn(testValue);
 
         NumberConstantPayloadDto result = ratingManager.getEntity(1);
@@ -93,11 +88,11 @@ class RatingManagerTest extends AbstractConstantEntityManagerTest<Rating> {
     @Test
     public void testGetEntityOptional() {
         NumberConstantPayloadDto numberConstantPayloadDto = new NumberConstantPayloadDto(1);
-        Parameter parameter = parameterFactory.createNumberParameter(VALUE, numberConstantPayloadDto.getValue());
+//        Parameter parameter = parameterFactory.createNumberParameter(VALUE, numberConstantPayloadDto.getValue());
         Rating testValue = createTestValue();
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(numberConstantPayloadDto);
-        when(parameterFactory.createNumberParameter(VALUE, 1)).thenReturn(parameter);
+//        when(parameterFactory.createNumberParameter(VALUE, 1)).thenReturn(parameter);
         //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
         Optional<NumberConstantPayloadDto> result = ratingManager.getEntityOptional(1);

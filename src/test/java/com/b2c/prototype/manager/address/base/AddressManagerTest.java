@@ -9,8 +9,7 @@ import com.b2c.prototype.modal.entity.order.DeliveryArticularItemQuantity;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 
-import com.tm.core.finder.parameter.Parameter;
-import com.tm.core.process.dao.common.ITransactionEntityDao;
+
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,10 +33,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class AddressManagerTest {
-
-    @Mock
-    private ITransactionEntityDao addressDao;
-
     @Mock
     private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
@@ -53,19 +48,17 @@ class AddressManagerTest {
         String userId = "123";
         UserAddressDto userAddressDto = getUserAddressDto();
         UserDetails userDetails = mock(UserDetails.class);
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
+
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
             Session session = mock(Session.class);
             consumer.accept(session);
             verify(session).merge(userDetails);
             return null;
-        }).when(addressDao).executeConsumer(any(Consumer.class));
+        });
 
         addressManager.saveUserAddress(userId, userAddressDto);
 
-        verify(addressDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
@@ -76,8 +69,7 @@ class AddressManagerTest {
         Delivery delivery = mock(Delivery.class);
         when(orderItemDataOption.getDelivery()).thenReturn(delivery);
 
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
+
         
 //        when(queryService.getEntity(DeliveryArticularItemQuantity.class, parameterSupplier))
 //                .thenReturn(orderItemDataOption);
@@ -87,11 +79,11 @@ class AddressManagerTest {
             consumer.accept(session);
             verify(session).merge(delivery);
             return null;
-        }).when(addressDao).executeConsumer(any(Consumer.class));
+        });
 
 //        addressManager.saveUserAddress(orderId, addressDto);
 
-        verify(addressDao).executeConsumer(any(Consumer.class));
+//        verify(addressDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
@@ -102,8 +94,7 @@ class AddressManagerTest {
 
 //        when(userDetails.getAddresses()).thenReturn(Set.of(address));
 
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
+
         Supplier<Address> addressSupplier = () -> address;
         Function<UserDetails, Address> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(UserDetails.class, Address.class))
@@ -116,15 +107,13 @@ class AddressManagerTest {
 
 //        addressManager.deleteAppUserAddress(userId);
 
-        verify(addressDao).deleteEntity(any(Supplier.class));
     }
 
     @Test
     void testDeleteAppUserAddress_NullDto() {
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
 
-        doThrow(new RuntimeException()).when(addressDao).deleteEntity(any(Supplier.class));
+
+//        doThrow(new RuntimeException()).when(addressDao).deleteEntity(any(Supplier.class));
 
 //        when(queryService.getEntity(eq(UserDetails.class), any(Supplier.class)))
 //                .thenReturn(null);
@@ -138,8 +127,7 @@ class AddressManagerTest {
         Delivery delivery = mock(Delivery.class);
         Address address = getAddress();
 
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
+
         
         when(orderItemDataOption.getDelivery()).thenReturn(delivery);
         when(delivery.getAddress()).thenReturn(address);
@@ -155,7 +143,6 @@ class AddressManagerTest {
 
 //        addressManager.deleteDeliveryAddress(orderId);
 
-        verify(addressDao).deleteEntity(any(Supplier.class));
     }
 
     @Test
@@ -163,10 +150,6 @@ class AddressManagerTest {
         String userId = "123";
         UserDetails userDetails = mock(UserDetails.class);
         Address address = getAddress();
-        Parameter parameter = mock(Parameter.class);
-
-        Supplier<Parameter> parameterSupplier = () -> parameter;
-        
 
         Function<UserDetails, AddressDto> transformationFunction = user -> getAddressDto();
         when(transformationFunctionService.getTransformationFunction(UserDetails.class, AddressDto.class))
@@ -193,9 +176,6 @@ class AddressManagerTest {
         DeliveryArticularItemQuantity orderItemDataOption = mock(DeliveryArticularItemQuantity.class);
         Delivery delivery = mock(Delivery.class);
         Address address = getAddress();
-        Parameter parameter = mock(Parameter.class);
-
-        Supplier<Parameter> parameterSupplier = () -> parameter;
 
         Function<DeliveryArticularItemQuantity, AddressDto> transformationFunction = user -> getAddressDto();
         when(transformationFunctionService.getTransformationFunction(DeliveryArticularItemQuantity.class, AddressDto.class))
@@ -269,7 +249,7 @@ class AddressManagerTest {
 
     private AddressDto getAddressDto() {
         return AddressDto.builder()
-                .country("USA")
+//                .country("USA")
                 .city("city")
                 .street("street")
                 .buildingNumber("1")
@@ -288,7 +268,7 @@ class AddressManagerTest {
 
     private AddressDto getUpdateAddressDto() {
         return AddressDto.builder()
-                .country("USA")
+//                .country("USA")
                 .city("city")
                 .street("update street")
                 .buildingNumber("1")

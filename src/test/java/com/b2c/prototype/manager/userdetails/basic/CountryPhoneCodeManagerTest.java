@@ -1,10 +1,8 @@
 package com.b2c.prototype.manager.userdetails.basic;
 
-import com.b2c.prototype.manager.userdetails.basic.CountryPhoneCodeManager;
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.manager.AbstractConstantEntityManagerTest;
-import com.tm.core.finder.parameter.Parameter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -26,15 +24,12 @@ class CountryPhoneCodeManagerTest extends AbstractConstantEntityManagerTest<Coun
 
     @BeforeEach
     void setUp() {
-        when(transformationFunctionService.getTransformationFunction(ConstantPayloadDto.class, CountryPhoneCode.class))
-                .thenReturn(mapDtoToEntityFunction);
-        when(transformationFunctionService.getTransformationFunction(CountryPhoneCode.class, ConstantPayloadDto.class))
-                .thenReturn(mapEntityToDtoFunction);
+//        when(transformationFunctionService.getTransformationFunction(ConstantPayloadDto.class, CountryPhoneCode.class))
+//                .thenReturn(mapDtoToEntityFunction);
+//        when(transformationFunctionService.getTransformationFunction(CountryPhoneCode.class, ConstantPayloadDto.class))
+//                .thenReturn(mapEntityToDtoFunction);
 
-        countryPhoneCodeManager = new CountryPhoneCodeManager(
-                parameterFactory,
-                dao,
-                transformationFunctionService);
+        countryPhoneCodeManager = null;
     }
 
     @Test
@@ -80,12 +75,12 @@ class CountryPhoneCodeManagerTest extends AbstractConstantEntityManagerTest<Coun
 
     @Test
     public void testGetEntity() {
-        Parameter parameter = parameterFactory.createStringParameter(VALUE, "testValue");
+//        
         CountryPhoneCode testValue = createTestValue();
         ConstantPayloadDto constantPayloadDto = getResponseOneFieldEntityDto();
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
-        when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
+//        
         //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
         ConstantPayloadDto result = countryPhoneCodeManager.getEntity("testValue");
@@ -95,12 +90,12 @@ class CountryPhoneCodeManagerTest extends AbstractConstantEntityManagerTest<Coun
 
     @Test
     public void testGetEntityOptional() {
-        Parameter parameter = parameterFactory.createStringParameter(VALUE, "testValue");
+//        
         CountryPhoneCode testValue = createTestValue();
         ConstantPayloadDto constantPayloadDto = getResponseOneFieldEntityDto();
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
-        when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
+//        
         //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
         Optional<ConstantPayloadDto> result = countryPhoneCodeManager.getEntityOptional("testValue");

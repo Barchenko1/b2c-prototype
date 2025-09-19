@@ -3,7 +3,6 @@ package com.b2c.prototype.manager.item.base;
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.manager.AbstractConstantEntityManagerTest;
-import com.tm.core.finder.parameter.Parameter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -26,15 +25,12 @@ class BrandManagerTest extends AbstractConstantEntityManagerTest<Brand> {
 
     @BeforeEach
     void setUp() {
-        when(transformationFunctionService.getTransformationFunction(ConstantPayloadDto.class, Brand.class))
-                .thenReturn(mapDtoToEntityFunction);
-        when(transformationFunctionService.getTransformationFunction(Brand.class, ConstantPayloadDto.class))
-                .thenReturn(mapEntityToDtoFunction);
+//        when(transformationFunctionService.getTransformationFunction(ConstantPayloadDto.class, Brand.class))
+//                .thenReturn(mapDtoToEntityFunction);
+//        when(transformationFunctionService.getTransformationFunction(Brand.class, ConstantPayloadDto.class))
+//                .thenReturn(mapEntityToDtoFunction);
 
-        brandManager = new BrandManager(
-                parameterFactory,
-                dao,
-                transformationFunctionService);
+        brandManager = null;
     }
 
     @Test
@@ -82,12 +78,12 @@ class BrandManagerTest extends AbstractConstantEntityManagerTest<Brand> {
     @Test
     public void testGetEntity() {
         
-        Parameter parameter = parameterFactory.createStringParameter(VALUE, "testValue");
+        
         Brand testValue = createTestValue();
         ConstantPayloadDto constantPayloadDto = getResponseOneFieldEntityDto();
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
-        when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
+        
         //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
         ConstantPayloadDto result = brandManager.getEntity("testValue");
@@ -98,12 +94,12 @@ class BrandManagerTest extends AbstractConstantEntityManagerTest<Brand> {
     @Test
     public void testGetEntityOptional() {
         
-        Parameter parameter = parameterFactory.createStringParameter(VALUE, "testValue");
+        
         Brand testValue = createTestValue();
         ConstantPayloadDto constantPayloadDto = getResponseOneFieldEntityDto();
 
         when(mapEntityToDtoFunction.apply(testValue)).thenReturn(constantPayloadDto);
-        when(parameterFactory.createStringParameter(VALUE, "testValue")).thenReturn(parameter);
+        
         //        when(dao.getNamedQueryEntity("", parameter)).thenReturn(testValue);
 
         Optional<ConstantPayloadDto> result = brandManager.getEntityOptional("testValue");

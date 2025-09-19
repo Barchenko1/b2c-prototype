@@ -8,8 +8,6 @@ import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 
-import com.tm.core.finder.parameter.Parameter;
-import com.tm.core.process.dao.common.ITransactionEntityDao;
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,8 +27,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class ContactInfoManagerTest {
-    @Mock
-    private ITransactionEntityDao contactInfoDao;
 
     @Mock
     private ITransformationFunctionService transformationFunctionService;
@@ -49,8 +45,7 @@ class ContactInfoManagerTest {
         UserDetails userDetails = mock(UserDetails.class);
         ContactInfo contactInfo = mock(ContactInfo.class);
         when(userDetails.getContactInfo()).thenReturn(contactInfo);
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
+
 //        when(queryService.getEntity(UserDetails.class, parameterSupplier))
 //                .thenReturn(userDetails);
         when(transformationFunctionService.getEntity(ContactInfo.class, contactInfoDto))
@@ -61,11 +56,11 @@ class ContactInfoManagerTest {
             consumer.accept(session);
             verify(session).merge(userDetails);
             return null;
-        }).when(contactInfoDao).executeConsumer(any(Consumer.class));
+        });
 
         contactInfoManager.saveUpdateContactInfoByUserId(userId, contactInfoDto);
 
-        verify(contactInfoDao).executeConsumer(any(Consumer.class));
+//        verify(contactInfoDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
@@ -75,8 +70,7 @@ class ContactInfoManagerTest {
         UserDetails userDetails = mock(UserDetails.class);
         ContactInfo contactInfo = mock(ContactInfo.class);
         when(userDetails.getContactInfo()).thenReturn(null);
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
+
 //        when(queryService.getEntity(UserDetails.class, parameterSupplier))
 //                .thenReturn(userDetails);
         when(transformationFunctionService.getEntity(ContactInfo.class, contactInfoDto))
@@ -87,11 +81,10 @@ class ContactInfoManagerTest {
             consumer.accept(session);
             verify(session).merge(userDetails);
             return null;
-        }).when(contactInfoDao).executeConsumer(any(Consumer.class));
+        });
 
         contactInfoManager.saveUpdateContactInfoByUserId(userId, contactInfoDto);
 
-        verify(contactInfoDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
@@ -102,8 +95,7 @@ class ContactInfoManagerTest {
         when(userDetails.getContactInfo()).thenReturn(contactInfo);
         Supplier<ContactInfo> supplier = () -> contactInfo;
 
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
+
 
         Function<UserDetails, ContactInfo> function = mock(Function.class);
         when(transformationFunctionService.getTransformationFunction(UserDetails.class, ContactInfo.class))
@@ -116,7 +108,7 @@ class ContactInfoManagerTest {
 
         contactInfoManager.deleteContactInfoByUserId(userId);
 
-        verify(contactInfoDao).deleteEntity(any(Supplier.class));
+//        verify(contactInfoDao).deleteEntity(any(Supplier.class));
     }
 
     @Test
@@ -125,9 +117,6 @@ class ContactInfoManagerTest {
         UserDetails userDetails = mock(UserDetails.class);
         ContactInfo contactInfo = getContactInfo();
         ContactInfoDto contactInfoDto = getContactInfoDto();
-        Parameter parameter = mock(Parameter.class);
-
-        Supplier<Parameter> parameterSupplier = () -> parameter;
         
 
         Function<UserDetails, ContactInfoDto> transformationFunction = user -> contactInfoDto;

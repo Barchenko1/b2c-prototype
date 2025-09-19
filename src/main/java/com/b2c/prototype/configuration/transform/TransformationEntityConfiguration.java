@@ -1,12 +1,10 @@
 package com.b2c.prototype.configuration.transform;
 
-import com.b2c.prototype.dao.ISessionEntityFetcher;
 import com.b2c.prototype.modal.base.constant.AbstractConstantEntity;
 import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
 import com.b2c.prototype.modal.entity.item.MetaData;
 import com.b2c.prototype.modal.entity.payment.MultiCurrencyPriceInfo;
 import com.b2c.prototype.modal.constant.FeeType;
-import com.b2c.prototype.modal.constant.ReviewStatusEnum;
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.dto.common.NumberConstantPayloadDto;
 import com.b2c.prototype.modal.dto.common.SearchFieldUpdateCollectionEntityDto;
@@ -93,7 +91,6 @@ import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.modal.entity.review.Review;
 import com.b2c.prototype.modal.entity.review.ReviewComment;
-import com.b2c.prototype.modal.entity.review.ReviewStatus;
 import com.b2c.prototype.modal.entity.store.Store;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
@@ -104,8 +101,6 @@ import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.transform.function.ITransformationFunction;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.util.CardUtil;
-import com.tm.core.finder.parameter.Parameter;
-import com.tm.core.process.dao.query.IQueryService;
 import org.hibernate.Session;
 import org.springframework.context.annotation.Configuration;
 
@@ -129,14 +124,7 @@ import static com.b2c.prototype.util.Util.getUUID;
 @Configuration
 public class TransformationEntityConfiguration {
 
-    private final ISessionEntityFetcher sessionEntityFetcher;
-    private final IQueryService queryService;
-
-    public TransformationEntityConfiguration(ITransformationFunctionService transformationFunctionService,
-                                             ISessionEntityFetcher sessionEntityFetcher,
-                                             IQueryService queryService) {
-        this.sessionEntityFetcher = sessionEntityFetcher;
-        this.queryService = queryService;
+    public TransformationEntityConfiguration(ITransformationFunctionService transformationFunctionService) {
         addConstantEntityTransformationFunctions(transformationFunctionService, Brand.class, Brand::new);
         addConstantEntityTransformationFunctions(transformationFunctionService, CountryPhoneCode.class, CountryPhoneCode::new);
         addConstantEntityTransformationFunctions(transformationFunctionService, Currency.class, Currency::new);
@@ -336,7 +324,6 @@ public class TransformationEntityConfiguration {
 
     private BiFunction<Session, AddressDto, Address> mapAddressDtoToAddressFunction() {
         return (session, addressDto) -> Address.builder()
-                .country(sessionEntityFetcher.fetchCountry(session, addressDto.getCountry()))
                 .city(addressDto.getCity())
                 .street(addressDto.getStreet())
                 .buildingNumber(addressDto.getBuildingNumber())
@@ -350,7 +337,7 @@ public class TransformationEntityConfiguration {
         return (session, userAddressDto) -> {
             AddressDto addressDto = userAddressDto.getAddress();
             String userAddressCombination = combineUserAddress(
-                    addressDto.getCountry(),
+                    String.valueOf(addressDto.getCountry()),
                     addressDto.getCity(),
                     addressDto.getStreet(),
                     addressDto.getBuildingNumber(),
@@ -364,7 +351,6 @@ public class TransformationEntityConfiguration {
 
     private Function<Address, AddressDto> mapAddressToAddressDtoFunction() {
         return address -> AddressDto.builder()
-                .country(address.getCountry().getValue())
                 .city(address.getCity())
                 .street(address.getStreet())
                 .buildingNumber(address.getBuildingNumber())
@@ -448,15 +434,15 @@ public class TransformationEntityConfiguration {
 
     private BiFunction<Session, MessageDto, Message> mapMessageDtoToMessageFunction() {
         return (session, messageDto) -> {
-            MessageStatus messageStatus = sessionEntityFetcher.fetchMessageStatus(session, messageDto.getStatus());
-            MessageType messageType = sessionEntityFetcher.fetchMessageType(session, messageDto.getMessageTemplate().getType());
+//            MessageStatus messageStatus = sessionEntityFetcher.fetchMessageStatus(session, messageDto.getStatus());
+//            MessageType messageType = sessionEntityFetcher.fetchMessageType(session, messageDto.getMessageTemplate().getType());
 
             return Message.builder()
                     .messageTemplate(MessageTemplate.builder()
                             .title(messageDto.getMessageTemplate().getTitle())
                             .message(messageDto.getMessageTemplate().getMessage())
                             .build())
-                    .status(messageStatus)
+//                    .status(messageStatus)
                     .build();
         };
     }
@@ -480,10 +466,10 @@ public class TransformationEntityConfiguration {
 
     private BiFunction<Session, ContactPhoneDto, ContactPhone> mapContactPhoneDtoToContactPhoneFunction() {
         return (session, contactPhoneDto) -> {
-            CountryPhoneCode countryPhoneCode = sessionEntityFetcher.fetchCountryPhoneCode(session, contactPhoneDto.getCountryPhoneCode());
+//            CountryPhoneCode countryPhoneCode = sessionEntityFetcher.fetchCountryPhoneCode(session, contactPhoneDto.getCountryPhoneCode());
             return ContactPhone.builder()
                     .phoneNumber(contactPhoneDto.getPhoneNumber())
-                    .countryPhoneCode(countryPhoneCode)
+//                    .countryPhoneCode(countryPhoneCode)
                     .build();
         };
     }
@@ -630,7 +616,7 @@ public class TransformationEntityConfiguration {
                 .message(postDto.getMessage())
                 .authorEmail(postDto.getAuthorEmail())
                 .authorName(postDto.getAuthorName())
-                .parent(sessionEntityFetcher.fetchPost(session, postDto.getParentPostId()).orElse(null))
+//                .parent(sessionEntityFetcher.fetchPost(session, postDto.getParentPostId()).orElse(null))
                 .postUniqId(getUUID())
 //                .dateOfCreate(getLocalDateTime("2024-03-03 12:00:00"))
                 .build();
@@ -638,16 +624,16 @@ public class TransformationEntityConfiguration {
 
     private BiFunction<Session, ReviewDto, Review> mapReviewDtoToReviewFunction() {
         return (session, reviewDto) -> {
-            ReviewStatus reviewStatus = sessionEntityFetcher.fetchReviewStatus(session, ReviewStatusEnum.PENDING.name());
-            Rating rating = sessionEntityFetcher.fetchRating(session, reviewDto.getRatingValue());
+//            ReviewStatus reviewStatus = sessionEntityFetcher.fetchReviewStatus(session, ReviewStatusEnum.PENDING.name());
+//            Rating rating = sessionEntityFetcher.fetchRating(session, reviewDto.getRatingValue());
             return Review.builder()
                     .title(reviewDto.getTitle())
                     .message(reviewDto.getMessage())
 //                    .dateOfCreate(getCurrentTimeMillis())
                     .reviewUniqId(getUUID())
-                    .comments(sessionEntityFetcher.fetchReviewComments(session, reviewDto.getReviewId()))
-                    .status(reviewStatus)
-                    .rating(rating)
+//                    .comments(sessionEntityFetcher.fetchReviewComments(session, reviewDto.getReviewId()))
+//                    .status(reviewStatus)
+//                    .rating(rating)
                     .build();
         };
     }
@@ -701,10 +687,10 @@ public class TransformationEntityConfiguration {
 
     private BiFunction<Session, PriceDto, Price> mapPriceDtoToPriceFunction() {
         return (session, priceDto) -> {
-            Currency currency = sessionEntityFetcher.fetchCurrency(session, priceDto.getCurrency());
+//            Currency currency = sessionEntityFetcher.fetchCurrency(session, priceDto.getCurrency());
             return Price.builder()
                     .amount(priceDto.getAmount())
-                    .currency(currency)
+//                    .currency(currency)
                     .build();
         };
     }
@@ -762,8 +748,9 @@ public class TransformationEntityConfiguration {
 
     BiFunction<Session, OptionGroupOptionItemSetDto, OptionGroup> mapOptionItemDtoToOptionGroup() {
         return (session, optionItemDto) -> {
-            Optional<OptionGroup> optionalResult =
-                    sessionEntityFetcher.fetchOptionGroup(session, "OptionGroup.withOptionItems", optionItemDto.getOptionGroup().getValue());
+//            Optional<OptionGroup> optionalResult =
+//                    sessionEntityFetcher.fetchOptionGroup(session, "OptionGroup.withOptionItems", optionItemDto.getOptionGroup().getValue());
+            Optional<OptionGroup> optionalResult = Optional.empty();
             return optionalResult.map(existingOG -> {
                 optionItemDto.getOptionItems().stream()
                         .filter(oi -> existingOG.getOptionItems().stream()
@@ -871,21 +858,21 @@ public class TransformationEntityConfiguration {
 
     private BiFunction<Session, ItemDataDto, MetaData> mapItemDataDtoToItemDataFunction() {
         return (session, itemDataDto) -> {
-            Category category = sessionEntityFetcher.fetchOptionalCategory(session, itemDataDto.getCategory().getValue())
-                    .orElse(Category.builder()
-                            .label(itemDataDto.getCategory().getLabel())
-                            .value(itemDataDto.getCategory().getValue())
-                            .build());
-            Brand brand = sessionEntityFetcher.fetchOptionalBrand(session, itemDataDto.getBrand().getValue())
-                    .orElse(Brand.builder()
-                            .label(itemDataDto.getBrand().getLabel())
-                            .value(itemDataDto.getBrand().getValue())
-                            .build());
-            ItemType itemType = sessionEntityFetcher.fetchOptionalItemType(session, itemDataDto.getItemType().getValue())
-                    .orElse(ItemType.builder()
-                            .label(itemDataDto.getItemType().getLabel())
-                            .value(itemDataDto.getItemType().getValue())
-                            .build());
+//            Category category = sessionEntityFetcher.fetchOptionalCategory(session, itemDataDto.getCategory().getValue())
+//                    .orElse(Category.builder()
+//                            .label(itemDataDto.getCategory().getLabel())
+//                            .value(itemDataDto.getCategory().getValue())
+//                            .build());
+//            Brand brand = sessionEntityFetcher.fetchOptionalBrand(session, itemDataDto.getBrand().getValue())
+//                    .orElse(Brand.builder()
+//                            .label(itemDataDto.getBrand().getLabel())
+//                            .value(itemDataDto.getBrand().getValue())
+//                            .build());
+//            ItemType itemType = sessionEntityFetcher.fetchOptionalItemType(session, itemDataDto.getItemType().getValue())
+//                    .orElse(ItemType.builder()
+//                            .label(itemDataDto.getItemType().getLabel())
+//                            .value(itemDataDto.getItemType().getValue())
+//                            .build());
 
             Set<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoSet = getOptionGroupOptionItemSetDtoSet(itemDataDto.getArticularItemSet());
             Set<OptionGroup> optionGroups = mapOptionGroupOptionItemSetDtoListToOptionGroupSet().apply(session, optionGroupOptionItemSetDtoSet);
@@ -901,9 +888,9 @@ public class TransformationEntityConfiguration {
 
             return MetaData.builder()
                     .description(itemDataDto.getDescription())
-                    .category(category)
-                    .brand(brand)
-                    .itemType(itemType)
+//                    .category(category)
+//                    .brand(brand)
+//                    .itemType(itemType)
                     .articularItemSet(articularItemSet)
                     .build();
         };
@@ -914,11 +901,12 @@ public class TransformationEntityConfiguration {
             String itemId = searchFieldUpdateCollectionEntityDto.getSearchField();
             List<ArticularItemDto> articularItemDtoList = searchFieldUpdateCollectionEntityDto.getUpdateDtoSet();
             Set<ArticularItemDto> articularItemDtoSet = new HashSet<>(articularItemDtoList);
-            MetaData existingMetaData = queryService.getNamedQueryEntity(
-                    session,
-                    MetaData.class,
-                    "MetaData.findItemDataWithFullRelations",
-                    new Parameter("itemId", itemId));
+//            MetaData existingMetaData = queryService.getNamedQueryEntity(
+//                    session,
+//                    MetaData.class,
+//                    "MetaData.findItemDataWithFullRelations",
+//                    new Parameter("itemId", itemId));
+            MetaData existingMetaData = null;
             Map<String, ArticularItem> existingArticularItemMap = existingMetaData.getArticularItemSet().stream()
                     .collect(Collectors.toMap(
                             ArticularItem::getArticularUniqId,
@@ -958,32 +946,33 @@ public class TransformationEntityConfiguration {
         return (session, itemDataSearchFieldUpdateDto) -> {
             String itemId = itemDataSearchFieldUpdateDto.getSearchField();
             ItemDataDto itemDataDto = itemDataSearchFieldUpdateDto.getUpdateDto();
-            MetaData existingMetaData = queryService.getNamedQueryEntity(
-                    session,
-                    MetaData.class,
-                    "MetaData.findItemDataWithFullRelations",
-                    new Parameter("itemId", itemId));
+//            MetaData existingMetaData = queryService.getNamedQueryEntity(
+//                    session,
+//                    MetaData.class,
+//                    "MetaData.findItemDataWithFullRelations",
+//                    new Parameter("itemId", itemId));
+            MetaData existingMetaData = null;
             Map<String, ArticularItem> existingArticularItemMap = existingMetaData.getArticularItemSet().stream()
                     .collect(Collectors.toMap(
                             ArticularItem::getArticularUniqId,
                             articularItem -> articularItem
                     ));
 
-            Category category = sessionEntityFetcher.fetchOptionalCategory(session, itemDataDto.getCategory().getValue())
-                    .orElse(Category.builder()
-                            .label(itemDataDto.getCategory().getLabel())
-                            .value(itemDataDto.getCategory().getValue())
-                            .build());
-            Brand brand = sessionEntityFetcher.fetchOptionalBrand(session, itemDataDto.getBrand().getValue())
-                    .orElse(Brand.builder()
-                            .label(itemDataDto.getBrand().getLabel())
-                            .value(itemDataDto.getBrand().getValue())
-                            .build());
-            ItemType itemType = sessionEntityFetcher.fetchOptionalItemType(session, itemDataDto.getItemType().getValue())
-                    .orElse(ItemType.builder()
-                            .label(itemDataDto.getItemType().getLabel())
-                            .value(itemDataDto.getItemType().getValue())
-                            .build());
+//            Category category = sessionEntityFetcher.fetchOptionalCategory(session, itemDataDto.getCategory().getValue())
+//                    .orElse(Category.builder()
+//                            .label(itemDataDto.getCategory().getLabel())
+//                            .value(itemDataDto.getCategory().getValue())
+//                            .build());
+//            Brand brand = sessionEntityFetcher.fetchOptionalBrand(session, itemDataDto.getBrand().getValue())
+//                    .orElse(Brand.builder()
+//                            .label(itemDataDto.getBrand().getLabel())
+//                            .value(itemDataDto.getBrand().getValue())
+//                            .build());
+//            ItemType itemType = sessionEntityFetcher.fetchOptionalItemType(session, itemDataDto.getItemType().getValue())
+//                    .orElse(ItemType.builder()
+//                            .label(itemDataDto.getItemType().getLabel())
+//                            .value(itemDataDto.getItemType().getValue())
+//                            .build());
 
             Set<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoSet = getOptionGroupOptionItemSetDtoSet(itemDataDto.getArticularItemSet());
             Set<OptionGroup> optionGroups = mapOptionGroupOptionItemSetDtoListToOptionGroupSet().apply(session, optionGroupOptionItemSetDtoSet);
@@ -1001,9 +990,9 @@ public class TransformationEntityConfiguration {
                     .id(existingMetaData.getId())
 //                    .itemId(existingMetaData.getItemId())
                     .description(itemDataDto.getDescription())
-                    .category(category)
-                    .brand(brand)
-                    .itemType(itemType)
+//                    .category(category)
+//                    .brand(brand)
+//                    .itemType(itemType)
                     .articularItemSet(articularItemSet)
                     .build();
         };
@@ -1015,10 +1004,10 @@ public class TransformationEntityConfiguration {
                                                    Map<String, ArticularItem> articularItemMap) {
         return articularItemDtoSet.stream()
                 .map(articularItemDto -> {
-                    Discount discount = sessionEntityFetcher.fetchOptionArticularDiscount(session, articularItemDto.getDiscount().getCharSequenceCode())
-                            .orElse(mapInitDiscountDtoToDiscount().apply(session, articularItemDto.getDiscount()));
+//                    Discount discount = sessionEntityFetcher.fetchOptionArticularDiscount(session, articularItemDto.getDiscount().getCharSequenceCode())
+//                            .orElse(mapInitDiscountDtoToDiscount().apply(session, articularItemDto.getDiscount()));
 
-                    ArticularStatus articularStatus = sessionEntityFetcher.fetchArticularStatus(session, articularItemDto.getStatus());
+//                    ArticularStatus articularStatus = sessionEntityFetcher.fetchArticularStatus(session, articularItemDto.getStatus());
                     ArticularItem existingArticularItem = articularItemMap.get(articularItemDto.getArticularId());
                     long articularId = Optional.ofNullable(existingArticularItem).map(ArticularItem::getId).orElse(0L);
                     long fullPriceId = Optional.ofNullable(existingArticularItem).map(item -> item.getFullPrice().getId()).orElse(0L);
@@ -1029,10 +1018,10 @@ public class TransformationEntityConfiguration {
                             .articularUniqId(articularItemDto.getArticularId() != null ? articularItemDto.getArticularId() : getUUID())
 //                            .dateOfCreate(getCurrentTimeMillis())
                             .productName(articularItemDto.getProductName())
-                            .status(articularStatus)
+//                            .status(articularStatus)
                             .fullPrice(mapPriceDtoToPriceFunction().apply(session, articularItemDto.getFullPrice()))
                             .totalPrice(mapPriceDtoToPriceFunction().apply(session, articularItemDto.getTotalPrice()))
-                            .discount(discount)
+//                            .discount(discount)
                             .build();
 
                     articularItemDto.getOptions().stream()
@@ -1059,13 +1048,13 @@ public class TransformationEntityConfiguration {
 
     private BiFunction<Session, DeliveryDto, Delivery> mapDeliveryDtoToDelivery() {
         return (session, deliveryDto) -> {
-            DeliveryType deliveryType = sessionEntityFetcher.fetchDeliveryType(session, deliveryDto.getDeliveryType());
+//            DeliveryType deliveryType = sessionEntityFetcher.fetchDeliveryType(session, deliveryDto.getDeliveryType());
             Address address = mapAddressDtoToAddressFunction().apply(session, deliveryDto.getDeliveryAddress());
-            TimeDurationOption timeDurationOption = sessionEntityFetcher.fetchTimeDurationOption(session, deliveryDto.getTimeDurationOption());
+//            TimeDurationOption timeDurationOption = sessionEntityFetcher.fetchTimeDurationOption(session, deliveryDto.getTimeDurationOption());
             return Delivery.builder()
-                    .deliveryType(deliveryType)
+//                    .deliveryType(deliveryType)
                     .address(address)
-                    .timeDurationOption(timeDurationOption)
+//                    .timeDurationOption(timeDurationOption)
                     .build();
         };
     }
@@ -1090,7 +1079,8 @@ public class TransformationEntityConfiguration {
 
     private BiFunction<Session, ArticularItemQuantityDto, ArticularItemQuantity> mapArticularItemQuantityDtoToArticularItemQuantityFunction() {
         return (session, articularItemQuantityDto) -> {
-            ArticularItem articularItem = sessionEntityFetcher.fetchArticularItem(session, articularItemQuantityDto.getArticularId());
+            ArticularItem articularItem = null;
+//            ArticularItem articularItem = sessionEntityFetcher.fetchArticularItem(session, articularItemQuantityDto.getArticularId());
 //            ArticularItemQuantity articularItemQuantity = ArticularItemQuantity.builder()
 //                    .articularItem(articularItem)
 //                    .quantity(articularItemQuantityDto.getQuantity())
@@ -1116,13 +1106,13 @@ public class TransformationEntityConfiguration {
 
     private BiFunction<Session, InitDiscountDto, Discount> mapInitDiscountDtoToDiscount() {
         return (session, initDiscountDto) -> {
-            Currency currency = sessionEntityFetcher.fetchCurrency(session, initDiscountDto.getCurrency());
+//            Currency currency = sessionEntityFetcher.fetchCurrency(session, initDiscountDto.getCurrency());
             return Discount.builder()
-                    .currency(currency)
+//                    .currency(currency)
                     .amount(initDiscountDto.getAmount())
                     .charSequenceCode(initDiscountDto.getCharSequenceCode())
                     .isActive(initDiscountDto.getIsActive())
-                    .isPercent(currency == null)
+//                    .isPercent(currency == null)
                     .build();
         };
     }
@@ -1147,12 +1137,12 @@ public class TransformationEntityConfiguration {
     private BiFunction<Session, Set<OptionGroupOptionItemSetDto>, Set<OptionGroup>> mapOptionGroupOptionItemSetDtoListToOptionGroupSet() {
         return (session, optionItemDtoList) -> optionItemDtoList.stream()
                 .map(optionItemDto -> {
-                    OptionGroup existingOG = sessionEntityFetcher.fetchOptionGroup(session, "OptionGroup.withOptionItemsAndArticularItems", optionItemDto.getOptionGroup().getValue())
-                            .orElseGet(() -> OptionGroup.builder()
-                                    .label(optionItemDto.getOptionGroup().getLabel())
-                                    .value(optionItemDto.getOptionGroup().getValue())
-                                    .build());
-
+//                    OptionGroup existingOG = sessionEntityFetcher.fetchOptionGroup(session, "OptionGroup.withOptionItemsAndArticularItems", optionItemDto.getOptionGroup().getValue())
+//                            .orElseGet(() -> OptionGroup.builder()
+//                                    .label(optionItemDto.getOptionGroup().getLabel())
+//                                    .value(optionItemDto.getOptionGroup().getValue())
+//                                    .build());
+                    OptionGroup existingOG = null;
                     optionItemDto.getOptionItems().forEach(dtoOptionItem -> {
                         if (existingOG.getOptionItems().stream().noneMatch(oi -> oi.getValue().equals(dtoOptionItem.getValue()))) {
                             existingOG.addOptionItem(OptionItem.builder()
@@ -1169,13 +1159,13 @@ public class TransformationEntityConfiguration {
 
     private BiFunction<Session, DiscountDto, Discount> mapDiscountDtoToDiscountFunction() {
         return (session, discountDto) -> {
-            Currency currency = sessionEntityFetcher.fetchCurrency(session, discountDto.getCurrency());
+//            Currency currency = sessionEntityFetcher.fetchCurrency(session, discountDto.getCurrency());
             return Discount.builder()
-                    .currency(currency)
+//                    .currency(currency)
                     .amount(discountDto.getAmount())
                     .charSequenceCode(discountDto.getCharSequenceCode())
                     .isActive(discountDto.getIsActive())
-                    .isPercent(currency == null)
+//                    .isPercent(currency == null)
                     .build();
         };
     }
@@ -1295,11 +1285,11 @@ public class TransformationEntityConfiguration {
     private BiFunction<Session, DeliveryDto, Delivery> mapDeliveryDtoToDeliveryFunction() {
         return (session, deliveryDto) -> {
             Address address = mapAddressDtoToAddressFunction().apply(session, deliveryDto.getDeliveryAddress());
-            DeliveryType deliveryType = sessionEntityFetcher.fetchDeliveryType(session, deliveryDto.getDeliveryType());
+//            DeliveryType deliveryType = sessionEntityFetcher.fetchDeliveryType(session, deliveryDto.getDeliveryType());
 
             return Delivery.builder()
                     .address(address)
-                    .deliveryType(deliveryType)
+//                    .deliveryType(deliveryType)
                     .build();
         };
     }
@@ -1391,11 +1381,11 @@ public class TransformationEntityConfiguration {
         return (session, commissionValueDto) -> {
             FeeType feeType = FeeType.valueOf(commissionValueDto.getFeeType());
             if (FeeType.FIXED.equals(feeType)) {
-                Currency currency = sessionEntityFetcher.fetchCurrency(session, commissionValueDto.getCurrency());
+//                Currency currency = sessionEntityFetcher.fetchCurrency(session, commissionValueDto.getCurrency());
                 return CommissionValue.builder()
                         .amount(commissionValueDto.getAmount())
                         .feeType(FeeType.valueOf(commissionValueDto.getFeeType()))
-                        .currency(currency)
+//                        .currency(currency)
                         .build();
             }
             return CommissionValue.builder()

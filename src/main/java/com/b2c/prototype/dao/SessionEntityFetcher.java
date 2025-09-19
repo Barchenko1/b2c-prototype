@@ -25,8 +25,7 @@ import com.b2c.prototype.modal.entity.review.ReviewComment;
 import com.b2c.prototype.modal.entity.review.ReviewStatus;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.modal.entity.user.UserDetails;
-import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.query.IQueryService;
+import com.nimbusds.jose.util.Pair;
 import org.hibernate.Session;
 
 import java.util.Collections;
@@ -40,219 +39,151 @@ import static com.b2c.prototype.util.Constant.REVIEW_COMMENT_ID;
 import static com.b2c.prototype.util.Constant.USER_ID;
 import static com.b2c.prototype.util.Constant.VALUE;
 
-public class SessionEntityFetcher implements ISessionEntityFetcher {
+public class SessionEntityFetcher {
 
-    private final IQueryService queryService;
-    private final IParameterFactory parameterFactory;
+    private final IGeneralEntityDao generalEntityDao;
 
-    public SessionEntityFetcher(IQueryService queryService, IParameterFactory parameterFactory) {
-        this.queryService = queryService;
-        this.parameterFactory = parameterFactory;
+    public SessionEntityFetcher(IGeneralEntityDao generalEntityDao) {
+        this.generalEntityDao = generalEntityDao;
     }
 
-    @Override
     public Optional<UserDetails> fetchUserDetails(Session session, String value) {
-        return queryService.getNamedQueryOptionalEntity(
-                session,
-                UserDetails.class,
+        return generalEntityDao.findOptionEntity(
                 "UserDetails.findByUserId",
-                parameterFactory.createStringParameter(USER_ID, value));
+                Pair.of(USER_ID, value));
     }
 
-    @Override
     public PaymentMethod fetchPaymentMethod(Session session, String value) {
-        return queryService.getNamedQueryEntity(
-                session,
-                PaymentMethod.class,
+        return generalEntityDao.findEntity(
                 "PaymentMethod.findByValue",
-                parameterFactory.createStringParameter(VALUE, value));
+                Pair.of(VALUE, value));
     }
 
-    @Override
     public PaymentStatus fetchPaymentStatus(Session session, String value) {
-        return queryService.getNamedQueryEntity(
-                session,
-                PaymentStatus.class,
+        return generalEntityDao.findEntity(
                 "PaymentStatus.findByValue",
-                parameterFactory.createStringParameter(VALUE, value));
+                Pair.of(VALUE, value));
     }
 
     public Currency fetchCurrency(Session session, String value) {
-        return queryService.getNamedQueryEntity(
-                session,
-                Currency.class,
+        return generalEntityDao.findEntity(
                 "Currency.findByValue",
-                parameterFactory.createStringParameter(VALUE, value));
+                Pair.of(VALUE, value));
     }
 
     public CountryPhoneCode fetchCountryPhoneCode(Session session, String value) {
-        return queryService.getNamedQueryEntity(
-                session,
-                CountryPhoneCode.class,
+        return generalEntityDao.findEntity(
                 "CountryPhoneCode.findByValue",
-                parameterFactory.createStringParameter(VALUE, value));
+                Pair.of(VALUE, value));
     }
 
-    @Override
     public Country fetchCountry(Session session, String value) {
-        return queryService.getNamedQueryEntity(
-                session,
-                Country.class,
+        return generalEntityDao.findEntity(
                 "Country.findByValue",
-                parameterFactory.createStringParameter(VALUE, value)
-        );
+                Pair.of(VALUE, value));
     }
 
-    @Override
     public Optional<Discount> fetchDiscountOptional(Session session, String value) {
-        return queryService.getNamedQueryOptionalEntity(
-                session,
-                Discount.class,
+        return generalEntityDao.findOptionEntity(
                 "Discount.currency",
-                parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, value));
+                Pair.of(CHAR_SEQUENCE_CODE, value));
     }
 
-    @Override
     public Optional<Discount> fetchOptionArticularDiscount(Session session, String value) {
-        return queryService.getNamedQueryOptionalEntity(
-                session,
-                Discount.class,
+        return generalEntityDao.findOptionEntity(
                 "ArticularItem.findByDiscountCharSequenceCode",
-                parameterFactory.createStringParameter(CHAR_SEQUENCE_CODE, value));
+                Pair.of(CHAR_SEQUENCE_CODE, value));
     }
 
-    @Override
     public ArticularStatus fetchArticularStatus(Session session, String value) {
-        return queryService.getNamedQueryEntity(
-                session,
-                ArticularStatus.class,
+        return generalEntityDao.findEntity(
                 "ArticularStatus.findByValue",
-                parameterFactory.createStringParameter(VALUE, value));
+                Pair.of(VALUE, value));
     }
 
-    @Override
     public Optional<OptionGroup> fetchOptionGroup(Session session, String namedQuery, String value) {
-        return queryService.getNamedQueryOptionalEntity(
-                session,
-                OptionGroup.class,
+        return generalEntityDao.findOptionEntity(
                 namedQuery,
-                parameterFactory.createStringParameter(VALUE, value));
+                Pair.of(VALUE, value));
     }
 
-    @Override
     public OrderStatus fetchOrderStatus(Session session, String value) {
-        return queryService.getNamedQueryEntity(
-                session,
-                OrderStatus.class,
+        return generalEntityDao.findEntity(
                 "OrderStatus.findByValue",
-                parameterFactory.createStringParameter(VALUE, value));
+                Pair.of(VALUE, value));
     }
 
-    @Override
     public ArticularItem fetchArticularItem(Session session, String articularId) {
-        return queryService.getNamedQueryEntity(
-                session,
-                ArticularItem.class,
+        return generalEntityDao.findEntity(
                 "ArticularItem.full",
-                parameterFactory.createStringParameter(ARTICULAR_ID, articularId));
+                Pair.of(ARTICULAR_ID, articularId));
     }
 
-    @Override
     public DeliveryType fetchDeliveryType(Session session, String value) {
-        return queryService.getNamedQueryEntity(
-                session,
-                DeliveryType.class,
+        return generalEntityDao.findEntity(
                 "DeliveryType.findByValue",
-                parameterFactory.createStringParameter(VALUE, value));
+                Pair.of(VALUE, value));
     }
 
-    @Override
     public TimeDurationOption fetchTimeDurationOption(Session session, String value) {
-        return queryService.getNamedQueryEntity(
-                session,
-                TimeDurationOption.class,
+        return generalEntityDao.findEntity(
                 "TimeDurationOption.findByValue",
-                parameterFactory.createStringParameter(VALUE, value));
+                Pair.of(VALUE, value));
     }
 
-    @Override
     public MessageStatus fetchMessageStatus(Session session, String value) {
-        return queryService.getNamedQueryEntity(
-                session,
-                MessageStatus.class,
+        return generalEntityDao.findEntity(
                 "MessageStatus.findByValue",
-                parameterFactory.createStringParameter(VALUE, value));
+                Pair.of(VALUE, value));
     }
 
-    @Override
     public MessageType fetchMessageType(Session session, String value) {
-        return queryService.getNamedQueryEntity(
-                session,
-                MessageType.class,
+        return generalEntityDao.findEntity(
                 "MessageType.findByValue",
-                parameterFactory.createStringParameter(VALUE, value));
+                Pair.of(VALUE, value));
     }
 
-    @Override
     public Optional<Category> fetchOptionalCategory(Session session, String value) {
-        return queryService.getNamedQueryOptionalEntity(
-                session,
-                Category.class,
+        return generalEntityDao.findOptionEntity(
                 "Category.findByValue",
-                parameterFactory.createStringParameter(VALUE, value));
+                Pair.of(VALUE, value));
     }
 
-    @Override
     public Optional<Brand> fetchOptionalBrand(Session session, String value) {
-        return queryService.getNamedQueryOptionalEntity(
-                session,
-                Brand.class,
+        return generalEntityDao.findOptionEntity(
                 "Brand.findByValue",
-                parameterFactory.createStringParameter(VALUE, value));
+                Pair.of(VALUE, value));
     }
 
-    @Override
     public Optional<ItemType> fetchOptionalItemType(Session session, String value) {
-        return queryService.getNamedQueryOptionalEntity(
-                session,
-                ItemType.class,
+        return generalEntityDao.findOptionEntity(
                 "ItemType.findByValue",
-                parameterFactory.createStringParameter(VALUE, value));
+                Pair.of(VALUE, value));
     }
 
-    @Override
     public Optional<CommissionValue> fetchCommission(Session session) {
-        return queryService.getNamedQueryOptionalEntity(
-                session,
-                CommissionValue.class,
-                "CommissionValue.getCommissionList");
+        return generalEntityDao.findOptionEntity(
+                "CommissionValue.getCommissionList", (Pair<String, ?>) null);
     }
 
-    @Override
     public Optional<MinMaxCommission> fetchMinMaxCommission(Session session) {
         return Optional.empty();
     }
 
-    @Override
     public Optional<Post> fetchPost(Session session, String value) {
         if (value != null) {
-            return queryService.getNamedQueryOptionalEntity(
-                    session,
-                    Post.class,
+            return generalEntityDao.findOptionEntity(
                     "Post.getPostByPostId",
-                    parameterFactory.createStringParameter(POST_ID, value));
+                    Pair.of(POST_ID, value));
         }
         return Optional.empty();
     }
 
-    @Override
     public List<ReviewComment> fetchReviewComments(Session session, String value) {
         if (value != null) {
-            Optional<Review> optionalReview = queryService.getNamedQueryOptionalEntity(
-                    session,
-                    Review.class,
+            Optional<Review> optionalReview = generalEntityDao.findOptionEntity(
                     "Review.findByReviewId",
-                    parameterFactory.createStringParameter(REVIEW_COMMENT_ID, value));
+                    Pair.of(REVIEW_COMMENT_ID, value));
             if (optionalReview.isPresent()) {
                 Review review = optionalReview.get();
                 return review.getComments();
@@ -261,21 +192,15 @@ public class SessionEntityFetcher implements ISessionEntityFetcher {
         return Collections.emptyList();
     }
 
-    @Override
     public ReviewStatus fetchReviewStatus(Session session, String value) {
-        return queryService.getNamedQueryEntity(
-                session,
-                ReviewStatus.class,
+        return generalEntityDao.findEntity(
                 "ReviewStatus.findByValue",
-                parameterFactory.createStringParameter(VALUE, value));
+                Pair.of(VALUE, value));
     }
 
-    @Override
     public Rating fetchRating(Session session, int value) {
-        return queryService.getNamedQueryEntity(
-                session,
-                Rating.class,
+        return generalEntityDao.findEntity(
                 "Rating.findByValue",
-                parameterFactory.createIntegerParameter(VALUE, value));
+                Pair.of(VALUE, value));
     }
 }

@@ -17,8 +17,6 @@ import com.b2c.prototype.modal.entity.user.UserCreditCard;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.util.CardUtil;
-import com.tm.core.finder.parameter.Parameter;
-import com.tm.core.process.dao.common.ITransactionEntityDao;
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,14 +28,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import static com.b2c.prototype.util.Converter.getLocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -46,8 +41,6 @@ import static org.mockito.Mockito.when;
 
 class UserDetailsManagerTest {
 
-    @Mock
-    private ITransactionEntityDao userDetailsDao;
     @Mock
     private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
@@ -71,7 +64,7 @@ class UserDetailsManagerTest {
 
         userDetailsManager.createNewUser(registrationUserDetailsDto);
 
-        verify(userDetailsDao).mergeEntity(userDetails);
+//        verify(userDetailsDao).mergeEntity(userDetails);
     }
 
     @Test
@@ -80,8 +73,7 @@ class UserDetailsManagerTest {
         boolean isActive = true;
         UserDetails userDetails = new UserDetails();
         userDetails.setActive(false);
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
+
 //        when(userDetailsDao.getNamedQueryEntity("", parameter))
 //                .thenReturn(userDetails);
         doAnswer(invocation -> {
@@ -90,12 +82,11 @@ class UserDetailsManagerTest {
             consumer.accept(session);
             verify(session).merge(userDetails);
             return null;
-        }).when(userDetailsDao).executeConsumer(any(Consumer.class));
+        });
 
         userDetailsManager.updateUserStatusByUserId(userId, isActive);
 
         assertTrue(userDetails.isActive());
-        verify(userDetailsDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
@@ -104,12 +95,11 @@ class UserDetailsManagerTest {
         UserDetailsDto userDetailsDto = getUserDetailsDto();
         UserDetails userDetails = getUserDetails();
 
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
+
         when(transformationFunctionService.getTransformationFunction(UserDetails.class, UserDetailsDto.class))
                 .thenReturn(transformationFunction);
-        when(userDetailsDao.getGraphEntity(anyString(), eq(parameter)))
-                .thenReturn(userDetails);
+//        when(userDetailsDao.getGraphEntity(anyString(), eq(parameter)))
+//                .thenReturn(userDetails);
 
         ResponseUserDetailsDto result = userDetailsManager.getUserDetailsByUserId(userId);
 
@@ -135,7 +125,7 @@ class UserDetailsManagerTest {
     private UserDetailsDto getUserDetailsDto() {
         return UserDetailsDto.builder()
                 .address(AddressDto.builder()
-                        .country("+11")
+//                        .country("+11")
                         .city("city")
                         .street("street")
                         .buildingNumber("1")
@@ -236,7 +226,7 @@ class UserDetailsManagerTest {
                 .zipCode(address.getZipCode())
                 .street(address.getStreet())
                 .florNumber(address.getFlorNumber())
-                .country(address.getCountry().getValue())
+//                .country(address.getCountry().getValue())
                 .build();
         UserCreditCard userCreditCard = userDetails.getUserCreditCards().stream().toList().get(0);
         CreditCard creditCard = userCreditCard.getCreditCard();

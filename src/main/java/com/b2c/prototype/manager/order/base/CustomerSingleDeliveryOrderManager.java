@@ -1,9 +1,6 @@
 package com.b2c.prototype.manager.order.base;
 
-import com.b2c.prototype.dao.GeneralEntityDao;
 import com.b2c.prototype.dao.IGeneralEntityDao;
-import com.b2c.prototype.dao.ISessionEntityFetcher;
-import com.b2c.prototype.modal.constant.OrderStatusEnum;
 import com.b2c.prototype.modal.dto.payload.order.PaymentDto;
 import com.b2c.prototype.modal.dto.payload.order.PaymentPriceDto;
 import com.b2c.prototype.modal.dto.payload.order.single.CustomerSingleDeliveryOrderDto;
@@ -25,7 +22,6 @@ import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.order.ICustomerSingleDeliveryOrderManager;
 import com.b2c.prototype.transform.help.calculate.IPriceCalculationService;
 import com.nimbusds.jose.util.Pair;
-import com.tm.core.finder.factory.IParameterFactory;
 import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,5 +1,6 @@
 package com.b2c.prototype.modal.dto.payload.order;
 
+import com.b2c.prototype.modal.dto.payload.constant.CountryDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AddressDto {
-    private String country;
+    private CountryDto country;
     private String city;
     private String street;
     private String buildingNumber;

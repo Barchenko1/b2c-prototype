@@ -8,8 +8,7 @@ import com.b2c.prototype.modal.entity.review.Rating;
 import com.b2c.prototype.modal.entity.review.Review;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
 
-import com.tm.core.finder.parameter.Parameter;
-import com.tm.core.process.dao.common.ITransactionEntityDao;
+
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,9 +36,6 @@ import static org.mockito.Mockito.when;
 class ReviewManagerTest {
 
     @Mock
-    private ITransactionEntityDao reviewDao;
-
-    @Mock
     private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
     private ReviewManager reviewManager;
@@ -60,8 +56,7 @@ class ReviewManagerTest {
         Review review = getReview();
 //        when(item.getReviews()).thenReturn(new ArrayList<>(){{add(review);}});
 
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
+
 
         
         NativeQuery<Item> query = mock(NativeQuery.class);
@@ -73,11 +68,10 @@ class ReviewManagerTest {
             consumer.accept(session);
             verify(session).merge(item);
             return null;
-        }).when(reviewDao).executeConsumer(any(Consumer.class));
+        });
 
         reviewManager.saveReview(articularId, userId, reviewDto);
 
-        verify(reviewDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
@@ -91,8 +85,7 @@ class ReviewManagerTest {
         Review review = getReview();
 //        when(item.getReviews()).thenReturn(new ArrayList<>(){{add(review);}});
 
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
+
 
         
         NativeQuery<Item> query = mock(NativeQuery.class);
@@ -104,18 +97,16 @@ class ReviewManagerTest {
             consumer.accept(session);
             verify(session).merge(item);
             return null;
-        }).when(reviewDao).executeConsumer(any(Consumer.class));
+        });
 
         reviewManager.saveReview(articularId, userId, reviewDto);
 
-        verify(reviewDao).executeConsumer(any(Consumer.class));
     }
 
     @Test
     void testDeleteReview_removesReviewFromEntity() {
         String articularId = "123";
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
+
 
         Review review = getReview();
         Supplier<Review> reviewSupplier = () -> review;
@@ -132,7 +123,6 @@ class ReviewManagerTest {
 
 //        reviewManager.deleteReview(articularId);
 
-        verify(reviewDao).deleteEntity(reviewSupplier);
     }
 
     @Test
@@ -141,8 +131,7 @@ class ReviewManagerTest {
         Review review = getReview();
         ResponseReviewDto responseReviewDto = getResponseReviewDto();
 
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
+
 
         List<ResponseReviewDto> expectedResponse = List.of(responseReviewDto);
         

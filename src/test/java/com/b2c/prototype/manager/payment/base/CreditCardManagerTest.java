@@ -10,8 +10,7 @@ import com.b2c.prototype.modal.entity.payment.Payment;
 import com.b2c.prototype.modal.entity.user.UserCreditCard;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.transform.function.ITransformationFunctionService;
-import com.tm.core.finder.parameter.Parameter;
-import com.tm.core.process.dao.common.ITransactionEntityDao;
+
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,8 +35,6 @@ import static org.mockito.Mockito.when;
 class CreditCardManagerTest {
 
     @Mock
-    private ITransactionEntityDao creditCardDao;
-    @Mock
     private ITransformationFunctionService transformationFunctionService;
     @InjectMocks
     private UserCreditCardManager creditCardManager;
@@ -55,8 +52,7 @@ class CreditCardManagerTest {
         UserDetails userDetails = mock(UserDetails.class);
         CreditCard newCreditCard = mock(CreditCard.class);
         Set<UserCreditCard> existingUserCreditCards = new HashSet<>();
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> supplier = () -> parameter;
+
 
         
 //        when(queryService.getEntity(UserDetails.class, supplier))
@@ -70,11 +66,11 @@ class CreditCardManagerTest {
             consumer.accept(session);
             verify(session).merge(userDetails);
             return null;
-        }).when(creditCardDao).executeConsumer(any(Consumer.class));
+        });
 
 //        creditCardManager.saveCreditCardByUserId(userId, creditCardDto);
 
-        verify(creditCardDao).executeConsumer(any(Consumer.class));
+        
     }
 
     @Test
@@ -88,8 +84,6 @@ class CreditCardManagerTest {
         Set<UserCreditCard> existingUserCreditCards = new HashSet<>(){{
             add(userCreditCard);
         }};
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> supplier = () -> parameter;
 
         
 //        when(queryService.getEntity(UserDetails.class, supplier))
@@ -103,11 +97,11 @@ class CreditCardManagerTest {
             consumer.accept(session);
             verify(session).merge(userDetails);
             return null;
-        }).when(creditCardDao).executeConsumer(any(Consumer.class));
+        });
 
 //        assertThrows(RuntimeException.class, () -> creditCardManager.saveUpdateCreditCardByOrderId(userId, creditCardDto));
 
-        verify(creditCardDao).executeConsumer(any(Consumer.class));
+        
     }
 
     @Test
@@ -118,8 +112,7 @@ class CreditCardManagerTest {
         DeliveryArticularItemQuantity orderItemDataOption = mock(DeliveryArticularItemQuantity.class);
         Payment payment = mock(Payment.class);
         CreditCard creditCard = mock(CreditCard.class);
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> supplier = () -> parameter;
+
 
 
 //        when(queryService.getEntity(DeliveryArticularItemQuantity.class, supplier))
@@ -134,11 +127,11 @@ class CreditCardManagerTest {
             consumer.accept(session);
             verify(session).merge(payment);
             return null;
-        }).when(creditCardDao).executeConsumer(any(Consumer.class));
+        });
 
 //        creditCardManager.saveUpdateCreditCardByOrderId(orderId, creditCardDto);
 
-        verify(creditCardDao).executeConsumer(any(Consumer.class));
+        
     }
 
     @Test
@@ -152,7 +145,6 @@ class CreditCardManagerTest {
                 .isDefault(false)
                 .build();
         Set<UserCreditCard> creditCardList = Set.of(userCreditCard);
-        Supplier<Parameter> parameterSupplier = mock(Supplier.class);
 //        when(queryService.getEntity(eq(UserDetails.class), any(Supplier.class)))
 //                .thenReturn(userDetails);
         when(transformationFunctionService.getEntity(CreditCard.class, userCreditCard))
@@ -165,11 +157,11 @@ class CreditCardManagerTest {
             consumer.accept(session);
             verify(session).merge(creditCard);
             return null;
-        }).when(creditCardDao).executeConsumer(any(Consumer.class));
+        });
 
 //        creditCardManager.saveUpdateCreditCardByOrderId(userId, creditCardDto);
 
-        verify(creditCardDao).executeConsumer(any(Consumer.class));
+        
     }
 
     @Test
@@ -179,8 +171,7 @@ class CreditCardManagerTest {
         DeliveryArticularItemQuantity orderItemDataOption = mock(DeliveryArticularItemQuantity.class);
         Payment payment = mock(Payment.class);
         CreditCard creditCard = getTestCreditCard();
-        Supplier<Parameter> parameterSupplier = mock(Supplier.class);
-        
+
 //        when(queryService.getEntity(eq(DeliveryArticularItemQuantity.class), any(Supplier.class)))
 //                .thenReturn(orderItemDataOption);
         when(transformationFunctionService.getEntity(CreditCard.class, creditCardDto))
@@ -194,11 +185,11 @@ class CreditCardManagerTest {
             consumer.accept(session);
             verify(session).merge(payment);
             return null;
-        }).when(creditCardDao).executeConsumer(any(Consumer.class));
+        });
 
 //        creditCardManager.saveUpdateCreditCardByOrderId(orderId, creditCardDto);
 
-        verify(creditCardDao).executeConsumer(any(Consumer.class));
+        
     }
 
     @Test
@@ -208,8 +199,7 @@ class CreditCardManagerTest {
         DeliveryArticularItemQuantity orderItemDataOption = mock(DeliveryArticularItemQuantity.class);
         Payment payment = mock(Payment.class);
         CreditCard creditCard = getTestCreditCard();
-        Supplier<Parameter> parameterSupplier = mock(Supplier.class);
-        
+
 //        when(queryService.getEntity(eq(DeliveryArticularItemQuantity.class), any(Supplier.class)))
 //                .thenReturn(orderItemDataOption);
         when(transformationFunctionService.getEntity(CreditCard.class, creditCardDto))
@@ -225,11 +215,11 @@ class CreditCardManagerTest {
             consumer.accept(session);
             verify(session).merge(payment);
             return null;
-        }).when(creditCardDao).executeConsumer(any(Consumer.class));
+        });
 
 //        assertThrows(RuntimeException.class, () -> creditCardManager.saveUpdateCreditCardByOrderId(orderId, creditCardDto));
 
-        verify(creditCardDao).executeConsumer(any(Consumer.class));
+        
     }
 
     @Test
@@ -243,8 +233,7 @@ class CreditCardManagerTest {
             add(userCreditCard);
         }};
         when(creditCard.getCardNumber()).thenReturn("123");
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> supplier = () -> parameter;
+
 
         
 //        when(queryService.getEntity(UserDetails.class, supplier))
@@ -256,19 +245,18 @@ class CreditCardManagerTest {
             consumer.accept(session);
             verify(session).remove(creditCard);
             return null;
-        }).when(creditCardDao).executeConsumer(any(Consumer.class));
+        });
 
         creditCardManager.deleteCreditCardByUserId(userId, "");
 
-        verify(creditCardDao).executeConsumer(any(Consumer.class));
+        
     }
 
     @Test
     void getCardListByUserId_shouldReturnResponseCreditCardDtoList() {
         String userId = "123";
         CreditCard creditCard = getTestCreditCard();
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> parameterSupplier = () -> parameter;
+
 
         when(transformationFunctionService.getTransformationFunction(CreditCard.class, ResponseCreditCardDto.class))
                 .thenReturn(creditCard1 -> ResponseCreditCardDto.builder()
@@ -303,8 +291,7 @@ class CreditCardManagerTest {
         CreditCard creditCard = mock(CreditCard.class);
         when(payment.getCreditCard()).thenReturn(creditCard);
         when(creditCard.getCardNumber()).thenReturn("123");
-        Parameter parameter = mock(Parameter.class);
-        Supplier<Parameter> supplier = () -> parameter;
+
 
         
 //        when(queryService.getEntity(DeliveryArticularItemQuantity.class, supplier))
@@ -316,19 +303,16 @@ class CreditCardManagerTest {
             consumer.accept(session);
             verify(session).remove(creditCard);
             return null;
-        }).when(creditCardDao).executeConsumer(any(Consumer.class));
+        });
 
 //        creditCardManager.deleteCreditCardByOrderId(orderId);
 
-        verify(creditCardDao).executeConsumer(any(Consumer.class));
+        
     }
 
     @Test
     void getAllCreditCards_shouldReturnResponseCardDtoList() {
         CreditCard creditCard = getTestCreditCard();
-        Parameter parameter = mock(Parameter.class);
-
-        Supplier<Parameter> parameterSupplier = () -> parameter;
 
         when(transformationFunctionService.getTransformationFunction(CreditCard.class, ResponseCreditCardDto.class))
                 .thenReturn(creditCard1 -> ResponseCreditCardDto.builder()

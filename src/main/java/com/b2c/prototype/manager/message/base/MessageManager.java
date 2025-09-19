@@ -9,22 +9,16 @@ import com.b2c.prototype.modal.entity.message.Message;
 import com.b2c.prototype.modal.entity.message.MessageBox;
 import com.b2c.prototype.modal.entity.message.MessageStatus;
 import com.b2c.prototype.modal.entity.message.MessageTemplate;
-import com.b2c.prototype.transform.function.ITransformationFunctionService;
 import com.b2c.prototype.manager.message.IMessageManager;
-import com.tm.core.finder.factory.IParameterFactory;
-import com.tm.core.process.dao.query.IQueryService;
-import com.tm.core.process.dao.IFetchHandler;
-import com.tm.core.process.manager.common.ITransactionEntityOperationManager;
-import com.tm.core.process.manager.common.operator.TransactionEntityOperationManager;
-import org.hibernate.Session;
+import com.b2c.prototype.transform.message.IMessageTransformService;
+import com.nimbusds.jose.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import static com.b2c.prototype.util.Constant.USER_ID;
@@ -35,185 +29,147 @@ public class MessageManager implements IMessageManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageManager.class);
 
-    private final ITransactionEntityOperationManager entityOperationManager;
-    private final IFetchHandler fetchHandler;
-    private final IQueryService queryService;
-    private final ITransformationFunctionService transformationFunctionService;
-    private final IParameterFactory parameterFactory;
+    private final IGeneralEntityDao generalEntityDao;
+    private final IMessageTransformService messageTransformService;
 
-    public MessageManager(IGeneralEntityDao messageBoxDao,
-                          IFetchHandler fetchHandler,
-                          IQueryService queryService,
-                          ITransformationFunctionService transformationFunctionService,
-                          IParameterFactory parameterFactory) {
-        this.entityOperationManager = new TransactionEntityOperationManager(null);
-        this.fetchHandler = fetchHandler;
-        this.queryService = queryService;
-        this.transformationFunctionService = transformationFunctionService;
-        this.parameterFactory = parameterFactory;
+    public MessageManager(IGeneralEntityDao generalEntityDao,
+                          IMessageTransformService messageTransformService) {
+        this.generalEntityDao = generalEntityDao;
+        this.messageTransformService = messageTransformService;
     }
 
     @Override
+    @Transactional
     public void saveMessage(MessageDto messageDto) {
-        entityOperationManager.executeConsumer(session -> {
-            Map<String, List<?>> map = new HashMap<>(){{
-                put("emails", messageDto.getMessageTemplate().getReceivers());
-            }};
-            List<MessageBox> messageBoxes = queryService.getNamedQueryEntityMap(
-                    session,
-                    MessageBox.class,
-                    "MessageBox.findByEmailListWithMessages",
-                    map);
-            Message message = transformationFunctionService.getEntity((Session) session, Message.class, messageDto);
-            messageBoxes.forEach(message::addMessageBox);
-            session.merge(message);
-        });
+        List<MessageBox> messageBoxes = generalEntityDao.findEntityList(
+                "MessageBox.findByEmailListWithMessages",
+                Pair.of("emails", messageDto.getMessageTemplate().getReceivers()));
+        Message message = messageTransformService.mapMessageDtoToMessage(messageDto);
+        messageBoxes.forEach(message::addMessageBox);
+        generalEntityDao.mergeEntity(message);
     }
 
     @Override
     public void updateMessage(String messageId, MessageDto messageDto) {
-        entityOperationManager.executeConsumer(session -> {
-            MessageBox messageBox = queryService.getNamedQueryEntity(
-                    session,
-                    MessageBox.class,
-                    "MessageBox.findByUserIdWithMessages",
-                    parameterFactory.createStringParameter(USER_ID, messageId));
-            Message newMessage = transformationFunctionService.getEntity((Session) session, Message.class, messageDto);
-            Message message = getExistingMessage(messageBox, messageId);
-            MessageTemplate messageTemplate = message.getMessageTemplate();
-            messageTemplate.setTitle(newMessage.getMessageTemplate().getTitle());
-            messageTemplate.setMessage(newMessage.getMessageTemplate().getMessage());
-            message.setStatus(newMessage.getStatus());
+        MessageBox messageBox = generalEntityDao.findEntity(
+                "MessageBox.findByUserIdWithMessages",
+                Pair.of(USER_ID, messageId));
+        generalEntityDao.findEntity("MessageBox.findByUserIdWithMessages",
+                Pair.of(USER_ID, messageId));
+        Message newMessage = messageTransformService.mapMessageDtoToMessage(messageDto);
+        Message message = getExistingMessage(messageBox, messageId);
+        MessageTemplate messageTemplate = message.getMessageTemplate();
+        messageTemplate.setTitle(newMessage.getMessageTemplate().getTitle());
+        messageTemplate.setMessage(newMessage.getMessageTemplate().getMessage());
+        message.setStatus(newMessage.getStatus());
 
-            session.merge(messageBox);
-        });
+        generalEntityDao.mergeEntity(messageBox);
     }
 
     @Override
     public void changeMessageStatus(String userId, String messageId, MessageStatusEnum status) {
-        entityOperationManager.executeConsumer(session -> {
-            MessageBox messageBox = queryService.getNamedQueryEntity(
-                    session,
-                    MessageBox.class,
-                    "MessageBox.findByUserIdWithMessages",
-                    parameterFactory.createStringParameter(USER_ID, messageId));
-            Message message = getExistingMessage(messageBox, messageId);
-            MessageStatus messageStatus = queryService.getNamedQueryEntity(
-                    session,
-                    MessageStatus.class,
-                    "MessageStatus.findByValue",
-                    parameterFactory.createStringParameter(VALUE, status.getValue()));
-            message.setStatus(messageStatus);
-            session.merge(message);
-        });
+        MessageBox messageBox = generalEntityDao.findEntity(
+                "MessageBox.findByUserIdWithMessages",
+                Pair.of(USER_ID, messageId));
+        Message message = getExistingMessage(messageBox, messageId);
+        MessageStatus messageStatus = generalEntityDao.findEntity(
+                "MessageStatus.findByValue",
+                Pair.of(VALUE, status.getValue()));
+        message.setStatus(messageStatus);
+        generalEntityDao.mergeEntity(message);
     }
 
     @Override
+    @Transactional
     public void deleteMessage(String messageId) {
-        entityOperationManager.executeConsumer(session -> {;
-            Optional<MessageTemplate> optionalMessageTemplate = queryService.getNamedQueryOptionalEntity(
-                    session,
-                    MessageTemplate.class,
-                    "MessageTemplate.findByMessageId",
-                    parameterFactory.createStringParameter("messageUniqNumber", messageId));
+        Optional<MessageTemplate> optionalMessageTemplate = generalEntityDao.findOptionEntity(
+                "MessageTemplate.findByMessageId",
+                Pair.of("messageUniqNumber", messageId));
 
-            optionalMessageTemplate.ifPresent(session::remove);
-        });
+        optionalMessageTemplate.ifPresent(generalEntityDao::removeEntity);
     }
 
     @Override
+    @Transactional
     public void deleteMessageByUserId(String userId, String messageId) {
-        entityOperationManager.executeConsumer(session -> {
-            MessageBox messageBox = queryService.getNamedQueryEntity(
-                    session,
-                    MessageBox.class,
-                    "MessageBox.findByUserIdWithMessages",
-                    parameterFactory.createStringParameter(USER_ID, userId));
+        MessageBox messageBox = generalEntityDao.findEntity(
+                "MessageBox.findByUserIdWithMessages",
+                Pair.of(USER_ID, userId));
 
-            Message message = getExistingMessage(messageBox, messageId);
-            messageBox.removeMessage(message);
-            if (message.getBoxes().isEmpty()) {
-                session.remove(message);
-            }
+        Message message = getExistingMessage(messageBox, messageId);
+        messageBox.removeMessage(message);
+        if (message.getBoxes().isEmpty()) {
+            generalEntityDao.removeEntity(message);
+        }
 //            session.merge(messageBox);
-        });
     }
 
     @Override
     public void cleanUpMessagesByUserId(String userId) {
-        entityOperationManager.executeConsumer(session -> {
-            MessageBox messageBox = queryService.getNamedQueryEntity(
-                    session,
-                    MessageBox.class,
-                    "MessageBox.findByUserIdWithMessages",
-                    parameterFactory.createStringParameter(USER_ID, userId));
+        MessageBox messageBox = generalEntityDao.findEntity(
+                "MessageBox.findByUserIdWithMessages",
+                Pair.of(USER_ID, userId));
 
-            List<Message> messagesToProcess = new ArrayList<>(messageBox.getMessages());
-            List<Message> messagesToDelete = new ArrayList<>();
+        List<Message> messagesToProcess = new ArrayList<>(messageBox.getMessages());
+        List<Message> messagesToDelete = new ArrayList<>();
 
-            for (Message message : messagesToProcess) {
-                messageBox.removeMessage(message);
-                if (message.getBoxes().isEmpty()) {
-                    messagesToDelete.add(message);
-                }
+        for (Message message : messagesToProcess) {
+            messageBox.removeMessage(message);
+            if (message.getBoxes().isEmpty()) {
+                messagesToDelete.add(message);
             }
-            messagesToProcess.forEach(session::remove);
-            session.merge(messageBox);
-        });
+        }
+        messagesToProcess.forEach(generalEntityDao::removeEntity);
+        generalEntityDao.mergeEntity(messageBox);
     }
 
     @Override
     public List<ResponseMessageOverviewDto> getMessageOverviewBySenderEmail(String senderEmail) {
-        List<Message> messages = fetchHandler.getNamedQueryEntityListClose(
-                Message.class,
+        List<Message> messages = generalEntityDao.findEntityList(
                 "Message.findMessageBySender",
-                parameterFactory.createStringParameter("sender", senderEmail));
+                Pair.of("sender", senderEmail));
 
         return messages.stream()
-                .map(transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class))
+                .map(messageTransformService::mapMessageToResponseMessageOverviewDto)
                 .toList();
     }
 
     @Override
     public List<ResponseMessageOverviewDto> getMessageOverviewByReceiverEmail(String receiverEmail) {
-        List<Message> messages = fetchHandler.getNamedQueryEntityListClose(
-                Message.class,
+        List<Message> messages = generalEntityDao.findEntityList(
                 "Message.findMessageByReceiver",
-                parameterFactory.createStringParameter("receiver", receiverEmail));
+                Pair.of("receiver", receiverEmail));
 
         return messages.stream()
-                .map(transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class))
+                .map(messageTransformService::mapMessageToResponseMessageOverviewDto)
                 .toList();
     }
 
     @Override
     public List<ResponseMessageOverviewDto> getMessageOverviewListByUserId(String userId) {
-        MessageBox messageBox = fetchHandler.getNamedQueryEntityClose(
-                MessageBox.class,
+        MessageBox messageBox = generalEntityDao.findEntity(
                 "MessageBox.findByUserIdWithMessages",
-                parameterFactory.createStringParameter(USER_ID, userId)
-        );
+                Pair.of(USER_ID, userId));
         return messageBox.getMessages().stream()
-                .map(transformationFunctionService.getTransformationFunction(Message.class, ResponseMessageOverviewDto.class))
+                .map(messageTransformService::mapMessageToResponseMessageOverviewDto)
                 .toList();
     }
 
     @Override
     public ResponseMessagePayloadDto getMessagePayloadDto(String userId, String messageId) {
-        MessageBox messageBox = fetchHandler.getNamedQueryEntityClose(
-                MessageBox.class,
+        MessageBox messageBox = generalEntityDao.findEntity(
                 "MessageBox.findByUserId",
-                parameterFactory.createStringParameter(USER_ID, userId));
+                Pair.of(USER_ID, userId));
         Message message = getExistingMessage(messageBox, messageId);
         ResponseMessagePayloadDto responseMessagePayloadDto =
-                transformationFunctionService.getEntity(ResponseMessagePayloadDto.class, message);
+                messageTransformService.mapResponseMessagePayloadDtoToMessage(message);
 
         return responseMessagePayloadDto;
     }
 
     private Message getExistingMessage(MessageBox messageBox, String uniqMessageId) {
         return messageBox.getMessages().stream()
-//                .filter(message -> message.getMessageUniqNumber().equals(uniqMessageId))
+                .filter(message -> message.getMessageUniqNumber().equals(uniqMessageId))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Message not found"));
     }
