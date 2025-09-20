@@ -21,8 +21,8 @@ public class CountryPhoneCodeControllerE2ETest extends AbstractConstantControlle
 
         postConstantEntity(constantPayloadDto,
                 COUNTRY_PHONE_CODE_SERVICE_ID,
-                "/datasets/user/country_phone_code/emptyCountryPhoneCodeDataSet.yml",
-                "/datasets/user/country_phone_code/saveCountryPhoneCodeDataSet.yml");
+                "/datasets/dao/user/country_phone_code/emptyCountryPhoneCodeDataSet.yml",
+                "/datasets/dao/user/country_phone_code/saveCountryPhoneCodeDataSet.yml");
     }
 
     @Test
@@ -35,8 +35,8 @@ public class CountryPhoneCodeControllerE2ETest extends AbstractConstantControlle
         putConstantEntity(constantPayloadDto,
                 COUNTRY_PHONE_CODE_SERVICE_ID,
                 "+48",
-                "/datasets/user/country_phone_code/testCountryPhoneCodeDataSet.yml",
-                "/datasets/user/country_phone_code/updateCountryPhoneCodeDataSet.yml");
+                "/datasets/dao/user/country_phone_code/testCountryPhoneCodeDataSet.yml",
+                "/datasets/dao/user/country_phone_code/updateCountryPhoneCodeDataSet.yml");
     }
 
     @Test
@@ -49,8 +49,8 @@ public class CountryPhoneCodeControllerE2ETest extends AbstractConstantControlle
         patchConstantEntity(constantPayloadDto,
                 COUNTRY_PHONE_CODE_SERVICE_ID,
                 "+48",
-                "/datasets/user/country_phone_code/testCountryPhoneCodeDataSet.yml",
-                "/datasets/user/country_phone_code/updateCountryPhoneCodeDataSet.yml");
+                "/datasets/dao/user/country_phone_code/testCountryPhoneCodeDataSet.yml",
+                "/datasets/dao/user/country_phone_code/updateCountryPhoneCodeDataSet.yml");
     }
 
     @Test
@@ -58,8 +58,8 @@ public class CountryPhoneCodeControllerE2ETest extends AbstractConstantControlle
         deleteConstantEntity(
                 COUNTRY_PHONE_CODE_SERVICE_ID,
                 "+48",
-                "/datasets/user/country_phone_code/testCountryPhoneCodeDataSet.yml",
-                "/datasets/user/country_phone_code/emptyCountryPhoneCodeDataSet.yml");
+                "/datasets/dao/user/country_phone_code/testCountryPhoneCodeDataSet.yml",
+                "/datasets/dao/user/country_phone_code/emptyCountryPhoneCodeDataSet.yml");
     }
 
     @Test
@@ -76,7 +76,7 @@ public class CountryPhoneCodeControllerE2ETest extends AbstractConstantControlle
 
         MvcResult mvcResult = getConstantEntities(
                 COUNTRY_PHONE_CODE_SERVICE_ID,
-                "/datasets/user/country_phone_code/testAllCountryPhoneCodeDataSet.yml");
+                "/datasets/e2e/user/contact_phone_code/testAllCountryPhoneCodeDataSet.yml");
 
         assertMvcListResult(mvcResult, constantPayloadDtoList, new TypeReference<>() {});
     }
@@ -90,7 +90,7 @@ public class CountryPhoneCodeControllerE2ETest extends AbstractConstantControlle
 
         MvcResult mvcResult = getConstantEntity(COUNTRY_PHONE_CODE_SERVICE_ID,
                 "+48",
-                "/datasets/user/country_phone_code/testCountryPhoneCodeDataSet.yml");
+                "/datasets/dao/user/country_phone_code/testCountryPhoneCodeDataSet.yml");
 
         assertMvcResult(mvcResult, dto);
     }

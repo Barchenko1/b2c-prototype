@@ -22,12 +22,12 @@ class PriceDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/price/price/emptyPriceDataSet.yml", cleanBefore = true,
+    @DataSet(value = "datasets/dao/price/price/emptyPriceDataSet.yml", cleanBefore = true,
             executeStatementsBefore = {
                     "TRUNCATE TABLE price RESTART IDENTITY CASCADE",
                     "TRUNCATE TABLE currency RESTART IDENTITY CASCADE"
     })
-    @ExpectedDataSet(value = "datasets/price/price/savePriceDataSet.yml", orderBy = "id")
+    @ExpectedDataSet(value = "datasets/dao/price/price/savePriceDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         Price entity = getPrice();
         entity.setId(0);
@@ -36,8 +36,8 @@ class PriceDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/price/price/testPriceDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/price/price/updatePriceDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/price/price/testPriceDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/price/price/updatePriceDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         Price entity = getPrice();
         entity.setAmount(20);
@@ -46,8 +46,8 @@ class PriceDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/price/price/emptyPriceCurrencyDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/price/price/savePriceDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/price/price/emptyPriceCurrencyDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/price/price/savePriceDataSet.yml", orderBy = "id")
     public void mergeEntity2_success() {
         Price entity = getPrice();
         entity.setId(0);
@@ -56,8 +56,8 @@ class PriceDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/price/price/testPriceDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/price/price/emptyPriceCurrencyDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/price/price/testPriceDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/price/price/emptyPriceCurrencyDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         Price entity = getPrice();
 
@@ -65,7 +65,7 @@ class PriceDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/price/price/testPriceDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/price/price/testPriceDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         Price expected = getPrice();
 
@@ -76,7 +76,7 @@ class PriceDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/price/price/testPriceDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/price/price/testPriceDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         Price expected = getPrice();
 
@@ -90,7 +90,7 @@ class PriceDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/price/price/testPriceDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/price/price/testPriceDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         Price entity = getPrice();
 

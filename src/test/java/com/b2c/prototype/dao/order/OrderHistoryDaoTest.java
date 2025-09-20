@@ -59,7 +59,7 @@ class OrderHistoryDaoTest extends AbstractDaoTest {
     }};
 
     @Test
-    @DataSet(value = "datasets/order/order_history/emptyOrderHistoryDataSet.yml", cleanBefore = true,
+    @DataSet(value = "datasets/dao/order/order_history/emptyOrderHistoryDataSet.yml", cleanBefore = true,
             executeStatementsBefore = {
                     "TRUNCATE TABLE price RESTART IDENTITY CASCADE",
                     "TRUNCATE TABLE contact_phone RESTART IDENTITY CASCADE",
@@ -67,7 +67,7 @@ class OrderHistoryDaoTest extends AbstractDaoTest {
                     "TRUNCATE TABLE address RESTART IDENTITY CASCADE",
                     "TRUNCATE TABLE credit_card RESTART IDENTITY CASCADE",
             })
-    @ExpectedDataSet(value = "datasets/order/order_history/saveOrderHistoryDataSet.yml", orderBy = "id", ignoreCols = {"id", "amount", "currency_id", "original_price_id", "current_price_id", "commission_price_info_id", "full_multi_currency_price_info_id", "total_multi_currency_price_info_id", "discount_multi_currency_price_info_id", "phone_number", "first_name", "last_name", "contact_info_id", "beneficiary_id", "full_price_id", "address_id", "credit_card_id", "contact_phone_id"})
+    @ExpectedDataSet(value = "datasets/dao/order/order_history/saveOrderHistoryDataSet.yml", orderBy = "id", ignoreCols = {"id", "amount", "currency_id", "original_price_id", "current_price_id", "commission_price_info_id", "full_multi_currency_price_info_id", "total_multi_currency_price_info_id", "discount_multi_currency_price_info_id", "phone_number", "first_name", "last_name", "contact_info_id", "beneficiary_id", "full_price_id", "address_id", "credit_card_id", "contact_phone_id"})
     public void persistEntity_success() {
         OrderHistory entity = getOrderHistory();
         entity.setId(0);
@@ -109,8 +109,8 @@ class OrderHistoryDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/order/order_history/testOrderHistoryDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/order/order_history/updateOrderHistoryDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/order/order_history/testOrderHistoryDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/order/order_history/updateOrderHistoryDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         OrderHistory entity = getOrderHistory();
 
@@ -125,8 +125,8 @@ class OrderHistoryDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/order/order_history/testOrderHistoryDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/order/order_history/emptyOrderHistoryDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/order/order_history/testOrderHistoryDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/order/order_history/emptyOrderHistoryDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         OrderHistory entity = getOrderHistory();
 
@@ -134,7 +134,7 @@ class OrderHistoryDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/order/order_history/testOrderHistoryDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/order/order_history/testOrderHistoryDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         OrderHistory expected = getOrderHistory();
 
@@ -145,7 +145,7 @@ class OrderHistoryDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/order/order_history/testOrderHistoryDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/order/order_history/testOrderHistoryDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         OrderHistory expected = getOrderHistory();
 
@@ -159,7 +159,7 @@ class OrderHistoryDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/order/order_history/testOrderHistoryDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/order/order_history/testOrderHistoryDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         OrderHistory entity = getOrderHistory();
 

@@ -21,8 +21,8 @@ public class DeliveryTypeControllerE2ETest extends AbstractConstantControllerE2E
 
         postConstantEntity(constantPayloadDto,
                 DELIVERY_TYPE_SERVICE_ID,
-                "/datasets/delivery/delivery_type/emptyDeliveryTypeDataSet.yml",
-                "/datasets/delivery/delivery_type/saveDeliveryTypeDataSet.yml");
+                "/datasets/dao/delivery/delivery_type/emptyDeliveryTypeDataSet.yml",
+                "/datasets/dao/delivery/delivery_type/saveDeliveryTypeDataSet.yml");
     }
 
     @Test
@@ -35,8 +35,8 @@ public class DeliveryTypeControllerE2ETest extends AbstractConstantControllerE2E
         putConstantEntity(constantPayloadDto,
                 DELIVERY_TYPE_SERVICE_ID,
                 "Post",
-                "/datasets/delivery/delivery_type/testDeliveryTypeDataSet.yml",
-                "/datasets/delivery/delivery_type/updateDeliveryTypeDataSet.yml");
+                "/datasets/dao/delivery/delivery_type/testDeliveryTypeDataSet.yml",
+                "/datasets/dao/delivery/delivery_type/updateDeliveryTypeDataSet.yml");
     }
 
     @Test
@@ -49,8 +49,8 @@ public class DeliveryTypeControllerE2ETest extends AbstractConstantControllerE2E
         patchConstantEntity(constantPayloadDto,
                 DELIVERY_TYPE_SERVICE_ID,
                 "Post",
-                "/datasets/delivery/delivery_type/testDeliveryTypeDataSet.yml",
-                "/datasets/delivery/delivery_type/updateDeliveryTypeDataSet.yml");
+                "/datasets/dao/delivery/delivery_type/testDeliveryTypeDataSet.yml",
+                "/datasets/dao/delivery/delivery_type/updateDeliveryTypeDataSet.yml");
     }
 
     @Test
@@ -58,8 +58,8 @@ public class DeliveryTypeControllerE2ETest extends AbstractConstantControllerE2E
         deleteConstantEntity(
                 DELIVERY_TYPE_SERVICE_ID,
                 "Post",
-                "/datasets/delivery/delivery_type/testDeliveryTypeDataSet.yml",
-                "/datasets/delivery/delivery_type/emptyDeliveryTypeDataSet.yml");
+                "/datasets/dao/delivery/delivery_type/testDeliveryTypeDataSet.yml",
+                "/datasets/dao/delivery/delivery_type/emptyDeliveryTypeDataSet.yml");
     }
 
     @Test
@@ -75,7 +75,7 @@ public class DeliveryTypeControllerE2ETest extends AbstractConstantControllerE2E
                         .build());
 
         MvcResult mvcResult = getConstantEntities(DELIVERY_TYPE_SERVICE_ID,
-                "/datasets/delivery/delivery_type/testAllDeliveryTypeDataSet.yml");
+                "/datasets/e2e/delviery/delivery_type/testAllDeliveryTypeDataSet.yml");
         assertMvcListResult(mvcResult, constantPayloadDtoList, new TypeReference<>() {});
     }
 
@@ -88,7 +88,7 @@ public class DeliveryTypeControllerE2ETest extends AbstractConstantControllerE2E
 
         MvcResult mvcResult = getConstantEntity(DELIVERY_TYPE_SERVICE_ID,
                 "Post",
-                "/datasets/delivery/delivery_type/testDeliveryTypeDataSet.yml");
+                "/datasets/dao/delivery/delivery_type/testDeliveryTypeDataSet.yml");
         assertMvcResult(mvcResult, dto);
     }
 

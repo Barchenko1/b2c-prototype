@@ -39,11 +39,11 @@ public class ArticularStockDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/store/articular_stock/emptyArticularStockDataSet.yml", cleanBefore = true,
+    @DataSet(value = "datasets/dao/store/articular_stock/emptyArticularStockDataSet.yml", cleanBefore = true,
             executeStatementsBefore = {
                     "TRUNCATE TABLE articular_stock RESTART IDENTITY CASCADE",
             })
-    @ExpectedDataSet(value = "datasets/store/articular_stock/saveArticularStockDataSet.yml", orderBy = "id")
+    @ExpectedDataSet(value = "datasets/dao/store/articular_stock/saveArticularStockDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         ArticularStock entity = getArticularStock();
         entity.setId(0L);
@@ -55,8 +55,8 @@ public class ArticularStockDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/store/articular_stock/testArticularStockDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/store/articular_stock/updateArticularStockDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/store/articular_stock/testArticularStockDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/store/articular_stock/updateArticularStockDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         ArticularStock entity = getArticularStock();
         entity.getArticularItemQuantities().get(0).setQuantity(2);
@@ -65,8 +65,8 @@ public class ArticularStockDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/store/articular_stock/testArticularStockDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/store/articular_stock/emptyArticularStockDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/store/articular_stock/testArticularStockDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/store/articular_stock/emptyArticularStockDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         ArticularStock entity = getArticularStock();
 
@@ -74,7 +74,7 @@ public class ArticularStockDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/store/articular_stock/testArticularStockDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/store/articular_stock/testArticularStockDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         ArticularStock expected = getArticularStock();
 
@@ -85,7 +85,7 @@ public class ArticularStockDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/store/articular_stock/testArticularStockDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/store/articular_stock/testArticularStockDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         ArticularStock expected = getArticularStock();
 
@@ -99,7 +99,7 @@ public class ArticularStockDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/store/articular_stock/testArticularStockDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/store/articular_stock/testArticularStockDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         ArticularStock entity = getArticularStock();
 

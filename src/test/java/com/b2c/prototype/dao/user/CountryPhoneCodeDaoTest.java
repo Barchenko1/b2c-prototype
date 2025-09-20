@@ -21,8 +21,8 @@ class CountryPhoneCodeDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/user/country_phone_code/emptyCountryPhoneCodeDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/user/country_phone_code/saveCountryPhoneCodeDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/user/country_phone_code/emptyCountryPhoneCodeDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/user/country_phone_code/saveCountryPhoneCodeDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         CountryPhoneCode entity = getCountryPhoneCode();
         entity.setId(0L);
@@ -31,8 +31,8 @@ class CountryPhoneCodeDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/country_phone_code/testCountryPhoneCodeDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/user/country_phone_code/updateCountryPhoneCodeDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/user/country_phone_code/testCountryPhoneCodeDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/user/country_phone_code/updateCountryPhoneCodeDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         CountryPhoneCode entity = getCountryPhoneCode();
         entity.setLabel("Update +11");
@@ -42,8 +42,8 @@ class CountryPhoneCodeDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/country_phone_code/testCountryPhoneCodeDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/user/country_phone_code/emptyCountryPhoneCodeDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/user/country_phone_code/testCountryPhoneCodeDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/user/country_phone_code/emptyCountryPhoneCodeDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         CountryPhoneCode entity = getCountryPhoneCode();
 
@@ -51,7 +51,7 @@ class CountryPhoneCodeDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/country_phone_code/testCountryPhoneCodeDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/user/country_phone_code/testCountryPhoneCodeDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         CountryPhoneCode expected = getCountryPhoneCode();
 
@@ -62,7 +62,7 @@ class CountryPhoneCodeDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/country_phone_code/testCountryPhoneCodeDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/user/country_phone_code/testCountryPhoneCodeDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         CountryPhoneCode expected = getCountryPhoneCode();
 
@@ -76,7 +76,7 @@ class CountryPhoneCodeDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/country_phone_code/testCountryPhoneCodeDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/user/country_phone_code/testCountryPhoneCodeDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         CountryPhoneCode entity = getCountryPhoneCode();
 

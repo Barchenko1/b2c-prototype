@@ -1,6 +1,8 @@
 package com.b2c.prototype.controller.constant;
 
+import com.b2c.prototype.manager.item.IBrandManager;
 import com.b2c.prototype.processor.constant.IConstantProcessorService;
+import com.b2c.prototype.processor.item.IItemProcess;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,9 +23,12 @@ import java.util.Map;
 public class ConstantController {
 
     private final IConstantProcessorService constantOrchestratorService;
+    private final IItemProcess itemProcess;
 
-    public ConstantController(IConstantProcessorService constantOrchestratorService) {
+    public ConstantController(IConstantProcessorService constantOrchestratorService,
+                              IItemProcess itemProcess) {
         this.constantOrchestratorService = constantOrchestratorService;
+        this.itemProcess = itemProcess;
     }
 
 

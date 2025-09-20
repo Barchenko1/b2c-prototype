@@ -21,8 +21,8 @@ class ItemTypeDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/item/item_type/emptyItemTypeDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/item/item_type/saveItemTypeDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/item/item_type/emptyItemTypeDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/item/item_type/saveItemTypeDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         ItemType entity = getItemType();
         entity.setId(0);
@@ -31,8 +31,8 @@ class ItemTypeDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/item_type/testItemTypeDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/item/item_type/updateItemTypeDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/item/item_type/testItemTypeDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/item/item_type/updateItemTypeDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         ItemType entity = getItemType();
         entity.setValue("Update Clothes");
@@ -41,8 +41,8 @@ class ItemTypeDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/item_type/testItemTypeDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/item/item_type/emptyItemTypeDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/item/item_type/testItemTypeDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/item/item_type/emptyItemTypeDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         ItemType entity = getItemType();
 
@@ -50,7 +50,7 @@ class ItemTypeDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/item_type/testItemTypeDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/item_type/testItemTypeDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         ItemType expected = getItemType();
 
@@ -61,7 +61,7 @@ class ItemTypeDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/item_type/testItemTypeDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/item_type/testItemTypeDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         ItemType expected = getItemType();
 
@@ -75,7 +75,7 @@ class ItemTypeDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/item_type/testItemTypeDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/item_type/testItemTypeDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         ItemType entity = getItemType();
 

@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class ZoneOptionControllerE2ETest extends BasicE2ETest {
 
-    private static final String URL_TEMPLATE = "/api/v1/zone";
+    private static final String URL_TEMPLATE = "/api/v1/zone_option";
 
     @BeforeEach
     public void setup() {
@@ -44,7 +44,7 @@ public class ZoneOptionControllerE2ETest extends BasicE2ETest {
 
     @Test
     public void testSaveTimeDurationOption() {
-        loadDataSet("/datasets/option/zone/emptyE2EZoneOption.yml");
+        loadDataSet("/datasets/e2e/item/zone_option/emptyE2EZoneOption.yml");
 
         try {
             mockMvc.perform(post(URL_TEMPLATE)
@@ -54,12 +54,12 @@ public class ZoneOptionControllerE2ETest extends BasicE2ETest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        verifyExpectedData("/datasets/option/zone/testE2EZoneOption.yml");
+        verifyExpectedData("/datasets/e2e/item/zone_option/testE2EZoneOption.yml");
     }
 
     @Test
     public void testUpdateTimeDurationOption() {
-        loadDataSet("/datasets/option/zone/testE2EZoneOption.yml");
+        loadDataSet("/datasets/e2e/item/zone_option/testE2EZoneOption.yml");
 
         try {
             mockMvc.perform(post(URL_TEMPLATE)
@@ -70,12 +70,12 @@ public class ZoneOptionControllerE2ETest extends BasicE2ETest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        verifyExpectedData("/datasets/option/zone/updateE2EZoneOption.yml");
+        verifyExpectedData("/datasets/e2e/item/zone_option/updateE2EZoneOption.yml");
     }
 
     @Test
     public void testDeleteTimeDurationOption() {
-        loadDataSet("/datasets/option/zone/testE2EZoneOption.yml");
+        loadDataSet("/datasets/e2e/item/zone_option/testE2EZoneOption.yml");
 
         try {
             mockMvc.perform(delete(URL_TEMPLATE)
@@ -85,12 +85,12 @@ public class ZoneOptionControllerE2ETest extends BasicE2ETest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        verifyExpectedData("/datasets/option/zone/deleteE2EZoneOption.yml");
+        verifyExpectedData("/datasets/e2e/item/zone_option/deleteE2EZoneOption.yml");
     }
 
     @Test
     public void testGetTimeDurationOption() {
-        loadDataSet("/datasets/option/zone/testE2EZoneOption.yml");
+        loadDataSet("/datasets/e2e/item/zone_option/testE2EZoneOption.yml");
 
         MvcResult mvcResult;
         try {
@@ -118,7 +118,7 @@ public class ZoneOptionControllerE2ETest extends BasicE2ETest {
 
     @Test
     public void testGetTimeDurationOptionList() {
-        loadDataSet("/datasets/option/zone/testE2EZoneOption.yml");
+        loadDataSet("/datasets/e2e/item/zone_option/testE2EZoneOption.yml");
 
         MvcResult mvcResult;
         try {

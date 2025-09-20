@@ -21,8 +21,8 @@ public class MessageStatusControllerE2ETest extends AbstractConstantControllerE2
 
         postConstantEntity(constantPayloadDto,
                 MESSAGE_STATUS_SERVICE_ID,
-                "/datasets/message/message_status/emptyMessageStatusDataSet.yml",
-                "/datasets/message/message_status/saveMessageStatusDataSet.yml");
+                "/datasets/dao/message/message_status/emptyMessageStatusDataSet.yml",
+                "/datasets/dao/message/message_status/saveMessageStatusDataSet.yml");
     }
 
     @Test
@@ -35,8 +35,8 @@ public class MessageStatusControllerE2ETest extends AbstractConstantControllerE2
         putConstantEntity(constantPayloadDto,
                 MESSAGE_STATUS_SERVICE_ID,
                 "New",
-                "/datasets/message/message_status/testMessageStatusDataSet.yml",
-                "/datasets/message/message_status/updateMessageStatusDataSet.yml");
+                "/datasets/dao/message/message_status/testMessageStatusDataSet.yml",
+                "/datasets/dao/message/message_status/updateMessageStatusDataSet.yml");
     }
 
     @Test
@@ -49,8 +49,8 @@ public class MessageStatusControllerE2ETest extends AbstractConstantControllerE2
         patchConstantEntity(constantPayloadDto,
                 MESSAGE_STATUS_SERVICE_ID,
                 "New",
-                "/datasets/message/message_status/testMessageStatusDataSet.yml",
-                "/datasets/message/message_status/updateMessageStatusDataSet.yml");
+                "/datasets/dao/message/message_status/testMessageStatusDataSet.yml",
+                "/datasets/dao/message/message_status/updateMessageStatusDataSet.yml");
     }
 
     @Test
@@ -58,8 +58,8 @@ public class MessageStatusControllerE2ETest extends AbstractConstantControllerE2
         deleteConstantEntity(
                 MESSAGE_STATUS_SERVICE_ID,
                 "New",
-                "/datasets/message/message_status/testMessageStatusDataSet.yml",
-                "/datasets/message/message_status/emptyMessageStatusDataSet.yml");
+                "/datasets/dao/message/message_status/testMessageStatusDataSet.yml",
+                "/datasets/dao/message/message_status/emptyMessageStatusDataSet.yml");
     }
 
     @Test
@@ -75,7 +75,7 @@ public class MessageStatusControllerE2ETest extends AbstractConstantControllerE2
                         .build());
 
         MvcResult mvcResult = getConstantEntities(MESSAGE_STATUS_SERVICE_ID,
-                "/datasets/message/message_status/testAllMessageStatusDataSet.yml");
+                "/datasets/dao/message/message_status/testAllMessageStatusDataSet.yml");
         assertMvcListResult(mvcResult, constantPayloadDtoList, new TypeReference<>() {});
     }
 
@@ -88,7 +88,7 @@ public class MessageStatusControllerE2ETest extends AbstractConstantControllerE2
 
         MvcResult mvcResult = getConstantEntity(MESSAGE_STATUS_SERVICE_ID,
                 "New",
-                "/datasets/message/message_status/testMessageStatusDataSet.yml");
+                "/datasets/dao/message/message_status/testMessageStatusDataSet.yml");
         assertMvcResult(mvcResult, dto);
     }
 

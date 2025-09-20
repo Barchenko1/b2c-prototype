@@ -25,8 +25,8 @@ class MultiCurrencyPriceInfoDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/price/multi_currency_price_info/emptyMultiCurrencyPriceInfoDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/price/multi_currency_price_info/saveMultiCurrencyPriceInfoDataSet.yml", orderBy = "amount", ignoreCols = {"id", "original_price_id", "current_price_id"})
+    @DataSet(value = "datasets/dao/price/multi_currency_price_info/emptyMultiCurrencyPriceInfoDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/price/multi_currency_price_info/saveMultiCurrencyPriceInfoDataSet.yml", orderBy = "amount", ignoreCols = {"id", "original_price_id", "current_price_id"})
     public void persistEntity_success() {
         MultiCurrencyPriceInfo entity = getMultiCurrencyPriceInfo();
         entity.setId(0);
@@ -37,8 +37,8 @@ class MultiCurrencyPriceInfoDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/price/multi_currency_price_info/testMultiCurrencyPriceInfoDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/price/multi_currency_price_info/updateMultiCurrencyPriceInfoDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/price/multi_currency_price_info/testMultiCurrencyPriceInfoDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/price/multi_currency_price_info/updateMultiCurrencyPriceInfoDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         MultiCurrencyPriceInfo entity = getMultiCurrencyPriceInfo();
 //        entity.setAmount(20);
@@ -47,8 +47,8 @@ class MultiCurrencyPriceInfoDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/price/multi_currency_price_info/testMultiCurrencyPriceInfoDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/price/multi_currency_price_info/emptyMultiCurrencyPriceInfoDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/price/multi_currency_price_info/testMultiCurrencyPriceInfoDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/price/multi_currency_price_info/emptyMultiCurrencyPriceInfoDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         MultiCurrencyPriceInfo entity = getMultiCurrencyPriceInfo();
 
@@ -56,7 +56,7 @@ class MultiCurrencyPriceInfoDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/price/multi_currency_price_info/testMultiCurrencyPriceInfoDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/price/multi_currency_price_info/testMultiCurrencyPriceInfoDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         MultiCurrencyPriceInfo expected = getMultiCurrencyPriceInfo();
 
@@ -67,7 +67,7 @@ class MultiCurrencyPriceInfoDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/price/multi_currency_price_info/testMultiCurrencyPriceInfoDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/price/multi_currency_price_info/testMultiCurrencyPriceInfoDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         MultiCurrencyPriceInfo expected = getMultiCurrencyPriceInfo();
 
@@ -81,7 +81,7 @@ class MultiCurrencyPriceInfoDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/price/multi_currency_price_info/testMultiCurrencyPriceInfoDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/price/multi_currency_price_info/testMultiCurrencyPriceInfoDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         MultiCurrencyPriceInfo entity = getMultiCurrencyPriceInfo();
 

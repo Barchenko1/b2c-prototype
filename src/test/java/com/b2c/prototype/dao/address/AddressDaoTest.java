@@ -22,8 +22,8 @@ public class AddressDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/order/address/emptyAddressDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/order/address/saveAddressDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/order/address/emptyAddressDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/order/address/saveAddressDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         Address entity = getAddress();
         entity.setId(0);
@@ -32,8 +32,8 @@ public class AddressDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/order/address/testAddressDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/order/address/updateAddressDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/order/address/testAddressDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/order/address/updateAddressDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         Address entity = getAddress();
         entity.setCity("new city");
@@ -45,8 +45,8 @@ public class AddressDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/order/address/testAddressDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/order/address/emptyAddressDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/order/address/testAddressDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/order/address/emptyAddressDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         Address entity = getAddress();
 
@@ -54,7 +54,7 @@ public class AddressDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/order/address/testAddressDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/order/address/testAddressDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         Address expected = getAddress();
 
@@ -65,7 +65,7 @@ public class AddressDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/order/address/testAddressDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/order/address/testAddressDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         Address expected = getAddress();
 
@@ -79,7 +79,7 @@ public class AddressDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/order/address/testAddressDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/order/address/testAddressDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         Address expected = getAddress();
 

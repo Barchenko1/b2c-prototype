@@ -30,8 +30,8 @@ class ArticularItemQuantityDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/item/articular_item_quantity/emptyArticularItemQuantityDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/item/articular_item_quantity/saveArticularItemQuantityDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/item/articular_item_quantity/emptyArticularItemQuantityDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/item/articular_item_quantity/saveArticularItemQuantityDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         ArticularItemQuantity entity = getArticularItemQuantityPrice();
         entity.setId(0);
@@ -40,8 +40,8 @@ class ArticularItemQuantityDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/articular_item_quantity/testArticularItemQuantityDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/item/articular_item_quantity/updateArticularItemQuantityDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/item/articular_item_quantity/testArticularItemQuantityDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/item/articular_item_quantity/updateArticularItemQuantityDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         ArticularItemQuantity entity = getArticularItemQuantityPrice();
 //        entity.setValue("Update InMail");
@@ -50,8 +50,8 @@ class ArticularItemQuantityDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/articular_item_quantity/testArticularItemQuantityDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/item/articular_item_quantity/emptyArticularItemQuantityDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/item/articular_item_quantity/testArticularItemQuantityDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/item/articular_item_quantity/emptyArticularItemQuantityDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         ArticularItemQuantity entity = getArticularItemQuantityPrice();
 
@@ -59,7 +59,7 @@ class ArticularItemQuantityDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/articular_item_quantity/testArticularItemQuantityDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/articular_item_quantity/testArticularItemQuantityDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         ArticularItemQuantity expected = getArticularItemQuantityPrice();
 
@@ -70,7 +70,7 @@ class ArticularItemQuantityDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/articular_item_quantity/testArticularItemQuantityDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/articular_item_quantity/testArticularItemQuantityDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         ArticularItemQuantity expected = getArticularItemQuantityPrice();
 
@@ -84,7 +84,7 @@ class ArticularItemQuantityDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/articular_item_quantity/testArticularItemQuantityDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/articular_item_quantity/testArticularItemQuantityDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         ArticularItemQuantity entity = getArticularItemQuantityPrice();
 

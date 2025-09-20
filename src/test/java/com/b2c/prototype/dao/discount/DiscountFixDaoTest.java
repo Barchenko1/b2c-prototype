@@ -22,11 +22,11 @@ class DiscountFixDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/item/discount/fix/emptyDiscountDataSet.yml", cleanBefore = true,
+    @DataSet(value = "datasets/dao/item/discount/fix/emptyDiscountDataSet.yml", cleanBefore = true,
             executeStatementsBefore = {
                     "TRUNCATE TABLE discount RESTART IDENTITY CASCADE",
             })
-    @ExpectedDataSet(value = "datasets/item/discount/fix/saveDiscountDataSet.yml", orderBy = "id")
+    @ExpectedDataSet(value = "datasets/dao/item/discount/fix/saveDiscountDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         Discount entity = getDiscount();
         entity.setId(0);
@@ -35,8 +35,8 @@ class DiscountFixDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/discount/fix/testDiscountDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/item/discount/fix/updateDiscountDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/item/discount/fix/testDiscountDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/item/discount/fix/updateDiscountDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         Discount entity = getDiscount();
         entity.setAmount(20);
@@ -46,8 +46,8 @@ class DiscountFixDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/discount/fix/testDiscountDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/item/discount/fix/emptyDiscountDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/item/discount/fix/testDiscountDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/item/discount/fix/emptyDiscountDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         Discount entity = getDiscount();
 
@@ -55,7 +55,7 @@ class DiscountFixDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/discount/fix/testDiscountDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/discount/fix/testDiscountDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         Discount expected = getDiscount();
 
@@ -66,7 +66,7 @@ class DiscountFixDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/discount/fix/testDiscountDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/discount/fix/testDiscountDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         Discount expected = getDiscount();
 
@@ -80,7 +80,7 @@ class DiscountFixDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/discount/fix/testDiscountDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/discount/fix/testDiscountDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         Discount entity = getDiscount();
 

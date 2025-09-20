@@ -23,11 +23,11 @@ class UserCreditCardDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/user/user_credit_card/emptyUserCreditCardDataSet.yml", cleanBefore = true,
+    @DataSet(value = "datasets/dao/user/user_credit_card/emptyUserCreditCardDataSet.yml", cleanBefore = true,
             executeStatementsBefore = {
                     "TRUNCATE TABLE credit_card RESTART IDENTITY CASCADE"
     })
-    @ExpectedDataSet(value = "datasets/user/user_credit_card/saveUserCreditCardDataSet.yml", orderBy = "id")
+    @ExpectedDataSet(value = "datasets/dao/user/user_credit_card/saveUserCreditCardDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         UserCreditCard entity = getUserCreditCard();
         entity.setId(0L);
@@ -37,8 +37,8 @@ class UserCreditCardDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/user_credit_card/testUserCreditCardDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/user/user_credit_card/updateUserCreditCardDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/user/user_credit_card/testUserCreditCardDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/user/user_credit_card/updateUserCreditCardDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         UserCreditCard entity = getUserCreditCard();
         entity.getCreditCard().setOwnerName("Update name");
@@ -47,8 +47,8 @@ class UserCreditCardDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/user_credit_card/testUserCreditCardDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/user/user_credit_card/emptyUserCreditCardDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/user/user_credit_card/testUserCreditCardDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/user/user_credit_card/emptyUserCreditCardDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         UserCreditCard entity = getUserCreditCard();
 
@@ -56,7 +56,7 @@ class UserCreditCardDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/user_credit_card/testUserCreditCardDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/user/user_credit_card/testUserCreditCardDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         UserCreditCard expected = getUserCreditCard();
 
@@ -67,7 +67,7 @@ class UserCreditCardDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/user_credit_card/testUserCreditCardDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/user/user_credit_card/testUserCreditCardDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         UserCreditCard expected = getUserCreditCard();
 
@@ -81,7 +81,7 @@ class UserCreditCardDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/user_credit_card/testUserCreditCardDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/user/user_credit_card/testUserCreditCardDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         UserCreditCard entity = getUserCreditCard();
 

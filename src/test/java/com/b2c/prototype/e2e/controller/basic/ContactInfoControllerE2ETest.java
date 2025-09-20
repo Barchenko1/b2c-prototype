@@ -45,7 +45,7 @@ class ContactInfoControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPostContactInfo() {
-        loadDataSet("/datasets/user/contact_info/emptyE2EContactInfoDataSet.yml");
+        loadDataSet("/datasets/e2e/user/contact_info/emptyE2EContactInfoDataSet.yml");
 
         try {
             mockMvc.perform(post(URL_TEMPLATE)
@@ -57,7 +57,7 @@ class ContactInfoControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/user/contact_info/saveE2EContactInfoDataSet.yml",
+        verifyExpectedData("/datasets/e2e/user/contact_info/saveE2EContactInfoDataSet.yml",
                 new String[] {"id", "dateOfCreate"},
                 new String[] {"label", "value"}
         );
@@ -65,7 +65,7 @@ class ContactInfoControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPutContactInfo() {
-        loadDataSet("/datasets/user/contact_info/testE2EContactInfoDataSet.yml");
+        loadDataSet("/datasets/e2e/user/contact_info/testE2EContactInfoDataSet.yml");
 
         try {
             mockMvc.perform(post(URL_TEMPLATE)
@@ -77,7 +77,7 @@ class ContactInfoControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/user/contact_info/updateE2EContactInfoDataSet.yml",
+        verifyExpectedData("/datasets/e2e/user/contact_info/updateE2EContactInfoDataSet.yml",
                 new String[] {"id", "option_group_id", "option_item_id", "articular_item_id", "articular_id", "dateOfCreate", "DISCOUNT_ID", "FULLPRICE_ID", "TOTALPRICE_ID"},
                 new String[] {"label", "value", "productname", "charSequenceCode"}
         );
@@ -85,7 +85,7 @@ class ContactInfoControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testDeleteContactInfo() {
-        loadDataSet("/datasets/user/contact_info/testE2EContactInfoDataSet.yml");
+        loadDataSet("/datasets/e2e/user/contact_info/testE2EContactInfoDataSet.yml");
 
         try {
             mockMvc.perform(delete(URL_TEMPLATE)
@@ -95,12 +95,12 @@ class ContactInfoControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/user/contact_info/emptyE2EContactInfoDataSet.yml");
+        verifyExpectedData("/datasets/e2e/user/contact_info/emptyE2EContactInfoDataSet.yml");
     }
 
     @Test
     void testGetContactInfo() {
-        loadDataSet("/datasets/user/contact_info/testE2EContactInfoDataSet.yml");
+        loadDataSet("/datasets/e2e/user/contact_info/testE2EContactInfoDataSet.yml");
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(get(URL_TEMPLATE)

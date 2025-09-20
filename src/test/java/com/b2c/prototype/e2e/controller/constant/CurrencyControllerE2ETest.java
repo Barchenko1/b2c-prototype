@@ -21,8 +21,8 @@ public class CurrencyControllerE2ETest extends AbstractConstantControllerE2ETest
 
         postConstantEntity(constantPayloadDto,
                 CURRENCY_SERVICE_ID,
-                "/datasets/price/currency/emptyCurrencyDataSet.yml",
-                "/datasets/price/currency/saveCurrencyDataSet.yml");
+                "/datasets/dao/price/currency/emptyCurrencyDataSet.yml",
+                "/datasets/dao/price/currency/saveCurrencyDataSet.yml");
     }
 
     @Test
@@ -35,8 +35,8 @@ public class CurrencyControllerE2ETest extends AbstractConstantControllerE2ETest
         putConstantEntity(constantPayloadDto,
                 CURRENCY_SERVICE_ID,
                 "USD",
-                "/datasets/price/currency/testCurrencyDataSet.yml",
-                "/datasets/price/currency/updateCurrencyDataSet.yml");
+                "/datasets/dao/price/currency/testCurrencyDataSet.yml",
+                "/datasets/dao/price/currency/updateCurrencyDataSet.yml");
     }
 
     @Test
@@ -49,8 +49,8 @@ public class CurrencyControllerE2ETest extends AbstractConstantControllerE2ETest
         patchConstantEntity(constantPayloadDto,
                 CURRENCY_SERVICE_ID,
                 "USD",
-                "/datasets/price/currency/testCurrencyDataSet.yml",
-                "/datasets/price/currency/updateCurrencyDataSet.yml");
+                "/datasets/dao/price/currency/testCurrencyDataSet.yml",
+                "/datasets/dao/price/currency/updateCurrencyDataSet.yml");
     }
 
     @Test
@@ -58,8 +58,8 @@ public class CurrencyControllerE2ETest extends AbstractConstantControllerE2ETest
         deleteConstantEntity(
                 CURRENCY_SERVICE_ID,
                 "USD",
-                "/datasets/price/currency/testCurrencyDataSet.yml",
-                "/datasets/price/currency/emptyCurrencyDataSet.yml");
+                "/datasets/dao/price/currency/testCurrencyDataSet.yml",
+                "/datasets/dao/price/currency/emptyCurrencyDataSet.yml");
     }
 
     @Test
@@ -75,7 +75,7 @@ public class CurrencyControllerE2ETest extends AbstractConstantControllerE2ETest
                         .build());
 
         MvcResult mvcResult = getConstantEntities(CURRENCY_SERVICE_ID,
-                "/datasets/price/currency/testAllCurrencyDataSet.yml");
+                "/datasets/dao/price/currency/testAllCurrencyDataSet.yml");
         assertMvcListResult(mvcResult, constantPayloadDtoList, new TypeReference<>() {});
     }
 
@@ -88,7 +88,7 @@ public class CurrencyControllerE2ETest extends AbstractConstantControllerE2ETest
 
         MvcResult mvcResult = getConstantEntity(CURRENCY_SERVICE_ID,
                 "USD",
-                "/datasets/price/currency/testCurrencyDataSet.yml");
+                "/datasets/dao/price/currency/testCurrencyDataSet.yml");
         assertMvcResult(mvcResult, dto);
     }
 

@@ -46,7 +46,7 @@ public class OptionItemControllerE2ETest extends BasicE2ETest {
 
     @Test
     public void testSaveOptionItemByArticularId() {
-        loadDataSet("/datasets/option/option_item/emptyE2EArticularIdOptionItemWithOptionGroupDataSet.yml");
+        loadDataSet("/datasets/e2e/item/articular_item/emptyE2EArticularIdOptionItemWithOptionGroupDataSet.yml");
         Map<String, String> requestParams = Map.of("articularId", "1234");
         SingleOptionItemDto singleOptionItemDto = getSingleOptionItemSizeGroupDto();
 
@@ -59,12 +59,12 @@ public class OptionItemControllerE2ETest extends BasicE2ETest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        verifyExpectedData("/datasets/option/option_item/testE2EArticularIdOptionItemSizeDataSet.yml");
+        verifyExpectedData("/datasets/e2e/item/articular_item/testE2EArticularIdOptionItemSizeDataSet.yml");
     }
 
     @Test
     public void testSaveOptionItemByArticularIdWithoutOptionGroup() {
-        loadDataSet("/datasets/option/option_item/emptyE2EArticularIdOptionItemWithoutOptionGroupDataSet.yml");
+        loadDataSet("/datasets/e2e/item/articular_item/emptyE2EArticularIdOptionItemWithoutOptionGroupDataSet.yml");
         Map<String, String> requestParams = Map.of("articularId", "1234");
         SingleOptionItemDto singleOptionItemDto = getSingleOptionItemSizeGroupDto();
 
@@ -77,12 +77,12 @@ public class OptionItemControllerE2ETest extends BasicE2ETest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        verifyExpectedData("/datasets/option/option_item/testE2EArticularIdOptionItemSizeDataSet.yml");
+        verifyExpectedData("/datasets/e2e/item/articular_item/testE2EArticularIdOptionItemSizeDataSet.yml");
     }
 
     @Test
     public void testSaveOptionItemByOptionGroup() {
-        loadDataSet("/datasets/option/option_item/emptyE2EOptionItemWithOptionGroupDataSet.yml");
+        loadDataSet("/datasets/e2e/item/articular_item/emptyE2EOptionItemWithOptionGroupDataSet.yml");
         OptionGroupOptionItemSetDto optionGroupOptionItemSetDto = getOptionItemSizeGroupDto();
         List<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoList = List.of(optionGroupOptionItemSetDto);
 
@@ -94,12 +94,12 @@ public class OptionItemControllerE2ETest extends BasicE2ETest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        verifyExpectedData("/datasets/option/option_item/testE2EAllOptionItemSizeDataSet.yml");
+        verifyExpectedData("/datasets/e2e/item/articular_item/testE2EAllOptionItemSizeDataSet.yml");
     }
 
     @Test
     public void testSaveOptionItemByOptionGroupWithOutOptionGroup() {
-        loadDataSet("/datasets/option/option_item/emptyE2EOptionItemWithoutOptionGroupDataSet.yml");
+        loadDataSet("/datasets/e2e/item/articular_item/emptyE2EOptionItemWithoutOptionGroupDataSet.yml");
         OptionGroupOptionItemSetDto optionGroupOptionItemSetDto = getOptionItemColorGroupDto();
         List<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoList = List.of(optionGroupOptionItemSetDto);
 
@@ -111,12 +111,12 @@ public class OptionItemControllerE2ETest extends BasicE2ETest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        verifyExpectedData("/datasets/option/option_item/testE2EAllOptionItemColorDataSet.yml");
+        verifyExpectedData("/datasets/e2e/item/articular_item/testE2EAllOptionItemColorDataSet.yml");
     }
 
     @Test
     public void testUpdateOptionItemByGroup() {
-        loadDataSet("/datasets/option/option_item/testE2EAllOptionItemColorDataSet.yml");
+        loadDataSet("/datasets/e2e/item/articular_item/testE2EAllOptionItemColorDataSet.yml");
         SingleOptionItemDto singleOptionItemDto = SingleOptionItemDto.builder()
                 .optionGroup(OptionGroupDto.builder()
                         .value("Color")
@@ -139,12 +139,12 @@ public class OptionItemControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/option/option_item/testUpdateE2EAllOptionItemColorDataSet.yml");
+        verifyExpectedData("/datasets/e2e/item/articular_item/testUpdateE2EAllOptionItemColorDataSet.yml");
     }
 
     @Test
     public void testUpdateOptionItemWithoutOptionGroupByGroup() {
-        loadDataSet("/datasets/option/option_item/testE2EAllOptionItemSizeDataSet.yml");
+        loadDataSet("/datasets/e2e/item/articular_item/testE2EAllOptionItemSizeDataSet.yml");
         SingleOptionItemDto singleOptionItemDto = getUpdateSingleOptionItemSizeGroupDto();
         Map<String, String> requestParams = Map.of("optionGroup", "Size", "optionItem", "XL");
 
@@ -157,12 +157,12 @@ public class OptionItemControllerE2ETest extends BasicE2ETest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        verifyExpectedData("/datasets/option/option_item/testUpdateE2EAllOptionItemSizeDataSet.yml");
+        verifyExpectedData("/datasets/e2e/item/articular_item/testUpdateE2EAllOptionItemSizeDataSet.yml");
     }
 
     @Test
     public void testDeleteOptionItemByArticularId() {
-        loadDataSet("/datasets/option/option_item/testE2EArticularIdOptionItemColorDataSet.yml");
+        loadDataSet("/datasets/e2e/item/articular_item/testE2EArticularIdOptionItemColorDataSet.yml");
         Map<String, String> requestParams = Map.of("articularId", "1234", "optionValue", "Red");
 
         try {
@@ -173,12 +173,12 @@ public class OptionItemControllerE2ETest extends BasicE2ETest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        verifyExpectedData("/datasets/option/option_item/testDeleteE2EAllOptionItemSizeDataSet.yml");
+        verifyExpectedData("/datasets/e2e/item/articular_item/testDeleteE2EAllOptionItemSizeDataSet.yml");
     }
 
     @Test
     public void testDeleteOptionItemByOptionGroup() {
-        loadDataSet("/datasets/option/option_item/testE2EArticularIdOptionItemColorDataSet.yml");
+        loadDataSet("/datasets/e2e/item/articular_item/testE2EArticularIdOptionItemColorDataSet.yml");
 
         Map<String, String> requestParams = Map.of("optionGroup", "Color", "optionValue", "Red");
 
@@ -190,12 +190,12 @@ public class OptionItemControllerE2ETest extends BasicE2ETest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        verifyExpectedData("/datasets/option/option_item/testDeleteE2EAllOptionItemColorDataSet.yml");
+        verifyExpectedData("/datasets/e2e/item/articular_item/testDeleteE2EAllOptionItemColorDataSet.yml");
     }
 
     @Test
     public void testGetOptionItemListByArticularId() {
-        loadDataSet("/datasets/option/option_item/testE2EArticularIdOptionItemSizeDataSet.yml");
+        loadDataSet("/datasets/e2e/item/articular_item/testE2EArticularIdOptionItemSizeDataSet.yml");
         SingleOptionItemDto expectedDto = getSingleOptionItemSizeGroupDto();
         Map<String, String> requestParams = Map.of("articularId", "1234");
 
@@ -226,7 +226,7 @@ public class OptionItemControllerE2ETest extends BasicE2ETest {
 
     @Test
     public void testGetOptionItemList() {
-        loadDataSet("/datasets/option/option_item/testE2EArticularIdOptionItemSizeDataSet.yml");
+        loadDataSet("/datasets/e2e/item/articular_item/testE2EArticularIdOptionItemSizeDataSet.yml");
         OptionGroupOptionItemSetDto expectedDto = OptionGroupOptionItemSetDto.builder()
                 .optionGroup(OptionGroupDto.builder()
                         .label("Size")
@@ -263,7 +263,7 @@ public class OptionItemControllerE2ETest extends BasicE2ETest {
 
     @Test
     public void testGetOptionItemListByGroup() {
-        loadDataSet("/datasets/option/option_item/testE2EAllOptionItemSizeDataSet.yml");
+        loadDataSet("/datasets/e2e/item/articular_item/testE2EAllOptionItemSizeDataSet.yml");
         OptionGroupOptionItemSetDto expectedDto = getOptionItemSizeGroupDto();
         Map<String, String> requestParams = Map.of("optionGroup", "Size");
 

@@ -48,7 +48,7 @@ public class ReviewControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPostReview() {
-        loadDataSet("/datasets/review/review/emptyE2EReview.yml");
+        loadDataSet("/datasets/e2e/review/review/emptyE2EReview.yml");
 
         try {
             mockMvc.perform(post(URL_TEMPLATE)
@@ -60,7 +60,7 @@ public class ReviewControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/review/review/testE2EReview.yml",
+        verifyExpectedData("/datasets/e2e/review/review/testE2EReview.yml",
                 new String[] {"id", "dateOfCreate", "reviewId"},
                 new String[] {"label", "value"}
         );
@@ -68,7 +68,7 @@ public class ReviewControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPutReview() {
-        loadDataSet("/datasets/review/review/testE2EReview.yml");
+        loadDataSet("/datasets/e2e/review/review/testE2EReview.yml");
 
         try {
             mockMvc.perform(post(URL_TEMPLATE)
@@ -80,7 +80,7 @@ public class ReviewControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/review/review/updateE2EReview.yml",
+        verifyExpectedData("/datasets/e2e/review/review/updateE2EReview.yml",
                 new String[] {"id", "dateOfCreate", "reviewId"},
                 new String[] {"label", "value"}
         );
@@ -88,7 +88,7 @@ public class ReviewControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testChangeReviewStatus() {
-        loadDataSet("/datasets/review/review/testE2EReview.yml");
+        loadDataSet("/datasets/e2e/review/review/testE2EReview.yml");
         Map<String, String> requestParams = Map.of("articularId", "1", "reviewId", "review123", "status", "DONE");
         try {
             mockMvc.perform(put(URL_TEMPLATE)
@@ -99,7 +99,7 @@ public class ReviewControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/review/review/testE2EUpdateStatusReview.yml",
+        verifyExpectedData("/datasets/e2e/review/review/testE2EUpdateStatusReview.yml",
                 new String[] {"id", "dateOfCreate", "reviewId"},
                 new String[] {"label", "value"}
         );
@@ -107,7 +107,7 @@ public class ReviewControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPutCommentOnReview() {
-        loadDataSet("/datasets/review/review/testE2EReview.yml");
+        loadDataSet("/datasets/e2e/review/review/testE2EReview.yml");
 
         try {
             mockMvc.perform(post(URL_TEMPLATE + "/comment")
@@ -119,7 +119,7 @@ public class ReviewControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/review/review/testE2EReviewComment.yml",
+        verifyExpectedData("/datasets/e2e/review/review/testE2EReviewComment.yml",
                 new String[] {"id", "dateOfCreate", "reviewId", "commentId"},
                 new String[] {"label", "value"}
         );
@@ -127,7 +127,7 @@ public class ReviewControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPutComment2OnReview() {
-        loadDataSet("/datasets/review/review/testE2EReviewComment.yml");
+        loadDataSet("/datasets/e2e/review/review/testE2EReviewComment.yml");
 
         try {
             mockMvc.perform(post(URL_TEMPLATE + "/comment")
@@ -139,7 +139,7 @@ public class ReviewControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/review/review/testE2EReviewComment2.yml",
+        verifyExpectedData("/datasets/e2e/review/review/testE2EReviewComment2.yml",
                 new String[] {"id", "dateOfCreate", "reviewId", "commentId"},
                 new String[] {"label", "value"}
         );
@@ -147,7 +147,7 @@ public class ReviewControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testDeleteReviewWithUser() {
-        loadDataSet("/datasets/review/review/testE2EReviewComment2.yml");
+        loadDataSet("/datasets/e2e/review/review/testE2EReviewComment2.yml");
 
         try {
             mockMvc.perform(delete(URL_TEMPLATE)
@@ -158,7 +158,7 @@ public class ReviewControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/review/review/emptyE2EReview.yml",
+        verifyExpectedData("/datasets/e2e/review/review/emptyE2EReview.yml",
                 new String[] {"id", "dateOfCreate", "reviewId"},
                 new String[] {"label", "value", "OPTION_ITEM_ID"}
         );
@@ -166,7 +166,7 @@ public class ReviewControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testDeleteReview() {
-        loadDataSet("/datasets/review/review/testE2EReviewComment2.yml");
+        loadDataSet("/datasets/e2e/review/review/testE2EReviewComment2.yml");
 
         try {
             mockMvc.perform(delete(URL_TEMPLATE)
@@ -177,7 +177,7 @@ public class ReviewControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/review/review/emptyE2EReview.yml",
+        verifyExpectedData("/datasets/e2e/review/review/emptyE2EReview.yml",
                 new String[] {"id", "dateOfCreate", "reviewId"},
                 new String[] {"label", "value", "OPTION_ITEM_ID"}
         );
@@ -185,7 +185,7 @@ public class ReviewControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testUpdateReviewComment() {
-        loadDataSet("/datasets/review/review/testE2EReviewComment.yml");
+        loadDataSet("/datasets/e2e/review/review/testE2EReviewComment.yml");
         Map<String, String> requestParams = Map.of(
                 "articularId", "1",
                 "userId", "123",
@@ -201,7 +201,7 @@ public class ReviewControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/review/review/testE2EReviewUpdateComment.yml",
+        verifyExpectedData("/datasets/e2e/review/review/testE2EReviewUpdateComment.yml",
                 new String[] {"id", "dateOfCreate", "reviewId"},
                 new String[] {"label", "value", "OPTION_ITEM_ID"}
         );
@@ -209,7 +209,7 @@ public class ReviewControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testDeleteReviewComment() {
-        loadDataSet("/datasets/review/review/testE2EReviewComment2.yml");
+        loadDataSet("/datasets/e2e/review/review/testE2EReviewComment2.yml");
         Map<String, String> requestParams = Map.of("articularId", "1", "userId", "123", "reviewId", "review123", "commentId", "comment121");
         try {
             mockMvc.perform(delete(URL_TEMPLATE + "/comment")
@@ -220,7 +220,7 @@ public class ReviewControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/review/review/testE2EReviewComment.yml",
+        verifyExpectedData("/datasets/e2e/review/review/testE2EReviewComment.yml",
                 new String[] {"id", "dateOfCreate", "reviewId"},
                 new String[] {"label", "value", "OPTION_ITEM_ID"}
         );
@@ -228,7 +228,7 @@ public class ReviewControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetReviewListByUserId() {
-        loadDataSet("/datasets/review/review/testE2EReviewComment2.yml");
+        loadDataSet("/datasets/e2e/review/review/testE2EReviewComment2.yml");
         Map<String, String> map = Map.of("userId", "123");
         MvcResult mvcResult;
         try {
@@ -262,7 +262,7 @@ public class ReviewControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetReviewListByArticularId() {
-        loadDataSet("/datasets/review/review/testE2EReviewComment2.yml");
+        loadDataSet("/datasets/e2e/review/review/testE2EReviewComment2.yml");
         Map<String, String> map = Map.of("articularId", "1");
         MvcResult mvcResult;
         try {
@@ -296,7 +296,7 @@ public class ReviewControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetReviewByArticularIdAndReviewId() {
-        loadDataSet("/datasets/review/review/testE2EReviewComment.yml");
+        loadDataSet("/datasets/e2e/review/review/testE2EReviewComment.yml");
 
         MvcResult mvcResult;
         try {
@@ -324,7 +324,7 @@ public class ReviewControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetReviewCommentListByArticularIdAndReviewId() {
-        loadDataSet("/datasets/review/review/testE2EReviewComment2.yml");
+        loadDataSet("/datasets/e2e/review/review/testE2EReviewComment2.yml");
 
         MvcResult mvcResult;
         try {

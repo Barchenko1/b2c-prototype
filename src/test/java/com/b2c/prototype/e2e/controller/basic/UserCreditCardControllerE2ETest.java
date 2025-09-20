@@ -47,7 +47,7 @@ class UserCreditCardControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPostUserCreditCard() {
-        loadDataSet("/datasets/user/user_credit_card/emptyE2ECreditCard.yml");
+        loadDataSet("/datasets/e2e/user/user_credit_card/emptyE2ECreditCard.yml");
 
         try {
             mockMvc.perform(post(URL_TEMPLATE)
@@ -59,7 +59,7 @@ class UserCreditCardControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/user/user_credit_card/testE2ECreditCard.yml",
+        verifyExpectedData("/datasets/e2e/user/user_credit_card/testE2ECreditCard.yml",
                 new String[] {"id", "dateOfCreate"},
                 new String[] {"label", "value"}
         );
@@ -67,7 +67,7 @@ class UserCreditCardControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPutUserCreditCard() {
-        loadDataSet("/datasets/user/user_credit_card/testE2ECreditCard.yml");
+        loadDataSet("/datasets/e2e/user/user_credit_card/testE2ECreditCard.yml");
         Map<String, String> requestParams = Map.of("userId", "123", "cardNumber", "4444-1111-2222-3333");
         try {
             mockMvc.perform(post(URL_TEMPLATE)
@@ -79,7 +79,7 @@ class UserCreditCardControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/user/user_credit_card/updateE2ECreditCard.yml",
+        verifyExpectedData("/datasets/e2e/user/user_credit_card/updateE2ECreditCard.yml",
                 new String[] {"id", "dateOfCreate"},
                 new String[] {"label", "value"}
         );
@@ -87,7 +87,7 @@ class UserCreditCardControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testSetDefaultUserCreditCard() {
-        loadDataSet("/datasets/user/user_credit_card/testE2ECreditCard.yml");
+        loadDataSet("/datasets/e2e/user/user_credit_card/testE2ECreditCard.yml");
         Map<String, String> requestParams = Map.of(
                 "userId", "123",
                 "cardNumber", "4444-1111-2222-3331"
@@ -101,12 +101,12 @@ class UserCreditCardControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/user/user_credit_card/testSetDefaultE2ECreditCard.yml");
+        verifyExpectedData("/datasets/e2e/user/user_credit_card/testSetDefaultE2ECreditCard.yml");
     }
 
     @Test
     void testDeleteUserCreditCard() {
-        loadDataSet("/datasets/user/user_credit_card/testE2ECreditCard.yml");
+        loadDataSet("/datasets/e2e/user/user_credit_card/testE2ECreditCard.yml");
         Map<String, String> requestParams = Map.of(
                 "userId", "123",
                 "cardNumber", "4444-1111-2222-3331"
@@ -120,12 +120,12 @@ class UserCreditCardControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/user/user_credit_card/emptyE2ECreditCard.yml");
+        verifyExpectedData("/datasets/e2e/user/user_credit_card/emptyE2ECreditCard.yml");
     }
 
     @Test
     void testGetUserCreditCards() {
-        loadDataSet("/datasets/user/user_credit_card/testE2ECreditCard.yml");
+        loadDataSet("/datasets/e2e/user/user_credit_card/testE2ECreditCard.yml");
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(get(URL_TEMPLATE)
@@ -152,7 +152,7 @@ class UserCreditCardControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetAllCreditCardsByCardNumber() {
-        loadDataSet("/datasets/user/user_credit_card/testE2ECreditCard.yml");
+        loadDataSet("/datasets/e2e/user/user_credit_card/testE2ECreditCard.yml");
         Map<String, String> requestParams = Map.of("cardNumber", "4444-1111-2222-3333");
 
         MvcResult mvcResult;
@@ -181,7 +181,7 @@ class UserCreditCardControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetDefaultCreditCard() {
-        loadDataSet("/datasets/user/user_credit_card/testE2ECreditCard.yml");
+        loadDataSet("/datasets/e2e/user/user_credit_card/testE2ECreditCard.yml");
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(get(URL_TEMPLATE + "/default")

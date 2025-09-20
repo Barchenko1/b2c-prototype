@@ -59,7 +59,7 @@ class MetaDataControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testCreateItemData() {
-        loadDataSet("/datasets/item/metadata/emptyE2EItemDataSet.yml");
+        loadDataSet("/datasets/dao/item/metadata/emptyE2EItemDataSet.yml");
         try {
             mockMvc.perform(post(URL_TEMPLATE)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -69,7 +69,7 @@ class MetaDataControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/item/metadata/saveE2EAllItemDataSet.yml",
+        verifyExpectedData("/datasets/dao/item/metadata/saveE2EAllItemDataSet.yml",
                 new String[] {"id", "option_group_id", "option_item_id", "articular_item_id", "item_id", "articular_id", "dateOfCreate", "discount_id", "fullprice_id", "totalprice_id"},
                 new String[] {"label", "value", "productname", "charSequenceCode"}
         );
@@ -78,7 +78,7 @@ class MetaDataControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPutItemData() {
-        loadDataSet("/datasets/item/metadata/testE2EAllItemDataSet.yml");
+        loadDataSet("/datasets/dao/item/metadata/testE2EAllItemDataSet.yml");
 
         try {
             mockMvc.perform(put(URL_TEMPLATE)
@@ -90,7 +90,7 @@ class MetaDataControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/item/metadata/updateE2EAllItemDataSet.yml",
+        verifyExpectedData("/datasets/dao/item/metadata/updateE2EAllItemDataSet.yml",
                 new String[] {"id", "option_group_id", "option_item_id", "articular_item_id", "item_id", "articular_id", "dateOfCreate", "DISCOUNT_ID", "FULLPRICE_ID", "TOTALPRICE_ID"},
                 new String[] {"label", "value", "productname", "charSequenceCode"}
         );
@@ -98,7 +98,7 @@ class MetaDataControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPatchItemData() {
-        loadDataSet("/datasets/item/metadata/testE2EAllItemDataSet.yml");
+        loadDataSet("/datasets/dao/item/metadata/testE2EAllItemDataSet.yml");
 
         try {
             mockMvc.perform(patch(URL_TEMPLATE)
@@ -110,7 +110,7 @@ class MetaDataControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/item/metadata/updateE2EAllItemDataSet.yml",
+        verifyExpectedData("/datasets/dao/item/metadata/updateE2EAllItemDataSet.yml",
                 new String[] {"id", "option_group_id", "option_item_id", "articular_item_id", "item_id", "articular_id", "dateOfCreate", "DISCOUNT_ID", "FULLPRICE_ID", "TOTALPRICE_ID"},
                 new String[] {"label", "value", "productname", "charSequenceCode"}
         );
@@ -118,7 +118,7 @@ class MetaDataControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testDeleteItemData() {
-        loadDataSet("/datasets/item/metadata/testE2EAllItemDataSet.yml");
+        loadDataSet("/datasets/dao/item/metadata/testE2EAllItemDataSet.yml");
 
         try {
             mockMvc.perform(delete(URL_TEMPLATE)
@@ -128,12 +128,12 @@ class MetaDataControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/item/metadata/deleteE2EItemDataSet.yml");
+        verifyExpectedData("/datasets/dao/item/metadata/deleteE2EItemDataSet.yml");
     }
 
     @Test
     void testGetItemData() {
-        loadDataSet("/datasets/item/metadata/testE2EAllItemDataSet.yml");
+        loadDataSet("/datasets/dao/item/metadata/testE2EAllItemDataSet.yml");
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(get(URL_TEMPLATE)
@@ -173,7 +173,7 @@ class MetaDataControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetAllItemData() {
-        loadDataSet("/datasets/item/metadata/testE2EAllItemDataSet.yml");
+        loadDataSet("/datasets/dao/item/metadata/testE2EAllItemDataSet.yml");
 
         MvcResult mvcResult;
         try {

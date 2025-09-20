@@ -23,11 +23,11 @@ public class CommissionValueDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/commission/commission_value/emptyCommissionValueDataSet.yml", cleanBefore = true,
+    @DataSet(value = "datasets/dao/commission/commission_value/emptyCommissionValueDataSet.yml", cleanBefore = true,
     executeStatementsBefore = {
             "TRUNCATE TABLE commission_value RESTART IDENTITY CASCADE",
     })
-    @ExpectedDataSet(value = "datasets/commission/commission_value/saveCommissionValueDataSet.yml", orderBy = "id")
+    @ExpectedDataSet(value = "datasets/dao/commission/commission_value/saveCommissionValueDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         CommissionValue entity = getCommissionValue();
         entity.setId(0);
@@ -36,8 +36,8 @@ public class CommissionValueDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/commission/commission_value/testCommissionValueDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/commission/commission_value/updateCommissionValueDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/commission/commission_value/testCommissionValueDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/commission/commission_value/updateCommissionValueDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         CommissionValue entity = getCommissionValue();
         entity.setAmount(5);
@@ -48,8 +48,8 @@ public class CommissionValueDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/commission/commission_value/testCommissionValueDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/commission/commission_value/emptyCommissionValueDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/commission/commission_value/testCommissionValueDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/commission/commission_value/emptyCommissionValueDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         CommissionValue entity = getCommissionValue();
 
@@ -57,7 +57,7 @@ public class CommissionValueDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/commission/commission_value/testCommissionValueDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/commission/commission_value/testCommissionValueDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         CommissionValue expected = getCommissionValue();
 
@@ -68,7 +68,7 @@ public class CommissionValueDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/commission/commission_value/testCommissionValueDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/commission/commission_value/testCommissionValueDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         CommissionValue expected = getCommissionValue();
 
@@ -82,7 +82,7 @@ public class CommissionValueDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/commission/commission_value/testCommissionValueDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/commission/commission_value/testCommissionValueDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         CommissionValue entity = getCommissionValue();
 

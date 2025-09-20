@@ -28,11 +28,11 @@ class MessageBoxDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/message/message_box/emptyMessageBoxDataSet.yml", cleanBefore = true,
+    @DataSet(value = "datasets/dao/message/message_box/emptyMessageBoxDataSet.yml", cleanBefore = true,
     executeStatementsBefore = {
             "TRUNCATE TABLE message_template RESTART IDENTITY CASCADE",
     })
-    @ExpectedDataSet(value = "datasets/message/message_box/saveMessageBoxDataSet.yml", orderBy = "id")
+    @ExpectedDataSet(value = "datasets/dao/message/message_box/saveMessageBoxDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         MessageBox entity = getMessageBox();
         entity.setId(0);
@@ -45,8 +45,8 @@ class MessageBoxDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/message/message_box/testMessageBoxDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/message/message_box/updateMessageBoxDataSet.yml", orderBy = "id", ignoreCols = "id")
+    @DataSet(value = "datasets/dao/message/message_box/testMessageBoxDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/message/message_box/updateMessageBoxDataSet.yml", orderBy = "id", ignoreCols = "id")
     public void mergeEntity_success() {
         MessageBox entity = getMessageBox();
 
@@ -60,8 +60,8 @@ class MessageBoxDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/message/message_box/testMessageBoxDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/message/message_box/removeMessageBoxDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/message/message_box/testMessageBoxDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/message/message_box/removeMessageBoxDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         MessageBox entity = getMessageBox();
 
@@ -69,7 +69,7 @@ class MessageBoxDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/message/message_box/testMessageBoxDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/message/message_box/testMessageBoxDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         MessageBox expected = getMessageBox();
 
@@ -80,7 +80,7 @@ class MessageBoxDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/message/message_box/testMessageBoxDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/message/message_box/testMessageBoxDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         MessageBox expected = getMessageBox();
 
@@ -94,7 +94,7 @@ class MessageBoxDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/message/message_box/testMessageBoxDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/message/message_box/testMessageBoxDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         MessageBox entity = getMessageBox();
 

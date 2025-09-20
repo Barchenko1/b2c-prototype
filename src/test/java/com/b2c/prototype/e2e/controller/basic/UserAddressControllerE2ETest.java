@@ -47,7 +47,7 @@ class UserAddressControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPostUserAddress() {
-        loadDataSet("/datasets/user/user_address/emptyE2EAddress.yml");
+        loadDataSet("/datasets/e2e/user/user_address/emptyE2EAddress.yml");
 
         try {
             mockMvc.perform(post(URL_TEMPLATE)
@@ -59,7 +59,7 @@ class UserAddressControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/user/user_address/testE2EAddress.yml",
+        verifyExpectedData("/datasets/e2e/user/user_address/testE2EAddress.yml",
                 new String[] {"id", "dateOfCreate"},
                 new String[] {"label", "value"}
         );
@@ -67,7 +67,7 @@ class UserAddressControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPutUserAddress() {
-        loadDataSet("/datasets/user/user_address/testE2EAddress.yml");
+        loadDataSet("/datasets/e2e/user/user_address/testE2EAddress.yml");
         Map<String, String> requestParams = Map.of("userId","123","addressId","USA/New York/5th Avenue/10/202");
         try {
             mockMvc.perform(post(URL_TEMPLATE)
@@ -79,7 +79,7 @@ class UserAddressControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/user/user_address/updateE2EAddress.yml",
+        verifyExpectedData("/datasets/e2e/user/user_address/updateE2EAddress.yml",
                 new String[] {"id", "dateOfCreate"},
                 new String[] {"label", "value"}
         );
@@ -87,7 +87,7 @@ class UserAddressControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testSetDefaultUserAddress() {
-        loadDataSet("/datasets/user/user_address/testE2EAddress.yml");
+        loadDataSet("/datasets/e2e/user/user_address/testE2EAddress.yml");
         Map<String, String> requestParams = Map.of("userId","123","addressId","comb");
         try {
             mockMvc.perform(put(URL_TEMPLATE)
@@ -97,7 +97,7 @@ class UserAddressControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/user/user_address/testSetDefaultE2EAddress.yml",
+        verifyExpectedData("/datasets/e2e/user/user_address/testSetDefaultE2EAddress.yml",
                 new String[] {"id", "dateOfCreate"},
                 new String[] {"label", "value"}
         );
@@ -105,7 +105,7 @@ class UserAddressControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testDeleteUserAddress() {
-        loadDataSet("/datasets/user/user_address/testE2EAddress.yml");
+        loadDataSet("/datasets/e2e/user/user_address/testE2EAddress.yml");
         Map<String, String> requestParams = Map.of("userId","123","addressId","USA/New York/5th Avenue/10/202");
 
         try {
@@ -116,12 +116,12 @@ class UserAddressControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/user/user_address/deleteE2EAddress.yml");
+        verifyExpectedData("/datasets/e2e/user/user_address/deleteE2EAddress.yml");
     }
 
     @Test
     void testGetAllAddressesByAddress() {
-        loadDataSet("/datasets/user/user_address/testE2EAddress.yml");
+        loadDataSet("/datasets/e2e/user/user_address/testE2EAddress.yml");
         Map<String, String> requestParams = Map.of("userId","123","addressId","USA/New York/5th Avenue/10/202");
 
         MvcResult mvcResult;
@@ -150,7 +150,7 @@ class UserAddressControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetUserAddressListByUserId() {
-        loadDataSet("/datasets/user/user_address/testE2EAddress.yml");
+        loadDataSet("/datasets/e2e/user/user_address/testE2EAddress.yml");
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(get(URL_TEMPLATE)
@@ -177,7 +177,7 @@ class UserAddressControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetDefaultUserAddress() {
-        loadDataSet("/datasets/user/user_address/testE2EAddress.yml");
+        loadDataSet("/datasets/e2e/user/user_address/testE2EAddress.yml");
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(get(URL_TEMPLATE + "/default")

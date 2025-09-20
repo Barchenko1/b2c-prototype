@@ -3,7 +3,6 @@ package com.b2c.prototype.dao.discount;
 import com.b2c.prototype.dao.AbstractDaoTest;
 import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.entity.item.Discount;
-import com.b2c.prototype.modal.entity.price.Currency;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.nimbusds.jose.util.Pair;
@@ -22,11 +21,11 @@ class DiscountPercentDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/item/discount/percent/emptyDiscountDataSet.yml", cleanBefore = true,
+    @DataSet(value = "datasets/dao/item/discount/percent/emptyDiscountDataSet.yml", cleanBefore = true,
     executeStatementsBefore = {
             "TRUNCATE TABLE discount RESTART IDENTITY CASCADE",
     })
-    @ExpectedDataSet(value = "datasets/item/discount/percent/saveDiscountDataSet.yml", orderBy = "id")
+    @ExpectedDataSet(value = "datasets/dao/item/discount/percent/saveDiscountDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         Discount entity = getDiscount();
         entity.setId(0);
@@ -35,8 +34,8 @@ class DiscountPercentDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/discount/percent/testDiscountDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/item/discount/percent/updateDiscountDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/item/discount/percent/testDiscountDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/item/discount/percent/updateDiscountDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         Discount entity = getDiscount();
         entity.setAmount(20);
@@ -46,8 +45,8 @@ class DiscountPercentDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/discount/percent/testDiscountDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/item/discount/percent/emptyDiscountDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/item/discount/percent/testDiscountDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/item/discount/percent/emptyDiscountDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         Discount entity = getDiscount();
 
@@ -55,7 +54,7 @@ class DiscountPercentDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/discount/percent/testDiscountDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/discount/percent/testDiscountDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         Discount expected = getDiscount();
 
@@ -66,7 +65,7 @@ class DiscountPercentDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/discount/percent/testDiscountDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/discount/percent/testDiscountDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         Discount expected = getDiscount();
 
@@ -80,7 +79,7 @@ class DiscountPercentDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/discount/percent/testDiscountDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/discount/percent/testDiscountDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         Discount entity = getDiscount();
 

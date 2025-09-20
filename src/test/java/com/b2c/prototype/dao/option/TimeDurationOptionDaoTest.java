@@ -23,12 +23,12 @@ class TimeDurationOptionDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/delivery/time_duration_option/emptyTimeDurationOptionDataSet.yml", cleanBefore = true,
+    @DataSet(value = "datasets/dao/delivery/time_duration_option/emptyTimeDurationOptionDataSet.yml", cleanBefore = true,
             executeStatementsBefore = {
                     "TRUNCATE TABLE time_duration_option RESTART IDENTITY CASCADE",
                     "TRUNCATE TABLE price RESTART IDENTITY CASCADE"
     })
-    @ExpectedDataSet(value = "datasets/delivery/time_duration_option/saveTimeDurationOptionDataSet.yml", orderBy = "id")
+    @ExpectedDataSet(value = "datasets/dao/delivery/time_duration_option/saveTimeDurationOptionDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         TimeDurationOption entity = getTimeDurationOption();
         entity.setId(0);
@@ -38,8 +38,8 @@ class TimeDurationOptionDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/delivery/time_duration_option/testTimeDurationOptionDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/delivery/time_duration_option/updateTimeDurationOptionDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/delivery/time_duration_option/testTimeDurationOptionDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/delivery/time_duration_option/updateTimeDurationOptionDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         TimeDurationOption entity = getTimeDurationOption();
         entity.setLabel("Update 1-10");
@@ -50,8 +50,8 @@ class TimeDurationOptionDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/delivery/time_duration_option/testTimeDurationOptionDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/delivery/time_duration_option/emptyTimeDurationOptionDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/delivery/time_duration_option/testTimeDurationOptionDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/delivery/time_duration_option/emptyTimeDurationOptionDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         TimeDurationOption entity = getTimeDurationOption();
 
@@ -59,7 +59,7 @@ class TimeDurationOptionDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/delivery/time_duration_option/testTimeDurationOptionDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/delivery/time_duration_option/testTimeDurationOptionDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         TimeDurationOption expected = getTimeDurationOption();
 
@@ -70,7 +70,7 @@ class TimeDurationOptionDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/delivery/time_duration_option/testTimeDurationOptionDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/delivery/time_duration_option/testTimeDurationOptionDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         TimeDurationOption expected = getTimeDurationOption();
 
@@ -84,7 +84,7 @@ class TimeDurationOptionDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/delivery/time_duration_option/testTimeDurationOptionDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/delivery/time_duration_option/testTimeDurationOptionDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         TimeDurationOption entity = getTimeDurationOption();
 

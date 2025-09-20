@@ -24,13 +24,13 @@ class DeliveryDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/delivery/delivery/emptyDeliveryDataSet.yml", cleanBefore = true,
+    @DataSet(value = "datasets/dao/delivery/delivery/emptyDeliveryDataSet.yml", cleanBefore = true,
             executeStatementsBefore = {
                     "TRUNCATE TABLE contact_phone RESTART IDENTITY CASCADE",
                     "TRUNCATE TABLE address RESTART IDENTITY CASCADE",
                     "TRUNCATE TABLE credit_card RESTART IDENTITY CASCADE"
     })
-    @ExpectedDataSet(value = "datasets/delivery/delivery/saveDeliveryDataSet.yml", orderBy = "id")
+    @ExpectedDataSet(value = "datasets/dao/delivery/delivery/saveDeliveryDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         Delivery entity = getDelivery();
         entity.setId(0L);
@@ -40,8 +40,8 @@ class DeliveryDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/delivery/delivery/testDeliveryDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/delivery/delivery/updateDeliveryDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/delivery/delivery/testDeliveryDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/delivery/delivery/updateDeliveryDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         Delivery entity = getDelivery();
         entity.getAddress().setStreet("Update street");
@@ -51,8 +51,8 @@ class DeliveryDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/delivery/delivery/testDeliveryDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/delivery/delivery/emptyDeliveryDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/delivery/delivery/testDeliveryDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/delivery/delivery/emptyDeliveryDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         Delivery entity = getDelivery();
 
@@ -60,7 +60,7 @@ class DeliveryDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/delivery/delivery/testDeliveryDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/delivery/delivery/testDeliveryDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         Delivery expected = getDelivery();
 
@@ -71,7 +71,7 @@ class DeliveryDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/delivery/delivery/testDeliveryDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/delivery/delivery/testDeliveryDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         Delivery expected = getDelivery();
 
@@ -85,7 +85,7 @@ class DeliveryDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/delivery/delivery/testDeliveryDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/delivery/delivery/testDeliveryDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         Delivery entity = getDelivery();
 

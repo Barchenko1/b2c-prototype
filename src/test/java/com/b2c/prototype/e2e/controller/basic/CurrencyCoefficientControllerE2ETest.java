@@ -2,7 +2,6 @@ package com.b2c.prototype.e2e.controller.basic;
 
 import com.b2c.prototype.e2e.BasicE2ETest;
 import com.b2c.prototype.e2e.util.TestUtil;
-import com.b2c.prototype.modal.dto.payload.commission.ResponseBuyerCommissionInfoDto;
 import com.b2c.prototype.modal.dto.payload.commission.ResponseMinMaxCommissionDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -43,7 +42,7 @@ public class CurrencyCoefficientControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testSaveBuyerCommission() {
-        loadDataSet("/datasets/commission/emptyE2ECommission.yml");
+        loadDataSet("/datasets/e2e/commission/emptyE2ECommission.yml");
         try {
             mockMvc.perform(post(URL_TEMPLATE)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -53,7 +52,7 @@ public class CurrencyCoefficientControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/commission/testE2EBuyerCommission.yml",
+        verifyExpectedData("/datasets/e2e/commission/testE2EBuyerCommission.yml",
                 new String[] {"id", "dateOfCreate", "user_id", "lastUpdateTimestamp", },
                 new String[] {"label", "value", "fee_type"}
         );
@@ -61,7 +60,7 @@ public class CurrencyCoefficientControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testDeleteCommission() {
-        loadDataSet("/datasets/commission/testE2EBuyerCommission.yml");
+        loadDataSet("/datasets/e2e/commission/testE2EBuyerCommission.yml");
         try {
             mockMvc.perform(delete(URL_TEMPLATE)
                             .params(getMultiValueMap(getRequestParams()))
@@ -71,7 +70,7 @@ public class CurrencyCoefficientControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/commission/emptyE2ECommission.yml",
+        verifyExpectedData("/datasets/e2e/commission/emptyE2ECommission.yml",
                 new String[] {"id", "dateOfCreate", "user_id", "lastUpdateTimestamp"},
                 new String[] {"label", "value", "fee_type"}
         );
@@ -79,7 +78,7 @@ public class CurrencyCoefficientControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetCommission() {
-        loadDataSet("/datasets/commission/testAllE2ECommission.yml");
+        loadDataSet("/datasets/e2e/commission/testAllE2ECommission.yml");
 
         MvcResult mvcResult;
         try {
@@ -107,7 +106,7 @@ public class CurrencyCoefficientControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetCommissions() {
-        loadDataSet("/datasets/commission/testAllE2ECommission.yml");
+        loadDataSet("/datasets/e2e/commission/testAllE2ECommission.yml");
 
         MvcResult mvcResult;
         try {

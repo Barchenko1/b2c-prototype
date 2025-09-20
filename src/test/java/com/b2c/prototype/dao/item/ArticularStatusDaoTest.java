@@ -21,8 +21,8 @@ class ArticularStatusDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/item/articular_status/emptyArticularStatusDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/item/articular_status/saveArticularStatusDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/item/articular_status/emptyArticularStatusDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/item/articular_status/saveArticularStatusDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         ArticularStatus entity = getArticularStatus();
         entity.setId(0);
@@ -31,8 +31,8 @@ class ArticularStatusDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/articular_status/testArticularStatusDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/item/articular_status/updateArticularStatusDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/item/articular_status/testArticularStatusDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/item/articular_status/updateArticularStatusDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         ArticularStatus entity = getArticularStatus();
         entity.setValue("Update Test");
@@ -41,8 +41,8 @@ class ArticularStatusDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/articular_status/testArticularStatusDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/item/articular_status/emptyArticularStatusDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/item/articular_status/testArticularStatusDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/item/articular_status/emptyArticularStatusDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         ArticularStatus entity = getArticularStatus();
 
@@ -50,7 +50,7 @@ class ArticularStatusDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/articular_status/testArticularStatusDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/articular_status/testArticularStatusDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         ArticularStatus expected = getArticularStatus();
 
@@ -61,7 +61,7 @@ class ArticularStatusDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/articular_status/testArticularStatusDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/articular_status/testArticularStatusDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         ArticularStatus expected = getArticularStatus();
 
@@ -75,7 +75,7 @@ class ArticularStatusDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/articular_status/testArticularStatusDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/articular_status/testArticularStatusDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         ArticularStatus entity = getArticularStatus();
 

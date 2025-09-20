@@ -6,7 +6,6 @@ import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.address.UserAddress;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
-import com.b2c.prototype.modal.entity.post.Post;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
@@ -34,13 +33,13 @@ class UserDetailsDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/user/user_details/emptyUserDetailsDataSet.yml", cleanBefore = true,
+    @DataSet(value = "datasets/dao/user/user_details/emptyUserDetailsDataSet.yml", cleanBefore = true,
             executeStatementsBefore = {
                     "TRUNCATE TABLE contact_phone RESTART IDENTITY CASCADE",
                     "TRUNCATE TABLE address RESTART IDENTITY CASCADE",
                     "TRUNCATE TABLE credit_card RESTART IDENTITY CASCADE"
     })
-    @ExpectedDataSet(value = "datasets/user/user_details/saveUserDetailsDataSet.yml", orderBy = "id")
+    @ExpectedDataSet(value = "datasets/dao/user/user_details/saveUserDetailsDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         UserDetails entity = getUserDetails();
         entity.setId(0L);
@@ -62,8 +61,8 @@ class UserDetailsDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/user_details/testUserDetailsDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/user/user_details/updateUserDetailsDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/user/user_details/testUserDetailsDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/user/user_details/updateUserDetailsDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         UserDetails entity = getUserDetails();
         entity.setUsername("Update username");
@@ -86,8 +85,8 @@ class UserDetailsDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/user_details/testUserDetailsDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/user/user_details/emptyUserDetailsDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/user/user_details/testUserDetailsDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/user/user_details/emptyUserDetailsDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         UserDetails entity = getUserDetails();
 
@@ -95,7 +94,7 @@ class UserDetailsDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/user_details/testUserDetailsDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/user/user_details/testUserDetailsDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         UserDetails expected = getUserDetails();
 
@@ -106,7 +105,7 @@ class UserDetailsDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/user_details/testUserDetailsDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/user/user_details/testUserDetailsDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         UserDetails expected = getUserDetails();
 
@@ -120,7 +119,7 @@ class UserDetailsDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/user_details/testUserDetailsDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/user/user_details/testUserDetailsDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         UserDetails entity = getUserDetails();
 

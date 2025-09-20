@@ -47,7 +47,7 @@ class StoreControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testSaveStore() {
-        loadDataSet("/datasets/store/store/emptyE2EStore.yml");
+        loadDataSet("/datasets/e2e/store/store/emptyE2EStore.yml");
         try {
             mockMvc.perform(post(URL_TEMPLATE)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -57,7 +57,7 @@ class StoreControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/store/store/testE2EStore.yml",
+        verifyExpectedData("/datasets/e2e/store/store/testE2EStore.yml",
                 new String[] {"id", "dateOfCreate", "STORE_ID"},
                 new String[] {"label", "value"}
         );
@@ -65,7 +65,7 @@ class StoreControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testUpdateStore() {
-        loadDataSet("/datasets/store/store/testE2EStore.yml");
+        loadDataSet("/datasets/e2e/store/store/testE2EStore.yml");
 
         try {
             mockMvc.perform(put(URL_TEMPLATE)
@@ -77,7 +77,7 @@ class StoreControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/store/store/updateE2EStore.yml",
+        verifyExpectedData("/datasets/e2e/store/store/updateE2EStore.yml",
                 new String[] {"id", "dateOfCreate"},
                 new String[] {"label", "value"}
         );
@@ -85,7 +85,7 @@ class StoreControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testDeleteStore() {
-        loadDataSet("/datasets/store/store/testE2EStore.yml");
+        loadDataSet("/datasets/e2e/store/store/testE2EStore.yml");
 
         try {
             mockMvc.perform(delete(URL_TEMPLATE)
@@ -95,12 +95,12 @@ class StoreControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/store/store/emptyE2EStore.yml");
+        verifyExpectedData("/datasets/e2e/store/store/emptyE2EStore.yml");
     }
 
     @Test
     void testGetStoreByUser() {
-        loadDataSet("/datasets/store/store/testE2EStore.yml");
+        loadDataSet("/datasets/e2e/store/store/testE2EStore.yml");
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(get(URL_TEMPLATE + "/123")
@@ -127,7 +127,7 @@ class StoreControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetAllStoresByArticularId() {
-        loadDataSet("/datasets/store/store/testE2EStore.yml");
+        loadDataSet("/datasets/e2e/store/store/testE2EStore.yml");
         Map<String, String> requestParams = Map.of("articularId", "123");
 
         MvcResult mvcResult;
@@ -156,7 +156,7 @@ class StoreControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetAllStoresByCountry() {
-        loadDataSet("/datasets/store/store/testE2EStore.yml");
+        loadDataSet("/datasets/e2e/store/store/testE2EStore.yml");
         Map<String, String> requestParams = Map.of("country", "USA");
 
         MvcResult mvcResult;

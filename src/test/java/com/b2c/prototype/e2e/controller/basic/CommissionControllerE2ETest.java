@@ -50,7 +50,7 @@ public class CommissionControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testSaveBuyerCommission() {
-        loadDataSet("/datasets/commission/emptyE2ECommission.yml");
+        loadDataSet("/datasets/e2e/commission/emptyE2ECommission.yml");
         try {
             mockMvc.perform(post(URL_TEMPLATE)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -60,7 +60,7 @@ public class CommissionControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/commission/testE2EBuyerCommission.yml",
+        verifyExpectedData("/datasets/e2e/commission/testE2EBuyerCommission.yml",
                 new String[] {"id", "dateOfCreate", "user_id", "lastUpdateTimestamp", },
                 new String[] {"label", "value", "fee_type"}
         );
@@ -68,7 +68,7 @@ public class CommissionControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testSaveSellerCommission() {
-        loadDataSet("/datasets/commission/emptyE2ECommission.yml");
+        loadDataSet("/datasets/e2e/commission/emptyE2ECommission.yml");
         try {
             mockMvc.perform(post(URL_TEMPLATE)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -78,7 +78,7 @@ public class CommissionControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/commission/testE2ESellerCommission.yml",
+        verifyExpectedData("/datasets/e2e/commission/testE2ESellerCommission.yml",
                 new String[] {"id", "dateOfCreate", "user_id", "lastUpdateTimestamp"},
                 new String[] {"label", "value", "fee_type"}
         );
@@ -86,7 +86,7 @@ public class CommissionControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetBuyerFixedCommission() {
-        loadDataSet("/datasets/commission/testE2EFixedCommissionWithArticularItemQuantity.yml");
+        loadDataSet("/datasets/e2e/commission/testE2EFixedCommissionWithArticularItemQuantity.yml");
 
         MvcResult mvcResult;
         try {
@@ -114,7 +114,7 @@ public class CommissionControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetBuyerPercentCommission() {
-        loadDataSet("/datasets/commission/testE2EPercentCommissionWithArticularItemQuantity.yml");
+        loadDataSet("/datasets/e2e/commission/testE2EPercentCommissionWithArticularItemQuantity.yml");
 
         MvcResult mvcResult;
         try {
@@ -142,7 +142,7 @@ public class CommissionControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testUpdateBuyerCommission() {
-        loadDataSet("/datasets/commission/testE2EBuyerCommission.yml");
+        loadDataSet("/datasets/e2e/commission/testE2EBuyerCommission.yml");
         try {
             mockMvc.perform(put(URL_TEMPLATE)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -152,7 +152,7 @@ public class CommissionControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/commission/updateE2EBuyerCommission.yml",
+        verifyExpectedData("/datasets/e2e/commission/updateE2EBuyerCommission.yml",
                 new String[] {"id", "dateOfCreate", "user_id", "lastUpdateTimestamp"},
                 new String[] {"label", "value", "fee_type"}
         );
@@ -160,7 +160,7 @@ public class CommissionControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testUpdateSellerCommission() {
-        loadDataSet("/datasets/commission/testE2ESellerCommission.yml");
+        loadDataSet("/datasets/e2e/commission/testE2ESellerCommission.yml");
         try {
             mockMvc.perform(put(URL_TEMPLATE)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -170,7 +170,7 @@ public class CommissionControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/commission/updateE2ESellerCommission.yml",
+        verifyExpectedData("/datasets/e2e/commission/updateE2ESellerCommission.yml",
                 new String[] {"id", "dateOfCreate", "user_id", "lastUpdateTimestamp"},
                 new String[] {"label", "value", "fee_type"}
         );
@@ -178,7 +178,7 @@ public class CommissionControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testDeleteCommission() {
-        loadDataSet("/datasets/commission/testE2EBuyerCommission.yml");
+        loadDataSet("/datasets/e2e/commission/testE2EBuyerCommission.yml");
         try {
             mockMvc.perform(delete(URL_TEMPLATE)
                             .params(getMultiValueMap(getRequestParams()))
@@ -188,7 +188,7 @@ public class CommissionControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/commission/emptyE2ECommission.yml",
+        verifyExpectedData("/datasets/e2e/commission/emptyE2ECommission.yml",
                 new String[] {"id", "dateOfCreate", "user_id", "lastUpdateTimestamp"},
                 new String[] {"label", "value", "fee_type"}
         );
@@ -196,7 +196,7 @@ public class CommissionControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetCommission() {
-        loadDataSet("/datasets/commission/testAllE2ECommission.yml");
+        loadDataSet("/datasets/e2e/commission/testAllE2ECommission.yml");
 
         MvcResult mvcResult;
         try {
@@ -224,7 +224,7 @@ public class CommissionControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetCommissions() {
-        loadDataSet("/datasets/commission/testAllE2ECommission.yml");
+        loadDataSet("/datasets/e2e/commission/testAllE2ECommission.yml");
 
         MvcResult mvcResult;
         try {

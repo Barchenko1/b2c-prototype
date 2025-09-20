@@ -21,8 +21,8 @@ class BrandDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/item/brand/emptyBrandDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/item/brand/saveBrandDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/item/brand/emptyBrandDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/item/brand/saveBrandDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         Brand entity = getBrand();
         entity.setId(0);
@@ -31,8 +31,8 @@ class BrandDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/brand/testBrandDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/item/brand/updateBrandDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/item/brand/testBrandDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/item/brand/updateBrandDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         Brand entity = getBrand();
         entity.setValue("Update Apple");
@@ -41,8 +41,8 @@ class BrandDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/brand/testBrandDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/item/brand/emptyBrandDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/item/brand/testBrandDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/item/brand/emptyBrandDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         Brand entity = getBrand();
 
@@ -50,7 +50,7 @@ class BrandDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/brand/testBrandDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/brand/testBrandDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         Brand expected = getBrand();
 
@@ -61,7 +61,7 @@ class BrandDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/brand/testBrandDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/brand/testBrandDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         Brand expected = getBrand();
 
@@ -75,7 +75,7 @@ class BrandDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/brand/testBrandDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/brand/testBrandDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         Brand entity = getBrand();
 

@@ -31,12 +31,12 @@ class PaymentDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/payment/payment/emptyPaymentDataSet.yml", cleanBefore = true,
+    @DataSet(value = "datasets/dao/payment/payment/emptyPaymentDataSet.yml", cleanBefore = true,
             executeStatementsBefore = {
                     "TRUNCATE TABLE contact_phone RESTART IDENTITY CASCADE",
                     "TRUNCATE TABLE credit_card RESTART IDENTITY CASCADE"
             })
-    @ExpectedDataSet(value = "datasets/payment/payment/savePaymentDataSet.yml", orderBy = "id", ignoreCols = {"id", "amount", "currency_id", "current_price_id", "original_price_id", "commission_price_info_id", "discount_multi_currency_price_info_id", "full_multi_currency_price_info_id", "total_multi_currency_price_info_id"})
+    @ExpectedDataSet(value = "datasets/dao/payment/payment/savePaymentDataSet.yml", orderBy = "id", ignoreCols = {"id", "amount", "currency_id", "current_price_id", "original_price_id", "commission_price_info_id", "discount_multi_currency_price_info_id", "full_multi_currency_price_info_id", "total_multi_currency_price_info_id"})
     public void persistEntity_success() {
         Payment entity = getPayment();
         entity.setId(0);
@@ -59,8 +59,8 @@ class PaymentDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/payment/payment/testPaymentDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/payment/payment/updatePaymentDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/payment/payment/testPaymentDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/payment/payment/updatePaymentDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         Payment entity = getPayment();
         PaymentStatus paymentStatus = PaymentStatus.builder()
@@ -74,8 +74,8 @@ class PaymentDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/payment/payment/testPaymentDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/payment/payment/removePaymentDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/payment/payment/testPaymentDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/payment/payment/removePaymentDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         Payment entity = getPayment();
 
@@ -83,7 +83,7 @@ class PaymentDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/payment/payment/testPaymentDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/payment/payment/testPaymentDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         Payment expected = getPayment();
 
@@ -94,7 +94,7 @@ class PaymentDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/payment/payment/testPaymentDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/payment/payment/testPaymentDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         Payment expected = getPayment();
 
@@ -108,7 +108,7 @@ class PaymentDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/payment/payment/testPaymentDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/payment/payment/testPaymentDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         Payment entity = getPayment();
 

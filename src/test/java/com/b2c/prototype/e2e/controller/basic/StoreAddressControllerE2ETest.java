@@ -45,7 +45,7 @@ class StoreAddressControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testUpdateStoreAddress() {
-        loadDataSet("/datasets/store/store_address/emptyE2EStoreAddress.yml");
+        loadDataSet("/datasets/e2e/store/store_address/emptyE2EStoreAddress.yml");
         try {
             mockMvc.perform(put(URL_TEMPLATE)
                             .params(getMultiValueMap(getRequestParams()))
@@ -56,7 +56,7 @@ class StoreAddressControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/store/store_address/updateE2EStoreAddress.yml",
+        verifyExpectedData("/datasets/e2e/store/store_address/updateE2EStoreAddress.yml",
                 new String[] {"id", "dateOfCreate", "user_id"},
                 new String[] {"label", "value"}
         );
@@ -64,7 +64,7 @@ class StoreAddressControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetStoreAddress() {
-        loadDataSet("/datasets/store/store_address/testE2EStoreAddress.yml");
+        loadDataSet("/datasets/e2e/store/store_address/testE2EStoreAddress.yml");
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(get(URL_TEMPLATE)

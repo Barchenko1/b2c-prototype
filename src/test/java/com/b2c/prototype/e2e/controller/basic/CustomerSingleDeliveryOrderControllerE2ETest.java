@@ -50,7 +50,7 @@ class CustomerSingleDeliveryOrderControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testCreateCustomerOrder() {
-        loadDataSet("/datasets/order/customer_order/emptyE2ECustomerOrder.yml");
+        loadDataSet("/datasets/e2e/order/curtomer_order/emptyE2ECustomerOrder.yml");
         try {
             mockMvc.perform(post(URL_TEMPLATE)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -61,7 +61,7 @@ class CustomerSingleDeliveryOrderControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/order/customer_order/testE2ECustomerOrder.yml",
+        verifyExpectedData("/datasets/e2e/order/curtomer_order/testE2ECustomerOrder.yml",
                 new String[] {"id", "ORDER_ID", "UPAYMENT_ID"},
                 new String[] {"label", "value", "productname", "charSequenceCode"}
         );
@@ -70,7 +70,7 @@ class CustomerSingleDeliveryOrderControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPutCustomerOrder() {
-        loadDataSet("/datasets/order/customer_order/testE2ECustomerOrder.yml");
+        loadDataSet("/datasets/e2e/order/curtomer_order/testE2ECustomerOrder.yml");
 
         try {
             mockMvc.perform(put(URL_TEMPLATE)
@@ -82,7 +82,7 @@ class CustomerSingleDeliveryOrderControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/order/customer_order/updateE2ECustomerOrder.yml",
+        verifyExpectedData("/datasets/e2e/order/curtomer_order/updateE2ECustomerOrder.yml",
                 new String[] {"id", "option_group_id", "option_item_id", "articular_item_id", "articular_id", "dateOfCreate", "DISCOUNT_ID", "FULLPRICE_ID", "TOTALPRICE_ID"},
                 new String[] {"label", "value", "productname", "charSequenceCode"}
         );
@@ -90,7 +90,7 @@ class CustomerSingleDeliveryOrderControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testChangeCustomerOrderStatus() {
-        loadDataSet("/datasets/order/customer_order/testE2ECustomerOrder.yml");
+        loadDataSet("/datasets/e2e/order/curtomer_order/testE2ECustomerOrder.yml");
 
         try {
             mockMvc.perform(put(URL_TEMPLATE)
@@ -102,7 +102,7 @@ class CustomerSingleDeliveryOrderControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/order/customer_order/updateE2ECustomerOrder.yml",
+        verifyExpectedData("/datasets/e2e/order/curtomer_order/updateE2ECustomerOrder.yml",
                 new String[] {"id", "option_group_id", "option_item_id", "articular_item_id", "articular_id", "dateOfCreate", "DISCOUNT_ID", "FULLPRICE_ID", "TOTALPRICE_ID"},
                 new String[] {"label", "value", "productname", "charSequenceCode"}
         );
@@ -110,7 +110,7 @@ class CustomerSingleDeliveryOrderControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testDeleteCustomerOrder() {
-        loadDataSet("/datasets/order/customer_order/testE2ECustomerOrder.yml");
+        loadDataSet("/datasets/e2e/order/curtomer_order/testE2ECustomerOrder.yml");
 
         try {
             mockMvc.perform(delete(URL_TEMPLATE)
@@ -120,12 +120,12 @@ class CustomerSingleDeliveryOrderControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/order/customer_order/emptyE2ECustomerOrder.yml");
+        verifyExpectedData("/datasets/e2e/order/curtomer_order/emptyE2ECustomerOrder.yml");
     }
 
     @Test
     void testGetCustomerOrder() {
-        loadDataSet("/datasets/order/customer_order/testE2ECustomerOrder.yml");
+        loadDataSet("/datasets/e2e/order/curtomer_order/testE2ECustomerOrder.yml");
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(get(URL_TEMPLATE)
@@ -152,7 +152,7 @@ class CustomerSingleDeliveryOrderControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetAllCustomerOrder() {
-        loadDataSet("/datasets/order/customer_order/testE2ECustomerOrder.yml");
+        loadDataSet("/datasets/e2e/order/curtomer_order/testE2ECustomerOrder.yml");
 
         MvcResult mvcResult;
         try {

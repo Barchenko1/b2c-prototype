@@ -21,8 +21,8 @@ class CategoryDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/item/category/emptyCategoryDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/item/category/saveCategoryDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/item/category/emptyCategoryDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/item/category/saveCategoryDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         Category entity = getCategoryChain();
         entity.setId(0);
@@ -38,8 +38,8 @@ class CategoryDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/category/testCategoryDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/item/category/updateCategoryDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/item/category/testCategoryDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/item/category/updateCategoryDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         Category entity = getCategoryChain();
         entity.getChildList().forEach(childEntity -> {
@@ -51,8 +51,8 @@ class CategoryDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/category/testCategoryDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/item/category/emptyCategoryDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/item/category/testCategoryDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/item/category/emptyCategoryDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         Category entity = getCategoryChain();
 
@@ -60,7 +60,7 @@ class CategoryDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/category/testCategoryDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/category/testCategoryDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         Category expected = getCategoryChain();
 
@@ -71,7 +71,7 @@ class CategoryDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/category/testCategoryDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/category/testCategoryDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         Category expected = getCategoryChain();
 
@@ -85,7 +85,7 @@ class CategoryDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/category/testCategoryDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/category/testCategoryDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         Category entity = getCategoryChain();
 

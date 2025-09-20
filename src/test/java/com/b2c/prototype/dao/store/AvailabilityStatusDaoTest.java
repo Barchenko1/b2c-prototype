@@ -20,8 +20,8 @@ public class AvailabilityStatusDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/store/availability_status/emptyAvailabilityStatusDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/store/availability_status/saveAvailabilityStatusDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/store/availability_status/emptyAvailabilityStatusDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/store/availability_status/saveAvailabilityStatusDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         AvailabilityStatus entity = getAvailabilityStatus();
         entity.setId(0L);
@@ -30,8 +30,8 @@ public class AvailabilityStatusDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/store/availability_status/testAvailabilityStatusDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/store/availability_status/updateAvailabilityStatusDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/store/availability_status/testAvailabilityStatusDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/store/availability_status/updateAvailabilityStatusDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         AvailabilityStatus entity = getAvailabilityStatus();
         entity.setLabel("Unavailable");
@@ -41,8 +41,8 @@ public class AvailabilityStatusDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/store/availability_status/testAvailabilityStatusDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/store/availability_status/emptyAvailabilityStatusDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/store/availability_status/testAvailabilityStatusDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/store/availability_status/emptyAvailabilityStatusDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         AvailabilityStatus entity = getAvailabilityStatus();
 
@@ -50,7 +50,7 @@ public class AvailabilityStatusDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/store/availability_status/testAvailabilityStatusDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/store/availability_status/testAvailabilityStatusDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         AvailabilityStatus expected = getAvailabilityStatus();
 
@@ -61,7 +61,7 @@ public class AvailabilityStatusDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/store/availability_status/testAvailabilityStatusDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/store/availability_status/testAvailabilityStatusDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         AvailabilityStatus expected = getAvailabilityStatus();
 
@@ -75,7 +75,7 @@ public class AvailabilityStatusDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/store/availability_status/testAvailabilityStatusDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/store/availability_status/testAvailabilityStatusDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         AvailabilityStatus entity = getAvailabilityStatus();
 

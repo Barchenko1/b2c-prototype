@@ -21,8 +21,8 @@ class DeliveryTypeDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/delivery/delivery_type/emptyDeliveryTypeDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/delivery/delivery_type/saveDeliveryTypeDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/delivery/delivery_type/emptyDeliveryTypeDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/delivery/delivery_type/saveDeliveryTypeDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         DeliveryType entity = getDeliveryType();
         entity.setId(0);
@@ -31,8 +31,8 @@ class DeliveryTypeDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/delivery/delivery_type/testDeliveryTypeDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/delivery/delivery_type/updateDeliveryTypeDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/delivery/delivery_type/testDeliveryTypeDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/delivery/delivery_type/updateDeliveryTypeDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         DeliveryType entity = getDeliveryType();
         entity.setValue("Update Post");
@@ -41,8 +41,8 @@ class DeliveryTypeDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/delivery/delivery_type/testDeliveryTypeDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/delivery/delivery_type/emptyDeliveryTypeDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/delivery/delivery_type/testDeliveryTypeDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/delivery/delivery_type/emptyDeliveryTypeDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         DeliveryType entity = getDeliveryType();
 
@@ -50,7 +50,7 @@ class DeliveryTypeDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/delivery/delivery_type/testDeliveryTypeDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/delivery/delivery_type/testDeliveryTypeDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         DeliveryType expected = getDeliveryType();
 
@@ -61,7 +61,7 @@ class DeliveryTypeDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/delivery/delivery_type/testDeliveryTypeDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/delivery/delivery_type/testDeliveryTypeDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         DeliveryType expected = getDeliveryType();
 
@@ -75,7 +75,7 @@ class DeliveryTypeDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/delivery/delivery_type/testDeliveryTypeDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/delivery/delivery_type/testDeliveryTypeDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         DeliveryType entity = getDeliveryType();
 

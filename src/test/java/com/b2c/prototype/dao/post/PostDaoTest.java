@@ -22,8 +22,8 @@ class PostDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/post/emptyPostDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/post/savePostDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/post/emptyPostDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/post/savePostDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         Post entity = getPostChain();
         entity.setId(0);
@@ -39,8 +39,8 @@ class PostDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/post/testPostDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/post/updatePostDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/post/testPostDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/post/updatePostDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         Post entity = getPostChain();
         entity.getChildList().forEach(childEntity -> {
@@ -51,8 +51,8 @@ class PostDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/post/testPostDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/post/emptyPostDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/post/testPostDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/post/emptyPostDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         Post entity = getPostChain();
 
@@ -60,7 +60,7 @@ class PostDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/post/testPostDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/post/testPostDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         Post expected = getPostChain();
 
@@ -71,7 +71,7 @@ class PostDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/post/testPostDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/post/testPostDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         Post expected = getPostChain();
 
@@ -85,7 +85,7 @@ class PostDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/post/testPostDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/post/testPostDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         Post entity = getPostChain();
 

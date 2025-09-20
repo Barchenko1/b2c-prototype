@@ -1,8 +1,0 @@
-category:
-  - id: 1
-    label: "parent"
-    value: "parent"
-  - id: 2
-    category_id: 1
-    label: "root"
-    value: "root"

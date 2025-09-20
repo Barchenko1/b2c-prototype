@@ -22,8 +22,8 @@ class ContactPhoneDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/user/contact_phone/emptyContactPhoneDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/user/contact_phone/saveContactPhoneDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/user/contact_phone/emptyContactPhoneDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/user/contact_phone/saveContactPhoneDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         ContactPhone entity = getContactPhone();
         entity.setId(0L);
@@ -32,8 +32,8 @@ class ContactPhoneDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/contact_phone/testContactPhoneDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/user/contact_phone/updateContactPhoneDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/user/contact_phone/testContactPhoneDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/user/contact_phone/updateContactPhoneDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         ContactPhone entity = getContactPhone();
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
@@ -48,8 +48,8 @@ class ContactPhoneDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/contact_phone/testContactPhoneDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/user/contact_phone/emptyContactPhoneDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/user/contact_phone/testContactPhoneDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/user/contact_phone/emptyContactPhoneDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         ContactPhone entity = getContactPhone();
 
@@ -57,7 +57,7 @@ class ContactPhoneDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/contact_phone/testContactPhoneDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/user/contact_phone/testContactPhoneDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         ContactPhone expected = getContactPhone();
 
@@ -68,7 +68,7 @@ class ContactPhoneDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/contact_phone/testContactPhoneDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/user/contact_phone/testContactPhoneDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         ContactPhone expected = getContactPhone();
 
@@ -82,7 +82,7 @@ class ContactPhoneDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/contact_phone/testContactPhoneDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/user/contact_phone/testContactPhoneDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         ContactPhone entity = getContactPhone();
 

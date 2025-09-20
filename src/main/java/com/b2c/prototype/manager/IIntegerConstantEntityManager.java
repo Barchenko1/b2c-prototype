@@ -1,7 +1,5 @@
 package com.b2c.prototype.manager;
 
-import com.b2c.prototype.modal.dto.common.NumberConstantPayloadDto;
-
 import java.util.List;
 import java.util.Optional;
 

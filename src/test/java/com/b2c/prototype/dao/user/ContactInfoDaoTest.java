@@ -11,9 +11,6 @@ import com.nimbusds.jose.util.Pair;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,11 +23,11 @@ class ContactInfoDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/user/contact_info/emptyContactInfoDataSet.yml", cleanBefore = true,
+    @DataSet(value = "datasets/dao/user/contact_info/emptyContactInfoDataSet.yml", cleanBefore = true,
             executeStatementsBefore = {
                     "TRUNCATE TABLE contact_phone RESTART IDENTITY CASCADE"
     })
-    @ExpectedDataSet(value = "datasets/user/contact_info/saveContactInfoDataSet.yml", orderBy = "id")
+    @ExpectedDataSet(value = "datasets/dao/user/contact_info/saveContactInfoDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         ContactInfo entity = getContactInfo();
         entity.setId(0L);
@@ -40,8 +37,8 @@ class ContactInfoDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/contact_info/testContactInfoDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/user/contact_info/updateContactInfoDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/user/contact_info/testContactInfoDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/user/contact_info/updateContactInfoDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         ContactInfo entity = getContactInfo();
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
@@ -62,8 +59,8 @@ class ContactInfoDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/contact_info/testContactInfoDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/user/contact_info/emptyContactInfoDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/user/contact_info/testContactInfoDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/user/contact_info/emptyContactInfoDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         ContactInfo entity = getContactInfo();
 
@@ -71,7 +68,7 @@ class ContactInfoDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/contact_info/testContactInfoDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/user/contact_info/testContactInfoDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         ContactInfo expected = getContactInfo();
 
@@ -82,7 +79,7 @@ class ContactInfoDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/contact_info/testContactInfoDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/user/contact_info/testContactInfoDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         ContactInfo expected = getContactInfo();
 
@@ -96,7 +93,7 @@ class ContactInfoDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/contact_info/testContactInfoDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/user/contact_info/testContactInfoDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         ContactInfo entity = getContactInfo();
 

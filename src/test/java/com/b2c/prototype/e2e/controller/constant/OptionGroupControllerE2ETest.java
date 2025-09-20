@@ -22,8 +22,8 @@ public class OptionGroupControllerE2ETest extends AbstractConstantControllerE2ET
 
         postConstantEntity(constantPayloadDto,
                 OPTION_GROUP_SERVICE_ID,
-                "/datasets/option/option_group/emptyOptionGroupDataSet.yml",
-                "/datasets/option/option_group/saveOptionGroupDataSet.yml");
+                "/datasets/dao/option/option_group/emptyOptionGroupDataSet.yml",
+                "/datasets/dao/option/option_group/saveOptionGroupDataSet.yml");
     }
 
     @Test
@@ -36,8 +36,8 @@ public class OptionGroupControllerE2ETest extends AbstractConstantControllerE2ET
         putConstantEntity(constantPayloadDto,
                 OPTION_GROUP_SERVICE_ID,
                 "Color",
-                "/datasets/option/option_group/testOptionGroupDataSet.yml",
-                "/datasets/option/option_group/updateOptionGroupDataSet.yml");
+                "/datasets/dao/option/option_group/testOptionGroupDataSet.yml",
+                "/datasets/dao/option/option_group/updateOptionGroupDataSet.yml");
     }
 
     @Test
@@ -50,8 +50,8 @@ public class OptionGroupControllerE2ETest extends AbstractConstantControllerE2ET
         patchConstantEntity(constantPayloadDto,
                 OPTION_GROUP_SERVICE_ID,
                 "Color",
-                "/datasets/option/option_group/testOptionGroupDataSet.yml",
-                "/datasets/option/option_group/updateOptionGroupDataSet.yml");
+                "/datasets/dao/option/option_group/testOptionGroupDataSet.yml",
+                "/datasets/dao/option/option_group/updateOptionGroupDataSet.yml");
     }
 
     @Test
@@ -59,8 +59,8 @@ public class OptionGroupControllerE2ETest extends AbstractConstantControllerE2ET
         deleteConstantEntity(
                 OPTION_GROUP_SERVICE_ID,
                 "Color",
-                "/datasets/option/option_group/testOptionGroupDataSet.yml",
-                "/datasets/option/option_group/emptyOptionGroupDataSet.yml");
+                "/datasets/dao/option/option_group/testOptionGroupDataSet.yml",
+                "/datasets/dao/option/option_group/emptyOptionGroupDataSet.yml");
     }
 
     @Test
@@ -76,7 +76,7 @@ public class OptionGroupControllerE2ETest extends AbstractConstantControllerE2ET
                         .build());
 
         MvcResult mvcResult = getConstantEntities(OPTION_GROUP_SERVICE_ID,
-                "/datasets/option/option_group/testAllOptionGroupDataSet.yml");
+                "/datasets/dao/option/option_group/testAllOptionGroupDataSet.yml");
         assertMvcListResult(mvcResult, constantPayloadDtoList, new TypeReference<>() {});
     }
 
@@ -89,7 +89,7 @@ public class OptionGroupControllerE2ETest extends AbstractConstantControllerE2ET
 
         MvcResult mvcResult = getConstantEntity(OPTION_GROUP_SERVICE_ID,
                 "Color",
-                "/datasets/option/option_group/testOptionGroupDataSet.yml");
+                "/datasets/dao/option/option_group/testOptionGroupDataSet.yml");
         assertMvcResult(mvcResult, dto);
     }
 

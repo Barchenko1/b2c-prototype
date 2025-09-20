@@ -54,11 +54,11 @@ class CustomerSingleDeliveryOrderDaoTest extends AbstractDaoTest {
     }};
 
     @Test
-    @DataSet(value = "datasets/order/customer_order/emptyCustomerSingleDeliveryOrderDataSet.yml", cleanBefore = true,
+    @DataSet(value = "datasets/dao/order/customer_order/emptyCustomerSingleDeliveryOrderDataSet.yml", cleanBefore = true,
     executeStatementsBefore = {
             "TRUNCATE TABLE price RESTART IDENTITY CASCADE",
     })
-    @ExpectedDataSet(value = "datasets/order/customer_order/saveCustomerSingleDeliveryOrderDataSet.yml", orderBy = "id", ignoreCols = {"id", "amount", "currency_id", "original_price_id", "current_price_id", "commission_price_info_id", "full_multi_currency_price_info_id", "total_multi_currency_price_info_id", "discount_multi_currency_price_info_id", "phone_number", "first_name", "last_name", "contact_info_id", "beneficiary_id", "full_price_id", "address_id"})
+    @ExpectedDataSet(value = "datasets/dao/order/customer_order/saveCustomerSingleDeliveryOrderDataSet.yml", orderBy = "id", ignoreCols = {"id", "amount", "currency_id", "original_price_id", "current_price_id", "commission_price_info_id", "full_multi_currency_price_info_id", "total_multi_currency_price_info_id", "discount_multi_currency_price_info_id", "phone_number", "first_name", "last_name", "contact_info_id", "beneficiary_id", "full_price_id", "address_id"})
     public void persistEntity_success() {
         CustomerSingleDeliveryOrder entity = getCustomerSingleDeliveryOrder();
         entity.setId(0);
@@ -98,8 +98,8 @@ class CustomerSingleDeliveryOrderDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/order/customer_order/testCustomerSingleDeliveryOrderDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/order/customer_order/updateCustomerSingleDeliveryOrderDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/order/customer_order/testCustomerSingleDeliveryOrderDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/order/customer_order/updateCustomerSingleDeliveryOrderDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         CustomerSingleDeliveryOrder entity = getCustomerSingleDeliveryOrder();
 
@@ -114,8 +114,8 @@ class CustomerSingleDeliveryOrderDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/order/customer_order/testCustomerSingleDeliveryOrderDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/order/customer_order/emptyCustomerSingleDeliveryOrderDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/order/customer_order/testCustomerSingleDeliveryOrderDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/order/customer_order/emptyCustomerSingleDeliveryOrderDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         CustomerSingleDeliveryOrder entity = getCustomerSingleDeliveryOrder();
 
@@ -123,7 +123,7 @@ class CustomerSingleDeliveryOrderDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/order/customer_order/testCustomerSingleDeliveryOrderDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/order/customer_order/testCustomerSingleDeliveryOrderDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         CustomerSingleDeliveryOrder expected = getCustomerSingleDeliveryOrder();
 
@@ -134,7 +134,7 @@ class CustomerSingleDeliveryOrderDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/order/customer_order/testCustomerSingleDeliveryOrderDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/order/customer_order/testCustomerSingleDeliveryOrderDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         CustomerSingleDeliveryOrder expected = getCustomerSingleDeliveryOrder();
 
@@ -148,7 +148,7 @@ class CustomerSingleDeliveryOrderDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/order/customer_order/testCustomerSingleDeliveryOrderDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/order/customer_order/testCustomerSingleDeliveryOrderDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         CustomerSingleDeliveryOrder entity = getCustomerSingleDeliveryOrder();
 

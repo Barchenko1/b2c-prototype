@@ -26,13 +26,13 @@ class MetaDataDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/item/metadata/emptyMetaDataSet.yml", cleanBefore = true,
+    @DataSet(value = "datasets/dao/item/metadata/emptyMetaDataSet.yml", cleanBefore = true,
     executeStatementsBefore = {
             "TRUNCATE TABLE brand RESTART IDENTITY CASCADE",
             "TRUNCATE TABLE item_type RESTART IDENTITY CASCADE",
             "TRUNCATE TABLE category RESTART IDENTITY CASCADE",
     })
-    @ExpectedDataSet(value = "datasets/item/metadata/saveMetaDataSet.yml", orderBy = "id")
+    @ExpectedDataSet(value = "datasets/dao/item/metadata/saveMetaDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         MetaData entity = getMetaData();
         entity.setId(0);
@@ -49,8 +49,8 @@ class MetaDataDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/metadata/testMetaDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/item/metadata/updateMetaDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/item/metadata/testMetaDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/item/metadata/updateMetaDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         MetaData entity = getMetaData();
         entity.setDescription(new HashMap<>() {{
@@ -63,8 +63,8 @@ class MetaDataDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/metadata/testMetaDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/item/metadata/removeMetaDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/item/metadata/testMetaDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/item/metadata/removeMetaDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         MetaData entity = getMetaData();
 
@@ -72,7 +72,7 @@ class MetaDataDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/metadata/testMetaDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/metadata/testMetaDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         MetaData expected = getMetaData();
 
@@ -83,7 +83,7 @@ class MetaDataDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/metadata/testMetaDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/metadata/testMetaDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         MetaData expected = getMetaData();
 
@@ -97,7 +97,7 @@ class MetaDataDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/metadata/testMetaDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/metadata/testMetaDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         MetaData entity = getMetaData();
 

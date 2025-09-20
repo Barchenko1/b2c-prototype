@@ -24,12 +24,12 @@ class OptionItemCostDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/option/option_item_cost/emptyOptionItemCostDataSet.yml", cleanBefore = true,
+    @DataSet(value = "datasets/dao/option/option_item_cost/emptyOptionItemCostDataSet.yml", cleanBefore = true,
             executeStatementsBefore = {
                     "TRUNCATE TABLE price RESTART IDENTITY CASCADE",
                     "TRUNCATE TABLE option_item_cost RESTART IDENTITY CASCADE",
             })
-    @ExpectedDataSet(value = "datasets/option/option_item_cost/saveOptionItemCostDataSet.yml", orderBy = "id", ignoreCols = {"option_group_id"})
+    @ExpectedDataSet(value = "datasets/dao/option/option_item_cost/saveOptionItemCostDataSet.yml", orderBy = "id", ignoreCols = {"option_group_id"})
     public void persistEntity_success() {
         OptionItemCost entity = getOptionItemCost();
         entity.setId(0);
@@ -40,8 +40,8 @@ class OptionItemCostDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/option/option_item_cost/testOptionItemCostDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/option/option_item_cost/updateOptionItemCostDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/option/option_item_cost/testOptionItemCostDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/option/option_item_cost/updateOptionItemCostDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         OptionItemCost entity = getOptionItemCost();
         entity.setLabel("XL");
@@ -51,8 +51,8 @@ class OptionItemCostDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/option/option_item_cost/testOptionItemCostDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/option/option_item_cost/removeOptionItemCostDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/option/option_item_cost/testOptionItemCostDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/option/option_item_cost/removeOptionItemCostDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         OptionItemCost entity = getOptionItemCost();
 
@@ -60,7 +60,7 @@ class OptionItemCostDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/option/option_item_cost/testOptionItemCostDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/option/option_item_cost/testOptionItemCostDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         OptionItemCost expected = getOptionItemCost();
 
@@ -71,7 +71,7 @@ class OptionItemCostDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/option/option_item_cost/testOptionItemCostDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/option/option_item_cost/testOptionItemCostDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         OptionItemCost expected = getOptionItemCost();
 
@@ -85,7 +85,7 @@ class OptionItemCostDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/option/option_item_cost/testOptionItemCostDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/option/option_item_cost/testOptionItemCostDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         OptionItemCost entity = getOptionItemCost();
 

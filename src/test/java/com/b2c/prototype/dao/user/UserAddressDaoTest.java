@@ -23,12 +23,12 @@ class UserAddressDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/user/user_address/emptyUserAddressDataSet.yml", cleanBefore = true,
+    @DataSet(value = "datasets/dao/user/user_address/emptyUserAddressDataSet.yml", cleanBefore = true,
             executeStatementsBefore = {
                     "TRUNCATE TABLE address RESTART IDENTITY CASCADE"
             }
     )
-    @ExpectedDataSet(value = "datasets/user/user_address/saveUserAddressDataSet.yml", orderBy = "id")
+    @ExpectedDataSet(value = "datasets/dao/user/user_address/saveUserAddressDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         UserAddress entity = getUserAddress();
         entity.setId(0L);
@@ -38,8 +38,8 @@ class UserAddressDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/user_address/testUserAddressDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/user/user_address/updateUserAddressDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/user/user_address/testUserAddressDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/user/user_address/updateUserAddressDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         UserAddress entity = getUserAddress();
         entity.getAddress().setStreet("Update street");
@@ -48,8 +48,8 @@ class UserAddressDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/user_address/testUserAddressDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/user/user_address/emptyUserAddressDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/user/user_address/testUserAddressDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/user/user_address/emptyUserAddressDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         UserAddress entity = getUserAddress();
 
@@ -57,7 +57,7 @@ class UserAddressDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/user_address/testUserAddressDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/user/user_address/testUserAddressDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         UserAddress expected = getUserAddress();
 
@@ -68,7 +68,7 @@ class UserAddressDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/user_address/testUserAddressDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/user/user_address/testUserAddressDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         UserAddress expected = getUserAddress();
 
@@ -82,7 +82,7 @@ class UserAddressDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/user_address/testUserAddressDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/user/user_address/testUserAddressDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         UserAddress entity = getUserAddress();
 

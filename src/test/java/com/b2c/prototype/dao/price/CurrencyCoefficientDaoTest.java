@@ -23,8 +23,8 @@ class CurrencyCoefficientDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/price/currency_coefficient/emptyCurrencyCoefficientDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/price/currency_coefficient/saveCurrencyCoefficientDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/price/currency_coefficient/emptyCurrencyCoefficientDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/price/currency_coefficient/saveCurrencyCoefficientDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         CurrencyCoefficient entity = getCurrencyCoefficient();
         entity.setId(0);
@@ -33,8 +33,8 @@ class CurrencyCoefficientDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/price/currency_coefficient/testCurrencyCoefficientDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/price/currency_coefficient/updateCurrencyCoefficientDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/price/currency_coefficient/testCurrencyCoefficientDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/price/currency_coefficient/updateCurrencyCoefficientDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         CurrencyCoefficient entity = getCurrencyCoefficient();
         entity.setCoefficient(0.97);
@@ -43,8 +43,8 @@ class CurrencyCoefficientDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/price/currency_coefficient/testCurrencyCoefficientDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/price/currency_coefficient/emptyCurrencyCoefficientDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/price/currency_coefficient/testCurrencyCoefficientDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/price/currency_coefficient/emptyCurrencyCoefficientDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         CurrencyCoefficient entity = getCurrencyCoefficient();
 
@@ -52,7 +52,7 @@ class CurrencyCoefficientDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/price/currency_coefficient/testCurrencyCoefficientDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/price/currency_coefficient/testCurrencyCoefficientDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         CurrencyCoefficient expected = getCurrencyCoefficient();
 
@@ -63,7 +63,7 @@ class CurrencyCoefficientDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/price/currency_coefficient/testCurrencyCoefficientDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/price/currency_coefficient/testCurrencyCoefficientDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         CurrencyCoefficient expected = getCurrencyCoefficient();
 
@@ -77,7 +77,7 @@ class CurrencyCoefficientDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/price/currency_coefficient/testCurrencyCoefficientDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/price/currency_coefficient/testCurrencyCoefficientDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         CurrencyCoefficient entity = getCurrencyCoefficient();
 

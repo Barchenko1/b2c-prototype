@@ -21,8 +21,8 @@ public class ItemTypeControllerE2ETest extends AbstractConstantControllerE2ETest
 
         postConstantEntity(constantPayloadDto,
                 ITEM_TYPE_SERVICE_ID,
-                "/datasets/item/item_type/emptyItemTypeDataSet.yml",
-                "/datasets/item/item_type/saveItemTypeDataSet.yml");
+                "/datasets/dao/item/item_type/emptyItemTypeDataSet.yml",
+                "/datasets/dao/item/item_type/saveItemTypeDataSet.yml");
     }
 
     @Test
@@ -35,8 +35,8 @@ public class ItemTypeControllerE2ETest extends AbstractConstantControllerE2ETest
         putConstantEntity(constantPayloadDto,
                 ITEM_TYPE_SERVICE_ID,
                 "Clothes",
-                "/datasets/item/item_type/testItemTypeDataSet.yml",
-                "/datasets/item/item_type/updateItemTypeDataSet.yml");
+                "/datasets/dao/item/item_type/testItemTypeDataSet.yml",
+                "/datasets/dao/item/item_type/updateItemTypeDataSet.yml");
     }
 
     @Test
@@ -49,8 +49,8 @@ public class ItemTypeControllerE2ETest extends AbstractConstantControllerE2ETest
         patchConstantEntity(constantPayloadDto,
                 ITEM_TYPE_SERVICE_ID,
                 "Clothes",
-                "/datasets/item/item_type/testItemTypeDataSet.yml",
-                "/datasets/item/item_type/updateItemTypeDataSet.yml");
+                "/datasets/dao/item/item_type/testItemTypeDataSet.yml",
+                "/datasets/dao/item/item_type/updateItemTypeDataSet.yml");
     }
 
     @Test
@@ -58,8 +58,8 @@ public class ItemTypeControllerE2ETest extends AbstractConstantControllerE2ETest
         deleteConstantEntity(
                 ITEM_TYPE_SERVICE_ID,
                 "Clothes",
-                "/datasets/item/item_type/testItemTypeDataSet.yml",
-                "/datasets/item/item_type/emptyItemTypeDataSet.yml");
+                "/datasets/dao/item/item_type/testItemTypeDataSet.yml",
+                "/datasets/dao/item/item_type/emptyItemTypeDataSet.yml");
     }
 
     @Test
@@ -75,7 +75,7 @@ public class ItemTypeControllerE2ETest extends AbstractConstantControllerE2ETest
                         .build());
 
         MvcResult mvcResult = getConstantEntities(ITEM_TYPE_SERVICE_ID,
-                "/datasets/item/item_type/testAllItemTypeDataSet.yml");
+                "/datasets/dao/item/item_type/testAllItemTypeDataSet.yml");
         assertMvcListResult(mvcResult, constantPayloadDtoList, new TypeReference<>() {});
     }
 
@@ -88,7 +88,7 @@ public class ItemTypeControllerE2ETest extends AbstractConstantControllerE2ETest
 
         MvcResult mvcResult = getConstantEntity(ITEM_TYPE_SERVICE_ID,
                 "Clothes",
-                "/datasets/item/item_type/testItemTypeDataSet.yml");
+                "/datasets/dao/item/item_type/testItemTypeDataSet.yml");
         assertMvcResult(mvcResult, dto);
     }
 

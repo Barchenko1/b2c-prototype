@@ -24,13 +24,13 @@ class ZoneOptionDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/delivery/zone_option/emptyZoneOptionDataSet.yml", cleanBefore = true,
+    @DataSet(value = "datasets/dao/delivery/zone_option/emptyZoneOptionDataSet.yml", cleanBefore = true,
             executeStatementsBefore = {
                     "TRUNCATE TABLE zone_option RESTART IDENTITY CASCADE",
                     "TRUNCATE TABLE price RESTART IDENTITY CASCADE"
             }
     )
-    @ExpectedDataSet(value = "datasets/delivery/zone_option/saveZoneOptionDataSet.yml", orderBy = "id")
+    @ExpectedDataSet(value = "datasets/dao/delivery/zone_option/saveZoneOptionDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         ZoneOption entity = getZoneOption();
         entity.setId(0);
@@ -40,8 +40,8 @@ class ZoneOptionDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/delivery/zone_option/testZoneOptionDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/delivery/zone_option/updateZoneOptionDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/delivery/zone_option/testZoneOptionDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/delivery/zone_option/updateZoneOptionDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         ZoneOption entity = getZoneOption();
         entity.setZoneName("Zone B");
@@ -50,8 +50,8 @@ class ZoneOptionDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/delivery/zone_option/testZoneOptionDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/delivery/zone_option/emptyZoneOptionDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/delivery/zone_option/testZoneOptionDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/delivery/zone_option/emptyZoneOptionDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         ZoneOption entity = getZoneOption();
 
@@ -59,7 +59,7 @@ class ZoneOptionDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/delivery/zone_option/testZoneOptionDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/delivery/zone_option/testZoneOptionDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         ZoneOption expected = getZoneOption();
 
@@ -70,7 +70,7 @@ class ZoneOptionDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/delivery/zone_option/testZoneOptionDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/delivery/zone_option/testZoneOptionDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         ZoneOption expected = getZoneOption();
 
@@ -84,7 +84,7 @@ class ZoneOptionDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/delivery/zone_option/testZoneOptionDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/delivery/zone_option/testZoneOptionDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         ZoneOption entity = getZoneOption();
 

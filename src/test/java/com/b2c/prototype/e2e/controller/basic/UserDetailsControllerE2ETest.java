@@ -59,7 +59,7 @@ class UserDetailsControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testCreateUserDetails() {
-        loadDataSet("/datasets/user/user_details/emptyE2EUserDetails.yml");
+        loadDataSet("/datasets/e2e/user/user_details/emptyE2EUserDetails.yml");
         try {
             mockMvc.perform(post(URL_TEMPLATE)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -69,7 +69,7 @@ class UserDetailsControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/user/user_details/saveE2ERegistrationUserDetails.yml",
+        verifyExpectedData("/datasets/e2e/user/user_details/saveE2ERegistrationUserDetails.yml",
                 new String[] {"id", "dateOfCreate", "user_id"},
                 new String[] {"label", "value"}
         );
@@ -77,7 +77,7 @@ class UserDetailsControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testCreateFullUserDetails() {
-        loadDataSet("/datasets/user/user_details/emptyE2EUserDetails.yml");
+        loadDataSet("/datasets/e2e/user/user_details/emptyE2EUserDetails.yml");
         try {
             mockMvc.perform(post(URL_TEMPLATE + "/full")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -87,7 +87,7 @@ class UserDetailsControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/user/user_details/saveE2EUserDetails.yml",
+        verifyExpectedData("/datasets/e2e/user/user_details/saveE2EUserDetails.yml",
                 new String[] {"id", "dateOfCreate", "user_id"},
                 new String[] {"label", "value"}
         );
@@ -95,7 +95,7 @@ class UserDetailsControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPutUserDetails() {
-        loadDataSet("/datasets/user/user_details/testE2EUserDetails.yml");
+        loadDataSet("/datasets/e2e/user/user_details/testE2EUserDetails.yml");
 
         try {
             mockMvc.perform(put(URL_TEMPLATE)
@@ -107,7 +107,7 @@ class UserDetailsControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/user/user_details/updateE2EUserDetails.yml",
+        verifyExpectedData("/datasets/e2e/user/user_details/updateE2EUserDetails.yml",
                 new String[] {"id", "dateOfCreate", "user_id"},
                 new String[] {"label", "value"}
         );
@@ -115,7 +115,7 @@ class UserDetailsControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPatchUserDetails() {
-        loadDataSet("/datasets/user/user_details/testE2EUserDetails.yml");
+        loadDataSet("/datasets/e2e/user/user_details/testE2EUserDetails.yml");
 
         try {
             mockMvc.perform(patch(URL_TEMPLATE)
@@ -127,7 +127,7 @@ class UserDetailsControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/user/user_details/updateE2EUserDetails.yml",
+        verifyExpectedData("/datasets/e2e/user/user_details/updateE2EUserDetails.yml",
                 new String[] {"id", "dateOfCreate", "user_id"},
                 new String[] {"label", "value"}
         );
@@ -135,7 +135,7 @@ class UserDetailsControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPatchUserDetailsStatus() {
-        loadDataSet("/datasets/user/user_details/testE2EUserDetails.yml");
+        loadDataSet("/datasets/e2e/user/user_details/testE2EUserDetails.yml");
         MultiValueMap<String, String> multiValueMap =  new LinkedMultiValueMap<>();
         multiValueMap.add("userId", "123");
         multiValueMap.add("status", String.valueOf(true));
@@ -148,7 +148,7 @@ class UserDetailsControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/user/user_details/updateStatusE2EUserDetails.yml",
+        verifyExpectedData("/datasets/e2e/user/user_details/updateStatusE2EUserDetails.yml",
                 new String[] {"id", "dateOfCreate", "user_id"},
                 new String[] {"label", "value"}
         );
@@ -156,7 +156,7 @@ class UserDetailsControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPatchUserDetailsVerifyEmail() {
-        loadDataSet("/datasets/user/user_details/testE2EUserDetails.yml");
+        loadDataSet("/datasets/e2e/user/user_details/testE2EUserDetails.yml");
         MultiValueMap<String, String> multiValueMap =  new LinkedMultiValueMap<>();
         multiValueMap.add("userId", "123");
         multiValueMap.add("verifyEmail", String.valueOf(true));
@@ -169,7 +169,7 @@ class UserDetailsControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/user/user_details/updateVerifyEmailE2EUserDetails.yml",
+        verifyExpectedData("/datasets/e2e/user/user_details/updateVerifyEmailE2EUserDetails.yml",
                 new String[] {"id", "dateOfCreate", "user_id"},
                 new String[] {"label", "value"}
         );
@@ -177,7 +177,7 @@ class UserDetailsControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPatchUserDetailsVerifyPhone() {
-        loadDataSet("/datasets/user/user_details/testE2EUserDetails.yml");
+        loadDataSet("/datasets/e2e/user/user_details/testE2EUserDetails.yml");
         MultiValueMap<String, String> multiValueMap =  new LinkedMultiValueMap<>();
         multiValueMap.add("userId", "123");
         multiValueMap.add("verifyPhone", String.valueOf(true));
@@ -190,7 +190,7 @@ class UserDetailsControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/user/user_details/updateVerifyPhoneE2EUserDetails.yml",
+        verifyExpectedData("/datasets/e2e/user/user_details/updateVerifyPhoneE2EUserDetails.yml",
                 new String[] {"id", "dateOfCreate", "user_id"},
                 new String[] {"label", "value"}
         );
@@ -198,7 +198,7 @@ class UserDetailsControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testDeleteUserDetails() {
-        loadDataSet("/datasets/user/user_details/testE2EUserDetails.yml");
+        loadDataSet("/datasets/e2e/user/user_details/testE2EUserDetails.yml");
 
         try {
             mockMvc.perform(delete(URL_TEMPLATE)
@@ -208,12 +208,12 @@ class UserDetailsControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/user/user_details/emptyE2EUserDetails.yml");
+        verifyExpectedData("/datasets/e2e/user/user_details/emptyE2EUserDetails.yml");
     }
 
     @Test
     void testGetUserDetails() {
-        loadDataSet("/datasets/user/user_details/testAllE2EUserDetails.yml");
+        loadDataSet("/datasets/e2e/user/user_details/testAllE2EUserDetails.yml");
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(get(URL_TEMPLATE)
@@ -240,7 +240,7 @@ class UserDetailsControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetAllUserDetails() {
-        loadDataSet("/datasets/user/user_details/testAllE2EUserDetails.yml");
+        loadDataSet("/datasets/e2e/user/user_details/testAllE2EUserDetails.yml");
 
         MvcResult mvcResult;
         try {

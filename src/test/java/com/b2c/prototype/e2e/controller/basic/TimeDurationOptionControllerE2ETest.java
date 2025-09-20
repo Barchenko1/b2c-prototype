@@ -44,7 +44,7 @@ public class TimeDurationOptionControllerE2ETest extends BasicE2ETest {
 
     @Test
     public void testSaveTimeDurationOption() {
-        loadDataSet("/datasets/option/time_duration/emptyE2ETimeDurationOption.yml");
+        loadDataSet("/datasets/e2e/item/time_duration_option/emptyE2ETimeDurationOption.yml");
 
         try {
             mockMvc.perform(post(URL_TEMPLATE)
@@ -54,12 +54,12 @@ public class TimeDurationOptionControllerE2ETest extends BasicE2ETest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        verifyExpectedData("/datasets/option/time_duration/testE2ETimeDurationOption.yml");
+        verifyExpectedData("/datasets/e2e/item/time_duration_option/testE2ETimeDurationOption.yml");
     }
 
     @Test
     public void testUpdateTimeDurationOption() {
-        loadDataSet("/datasets/option/time_duration/testE2ETimeDurationOption.yml");
+        loadDataSet("/datasets/e2e/item/time_duration_option/testE2ETimeDurationOption.yml");
 
         try {
             mockMvc.perform(post(URL_TEMPLATE)
@@ -70,12 +70,12 @@ public class TimeDurationOptionControllerE2ETest extends BasicE2ETest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        verifyExpectedData("/datasets/option/time_duration/updateE2ETimeDurationOption.yml");
+        verifyExpectedData("/datasets/e2e/item/time_duration_option/updateE2ETimeDurationOption.yml");
     }
 
     @Test
     public void testDeleteTimeDurationOption() {
-        loadDataSet("/datasets/option/time_duration/testE2ETimeDurationOption.yml");
+        loadDataSet("/datasets/e2e/item/time_duration_option/testE2ETimeDurationOption.yml");
 
         try {
             mockMvc.perform(delete(URL_TEMPLATE)
@@ -85,12 +85,12 @@ public class TimeDurationOptionControllerE2ETest extends BasicE2ETest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        verifyExpectedData("/datasets/option/time_duration/deleteE2ETimeDurationOption.yml");
+        verifyExpectedData("/datasets/e2e/item/time_duration_option/deleteE2ETimeDurationOption.yml");
     }
 
     @Test
     public void testGetTimeDurationOption() {
-        loadDataSet("/datasets/option/time_duration/testE2ETimeDurationOption.yml");
+        loadDataSet("/datasets/e2e/item/time_duration_option/testE2ETimeDurationOption.yml");
 
         MvcResult mvcResult;
         try {
@@ -118,7 +118,7 @@ public class TimeDurationOptionControllerE2ETest extends BasicE2ETest {
 
     @Test
     public void testGetTimeDurationOptionList() {
-        loadDataSet("/datasets/option/time_duration/testE2ETimeDurationOption.yml");
+        loadDataSet("/datasets/e2e/item/time_duration_option/testE2ETimeDurationOption.yml");
 
         MvcResult mvcResult;
         try {

@@ -6,13 +6,9 @@ import com.b2c.prototype.modal.constant.CountType;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
-import com.b2c.prototype.modal.entity.item.Brand;
-import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.Discount;
-import com.b2c.prototype.modal.entity.item.MetaData;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.ArticularStatus;
-import com.b2c.prototype.modal.entity.item.ItemType;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.modal.entity.price.Currency;
@@ -26,9 +22,7 @@ import com.nimbusds.jose.util.Pair;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -42,11 +36,11 @@ class StoreDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/store/store/emptyStoreDataSet.yml", cleanBefore = true,
+    @DataSet(value = "datasets/dao/store/store/emptyStoreDataSet.yml", cleanBefore = true,
             executeStatementsBefore = {
                     "TRUNCATE TABLE address RESTART IDENTITY CASCADE",
             })
-    @ExpectedDataSet(value = "datasets/store/store/saveStoreDataSet.yml", orderBy = "id")
+    @ExpectedDataSet(value = "datasets/dao/store/store/saveStoreDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         Store entity = getStore();
         entity.setId(0L);
@@ -62,8 +56,8 @@ class StoreDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/store/store/testStoreDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/store/store/updateStoreDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/store/store/testStoreDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/store/store/updateStoreDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         Store entity = getStore();
         entity.setStoreName("Update Store Name");
@@ -72,8 +66,8 @@ class StoreDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/store/store/testStoreDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/store/store/emptyStoreDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/store/store/testStoreDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/store/store/emptyStoreDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         Store entity = getStore();
 
@@ -81,7 +75,7 @@ class StoreDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/store/store/testStoreDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/store/store/testStoreDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         Store expected = getStore();
 
@@ -92,7 +86,7 @@ class StoreDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/store/store/testStoreDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/store/store/testStoreDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         Store expected = getStore();
 
@@ -106,7 +100,7 @@ class StoreDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/store/store/testStoreDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/store/store/testStoreDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         Store entity = getStore();
 

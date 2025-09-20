@@ -15,7 +15,6 @@ import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +43,7 @@ public class PostControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPostPost() {
-        loadDataSet("/datasets/post/emptyE2EPost.yml");
+        loadDataSet("/datasets/e2e/post/emptyE2EPost.yml");
 
         try {
             mockMvc.perform(post(URL_TEMPLATE)
@@ -56,7 +55,7 @@ public class PostControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/post/testE2EPost.yml",
+        verifyExpectedData("/datasets/e2e/post/testE2EPost.yml",
                 new String[] {"id", "dateOfCreate", "postId"},
                 new String[] {"label", "value"}
         );
@@ -64,7 +63,7 @@ public class PostControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPutPostOnPost() {
-        loadDataSet("/datasets/post/testE2EPost.yml");
+        loadDataSet("/datasets/e2e/post/testE2EPost.yml");
         try {
             mockMvc.perform(post(URL_TEMPLATE)
                             .params(getMultiValueMap(getRequestArticularParams()))
@@ -75,7 +74,7 @@ public class PostControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/post/testAddE2EPost.yml",
+        verifyExpectedData("/datasets/e2e/post/testAddE2EPost.yml",
                 new String[] {"id", "dateOfCreate", "postId"},
                 new String[] {"label", "value"}
         );
@@ -83,7 +82,7 @@ public class PostControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPutPost() {
-        loadDataSet("/datasets/post/testE2EPost.yml");
+        loadDataSet("/datasets/e2e/post/testE2EPost.yml");
 
         try {
             mockMvc.perform(post(URL_TEMPLATE)
@@ -95,7 +94,7 @@ public class PostControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/post/updateE2EPost.yml",
+        verifyExpectedData("/datasets/e2e/post/updateE2EPost.yml",
                 new String[] {"id", "dateOfCreate", "postId"},
                 new String[] {"label", "value"}
         );
@@ -103,7 +102,7 @@ public class PostControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testDeletePost() {
-        loadDataSet("/datasets/post/testE2EPost.yml");
+        loadDataSet("/datasets/e2e/post/testE2EPost.yml");
 
         try {
             mockMvc.perform(delete(URL_TEMPLATE)
@@ -114,7 +113,7 @@ public class PostControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/post/emptyE2EPost.yml",
+        verifyExpectedData("/datasets/e2e/post/emptyE2EPost.yml",
                 new String[] {"id", "dateOfCreate", "postId"},
                 new String[] {"label", "value", "OPTION_ITEM_ID"}
         );
@@ -122,7 +121,7 @@ public class PostControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetPostListByUserId() {
-        loadDataSet("/datasets/post/testWithUserDetailsE2EPost.yml");
+        loadDataSet("/datasets/e2e/post/testWithUserDetailsE2EPost.yml");
 
         MvcResult mvcResult;
         try {
@@ -152,7 +151,7 @@ public class PostControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetPostListByArticularId() {
-        loadDataSet("/datasets/post/testAddE2EPost.yml");
+        loadDataSet("/datasets/e2e/post/testAddE2EPost.yml");
 
         MvcResult mvcResult;
         try {
@@ -182,7 +181,7 @@ public class PostControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetPostListByEmail() {
-        loadDataSet("/datasets/post/testAddE2EPost.yml");
+        loadDataSet("/datasets/e2e/post/testAddE2EPost.yml");
 
         MvcResult mvcResult;
         try {
@@ -212,7 +211,7 @@ public class PostControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetPostByArticularIdPostId() {
-        loadDataSet("/datasets/post/testAddE2EPost.yml");
+        loadDataSet("/datasets/e2e/post/testAddE2EPost.yml");
 
         MvcResult mvcResult;
         try {

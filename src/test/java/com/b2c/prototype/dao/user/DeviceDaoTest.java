@@ -22,8 +22,8 @@ class DeviceDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/user/device/emptyDeviceDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/user/device/saveDeviceDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/user/device/emptyDeviceDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/user/device/saveDeviceDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         Device entity = getDevice();
         entity.setId(0L);
@@ -32,8 +32,8 @@ class DeviceDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/device/testDeviceDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/user/device/updateDeviceDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/user/device/testDeviceDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/user/device/updateDeviceDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         Device entity = getDevice();
         entity.setUserAgent("Update agent");
@@ -42,8 +42,8 @@ class DeviceDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/device/testDeviceDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/user/device/emptyDeviceDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/user/device/testDeviceDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/user/device/emptyDeviceDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         Device entity = getDevice();
 
@@ -51,7 +51,7 @@ class DeviceDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/device/testDeviceDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/user/device/testDeviceDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         Device expected = getDevice();
 
@@ -62,7 +62,7 @@ class DeviceDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/device/testDeviceDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/user/device/testDeviceDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         Device expected = getDevice();
 
@@ -76,7 +76,7 @@ class DeviceDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/user/device/testDeviceDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/user/device/testDeviceDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         Device entity = getDevice();
 

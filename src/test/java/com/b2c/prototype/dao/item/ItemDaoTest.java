@@ -39,11 +39,11 @@ class ItemDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/item/item/emptyItemDataSet.yml", cleanBefore = true,
+    @DataSet(value = "datasets/dao/item/item/emptyItemDataSet.yml", cleanBefore = true,
     executeStatementsBefore = {
             "TRUNCATE TABLE option_item RESTART IDENTITY CASCADE",
     })
-    @ExpectedDataSet(value = "datasets/item/item/saveItemDataSet.yml", orderBy = "id", ignoreCols = {"label", "value", "id", "message", "title", "post_id", "post_uniq_id", "category_id", "option_group_id", "brand_id", "discount_id", "full_price_id", "total_price_id", "status_id"})
+    @ExpectedDataSet(value = "datasets/dao/item/item/saveItemDataSet.yml", orderBy = "id", ignoreCols = {"label", "value", "id", "message", "title", "post_id", "post_uniq_id", "category_id", "option_group_id", "brand_id", "discount_id", "full_price_id", "total_price_id", "status_id"})
     public void persistEntity_success() {
         Item entity = getItem();
         entity.setId(0);
@@ -78,8 +78,8 @@ class ItemDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/item/testItemDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/item/item/updateItemDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/item/item/testItemDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/item/item/updateItemDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         Item entity = getItem();
         entity.setItemUniqId("Update 123");
@@ -88,8 +88,8 @@ class ItemDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/item/testItemDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/item/item/removeItemDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/item/item/testItemDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/item/item/removeItemDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         Item entity = getItem();
 
@@ -97,7 +97,7 @@ class ItemDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/item/testItemDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/item/testItemDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         Item expected = getItem();
 
@@ -108,7 +108,7 @@ class ItemDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/item/testItemDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/item/testItemDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         Item expected = getItem();
 
@@ -122,7 +122,7 @@ class ItemDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/item/testItemDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/item/testItemDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         Item entity = getItem();
 

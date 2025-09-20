@@ -22,9 +22,9 @@ public abstract class AbstractDaoTest {
 
     @BeforeAll
     public static void setUpAll() {
-        DataSource dataSource = getPostgresDataSource();
-        ConnectionHolder connectionHolder = dataSource::getConnection;
-        DataSetExecutor executor = DataSetExecutorImpl.instance("dao", connectionHolder);
+//        DataSource dataSource = getPostgresDataSource();
+//        ConnectionHolder connectionHolder = dataSource::getConnection;
+//        DataSetExecutor executor = DataSetExecutorImpl.instance("dao", connectionHolder);
     }
 
 }

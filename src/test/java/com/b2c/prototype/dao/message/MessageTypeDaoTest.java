@@ -21,8 +21,8 @@ class MessageTypeDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/message/message_type/emptyMessageTypeDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/message/message_type/saveMessageTypeDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/message/message_type/emptyMessageTypeDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/message/message_type/saveMessageTypeDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         MessageType entity = getMessageType();
         entity.setId(0);
@@ -31,8 +31,8 @@ class MessageTypeDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/message/message_type/testMessageTypeDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/message/message_type/updateMessageTypeDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/message/message_type/testMessageTypeDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/message/message_type/updateMessageTypeDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         MessageType entity = getMessageType();
         entity.setValue("Update InMail");
@@ -41,8 +41,8 @@ class MessageTypeDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/message/message_type/testMessageTypeDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/message/message_type/emptyMessageTypeDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/message/message_type/testMessageTypeDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/message/message_type/emptyMessageTypeDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         MessageType entity = getMessageType();
 
@@ -50,7 +50,7 @@ class MessageTypeDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/message/message_type/testMessageTypeDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/message/message_type/testMessageTypeDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         MessageType expected = getMessageType();
 
@@ -61,7 +61,7 @@ class MessageTypeDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/message/message_type/testMessageTypeDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/message/message_type/testMessageTypeDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         MessageType expected = getMessageType();
 
@@ -75,7 +75,7 @@ class MessageTypeDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/message/message_type/testMessageTypeDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/message/message_type/testMessageTypeDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         MessageType entity = getMessageType();
 

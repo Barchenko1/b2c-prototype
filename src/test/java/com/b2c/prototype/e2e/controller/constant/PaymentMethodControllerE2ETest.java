@@ -22,8 +22,8 @@ public class PaymentMethodControllerE2ETest extends AbstractConstantControllerE2
 
         postConstantEntity(constantPayloadDto,
                 PAYMENT_METHOD_SERVICE_ID,
-                "/datasets/payment/payment_method/emptyPaymentMethodDataSet.yml",
-                "/datasets/payment/payment_method/savePaymentMethodDataSet.yml");
+                "/datasets/dao/payment/payment_method/emptyPaymentMethodDataSet.yml",
+                "/datasets/dao/payment/payment_method/savePaymentMethodDataSet.yml");
     }
 
     @Test
@@ -36,8 +36,8 @@ public class PaymentMethodControllerE2ETest extends AbstractConstantControllerE2
         putConstantEntity(constantPayloadDto,
                 PAYMENT_METHOD_SERVICE_ID,
                 "Card",
-                "/datasets/payment/payment_method/testPaymentMethodDataSet.yml",
-                "/datasets/payment/payment_method/updatePaymentMethodDataSet.yml");
+                "/datasets/dao/payment/payment_method/testPaymentMethodDataSet.yml",
+                "/datasets/dao/payment/payment_method/updatePaymentMethodDataSet.yml");
     }
 
     @Test
@@ -50,8 +50,8 @@ public class PaymentMethodControllerE2ETest extends AbstractConstantControllerE2
         patchConstantEntity(constantPayloadDto,
                 PAYMENT_METHOD_SERVICE_ID,
                 "Card",
-                "/datasets/payment/payment_method/testPaymentMethodDataSet.yml",
-                "/datasets/payment/payment_method/updatePaymentMethodDataSet.yml");
+                "/datasets/dao/payment/payment_method/testPaymentMethodDataSet.yml",
+                "/datasets/dao/payment/payment_method/updatePaymentMethodDataSet.yml");
     }
 
     @Test
@@ -59,8 +59,8 @@ public class PaymentMethodControllerE2ETest extends AbstractConstantControllerE2
         deleteConstantEntity(
                 PAYMENT_METHOD_SERVICE_ID,
                 "Card",
-                "/datasets/payment/payment_method/testPaymentMethodDataSet.yml",
-                "/datasets/payment/payment_method/emptyPaymentMethodDataSet.yml");
+                "/datasets/dao/payment/payment_method/testPaymentMethodDataSet.yml",
+                "/datasets/dao/payment/payment_method/emptyPaymentMethodDataSet.yml");
     }
 
     @Test
@@ -76,7 +76,7 @@ public class PaymentMethodControllerE2ETest extends AbstractConstantControllerE2
                         .build());
 
         MvcResult mvcResult = getConstantEntities(PAYMENT_METHOD_SERVICE_ID,
-                "/datasets/payment/payment_method/testAllPaymentMethodDataSet.yml");
+                "/datasets/e2e/payment/payment_method/testAllPaymentMethodDataSet.yml");
         assertMvcListResult(mvcResult, constantPayloadDtoList, new TypeReference<>() {});
     }
 
@@ -89,7 +89,7 @@ public class PaymentMethodControllerE2ETest extends AbstractConstantControllerE2
 
         MvcResult mvcResult = getConstantEntity(PAYMENT_METHOD_SERVICE_ID,
                 "Card",
-                "/datasets/payment/payment_method/testPaymentMethodDataSet.yml");
+                "/datasets/dao/payment/payment_method/testPaymentMethodDataSet.yml");
         assertMvcResult(mvcResult, entity);
     }
 

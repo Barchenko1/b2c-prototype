@@ -21,8 +21,8 @@ public class CountryDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/constant/country/emptyCountryDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/constant/country/saveCountryDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/country/emptyCountryDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/country/saveCountryDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         Country entity = getCountry();
         entity.setId(0);
@@ -31,8 +31,8 @@ public class CountryDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/constant/country/testCountryDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/constant/country/updateCountryDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/country/testCountryDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/country/updateCountryDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         Country entity = getCountry();
         entity.setValue("Update USA");
@@ -41,8 +41,8 @@ public class CountryDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/constant/country/testCountryDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/constant/country/emptyCountryDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/country/testCountryDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/country/emptyCountryDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         Country entity = getCountry();
 
@@ -50,7 +50,7 @@ public class CountryDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/constant/country/testCountryDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/country/testCountryDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         Country expected = getCountry();
 
@@ -61,7 +61,7 @@ public class CountryDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/constant/country/testCountryDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/country/testCountryDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         Country expected = getCountry();
 
@@ -75,7 +75,7 @@ public class CountryDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/constant/country/testCountryDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/country/testCountryDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         Country entity = getCountry();
 

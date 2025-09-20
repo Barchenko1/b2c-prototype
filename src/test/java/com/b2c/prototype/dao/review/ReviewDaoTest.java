@@ -24,8 +24,8 @@ class ReviewDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/review/review/emptyReviewDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/review/review/saveReviewDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/review/review/emptyReviewDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/review/review/saveReviewDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         Review entity = getReview();
         entity.setId(0);
@@ -34,8 +34,8 @@ class ReviewDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/review/review/testReviewDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/review/review/updateReviewDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/review/review/testReviewDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/review/review/updateReviewDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         Review entity = getReview();
         entity.setTitle("Update Great Product!");
@@ -48,8 +48,8 @@ class ReviewDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/review/review/testReviewDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/review/review/emptyReviewDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/review/review/testReviewDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/review/review/emptyReviewDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         Review entity = getReview();
 
@@ -57,7 +57,7 @@ class ReviewDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/review/review/testReviewDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/review/review/testReviewDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         Review expected = getReview();
 
@@ -68,7 +68,7 @@ class ReviewDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/review/review/testReviewDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/review/review/testReviewDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         Review expected = getReview();
 
@@ -82,7 +82,7 @@ class ReviewDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/review/review/testReviewDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/review/review/testReviewDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         Review entity = getReview();
 

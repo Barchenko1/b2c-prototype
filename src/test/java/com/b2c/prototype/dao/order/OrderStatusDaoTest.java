@@ -21,8 +21,8 @@ class OrderStatusDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/order/order_status/emptyOrderStatusDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/order/order_status/saveOrderStatusDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/order/order_status/emptyOrderStatusDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/order/order_status/saveOrderStatusDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         OrderStatus entity = getOrderStatus();
         entity.setId(0);
@@ -31,8 +31,8 @@ class OrderStatusDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/order/order_status/testOrderStatusDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/order/order_status/updateOrderStatusDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/order/order_status/testOrderStatusDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/order/order_status/updateOrderStatusDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         OrderStatus entity = getOrderStatus();
         entity.setValue("Update Pending");
@@ -41,8 +41,8 @@ class OrderStatusDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/order/order_status/testOrderStatusDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/order/order_status/emptyOrderStatusDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/order/order_status/testOrderStatusDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/order/order_status/emptyOrderStatusDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         OrderStatus entity = getOrderStatus();
 
@@ -50,7 +50,7 @@ class OrderStatusDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/order/order_status/testOrderStatusDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/order/order_status/testOrderStatusDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         OrderStatus expected = getOrderStatus();
 
@@ -61,7 +61,7 @@ class OrderStatusDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/order/order_status/testOrderStatusDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/order/order_status/testOrderStatusDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         OrderStatus expected = getOrderStatus();
 
@@ -75,7 +75,7 @@ class OrderStatusDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/order/order_status/testOrderStatusDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/order/order_status/testOrderStatusDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         OrderStatus entity = getOrderStatus();
 

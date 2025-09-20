@@ -42,7 +42,7 @@ public class DeviceControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testActivateDevice() {
-        loadDataSet("/datasets/user/device/emptyE2EDevice.yml");
+        loadDataSet("/datasets/e2e/user/device/emptyE2EDevice.yml");
         try {
             mockMvc.perform(post(URL_TEMPLATE)
                             .params(getMultiValueMap(getRequestParams()))
@@ -53,7 +53,7 @@ public class DeviceControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/user/device/updateActiveE2EDevice.yml",
+        verifyExpectedData("/datasets/e2e/user/device/updateActiveE2EDevice.yml",
                 new String[] {"id", "dateOfCreate", "user_id", "logintime"},
                 new String[] {"label", "value"}
         );
@@ -61,7 +61,7 @@ public class DeviceControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testAddNewActivateDevice() {
-        loadDataSet("/datasets/user/device/emptyE2EDevice.yml");
+        loadDataSet("/datasets/e2e/user/device/emptyE2EDevice.yml");
         try {
             mockMvc.perform(post(URL_TEMPLATE)
                             .params(getMultiValueMap(getRequestParams()))
@@ -72,7 +72,7 @@ public class DeviceControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/user/device/addNewE2EDevice.yml",
+        verifyExpectedData("/datasets/e2e/user/device/addNewE2EDevice.yml",
                 new String[] {"id", "dateOfCreate", "user_id", "logintime"},
                 new String[] {"label", "value"}
         );
@@ -80,7 +80,7 @@ public class DeviceControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testDeleteDevice() {
-        loadDataSet("/datasets/user/device/emptyE2EDevice.yml");
+        loadDataSet("/datasets/e2e/user/device/emptyE2EDevice.yml");
         try {
             mockMvc.perform(delete(URL_TEMPLATE)
                             .params(getMultiValueMap(getRequestParams()))
@@ -91,7 +91,7 @@ public class DeviceControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/user/device/deleteE2EDevice.yml",
+        verifyExpectedData("/datasets/e2e/user/device/deleteE2EDevice.yml",
                 new String[] {"id", "dateOfCreate", "user_id"},
                 new String[] {"label", "value"}
         );
@@ -99,7 +99,7 @@ public class DeviceControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetUserDevices() {
-        loadDataSet("/datasets/user/device/testAllE2EDevice.yml");
+        loadDataSet("/datasets/e2e/user/device/testAllE2EDevice.yml");
 
         MvcResult mvcResult;
         try {

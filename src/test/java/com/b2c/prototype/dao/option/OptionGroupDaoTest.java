@@ -21,8 +21,8 @@ class OptionGroupDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/option/option_group/emptyOptionGroupDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/option/option_group/saveOptionGroupDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/option/option_group/emptyOptionGroupDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/option/option_group/saveOptionGroupDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         OptionGroup entity = getOptionGroup();
         entity.setId(0);
@@ -31,8 +31,8 @@ class OptionGroupDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/option/option_group/testOptionGroupDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/option/option_group/updateOptionGroupDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/option/option_group/testOptionGroupDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/option/option_group/updateOptionGroupDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         OptionGroup entity = getOptionGroup();
         entity.setValue("Update Color");
@@ -41,8 +41,8 @@ class OptionGroupDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/option/option_group/testOptionGroupDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/option/option_group/emptyOptionGroupDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/option/option_group/testOptionGroupDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/option/option_group/emptyOptionGroupDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         OptionGroup entity = getOptionGroup();
 
@@ -50,7 +50,7 @@ class OptionGroupDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/option/option_group/testOptionGroupDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/option/option_group/testOptionGroupDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         OptionGroup expected = getOptionGroup();
 
@@ -61,7 +61,7 @@ class OptionGroupDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/option/option_group/testOptionGroupDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/option/option_group/testOptionGroupDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         OptionGroup expected = getOptionGroup();
 
@@ -75,7 +75,7 @@ class OptionGroupDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/option/option_group/testOptionGroupDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/option/option_group/testOptionGroupDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         OptionGroup entity = getOptionGroup();
 

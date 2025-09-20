@@ -51,7 +51,7 @@ class ArticularItemControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testCreateItemData() {
-        loadDataSet("/datasets/item/articular_item/emptyE2EArticularItem.yml");
+        loadDataSet("/datasets/e2e/item/articular_item/emptyE2EArticularItem.yml");
         try {
             mockMvc.perform(post(URL_TEMPLATE)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -62,7 +62,7 @@ class ArticularItemControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/item/articular_item/saveE2EArticularItem.yml",
+        verifyExpectedData("/datasets/e2e/item/articular_item/saveE2EArticularItem.yml",
                 new String[] {"id", "option_group_id", "option_item_id", "articular_item_id", "articular_id", "dateOfCreate", "discount_id", "fullprice_id", "totalprice_id"},
                 new String[] {"label", "value", "productname", "charSequenceCode"}
         );
@@ -71,7 +71,7 @@ class ArticularItemControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPutItemData() {
-        loadDataSet("/datasets/item/articular_item/testE2EArticularItem.yml");
+        loadDataSet("/datasets/e2e/item/articular_item/testE2EArticularItem.yml");
 
         try {
             mockMvc.perform(put(URL_TEMPLATE)
@@ -83,7 +83,7 @@ class ArticularItemControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/item/articular_item/updateE2EArticularItem.yml",
+        verifyExpectedData("/datasets/e2e/item/articular_item/updateE2EArticularItem.yml",
                 new String[] {"id", "option_group_id", "option_item_id", "articular_item_id", "articular_id", "dateOfCreate", "DISCOUNT_ID", "FULLPRICE_ID", "TOTALPRICE_ID"},
                 new String[] {"label", "value", "productname", "charSequenceCode"}
         );
@@ -91,7 +91,7 @@ class ArticularItemControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPatchItemData() {
-        loadDataSet("/datasets/item/articular_item/testE2EArticularItem.yml");
+        loadDataSet("/datasets/e2e/item/articular_item/testE2EArticularItem.yml");
 
         try {
             mockMvc.perform(patch(URL_TEMPLATE)
@@ -103,7 +103,7 @@ class ArticularItemControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/item/articular_item/updateE2EArticularItem.yml",
+        verifyExpectedData("/datasets/e2e/item/articular_item/updateE2EArticularItem.yml",
                 new String[] {"id", "option_group_id", "option_item_id", "articular_item_id", "articular_id", "dateOfCreate", "DISCOUNT_ID", "FULLPRICE_ID", "TOTALPRICE_ID"},
                 new String[] {"label", "value", "productname", "charSequenceCode"}
         );
@@ -111,7 +111,7 @@ class ArticularItemControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testDeleteItemData() {
-        loadDataSet("/datasets/item/articular_item/testE2EArticularItem.yml");
+        loadDataSet("/datasets/e2e/item/articular_item/testE2EArticularItem.yml");
 
         try {
             mockMvc.perform(delete(URL_TEMPLATE)
@@ -121,12 +121,12 @@ class ArticularItemControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/item/articular_item/deleteE2EArticularItem.yml");
+        verifyExpectedData("/datasets/e2e/item/articular_item/deleteE2EArticularItem.yml");
     }
 
     @Test
     void testGetItemData() {
-        loadDataSet("/datasets/item/articular_item/testE2EArticularItem.yml");
+        loadDataSet("/datasets/e2e/item/articular_item/testE2EArticularItem.yml");
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(get(URL_TEMPLATE)
@@ -153,7 +153,7 @@ class ArticularItemControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetAllItemData() {
-        loadDataSet("/datasets/item/articular_item/testE2EArticularItem.yml");
+        loadDataSet("/datasets/e2e/item/articular_item/testE2EArticularItem.yml");
 
         MvcResult mvcResult;
         try {

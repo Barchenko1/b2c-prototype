@@ -35,7 +35,7 @@ class ArticularItemDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/item/articular_item/emptyArticularItemDataSet.yml", cleanBefore = true,
+    @DataSet(value = "datasets/dao/item/articular_item/emptyArticularItemDataSet.yml", cleanBefore = true,
             executeStatementsBefore = {
                     "TRUNCATE TABLE price RESTART IDENTITY CASCADE",
                     "TRUNCATE TABLE brand RESTART IDENTITY CASCADE",
@@ -45,7 +45,7 @@ class ArticularItemDaoTest extends AbstractDaoTest {
                     "TRUNCATE TABLE option_group RESTART IDENTITY CASCADE",
                     "TRUNCATE TABLE articular_status RESTART IDENTITY CASCADE",
             })
-    @ExpectedDataSet(value = "datasets/item/articular_item/saveArticularItemDataSet.yml", orderBy = "id", ignoreCols = {"label", "value"})
+    @ExpectedDataSet(value = "datasets/dao/item/articular_item/saveArticularItemDataSet.yml", orderBy = "id", ignoreCols = {"label", "value"})
     public void persistEntity_success() {
         ArticularItem entity = getArticularItem();
         entity.setId(0);
@@ -66,8 +66,8 @@ class ArticularItemDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/articular_item/testArticularItemDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/item/articular_item/updateArticularItemDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/item/articular_item/testArticularItemDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/item/articular_item/updateArticularItemDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         ArticularItem entity = getArticularItem();
 //        entity.setValue("Update InMail");
@@ -76,8 +76,8 @@ class ArticularItemDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/articular_item/testArticularItemDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/item/articular_item/removeArticularItemDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/item/articular_item/testArticularItemDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/item/articular_item/removeArticularItemDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         ArticularItem entity = getArticularItem();
 
@@ -85,7 +85,7 @@ class ArticularItemDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/articular_item/testArticularItemDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/articular_item/testArticularItemDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         ArticularItem expected = getArticularItem();
 
@@ -96,7 +96,7 @@ class ArticularItemDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/articular_item/testArticularItemDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/articular_item/testArticularItemDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         ArticularItem expected = getArticularItem();
 
@@ -110,7 +110,7 @@ class ArticularItemDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/item/articular_item/testArticularItemDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/articular_item/testArticularItemDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         ArticularItem entity = getArticularItem();
 

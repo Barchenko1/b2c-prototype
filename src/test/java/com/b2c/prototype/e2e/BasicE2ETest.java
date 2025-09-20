@@ -46,18 +46,18 @@ public class BasicE2ETest extends DataBaseLoader {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
-    @AfterAll
-    public static void tearDown() {
-        cleanDatabase(connectionHolder);
-    }
-
-    @BeforeAll
-    public static void setUpAll() {
-        DataSource dataSource = getPostgresDataSource();
-        connectionHolder = dataSource::getConnection;
-        executor = DataSetExecutorImpl.instance("e2e", connectionHolder);
-    }
-
+//    @AfterAll
+//    public static void tearDown() {
+//        cleanDatabase(connectionHolder);
+//    }
+//
+//    @BeforeAll
+//    public static void setUpAll() {
+//        DataSource dataSource = getPostgresDataSource();
+//        connectionHolder = dataSource::getConnection;
+//        executor = DataSetExecutorImpl.instance("e2e", connectionHolder);
+//    }
+//
     protected MultiValueMap<String, String> getMultiValueMap(Map<String, String> requestParams) {
         MultiValueMap<String, String> multiValueMap =  new LinkedMultiValueMap<>();
         requestParams.forEach(multiValueMap::add);

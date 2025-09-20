@@ -50,7 +50,7 @@ public class MessageControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPostMessage() {
-        loadDataSet("/datasets/user/message/emptyE2EMessage.yml");
+        loadDataSet("/datasets/e2e/user/message/emptyE2EMessage.yml");
 
         try {
             mockMvc.perform(post(URL_TEMPLATE)
@@ -62,7 +62,7 @@ public class MessageControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/user/message/testE2EMessage.yml",
+        verifyExpectedData("/datasets/e2e/user/message/testE2EMessage.yml",
                 new String[] {"id", "dateOfSend", "messageUniqNumber"},
                 new String[] {"label", "value", "receiver_email"}
         );
@@ -70,7 +70,7 @@ public class MessageControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPutMessage() {
-        loadDataSet("/datasets/user/message/testE2EMessage.yml");
+        loadDataSet("/datasets/e2e/user/message/testE2EMessage.yml");
 
         try {
             mockMvc.perform(put(URL_TEMPLATE)
@@ -82,7 +82,7 @@ public class MessageControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/user/message/updateE2EMessage.yml",
+        verifyExpectedData("/datasets/e2e/user/message/updateE2EMessage.yml",
                 new String[] {"id", "dateOfSend", "messageUniqNumber"},
                 new String[] {"label", "value", "receiver_email"}
         );
@@ -90,7 +90,7 @@ public class MessageControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testChangeMessageStatus() {
-        loadDataSet("/datasets/user/message/testE2EMessage.yml");
+        loadDataSet("/datasets/e2e/user/message/testE2EMessage.yml");
         Map<String, String> requestParams = Map.of("userId", "123", "messageId", "123", "status", "read");
         try {
             mockMvc.perform(put(URL_TEMPLATE + "/status")
@@ -102,7 +102,7 @@ public class MessageControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/user/message/updateStatusE2EMessage.yml",
+        verifyExpectedData("/datasets/e2e/user/message/updateStatusE2EMessage.yml",
                 new String[] {"id", "dateOfSend", "messageUniqNumber"},
                 new String[] {"label", "value", "receiver_email"}
         );
@@ -110,7 +110,7 @@ public class MessageControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testDeleteByMessageId() {
-        loadDataSet("/datasets/user/message/testE2EMessage.yml");
+        loadDataSet("/datasets/e2e/user/message/testE2EMessage.yml");
         Map<String, String> requestParams = Map.of("messageId", "123");
         try {
             mockMvc.perform(delete(URL_TEMPLATE)
@@ -121,7 +121,7 @@ public class MessageControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/user/message/deleteE2EMessage.yml",
+        verifyExpectedData("/datasets/e2e/user/message/deleteE2EMessage.yml",
                 new String[] {"id", "dateOfSend", "messageUniqNumber"},
                 new String[] {"label", "value", "receiver_email"}
         );
@@ -129,7 +129,7 @@ public class MessageControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testDeleteByUserIdAndMessageId() {
-        loadDataSet("/datasets/user/message/testE2EMessage.yml");
+        loadDataSet("/datasets/e2e/user/message/testE2EMessage.yml");
 
         try {
             mockMvc.perform(delete(URL_TEMPLATE)
@@ -140,7 +140,7 @@ public class MessageControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/user/message/emptyE2EMessage.yml",
+        verifyExpectedData("/datasets/e2e/user/message/emptyE2EMessage.yml",
                 new String[] {"id", "dateOfSend", "messageUniqNumber"},
                 new String[] {"label", "value", "receiver_email"}
         );
@@ -148,7 +148,7 @@ public class MessageControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testCleanUpMessage() {
-        loadDataSet("/datasets/user/message/testE2EMessage.yml");
+        loadDataSet("/datasets/e2e/user/message/testE2EMessage.yml");
         try {
             mockMvc.perform(delete(URL_TEMPLATE + "/clean")
                             .params(getMultiValueMap(getRequestUserMessageParams()))
@@ -158,7 +158,7 @@ public class MessageControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/user/message/deleteCleanE2EMessage.yml",
+        verifyExpectedData("/datasets/e2e/user/message/deleteCleanE2EMessage.yml",
                 new String[] {"id", "dateOfSend", "messageUniqNumber"},
                 new String[] {"label", "value", "receiver_email"}
         );
@@ -166,7 +166,7 @@ public class MessageControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetMessageOverviewBySenderEmail() {
-        loadDataSet("/datasets/user/message/testE2EMessage.yml");
+        loadDataSet("/datasets/e2e/user/message/testE2EMessage.yml");
         Map<String, String> requestParams = Map.of("sender", "sender.test@example.com");
         MvcResult mvcResult;
         try {
@@ -194,7 +194,7 @@ public class MessageControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetMessageOverviewByReceiverEmail() {
-        loadDataSet("/datasets/user/message/testE2EMessage.yml");
+        loadDataSet("/datasets/e2e/user/message/testE2EMessage.yml");
         Map<String, String> requestParams = Map.of("receiver", "jone.doe@example.com");
         MvcResult mvcResult;
         try {
@@ -222,7 +222,7 @@ public class MessageControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetMessageOverviewListByUserId() {
-        loadDataSet("/datasets/user/message/testE2EMessage.yml");
+        loadDataSet("/datasets/e2e/user/message/testE2EMessage.yml");
 
         MvcResult mvcResult;
         try {
@@ -252,7 +252,7 @@ public class MessageControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetMessagePayloadDto() {
-        loadDataSet("/datasets/user/message/testE2EMessage.yml");
+        loadDataSet("/datasets/e2e/user/message/testE2EMessage.yml");
 
         MvcResult mvcResult;
         try {

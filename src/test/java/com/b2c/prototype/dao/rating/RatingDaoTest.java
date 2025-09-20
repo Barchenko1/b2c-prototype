@@ -21,8 +21,8 @@ class RatingDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/rating/emptyRatingDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/rating/saveRatingDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/rating/emptyRatingDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/rating/saveRatingDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         Rating entity = getRating();
         entity.setId(0);
@@ -31,8 +31,8 @@ class RatingDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/rating/testRatingDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/rating/updateRatingDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/rating/testRatingDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/rating/updateRatingDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         Rating entity = getRating();
         entity.setValue(3);
@@ -41,8 +41,8 @@ class RatingDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/rating/testRatingDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/rating/emptyRatingDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/rating/testRatingDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/rating/emptyRatingDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         Rating entity = getRating();
 
@@ -50,7 +50,7 @@ class RatingDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/rating/testRatingDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/rating/testRatingDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         Rating expected = getRating();
 
@@ -61,7 +61,7 @@ class RatingDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/rating/testRatingDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/rating/testRatingDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         Rating expected = getRating();
 
@@ -75,7 +75,7 @@ class RatingDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/rating/testRatingDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/rating/testRatingDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         Rating entity = getRating();
 

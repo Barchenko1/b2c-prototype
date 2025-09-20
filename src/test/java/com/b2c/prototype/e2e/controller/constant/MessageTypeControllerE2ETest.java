@@ -21,8 +21,8 @@ public class MessageTypeControllerE2ETest extends AbstractConstantControllerE2ET
 
         postConstantEntity(constantPayloadDto,
                 MESSAGE_TYPE_SERVICE_ID,
-                "/datasets/message/message_type/emptyMessageTypeDataSet.yml",
-                "/datasets/message/message_type/saveMessageTypeDataSet.yml");
+                "/datasets/dao/message/message_type/emptyMessageTypeDataSet.yml",
+                "/datasets/dao/message/message_type/saveMessageTypeDataSet.yml");
     }
 
     @Test
@@ -35,8 +35,8 @@ public class MessageTypeControllerE2ETest extends AbstractConstantControllerE2ET
         putConstantEntity(constantPayloadDto,
                 MESSAGE_TYPE_SERVICE_ID,
                 "InMail",
-                "/datasets/message/message_type/testMessageTypeDataSet.yml",
-                "/datasets/message/message_type/updateMessageTypeDataSet.yml");
+                "/datasets/dao/message/message_type/testMessageTypeDataSet.yml",
+                "/datasets/dao/message/message_type/updateMessageTypeDataSet.yml");
     }
 
     @Test
@@ -49,8 +49,8 @@ public class MessageTypeControllerE2ETest extends AbstractConstantControllerE2ET
         patchConstantEntity(constantPayloadDto,
                 MESSAGE_TYPE_SERVICE_ID,
                 "InMail",
-                "/datasets/message/message_type/testMessageTypeDataSet.yml",
-                "/datasets/message/message_type/updateMessageTypeDataSet.yml");
+                "/datasets/dao/message/message_type/testMessageTypeDataSet.yml",
+                "/datasets/dao/message/message_type/updateMessageTypeDataSet.yml");
     }
 
     @Test
@@ -58,8 +58,8 @@ public class MessageTypeControllerE2ETest extends AbstractConstantControllerE2ET
         deleteConstantEntity(
                 MESSAGE_TYPE_SERVICE_ID,
                 "InMail",
-                "/datasets/message/message_type/testMessageTypeDataSet.yml",
-                "/datasets/message/message_type/emptyMessageTypeDataSet.yml");
+                "/datasets/dao/message/message_type/testMessageTypeDataSet.yml",
+                "/datasets/dao/message/message_type/emptyMessageTypeDataSet.yml");
     }
 
     @Test
@@ -75,7 +75,7 @@ public class MessageTypeControllerE2ETest extends AbstractConstantControllerE2ET
                         .build());
 
         MvcResult mvcResult = getConstantEntities(MESSAGE_TYPE_SERVICE_ID,
-                "/datasets/message/message_type/testAllMessageTypeDataSet.yml");
+                "/datasets/dao/message/message_type/testAllMessageTypeDataSet.yml");
         assertMvcListResult(mvcResult, constantPayloadDtoList, new TypeReference<>() {});
     }
 
@@ -88,7 +88,7 @@ public class MessageTypeControllerE2ETest extends AbstractConstantControllerE2ET
 
         MvcResult mvcResult = getConstantEntity(MESSAGE_TYPE_SERVICE_ID,
                 "InMail",
-                "/datasets/message/message_type/testMessageTypeDataSet.yml");
+                "/datasets/dao/message/message_type/testMessageTypeDataSet.yml");
         assertMvcResult(mvcResult, dto);
     }
 

@@ -49,7 +49,7 @@ public class CategoryControllerE2ETest extends BasicE2ETest {
     @Test
     void testPostCategory() {
         cleanUpDb(3);
-        loadDataSet("/datasets/item/category/emptyE2ECategoryDataSet.yml");
+        loadDataSet("/datasets/e2e/item/category/emptyE2ECategoryDataSet.yml");
 
         try {
             mockMvc.perform(post(URL_TEMPLATE)
@@ -60,7 +60,7 @@ public class CategoryControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/item/category/testE2ECategoryDataSet.yml",
+        verifyExpectedData("/datasets/e2e/item/category/testE2ECategoryDataSet.yml",
                 new String[] {"id"},
                 new String[] {"label", "value"}
         );
@@ -68,7 +68,7 @@ public class CategoryControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPutSingleCategory() {
-        loadDataSet("/datasets/item/category/testE2ECategoryDataSet.yml");
+        loadDataSet("/datasets/e2e/item/category/testE2ECategoryDataSet.yml");
 
         try {
             mockMvc.perform(put(URL_TEMPLATE)
@@ -80,7 +80,7 @@ public class CategoryControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/item/category/updateE2ESingleCategoryDataSet.yml",
+        verifyExpectedData("/datasets/e2e/item/category/updateE2ESingleCategoryDataSet.yml",
                 new String[] {"id"},
                 new String[] {"label", "value"}
         );
@@ -88,7 +88,7 @@ public class CategoryControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPutCategory1() {
-        loadDataSet("/datasets/item/category/testE2ECategoryDataSet.yml");
+        loadDataSet("/datasets/e2e/item/category/testE2ECategoryDataSet.yml");
 
         try {
             mockMvc.perform(put(URL_TEMPLATE + "/inner")
@@ -100,7 +100,7 @@ public class CategoryControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/item/category/updateE2ECategory1DataSet.yml",
+        verifyExpectedData("/datasets/e2e/item/category/updateE2ECategory1DataSet.yml",
                 new String[] {"id"},
                 new String[] {"label", "value"}
         );
@@ -108,7 +108,7 @@ public class CategoryControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPutCategory2() {
-        loadDataSet("/datasets/item/category/testE2ECategoryDataSet.yml");
+        loadDataSet("/datasets/e2e/item/category/testE2ECategoryDataSet.yml");
 
         try {
             mockMvc.perform(put(URL_TEMPLATE + "/inner")
@@ -120,7 +120,7 @@ public class CategoryControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/item/category/updateE2ECategory2DataSet.yml",
+        verifyExpectedData("/datasets/e2e/item/category/updateE2ECategory2DataSet.yml",
                 new String[] {"id"},
                 new String[] {"label", "value"}
         );
@@ -128,7 +128,7 @@ public class CategoryControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPutCategory3() {
-        loadDataSet("/datasets/item/category/testE2ECategoryDataSet.yml");
+        loadDataSet("/datasets/e2e/item/category/testE2ECategoryDataSet.yml");
 
         try {
             mockMvc.perform(put(URL_TEMPLATE + "/inner")
@@ -140,7 +140,7 @@ public class CategoryControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/item/category/updateE2ECategory3DataSet.yml",
+        verifyExpectedData("/datasets/e2e/item/category/updateE2ECategory3DataSet.yml",
                 new String[] {"id"},
                 new String[] {"label", "value"}
         );
@@ -148,7 +148,7 @@ public class CategoryControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testPutCategoryException() {
-        loadDataSet("/datasets/item/category/testE2ECategoryDataSet.yml");
+        loadDataSet("/datasets/e2e/item/category/testE2ECategoryDataSet.yml");
 
         try {
             mockMvc.perform(put(URL_TEMPLATE + "/inner")
@@ -160,7 +160,7 @@ public class CategoryControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/item/category/testE2ECategoryDataSet.yml",
+        verifyExpectedData("/datasets/e2e/item/category/testE2ECategoryDataSet.yml",
                 new String[] {"id"},
                 new String[] {"label", "value"}
         );
@@ -168,7 +168,7 @@ public class CategoryControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testDeleteCategory() {
-        loadDataSet("/datasets/item/category/testE2ECategoryDataSet.yml");
+        loadDataSet("/datasets/e2e/item/category/testE2ECategoryDataSet.yml");
 
         try {
             mockMvc.perform(delete(URL_TEMPLATE)
@@ -178,12 +178,12 @@ public class CategoryControllerE2ETest extends BasicE2ETest {
             throw new RuntimeException(e);
         }
 
-        verifyExpectedData("/datasets/item/category/deleteE2ECategoryDataSet.yml");
+        verifyExpectedData("/datasets/e2e/item/category/deleteE2ECategoryDataSet.yml");
     }
 
     @Test
     void testGetCategory() {
-        loadDataSet("/datasets/item/category/testE2ECategoryDataSet.yml");
+        loadDataSet("/datasets/e2e/item/category/testE2ECategoryDataSet.yml");
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(get(URL_TEMPLATE)
@@ -210,7 +210,7 @@ public class CategoryControllerE2ETest extends BasicE2ETest {
 
     @Test
     void testGetAllFirstLineCategories() {
-        loadDataSet("/datasets/item/category/testE2ECategoryDataSet.yml");
+        loadDataSet("/datasets/e2e/item/category/testE2ECategoryDataSet.yml");
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(get(URL_TEMPLATE + "/all")

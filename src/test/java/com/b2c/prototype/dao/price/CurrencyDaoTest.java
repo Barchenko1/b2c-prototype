@@ -21,8 +21,8 @@ class CurrencyDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/price/currency/emptyCurrencyDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/price/currency/saveCurrencyDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/price/currency/emptyCurrencyDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/price/currency/saveCurrencyDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
         Currency entity = getCurrency();
         entity.setId(0);
@@ -31,8 +31,8 @@ class CurrencyDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/price/currency/testCurrencyDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/price/currency/updateCurrencyDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/price/currency/testCurrencyDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/price/currency/updateCurrencyDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         Currency entity = getCurrency();
         entity.setValue("Update USD");
@@ -41,8 +41,8 @@ class CurrencyDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/price/currency/testCurrencyDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/price/currency/emptyCurrencyDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/price/currency/testCurrencyDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/price/currency/emptyCurrencyDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
         Currency entity = getCurrency();
 
@@ -50,7 +50,7 @@ class CurrencyDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/price/currency/testCurrencyDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/price/currency/testCurrencyDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
         Currency expected = getCurrency();
 
@@ -61,7 +61,7 @@ class CurrencyDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/price/currency/testCurrencyDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/price/currency/testCurrencyDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
         Currency expected = getCurrency();
 
@@ -75,7 +75,7 @@ class CurrencyDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/price/currency/testCurrencyDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/price/currency/testCurrencyDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
         Currency entity = getCurrency();
 

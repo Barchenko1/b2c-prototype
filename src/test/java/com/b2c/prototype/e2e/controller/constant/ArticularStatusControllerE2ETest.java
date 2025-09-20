@@ -21,8 +21,8 @@ public class ArticularStatusControllerE2ETest extends AbstractConstantController
 
         postConstantEntity(constantPayloadDto,
                 ITEM_STATUS_SERVICE_ID,
-                "/datasets/item/articular_status/emptyArticularStatusDataSet.yml",
-                "/datasets/item/articular_status/saveArticularStatusDataSet.yml");
+                "/datasets/dao/item/articular_status/emptyArticularStatusDataSet.yml",
+                "/datasets/dao/item/articular_status/saveArticularStatusDataSet.yml");
     }
 
     @Test
@@ -35,8 +35,8 @@ public class ArticularStatusControllerE2ETest extends AbstractConstantController
         putConstantEntity(constantPayloadDto,
                 ITEM_STATUS_SERVICE_ID,
                 "Test",
-                "/datasets/item/articular_status/testArticularStatusDataSet.yml",
-                "/datasets/item/articular_status/updateArticularStatusDataSet.yml");
+                "/datasets/dao/item/articular_status/testArticularStatusDataSet.yml",
+                "/datasets/dao/item/articular_status/updateArticularStatusDataSet.yml");
     }
 
     @Test
@@ -49,8 +49,8 @@ public class ArticularStatusControllerE2ETest extends AbstractConstantController
         patchConstantEntity(constantPayloadDto,
                 ITEM_STATUS_SERVICE_ID,
                 "Test",
-                "/datasets/item/articular_status/testArticularStatusDataSet.yml",
-                "/datasets/item/articular_status/updateArticularStatusDataSet.yml");
+                "/datasets/dao/item/articular_status/testArticularStatusDataSet.yml",
+                "/datasets/dao/item/articular_status/updateArticularStatusDataSet.yml");
     }
 
     @Test
@@ -58,8 +58,8 @@ public class ArticularStatusControllerE2ETest extends AbstractConstantController
         deleteConstantEntity(
                 ITEM_STATUS_SERVICE_ID,
                 "Test",
-                "/datasets/item/articular_status/testArticularStatusDataSet.yml",
-                "/datasets/item/articular_status/emptyArticularStatusDataSet.yml");
+                "/datasets/dao/item/articular_status/testArticularStatusDataSet.yml",
+                "/datasets/dao/item/articular_status/emptyArticularStatusDataSet.yml");
     }
 
     @Test
@@ -75,7 +75,7 @@ public class ArticularStatusControllerE2ETest extends AbstractConstantController
                         .build());
 
         MvcResult mvcResult = getConstantEntities(ITEM_STATUS_SERVICE_ID,
-                "/datasets/item/articular_status/testAllArticularStatusDataSet.yml");
+                "/datasets/e2e/item/articular_status/testAllArticularStatusDataSet.yml");
         assertMvcListResult(mvcResult, constantPayloadDtoList, new TypeReference<>() {});
     }
 
@@ -88,7 +88,7 @@ public class ArticularStatusControllerE2ETest extends AbstractConstantController
 
         MvcResult mvcResult = getConstantEntity(ITEM_STATUS_SERVICE_ID,
                 "Test",
-                "/datasets/item/articular_status/testArticularStatusDataSet.yml");
+                "/datasets/dao/item/articular_status/testArticularStatusDataSet.yml");
         assertMvcResult(mvcResult, dto);
     }
 
