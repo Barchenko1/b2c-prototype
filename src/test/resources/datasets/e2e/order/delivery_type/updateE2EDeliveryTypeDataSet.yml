@@ -1,0 +1,7 @@
+delivery_type:
+  - id: 1
+    value: "Post"
+    label: "Post"
+  - id: 2
+    value: "Update Courier"
+    label: "Courier"

@@ -25,38 +25,33 @@ public class OrderStatusManager implements IOrderStatusManager {
         this.orderTransformService = orderTransformService;
     }
 
-    public void saveEntity(ConstantPayloadDto payload) {
-        OrderStatus entity = orderTransformService.mapConstantPayloadDtoToOrderStatus(payload);
+    public void persistEntity(OrderStatus entity) {
         generalEntityDao.persistEntity(entity);
     }
 
-    public void updateEntity(String searchValue, ConstantPayloadDto payload) {
+    public void mergeEntity(String searchValue, OrderStatus entity) {
         OrderStatus fetchedEntity =
                 generalEntityDao.findEntity("OrderStatus.findByValue", Pair.of(VALUE, searchValue));
-        fetchedEntity.setValue(payload.getValue());
-        fetchedEntity.setLabel(payload.getLabel());
-        generalEntityDao.mergeEntity(fetchedEntity);
+        entity.setId(fetchedEntity.getId());
+        generalEntityDao.mergeEntity(entity);
     }
 
-    public void deleteEntity(String value) {
+    public void removeEntity(String value) {
         OrderStatus fetchedEntity = generalEntityDao.findEntity("OrderStatus.findByValue", Pair.of(VALUE, value));
         generalEntityDao.removeEntity(fetchedEntity);
     }
 
-    public ConstantPayloadDto getEntity(String value) {
-        OrderStatus entity = generalEntityDao.findEntity("OrderStatus.findByValue", Pair.of(VALUE, value));
-        return orderTransformService.mapOrderStatusToConstantPayloadDto(entity);
+    public OrderStatus getEntity(String value) {
+        return generalEntityDao.findEntity("OrderStatus.findByValue", Pair.of(VALUE, value));
     }
 
-    public Optional<ConstantPayloadDto> getEntityOptional(String value) {
+    public Optional<OrderStatus> getEntityOptional(String value) {
         OrderStatus entity = generalEntityDao.findEntity("OrderStatus.findByValue", Pair.of(VALUE, value));
-        return Optional.of(orderTransformService.mapOrderStatusToConstantPayloadDto(entity));
+        return Optional.of(entity);
     }
 
 
-    public List<ConstantPayloadDto> getEntities() {
-        return generalEntityDao.findEntityList("OrderStatus.all", (Pair<String, ?>) null).stream()
-                .map(e -> orderTransformService.mapOrderStatusToConstantPayloadDto((OrderStatus) e))
-                .toList();
+    public List<OrderStatus> getEntities() {
+        return generalEntityDao.findEntityList("OrderStatus.all", (Pair<String, ?>) null);
     }
 }

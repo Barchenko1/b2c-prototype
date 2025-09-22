@@ -1,97 +1,151 @@
 package com.b2c.prototype.e2e.controller.constant;
 
-import com.b2c.prototype.e2e.AbstractConstantControllerE2ETest;
+import com.b2c.prototype.e2e.BasicE2ETest;
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
+import com.b2c.prototype.modal.entity.order.OrderStatus;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.github.database.rider.core.api.dataset.DataSet;
+import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.List;
 
-import static com.b2c.prototype.util.Constant.ORDER_STATUS_SERVICE_ID;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class OrderStatusControllerE2ETest extends AbstractConstantControllerE2ETest {
+public class OrderStatusControllerE2ETest extends BasicE2ETest {
+
+    private final String URL_TEMPLATE = "/api/v1/order/status";
 
     @Test
-    public void testCreateConstantEntity() {
+    @DataSet(value = "datasets/e2e/order/order_status/emptyE2EOrderStatusDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/order/order_status/testE2EOrderStatusDataSet.yml", orderBy = "id")
+    public void testCreateEntity() {
+        ConstantPayloadDto dto = getConstantPayloadDto();
+        try {
+            String jsonPayload = objectMapper.writeValueAsString(dto);
+
+            mockMvc.perform(post(URL_TEMPLATE)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(jsonPayload))
+                    .andExpect(status().isOk());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    @DataSet(value = "datasets/e2e/order/order_status/testE2EOrderStatusDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/order/order_status/updateE2EOrderStatusDataSet.yml", orderBy = "id")
+    public void testUpdateEntity() {
         ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .label("Pending")
-                .value("Pending")
+                .label("Complete")
+                .value("Update Complete")
+                .build();
+        try {
+            String jsonPayload = objectMapper.writeValueAsString(constantPayloadDto);
+
+            mockMvc.perform(put(URL_TEMPLATE)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .param("value", "Complete")
+                            .content(jsonPayload))
+                    .andExpect(status().isOk());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    @DataSet(value = "datasets/e2e/order/order_status/testE2EOrderStatusDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/order/order_status/updateE2EOrderStatusDataSet.yml", orderBy = "id")
+    public void testPatchEntity() {
+        ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
+                .label("Complete")
+                .value("Update Complete")
                 .build();
 
-        postConstantEntity(constantPayloadDto,
-                ORDER_STATUS_SERVICE_ID,
-                "/datasets/dao/order/order_status/emptyOrderStatusDataSet.yml",
-                "/datasets/dao/order/order_status/saveOrderStatusDataSet.yml");
+        try {
+            String jsonPayload = objectMapper.writeValueAsString(constantPayloadDto);
+
+            mockMvc.perform(put(URL_TEMPLATE)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .param("value", "Complete")
+                            .content(jsonPayload))
+                    .andExpect(status().isOk());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
-    public void testUpdateConstantEntity() {
-        ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .label("Pending")
-                .value("Update Pending")
-                .build();
-
-        putConstantEntity(constantPayloadDto,
-                ORDER_STATUS_SERVICE_ID,
-                "Pending",
-                "/datasets/dao/order/order_status/testOrderStatusDataSet.yml",
-                "/datasets/dao/order/order_status/updateOrderStatusDataSet.yml");
+    @DataSet(value = "datasets/e2e/order/order_status/testE2EOrderStatusDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/order/order_status/emptyE2EOrderStatusDataSet.yml", orderBy = "id")
+    public void testDeleteEntity() {
+        try {
+            mockMvc.perform(delete(URL_TEMPLATE)
+                            .param("value", "Complete"))
+                    .andExpect(status().isOk());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
-    public void testPatchConstantEntity() {
-        ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .label("Pending")
-                .value("Update Pending")
-                .build();
-
-        patchConstantEntity(constantPayloadDto,
-                ORDER_STATUS_SERVICE_ID,
-                "Pending",
-                "/datasets/dao/order/order_status/testOrderStatusDataSet.yml",
-                "/datasets/dao/order/order_status/updateOrderStatusDataSet.yml");
-    }
-
-    @Test
-    public void testDeleteConstantEntity() {
-        deleteConstantEntity(
-                ORDER_STATUS_SERVICE_ID,
-                "Pending",
-                "/datasets/dao/order/order_status/testOrderStatusDataSet.yml",
-                "/datasets/dao/order/order_status/emptyOrderStatusDataSet.yml");
-    }
-
-    @Test
-    public void testGetConstantEntities() {
-        List<ConstantPayloadDto> constantPayloadDtoList = List.of(
-                ConstantPayloadDto.builder()
+    @DataSet(value = "datasets/e2e/order/order_status/testE2EOrderStatusDataSet.yml", cleanBefore = true)
+    public void testGetEntities() {
+        List<OrderStatus> constantPayloadDtoList = List.of(
+                OrderStatus.builder()
                         .label("Pending")
                         .value("Pending")
                         .build(),
-                ConstantPayloadDto.builder()
+                OrderStatus.builder()
                         .label("Complete")
                         .value("Complete")
                         .build());
+        try {
 
-        MvcResult mvcResult = getConstantEntities(ORDER_STATUS_SERVICE_ID,
-                "/datasets/e2e/order/order_status/testAllOrderStatusDataSet.yml");
-        assertMvcListResult(mvcResult, constantPayloadDtoList, new TypeReference<>() {});
+            MvcResult mvcResult = mockMvc.perform(get(URL_TEMPLATE + "/all"))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                    .andExpect(status().is2xxSuccessful())
+                    .andReturn();
+
+            assertMvcListResult(mvcResult, constantPayloadDtoList, new TypeReference<>() {});
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
-    public void testGetConstantEntity() {
-        ConstantPayloadDto dto = ConstantPayloadDto.builder()
-                .label("Pending")
-                .value("Pending")
-                .build();
+    @DataSet(value = "datasets/e2e/order/order_status/testE2EOrderStatusDataSet.yml", cleanBefore = true)
+    public void testGetEntity() {
+        ConstantPayloadDto dto = getConstantPayloadDto();
+        try {
 
-        MvcResult mvcResult = getConstantEntity(ORDER_STATUS_SERVICE_ID,
-                "Pending",
-                "/datasets/dao/order/order_status/testOrderStatusDataSet.yml");
-        assertMvcResult(mvcResult, dto);
+            MvcResult mvcResult = mockMvc.perform(get(URL_TEMPLATE)
+                            .param("value", "Complete"))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                    .andExpect(status().is2xxSuccessful())
+                    .andReturn();
+
+            assertMvcResult(mvcResult, dto);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-
+    private ConstantPayloadDto getConstantPayloadDto() {
+        return ConstantPayloadDto.builder()
+                .label("Complete")
+                .value("Complete")
+                .build();
+    }
 
 }

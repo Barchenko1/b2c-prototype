@@ -1,98 +1,150 @@
 package com.b2c.prototype.e2e.controller.constant;
 
-import com.b2c.prototype.e2e.AbstractConstantControllerE2ETest;
+import com.b2c.prototype.e2e.BasicE2ETest;
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.github.database.rider.core.api.dataset.DataSet;
+import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.List;
 
-import static com.b2c.prototype.util.Constant.COUNTRY_PHONE_CODE_SERVICE_ID;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class CountryPhoneCodeControllerE2ETest extends AbstractConstantControllerE2ETest {
+public class CountryPhoneCodeControllerE2ETest extends BasicE2ETest {
+
+    private final String URL_TEMPLATE = "/api/v1/user/phone/country-code";
 
     @Test
-    public void testCreateConstantEntity() {
+    @DataSet(value = "datasets/e2e/user/country_phone_code/emptyE2ECountryPhoneCodeDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/user/country_phone_code/testE2ECountryPhoneCodeDataSet.yml", orderBy = "id")
+    public void testCreateEntity() {
+        ConstantPayloadDto dto = getConstantPayloadDto();
+        try {
+            String jsonPayload = objectMapper.writeValueAsString(dto);
+
+            mockMvc.perform(post(URL_TEMPLATE)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(jsonPayload))
+                    .andExpect(status().isOk());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    @DataSet(value = "datasets/e2e/user/country_phone_code/testE2ECountryPhoneCodeDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/user/country_phone_code/updateE2ECountryPhoneCodeDataSet.yml", orderBy = "id")
+    public void testUpdateEntity() {
         ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .label("+48")
-                .value("+48")
+                .label("+11")
+                .value("Update +11")
+                .build();
+        try {
+            String jsonPayload = objectMapper.writeValueAsString(constantPayloadDto);
+
+            mockMvc.perform(put(URL_TEMPLATE)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .param("value", "+11")
+                            .content(jsonPayload))
+                    .andExpect(status().isOk());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    @DataSet(value = "datasets/e2e/user/country_phone_code/testE2ECountryPhoneCodeDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/user/country_phone_code/updateE2ECountryPhoneCodeDataSet.yml", orderBy = "id")
+    public void testPatchEntity() {
+        ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
+                .label("+11")
+                .value("Update +11")
                 .build();
 
-        postConstantEntity(constantPayloadDto,
-                COUNTRY_PHONE_CODE_SERVICE_ID,
-                "/datasets/dao/user/country_phone_code/emptyCountryPhoneCodeDataSet.yml",
-                "/datasets/dao/user/country_phone_code/saveCountryPhoneCodeDataSet.yml");
+        try {
+            String jsonPayload = objectMapper.writeValueAsString(constantPayloadDto);
+
+            mockMvc.perform(put(URL_TEMPLATE)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .param("value", "+11")
+                            .content(jsonPayload))
+                    .andExpect(status().isOk());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
-    public void testUpdateConstantEntity() {
-        ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .label("Update +48")
-                .value("Update +48")
-                .build();
-
-        putConstantEntity(constantPayloadDto,
-                COUNTRY_PHONE_CODE_SERVICE_ID,
-                "+48",
-                "/datasets/dao/user/country_phone_code/testCountryPhoneCodeDataSet.yml",
-                "/datasets/dao/user/country_phone_code/updateCountryPhoneCodeDataSet.yml");
+    @DataSet(value = "datasets/e2e/user/country_phone_code/testE2ECountryPhoneCodeDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/user/country_phone_code/emptyE2ECountryPhoneCodeDataSet.yml", orderBy = "id")
+    public void testDeleteEntity() {
+        try {
+            mockMvc.perform(delete(URL_TEMPLATE)
+                            .param("value", "+22"))
+                    .andExpect(status().isOk());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
-    public void testPatchConstantEntity() {
-        ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .label("Update +48")
-                .value("Update +48")
-                .build();
-
-        patchConstantEntity(constantPayloadDto,
-                COUNTRY_PHONE_CODE_SERVICE_ID,
-                "+48",
-                "/datasets/dao/user/country_phone_code/testCountryPhoneCodeDataSet.yml",
-                "/datasets/dao/user/country_phone_code/updateCountryPhoneCodeDataSet.yml");
-    }
-
-    @Test
-    public void testDeleteConstantEntity() {
-        deleteConstantEntity(
-                COUNTRY_PHONE_CODE_SERVICE_ID,
-                "+48",
-                "/datasets/dao/user/country_phone_code/testCountryPhoneCodeDataSet.yml",
-                "/datasets/dao/user/country_phone_code/emptyCountryPhoneCodeDataSet.yml");
-    }
-
-    @Test
-    public void testGetConstantEntities() {
+    @DataSet(value = "datasets/e2e/user/country_phone_code/testE2ECountryPhoneCodeDataSet.yml", cleanBefore = true)
+    public void testGetEntities() {
         List<ConstantPayloadDto> constantPayloadDtoList = List.of(
-                ConstantPayloadDto.builder()
-                        .label("+48")
-                        .value("+48")
-                        .build(),
                 ConstantPayloadDto.builder()
                         .label("+11")
                         .value("+11")
+                        .build(),
+                ConstantPayloadDto.builder()
+                        .label("+22")
+                        .value("+22")
                         .build());
+        try {
 
-        MvcResult mvcResult = getConstantEntities(
-                COUNTRY_PHONE_CODE_SERVICE_ID,
-                "/datasets/e2e/user/contact_phone_code/testAllCountryPhoneCodeDataSet.yml");
+            MvcResult mvcResult = mockMvc.perform(get(URL_TEMPLATE + "/all"))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                    .andExpect(status().is2xxSuccessful())
+                    .andReturn();
 
-        assertMvcListResult(mvcResult, constantPayloadDtoList, new TypeReference<>() {});
+            assertMvcListResult(mvcResult, constantPayloadDtoList, new TypeReference<>() {});
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
-    public void testGetConstantEntity() {
-        ConstantPayloadDto dto = ConstantPayloadDto.builder()
-                .label("+48")
-                .value("+48")
+    @DataSet(value = "datasets/e2e/user/country_phone_code/testE2ECountryPhoneCodeDataSet.yml", cleanBefore = true)
+    public void testGetEntity() {
+        ConstantPayloadDto dto = getConstantPayloadDto();
+        try {
+
+            MvcResult mvcResult = mockMvc.perform(get(URL_TEMPLATE)
+                            .param("value", "+22"))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                    .andExpect(status().is2xxSuccessful())
+                    .andReturn();
+
+            assertMvcResult(mvcResult, dto);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private ConstantPayloadDto getConstantPayloadDto() {
+        return ConstantPayloadDto.builder()
+                .label("+22")
+                .value("+22")
                 .build();
-
-        MvcResult mvcResult = getConstantEntity(COUNTRY_PHONE_CODE_SERVICE_ID,
-                "+48",
-                "/datasets/dao/user/country_phone_code/testCountryPhoneCodeDataSet.yml");
-
-        assertMvcResult(mvcResult, dto);
     }
 
 }

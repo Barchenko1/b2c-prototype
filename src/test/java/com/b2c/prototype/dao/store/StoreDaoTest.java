@@ -214,7 +214,7 @@ class StoreDaoTest extends AbstractDaoTest {
                 .id(1L)
                 .articularStocks(List.of(getArticularStock()))
                 .address(address)
-                .storeId("123")
+                .storeUniqId("123")
                 .storeName("Store")
                 .isActive(true)
                 .build();

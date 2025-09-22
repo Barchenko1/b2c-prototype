@@ -3,7 +3,7 @@ package com.b2c.prototype.controller.user;
 import com.b2c.prototype.modal.dto.payload.user.UserCreditCardDto;
 import com.b2c.prototype.modal.dto.payload.order.ResponseCreditCardDto;
 import com.b2c.prototype.modal.dto.payload.user.ResponseUserCreditCardDto;
-import com.b2c.prototype.processor.creditcard.IUserCreditCardProcess;
+import com.b2c.prototype.processor.user.IUserCreditCardProcess;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;

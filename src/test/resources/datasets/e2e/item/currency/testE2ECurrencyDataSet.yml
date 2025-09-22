@@ -1,0 +1,7 @@
+currency:
+  - id: 1
+    label: "EUR"
+    value: "EUR"
+  - id: 2
+    label: "USD"
+    value: "USD"

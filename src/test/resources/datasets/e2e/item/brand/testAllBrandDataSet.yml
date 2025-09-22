@@ -1,7 +1,0 @@
-brand:
-  - id: 1
-    value: "Apple"
-    label: "Apple"
-  - id: 2
-    value: "Android"
-    label: "Android"

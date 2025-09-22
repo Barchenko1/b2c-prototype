@@ -34,14 +34,14 @@ import java.util.List;
         @NamedQuery(
                 name = "Store.findStoreByStoreId",
                 query = "SELECT s FROM Store s " +
-                        "WHERE s.storeId = :storeId"
+                        "WHERE s.storeUniqId = :storeUniqId"
         ),
         @NamedQuery(
                 name = "Store.findStoreWithAddressByStoreId",
                 query = "SELECT s FROM Store s " +
                         "LEFT JOIN FETCH s.address a " +
                         "LEFT JOIN FETCH a.country c " +
-                        "WHERE s.storeId = :storeId"
+                        "WHERE s.storeUniqId = :storeUniqId"
         ),
         @NamedQuery(
                 name = "Store.findStoreWithAddressArticularItemQuantityByStoreId",
@@ -51,7 +51,7 @@ import java.util.List;
                         "LEFT JOIN FETCH s.articularStocks sas " +
                         "LEFT JOIN FETCH sas.articularItemQuantities aiq " +
                         "LEFT JOIN FETCH aiq.articularItem ai " +
-                        "WHERE s.storeId = :storeId"
+                        "WHERE s.storeUniqId = :storeUniqId"
         ),
         @NamedQuery(
                 name = "Store.findStoreWithAddressArticularItemQuantityByCountry",
@@ -90,8 +90,8 @@ public class Store {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
-    @Column(name = "store_id", unique = true, nullable = false)
-    private String storeId;
+    @Column(name = "store_uniq_id", unique = true, nullable = false)
+    private String storeUniqId;
     private String storeName;
     private boolean isActive;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)

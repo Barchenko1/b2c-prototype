@@ -1,12 +1,11 @@
 package com.b2c.prototype.manager.payment.base;
 
 import com.b2c.prototype.dao.IGeneralEntityDao;
-import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.entity.payment.PaymentMethod;
 import com.b2c.prototype.manager.payment.IPaymentMethodManager;
-import com.b2c.prototype.transform.order.IOrderTransformService;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,45 +16,40 @@ import static com.b2c.prototype.util.Constant.VALUE;
 public class PaymentMethodManager implements IPaymentMethodManager {
 
     private final IGeneralEntityDao generalEntityDao;
-    private final IOrderTransformService orderTransformService;
 
-    public PaymentMethodManager(IGeneralEntityDao generalEntityDao, IOrderTransformService orderTransformService) {
+    public PaymentMethodManager(IGeneralEntityDao generalEntityDao) {
         this.generalEntityDao = generalEntityDao;
-        this.orderTransformService = orderTransformService;
     }
 
-    public void saveEntity(ConstantPayloadDto payload) {
-        PaymentMethod entity = orderTransformService.mapConstantPayloadDtoToPaymentMethod(payload);
+    public void persistEntity(PaymentMethod entity) {
         generalEntityDao.persistEntity(entity);
     }
 
-    public void updateEntity(String searchValue, ConstantPayloadDto payload) {
+    @Transactional
+    public void mergeEntity(String searchValue, PaymentMethod payload) {
         PaymentMethod fetchedEntity =
                 generalEntityDao.findEntity("PaymentMethod.findByValue", Pair.of(VALUE, searchValue));
-        fetchedEntity.setValue(payload.getValue());
-        fetchedEntity.setLabel(payload.getLabel());
-        generalEntityDao.mergeEntity(fetchedEntity);
+        payload.setId(fetchedEntity.getId());
+        generalEntityDao.mergeEntity(payload);
     }
 
-    public void deleteEntity(String value) {
+    @Transactional
+    public void removeEntity(String value) {
         PaymentMethod fetchedEntity = generalEntityDao.findEntity("PaymentMethod.findByValue", Pair.of(VALUE, value));
         generalEntityDao.removeEntity(fetchedEntity);
     }
 
-    public ConstantPayloadDto getEntity(String value) {
-        PaymentMethod entity = generalEntityDao.findEntity("PaymentMethod.findByValue", Pair.of(VALUE, value));
-        return orderTransformService.mapPaymentMethodToConstantPayloadDto(entity);
+    public PaymentMethod getEntity(String value) {
+        return generalEntityDao.findEntity("PaymentMethod.findByValue", Pair.of(VALUE, value));
     }
 
-    public Optional<ConstantPayloadDto> getEntityOptional(String value) {
+    public Optional<PaymentMethod> getEntityOptional(String value) {
         PaymentMethod entity = generalEntityDao.findEntity("PaymentMethod.findByValue", Pair.of(VALUE, value));
-        return Optional.of(orderTransformService.mapPaymentMethodToConstantPayloadDto(entity));
+        return Optional.of(entity);
     }
 
 
-    public List<ConstantPayloadDto> getEntities() {
-        return generalEntityDao.findEntityList("PaymentMethod.all", (Pair<String, ?>) null).stream()
-                .map(e -> orderTransformService.mapPaymentMethodToConstantPayloadDto((PaymentMethod) e))
-                .toList();
+    public List<PaymentMethod> getEntities() {
+        return generalEntityDao.findEntityList("PaymentMethod.all", (Pair<String, ?>) null);
     }
 }

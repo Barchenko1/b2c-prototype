@@ -1,0 +1,7 @@
+availability_status:
+  - id: 1
+    label: "Available"
+    value: "Update Available"
+  - id: 2
+    label: "Unavailable"
+    value: "Unavailable"

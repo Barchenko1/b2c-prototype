@@ -30,6 +30,8 @@ public class MessageTemplate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
+    @Column(name = "message_template_uniq_id")
+    private String messageTemplateUniqId;
     private String title;
     private String message;
 }

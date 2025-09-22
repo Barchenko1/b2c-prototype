@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/message")
+@RequestMapping("/api/v1/user/message")
 public class MessageController {
 
     private final IMessageProcess messageProcess;
@@ -43,11 +43,11 @@ public class MessageController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping(value = "/status", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> changeMessageStatus(@RequestParam final Map<String, String> requestParams) {
-        messageProcess.changeMessageStatus(requestParams);
-        return ResponseEntity.ok().build();
-    }
+//    @PutMapping(value = "/status", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<Void> changeMessageStatus(@RequestParam final Map<String, String> requestParams) {
+//        messageProcess.changeMessageStatus(requestParams);
+//        return ResponseEntity.ok().build();
+//    }
 
     @DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> deleteMessage(@RequestParam final Map<String, String> requestParams) {

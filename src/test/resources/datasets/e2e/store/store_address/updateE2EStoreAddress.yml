@@ -65,7 +65,7 @@ country:
   - id: 1
     label: "USA"
     value: "USA"
-    flagImagePath: "/images/usa.jpg"
+    flag_image_path: "/images/usa.jpg"
 address:
   - id: 1
     city: "New York2"

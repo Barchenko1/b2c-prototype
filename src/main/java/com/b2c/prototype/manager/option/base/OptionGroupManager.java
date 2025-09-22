@@ -25,20 +25,21 @@ public class OptionGroupManager implements IOptionGroupManager {
         this.itemTransformService = itemTransformService;
     }
 
-    public void saveEntity(ConstantPayloadDto payload) {
+    public void persistEntity(ConstantPayloadDto payload) {
         OptionGroup entity = itemTransformService.mapConstantPayloadDtoToOptionGroup(payload);
         generalEntityDao.persistEntity(entity);
     }
 
-    public void updateEntity(String searchValue, ConstantPayloadDto payload) {
+    public void mergeEntity(String searchValue, ConstantPayloadDto entity) {
         OptionGroup fetchedEntity =
                 generalEntityDao.findEntity("OptionGroup.findByValue", Pair.of(VALUE, searchValue));
-        fetchedEntity.setValue(payload.getValue());
-        fetchedEntity.setLabel(payload.getLabel());
+        fetchedEntity.setValue(entity.getValue());
+        fetchedEntity.setLabel(entity.getLabel());
+
         generalEntityDao.mergeEntity(fetchedEntity);
     }
 
-    public void deleteEntity(String value) {
+    public void removeEntity(String value) {
         OptionGroup fetchedEntity = generalEntityDao.findEntity("OptionGroup.findByValue", Pair.of(VALUE, value));
         generalEntityDao.removeEntity(fetchedEntity);
     }

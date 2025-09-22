@@ -2,7 +2,7 @@ package com.b2c.prototype.controller.discount;
 
 import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountStatusDto;
-import com.b2c.prototype.processor.discount.IDiscountProcess;
+import com.b2c.prototype.processor.item.IDiscountProcess;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

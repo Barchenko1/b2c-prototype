@@ -2,6 +2,8 @@ package com.b2c.prototype.modal.entity.store;
 
 import com.b2c.prototype.modal.base.constant.AbstractConstantEntity;
 import jakarta.persistence.Entity;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -10,5 +12,15 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "availability_status")
 @SuperBuilder
 @NoArgsConstructor
+@NamedQueries({
+        @NamedQuery(
+                name = "AvailabilityStatus.findByValue",
+                query = "SELECT e FROM AvailabilityStatus e WHERE e.value = : value"
+        ),
+        @NamedQuery(
+                name = "AvailabilityStatus.all",
+                query = "SELECT e FROM AvailabilityStatus e"
+        )
+})
 public class AvailabilityStatus extends AbstractConstantEntity {
 }

@@ -1,11 +1,10 @@
 package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.dao.IGeneralEntityDao;
-import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.entity.item.ArticularStatus;
-import com.b2c.prototype.manager.item.IItemStatusManager;
-import com.b2c.prototype.transform.item.IItemTransformService;
+import com.b2c.prototype.manager.item.IArticularStatusManager;
 import com.nimbusds.jose.util.Pair;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,49 +13,46 @@ import java.util.Optional;
 import static com.b2c.prototype.util.Constant.VALUE;
 
 @Service
-public class ArticularStatusManager implements IItemStatusManager {
+public class ArticularStatusManager implements IArticularStatusManager {
 
     private final IGeneralEntityDao generalEntityDao;
-    private final IItemTransformService itemTransformService;
-    public ArticularStatusManager(IGeneralEntityDao generalEntityDao,
-                                  IItemTransformService itemTransformService) {
+
+    public ArticularStatusManager(IGeneralEntityDao generalEntityDao) {
 
         this.generalEntityDao = generalEntityDao;
-        this.itemTransformService = itemTransformService;
     }
 
-    public void saveEntity(ConstantPayloadDto payload) {
-        ArticularStatus entity = itemTransformService.mapConstantPayloadDtoToArticularStatus(payload);
-        generalEntityDao.persistEntity(entity);
+    public void persistEntity(ArticularStatus payload) {
+        generalEntityDao.persistEntity(payload);
     }
 
-    public void updateEntity(String searchValue, ConstantPayloadDto payload) {
+    @Transactional
+    @Override
+    public void mergeEntity(String searchValue, ArticularStatus entity) {
         ArticularStatus fetchedEntity =
                 generalEntityDao.findEntity("ArticularStatus.findByValue", Pair.of(VALUE, searchValue));
-        fetchedEntity.setValue(payload.getValue());
-        fetchedEntity.setLabel(payload.getLabel());
-        generalEntityDao.mergeEntity(fetchedEntity);
+        entity.setId(fetchedEntity.getId());
+        generalEntityDao.mergeEntity(entity);
     }
 
-    public void deleteEntity(String value) {
+    @Transactional
+    @Override
+    public void removeEntity(String value) {
         ArticularStatus fetchedEntity = generalEntityDao.findEntity("ArticularStatus.findByValue", Pair.of(VALUE, value));
         generalEntityDao.removeEntity(fetchedEntity);
     }
 
-    public ConstantPayloadDto getEntity(String value) {
-        ArticularStatus entity = generalEntityDao.findEntity("ArticularStatus.findByValue", Pair.of(VALUE, value));
-        return itemTransformService.mapArticularStatusToConstantPayloadDto(entity);
+    public ArticularStatus getEntity(String value) {
+        return generalEntityDao.findEntity("ArticularStatus.findByValue", Pair.of(VALUE, value));
     }
 
-    public Optional<ConstantPayloadDto> getEntityOptional(String value) {
+    public Optional<ArticularStatus> getEntityOptional(String value) {
         ArticularStatus entity = generalEntityDao.findEntity("ArticularStatus.findByValue", Pair.of(VALUE, value));
-        return Optional.of(itemTransformService.mapArticularStatusToConstantPayloadDto(entity));
+        return Optional.of(entity);
     }
 
 
-    public List<ConstantPayloadDto> getEntities() {
-        return generalEntityDao.findEntityList("ArticularStatus.all", (Pair<String, ?>) null).stream()
-                .map(e -> itemTransformService.mapArticularStatusToConstantPayloadDto((ArticularStatus) e))
-                .toList();
+    public List<ArticularStatus> getEntities() {
+        return generalEntityDao.findEntityList("ArticularStatus.all", (Pair<String, ?>) null);
     }
 }

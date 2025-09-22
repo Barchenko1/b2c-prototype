@@ -1384,7 +1384,7 @@ public class TransformationEntityConfiguration {
 
     private BiFunction<Session, StoreDto, Store> mapStoreDtoToStoreFunction() {
         return (session, storeDto) -> Store.builder()
-                .storeId(getUUID())
+                .storeUniqId(getUUID())
                 .storeName(storeDto.getStoreName())
                 .address(storeDto.getAddress() != null ? mapAddressDtoToAddressFunction().apply(session, storeDto.getAddress()) : null)
                 .isActive(true)
@@ -1398,7 +1398,7 @@ public class TransformationEntityConfiguration {
 //                    .toList();
             return ResponseStoreDto.builder()
                     .storeName(store.getStoreName())
-                    .storeId(store.getStoreId())
+                    .storeId(store.getStoreUniqId())
                     .address(mapAddressToAddressDtoFunction().apply(store.getAddress()))
                     .articularItemQuantityList(null)
                     .build();

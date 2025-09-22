@@ -2,10 +2,9 @@ package com.b2c.prototype.manager.rating.base;
 
 import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.manager.rating.IRatingManager;
-import com.b2c.prototype.modal.dto.common.NumberConstantPayloadDto;
 import com.b2c.prototype.modal.entity.review.Rating;
-import com.b2c.prototype.transform.item.IItemTransformService;
 import com.nimbusds.jose.util.Pair;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,45 +16,42 @@ import static com.b2c.prototype.util.Constant.VALUE;
 public class RatingManager implements IRatingManager {
     
     private final IGeneralEntityDao generalEntityDao;
-    private final IItemTransformService itemTransformService;
 
-    public RatingManager(IGeneralEntityDao generalEntityDao,
-                         IItemTransformService itemTransformService) {
+    public RatingManager(IGeneralEntityDao generalEntityDao) {
         this.generalEntityDao = generalEntityDao;
-        this.itemTransformService = itemTransformService;
     }
 
-    public void saveEntity(NumberConstantPayloadDto payload) {
-        Rating entity = itemTransformService.mapNumberConstantPayloadDtoToRating(payload);
+    public void persistEntity(Rating entity) {
         generalEntityDao.persistEntity(entity);
     }
 
-    public void updateEntity(Integer searchValue, NumberConstantPayloadDto payload) {
+    @Transactional
+    @Override
+    public void mergeEntity(Integer searchValue, Rating entity) {
         Rating fetchedEntity =
                 generalEntityDao.findEntity("Rating.findByValue", Pair.of(VALUE, searchValue));
-        fetchedEntity.setValue(payload.getValue().intValue());
-        generalEntityDao.mergeEntity(fetchedEntity);
+        entity.setId(fetchedEntity.getId());
+        generalEntityDao.mergeEntity(entity);
     }
 
-    public void deleteEntity(int value) {
+    @Transactional
+    @Override
+    public void removeEntity(int value) {
         Rating fetchedEntity = generalEntityDao.findEntity("Rating.findByValue", Pair.of(VALUE, value));
         generalEntityDao.removeEntity(fetchedEntity);
     }
 
-    public NumberConstantPayloadDto getEntity(int value) {
-        Rating entity = generalEntityDao.findEntity("Rating.findByValue", Pair.of(VALUE, value));
-        return itemTransformService.mapRatingToNumberConstantPayloadDto(entity);
+    public Rating getEntity(int value) {
+        return generalEntityDao.findEntity("Rating.findByValue", Pair.of(VALUE, value));
     }
 
-    public Optional<NumberConstantPayloadDto> getEntityOptional(int value) {
+    public Optional<Rating> getEntityOptional(int value) {
         Rating entity = generalEntityDao.findEntity("Rating.findByValue", Pair.of(VALUE, value));
-        return Optional.of(itemTransformService.mapRatingToNumberConstantPayloadDto(entity));
+        return Optional.of(entity);
     }
 
 
-    public List<NumberConstantPayloadDto> getEntities() {
-        return generalEntityDao.findEntityList("Rating.all", (Pair<String, ?>) null).stream()
-                .map(e -> itemTransformService.mapRatingToNumberConstantPayloadDto((Rating) e))
-                .toList();
+    public List<Rating> getEntities() {
+        return generalEntityDao.findEntityList("Rating.all", (Pair<String, ?>) null);
     }
 }

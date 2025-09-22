@@ -1,33 +1,17 @@
 package com.b2c.prototype.util;
 
 public interface Constant {
-    String USER_ID = "userId";
+    String USER_ID = "user_uniq_id";
     String EMAIL = "email";
-    String ORDER_ID = "orderId";
-    String ARTICULAR_ID = "articularId";
-    String PAYMENT_ID = "upayment_id";
+    String ORDER_ID = "order_uniq_id";
+    String ARTICULAR_ID = "articular_uniq_id";
+    String PAYMENT_ID = "payment_uniq_id";
     String ITEM_ID = "itemId";
     String CHAR_SEQUENCE_CODE = "charSequenceCode";
     String VALUE = "value";
-    String STORE_ID = "storeId";
-    String MESSAGE_ID = "messageId";
-    String POST_ID = "postId";
-    String REVIEW_COMMENT_ID = "commentId";
-
-    // serviceId
-    String AVAILABILITY_STATUS_ID = "availabilityStatus";
-    String BRAND_SERVICE_ID = "brand";
-    String COUNTRY_PHONE_CODE_SERVICE_ID = "countryPhoneCode";
-    String COUNTRY_SERVICE_ID = "country";
-    String CURRENCY_SERVICE_ID = "currency";
-    String DELIVERY_TYPE_SERVICE_ID = "deliveryType";
-    String ITEM_STATUS_SERVICE_ID = "itemStatus";
-    String ITEM_TYPE_SERVICE_ID = "itemType";
-    String MESSAGE_STATUS_SERVICE_ID = "messageStatus";
-    String MESSAGE_TYPE_SERVICE_ID = "messageType";
-    String OPTION_GROUP_SERVICE_ID = "optionGroup";
-    String ORDER_STATUS_SERVICE_ID = "orderStatus";
-    String PAYMENT_METHOD_SERVICE_ID = "paymentMethod";
-    String RATING_SERVICE_ID = "rating";
+    String STORE_ID = "store_uniq_id";
+    String MESSAGE_ID = "message_uniq_id";
+    String POST_ID = "post_uniq_id";
+    String REVIEW_COMMENT_ID = "comment_uniq_id";
 
 }

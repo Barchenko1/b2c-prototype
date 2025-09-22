@@ -1,13 +1,12 @@
 package com.b2c.prototype.manager.message.base;
 
 import com.b2c.prototype.dao.IGeneralEntityDao;
-import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.entity.item.ItemType;
 import com.b2c.prototype.modal.entity.message.MessageStatus;
 import com.b2c.prototype.manager.message.IMessageStatusManager;
 
-import com.b2c.prototype.transform.userdetails.IUserDetailsTransformService;
 import com.nimbusds.jose.util.Pair;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,48 +18,43 @@ import static com.b2c.prototype.util.Constant.VALUE;
 public class MessageStatusManager implements IMessageStatusManager {
 
     private final IGeneralEntityDao generalEntityDao;
-    private final IUserDetailsTransformService userDetailsTransformService;
 
-    public MessageStatusManager(IGeneralEntityDao generalEntityDao,
-                                IUserDetailsTransformService userDetailsTransformService) {
+    public MessageStatusManager(IGeneralEntityDao generalEntityDao) {
 
         this.generalEntityDao = generalEntityDao;
-        this.userDetailsTransformService = userDetailsTransformService;
     }
 
-    public void saveEntity(ConstantPayloadDto payload) {
-        MessageStatus entity = userDetailsTransformService.mapConstantPayloadDtoToMessageStatus(payload);
+    public void persistEntity(MessageStatus entity) {
         generalEntityDao.persistEntity(entity);
     }
 
-    public void updateEntity(String searchValue, ConstantPayloadDto payload) {
-        ItemType fetchedEntity =
+    @Transactional
+    @Override
+    public void mergeEntity(String searchValue, MessageStatus entity) {
+        MessageStatus fetchedEntity =
                 generalEntityDao.findEntity("MessageStatus.findByValue", Pair.of(VALUE, searchValue));
-        fetchedEntity.setValue(payload.getValue());
-        fetchedEntity.setLabel(payload.getLabel());
-        generalEntityDao.mergeEntity(fetchedEntity);
+        entity.setId(fetchedEntity.getId());
+        generalEntityDao.mergeEntity(entity);
     }
 
-    public void deleteEntity(String value) {
+    @Transactional
+    @Override
+    public void removeEntity(String value) {
         MessageStatus fetchedEntity = generalEntityDao.findEntity("MessageStatus.findByValue", Pair.of(VALUE, value));
         generalEntityDao.removeEntity(fetchedEntity);
     }
 
-    public ConstantPayloadDto getEntity(String value) {
-        MessageStatus entity = generalEntityDao.findEntity("MessageStatus.findByValue", Pair.of(VALUE, value));
-        return userDetailsTransformService.mapMessageStatusToConstantPayloadDto(entity);
+    public MessageStatus getEntity(String value) {
+        return generalEntityDao.findEntity("MessageStatus.findByValue", Pair.of(VALUE, value));
     }
 
-    public Optional<ConstantPayloadDto> getEntityOptional(String value) {
+    public Optional<MessageStatus> getEntityOptional(String value) {
         MessageStatus entity = generalEntityDao.findEntity("MessageStatus.findByValue", Pair.of(VALUE, value));
-        return Optional.of(userDetailsTransformService.mapMessageStatusToConstantPayloadDto(entity));
+        return Optional.of(entity);
     }
 
-
-    public List<ConstantPayloadDto> getEntities() {
-        return generalEntityDao.findEntityList("MessageStatus.all", (Pair<String, ?>) null).stream()
-                .map(e -> userDetailsTransformService.mapMessageStatusToConstantPayloadDto((MessageStatus) e))
-                .toList();
+    public List<MessageStatus> getEntities() {
+        return generalEntityDao.findEntityList("MessageStatus.all", (Pair<String, ?>) null);
     }
 
 }

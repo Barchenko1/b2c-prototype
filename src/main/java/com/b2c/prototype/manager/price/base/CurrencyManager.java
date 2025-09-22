@@ -1,12 +1,11 @@
 package com.b2c.prototype.manager.price.base;
 
 import com.b2c.prototype.dao.IGeneralEntityDao;
-import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.manager.price.ICurrencyManager;
-import com.b2c.prototype.transform.constant.IGeneralEntityTransformService;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,46 +16,42 @@ import static com.b2c.prototype.util.Constant.VALUE;
 public class CurrencyManager implements ICurrencyManager {
     
     private final IGeneralEntityDao generalEntityDao;
-    private final IGeneralEntityTransformService generalEntityTransformService;
 
-    public CurrencyManager(IGeneralEntityDao generalEntityDao,
-                           IGeneralEntityTransformService generalEntityTransformService) {
+    public CurrencyManager(IGeneralEntityDao generalEntityDao) {
         this.generalEntityDao = generalEntityDao;
-        this.generalEntityTransformService = generalEntityTransformService;
     }
 
-    public void saveEntity(ConstantPayloadDto payload) {
-        Currency entity = generalEntityTransformService.mapConstantPayloadDtoToCurrency(payload);
+    public void persistEntity(Currency entity) {
         generalEntityDao.persistEntity(entity);
     }
 
-    public void updateEntity(String searchValue, ConstantPayloadDto payload) {
+    @Transactional
+    @Override
+    public void mergeEntity(String searchValue, Currency entity) {
         Currency fetchedEntity =
                 generalEntityDao.findEntity("Currency.findByValue", Pair.of(VALUE, searchValue));
-        fetchedEntity.setValue(payload.getValue());
-        fetchedEntity.setLabel(payload.getLabel());
-        generalEntityDao.mergeEntity(fetchedEntity);
+        entity.setId(fetchedEntity.getId());
+        generalEntityDao.mergeEntity(entity);
     }
 
-    public void deleteEntity(String value) {
+    @Transactional
+    @Override
+    public void removeEntity(String value) {
         Currency fetchedEntity = generalEntityDao.findEntity("Currency.findByValue", Pair.of(VALUE, value));
         generalEntityDao.removeEntity(fetchedEntity);
     }
 
-    public ConstantPayloadDto getEntity(String value) {
-        Currency entity = generalEntityDao.findEntity("Currency.findByValue", Pair.of(VALUE, value));
-        return generalEntityTransformService.mapCurrencyToConstantPayloadDto(entity);
+    public Currency getEntity(String value) {
+        return generalEntityDao.findEntity("Currency.findByValue", Pair.of(VALUE, value));
     }
 
-    public Optional<ConstantPayloadDto> getEntityOptional(String value) {
+    public Optional<Currency> getEntityOptional(String value) {
         Currency entity = generalEntityDao.findEntity("Currency.findByValue", Pair.of(VALUE, value));
-        return Optional.of(generalEntityTransformService.mapCurrencyToConstantPayloadDto(entity));
+        return Optional.of(entity);
     }
 
 
-    public List<ConstantPayloadDto> getEntities() {
-        return generalEntityDao.findEntityList("Currency.all", (Pair<String, ?>) null).stream()
-                .map(e -> generalEntityTransformService.mapCurrencyToConstantPayloadDto((Currency) e))
-                .toList();
+    public List<Currency> getEntities() {
+        return generalEntityDao.findEntityList("Currency.all", (Pair<String, ?>) null);
     }
 }

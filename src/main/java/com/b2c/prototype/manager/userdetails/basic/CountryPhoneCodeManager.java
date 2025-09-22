@@ -1,11 +1,10 @@
 package com.b2c.prototype.manager.userdetails.basic;
 
 import com.b2c.prototype.dao.IGeneralEntityDao;
-import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.manager.userdetails.ICountryPhoneCodeManager;
-import com.b2c.prototype.transform.userdetails.IUserDetailsTransformService;
 import com.nimbusds.jose.util.Pair;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,45 +16,45 @@ import static com.b2c.prototype.util.Constant.VALUE;
 public class CountryPhoneCodeManager implements ICountryPhoneCodeManager {
     
     private final IGeneralEntityDao generalEntityDao;
-    private final IUserDetailsTransformService userDetailsTransformService;
 
-    public CountryPhoneCodeManager(IGeneralEntityDao generalEntityDao, IUserDetailsTransformService userDetailsTransformService) {
+    public CountryPhoneCodeManager(IGeneralEntityDao generalEntityDao) {
         this.generalEntityDao = generalEntityDao;
-        this.userDetailsTransformService = userDetailsTransformService;
     }
 
-    public void saveEntity(ConstantPayloadDto payload) {
-        CountryPhoneCode entity = userDetailsTransformService.mapConstantPayloadDtoToCountryPhoneCode(payload);
+    @Override
+    public void persistEntity(CountryPhoneCode entity) {
         generalEntityDao.persistEntity(entity);
     }
 
-    public void updateEntity(String searchValue, ConstantPayloadDto payload) {
+    @Transactional
+    @Override
+    public void mergeEntity(String searchValue, CountryPhoneCode entity) {
         CountryPhoneCode fetchedEntity =
                 generalEntityDao.findEntity("CountryPhoneCode.findByValue", Pair.of(VALUE, searchValue));
-        fetchedEntity.setValue(payload.getValue());
-        fetchedEntity.setLabel(payload.getLabel());
-        generalEntityDao.mergeEntity(fetchedEntity);
+        entity.setId(fetchedEntity.getId());
+        generalEntityDao.mergeEntity(entity);
     }
 
-    public void deleteEntity(String value) {
+    @Transactional
+    @Override
+    public void removeEntity(String value) {
         CountryPhoneCode fetchedEntity = generalEntityDao.findEntity("CountryPhoneCode.findByValue", Pair.of(VALUE, value));
         generalEntityDao.removeEntity(fetchedEntity);
     }
 
-    public ConstantPayloadDto getEntity(String value) {
-        CountryPhoneCode entity = generalEntityDao.findEntity("CountryPhoneCode.findByValue", Pair.of(VALUE, value));
-        return userDetailsTransformService.mapCountryPhoneCodeDtoToConstantPayloadDto(entity);
+    @Override
+    public CountryPhoneCode getEntity(String value) {
+        return generalEntityDao.findEntity("CountryPhoneCode.findByValue", Pair.of(VALUE, value));
     }
 
-    public Optional<ConstantPayloadDto> getEntityOptional(String value) {
+    @Override
+    public Optional<CountryPhoneCode> getEntityOptional(String value) {
         CountryPhoneCode entity = generalEntityDao.findEntity("CountryPhoneCode.findByValue", Pair.of(VALUE, value));
-        return Optional.of(userDetailsTransformService.mapCountryPhoneCodeDtoToConstantPayloadDto(entity));
+        return Optional.of(entity);
     }
 
-
-    public List<ConstantPayloadDto> getEntities() {
-        return generalEntityDao.findEntityList("CountryPhoneCode.all", (Pair<String, ?>) null).stream()
-                .map(e -> userDetailsTransformService.mapCountryPhoneCodeDtoToConstantPayloadDto((CountryPhoneCode) e))
-                .toList();
+    @Override
+    public List<CountryPhoneCode> getEntities() {
+        return generalEntityDao.findEntityList("CountryPhoneCode.all", (Pair<String, ?>) null);
     }
 }

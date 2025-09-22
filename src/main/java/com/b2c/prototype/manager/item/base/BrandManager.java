@@ -1,10 +1,8 @@
 package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.dao.IGeneralEntityDao;
-import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.manager.item.IBrandManager;
-import com.b2c.prototype.transform.item.IItemTransformService;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
@@ -17,47 +15,40 @@ import static com.b2c.prototype.util.Constant.VALUE;
 public class BrandManager implements IBrandManager {
 
     private final IGeneralEntityDao generalEntityDao;
-    private final IItemTransformService itemTransformService;
 
-    public BrandManager(IGeneralEntityDao brandDao,
-                        IItemTransformService itemTransformService) {
+    public BrandManager(IGeneralEntityDao brandDao) {
         this.generalEntityDao = brandDao;
-        this.itemTransformService = itemTransformService;
     }
 
-    public void saveEntity(ConstantPayloadDto payload) {
-        Brand entity = itemTransformService.mapConstantPayloadDtoToBrand(payload);
-        generalEntityDao.persistEntity(entity);
+    @Override
+    public void persistEntity(Brand payload) {
+        generalEntityDao.persistEntity(payload);
     }
 
-    public void updateEntity(String searchValue, ConstantPayloadDto payload) {
+    @Override
+    public void mergeEntity(String searchValue, Brand entity) {
         Brand fetchedEntity =
                 generalEntityDao.findEntity("Brand.findByValue", Pair.of(VALUE, searchValue));
-        fetchedEntity.setValue(payload.getValue());
-        fetchedEntity.setLabel(payload.getLabel());
-        generalEntityDao.mergeEntity(fetchedEntity);
+        entity.setId(fetchedEntity.getId());
+        generalEntityDao.mergeEntity(entity);
     }
 
-    public void deleteEntity(String value) {
+    public void removeEntity(String value) {
         Brand fetchedEntity = generalEntityDao.findEntity("Brand.findByValue", Pair.of(VALUE, value));
         generalEntityDao.removeEntity(fetchedEntity);
     }
 
-    public ConstantPayloadDto getEntity(String value) {
-        Brand entity = generalEntityDao.findEntity("Brand.findByValue", Pair.of(VALUE, value));
-        return itemTransformService.mapBrandToConstantPayloadDto(entity);
+    public Brand getEntity(String value) {
+        return generalEntityDao.findEntity("Brand.findByValue", Pair.of(VALUE, value));
     }
 
-    public Optional<ConstantPayloadDto> getEntityOptional(String value) {
+    public Optional<Brand> getEntityOptional(String value) {
         Brand entity = generalEntityDao.findEntity("Brand.findByValue", Pair.of(VALUE, value));
-        return Optional.of(itemTransformService.mapBrandToConstantPayloadDto(entity));
+        return Optional.of(entity);
     }
 
-
-    public List<ConstantPayloadDto> getEntities() {
-        return generalEntityDao.findEntityList("Brand.all", (Pair<String, ?>) null).stream()
-                .map(e -> itemTransformService.mapBrandToConstantPayloadDto((Brand) e))
-                .toList();
+    public List<Brand> getEntities() {
+        return generalEntityDao.findEntityList("Brand.all", (Pair<String, ?>) null);
     }
 
 }

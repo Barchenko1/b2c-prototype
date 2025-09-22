@@ -1,0 +1,7 @@
+message_status:
+  - id: 1
+    label: "New"
+    value: "Update New"
+  - id: 2
+    label: "Read"
+    value: "Read"

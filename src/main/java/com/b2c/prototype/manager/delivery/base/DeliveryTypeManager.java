@@ -1,11 +1,10 @@
 package com.b2c.prototype.manager.delivery.base;
 
 import com.b2c.prototype.dao.IGeneralEntityDao;
-import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.entity.delivery.DeliveryType;
 import com.b2c.prototype.manager.delivery.IDeliveryTypeManager;
-import com.b2c.prototype.transform.order.IOrderTransformService;
 import com.nimbusds.jose.util.Pair;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,45 +16,40 @@ import static com.b2c.prototype.util.Constant.VALUE;
 public class DeliveryTypeManager implements IDeliveryTypeManager {
 
     private final IGeneralEntityDao generalEntityDao;
-    private final IOrderTransformService orderTransformService;
 
-    public DeliveryTypeManager(IGeneralEntityDao generalEntityDao, IOrderTransformService orderTransformService) {
+    public DeliveryTypeManager(IGeneralEntityDao generalEntityDao) {
         this.generalEntityDao = generalEntityDao;
-        this.orderTransformService = orderTransformService;
     }
 
-    public void saveEntity(ConstantPayloadDto payload) {
-        DeliveryType entity = orderTransformService.mapConstantPayloadDtoToDeliveryType(payload);
+    public void persistEntity(DeliveryType entity) {
         generalEntityDao.persistEntity(entity);
     }
 
-    public void updateEntity(String searchValue, ConstantPayloadDto payload) {
+    @Transactional
+    public void mergeEntity(String searchValue, DeliveryType entity) {
         DeliveryType fetchedEntity =
                 generalEntityDao.findEntity("DeliveryType.findByValue", Pair.of(VALUE, searchValue));
-        fetchedEntity.setValue(payload.getValue());
-        fetchedEntity.setLabel(payload.getLabel());
-        generalEntityDao.mergeEntity(fetchedEntity);
+        entity.setId(fetchedEntity.getId());
+        generalEntityDao.mergeEntity(entity);
     }
 
-    public void deleteEntity(String value) {
+    @Transactional
+    public void removeEntity(String value) {
         DeliveryType fetchedEntity = generalEntityDao.findEntity("DeliveryType.findByValue", Pair.of(VALUE, value));
         generalEntityDao.removeEntity(fetchedEntity);
     }
 
-    public ConstantPayloadDto getEntity(String value) {
-        DeliveryType entity = generalEntityDao.findEntity("DeliveryType.findByValue", Pair.of(VALUE, value));
-        return orderTransformService.mapDeliveryTypeToConstantPayloadDto(entity);
+    public DeliveryType getEntity(String value) {
+        return generalEntityDao.findEntity("DeliveryType.findByValue", Pair.of(VALUE, value));
     }
 
-    public Optional<ConstantPayloadDto> getEntityOptional(String value) {
+    public Optional<DeliveryType> getEntityOptional(String value) {
         DeliveryType entity = generalEntityDao.findEntity("DeliveryType.findByValue", Pair.of(VALUE, value));
-        return Optional.of(orderTransformService.mapDeliveryTypeToConstantPayloadDto(entity));
+        return Optional.of(entity);
     }
 
 
-    public List<ConstantPayloadDto> getEntities() {
-        return generalEntityDao.findEntityList("DeliveryType.all", (Pair<String, ?>) null).stream()
-                .map(e -> orderTransformService.mapDeliveryTypeToConstantPayloadDto((DeliveryType) e))
-                .toList();
+    public List<DeliveryType> getEntities() {
+        return generalEntityDao.findEntityList("DeliveryType.all", (Pair<String, ?>) null);
     }
 }

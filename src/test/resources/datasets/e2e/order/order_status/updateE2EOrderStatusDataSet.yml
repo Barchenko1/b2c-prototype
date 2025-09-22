@@ -1,0 +1,7 @@
+order_status:
+  - id: 1
+    value: "Pending"
+    label: "Pending"
+  - id: 2
+    value: "Update Complete"
+    label: "Complete"
