@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.b2c.prototype.util.Constant.VALUE;
+import static com.b2c.prototype.util.Util.getUUID;
 
 @Service
 public class MessageTemplateManager implements IMessageTemplateManager {
@@ -30,7 +31,8 @@ public class MessageTemplateManager implements IMessageTemplateManager {
     public void mergeEntity(String searchValue, MessageTemplate entity) {
         MessageTemplate fetchedEntity =
                 generalEntityDao.findEntity("MessageTemplate.findByValue", Pair.of(VALUE, searchValue));
-        entity.setId(fetchedEntity.getId());
+        entity.setMessageTemplateUniqId(getUUID());
+        entity.setMessageTemplateUniqId(fetchedEntity.getMessageTemplateUniqId());
         generalEntityDao.mergeEntity(entity);
     }
 

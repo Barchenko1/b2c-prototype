@@ -169,7 +169,7 @@ public class MessageManager implements IMessageManager {
 
     private Message getExistingMessage(MessageBox messageBox, String uniqMessageId) {
         return messageBox.getMessages().stream()
-                .filter(message -> message.getMessageUniqNumber().equals(uniqMessageId))
+                .filter(message -> message.getMessageUniqId().equals(uniqMessageId))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Message not found"));
     }

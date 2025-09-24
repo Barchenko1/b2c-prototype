@@ -1,6 +1,5 @@
 package com.b2c.prototype.modal.entity.option;
 
-import com.b2c.prototype.modal.base.constant.AbstractConstantEntity;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.price.Price;
 import jakarta.persistence.CascadeType;

@@ -29,21 +29,16 @@ import java.util.Set;
                 name = "OptionGroup.findByValueWithOptionItems",
                 query = "SELECT og FROM OptionGroup og " +
                         "LEFT JOIN FETCH og.optionItems oi " +
+                        "LEFT JOIN FETCH og.optionItemCosts oic " +
                         "WHERE og.value = : value"
         ),
         @NamedQuery(
                 name = "OptionGroup.findWithOptionItems",
                 query = "SELECT og FROM OptionGroup og " +
-                        "LEFT JOIN FETCH og.optionItems oi"
-        ),
-        @NamedQuery(
-                name = "OptionGroup.findByValue",
-                query = "SELECT og FROM OptionGroup og " +
-                        "WHERE og.value = : value"
-        ),
-        @NamedQuery(
-                name = "OptionGroup.all",
-                query = "SELECT og FROM OptionGroup og"
+                        "LEFT JOIN FETCH og.optionItems oi " +
+                        "LEFT JOIN FETCH og.optionItemCosts oic " +
+                        "LEFT JOIN FETCH oi.articularItems oia " +
+                        "LEFT JOIN FETCH oic.articularItems oica"
         ),
         @NamedQuery(
                 name = "OptionGroup.withOptionItemsAndArticularItems",

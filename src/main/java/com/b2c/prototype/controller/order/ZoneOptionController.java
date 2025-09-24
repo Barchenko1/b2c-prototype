@@ -1,4 +1,4 @@
-package com.b2c.prototype.controller.item;
+package com.b2c.prototype.controller.order;
 
 import com.b2c.prototype.modal.dto.payload.option.ZoneOptionDto;
 import com.b2c.prototype.processor.option.IZoneOptionProcess;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/zone")
+@RequestMapping("/api/v1/order/option/zone")
 public class ZoneOptionController {
     private final IZoneOptionProcess zoneOptionProcess;
 

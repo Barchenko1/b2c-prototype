@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -60,11 +59,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ErrorDTO.builder().errorCode(HttpStatus.BAD_REQUEST.value()).description("Invalid Input Exception").build(), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({NoResourceFoundException.class})
-    public ResponseEntity<ErrorDTO> handleNoResourceFoundExceptionException() {
-        return new ResponseEntity<>(ErrorDTO.builder()
-                .errorCode(HttpStatus.NOT_FOUND.value())
-                .description("Resource not found")
-                .build(), HttpStatus.NOT_FOUND);
-    }
+//    @ExceptionHandler({NoResourceFoundException.class})
+//    public ResponseEntity<ErrorDTO> handleNoResourceFoundExceptionException() {
+//        return new ResponseEntity<>(ErrorDTO.builder()
+//                .errorCode(HttpStatus.NOT_FOUND.value())
+//                .description("Resource not found")
+//                .build(), HttpStatus.NOT_FOUND);
+//    }
 }

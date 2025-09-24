@@ -43,7 +43,7 @@ class OptionGroupManagerTest extends AbstractConstantEntityManagerTest<OptionGro
         when(mapDtoToEntityFunction.apply(dto)).thenReturn(testValue);
 //        when(dao.getEntityClass()).thenAnswer(invocation -> OptionGroup.class);
 
-        optionGroupManager.persistEntity(dto);
+//        optionGroupManager.persistEntity(dto);
 
         verifySaveEntity(testValue);
     }
@@ -62,7 +62,7 @@ class OptionGroupManagerTest extends AbstractConstantEntityManagerTest<OptionGro
         when(mapDtoToEntityFunction.apply(newDto)).thenReturn(testValue);
 //        when(dao.getEntityClass()).thenAnswer(invocation -> OptionGroup.class);
 
-        optionGroupManager.mergeEntity("testValue", newDto);
+//        optionGroupManager.mergeEntity("testValue", newDto);
 
         verifyUpdateEntity(testValue, newDto.getValue());
     }

@@ -56,8 +56,8 @@ public class Message {
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
     private String sender;
-    @Column(name = "message_uniq_number", updatable = false, nullable = false, unique = true)
-    private String messageUniqNumber;
+    @Column(name = "message_uniq_id", updatable = false, nullable = false, unique = true)
+    private String messageUniqId;
     @ElementCollection
     @CollectionTable(name = "message_receivers", joinColumns = @JoinColumn(name = "message_id"))
     @Column(name = "receiver_email", nullable = false)

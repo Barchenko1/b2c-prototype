@@ -6,7 +6,9 @@ import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.processor.item.ICountryPhoneCodeProcess;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriUtils;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -30,12 +32,12 @@ public class CountryPhoneCodeProcess implements ICountryPhoneCodeProcess {
     @Override
     public void mergeEntity(Map<String, Object> payload, String value) {
         CountryPhoneCode entity = objectMapper.convertValue(payload, CountryPhoneCode.class);
-        countryPhoneCodeManager.mergeEntity(value, entity);
+        countryPhoneCodeManager.mergeEntity(decodeCountryCode(value), entity);
     }
 
     @Override
     public void removeEntity(String value) {
-        countryPhoneCodeManager.removeEntity(value);
+        countryPhoneCodeManager.removeEntity(decodeCountryCode(value));
     }
 
     @Override
@@ -47,8 +49,12 @@ public class CountryPhoneCodeProcess implements ICountryPhoneCodeProcess {
 
     @Override
     public CountryPhoneCodeDto getEntity(String location, String value) {
-        return Optional.of(countryPhoneCodeManager.getEntity(value))
+        return Optional.of(countryPhoneCodeManager.getEntity(decodeCountryCode(value)))
                 .map(entity -> objectMapper.convertValue(entity, CountryPhoneCodeDto.class))
                 .orElseThrow(() -> new RuntimeException(""));
+    }
+
+    private String decodeCountryCode(String countryCode) {
+        return UriUtils.decode(countryCode, StandardCharsets.UTF_8);
     }
 }

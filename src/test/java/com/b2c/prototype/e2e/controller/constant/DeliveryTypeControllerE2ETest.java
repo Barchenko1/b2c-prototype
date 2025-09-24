@@ -2,22 +2,16 @@ package com.b2c.prototype.e2e.controller.constant;
 
 import com.b2c.prototype.e2e.BasicE2ETest;
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
-import com.b2c.prototype.modal.entity.delivery.DeliveryType;
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.b2c.prototype.modal.dto.payload.order.DeliveryTypeDto;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class DeliveryTypeControllerE2ETest extends BasicE2ETest {
 
@@ -31,10 +25,13 @@ public class DeliveryTypeControllerE2ETest extends BasicE2ETest {
         try {
             String jsonPayload = objectMapper.writeValueAsString(dto);
 
-            mockMvc.perform(post(URL_TEMPLATE)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(jsonPayload))
-                    .andExpect(status().isOk());
+            webTestClient.post()
+                    .uri(URL_TEMPLATE)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .bodyValue(jsonPayload)
+                    .exchange()
+                    .expectStatus().isOk();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -48,17 +45,17 @@ public class DeliveryTypeControllerE2ETest extends BasicE2ETest {
                 .label("Courier")
                 .value("Update Courier")
                 .build();
-        try {
-            String jsonPayload = objectMapper.writeValueAsString(constantPayloadDto);
-
-            mockMvc.perform(put(URL_TEMPLATE)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .param("value", "Courier")
-                            .content(jsonPayload))
-                    .andExpect(status().isOk());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        String jsonPayload = writeValueAsString(constantPayloadDto);
+        webTestClient.put()
+                .uri(uriBuilder -> uriBuilder
+                        .path(URL_TEMPLATE)
+                        .queryParam("value", "Courier")
+                        .build())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .bodyValue(jsonPayload)
+                .exchange()
+                .expectStatus().isOk();
     }
 
     @Test
@@ -69,78 +66,85 @@ public class DeliveryTypeControllerE2ETest extends BasicE2ETest {
                 .label("Courier")
                 .value("Update Courier")
                 .build();
-
-        try {
-            String jsonPayload = objectMapper.writeValueAsString(constantPayloadDto);
-
-            mockMvc.perform(put(URL_TEMPLATE)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .param("value", "Courier")
-                            .content(jsonPayload))
-                    .andExpect(status().isOk());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        String jsonPayload = writeValueAsString(constantPayloadDto);
+        webTestClient.put()
+                .uri(uriBuilder -> uriBuilder
+                        .path(URL_TEMPLATE)
+                        .queryParam("value", "Courier")
+                        .build())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .bodyValue(jsonPayload)
+                .exchange()
+                .expectStatus().isOk();
     }
 
     @Test
     @DataSet(value = "datasets/e2e/order/delivery_type/testE2EDeliveryTypeDataSet.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/e2e/order/delivery_type/emptyE2EDeliveryTypeDataSet.yml", orderBy = "id")
     public void testDeleteEntity() {
-        try {
-            mockMvc.perform(delete(URL_TEMPLATE)
-                            .param("value", "Courier"))
-                    .andExpect(status().isOk());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        webTestClient.delete()
+                .uri(uriBuilder -> uriBuilder
+                        .path(URL_TEMPLATE)
+                        .queryParam("value", "Courier")
+                        .build())
+                .accept(MediaType.TEXT_PLAIN)
+                .exchange()
+                .expectStatus().isOk();
     }
 
     @Test
     @DataSet(value = "datasets/e2e/order/delivery_type/testE2EDeliveryTypeDataSet.yml", cleanBefore = true)
     public void testGetEntities() {
-        List<DeliveryType> constantPayloadDtoList = List.of(
-                DeliveryType.builder()
+        List<DeliveryTypeDto> constantPayloadDtoList = List.of(
+                DeliveryTypeDto.builder()
                         .label("Post")
                         .value("Post")
                         .build(),
-                DeliveryType.builder()
+                DeliveryTypeDto.builder()
                         .label("Courier")
                         .value("Courier")
                         .build());
-        try {
 
-            MvcResult mvcResult = mockMvc.perform(get(URL_TEMPLATE + "/all"))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-                    .andExpect(status().is2xxSuccessful())
-                    .andReturn();
+        List<DeliveryTypeDto> actual =
+                webTestClient.get()
+                        .uri(URL_TEMPLATE + "/all")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .exchange()
+                        .expectStatus().isOk()
+                        .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                        .expectBody(new ParameterizedTypeReference<List<DeliveryTypeDto>>() {})
+                        .returnResult()
+                        .getResponseBody();
 
-            assertMvcListResult(mvcResult, constantPayloadDtoList, new TypeReference<>() {});
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        assertThat(actual).isEqualTo(constantPayloadDtoList);
     }
 
     @Test
     @DataSet(value = "datasets/e2e/order/delivery_type/testE2EDeliveryTypeDataSet.yml", cleanBefore = true)
     public void testGetEntity() {
-        ConstantPayloadDto dto = getConstantPayloadDto();
-        try {
+        DeliveryTypeDto expected = DeliveryTypeDto.builder()
+                .label("Courier")
+                .value("Courier")
+                .build();
 
-            MvcResult mvcResult = mockMvc.perform(get(URL_TEMPLATE)
-                            .param("value", "Courier"))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-                    .andExpect(status().is2xxSuccessful())
-                    .andReturn();
+        DeliveryTypeDto actual =
+                webTestClient.get()
+                        .uri(uriBuilder -> uriBuilder
+                                .path(URL_TEMPLATE)
+                                .queryParam("value", "Courier")
+                                .build())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .exchange()
+                        .expectStatus().isOk()
+                        .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                        .expectBody(DeliveryTypeDto.class)
+                        .returnResult()
+                        .getResponseBody();
 
-            assertMvcResult(mvcResult, dto);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        assertThat(actual).isEqualTo(expected);
     }
-    
+
     private ConstantPayloadDto getConstantPayloadDto() {
         return ConstantPayloadDto.builder()
                 .label("Courier")

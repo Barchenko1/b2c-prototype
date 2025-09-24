@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/item/itemType")
+@RequestMapping("/api/v1/item/type")
 public class ItemTypeController {
     private final IItemTypeProcess itemTypeProcess;
 

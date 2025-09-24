@@ -105,7 +105,6 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.b2c.prototype.util.Util.getEmailPrefix;
 import static com.b2c.prototype.util.Util.getUUID;
 
 @Configuration
@@ -518,7 +517,7 @@ public class TransformationEntityConfiguration {
                     .email(registrationUserDetailsDto.getEmail())
                     .build();
             return UserDetails.builder()
-                    .username(getEmailPrefix(registrationUserDetailsDto.getEmail()))
+//                    .username(getEmailPrefix(registrationUserDetailsDto.getEmail()))
                     .userId(getUUID())
 //                    .dateOfCreate(getCurrentTimeMillis())
                     .contactInfo(contactInfo)
@@ -541,7 +540,7 @@ public class TransformationEntityConfiguration {
                     .build();
             UserCreditCard userCreditCard = mapCreditCardDtoUserCreditCardDtoFunction().apply(userDetailsDto.getCreditCard());
             return UserDetails.builder()
-                    .username(getEmailPrefix(userDetailsDto.getContactInfo().getEmail()))
+//                    .username(getEmailPrefix(userDetailsDto.getContactInfo().getEmail()))
                     .userId(getUUID())
 //                    .dateOfCreate(getCurrentTimeMillis())
                     .contactInfo(contactInfo)

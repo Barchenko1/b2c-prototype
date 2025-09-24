@@ -73,7 +73,7 @@ message_box:
 message_template:
   - id: 1
     sender: "sender.test@example.com"
-    message_uniq_number: "125"
+    message_uniq_id: "125"
     date_of_send: "2024-03-03 12:00:00"
     title: "Welcome to the platform"
     message: "Hello! We're excited to have you on board."
@@ -81,7 +81,7 @@ message_template:
     type_id: 1
   - id: 2
     sender: "john.doe@example.com"
-    message_uniq_number: "123"
+    message_uniq_id: "123"
     date_of_send: "2024-03-03 12:00:00"
     title: "Welcome to the platform"
     message: "Hello! We're excited to have you on board."

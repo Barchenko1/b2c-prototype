@@ -1,0 +1,7 @@
+message_template:
+  - id: 1
+    title: "title1"
+    message: "Update message1"
+  - id: 2
+    title: "title2"
+    message: "message2"

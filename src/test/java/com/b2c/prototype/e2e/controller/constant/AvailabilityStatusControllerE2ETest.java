@@ -3,21 +3,15 @@ package com.b2c.prototype.e2e.controller.constant;
 import com.b2c.prototype.e2e.BasicE2ETest;
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.dto.payload.store.AvailabilityStatusDto;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class AvailabilityStatusControllerE2ETest extends BasicE2ETest {
 
@@ -28,16 +22,15 @@ public class AvailabilityStatusControllerE2ETest extends BasicE2ETest {
     @ExpectedDataSet(value = "datasets/e2e/store/availability_status/testE2EAvailabilityStatusDataSet.yml", orderBy = "id")
     public void testCreateEntity() {
         ConstantPayloadDto dto = getConstantPayloadDto();
-        try {
-            String jsonPayload = objectMapper.writeValueAsString(dto);
+        String jsonPayload = writeValueAsString(dto);
 
-            mockMvc.perform(post(URL_TEMPLATE)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(jsonPayload))
-                    .andExpect(status().isOk());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        webTestClient.post()
+                .uri(URL_TEMPLATE)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .bodyValue(jsonPayload)
+                .exchange()
+                .expectStatus().isOk();
     }
 
     @Test
@@ -48,17 +41,18 @@ public class AvailabilityStatusControllerE2ETest extends BasicE2ETest {
                 .label("Available")
                 .value("Update Available")
                 .build();
-        try {
-            String jsonPayload = objectMapper.writeValueAsString(constantPayloadDto);
 
-            mockMvc.perform(put(URL_TEMPLATE)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .param("value", "Available")
-                            .content(jsonPayload))
-                    .andExpect(status().isOk());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        String jsonPayload = writeValueAsString(constantPayloadDto);
+        webTestClient.put()
+                .uri(uriBuilder -> uriBuilder
+                        .path(URL_TEMPLATE)
+                        .queryParam("value", "Available")
+                        .build())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .bodyValue(jsonPayload)
+                .exchange()
+                .expectStatus().isOk();
     }
 
     @Test
@@ -70,30 +64,31 @@ public class AvailabilityStatusControllerE2ETest extends BasicE2ETest {
                 .value("Update Available")
                 .build();
 
-        try {
-            String jsonPayload = objectMapper.writeValueAsString(constantPayloadDto);
-
-            mockMvc.perform(put(URL_TEMPLATE)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .param("value", "Available")
-                            .content(jsonPayload))
-                    .andExpect(status().isOk());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        String jsonPayload = writeValueAsString(constantPayloadDto);
+        webTestClient.patch()
+                .uri(uriBuilder -> uriBuilder
+                        .path(URL_TEMPLATE)
+                        .queryParam("value", "Available")
+                        .build())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .bodyValue(jsonPayload)
+                .exchange()
+                .expectStatus().isOk();
     }
 
     @Test
     @DataSet(value = "datasets/e2e/store/availability_status/testE2EAvailabilityStatusDataSet.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/e2e/store/availability_status/emptyE2EAvailabilityStatusDataSet.yml", orderBy = "id")
     public void testDeleteEntity() {
-        try {
-            mockMvc.perform(delete(URL_TEMPLATE)
-                            .param("value", "Unavailable"))
-                    .andExpect(status().isOk());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        webTestClient.delete()
+                .uri(uriBuilder -> uriBuilder
+                        .path(URL_TEMPLATE)
+                        .queryParam("value", "Unavailable")
+                        .build())
+                .accept(MediaType.TEXT_PLAIN)
+                .exchange()
+                .expectStatus().isOk();
     }
 
     @Test
@@ -108,37 +103,43 @@ public class AvailabilityStatusControllerE2ETest extends BasicE2ETest {
                         .label("Unavailable")
                         .value("Unavailable")
                         .build());
-        try {
 
-            MvcResult mvcResult = mockMvc.perform(get(URL_TEMPLATE + "/all"))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-                    .andExpect(status().is2xxSuccessful())
-                    .andReturn();
+        List<AvailabilityStatusDto> actual =
+                webTestClient.get()
+                        .uri(URL_TEMPLATE + "/all")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .exchange()
+                        .expectStatus().isOk()
+                        .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                        .expectBody(new ParameterizedTypeReference<List<AvailabilityStatusDto>>() {})
+                        .returnResult()
+                        .getResponseBody();
 
-            assertMvcListResult(mvcResult, constantPayloadDtoList, new TypeReference<>() {});
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        assertThat(actual).isEqualTo(constantPayloadDtoList);
     }
 
     @Test
     @DataSet(value = "datasets/e2e/store/availability_status/testE2EAvailabilityStatusDataSet.yml", cleanBefore = true)
     public void testGetEntity() {
-        ConstantPayloadDto dto = getConstantPayloadDto();
-        try {
+        AvailabilityStatusDto expected = AvailabilityStatusDto.builder()
+                .label("Unavailable")
+                .value("Unavailable")
+                .build();
 
-            MvcResult mvcResult = mockMvc.perform(get(URL_TEMPLATE)
-                            .param("value", "Unavailable"))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-                    .andExpect(status().is2xxSuccessful())
-                    .andReturn();
+        AvailabilityStatusDto actual = webTestClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path(URL_TEMPLATE)
+                        .queryParam("value", "Unavailable")
+                        .build())
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                .expectBody(AvailabilityStatusDto.class)
+                .returnResult()
+                .getResponseBody();
 
-            assertMvcResult(mvcResult, dto);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        assertThat(actual).isEqualTo(expected);
     }
 
     private ConstantPayloadDto getConstantPayloadDto() {

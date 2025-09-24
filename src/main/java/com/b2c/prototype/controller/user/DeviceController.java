@@ -3,7 +3,6 @@ package com.b2c.prototype.controller.user;
 import com.b2c.prototype.modal.dto.payload.user.DeviceDto;
 import com.b2c.prototype.modal.dto.payload.user.ResponseDeviceDto;
 import com.b2c.prototype.processor.user.IDeviceProcess;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ServerWebExchange;
 
 import java.util.List;
 import java.util.Map;
@@ -27,7 +27,7 @@ public class DeviceController {
     }
 
     @PostMapping(produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<Void> activateCurrentDevice(HttpServletRequest request,
+    public ResponseEntity<Void> activateCurrentDevice(ServerWebExchange request,
                                                       @RequestParam final Map<String, String> requestParams,
                                                       @RequestBody final DeviceDto deviceDto) {
         deviceProcess.activateCurrentDevice(requestParams, request, deviceDto);
@@ -42,7 +42,7 @@ public class DeviceController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ResponseDeviceDto> getDevicesByUserId(HttpServletRequest request,
+    public List<ResponseDeviceDto> getDevicesByUserId(ServerWebExchange request,
                                                       @RequestParam final Map<String, String> requestParams) {
         return deviceProcess.getDevicesByUserId(requestParams, request);
     }

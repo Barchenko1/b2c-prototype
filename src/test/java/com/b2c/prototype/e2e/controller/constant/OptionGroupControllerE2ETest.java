@@ -2,150 +2,166 @@
 package com.b2c.prototype.e2e.controller.constant;
 
 import com.b2c.prototype.e2e.BasicE2ETest;
-import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
-import com.b2c.prototype.modal.entity.item.ItemType;
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.b2c.prototype.modal.dto.payload.option.OptionGroupDto;
+import com.b2c.prototype.modal.dto.payload.option.OptionItemDto;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.List;
+import java.util.Set;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class OptionGroupControllerE2ETest extends BasicE2ETest {
 
-    private final String URL_TEMPLATE = "/api/v1/item/itemType";
+    private final String URL_TEMPLATE = "/api/v1/option/group";
 
     @Test
-    @DataSet(value = "datasets/e2e/item/item_type/emptyE2EItemTypeDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/item/item_type/testE2EItemTypeDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/e2e/item/option_group/emptyE2EOptionGroupDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/item/option_group/testE2EOptionGroupDataSet.yml", orderBy = "id")
     public void testCreateEntity() {
-        ConstantPayloadDto dto = getConstantPayloadDto();
-        try {
-            String jsonPayload = objectMapper.writeValueAsString(dto);
+        OptionGroupDto dto = getOptionGroupDto();
+        String jsonPayload = writeValueAsString(dto);
 
-            mockMvc.perform(post(URL_TEMPLATE)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(jsonPayload))
-                    .andExpect(status().isOk());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        webTestClient.post()
+                .uri(URL_TEMPLATE)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .bodyValue(jsonPayload)
+                .exchange()
+                .expectStatus().isOk();
     }
 
     @Test
-    @DataSet(value = "datasets/e2e/item/item_type/testE2EItemTypeDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/item/item_type/updateE2EItemTypeDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/e2e/item/option_group/testE2EOptionGroupDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/item/option_group/updateE2EOptionGroupDataSet.yml", orderBy = "id")
     public void testUpdateEntity() {
-        ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .label("Clothes1")
-                .value("Update Clothes1")
+        OptionGroupDto constantPayloadDto = OptionGroupDto.builder()
+                .label("Color")
+                .value("Update Color")
+//                .optionItems(Set.of())
                 .build();
-        try {
-            String jsonPayload = objectMapper.writeValueAsString(constantPayloadDto);
 
-            mockMvc.perform(put(URL_TEMPLATE)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .param("value", "Clothes1")
-                            .content(jsonPayload))
-                    .andExpect(status().isOk());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        String jsonPayload = writeValueAsString(constantPayloadDto);
+        webTestClient.put()
+                .uri(uriBuilder -> uriBuilder
+                        .path(URL_TEMPLATE)
+                        .queryParam("value", "Color")
+                        .build())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .bodyValue(jsonPayload)
+                .exchange()
+                .expectStatus().isOk();
     }
 
     @Test
-    @DataSet(value = "datasets/e2e/item/item_type/testE2EItemTypeDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/item/item_type/updateE2EItemTypeDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/e2e/item/option_group/testE2EOptionGroupDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/item/option_group/updateE2EOptionGroupDataSet.yml", orderBy = "id")
     public void testPatchEntity() {
-        ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .label("Clothes1")
-                .value("Update Clothes1")
+        OptionGroupDto constantPayloadDto = OptionGroupDto.builder()
+                .label("Color")
+                .value("Update Color")
+                .optionItems(Set.of())
                 .build();
 
-        try {
-            String jsonPayload = objectMapper.writeValueAsString(constantPayloadDto);
-
-            mockMvc.perform(put(URL_TEMPLATE)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .param("value", "Clothes1")
-                            .content(jsonPayload))
-                    .andExpect(status().isOk());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        String jsonPayload = writeValueAsString(constantPayloadDto);
+        webTestClient.patch()
+                .uri(uriBuilder -> uriBuilder
+                        .path(URL_TEMPLATE)
+                        .queryParam("value", "Color")
+                        .build())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .bodyValue(jsonPayload)
+                .exchange()
+                .expectStatus().isOk();
     }
 
     @Test
-    @DataSet(value = "datasets/e2e/item/item_type/testE2EItemTypeDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/item/item_type/emptyE2EItemTypeDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/e2e/item/option_group/testE2EOptionGroupDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/item/option_group/emptyE2EOptionGroupDataSet.yml", orderBy = "id")
     public void testDeleteEntity() {
-        try {
-            mockMvc.perform(delete(URL_TEMPLATE)
-                            .param("value", "Clothes2"))
-                    .andExpect(status().isOk());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        webTestClient.delete()
+                .uri(uriBuilder -> uriBuilder
+                        .path(URL_TEMPLATE)
+                        .queryParam("value", "Color")
+                        .build())
+                .accept(MediaType.TEXT_PLAIN)
+                .exchange()
+                .expectStatus().isOk();
     }
 
     @Test
-    @DataSet(value = "datasets/e2e/item/item_type/testE2EItemTypeDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/e2e/item/option_group/testE2EOptionGroupDataSet.yml", cleanBefore = true)
     public void testGetEntities() {
-        List<ItemType> constantPayloadDtoList = List.of(
-                ItemType.builder()
-                        .label("Clothes1")
-                        .value("Clothes1")
+        List<OptionGroupDto> constantPayloadDtoList = List.of(
+                OptionGroupDto.builder()
+                        .label("Color")
+                        .value("Color")
+                        .optionItems(Set.of())
                         .build(),
-                ItemType.builder()
-                        .label("Clothes2")
-                        .value("Clothes2")
+                OptionGroupDto.builder()
+                        .label("Modal")
+                        .value("Modal")
+                        .optionItems(Set.of(
+                                OptionItemDto.builder()
+                                        .label("Modal1")
+                                        .value("Modal1")
+                                        .build(),
+                                OptionItemDto.builder()
+                                        .label("Modal2")
+                                        .value("Modal2")
+                                        .build()
+                        ))
                         .build());
-        try {
 
-            MvcResult mvcResult = mockMvc.perform(get(URL_TEMPLATE + "/all"))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-                    .andExpect(status().is2xxSuccessful())
-                    .andReturn();
+        List<OptionGroupDto> actual = webTestClient.get()
+                .uri(URL_TEMPLATE + "/all")
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                .expectBody(new ParameterizedTypeReference<List<OptionGroupDto>>() {})
+                .returnResult()
+                .getResponseBody();
 
-            assertMvcListResult(mvcResult, constantPayloadDtoList, new TypeReference<>() {});
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        assertThat(actual).isEqualTo(constantPayloadDtoList);
     }
 
     @Test
-    @DataSet(value = "datasets/e2e/item/item_type/testE2EItemTypeDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/e2e/item/option_group/testE2EOptionGroupDataSet.yml", cleanBefore = true)
     public void testGetEntity() {
-        ConstantPayloadDto dto = getConstantPayloadDto();
-        try {
-
-            MvcResult mvcResult = mockMvc.perform(get(URL_TEMPLATE)
-                            .param("value", "Clothes2"))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-                    .andExpect(status().is2xxSuccessful())
-                    .andReturn();
-
-            assertMvcResult(mvcResult, dto);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private ConstantPayloadDto getConstantPayloadDto() {
-        return ConstantPayloadDto.builder()
+        OptionGroupDto expected = OptionGroupDto.builder()
                 .label("Color")
                 .value("Color")
+                .optionItems(Set.of())
+                .build();
+
+        OptionGroupDto actual = webTestClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path(URL_TEMPLATE)
+                        .queryParam("value", "Color")
+                        .build())
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                .expectBody(OptionGroupDto.class)
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    private OptionGroupDto getOptionGroupDto() {
+        return OptionGroupDto.builder()
+                .label("Color")
+                .value("Color")
+                .optionItems(Set.of())
                 .build();
     }
 

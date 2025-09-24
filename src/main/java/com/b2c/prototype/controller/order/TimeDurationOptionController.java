@@ -1,4 +1,4 @@
-package com.b2c.prototype.controller.item;
+package com.b2c.prototype.controller.order;
 
 import com.b2c.prototype.modal.dto.payload.option.TimeDurationOptionDto;
 import com.b2c.prototype.modal.dto.payload.option.ResponseTimeDurationOptionDto;
@@ -18,10 +18,9 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/timeduration")
+@RequestMapping("/api/v1/order/option/timeduration")
 public class TimeDurationOptionController {
     private final ITimeDurationOptionProcess timeDurationOptionProcess;
-
 
     public TimeDurationOptionController(ITimeDurationOptionProcess timeDurationOptionProcess) {
         this.timeDurationOptionProcess = timeDurationOptionProcess;

@@ -13,7 +13,7 @@ message_template:
 message:
   - date_of_send: "2024-03-03 12:00:00"
     message_template_id: 1
-    message_uniq_number: "messageUniqNumber1"
+    message_uniq_id: "messageUniqNumber1"
     sender: "sender@email.com"
     status_id: 1
     type_id: 1

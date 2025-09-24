@@ -34,12 +34,12 @@ public class OptionItemController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(value = "/group", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> saveUpdateOptionItemSet(@RequestParam final Map<String, String> requestParams,
-                                                        @RequestBody final Set<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoList) {
-        optionItemProcessor.saveOptionItemSet(requestParams, optionGroupOptionItemSetDtoList);
-        return ResponseEntity.ok().build();
-    }
+//    @PostMapping(value = "/group", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<Void> saveUpdateOptionItemSet(@RequestParam final Map<String, String> requestParams,
+//                                                        @RequestBody final Set<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoList) {
+//        optionItemProcessor.saveOptionItemSet(requestParams, optionGroupOptionItemSetDtoList);
+//        return ResponseEntity.ok().build();
+//    }
 
     @DeleteMapping(produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<Void> deleteOptionItem(@RequestParam final Map<String, String> requestParams) {
@@ -47,11 +47,11 @@ public class OptionItemController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/group", produces = MediaType.APPLICATION_JSON_VALUE)
-    public OptionGroupOptionItemSetDto getOptionItem(@RequestParam final Map<String, String> requestParams) {
-
-        return optionItemProcessor.getOptionItemDto(requestParams);
-    }
+//    @GetMapping(value = "/group", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public OptionGroupOptionItemSetDto getOptionItem(@RequestParam final Map<String, String> requestParams) {
+//
+//        return optionItemProcessor.getOptionItemDto(requestParams);
+//    }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<OptionGroupOptionItemSetDto> getOptionItemList(@RequestParam final Map<String, String> requestParams) {

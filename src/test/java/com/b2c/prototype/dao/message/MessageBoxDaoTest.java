@@ -53,7 +53,7 @@ class MessageBoxDaoTest extends AbstractDaoTest {
         Message message = getMessage();
         message.setId(0);
         message.getMessageTemplate().setId(0);
-        message.setMessageUniqNumber("messageUniqNumber2");
+        message.setMessageUniqId("messageUniqNumber2");
         entity.addMessage(message);
 
         generalEntityDao.mergeEntity(entity);
@@ -127,7 +127,7 @@ class MessageBoxDaoTest extends AbstractDaoTest {
                 .messageTemplate(messageTemplate)
                 .status(messageStatus)
                 .type(messageType)
-                .messageUniqNumber("messageUniqNumber1")
+                .messageUniqId("messageUniqNumber1")
                 .sender("sender@email.com")
                 .receivers(Set.of("receiver1@email.com", "receiver2@email.com"))
                 .dateOfSend(getLocalDateTime("2024-03-03 12:00:00"))

@@ -2,6 +2,8 @@ package com.b2c.prototype.modal.entity.option;
 
 import com.b2c.prototype.modal.base.constant.AbstractConstantEntity;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -44,6 +46,7 @@ public class OptionItem extends AbstractConstantEntity {
     @JoinColumn(name = "option_group_id", nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    @JsonIgnore
     protected OptionGroup optionGroup;
     @ManyToMany(mappedBy = "optionItems")
     @Builder.Default

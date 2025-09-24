@@ -1,24 +1,16 @@
 package com.b2c.prototype.e2e.controller.constant;
 
 import com.b2c.prototype.e2e.BasicE2ETest;
-import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
 import com.b2c.prototype.modal.dto.payload.constant.CountryDto;
-import com.b2c.prototype.modal.entity.address.Country;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class CountryControllerE2ETest extends BasicE2ETest {
 
@@ -29,16 +21,15 @@ public class CountryControllerE2ETest extends BasicE2ETest {
     @ExpectedDataSet(value = "datasets/e2e/order/country/testE2ECountryDataSet.yml", orderBy = "id")
     public void testCreateEntity() {
         CountryDto dto = getCountryDto();
-        try {
-            String jsonPayload = objectMapper.writeValueAsString(dto);
+        String jsonPayload = writeValueAsString(dto);
 
-            mockMvc.perform(post(URL_TEMPLATE)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(jsonPayload))
-                    .andExpect(status().isOk());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        webTestClient.post()
+                .uri(URL_TEMPLATE)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .bodyValue(jsonPayload)
+                .exchange()
+                .expectStatus().isOk();
     }
 
     @Test
@@ -50,17 +41,17 @@ public class CountryControllerE2ETest extends BasicE2ETest {
                 .value("Update USA")
                 .flagImagePath("/images/usa.jpg")
                 .build();
-        try {
-            String jsonPayload = objectMapper.writeValueAsString(countryDto);
-
-            mockMvc.perform(put(URL_TEMPLATE)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .param("value", "USA")
-                            .content(jsonPayload))
-                    .andExpect(status().isOk());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        String jsonPayload = writeValueAsString(countryDto);
+        webTestClient.put()
+                .uri(uriBuilder -> uriBuilder
+                        .path(URL_TEMPLATE)
+                        .queryParam("value", "USA")
+                        .build())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .bodyValue(jsonPayload)
+                .exchange()
+                .expectStatus().isOk();
     }
 
     @Test
@@ -72,78 +63,84 @@ public class CountryControllerE2ETest extends BasicE2ETest {
                 .value("Update USA")
                 .flagImagePath("/images/usa.jpg")
                 .build();
-
-        try {
-            String jsonPayload = objectMapper.writeValueAsString(countryDto);
-
-            mockMvc.perform(put(URL_TEMPLATE)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .param("value", "USA")
-                            .content(jsonPayload))
-                    .andExpect(status().isOk());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        String jsonPayload = writeValueAsString(countryDto);
+        webTestClient.patch()
+                .uri(uriBuilder -> uriBuilder
+                        .path(URL_TEMPLATE)
+                        .queryParam("value", "USA")
+                        .build())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .bodyValue(jsonPayload)
+                .exchange()
+                .expectStatus().isOk();
     }
 
     @Test
     @DataSet(value = "datasets/e2e/order/country/testE2ECountryDataSet.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/e2e/order/country/emptyE2ECountryDataSet.yml", orderBy = "id")
     public void testDeleteEntity() {
-        try {
-            mockMvc.perform(delete(URL_TEMPLATE)
-                            .param("value", "USA"))
-                    .andExpect(status().isOk());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        webTestClient.delete()
+                .uri(uriBuilder -> uriBuilder
+                        .path(URL_TEMPLATE)
+                        .queryParam("value", "USA")
+                        .build())
+                .accept(MediaType.TEXT_PLAIN)
+                .exchange()
+                .expectStatus().isOk();
     }
 
     @Test
     @DataSet(value = "datasets/e2e/order/country/testE2ECountryDataSet.yml", cleanBefore = true)
     public void testGetEntities() {
-        List<Country> constantPayloadDtoList = List.of(
-                Country.builder()
+        List<CountryDto> constantPayloadDtoList = List.of(
+                CountryDto.builder()
                         .label("CANADA")
                         .value("CANADA")
                         .flagImagePath("/images/canada.jpg")
                         .build(),
-                Country.builder()
+                CountryDto.builder()
                         .label("USA")
                         .value("USA")
                         .flagImagePath("/images/usa.jpg")
                         .build());
-        try {
 
-            MvcResult mvcResult = mockMvc.perform(get(URL_TEMPLATE + "/all"))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-                    .andExpect(status().is2xxSuccessful())
-                    .andReturn();
+        List<CountryDto> actual =
+                webTestClient.get()
+                        .uri(URL_TEMPLATE + "/all")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .exchange()
+                        .expectStatus().isOk()
+                        .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                        .expectBody(new ParameterizedTypeReference<List<CountryDto>>() {})
+                        .returnResult()
+                        .getResponseBody();
 
-            assertMvcListResult(mvcResult, constantPayloadDtoList, new TypeReference<>() {});
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        assertThat(actual).isEqualTo(constantPayloadDtoList);
     }
 
     @Test
     @DataSet(value = "datasets/e2e/order/country/testE2ECountryDataSet.yml", cleanBefore = true)
     public void testGetEntity() {
-        CountryDto dto = getCountryDto();
-        try {
+        CountryDto expected = CountryDto.builder()
+                .label("USA")
+                .value("USA")
+                .flagImagePath("/images/usa.jpg")
+                .build();
+        CountryDto actual = webTestClient.get()
+                        .uri(uriBuilder -> uriBuilder
+                                .path(URL_TEMPLATE)
+                                .queryParam("value", "USA")
+                                .build())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .exchange()
+                        .expectStatus().isOk()
+                        .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                        .expectBody(CountryDto.class)
+                        .returnResult()
+                        .getResponseBody();
 
-            MvcResult mvcResult = mockMvc.perform(get(URL_TEMPLATE)
-                            .param("value", "USA"))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-                    .andExpect(status().is2xxSuccessful())
-                    .andReturn();
-
-            assertMvcResult(mvcResult, dto);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        assertThat(actual).isEqualTo(expected);
     }
 
     private CountryDto getCountryDto() {
