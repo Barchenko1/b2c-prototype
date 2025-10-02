@@ -1,7 +1,8 @@
 package com.b2c.prototype.e2e.controller.constant;
 
 import com.b2c.prototype.e2e.BasicE2ETest;
-import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
+import com.b2c.prototype.modal.dto.payload.constant.CountryDto;
+import com.b2c.prototype.modal.dto.payload.item.PriceDto;
 import com.b2c.prototype.modal.dto.payload.option.ZoneOptionDto;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
@@ -18,8 +19,8 @@ public class ZoneOptionControllerE2ETest extends BasicE2ETest {
     private static final String URL_TEMPLATE = "/api/v1/order/option/zone";
 
     @Test
-    @DataSet(value = "datasets/e2e/item/rating/emptyE2ERatingDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/item/rating/testE2ERatingDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/e2e/order/zone_option/emptyE2EZoneOptionDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/order/zone_option/testE2EZoneOptionDataSet.yml", orderBy = "id")
     public void testSaveEntity() {
         ZoneOptionDto dto = getZoneOptionDto();
         String jsonPayload = writeValueAsString(dto);
@@ -34,12 +35,21 @@ public class ZoneOptionControllerE2ETest extends BasicE2ETest {
     }
 
     @Test
-    @DataSet(value = "datasets/e2e/item/rating/emptyE2ERatingDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/item/rating/testE2ERatingDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/e2e/order/zone_option/testE2EZoneOptionDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/order/zone_option/updateE2EZoneOptionDataSet.yml", orderBy = "id")
     public void testUpdateEntity() {
-        ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .label("ZoneA")
+        ZoneOptionDto constantPayloadDto = ZoneOptionDto.builder()
+                .label("Update ZoneA")
                 .value("Update ZoneA")
+                .city("New York")
+                .country(CountryDto.builder()
+                        .label("USA")
+                        .value("USA")
+                        .build())
+                .price(PriceDto.builder()
+                        .amount(30.0)
+                        .currency("USD")
+                        .build())
                 .build();
         String jsonPayload = writeValueAsString(constantPayloadDto);
         webTestClient.put()
@@ -55,12 +65,21 @@ public class ZoneOptionControllerE2ETest extends BasicE2ETest {
     }
 
     @Test
-    @DataSet(value = "datasets/e2e/item/rating/emptyE2ERatingDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/item/rating/testE2ERatingDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/e2e/order/zone_option/testE2EZoneOptionDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/order/zone_option/updateE2EZoneOptionDataSet.yml", orderBy = "id")
     public void testPatchEntity() {
-        ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .label("ZoneA")
+        ZoneOptionDto constantPayloadDto = ZoneOptionDto.builder()
+                .label("Update ZoneA")
                 .value("Update ZoneA")
+                .city("New York")
+                .country(CountryDto.builder()
+                        .label("USA")
+                        .value("USA")
+                        .build())
+                .price(PriceDto.builder()
+                        .amount(30.0)
+                        .currency("USD")
+                        .build())
                 .build();
         String jsonPayload = writeValueAsString(constantPayloadDto);
         webTestClient.put()
@@ -76,8 +95,8 @@ public class ZoneOptionControllerE2ETest extends BasicE2ETest {
     }
 
     @Test
-    @DataSet(value = "datasets/e2e/item/rating/emptyE2ERatingDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/item/rating/testE2ERatingDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/e2e/order/zone_option/testE2EZoneOptionDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/order/zone_option/emptyE2EZoneOptionDataSet.yml", orderBy = "id")
     public void testDeleteEntity() {
         webTestClient.delete()
                 .uri(uriBuilder -> uriBuilder
@@ -90,7 +109,7 @@ public class ZoneOptionControllerE2ETest extends BasicE2ETest {
     }
 
     @Test
-    @DataSet(value = "datasets/e2e/item/rating/emptyE2ERatingDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/e2e/order/zone_option/testE2EZoneOptionDataSet.yml", cleanBefore = true)
     public void testGetEntity() {
         ZoneOptionDto expected = getZoneOptionDto();
         ZoneOptionDto actual = webTestClient.get()
@@ -110,16 +129,34 @@ public class ZoneOptionControllerE2ETest extends BasicE2ETest {
     }
 
     @Test
-    @DataSet(value = "datasets/e2e/item/rating/emptyE2ERatingDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/e2e/order/zone_option/testE2EZoneOptionDataSet.yml", cleanBefore = true)
     public void testGetEntities() {
         List<ZoneOptionDto> constantPayloadDtoList = List.of(
                 ZoneOptionDto.builder()
                         .label("ZoneA")
                         .value("ZoneA")
+                        .city("New York")
+                        .country(CountryDto.builder()
+                                .label("USA")
+                                .value("USA")
+                                .build())
+                        .price(PriceDto.builder()
+                                .amount(27.0)
+                                .currency("USD")
+                                .build())
                         .build(),
                 ZoneOptionDto.builder()
                         .label("ZoneB")
                         .value("ZoneB")
+                        .city("New York")
+                        .country(CountryDto.builder()
+                                .label("USA")
+                                .value("USA")
+                                .build())
+                        .price(PriceDto.builder()
+                                .amount(25.0)
+                                .currency("USD")
+                                .build())
                         .build());
 
         List<ZoneOptionDto> actual = webTestClient.get()
@@ -139,6 +176,15 @@ public class ZoneOptionControllerE2ETest extends BasicE2ETest {
         return ZoneOptionDto.builder()
                 .label("ZoneB")
                 .value("ZoneB")
+                .city("New York")
+                .country(CountryDto.builder()
+                        .label("USA")
+                        .value("USA")
+                        .build())
+                .price(PriceDto.builder()
+                        .amount(25.0)
+                        .currency("USD")
+                        .build())
                 .build();
     }
 }

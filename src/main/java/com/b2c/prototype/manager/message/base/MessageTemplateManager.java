@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static com.b2c.prototype.util.Constant.MESSAGE_TEMPLATE_UNIQ_ID;
 import static com.b2c.prototype.util.Constant.VALUE;
 import static com.b2c.prototype.util.Util.getUUID;
 
@@ -23,6 +24,7 @@ public class MessageTemplateManager implements IMessageTemplateManager {
     }
 
     public void persistEntity(MessageTemplate entity) {
+        entity.setMessageTemplateUniqId(getUUID());
         generalEntityDao.persistEntity(entity);
     }
 
@@ -30,25 +32,25 @@ public class MessageTemplateManager implements IMessageTemplateManager {
     @Override
     public void mergeEntity(String searchValue, MessageTemplate entity) {
         MessageTemplate fetchedEntity =
-                generalEntityDao.findEntity("MessageTemplate.findByValue", Pair.of(VALUE, searchValue));
+                generalEntityDao.findEntity("MessageTemplate.findByMessageTemplateId", Pair.of(MESSAGE_TEMPLATE_UNIQ_ID, searchValue));
         entity.setMessageTemplateUniqId(getUUID());
-        entity.setMessageTemplateUniqId(fetchedEntity.getMessageTemplateUniqId());
+        entity.setOriginal(fetchedEntity);
         generalEntityDao.mergeEntity(entity);
     }
 
     @Transactional
     @Override
     public void removeEntity(String value) {
-        MessageTemplate fetchedEntity = generalEntityDao.findEntity("MessageTemplate.findByValue", Pair.of(VALUE, value));
+        MessageTemplate fetchedEntity = generalEntityDao.findEntity("MessageTemplate.findByMessageTemplateId", Pair.of(MESSAGE_TEMPLATE_UNIQ_ID, value));
         generalEntityDao.removeEntity(fetchedEntity);
     }
 
     public MessageTemplate getEntity(String value) {
-        return generalEntityDao.findEntity("MessageTemplate.findByValue", Pair.of(VALUE, value));
+        return generalEntityDao.findEntity("MessageTemplate.findByMessageTemplateId", Pair.of(MESSAGE_TEMPLATE_UNIQ_ID, value));
     }
 
     public Optional<MessageTemplate> getEntityOptional(String value) {
-        MessageTemplate entity = generalEntityDao.findEntity("MessageTemplate.findByValue", Pair.of(VALUE, value));
+        MessageTemplate entity = generalEntityDao.findEntity("MessageTemplate.findByMessageTemplateId", Pair.of(MESSAGE_TEMPLATE_UNIQ_ID, value));
         return Optional.of(entity);
     }
 

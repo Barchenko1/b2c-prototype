@@ -1,15 +1,17 @@
+country:
+  - id: 1
+    label: "USA"
+    value: "USA"
 currency:
   - id: 1
     value: "USD"
     label: "USD"
 price:
-  - id: 1
-    amount: 27
+  - amount: 27
     currency_id: 1
 zone_option:
-  - id: 1
-    label: "ZoneA"
+  - label: "ZoneA"
     value: "ZoneA"
     city: "New York"
-    zoneName: "ZoneA"
+    country_id: 1
     price_id: 1

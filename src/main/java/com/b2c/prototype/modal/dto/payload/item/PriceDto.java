@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PriceDto {
-    private double amount;
+    private Double amount;
     private String currency;
 }

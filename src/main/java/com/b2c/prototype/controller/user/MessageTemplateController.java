@@ -34,20 +34,20 @@ public class MessageTemplateController {
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> putConstantEntity(@RequestBody Map<String, Object> payload,
-                                                    @RequestParam(value = "value") final String value) {
+                                                    @RequestParam(value = "messageTemplateId") final String value) {
         messageTemplateProcess.mergeEntity(payload, value);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> patchConstantEntity(@RequestBody Map<String, Object> payload,
-                                                      @RequestParam(value = "value") final String value) {
+                                                      @RequestParam(value = "messageTemplateId") final String value) {
         messageTemplateProcess.mergeEntity(payload, value);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<String> deleteConstantEntity(@RequestParam(value = "value") final String value) {
+    public ResponseEntity<String> deleteConstantEntity(@RequestParam(value = "messageTemplateId") final String value) {
         messageTemplateProcess.removeEntity(value);
         return ResponseEntity.ok().build();
     }
@@ -59,7 +59,7 @@ public class MessageTemplateController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getConstantEntity(@RequestHeader(name = "Accept-Language", defaultValue = "en") String location,
-                                               @RequestParam(value = "value") final String value) {
+                                               @RequestParam(value = "messageTemplateId") final String value) {
         return ResponseEntity.ok(messageTemplateProcess.getEntity(location, value));
     }
 }

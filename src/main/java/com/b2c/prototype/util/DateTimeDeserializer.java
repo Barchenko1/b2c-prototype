@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.TemporalAccessor;
 
 @Slf4j
-public class ZonedDateTimeDeserializer extends JsonDeserializer<ZonedDateTime> {
+public class DateTimeDeserializer extends JsonDeserializer<ZonedDateTime> {
 
     // --------------------------- MEMBER VARIABLES ---------------------------
 

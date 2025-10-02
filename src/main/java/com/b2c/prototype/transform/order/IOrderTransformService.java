@@ -1,21 +1,19 @@
 package com.b2c.prototype.transform.order;
 
-import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
+import com.b2c.prototype.modal.dto.payload.option.TimeDurationOptionDto;
+import com.b2c.prototype.modal.dto.payload.option.ZoneOptionDto;
 import com.b2c.prototype.modal.dto.payload.order.single.ResponseCustomerOrderDetails;
-import com.b2c.prototype.modal.entity.delivery.DeliveryType;
+import com.b2c.prototype.modal.entity.option.TimeDurationOption;
+import com.b2c.prototype.modal.entity.option.ZoneOption;
 import com.b2c.prototype.modal.entity.order.CustomerSingleDeliveryOrder;
-import com.b2c.prototype.modal.entity.order.OrderStatus;
-import com.b2c.prototype.modal.entity.payment.PaymentMethod;
 
 public interface IOrderTransformService {
-    OrderStatus mapConstantPayloadDtoToOrderStatus(ConstantPayloadDto constantPayloadDto);
-    ConstantPayloadDto mapOrderStatusToConstantPayloadDto(OrderStatus orderStatus);
+    ZoneOptionDto mapZoneOptionToZoneOptionDto(ZoneOption zoneOption);
+    ZoneOption mapZoneOptionDtoToZoneOption(ZoneOptionDto zoneOptionDto);
 
-    PaymentMethod mapConstantPayloadDtoToPaymentMethod(ConstantPayloadDto constantPayloadDto);
-    ConstantPayloadDto mapPaymentMethodToConstantPayloadDto(PaymentMethod paymentMethod);
 
-    DeliveryType mapConstantPayloadDtoToDeliveryType(ConstantPayloadDto constantPayloadDto);
-    ConstantPayloadDto mapDeliveryTypeToConstantPayloadDto(DeliveryType deliveryType);
+    TimeDurationOption mapTimeDurationOptionDtoToTimeDurationOption(TimeDurationOptionDto timeDurationOptionDto);
+    TimeDurationOptionDto mapTimeDurationOptionToTimeDurationOptionDto(TimeDurationOption timeDurationOption);
 
     ResponseCustomerOrderDetails mapCustomerSingleDeliveryOrderToResponseCustomerOrderDetails(CustomerSingleDeliveryOrder customerSingleDeliveryOrder);
 }

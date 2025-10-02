@@ -9,7 +9,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class ZonedDateTimeSerializer extends JsonSerializer<ZonedDateTime> {
+public class DateTimeSerializer extends JsonSerializer<ZonedDateTime> {
 
     // --------------------------- MEMBER VARIABLES ---------------------------
 

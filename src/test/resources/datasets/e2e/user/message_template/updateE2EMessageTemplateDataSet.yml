@@ -1,7 +1,14 @@
 message_template:
   - id: 1
     title: "title1"
-    message: "Update message1"
+    message: "message1"
+    message_template_uniq_id: "123"
   - id: 2
     title: "title2"
     message: "message2"
+    message_template_uniq_id: "125"
+  - id: 3
+    title: "title3"
+    message: "message3"
+    message_template_id: 1
+    message_template_uniq_id: "1252"

@@ -42,14 +42,22 @@ public class MessageTemplateProcess implements IMessageTemplateProcess {
     @Override
     public List<MessageTemplateDto> getEntityList(String location) {
         return  messageTemplateManager.getEntities().stream()
-                .map(entity -> objectMapper.convertValue(entity, MessageTemplateDto.class))
+                .map(entity -> {
+                    MessageTemplateDto messageTemplateDto = objectMapper.convertValue(entity, MessageTemplateDto.class);
+                    messageTemplateDto.setMessageTemplateId(entity.getMessageTemplateUniqId());
+                    return messageTemplateDto;
+                })
                 .toList();
     }
 
     @Override
     public MessageTemplateDto getEntity(String location, String value) {
         return Optional.of(messageTemplateManager.getEntity(value))
-                .map(entity -> objectMapper.convertValue(entity, MessageTemplateDto.class))
+                .map(entity -> {
+                    MessageTemplateDto messageTemplateDto = objectMapper.convertValue(entity, MessageTemplateDto.class);
+                    messageTemplateDto.setMessageTemplateId(entity.getMessageTemplateUniqId());
+                    return messageTemplateDto;
+                })
                 .orElseThrow(() -> new RuntimeException(""));
     }
 }

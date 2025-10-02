@@ -24,8 +24,12 @@ import lombok.ToString;
 @Builder
 @NamedQueries({
         @NamedQuery(
-                name = "MessageTemplate.findByMessageId",
-                query = "SELECT DISTINCT mt FROM MessageTemplate mt"
+                name = "MessageTemplate.findByMessageTemplateId",
+                query = "SELECT mt FROM MessageTemplate mt WHERE mt.messageTemplateUniqId =: message_template_uniq_id"
+        ),
+        @NamedQuery(
+                name = "MessageTemplate.all",
+                query = "SELECT mt FROM MessageTemplate mt"
         ),
 })
 public class MessageTemplate {
@@ -33,7 +37,7 @@ public class MessageTemplate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
-    @Column(name = "message_template_uniq_id")
+    @Column(name = "message_template_uniq_id", updatable = false, nullable = false)
     private String messageTemplateUniqId;
     private String title;
     private String message;

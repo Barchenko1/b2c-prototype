@@ -20,8 +20,8 @@ public class OptionGroupItemCostControllerE2ETest extends BasicE2ETest {
     private final String URL_TEMPLATE = "/api/v1/option/group";
 
     @Test
-    @DataSet(value = "datasets/e2e/item/option_group/emptyE2EOptionGroupDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/item/option_group/testE2EOptionGroupDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/e2e/item/option_group/option_item_cost/emptyE2EOptionGroupItemCostDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/item/option_group/option_item_cost/testE2EOptionGroupItemCostDataSet.yml", orderBy = "id")
     public void testCreateEntity() {
         OptionGroupDto dto = getOptionGroupDto();
         String jsonPayload = writeValueAsString(dto);
@@ -36,8 +36,8 @@ public class OptionGroupItemCostControllerE2ETest extends BasicE2ETest {
     }
 
     @Test
-    @DataSet(value = "datasets/e2e/item/option_group/testE2EOptionGroupDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/item/option_group/updateE2EOptionGroupDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/e2e/item/option_group/option_item_cost/testE2EOptionGroupItemCostDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/item/option_group/option_item_cost/updateE2EOptionGroupItemCostDataSet.yml", orderBy = "id")
     public void testUpdateEntity() {
         OptionGroupDto constantPayloadDto = OptionGroupDto.builder()
                 .label("Color")
@@ -59,8 +59,8 @@ public class OptionGroupItemCostControllerE2ETest extends BasicE2ETest {
     }
 
     @Test
-    @DataSet(value = "datasets/e2e/item/option_group/testE2EOptionGroupDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/item/option_group/updateE2EOptionGroupDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/e2e/item/option_group/option_item_cost/testE2EOptionGroupItemCostDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/item/option_group/option_item_cost/updateE2EOptionGroupItemCostDataSet.yml", orderBy = "id")
     public void testPatchEntity() {
         OptionGroupDto constantPayloadDto = OptionGroupDto.builder()
                 .label("Color")
@@ -82,8 +82,8 @@ public class OptionGroupItemCostControllerE2ETest extends BasicE2ETest {
     }
 
     @Test
-    @DataSet(value = "datasets/e2e/item/option_group/testE2EOptionGroupDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/item/option_group/emptyE2EOptionGroupDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/e2e/item/option_group/option_item_cost/testE2EOptionGroupItemCostDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/item/option_group/option_item_cost/emptyE2EOptionGroupItemCostDataSet.yml", orderBy = "id")
     public void testDeleteEntity() {
         webTestClient.delete()
                 .uri(uriBuilder -> uriBuilder
@@ -96,7 +96,7 @@ public class OptionGroupItemCostControllerE2ETest extends BasicE2ETest {
     }
 
     @Test
-    @DataSet(value = "datasets/e2e/item/option_group/testE2EOptionGroupDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/e2e/item/option_group/option_item_cost/testE2EOptionGroupItemCostDataSet.yml", cleanBefore = true)
     public void testGetEntities() {
         List<OptionGroupDto> constantPayloadDtoList = List.of(
                 OptionGroupDto.builder()
@@ -133,7 +133,7 @@ public class OptionGroupItemCostControllerE2ETest extends BasicE2ETest {
     }
 
     @Test
-    @DataSet(value = "datasets/e2e/item/option_group/testE2EOptionGroupDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/e2e/item/option_group/option_item_cost/testE2EOptionGroupItemCostDataSet.yml", cleanBefore = true)
     public void testGetEntity() {
         OptionGroupDto expected = OptionGroupDto.builder()
                 .label("Color")

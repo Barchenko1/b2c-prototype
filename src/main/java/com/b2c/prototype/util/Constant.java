@@ -11,6 +11,7 @@ public interface Constant {
     String VALUE = "value";
     String STORE_ID = "store_uniq_id";
     String MESSAGE_ID = "message_uniq_id";
+    String MESSAGE_TEMPLATE_UNIQ_ID = "message_template_uniq_id";
     String POST_ID = "post_uniq_id";
     String REVIEW_COMMENT_ID = "comment_uniq_id";
 

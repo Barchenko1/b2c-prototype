@@ -53,7 +53,6 @@ import com.b2c.prototype.modal.dto.payload.message.ResponseMessageOverviewDto;
 import com.b2c.prototype.modal.dto.payload.message.ResponseMessagePayloadDto;
 import com.b2c.prototype.modal.dto.payload.review.ResponseReviewDto;
 import com.b2c.prototype.modal.dto.payload.store.ResponseStoreDto;
-import com.b2c.prototype.modal.dto.payload.option.ResponseTimeDurationOptionDto;
 import com.b2c.prototype.modal.dto.payload.user.ResponseUserAddressDto;
 import com.b2c.prototype.modal.dto.payload.user.ResponseUserCreditCardDto;
 import com.b2c.prototype.modal.dto.payload.user.ResponseUserDetailsDto;
@@ -1295,31 +1294,31 @@ public class TransformationEntityConfiguration {
         return (session, timeDurationOptionDto) -> {
             Price price = mapPriceDtoToPriceFunction().apply(session, timeDurationOptionDto.getPrice());
             return TimeDurationOption.builder()
-                    .durationInMin(timeDurationOptionDto.getDuration())
+//                    .durationInMin(timeDurationOptionDto.getDuration())
                     .label(timeDurationOptionDto.getLabel())
-                    .value(timeDurationOptionDto.getValue())
+//                    .value(timeDurationOptionDto.getValue())
                     .price(price)
                     .build();
         };
     }
 
-    private Function<TimeDurationOption, ResponseTimeDurationOptionDto> mapTimeDurationOptionToResponseTimeDurationOptionDtoFunction() {
-        return timeDurationOption -> {
-            PriceDto price = mapPriceToPriceDtoFunction().apply(timeDurationOption.getPrice());
-            return ResponseTimeDurationOptionDto.builder()
-                    .durationInMinutes(timeDurationOption.getDurationInMin())
-                    .label(timeDurationOption.getLabel())
-                    .value(timeDurationOption.getValue())
-                    .price(price)
-                    .build();
-        };
-    }
+//    private Function<TimeDurationOption, ResponseTimeDurationOptionDto> mapTimeDurationOptionToResponseTimeDurationOptionDtoFunction() {
+//        return timeDurationOption -> {
+//            PriceDto price = mapPriceToPriceDtoFunction().apply(timeDurationOption.getPrice());
+//            return ResponseTimeDurationOptionDto.builder()
+//                    .durationInMinutes(timeDurationOption.getDurationInMin())
+//                    .label(timeDurationOption.getLabel())
+//                    .value(timeDurationOption.getValue())
+//                    .price(price)
+//                    .build();
+//        };
+//    }
 
     private BiFunction<Session, ZoneOptionDto, ZoneOption> mapZoneOptionDtoToZoneOptionFunction() {
         return (session, zoneOptionDto) -> {
             Price price = mapPriceDtoToPriceFunction().apply(session, zoneOptionDto.getPrice());
             return ZoneOption.builder()
-                    .zoneName(zoneOptionDto.getZoneName())
+//                    .zoneName(zoneOptionDto.getZoneName())
                     .city(zoneOptionDto.getCity())
                     .price(price)
                     .build();
@@ -1331,7 +1330,7 @@ public class TransformationEntityConfiguration {
             PriceDto price = mapPriceToPriceDtoFunction().apply(zoneOption.getPrice());
             return ZoneOptionDto.builder()
                     .city(zoneOption.getCity())
-                    .zoneName(zoneOption.getZoneName())
+//                    .zoneName(zoneOption.getZoneName())
                     .price(price)
                     .build();
         };

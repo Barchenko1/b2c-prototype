@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 
 import java.util.List;
 
+import static com.b2c.prototype.util.Converter.getLocalDateTime;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class TimeDurationOptionControllerE2ETest extends BasicE2ETest {
@@ -19,8 +20,8 @@ public class TimeDurationOptionControllerE2ETest extends BasicE2ETest {
     private static final String URL_TEMPLATE = "/api/v1/order/option/timeduration";
 
     @Test
-    @DataSet(value = "datasets/e2e/item/rating/emptyE2ERatingDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/item/rating/testE2ERatingDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/e2e/order/time_duration_option/emptyE2ETimeDurationOptionDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/order/time_duration_option/testE2ETimeDurationOptionDataSet.yml", orderBy = "id")
     public void testSaveEntity() {
         TimeDurationOptionDto dto = getTimeDurationOptionDto();
         String jsonPayload = writeValueAsString(dto);
@@ -35,8 +36,8 @@ public class TimeDurationOptionControllerE2ETest extends BasicE2ETest {
     }
 
     @Test
-    @DataSet(value = "datasets/e2e/item/rating/emptyE2ERatingDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/item/rating/testE2ERatingDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/e2e/order/time_duration_option/testE2ETimeDurationOptionDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/order/time_duration_option/updateE2ETimeDurationOptionDataSet.yml", orderBy = "id")
     public void testUpdateEntity() {
         ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
                 .label("12-14")
@@ -46,7 +47,8 @@ public class TimeDurationOptionControllerE2ETest extends BasicE2ETest {
         webTestClient.put()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "12-14")
+                        .queryParam("start", "1970-01-01T08:00:00")
+                        .queryParam("end", "1970-01-01T08:00:00")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -56,6 +58,8 @@ public class TimeDurationOptionControllerE2ETest extends BasicE2ETest {
     }
 
     @Test
+    @DataSet(value = "datasets/e2e/order/time_duration_option/testE2ETimeDurationOptionDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/order/time_duration_option/updateE2ETimeDurationOptionDataSet.yml", orderBy = "id")
     public void testPatchTEntity() {
         ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
                 .label("12-14")
@@ -65,7 +69,8 @@ public class TimeDurationOptionControllerE2ETest extends BasicE2ETest {
         webTestClient.patch()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "12-14")
+                        .queryParam("start", "1970-01-01 09:00:00")
+                        .queryParam("end", "1970-01-01 11:00:00")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -75,13 +80,14 @@ public class TimeDurationOptionControllerE2ETest extends BasicE2ETest {
     }
 
     @Test
-    @DataSet(value = "datasets/e2e/item/rating/emptyE2ERatingDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/item/rating/testE2ERatingDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/e2e/order/time_duration_option/testE2ETimeDurationOptionDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/order/time_duration_option/emptyE2ETimeDurationOptionDataSet.yml", orderBy = "id")
     public void testDeleteEntity() {
         webTestClient.delete()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "12-14")
+                        .queryParam("start", "1970-01-01T08:00:00")
+                        .queryParam("end", "1970-01-01T08:00:00")
                         .build())
                 .accept(MediaType.TEXT_PLAIN)
                 .exchange()
@@ -89,13 +95,14 @@ public class TimeDurationOptionControllerE2ETest extends BasicE2ETest {
     }
 
     @Test
-    @DataSet(value = "datasets/e2e/item/rating/emptyE2ERatingDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/e2e/order/time_duration_option/testE2ETimeDurationOptionDataSet.yml", cleanBefore = true)
     public void testGetEntity() {
         TimeDurationOptionDto expected = getTimeDurationOptionDto();
         TimeDurationOptionDto actual = webTestClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "ZoneB")
+                        .queryParam("start", "1970-01-01T08:00:00")
+                        .queryParam("end", "1970-01-01T08:00:00")
                         .build())
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
@@ -109,15 +116,28 @@ public class TimeDurationOptionControllerE2ETest extends BasicE2ETest {
     }
 
     @Test
+    @DataSet(value = "datasets/e2e/order/time_duration_option/testE2ETimeDurationOptionDataSet.yml", cleanBefore = true)
     public void testGetEntities() {
         List<TimeDurationOptionDto > constantPayloadDtoList = List.of(
                 TimeDurationOptionDto.builder()
                         .label("9-11")
-                        .value("9-11")
+                        .startTime(getLocalDateTime("1970-01-01 09:00:00"))
+                        .endTime(getLocalDateTime("1970-01-01 11:00:00"))
+                        .clientTimezone("Europe")
+                        .price(PriceDto.builder()
+                                .amount(10.0)
+                                .currency("USD")
+                                .build())
                         .build(),
                 TimeDurationOptionDto.builder()
                         .label("12-14")
-                        .value("12-14")
+                        .startTime(getLocalDateTime("1970-01-01 12:00:00"))
+                        .endTime(getLocalDateTime("1970-01-01 14:00:00"))
+                        .clientTimezone("Europe")
+                        .price(PriceDto.builder()
+                                .amount(10.0)
+                                .currency("USD")
+                                .build())
                         .build());
 
         List<TimeDurationOptionDto> actual = webTestClient.get()
@@ -136,10 +156,11 @@ public class TimeDurationOptionControllerE2ETest extends BasicE2ETest {
     private TimeDurationOptionDto getTimeDurationOptionDto() {
         return TimeDurationOptionDto.builder()
                 .label("12-14")
-                .value("12-14")
-                .duration(120)
+                .startTime(getLocalDateTime("1970-01-01 12:00:00"))
+                .endTime(getLocalDateTime("1970-01-01 14:00:00"))
+                .clientTimezone("Europe")
                 .price(PriceDto.builder()
-                        .amount(10)
+                        .amount(10.0)
                         .currency("USD")
                         .build())
                 .build();

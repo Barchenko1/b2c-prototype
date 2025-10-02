@@ -1,7 +1,7 @@
 package com.b2c.prototype.modal.dto.payload.user;
 
-import com.b2c.prototype.util.ZonedDateTimeDeserializer;
-import com.b2c.prototype.util.ZonedDateTimeSerializer;
+import com.b2c.prototype.util.DateTimeDeserializer;
+import com.b2c.prototype.util.DateTimeSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -21,8 +21,8 @@ import java.time.ZonedDateTime;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseDeviceDto {
     private String ipAddress;
-    @JsonSerialize(using = ZonedDateTimeSerializer.class)
-    @JsonDeserialize(using = ZonedDateTimeDeserializer.class)
+    @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeserializer.class)
     private ZonedDateTime loginTime;
     private String userAgent;
     private int screenWidth;

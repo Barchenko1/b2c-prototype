@@ -48,10 +48,10 @@ class MessageManagerTest {
     void saveUpdateMessage_shouldInvokeMergeOnSession() {
         MessageDto messageDto = MessageDto.builder()
                 .messageTemplate(MessageTemplateDto.builder()
-                        .sender("test@domain.com")
+//                        .sender("test@domain.com")
                         .title("Test Message")
                         .message("This is a test.")
-                        .receivers(Collections.singletonList("receiver@domain.com"))
+//                        .receivers(Collections.singletonList("receiver@domain.com"))
                         .build())
                 .build();
         String userId = "userId";

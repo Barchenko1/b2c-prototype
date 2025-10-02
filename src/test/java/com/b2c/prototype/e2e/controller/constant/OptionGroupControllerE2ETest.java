@@ -42,7 +42,6 @@ public class OptionGroupControllerE2ETest extends BasicE2ETest {
         OptionGroupDto constantPayloadDto = OptionGroupDto.builder()
                 .label("Color")
                 .value("Update Color")
-//                .optionItems(Set.of())
                 .build();
 
         String jsonPayload = writeValueAsString(constantPayloadDto);

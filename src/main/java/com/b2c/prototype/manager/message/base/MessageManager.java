@@ -41,12 +41,12 @@ public class MessageManager implements IMessageManager {
     @Override
     @Transactional
     public void saveMessage(MessageDto messageDto) {
-        List<MessageBox> messageBoxes = generalEntityDao.findEntityList(
-                "MessageBox.findByEmailListWithMessages",
-                Pair.of("emails", messageDto.getMessageTemplate().getReceivers()));
-        Message message = userDetailsTransformService.mapMessageDtoToMessage(messageDto);
-        messageBoxes.forEach(message::addMessageBox);
-        generalEntityDao.mergeEntity(message);
+//        List<MessageBox> messageBoxes = generalEntityDao.findEntityList(
+//                "MessageBox.findByEmailListWithMessages",
+//                Pair.of("emails", messageDto.getMessageTemplate().getReceivers()));
+//        Message message = userDetailsTransformService.mapMessageDtoToMessage(messageDto);
+//        messageBoxes.forEach(message::addMessageBox);
+//        generalEntityDao.mergeEntity(message);
     }
 
     @Override
@@ -169,7 +169,7 @@ public class MessageManager implements IMessageManager {
 
     private Message getExistingMessage(MessageBox messageBox, String uniqMessageId) {
         return messageBox.getMessages().stream()
-                .filter(message -> message.getMessageUniqId().equals(uniqMessageId))
+//                .filter(message -> message.getMessageUniqId().equals(uniqMessageId))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Message not found"));
     }

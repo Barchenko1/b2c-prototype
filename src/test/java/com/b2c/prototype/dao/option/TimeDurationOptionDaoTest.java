@@ -43,7 +43,7 @@ class TimeDurationOptionDaoTest extends AbstractDaoTest {
     public void mergeEntity_success() {
         TimeDurationOption entity = getTimeDurationOption();
         entity.setLabel("Update 1-10");
-        entity.setValue("Update 1-10");
+//        entity.setValue("Update 1-10");
         entity.getPrice().setAmount(20);
 
         generalEntityDao.mergeEntity(entity);
@@ -108,7 +108,7 @@ class TimeDurationOptionDaoTest extends AbstractDaoTest {
         return TimeDurationOption.builder()
                 .id(1L)
                 .label("1-10")
-                .value("1-10")
+//                .value("1-10")
                 .durationInMin(120)
                 .price(price)
                 .build();

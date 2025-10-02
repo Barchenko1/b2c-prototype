@@ -29,19 +29,21 @@ import lombok.NoArgsConstructor;
 @NamedQueries({
         @NamedQuery(
                 name = "ZoneOption.findByValue",
-                query = "SELECT zo FROM ZoneOption zo WHERE zo.zoneName = : zoneName"
+                query = "SELECT zo FROM ZoneOption zo WHERE zo.value = : value"
         ),
         @NamedQuery(
                 name = "ZoneOption.findAllWithPriceAndCurrency",
                 query = "SELECT zo FROM ZoneOption zo " +
                         "LEFT JOIN FETCH zo.price p " +
                         "LEFT JOIN FETCH p.currency c " +
-                        "WHERE zo.zoneName = : zoneName"
+                        "LEFT JOIN FETCH zo.country cc " +
+                        "WHERE zo.value = : value"
         ),
         @NamedQuery(
                 name = "ZoneOption.all",
                 query = "SELECT zo FROM ZoneOption zo " +
                         "LEFT JOIN FETCH zo.price p " +
+                        "LEFT JOIN FETCH zo.country cc " +
                         "LEFT JOIN FETCH p.currency c"
         )
 })
@@ -58,6 +60,7 @@ public class ZoneOption {
     private Country country;
     @Column(name = "city", nullable = false)
     private String city;
-    @Column(name = "zoneName", unique = true, nullable = false)
-    private String zoneName;
+    private String label;
+    @Column(unique = true, nullable = false)
+    private String value;
 }

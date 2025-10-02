@@ -52,6 +52,7 @@ public class OptionItem extends AbstractConstantEntity {
     @Builder.Default
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    @JsonIgnore
     protected Set<ArticularItem> articularItems = new HashSet<>();
 
     public void addArticularItem(ArticularItem articularItem) {

@@ -3,12 +3,12 @@ package com.b2c.prototype.processor.option;
 import com.b2c.prototype.modal.dto.payload.option.ZoneOptionDto;
 
 import java.util.List;
-import java.util.Map;
 
 public interface IZoneOptionProcess {
-    void saveUpdateZoneOption(Map<String, String> requestParams, ZoneOptionDto zoneOptionDto);
-    void deleteZoneOption(Map<String, String> requestParams);
+    void persistEntity(final ZoneOptionDto zoneOptionDto);
+    void mergeEntity(final ZoneOptionDto zoneOptionDto, final String value);
+    void removeEntity(final String value);
 
-    List<ZoneOptionDto> getZoneOptionList(Map<String, String> requestParams);
-    ZoneOptionDto getZoneOption(Map<String, String> requestParams);
+    List<ZoneOptionDto> getEntityList(final String location);
+    ZoneOptionDto getEntity(final String location, final String value);
 }

@@ -1,3 +1,4 @@
 message_template:
   - title: "title1"
     message: "message1"
+    message_template_uniq_id: "123"

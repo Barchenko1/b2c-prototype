@@ -44,7 +44,7 @@ class ZoneOptionDaoTest extends AbstractDaoTest {
     @ExpectedDataSet(value = "datasets/dao/delivery/zone_option/updateZoneOptionDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         ZoneOption entity = getZoneOption();
-        entity.setZoneName("Zone B");
+//        entity.setZoneName("Zone B");
 
         generalEntityDao.mergeEntity(entity);
     }
@@ -112,7 +112,7 @@ class ZoneOptionDaoTest extends AbstractDaoTest {
                 .build();
         return ZoneOption.builder()
                 .id(1L)
-                .zoneName("Zone A")
+//                .zoneName("Zone A")
                 .country(country)
                 .price(price)
                 .city("City")

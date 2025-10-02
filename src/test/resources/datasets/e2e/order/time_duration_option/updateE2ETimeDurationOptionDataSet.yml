@@ -12,15 +12,13 @@ price:
 time_duration_option:
   - id: 1
     label: "9-11"
-    value: "9-11"
-    start_time: "09:00:00"
-    end_time: "11:00:00"
+    start_time: "1970-01-01 09:00:00"
+    end_time: "1970-01-01 11:00:00"
     duration_in_min: 120
     price_id: 1
   - id: 2
-    label: "11-13"
-    value: "11-13"
-    start_time: "11:00:00"
-    end_time: "13:00:00"
+    label: "12-14"
+    start_time: "1970-01-01 12:00:00"
+    end_time: "1970-01-01 14:00:00"
     duration_in_min: 120
     price_id: 2

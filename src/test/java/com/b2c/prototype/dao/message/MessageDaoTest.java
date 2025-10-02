@@ -117,7 +117,7 @@ class MessageDaoTest extends AbstractDaoTest {
                 .messageTemplate(messageTemplate)
                 .status(messageStatus)
                 .type(messageType)
-                .messageUniqId("messageUniqNumber1")
+//                .messageUniqId("messageUniqNumber1")
                 .sender("sender@email.com")
                 .receivers(Set.of("receiver1@email.com", "receiver2@email.com"))
                 .dateOfSend(getLocalDateTime("2024-03-03 12:00:00"))
