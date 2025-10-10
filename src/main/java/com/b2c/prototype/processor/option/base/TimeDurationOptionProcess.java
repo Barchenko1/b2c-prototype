@@ -10,6 +10,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
+import static com.b2c.prototype.util.Constant.VALUE;
+
 @Service
 public class TimeDurationOptionProcess implements ITimeDurationOptionProcess {
 
@@ -26,16 +28,12 @@ public class TimeDurationOptionProcess implements ITimeDurationOptionProcess {
 
     @Override
     public void mergeEntity(Map<String, String> requestParams, TimeDurationOptionDto timeDurationOptionDto) {
-        LocalDateTime start = getLocalDateTime(requestParams.get("start"));
-        LocalDateTime end = getLocalDateTime(requestParams.get("end"));
-        timeDurationOptionManager.mergeEntity(start, end, timeDurationOptionDto);
+        timeDurationOptionManager.mergeEntity(requestParams.get(VALUE), timeDurationOptionDto);
     }
 
     @Override
     public void removeEntity(Map<String, String> requestParams) {
-        LocalDateTime start = getLocalDateTime(requestParams.get("start"));
-        LocalDateTime end = getLocalDateTime(requestParams.get("end"));
-        timeDurationOptionManager.removeEntity(start, end);
+        timeDurationOptionManager.removeEntity(requestParams.get(VALUE));
     }
 
     @Override
@@ -45,13 +43,7 @@ public class TimeDurationOptionProcess implements ITimeDurationOptionProcess {
 
     @Override
     public TimeDurationOptionDto getEntity(Map<String, String> requestParams) {
-        LocalDateTime start = getLocalDateTime(requestParams.get("start"));
-        LocalDateTime end = getLocalDateTime(requestParams.get("end"));
-        return timeDurationOptionManager.getEntity(start, end);
+        return timeDurationOptionManager.getEntity(requestParams.get(VALUE));
     }
 
-    public static LocalDateTime getLocalDateTime(String date) {
-        DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        return LocalDateTime.parse(date, f);
-    }
 }

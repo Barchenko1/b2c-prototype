@@ -14,8 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import java.util.Optional;
 
-import static com.b2c.prototype.util.Converter.getDate;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ContactInfoDaoTest extends AbstractDaoTest {
 
@@ -119,7 +119,7 @@ class ContactInfoDaoTest extends AbstractDaoTest {
                 .firstName("Wolter")
                 .lastName("White")
                 .email("email")
-                .birthdayDate(getDate("2024-03-03"))
+//                .birthdayDate(getDate("2024-03-03"))
                 .contactPhone(contactPhone)
                 .isEmailVerified(false)
                 .isContactPhoneVerified(false)

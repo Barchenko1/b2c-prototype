@@ -1,9 +1,13 @@
 package com.b2c.prototype.modal.entity.option;
 
 import com.b2c.prototype.modal.base.constant.AbstractConstantEntity;
+import com.b2c.prototype.modal.entity.address.Country;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
@@ -23,7 +27,7 @@ import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "option_group")
+@Table(name = "zone_option_group")
 @NamedQueries({
         @NamedQuery(
                 name = "OptionGroup.findByValueWithOptionItems",
@@ -57,45 +61,23 @@ import java.util.Set;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OptionGroup extends AbstractConstantEntity {
-    @OneToMany(mappedBy = "optionGroup", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+public class ZoneOptionGroup extends AbstractConstantEntity {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "country_id", nullable = false)
+    private Country country;
+    @Column(name = "city", nullable = false)
+    private String city;
+    @OneToMany(mappedBy = "zoneOptionGroup", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    private Set<OptionItem> optionItems = new HashSet<>();
-    @OneToMany(mappedBy = "optionGroup", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private Set<OptionItemCost> optionItemCosts = new HashSet<>();
-    @OneToMany(mappedBy = "optionGroup", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private Set<TimeDurationOption> timeDurationOptions = new HashSet<>();
+    private Set<ZoneOption> zoneOptions = new HashSet<>();
 
-    public void addOptionItem(OptionItem optionItem) {
-        this.optionItems.add(optionItem);
-        optionItem.setOptionGroup(this);
+    public void addZoneOption(ZoneOption zoneOption) {
+        this.zoneOptions.add(zoneOption);
+        zoneOption.setOptionGroup(this);
     }
 
-    public void removeOptionItem(OptionItem optionItem) {
-        this.optionItems.remove(optionItem);
-        optionItem.setOptionGroup(null);
+    public void removeZoneOption(ZoneOption zoneOption) {
+        this.zoneOptions.remove(zoneOption);
+        zoneOption.setOptionGroup(null);
     }
-
-    public void addOptionItemCost(OptionItemCost optionItem) {
-        this.optionItemCosts.add(optionItem);
-        optionItem.setOptionGroup(this);
-    }
-
-    public void removeOptionItemCost(OptionItemCost optionItem) {
-        this.optionItemCosts.remove(optionItem);
-        optionItem.setOptionGroup(null);
-    }
-
-    public void addTimeDurationOption(TimeDurationOption timeDurationOption) {
-        this.timeDurationOptions.add(timeDurationOption);
-        timeDurationOption.setOptionGroup(this);
-    }
-
-    public void removeTimeDurationOption(TimeDurationOption timeDurationOption) {
-        this.timeDurationOptions.remove(timeDurationOption);
-        timeDurationOption.setOptionGroup(null);
-    }
-
 }

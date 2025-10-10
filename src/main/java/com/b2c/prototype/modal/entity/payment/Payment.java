@@ -33,7 +33,7 @@ public class Payment {
     @Column(name = "payment_uniq_id", unique = true, nullable = false)
     private String paymentUniqId;
     private LocalDateTime paymentTime;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payment_method_id")
     private PaymentMethod paymentMethod;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -46,7 +46,7 @@ public class Payment {
     private MultiCurrencyPriceInfo totalMultiCurrencyPriceInfo;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private MultiCurrencyPriceInfo discountMultiCurrencyPriceInfo;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "payment_status_id")
     private PaymentStatus paymentStatus;
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})

@@ -113,9 +113,9 @@ class ZoneOptionDaoTest extends AbstractDaoTest {
         return ZoneOption.builder()
                 .id(1L)
 //                .zoneName("Zone A")
-                .country(country)
+//                .country(country)
                 .price(price)
-                .city("City")
+//                .city("City")
                 .build();
     }
 }

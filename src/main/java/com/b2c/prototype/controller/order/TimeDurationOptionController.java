@@ -29,7 +29,7 @@ public class TimeDurationOptionController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> postTimeDurationOption(@RequestParam final Map<String, String> requestParams,
-                                                             @RequestBody final TimeDurationOptionDto timeDurationOptionDto) {
+                                                       @RequestBody final TimeDurationOptionDto timeDurationOptionDto) {
         timeDurationOptionProcess.persistEntity(timeDurationOptionDto);
         return ResponseEntity.ok().build();
     }

@@ -67,7 +67,7 @@ public class Message {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<MessageBox> boxes = new HashSet<>();
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
     private MessageTemplate messageTemplate;
     @ManyToOne(fetch = FetchType.LAZY)
     private MessageStatus status;

@@ -43,7 +43,7 @@ public class CommissionValue {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private double amount;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY)
     private Currency currency;
     @Enumerated(EnumType.STRING)
     @Column(name = "fee_type", nullable = false)

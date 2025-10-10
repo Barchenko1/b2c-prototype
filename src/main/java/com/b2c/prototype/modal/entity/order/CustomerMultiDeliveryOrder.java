@@ -37,10 +37,10 @@ public class CustomerMultiDeliveryOrder {
     @Column(name = "order_id", unique = true, nullable = false)
     private String orderId;
     private long dateOfCreate;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_details_id")
     private UserDetails userDetails;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_status_id")
     private OrderStatus status;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)

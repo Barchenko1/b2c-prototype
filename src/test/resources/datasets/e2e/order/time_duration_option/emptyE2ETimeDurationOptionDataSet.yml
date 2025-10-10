@@ -3,13 +3,13 @@ currency:
     value: "USD"
     label: "USD"
 price:
-  - id: 1
-    amount: 27
+  - amount: 10.0
     currency_id: 1
 time_duration_option:
-  - id: 1
-    label: "9-11"
+  - label: "9-11"
+    value: "USD_NY_09:00:00-11:00:00"
     start_time: "1970-01-01 09:00:00"
     end_time: "1970-01-01 11:00:00"
+    time_zone: "UTC"
     duration_in_min: 120
     price_id: 1

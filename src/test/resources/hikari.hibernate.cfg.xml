@@ -203,7 +203,7 @@
     </named-query>
 
     <named-query name="ZoneOption.findById">
-        <query>select e from ZoneOption e JOIN FETCH e.country c JOIN FETCH e.price p JOIN FETCH p.currency WHERE e.id = :id</query>
+        <query>select e from ZoneOption e JOIN FETCH e.price p JOIN FETCH p.currency WHERE e.id = :id</query>
     </named-query>
     <named-query name="TimeDurationOption.findById">
         <query>SELECT e FROM TimeDurationOption e JOIN FETCH e.price p JOIN FETCH p.currency WHERE e.id = :id</query>
@@ -294,7 +294,6 @@
             LEFT JOIN FETCH del.zoneOption delz
             LEFT JOIN FETCH delz.price delzp
             LEFT JOIN FETCH delzp.currency delzpc
-            LEFT JOIN FETCH delz.country delzc
 
             LEFT JOIN FETCH del.deliveryType delt
 
@@ -378,7 +377,6 @@
             LEFT JOIN FETCH del.zoneOption delz
             LEFT JOIN FETCH delz.price delzp
             LEFT JOIN FETCH delzp.currency delzpc
-            LEFT JOIN FETCH delz.country delzc
             LEFT JOIN FETCH del.deliveryType delt
 
             /* payment (+ its single-valued graph) */

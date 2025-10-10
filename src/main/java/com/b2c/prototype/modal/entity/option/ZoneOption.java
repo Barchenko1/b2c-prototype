@@ -1,7 +1,7 @@
 package com.b2c.prototype.modal.entity.option;
 
-import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.price.Price;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,7 +18,9 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "zone_option")
@@ -36,14 +38,12 @@ import lombok.NoArgsConstructor;
                 query = "SELECT zo FROM ZoneOption zo " +
                         "LEFT JOIN FETCH zo.price p " +
                         "LEFT JOIN FETCH p.currency c " +
-                        "LEFT JOIN FETCH zo.country cc " +
                         "WHERE zo.value = : value"
         ),
         @NamedQuery(
                 name = "ZoneOption.all",
                 query = "SELECT zo FROM ZoneOption zo " +
                         "LEFT JOIN FETCH zo.price p " +
-                        "LEFT JOIN FETCH zo.country cc " +
                         "LEFT JOIN FETCH p.currency c"
         )
 })
@@ -55,12 +55,14 @@ public class ZoneOption {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(nullable = false)
     private Price price;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "country_id", nullable = false)
-    private Country country;
-    @Column(name = "city", nullable = false)
-    private String city;
     private String label;
     @Column(unique = true, nullable = false)
     private String value;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+    @JoinColumn(name = "zone_option_group_id", nullable = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonIgnore
+    protected ZoneOptionGroup optionGroup;
 }

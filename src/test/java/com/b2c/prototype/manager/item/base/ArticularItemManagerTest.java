@@ -2,7 +2,6 @@ package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.modal.dto.payload.discount.InitDiscountDto;
 import com.b2c.prototype.modal.dto.payload.item.ArticularItemDto;
-import com.b2c.prototype.modal.dto.payload.option.OptionGroupOptionItemSetDto;
 import com.b2c.prototype.modal.dto.payload.item.PriceDto;
 import com.b2c.prototype.modal.dto.payload.item.ResponseArticularItemDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
@@ -159,7 +158,6 @@ class ArticularItemManagerTest {
                 .currency("EUR")
                 .charSequenceCode("CODE124")
                 .build();
-        OptionGroupOptionItemSetDto optionGroupOptionItemSetDto = null;
         return ArticularItemDto.builder()
                 .fullPrice(getPriceDto(10))
                 .totalPrice(getPriceDto(8))

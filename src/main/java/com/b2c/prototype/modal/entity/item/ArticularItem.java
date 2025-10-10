@@ -140,7 +140,7 @@ public class ArticularItem {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(nullable = false)
     private Price totalPrice;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "status_id")
     private ArticularStatus status;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

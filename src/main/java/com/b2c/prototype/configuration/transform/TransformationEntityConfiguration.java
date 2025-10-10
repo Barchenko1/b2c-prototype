@@ -7,7 +7,6 @@ import com.b2c.prototype.modal.entity.item.MetaData;
 import com.b2c.prototype.modal.entity.payment.MultiCurrencyPriceInfo;
 import com.b2c.prototype.modal.constant.FeeType;
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
-import com.b2c.prototype.modal.dto.common.NumberConstantPayloadDto;
 import com.b2c.prototype.modal.dto.common.SearchFieldUpdateCollectionEntityDto;
 import com.b2c.prototype.modal.dto.common.SearchFieldUpdateEntityDto;
 import com.b2c.prototype.modal.dto.payload.commission.MinMaxCommissionDto;
@@ -29,12 +28,10 @@ import com.b2c.prototype.modal.dto.payload.discount.InitDiscountDto;
 import com.b2c.prototype.modal.dto.payload.item.MetaDataDto;
 import com.b2c.prototype.modal.dto.payload.message.MessageDto;
 import com.b2c.prototype.modal.dto.payload.option.OptionGroupDto;
-import com.b2c.prototype.modal.dto.payload.option.OptionGroupOptionItemSetDto;
 import com.b2c.prototype.modal.dto.payload.option.OptionItemDto;
 import com.b2c.prototype.modal.dto.payload.item.PriceDto;
 import com.b2c.prototype.modal.dto.payload.user.RegistrationUserDetailsDto;
 import com.b2c.prototype.modal.dto.payload.review.ReviewDto;
-import com.b2c.prototype.modal.dto.payload.option.SingleOptionItemDto;
 import com.b2c.prototype.modal.dto.payload.store.StoreDto;
 import com.b2c.prototype.modal.dto.payload.option.TimeDurationOptionDto;
 import com.b2c.prototype.modal.dto.payload.user.UserAddressDto;
@@ -43,7 +40,6 @@ import com.b2c.prototype.modal.dto.payload.user.UserDetailsDto;
 import com.b2c.prototype.modal.dto.payload.option.ZoneOptionDto;
 import com.b2c.prototype.modal.dto.payload.constant.BrandDto;
 import com.b2c.prototype.modal.dto.payload.constant.CategoryValueDto;
-import com.b2c.prototype.modal.dto.payload.constant.CountryDto;
 import com.b2c.prototype.modal.dto.payload.constant.ItemTypeDto;
 import com.b2c.prototype.modal.dto.payload.item.ResponseArticularItemDto;
 import com.b2c.prototype.modal.dto.payload.commission.ResponseMinMaxCommissionDto;
@@ -57,7 +53,6 @@ import com.b2c.prototype.modal.dto.payload.user.ResponseUserAddressDto;
 import com.b2c.prototype.modal.dto.payload.user.ResponseUserCreditCardDto;
 import com.b2c.prototype.modal.dto.payload.user.ResponseUserDetailsDto;
 import com.b2c.prototype.modal.entity.address.Address;
-import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.address.UserAddress;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
 import com.b2c.prototype.modal.entity.message.MessageTemplate;
@@ -68,7 +63,6 @@ import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.order.CustomerSingleDeliveryOrder;
 import com.b2c.prototype.modal.entity.payment.CommissionValue;
 import com.b2c.prototype.modal.entity.payment.MinMaxCommission;
-import com.b2c.prototype.modal.entity.review.Rating;
 import com.b2c.prototype.modal.entity.message.Message;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
@@ -285,28 +279,6 @@ public class TransformationEntityConfiguration {
 //        transformationFunctionService.addTransformationFunction(entityClass, ConstantPayloadDto.class, mapConstantEntityToConstantEntityPayloadDtoFunction());
 //    }
 
-    private Function<NumberConstantPayloadDto, Rating> mapOneIntegerFieldEntityDtoRatingFunction() {
-        return constantIntegerEntityPayloadDto -> Rating.builder()
-                .value((Integer) constantIntegerEntityPayloadDto.getValue())
-                .build();
-    }
-
-    private Function<Country, CountryDto> mapCountryEntityCountryDtoFunction() {
-        return entity -> CountryDto.builder()
-                .label(entity.getLabel())
-                .value(entity.getValue())
-                .flagImagePath(entity.getFlagImagePath())
-                .build();
-    }
-
-    private Function<CountryDto, Country> mapCountryDtoCountryFunction() {
-        return countryDto -> Country.builder()
-                .label(countryDto.getLabel())
-                .value(countryDto.getValue())
-                .flagImagePath(countryDto.getFlagImagePath())
-                .build();
-    }
-
     private BiFunction<Session, AddressDto, Address> mapAddressDtoToAddressFunction() {
         return (session, addressDto) -> Address.builder()
                 .city(addressDto.getCity())
@@ -459,40 +431,6 @@ public class TransformationEntityConfiguration {
         };
     }
 
-    private Function<ContactPhone, ContactPhoneDto> mapContactPhoneToContactPhoneDtoFunction() {
-        return contactPhone -> ContactPhoneDto.builder()
-                .phoneNumber(contactPhone.getPhoneNumber())
-                .countryPhoneCode(contactPhone.getCountryPhoneCode().getValue())
-                .build();
-    }
-
-    private Function<UserDetails, ContactPhoneDto> mapUserDetailsToContactPhoneDtoFunction() {
-        return userDetails -> {
-            ContactPhone contactPhone = userDetails.getContactInfo().getContactPhone();
-            return mapContactPhoneToContactPhoneDtoFunction().apply(contactPhone);
-        };
-    }
-
-    private BiFunction<Session, ContactInfoDto, ContactInfo> mapContactInfoDtoToContactInfoFunction() {
-        return (session, contactInfoDto) -> ContactInfo.builder()
-                .email(contactInfoDto.getEmail())
-                .firstName(contactInfoDto.getFirstName())
-                .lastName(contactInfoDto.getLastName())
-                .contactPhone(mapContactPhoneDtoToContactPhoneFunction().apply(session, contactInfoDto.getContactPhone()))
-                .birthdayDate(contactInfoDto.getBirthdayDate())
-                .build();
-    }
-
-    private BiFunction<Session, ContactInfo, ContactInfoDto> mapContactInfoToContactInfoDtoFunction() {
-        return (session, contactInfo) -> ContactInfoDto.builder()
-                .email(contactInfo.getEmail())
-                .firstName(contactInfo.getFirstName())
-                .lastName(contactInfo.getLastName())
-                .contactPhone(mapContactPhoneToContactPhoneDtoFunction().apply(contactInfo.getContactPhone()))
-                .birthdayDate(contactInfo.getBirthdayDate())
-                .build();
-    }
-
     Function<UserDetails, ContactInfoDto> mapUserDetailsToContactInfoDtoFunction() {
         return userDetails -> {
             ContactInfo contactInfo = userDetails.getContactInfo();
@@ -531,7 +469,8 @@ public class TransformationEntityConfiguration {
 
     private BiFunction<Session, UserDetailsDto, UserDetails> mapUserDetailsDtoToUserDetailsFunction() {
         return (session, userDetailsDto) -> {
-            ContactInfo contactInfo = mapContactInfoDtoToContactInfoFunction().apply(session, userDetailsDto.getContactInfo());
+//            ContactInfo contactInfo = mapContactInfoDtoToContactInfoFunction().apply(session, userDetailsDto.getContactInfo());
+            ContactInfo contactInfo = null;
             Address address = mapAddressDtoToAddressFunction().apply(session, userDetailsDto.getAddress());
             UserAddress userAddress = UserAddress.builder()
                     .address(address)
@@ -731,115 +670,101 @@ public class TransformationEntityConfiguration {
         return ArticularItem::getOptionItems;
     }
 
-    BiFunction<Session, OptionGroupOptionItemSetDto, OptionGroup> mapOptionItemDtoToOptionGroup() {
-        return (session, optionItemDto) -> {
-//            Optional<OptionGroup> optionalResult =
-//                    sessionEntityFetcher.fetchOptionGroup(session, "OptionGroup.withOptionItems", optionItemDto.getOptionGroup().getValue());
-            Optional<OptionGroup> optionalResult = Optional.empty();
-            return optionalResult.map(existingOG -> {
-                optionItemDto.getOptionItems().stream()
-                        .filter(oi -> existingOG.getOptionItems().stream()
-                                .noneMatch(v -> v.getValue().equals(oi.getValue())))
-                        .forEach(newOption -> existingOG.getOptionItems().add(
-                                OptionItem.builder()
-                                        .label(newOption.getLabel())
-                                        .value(newOption.getValue())
-                                        .build()
-                        ));
+//    BiFunction<Session, OptionGroupOptionItemSetDto, OptionGroup> mapOptionItemDtoToOptionGroup() {
+//        return (session, optionItemDto) -> {
+////            Optional<OptionGroup> optionalResult =
+////                    sessionEntityFetcher.fetchOptionGroup(session, "OptionGroup.withOptionItems", optionItemDto.getOptionGroup().getValue());
+//            Optional<OptionGroup> optionalResult = Optional.empty();
+//            return optionalResult.map(existingOG -> {
+//                optionItemDto.getOptionItems().stream()
+//                        .filter(oi -> existingOG.getOptionItems().stream()
+//                                .noneMatch(v -> v.getValue().equals(oi.getValue())))
+//                        .forEach(newOption -> existingOG.getOptionItems().add(
+//                                OptionItem.builder()
+//                                        .label(newOption.getLabel())
+//                                        .value(newOption.getValue())
+//                                        .build()
+//                        ));
+//
+//                return existingOG;
+//            }).orElseGet(() -> {
+//                OptionGroup newOG = OptionGroup.builder()
+//                        .label(optionItemDto.getOptionGroup().getLabel())
+//                        .value(optionItemDto.getOptionGroup().getValue())
+//                        .build();
+//
+//                optionItemDto.getOptionItems().stream()
+//                        .map(item -> OptionItem.builder()
+//                                .label(item.getLabel())
+//                                .value(item.getValue())
+//                                .build())
+//                        .forEach(newOG::addOptionItem);
+//
+//                return newOG;
+//            });
+//        };
+//    }
+//
+//    Function<OptionGroup, OptionGroupOptionItemSetDto> mapOptionGroupToOptionItemDto() {
+//        return optionGroup -> {
+//            OptionGroupDto optionGroupDto = OptionGroupDto.builder()
+//                    .label(optionGroup.getLabel())
+//                    .value(optionGroup.getValue())
+//                    .build();
+//
+//            Set<OptionItemDto> constantPayloadDtoList = optionGroup.getOptionItems().stream()
+//                    .map(item -> OptionItemDto.builder()
+//                            .label(item.getLabel())
+//                            .value(item.getValue())
+//                            .build())
+//                    .collect(Collectors.toSet());
+//
+//
+//            return OptionGroupOptionItemSetDto.builder()
+//                    .optionGroup(optionGroupDto)
+//                    .optionItems(constantPayloadDtoList)
+//                    .build();
+//        };
+//    }
+//
+//    private Function<ArticularItem, List<OptionGroupOptionItemSetDto>> mapArticularItemToOptionItemDtoList() {
+//        return articularItem -> articularItem.getOptionItems().stream()
+//                .map(optionItem -> OptionGroupOptionItemSetDto.builder()
+//                        .optionGroup(OptionGroupDto.builder()
+//                                .label(optionItem.getOptionGroup().getLabel())
+//                                .value(optionItem.getOptionGroup().getValue())
+//                                .build())
+//                        .optionItems(Set.of(OptionItemDto.builder()
+//                                .label(optionItem.getLabel())
+//                                .value(optionItem.getValue())
+//                                .build()))
+//                        .build())
+//                .toList();
+//    }
 
-                return existingOG;
-            }).orElseGet(() -> {
-                OptionGroup newOG = OptionGroup.builder()
-                        .label(optionItemDto.getOptionGroup().getLabel())
-                        .value(optionItemDto.getOptionGroup().getValue())
-                        .build();
-
-                optionItemDto.getOptionItems().stream()
-                        .map(item -> OptionItem.builder()
-                                .label(item.getLabel())
-                                .value(item.getValue())
-                                .build())
-                        .forEach(newOG::addOptionItem);
-
-                return newOG;
-            });
-        };
-    }
-
-    Function<OptionGroup, OptionGroupOptionItemSetDto> mapOptionGroupToOptionItemDto() {
-        return optionGroup -> {
-            OptionGroupDto optionGroupDto = OptionGroupDto.builder()
-                    .label(optionGroup.getLabel())
-                    .value(optionGroup.getValue())
-                    .build();
-
-            Set<OptionItemDto> constantPayloadDtoList = optionGroup.getOptionItems().stream()
-                    .map(item -> OptionItemDto.builder()
-                            .label(item.getLabel())
-                            .value(item.getValue())
-                            .build())
-                    .collect(Collectors.toSet());
-
-
-            return OptionGroupOptionItemSetDto.builder()
-                    .optionGroup(optionGroupDto)
-                    .optionItems(constantPayloadDtoList)
-                    .build();
-        };
-    }
-
-    private Function<ArticularItem, List<OptionGroupOptionItemSetDto>> mapArticularItemToOptionItemDtoList() {
-        return articularItem -> articularItem.getOptionItems().stream()
-                .map(optionItem -> OptionGroupOptionItemSetDto.builder()
-                        .optionGroup(OptionGroupDto.builder()
-                                .label(optionItem.getOptionGroup().getLabel())
-                                .value(optionItem.getOptionGroup().getValue())
-                                .build())
-                        .optionItems(Set.of(OptionItemDto.builder()
-                                .label(optionItem.getLabel())
-                                .value(optionItem.getValue())
-                                .build()))
-                        .build())
-                .toList();
-    }
-
-    private Function<SingleOptionItemDto, OptionGroup> mapSingleOptionItemDtoToOptionGroup() {
-        return singleOptionItemDto -> {
-            OptionGroup og = OptionGroup.builder()
-                    .label(singleOptionItemDto.getOptionGroup().getLabel())
-                    .value(singleOptionItemDto.getOptionGroup().getValue())
-                    .build();
-            og.addOptionItem(OptionItem.builder()
-                    .value(singleOptionItemDto.getOptionItem().getValue())
-                    .label(singleOptionItemDto.getOptionItem().getLabel())
-                    .build());
-            return og;
-        };
-    }
-
-    private Set<OptionGroupOptionItemSetDto> getOptionGroupOptionItemSetDtoSet(Set<ArticularItemDto> articularItemDtoSet) {
-        return articularItemDtoSet.stream()
-                .flatMap(articularItem -> articularItem.getOptions().stream())
-                .collect(Collectors.groupingBy(
-                        SingleOptionItemDto::getOptionGroup,
-                        Collectors.mapping(
-                                SingleOptionItemDto::getOptionItem,
-                                Collectors.toSet())
-                ))
-                .entrySet().stream()
-                .map(entry ->
-                        OptionGroupOptionItemSetDto.builder()
-                            .optionGroup(OptionGroupDto.builder()
-                                    .label(entry.getKey().getLabel())
-                                    .value(entry.getKey().getValue())
-                                    .build())
-                            .optionItems(entry.getValue().stream()
-                                    .map(optionItem -> new OptionItemDto(optionItem.getLabel(), optionItem.getValue()))
-                                    .collect(Collectors.toSet()))
-                            .build()
-                )
-                .collect(Collectors.toSet());
-    }
+//    private Set<OptionGroupOptionItemSetDto> getOptionGroupOptionItemSetDtoSet(Set<ArticularItemDto> articularItemDtoSet) {
+//        return articularItemDtoSet.stream()
+//                .flatMap(articularItem -> articularItem.getOptions().stream())
+//                .collect(Collectors.groupingBy(
+//                        SingleOptionItemDto::getOptionGroup,
+//                        Collectors.mapping(
+//                                SingleOptionItemDto::getOptionItem,
+//                                Collectors.toSet())
+//                ))
+//                .entrySet().stream()
+//                .map(entry ->
+//                        OptionGroupOptionItemSetDto.builder()
+//                            .optionGroup(OptionGroupDto.builder()
+//                                    .label(entry.getKey().getLabel())
+//                                    .value(entry.getKey().getValue())
+//                                    .build())
+//                            .optionItems(entry.getValue().stream()
+//                                    .map(optionItem -> new OptionItemDto(optionItem.getLabel(), optionItem.getValue()))
+//                                    .collect(Collectors.toSet()))
+//                            .build()
+//                )
+//                .collect(Collectors.toSet());
+//    }
 
     private BiFunction<Session, MetaDataDto, MetaData> mapItemDataDtoToItemDataFunction() {
         return (session, itemDataDto) -> {
@@ -859,16 +784,18 @@ public class TransformationEntityConfiguration {
 //                            .value(itemDataDto.getItemType().getValue())
 //                            .build());
 
-            Set<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoSet = getOptionGroupOptionItemSetDtoSet(itemDataDto.getArticularItemSet());
-            Set<OptionGroup> optionGroups = mapOptionGroupOptionItemSetDtoListToOptionGroupSet().apply(session, optionGroupOptionItemSetDtoSet);
-            Set<OptionItem> optionItems = optionGroups.stream()
-                    .flatMap(og -> og.getOptionItems().stream())
-                    .collect(Collectors.toSet());
+//            Set<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoSet = getOptionGroupOptionItemSetDtoSet(itemDataDto.getArticularItemSet());
+            Set<OptionGroupDto> optionGroupDtoSet = new HashSet<>();
+//            Set<OptionGroup> optionGroups = mapOptionGroupOptionItemSetDtoListToOptionGroupSet().apply(session, null);
+//            Set<OptionItemDto> optionGroups = new HashSet<>();
+//            Set<OptionItem> optionItems = optionGroups.stream()
+//                    .flatMap(og -> og.getOptionItems().stream())
+//                    .collect(Collectors.toSet());
 
             Set<ArticularItem> articularItemSet = mapArticularItemSet(
                     session,
                     itemDataDto.getArticularItemSet(),
-                    optionItems,
+                    null,
                     Collections.emptyMap());
 
             return MetaData.builder()
@@ -897,16 +824,17 @@ public class TransformationEntityConfiguration {
                             ArticularItem::getArticularUniqId,
                             articularItem -> articularItem
                     ));
-            Set<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoSet = getOptionGroupOptionItemSetDtoSet(articularItemDtoSet);
-            Set<OptionGroup> optionGroups = mapOptionGroupOptionItemSetDtoListToOptionGroupSet().apply(session, optionGroupOptionItemSetDtoSet);
-            Set<OptionItem> optionItems = optionGroups.stream()
-                    .flatMap(og -> og.getOptionItems().stream())
-                    .collect(Collectors.toSet());
+//            Set<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoSet = getOptionGroupOptionItemSetDtoSet(articularItemDtoSet);
+            Set<OptionGroupDto> optionGroupDtoSet = new HashSet<>();
+//            Set<OptionGroup> optionGroups = mapOptionGroupOptionItemSetDtoListToOptionGroupSet().apply(session, null);
+//            Set<OptionItem> optionItems = optionGroups.stream()
+//                    .flatMap(og -> og.getOptionItems().stream())
+//                    .collect(Collectors.toSet());
 
             Set<ArticularItem> articularItemSet = mapArticularItemSet(
                     session,
                     articularItemDtoSet,
-                    optionItems,
+                    null,
                     existingArticularItemMap);
             List<ArticularItem> nonUpdatedArticularList = existingMetaData.getArticularItemSet().stream()
                     .filter(existingItem -> articularItemSet.stream()
@@ -959,16 +887,17 @@ public class TransformationEntityConfiguration {
 //                            .value(metaDataDto.getItemType().getValue())
 //                            .build());
 
-            Set<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoSet = getOptionGroupOptionItemSetDtoSet(metaDataDto.getArticularItemSet());
-            Set<OptionGroup> optionGroups = mapOptionGroupOptionItemSetDtoListToOptionGroupSet().apply(session, optionGroupOptionItemSetDtoSet);
-            Set<OptionItem> optionItems = optionGroups.stream()
-                    .flatMap(og -> og.getOptionItems().stream())
-                    .collect(Collectors.toSet());
+//            Set<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoSet = getOptionGroupOptionItemSetDtoSet(metaDataDto.getArticularItemSet());
+            Set<OptionGroupDto> optionGroupDtoSet = new HashSet<>();
+//            Set<OptionGroup> optionGroups = mapOptionGroupOptionItemSetDtoListToOptionGroupSet().apply(session, null);
+//            Set<OptionItem> optionItems = optionGroups.stream()
+//                    .flatMap(og -> og.getOptionItems().stream())
+//                    .collect(Collectors.toSet());
 
             Set<ArticularItem> articularItemSet = mapArticularItemSet(
                     session,
                     metaDataDto.getArticularItemSet(),
-                    optionItems,
+                    null,
                     existingArticularItemMap);
 
             return MetaData.builder()
@@ -1009,18 +938,18 @@ public class TransformationEntityConfiguration {
 //                            .discount(discount)
                             .build();
 
-                    articularItemDto.getOptions().stream()
-                            .flatMap(soi -> optionItems.stream()
-                                    .filter(optionItem -> optionItem.getValue().equals(soi.getOptionItem().getValue()))
-                            )
-                            .forEach(optionItem -> {
-                                optionItem.getArticularItems().stream()
-                                        .filter(ai -> ai.getArticularUniqId().equals(articularItem.getArticularUniqId()))
-                                        .collect(Collectors.toSet())
-                                        .forEach(optionItem::removeArticularItem);
-
-                                optionItem.addArticularItem(articularItem);
-                            });
+//                    articularItemDto.getOptions().stream()
+//                            .flatMap(soi -> optionItems.stream()
+//                                    .filter(optionItem -> optionItem.getValue().equals(soi.getOptionItem().getValue()))
+//                            )
+//                            .forEach(optionItem -> {
+//                                optionItem.getArticularItems().stream()
+//                                        .filter(ai -> ai.getArticularUniqId().equals(articularItem.getArticularUniqId()))
+//                                        .collect(Collectors.toSet())
+//                                        .forEach(optionItem::removeArticularItem);
+//
+//                                optionItem.addArticularItem(articularItem);
+//                            });
 
                     articularItem.getFullPrice().setId(fullPriceId);
                     articularItem.getTotalPrice().setId(totalPriceId);
@@ -1119,28 +1048,28 @@ public class TransformationEntityConfiguration {
                 .build();
     }
 
-    private BiFunction<Session, Set<OptionGroupOptionItemSetDto>, Set<OptionGroup>> mapOptionGroupOptionItemSetDtoListToOptionGroupSet() {
-        return (session, optionItemDtoList) -> optionItemDtoList.stream()
-                .map(optionItemDto -> {
-//                    OptionGroup existingOG = sessionEntityFetcher.fetchOptionGroup(session, "OptionGroup.withOptionItemsAndArticularItems", optionItemDto.getOptionGroup().getValue())
-//                            .orElseGet(() -> OptionGroup.builder()
-//                                    .label(optionItemDto.getOptionGroup().getLabel())
-//                                    .value(optionItemDto.getOptionGroup().getValue())
+//    private BiFunction<Session, Set<OptionGroupOptionItemSetDto>, Set<OptionGroup>> mapOptionGroupOptionItemSetDtoListToOptionGroupSet() {
+//        return (session, optionItemDtoList) -> optionItemDtoList.stream()
+//                .map(optionItemDto -> {
+////                    OptionGroup existingOG = sessionEntityFetcher.fetchOptionGroup(session, "OptionGroup.withOptionItemsAndArticularItems", optionItemDto.getOptionGroup().getValue())
+////                            .orElseGet(() -> OptionGroup.builder()
+////                                    .label(optionItemDto.getOptionGroup().getLabel())
+////                                    .value(optionItemDto.getOptionGroup().getValue())
+////                                    .build());
+//                    OptionGroup existingOG = null;
+//                    optionItemDto.getOptionItems().forEach(dtoOptionItem -> {
+//                        if (existingOG.getOptionItems().stream().noneMatch(oi -> oi.getValue().equals(dtoOptionItem.getValue()))) {
+//                            existingOG.addOptionItem(OptionItem.builder()
+//                                    .label(dtoOptionItem.getLabel())
+//                                    .value(dtoOptionItem.getValue())
 //                                    .build());
-                    OptionGroup existingOG = null;
-                    optionItemDto.getOptionItems().forEach(dtoOptionItem -> {
-                        if (existingOG.getOptionItems().stream().noneMatch(oi -> oi.getValue().equals(dtoOptionItem.getValue()))) {
-                            existingOG.addOptionItem(OptionItem.builder()
-                                    .label(dtoOptionItem.getLabel())
-                                    .value(dtoOptionItem.getValue())
-                                    .build());
-                        }
-                    });
-
-                    return existingOG;
-                })
-                .collect(Collectors.toSet());
-    }
+//                        }
+//                    });
+//
+//                    return existingOG;
+//                })
+//                .collect(Collectors.toSet());
+//    }
 
     private BiFunction<Session, DiscountDto, Discount> mapDiscountDtoToDiscountFunction() {
         return (session, discountDto) -> {
@@ -1233,32 +1162,32 @@ public class TransformationEntityConfiguration {
                 .totalPrice(mapPriceToPriceDtoFunction().apply(articularItem.getTotalPrice()))
                 .status(mapArticularStatusToConstantPayloadDtoFunction().apply(articularItem.getStatus()))
                 .discount(mapDiscountToInitDiscountDto().apply(articularItem.getDiscount()))
-                .options(mapOptionItemSetToSingleOptionItemDtoSetFunction().apply(articularItem.getOptionItems()))
+//                .options(mapOptionItemSetToSingleOptionItemDtoSetFunction().apply(articularItem.getOptionItems()))
                 .build();
     }
 
-    private Function<Set<OptionItem>, Set<OptionGroupOptionItemSetDto>> mapOptionItemSetToSingleOptionItemDtoSetFunction() {
-        return optionItemSet -> optionItemSet.stream()
-                .collect(Collectors.groupingBy(
-                        OptionItem::getOptionGroup,
-                        Collectors.mapping(
-                                optionItem -> optionItem,
-                                Collectors.toSet())
-                ))
-                .entrySet().stream()
-                .map(entry ->
-                        OptionGroupOptionItemSetDto.builder()
-                                .optionGroup(OptionGroupDto.builder()
-                                        .label(entry.getKey().getLabel())
-                                        .value(entry.getKey().getValue())
-                                        .build())
-                                .optionItems(entry.getValue().stream()
-                                        .map(optionItem -> new OptionItemDto(optionItem.getLabel(), optionItem.getValue()))
-                                        .collect(Collectors.toSet()))
-                                .build()
-                )
-                .collect(Collectors.toSet());
-    }
+//    private Function<Set<OptionItem>, Set<OptionGroupOptionItemSetDto>> mapOptionItemSetToSingleOptionItemDtoSetFunction() {
+//        return optionItemSet -> optionItemSet.stream()
+//                .collect(Collectors.groupingBy(
+//                        OptionItem::getOptionGroup,
+//                        Collectors.mapping(
+//                                optionItem -> optionItem,
+//                                Collectors.toSet())
+//                ))
+//                .entrySet().stream()
+//                .map(entry ->
+//                        OptionGroupOptionItemSetDto.builder()
+//                                .optionGroup(OptionGroupDto.builder()
+//                                        .label(entry.getKey().getLabel())
+//                                        .value(entry.getKey().getValue())
+//                                        .build())
+//                                .optionItems(entry.getValue().stream()
+//                                        .map(optionItem -> new OptionItemDto(optionItem.getLabel(), optionItem.getValue()))
+//                                        .collect(Collectors.toSet()))
+//                                .build()
+//                )
+//                .collect(Collectors.toSet());
+//    }
 
     private Function<ArticularStatus, ConstantPayloadDto> mapArticularStatusToConstantPayloadDtoFunction() {
         return articularStatus -> ConstantPayloadDto.builder()
@@ -1319,7 +1248,7 @@ public class TransformationEntityConfiguration {
             Price price = mapPriceDtoToPriceFunction().apply(session, zoneOptionDto.getPrice());
             return ZoneOption.builder()
 //                    .zoneName(zoneOptionDto.getZoneName())
-                    .city(zoneOptionDto.getCity())
+//                    .city(zoneOptionDto.getCity())
                     .price(price)
                     .build();
         };
@@ -1329,7 +1258,7 @@ public class TransformationEntityConfiguration {
         return zoneOption -> {
             PriceDto price = mapPriceToPriceDtoFunction().apply(zoneOption.getPrice());
             return ZoneOptionDto.builder()
-                    .city(zoneOption.getCity())
+//                    .city(zoneOption.getCity())
 //                    .zoneName(zoneOption.getZoneName())
                     .price(price)
                     .build();

@@ -1,8 +1,7 @@
 package com.b2c.prototype.manager.option.base;
 
 import com.b2c.prototype.dao.IGeneralEntityDao;
-import com.b2c.prototype.modal.dto.payload.option.OptionGroupOptionItemSetDto;
-import com.b2c.prototype.modal.dto.payload.option.SingleOptionItemDto;
+import com.b2c.prototype.modal.dto.payload.option.OptionItemDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
@@ -31,14 +30,16 @@ public class OptionItemManager implements IOptionItemManager {
     }
 
     @Override
-    public void saveUpdateOptionItemByArticularId(String articularId, String optionItemValue, SingleOptionItemDto singleOptionItemDto) {
+    public void saveUpdateOptionItemByArticularId(String articularId,
+                                                  String optionItemValue,
+                                                  OptionItemDto optionItemDto) {
 //        OptionGroup newOptionGroup = itemTransformService.getEntity(
 //                OptionGroup.class,
 //                singleOptionItemDto);
         OptionGroup newOptionGroup = new OptionGroup();
         OptionGroup existingOptionGroup = (OptionGroup) generalEntityDao.findOptionEntity(
                         "OptionGroup.findByValueWithOptionItems",
-                        Pair.of(VALUE, singleOptionItemDto.getOptionGroup().getValue()))
+                        Pair.of(VALUE, optionItemDto.getValue()))
                 .orElseGet(() -> {
                     generalEntityDao.persistEntity(newOptionGroup);
                     return newOptionGroup;
@@ -57,7 +58,7 @@ public class OptionItemManager implements IOptionItemManager {
 
 
     @Override
-    public void saveUpdateOptionItemByOptionGroup(String optionGroupValue, String optionItemValue, SingleOptionItemDto singleOptionItemDto) {
+    public void saveUpdateOptionItemByOptionGroup(String optionGroupValue, String optionItemValue, OptionItemDto optionItemDto) {
         OptionGroup existingOptionGroup = generalEntityDao.findEntity(
                 "OptionGroup.findByValueWithOptionItems",
                 Pair.of(VALUE, optionGroupValue));
@@ -79,17 +80,6 @@ public class OptionItemManager implements IOptionItemManager {
         } else {
             generalEntityDao.mergeEntity(newOptionGroup);
         }
-    }
-
-
-    @Override
-    public void saveOptionItemSet(Set<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoList) {
-//        entityOperationManager.executeConsumer(session -> {
-//            Set<OptionGroup> optionGroups =
-//                    (Set<OptionGroup>) transformationFunctionService.getCollectionTransformationCollectionBiFunction(OptionGroupOptionItemSetDto.class, OptionGroup.class, "set")
-//                            .apply((Session) session, optionGroupOptionItemSetDtoList);
-//            optionGroups.forEach(session::merge);
-//        });
     }
 
     @Override
@@ -134,7 +124,7 @@ public class OptionItemManager implements IOptionItemManager {
     }
 
     @Override
-    public OptionGroupOptionItemSetDto getOptionItemListByOptionGroup(String optionGroupValue) {
+    public List<OptionItemDto> getOptionItemListByOptionGroup(String optionGroupValue) {
 //        OptionGroup optionGroup = generalEntityDao.findEntity(
 //                "OptionGroup.findByValueWithOptionItems",
 //                Pair.of(VALUE, optionGroupValue));
@@ -145,7 +135,7 @@ public class OptionItemManager implements IOptionItemManager {
     }
 
     @Override
-    public List<OptionGroupOptionItemSetDto> getOptionItemByItemArticularId(String articularId) {
+    public List<OptionItemDto> getOptionItemByItemArticularId(String articularId) {
 //        ArticularItem articularItem = generalEntityDao.findEntity(
 //                "ArticularItem.optionItems",
 //                Pair.of(ARTICULAR_ID, articularId));
@@ -157,7 +147,7 @@ public class OptionItemManager implements IOptionItemManager {
     }
 
     @Override
-    public List<OptionGroupOptionItemSetDto> getOptionItemList() {
+    public List<OptionItemDto> getOptionItemList() {
 //        List<OptionGroup> optionGroupList = generalEntityDao.findEntityList(
 //                "OptionGroup.findWithOptionItems", (Pair<String, ?>) null);
 //        return optionGroupList.stream()

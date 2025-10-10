@@ -41,7 +41,7 @@ public class ArticularStock {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private List<ArticularItemQuantity> articularItemQuantities = new ArrayList<>();
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "availability_status_id")
     private AvailabilityStatus availabilityState;
     @Enumerated(EnumType.STRING)

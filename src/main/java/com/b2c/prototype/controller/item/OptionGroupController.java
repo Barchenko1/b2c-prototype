@@ -1,7 +1,5 @@
 package com.b2c.prototype.controller.item;
 
-import com.b2c.prototype.modal.dto.payload.option.OptionGroupOptionItemSetDto;
-import com.b2c.prototype.modal.dto.payload.option.SingleOptionItemDto;
 import com.b2c.prototype.processor.option.IOptionGroupProcess;
 import com.b2c.prototype.processor.option.IOptionItemProcessor;
 import org.springframework.http.MediaType;
@@ -17,9 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/option/group")

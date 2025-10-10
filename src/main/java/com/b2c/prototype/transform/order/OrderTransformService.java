@@ -10,12 +10,11 @@ import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.option.TimeDurationOption;
 import com.b2c.prototype.modal.entity.option.ZoneOption;
 import com.b2c.prototype.modal.entity.order.CustomerSingleDeliveryOrder;
-import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
-import javax.management.ValueExp;
+import java.time.Duration;
 
 import static com.b2c.prototype.util.Constant.VALUE;
 
@@ -33,11 +32,7 @@ public class OrderTransformService implements IOrderTransformService {
         return ZoneOptionDto.builder()
                 .label(zoneOption.getLabel())
                 .value(zoneOption.getValue())
-                .country(CountryDto.builder()
-                        .label(zoneOption.getCountry().getLabel())
-                        .value(zoneOption.getCountry().getValue())
-                        .build())
-                .city(zoneOption.getCity())
+//                .city(zoneOption.getCity())
                 .price(PriceDto.builder()
                         .amount(zoneOption.getPrice().getAmount())
                         .currency(zoneOption.getPrice().getCurrency().getLabel())
@@ -50,8 +45,8 @@ public class OrderTransformService implements IOrderTransformService {
         return ZoneOption.builder()
                 .label(zoneOptionDto.getLabel())
                 .value(zoneOptionDto.getValue())
-                .country(generalEntityDao.findEntity("Country.findByValue", Pair.of(VALUE, zoneOptionDto.getCountry().getValue())))
-                .city(zoneOptionDto.getCity())
+
+//                .city(zoneOptionDto.getCity())
                 .price(Price.builder()
                         .amount(zoneOptionDto.getPrice().getAmount())
                         .currency(generalEntityDao.findEntity("Currency.findByValue", Pair.of(VALUE, zoneOptionDto.getPrice().getCurrency())))
@@ -61,12 +56,36 @@ public class OrderTransformService implements IOrderTransformService {
 
     @Override
     public TimeDurationOption mapTimeDurationOptionDtoToTimeDurationOption(TimeDurationOptionDto timeDurationOptionDto) {
-        return null;
+        return TimeDurationOption.builder()
+                .label(timeDurationOptionDto.getLabel())
+                .value(timeDurationOptionDto.getValue())
+                .timeZone(timeDurationOptionDto.getTimeZone())
+                .startTime(timeDurationOptionDto.getStartTime())
+                .endTime(timeDurationOptionDto.getEndTime())
+                .durationInMin(Duration.between(
+                        timeDurationOptionDto.getStartTime(),
+                        timeDurationOptionDto.getEndTime())
+                        .toMinutes())
+                .price(Price.builder()
+                        .amount(timeDurationOptionDto.getPrice().getAmount())
+                        .currency(generalEntityDao.findEntity("Currency.findByValue", Pair.of(VALUE, timeDurationOptionDto.getPrice().getCurrency())))
+                        .build())
+                .build();
     }
 
     @Override
     public TimeDurationOptionDto mapTimeDurationOptionToTimeDurationOptionDto(TimeDurationOption timeDurationOption) {
-        return null;
+        return TimeDurationOptionDto.builder()
+                .label(timeDurationOption.getLabel())
+                .value(timeDurationOption.getValue())
+                .timeZone(timeDurationOption.getTimeZone())
+                .startTime(timeDurationOption.getStartTime())
+                .endTime(timeDurationOption.getEndTime())
+                .price(PriceDto.builder()
+                        .amount(timeDurationOption.getPrice().getAmount())
+                        .currency(timeDurationOption.getPrice().getCurrency().getLabel())
+                        .build())
+                .build();
     }
 
     @Override

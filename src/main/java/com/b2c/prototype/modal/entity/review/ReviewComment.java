@@ -39,7 +39,7 @@ public class ReviewComment {
     private String title;
     private String message;
     private LocalDateTime dateOfCreate;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY)
     private UserDetails userDetails;
     @ManyToOne
     @JoinColumn(name = "comment_id")

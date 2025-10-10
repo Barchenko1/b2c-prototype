@@ -16,6 +16,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 public class ZoneOptionDto extends AbstractConstantDto {
     private PriceDto price;
-    private CountryDto country;
+    private OptionGroupDto optionGroup;
     private String city;
 }

@@ -10,8 +10,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 
+import java.time.ZoneId;
 import java.util.List;
 
+import static com.b2c.prototype.util.Constant.VALUE;
 import static com.b2c.prototype.util.Converter.getLocalDateTime;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -39,16 +41,22 @@ public class TimeDurationOptionControllerE2ETest extends BasicE2ETest {
     @DataSet(value = "datasets/e2e/order/time_duration_option/testE2ETimeDurationOptionDataSet.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/e2e/order/time_duration_option/updateE2ETimeDurationOptionDataSet.yml", orderBy = "id")
     public void testUpdateEntity() {
-        ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .label("12-14")
-                .value("Update 12-14")
+        TimeDurationOptionDto constantPayloadDto = TimeDurationOptionDto.builder()
+                .label("14-16")
+                .value("USD_NY_14:00:00-16:00:00")
+                .startTime(getLocalDateTime("1970-01-01 14:00:00"))
+                .endTime(getLocalDateTime("1970-01-01 16:00:00"))
+                .timeZone(ZoneId.of("UTC"))
+                .price(PriceDto.builder()
+                        .amount(15.0)
+                        .currency("USD")
+                        .build())
                 .build();
         String jsonPayload = writeValueAsString(constantPayloadDto);
         webTestClient.put()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("start", "1970-01-01T08:00:00")
-                        .queryParam("end", "1970-01-01T08:00:00")
+                        .queryParam(VALUE, "USD_NY_12:00:00-14:00:00")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -61,16 +69,22 @@ public class TimeDurationOptionControllerE2ETest extends BasicE2ETest {
     @DataSet(value = "datasets/e2e/order/time_duration_option/testE2ETimeDurationOptionDataSet.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/e2e/order/time_duration_option/updateE2ETimeDurationOptionDataSet.yml", orderBy = "id")
     public void testPatchTEntity() {
-        ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .label("12-14")
-                .value("Update 12-14")
+        TimeDurationOptionDto constantPayloadDto = TimeDurationOptionDto.builder()
+                .label("14-16")
+                .value("USD_NY_14:00:00-16:00:00")
+                .startTime(getLocalDateTime("1970-01-01 14:00:00"))
+                .endTime(getLocalDateTime("1970-01-01 16:00:00"))
+                .timeZone(ZoneId.of("UTC"))
+                .price(PriceDto.builder()
+                        .amount(15.0)
+                        .currency("USD")
+                        .build())
                 .build();
         String jsonPayload = writeValueAsString(constantPayloadDto);
         webTestClient.patch()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("start", "1970-01-01 09:00:00")
-                        .queryParam("end", "1970-01-01 11:00:00")
+                        .queryParam(VALUE, "USD_NY_12:00:00-14:00:00")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -86,8 +100,7 @@ public class TimeDurationOptionControllerE2ETest extends BasicE2ETest {
         webTestClient.delete()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("start", "1970-01-01T08:00:00")
-                        .queryParam("end", "1970-01-01T08:00:00")
+                        .queryParam(VALUE, "USD_NY_12:00:00-14:00:00")
                         .build())
                 .accept(MediaType.TEXT_PLAIN)
                 .exchange()
@@ -101,8 +114,7 @@ public class TimeDurationOptionControllerE2ETest extends BasicE2ETest {
         TimeDurationOptionDto actual = webTestClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("start", "1970-01-01T08:00:00")
-                        .queryParam("end", "1970-01-01T08:00:00")
+                        .queryParam(VALUE, "USD_NY_12:00:00-14:00:00")
                         .build())
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
@@ -121,9 +133,10 @@ public class TimeDurationOptionControllerE2ETest extends BasicE2ETest {
         List<TimeDurationOptionDto > constantPayloadDtoList = List.of(
                 TimeDurationOptionDto.builder()
                         .label("9-11")
+                        .value("USD_NY_09:00:00-11:00:00")
                         .startTime(getLocalDateTime("1970-01-01 09:00:00"))
                         .endTime(getLocalDateTime("1970-01-01 11:00:00"))
-                        .clientTimezone("Europe")
+                        .timeZone(ZoneId.of("UTC"))
                         .price(PriceDto.builder()
                                 .amount(10.0)
                                 .currency("USD")
@@ -131,11 +144,12 @@ public class TimeDurationOptionControllerE2ETest extends BasicE2ETest {
                         .build(),
                 TimeDurationOptionDto.builder()
                         .label("12-14")
+                        .value("USD_NY_12:00:00-14:00:00")
                         .startTime(getLocalDateTime("1970-01-01 12:00:00"))
                         .endTime(getLocalDateTime("1970-01-01 14:00:00"))
-                        .clientTimezone("Europe")
+                        .timeZone(ZoneId.of("UTC"))
                         .price(PriceDto.builder()
-                                .amount(10.0)
+                                .amount(15.0)
                                 .currency("USD")
                                 .build())
                         .build());
@@ -150,17 +164,20 @@ public class TimeDurationOptionControllerE2ETest extends BasicE2ETest {
                 .returnResult()
                 .getResponseBody();
 
-        assertThat(actual).isEqualTo(constantPayloadDtoList);
+        assertThat(constantPayloadDtoList)
+                .usingRecursiveComparison()
+                .isEqualTo(actual);
     }
 
     private TimeDurationOptionDto getTimeDurationOptionDto() {
         return TimeDurationOptionDto.builder()
                 .label("12-14")
+                .value("USD_NY_12:00:00-14:00:00")
                 .startTime(getLocalDateTime("1970-01-01 12:00:00"))
                 .endTime(getLocalDateTime("1970-01-01 14:00:00"))
-                .clientTimezone("Europe")
+                .timeZone(ZoneId.of("UTC"))
                 .price(PriceDto.builder()
-                        .amount(10.0)
+                        .amount(15.0)
                         .currency("USD")
                         .build())
                 .build();

@@ -1,8 +1,8 @@
 package com.b2c.prototype.processor.option.base;
 
 import com.b2c.prototype.manager.option.IOptionItemManager;
-import com.b2c.prototype.modal.dto.payload.option.OptionGroupOptionItemSetDto;
-import com.b2c.prototype.modal.dto.payload.option.SingleOptionItemDto;
+import com.b2c.prototype.modal.dto.payload.option.OptionGroupDto;
+import com.b2c.prototype.modal.dto.payload.option.OptionItemDto;
 import com.b2c.prototype.processor.option.IOptionItemProcessor;
 import org.springframework.stereotype.Service;
 
@@ -20,21 +20,23 @@ public class OptionItemProcessor implements IOptionItemProcessor {
     }
 
     @Override
-    public void saveUpdateOptionItem(Map<String, String> requestParams, SingleOptionItemDto singleOptionItemDto) {
+    public void saveUpdateOptionItem(Map<String, String> requestParams, OptionItemDto optionItemDto) {
         String articularId = requestParams.get("articularId");
         String optionGroupValue = requestParams.get("optionGroup");
         String optionItemValue = requestParams.get("optionItem");
         if (articularId != null) {
-            optionItemManager.saveUpdateOptionItemByArticularId(articularId, optionItemValue, singleOptionItemDto);
+//            optionItemManager.saveUpdateOptionItemByArticularId(articularId, optionItemValue, optionGroupDto);
         }
         if (optionGroupValue != null) {
-            optionItemManager.saveUpdateOptionItemByOptionGroup(optionGroupValue, optionItemValue, singleOptionItemDto);
+//            optionItemManager.saveUpdateOptionItemByOptionGroup(optionGroupValue, optionItemValue, optionGroupDto);
         }
     }
 
     @Override
-    public void saveOptionItemSet(Map<String, String> requestParams, Set<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoList) {
-        optionItemManager.saveOptionItemSet(optionGroupOptionItemSetDtoList);
+    public void saveOptionItemSet(Map<String, String> requestParams, Set<OptionItemDto> optionItemDtoSet) {
+//        optionItemDtoSet.forEach(optionItemDto -> {
+//            optionItemManager.saveUpdateOptionItemByOptionGroup(optionItemDto);
+//        });
     }
 
     @Override
@@ -51,16 +53,16 @@ public class OptionItemProcessor implements IOptionItemProcessor {
     }
 
     @Override
-    public OptionGroupOptionItemSetDto getOptionItemDto(Map<String, String> requestParams) {
+    public OptionItemDto getOptionItemDto(Map<String, String> requestParams) {
         String optionGroup = requestParams.get("optionGroup");
         if (optionGroup != null) {
-            return optionItemManager.getOptionItemListByOptionGroup(optionGroup);
+//            return optionItemManager.getOptionItemListByOptionGroup(optionGroup);
         }
         throw new IllegalArgumentException("optionGroup cannot be null");
     }
 
     @Override
-    public List<OptionGroupOptionItemSetDto> getOptionItemDtoList(Map<String, String> requestParams) {
+    public List<OptionItemDto> getOptionItemDtoList(Map<String, String> requestParams) {
         String articularId = requestParams.get("articularId");
         if (articularId != null) {
             return optionItemManager.getOptionItemByItemArticularId(articularId);

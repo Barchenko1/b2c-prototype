@@ -38,7 +38,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.b2c.prototype.util.Converter.getDate;
 import static com.b2c.prototype.util.Converter.getLocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -174,7 +173,7 @@ class CustomerSingleDeliveryOrderDaoTest extends AbstractDaoTest {
                 .firstName("Wolter")
                 .lastName("White")
                 .email("email")
-                .birthdayDate(getDate("2024-03-03"))
+//                .birthdayDate(getDate("2024-03-03"))
                 .contactPhone(contactPhone)
                 .isEmailVerified(false)
                 .isContactPhoneVerified(false)
@@ -197,7 +196,7 @@ class CustomerSingleDeliveryOrderDaoTest extends AbstractDaoTest {
                 .firstName("Wolter2")
                 .lastName("White2")
                 .email("email")
-                .birthdayDate(getDate("2024-03-03"))
+//                .birthdayDate(getDate("2024-03-03"))
                 .contactPhone(contactPhone)
                 .isEmailVerified(false)
                 .isContactPhoneVerified(false)

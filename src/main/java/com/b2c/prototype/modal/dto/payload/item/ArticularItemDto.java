@@ -1,7 +1,7 @@
 package com.b2c.prototype.modal.dto.payload.item;
 
 import com.b2c.prototype.modal.dto.payload.discount.InitDiscountDto;
-import com.b2c.prototype.modal.dto.payload.option.SingleOptionItemDto;
+import com.b2c.prototype.modal.dto.payload.option.OptionItemDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +16,7 @@ import java.util.Set;
 public class ArticularItemDto {
     private String articularId;
     private String productName;
-    private Set<SingleOptionItemDto> options;
+    private Set<OptionItemDto> options;
     private PriceDto fullPrice;
     private PriceDto totalPrice;
     private String status;

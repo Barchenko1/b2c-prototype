@@ -28,15 +28,15 @@ public class TimeDurationOptionManager implements ITimeDurationOptionManager {
     @Override
     public void persistEntity(TimeDurationOptionDto timeDurationOptionDto) {
         TimeDurationOption timeDurationOption = orderTransformService.mapTimeDurationOptionDtoToTimeDurationOption(timeDurationOptionDto);
-        generalEntityDao.mergeEntity(timeDurationOption);
+        generalEntityDao.persistEntity(timeDurationOption);
     }
 
     @Override
-    public void mergeEntity(LocalDateTime start, LocalDateTime end, TimeDurationOptionDto timeDurationOptionDto) {
+    public void mergeEntity(String value, TimeDurationOptionDto timeDurationOptionDto) {
         TimeDurationOption timeDurationOption = orderTransformService.mapTimeDurationOptionDtoToTimeDurationOption(timeDurationOptionDto);
         TimeDurationOption existingZoneOption = generalEntityDao.findEntity(
-                "TimeDurationOption.findAllWithPriceAndCurrency",
-                Pair.of(VALUE, start));
+                "TimeDurationOption.findTimeDurationByValue",
+                Pair.of(VALUE, value));
         timeDurationOption.setId(existingZoneOption.getId());
         timeDurationOption.getPrice().setId(existingZoneOption.getPrice().getId());
         timeDurationOption.getPrice().getCurrency().setId(existingZoneOption.getPrice().getCurrency().getId());
@@ -44,18 +44,18 @@ public class TimeDurationOptionManager implements ITimeDurationOptionManager {
     }
 
     @Override
-    public void removeEntity(LocalDateTime start, LocalDateTime end) {
+    public void removeEntity(String value) {
         TimeDurationOption timeDurationOption = generalEntityDao.findEntity(
-                "TimeDurationOption.findAllWithPriceAndCurrency",
-                Pair.of(VALUE, start));
+                "TimeDurationOption.findTimeDurationByValue",
+                Pair.of(VALUE, value));
         generalEntityDao.removeEntity(timeDurationOption);
     }
 
     @Override
-    public TimeDurationOptionDto getEntity(LocalDateTime start, LocalDateTime end) {
+    public TimeDurationOptionDto getEntity(String value) {
         TimeDurationOption timeDurationOption = generalEntityDao.findEntity(
-                "TimeDurationOption.findAllWithPriceAndCurrency",
-                Pair.of(VALUE, start));
+                "TimeDurationOption.findTimeDurationByValue",
+                List.of(Pair.of(VALUE, value)));
 
         return orderTransformService.mapTimeDurationOptionToTimeDurationOptionDto(timeDurationOption);
     }

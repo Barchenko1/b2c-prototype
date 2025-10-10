@@ -70,7 +70,7 @@ public class Post {
     @Column(name = "post_uniq_id", unique = true, nullable = false)
     private String postUniqId;
     private LocalDateTime dateOfCreate;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY)
     private UserDetails userDetails;
     @ManyToOne
     @JoinColumn(name = "post_id")

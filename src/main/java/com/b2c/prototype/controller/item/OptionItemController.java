@@ -1,7 +1,6 @@
 package com.b2c.prototype.controller.item;
 
-import com.b2c.prototype.modal.dto.payload.option.OptionGroupOptionItemSetDto;
-import com.b2c.prototype.modal.dto.payload.option.SingleOptionItemDto;
+import com.b2c.prototype.modal.dto.payload.option.OptionItemDto;
 import com.b2c.prototype.processor.option.IOptionItemProcessor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +28,8 @@ public class OptionItemController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> saveUpdateOptionItem(@RequestParam final Map<String, String> requestParams,
-                                                     @RequestBody final SingleOptionItemDto singleOptionItemDto) {
-        optionItemProcessor.saveUpdateOptionItem(requestParams, singleOptionItemDto);
+                                                     @RequestBody final OptionItemDto optionItemDto) {
+        optionItemProcessor.saveUpdateOptionItem(requestParams, optionItemDto);
         return ResponseEntity.ok().build();
     }
 
@@ -54,7 +53,7 @@ public class OptionItemController {
 //    }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<OptionGroupOptionItemSetDto> getOptionItemList(@RequestParam final Map<String, String> requestParams) {
+    public List<OptionItemDto> getOptionItemList(@RequestParam final Map<String, String> requestParams) {
 
         return optionItemProcessor.getOptionItemDtoList(requestParams);
     }

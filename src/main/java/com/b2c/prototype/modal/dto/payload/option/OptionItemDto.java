@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class OptionItemDto {
     private String label;
     private String value;
+
 }
