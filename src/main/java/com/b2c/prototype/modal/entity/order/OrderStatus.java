@@ -15,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @NamedQueries({
         @NamedQuery(
                 name = "OrderStatus.findByValue",
-                query = "SELECT o FROM OrderStatus o WHERE o.value = : value"
+                query = "SELECT o FROM OrderStatus o WHERE o.value = :value"
         ),
         @NamedQuery(
                 name = "OrderStatus.all",

@@ -38,21 +38,7 @@
         <query>select e from Category e where e.id = :id</query>
     </named-query>
     <named-query name="MetaData.findById">
-        <query>SELECT e FROM MetaData e
-            LEFT JOIN FETCH e.category c
-            LEFT JOIN FETCH e.itemType it
-            LEFT JOIN FETCH e.brand b
-            LEFT JOIN FETCH e.articularItemSet ai
-            LEFT JOIN FETCH ai.optionItems oi
-            LEFT JOIN FETCH oi.optionGroup og
-            LEFT JOIN FETCH ai.fullPrice fp
-            LEFT JOIN FETCH fp.currency fpc
-            LEFT JOIN FETCH ai.totalPrice tp
-            LEFT JOIN FETCH tp.currency tpc
-            LEFT JOIN FETCH ai.discount d
-            LEFT JOIN FETCH d.currency dc
-            LEFT JOIN FETCH d.articularItemList dai
-            where e.id = :id
+        <query>SELECT e FROM MetaData e where e.id = :id
         </query>
     </named-query>
     <named-query name="ArticularItem.findById">
@@ -79,9 +65,6 @@
             LEFT JOIN FETCH e.articularItems ai
 
             LEFT JOIN FETCH e.metaData md
-            LEFT JOIN FETCH md.category c
-            LEFT JOIN FETCH md.itemType it
-            LEFT JOIN FETCH md.brand b
 
             LEFT JOIN FETCH e.posts p
             LEFT JOIN FETCH e.reviews re
@@ -510,8 +493,6 @@
     <entity class="com.b2c.prototype.modal.entity.address.UserAddress" />
     <entity class="com.b2c.prototype.modal.entity.address.Country" />
 
-    <entity class="com.b2c.prototype.modal.entity.option.TimeDurationOption" />
-    <entity class="com.b2c.prototype.modal.entity.option.ZoneOption" />
     <entity class="com.b2c.prototype.modal.entity.delivery.DeliveryType" />
     <entity class="com.b2c.prototype.modal.entity.delivery.Delivery" />
 
@@ -535,8 +516,13 @@
     <entity class="com.b2c.prototype.modal.entity.option.OptionItem" />
     <entity class="com.b2c.prototype.modal.entity.option.OptionItemCost" />
 
+    <entity class="com.b2c.prototype.modal.entity.option.ZoneOptionGroup" />
+    <entity class="com.b2c.prototype.modal.entity.option.ZoneOption" />
+    <entity class="com.b2c.prototype.modal.entity.option.TimeDurationOption" />
+
     <entity class="com.b2c.prototype.modal.entity.item.MetaData" />
     <entity class="com.b2c.prototype.modal.entity.item.ArticularItem" />
+    <entity class="com.b2c.prototype.modal.entity.item.ArticularGroup" />
     <entity class="com.b2c.prototype.modal.entity.item.Item" />
     <entity class="com.b2c.prototype.modal.entity.item.ArticularItemQuantity" />
 

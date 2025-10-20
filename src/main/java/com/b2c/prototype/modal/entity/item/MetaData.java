@@ -38,41 +38,41 @@ import java.util.Set;
                 name = "MetaData.findByValue",
                 query = "SELECT d FROM MetaData d WHERE d.metadataUniqId = :metadataUniqId"
         ),
-        @NamedQuery(
-                name = "MetaData.findAllWithFullRelations",
-                query = "SELECT DISTINCT id FROM MetaData id " +
-                        "LEFT JOIN FETCH id.category c " +
-                        "LEFT JOIN FETCH id.itemType it " +
-                        "LEFT JOIN FETCH id.brand b " +
-                        "LEFT JOIN FETCH id.articularItemSet ai " +
-                        "LEFT JOIN FETCH ai.optionItems oi " +
-                        "LEFT JOIN FETCH oi.optionGroup og " +
-                        "LEFT JOIN FETCH ai.fullPrice fp " +
-                        "LEFT JOIN FETCH fp.currency fpc " +
-                        "LEFT JOIN FETCH ai.totalPrice tp " +
-                        "LEFT JOIN FETCH tp.currency tpc " +
-                        "LEFT JOIN FETCH ai.discount d " +
-                        "LEFT JOIN FETCH d.currency dc " +
-                        "LEFT JOIN FETCH d.articularItemList dai"
-        ),
-        @NamedQuery(
-                name = "ItemData.findItemDataWithFullRelations",
-                query = "SELECT DISTINCT id FROM MetaData id " +
-                        "LEFT JOIN FETCH id.category c " +
-                        "LEFT JOIN FETCH id.itemType it " +
-                        "LEFT JOIN FETCH id.brand b " +
-                        "LEFT JOIN FETCH id.articularItemSet ai " +
-                        "LEFT JOIN FETCH ai.optionItems oi " +
-                        "LEFT JOIN FETCH oi.optionGroup og " +
-                        "LEFT JOIN FETCH ai.fullPrice fp " +
-                        "LEFT JOIN FETCH fp.currency fpc " +
-                        "LEFT JOIN FETCH ai.totalPrice tp " +
-                        "LEFT JOIN FETCH tp.currency tpc " +
-                        "LEFT JOIN FETCH ai.discount d " +
-                        "LEFT JOIN FETCH d.currency dc " +
-                        "LEFT JOIN FETCH d.articularItemList dai " +
-                        "WHERE id.metadataUniqId = :metadataUniqId"
-        )
+//        @NamedQuery(
+//                name = "MetaData.findAllWithFullRelations",
+//                query = "SELECT DISTINCT id FROM MetaData id " +
+//                        "LEFT JOIN FETCH id.category c " +
+//                        "LEFT JOIN FETCH id.itemType it " +
+//                        "LEFT JOIN FETCH id.brand b " +
+//                        "LEFT JOIN FETCH id.articularItemSet ai " +
+//                        "LEFT JOIN FETCH ai.optionItems oi " +
+//                        "LEFT JOIN FETCH oi.optionGroup og " +
+//                        "LEFT JOIN FETCH ai.fullPrice fp " +
+//                        "LEFT JOIN FETCH fp.currency fpc " +
+//                        "LEFT JOIN FETCH ai.totalPrice tp " +
+//                        "LEFT JOIN FETCH tp.currency tpc " +
+//                        "LEFT JOIN FETCH ai.discount d " +
+//                        "LEFT JOIN FETCH d.currency dc " +
+//                        "LEFT JOIN FETCH d.articularItemList dai"
+//        ),
+//        @NamedQuery(
+//                name = "ItemData.findItemDataWithFullRelations",
+//                query = "SELECT DISTINCT id FROM MetaData id " +
+//                        "LEFT JOIN FETCH id.category c " +
+//                        "LEFT JOIN FETCH id.itemType it " +
+//                        "LEFT JOIN FETCH id.brand b " +
+//                        "LEFT JOIN FETCH id.articularItemSet ai " +
+//                        "LEFT JOIN FETCH ai.optionItems oi " +
+//                        "LEFT JOIN FETCH oi.optionGroup og " +
+//                        "LEFT JOIN FETCH ai.fullPrice fp " +
+//                        "LEFT JOIN FETCH fp.currency fpc " +
+//                        "LEFT JOIN FETCH ai.totalPrice tp " +
+//                        "LEFT JOIN FETCH tp.currency tpc " +
+//                        "LEFT JOIN FETCH ai.discount d " +
+//                        "LEFT JOIN FETCH d.currency dc " +
+//                        "LEFT JOIN FETCH d.articularItemList dai " +
+//                        "WHERE id.metadataUniqId = :metadataUniqId"
+//        )
 })
 @Data
 @Builder
@@ -89,19 +89,4 @@ public class MetaData {
     @Convert(converter = ItemDataDescriptionConverter.class)
     @Builder.Default
     private Map<String, String> description = new LinkedHashMap<>();
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
-    @JoinColumn(name = "category_id")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private Category category;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
-    private ItemType itemType;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
-    private Brand brand;
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
-    @JoinColumn(name = "meta_data_id")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @Builder.Default
-    private Set<ArticularItem> articularItemSet = new HashSet<>();
 }

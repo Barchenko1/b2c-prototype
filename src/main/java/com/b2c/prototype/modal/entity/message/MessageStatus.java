@@ -15,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @NamedQueries({
         @NamedQuery(
                 name = "MessageStatus.findByValue",
-                query = "SELECT m FROM MessageStatus m WHERE m.value = : value"
+                query = "SELECT m FROM MessageStatus m WHERE m.value = :value"
         ),
         @NamedQuery(
                 name = "MessageStatus.all",

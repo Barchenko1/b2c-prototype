@@ -31,14 +31,14 @@ import lombok.ToString;
 @NamedQueries({
         @NamedQuery(
                 name = "ZoneOption.findByValue",
-                query = "SELECT zo FROM ZoneOption zo WHERE zo.value = : value"
+                query = "SELECT zo FROM ZoneOption zo WHERE zo.value = :value"
         ),
         @NamedQuery(
                 name = "ZoneOption.findAllWithPriceAndCurrency",
                 query = "SELECT zo FROM ZoneOption zo " +
                         "LEFT JOIN FETCH zo.price p " +
                         "LEFT JOIN FETCH p.currency c " +
-                        "WHERE zo.value = : value"
+                        "WHERE zo.value = :value"
         ),
         @NamedQuery(
                 name = "ZoneOption.all",
@@ -60,7 +60,7 @@ public class ZoneOption {
     private String value;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
-    @JoinColumn(name = "zone_option_group_id", nullable = false)
+    @JoinColumn(name = "option_group_id", nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @JsonIgnore

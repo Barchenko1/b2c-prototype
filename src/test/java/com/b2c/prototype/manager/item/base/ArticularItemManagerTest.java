@@ -75,7 +75,7 @@ class ArticularItemManagerTest {
         ArticularItemDto articularItemDto = getItemDataOptionDto();
         List<ArticularItemDto> articularItemDtoList = List.of(articularItemDto);
         MetaData metaData = getItemData();
-        metaData.setArticularItemSet(new HashSet<>());
+//        metaData.setArticularItemSet(new HashSet<>());
         ArticularItem newArticularItem = updateItemDataOption();
 
         doAnswer(invocation -> {
@@ -204,18 +204,18 @@ class ArticularItemManagerTest {
 
     private MetaData getItemData() {
         return MetaData.builder()
-                .category(Category.builder()
-                        .label("categoryLabel")
-                        .value("categoryValue").build())
-                .itemType(ItemType.builder()
-                        .label("itemTypeLabel")
-                        .value("itemTypeValue")
-                        .build())
-                .brand(Brand.builder()
-                        .label("brandLabel")
-                        .value("brandValue")
-                        .build())
-                .articularItemSet(Set.of(getItemDataOption()))
+//                .category(Category.builder()
+//                        .label("categoryLabel")
+//                        .value("categoryValue").build())
+//                .itemType(ItemType.builder()
+//                        .label("itemTypeLabel")
+//                        .value("itemTypeValue")
+//                        .build())
+//                .brand(Brand.builder()
+//                        .label("brandLabel")
+//                        .value("brandValue")
+//                        .build())
+//                .articularItemSet(Set.of(getItemDataOption()))
                 .build();
     }
 
@@ -260,7 +260,7 @@ class ArticularItemManagerTest {
     private PriceDto getPriceDto(double amount) {
         return PriceDto.builder()
                 .amount(amount)
-                .currency("USD")
+//                .currency("USD")
                 .build();
     }
 }

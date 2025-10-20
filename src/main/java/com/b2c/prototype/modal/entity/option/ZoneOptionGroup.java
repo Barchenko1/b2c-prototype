@@ -30,14 +30,14 @@ import java.util.Set;
 @Table(name = "zone_option_group")
 @NamedQueries({
         @NamedQuery(
-                name = "OptionGroup.findByValueWithOptionItems",
+                name = "ZoneOptionGroup.findByValueWithOptionItems",
                 query = "SELECT og FROM OptionGroup og " +
                         "LEFT JOIN FETCH og.optionItems oi " +
                         "LEFT JOIN FETCH og.optionItemCosts oic " +
-                        "WHERE og.value = : value"
+                        "WHERE og.value = :value"
         ),
         @NamedQuery(
-                name = "OptionGroup.findWithOptionItems",
+                name = "ZoneOptionGroup.findWithOptionItems",
                 query = "SELECT og FROM OptionGroup og " +
                         "LEFT JOIN FETCH og.optionItems oi " +
                         "LEFT JOIN FETCH og.optionItemCosts oic " +
@@ -45,7 +45,7 @@ import java.util.Set;
                         "LEFT JOIN FETCH oic.articularItems oica"
         ),
         @NamedQuery(
-                name = "OptionGroup.withOptionItemsAndArticularItems",
+                name = "ZoneOptionGroup.withOptionItemsAndArticularItems",
                 query = "SELECT DISTINCT og FROM OptionGroup og " +
                         "LEFT JOIN FETCH og.optionItems oi " +
                         "LEFT JOIN FETCH oi.articularItems ai " +
@@ -67,7 +67,7 @@ public class ZoneOptionGroup extends AbstractConstantEntity {
     private Country country;
     @Column(name = "city", nullable = false)
     private String city;
-    @OneToMany(mappedBy = "zoneOptionGroup", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "optionGroup", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private Set<ZoneOption> zoneOptions = new HashSet<>();
 

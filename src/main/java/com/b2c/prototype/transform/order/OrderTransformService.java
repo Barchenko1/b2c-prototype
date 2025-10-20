@@ -1,20 +1,33 @@
 package com.b2c.prototype.transform.order;
 
 import com.b2c.prototype.dao.IGeneralEntityDao;
-import com.b2c.prototype.modal.dto.payload.constant.CountryDto;
+import com.b2c.prototype.modal.dto.payload.constant.CurrencyDto;
 import com.b2c.prototype.modal.dto.payload.item.PriceDto;
-import com.b2c.prototype.modal.dto.payload.option.TimeDurationOptionDto;
-import com.b2c.prototype.modal.dto.payload.option.ZoneOptionDto;
+import com.b2c.prototype.modal.dto.payload.option.group.OptionItemCostGroupDto;
+import com.b2c.prototype.modal.dto.payload.option.group.OptionItemGroupDto;
+import com.b2c.prototype.modal.dto.payload.option.group.TimeDurationOptionGroupDto;
+import com.b2c.prototype.modal.dto.payload.option.group.ZoneOptionGroupDto;
+import com.b2c.prototype.modal.dto.payload.option.item.OptionItemCostDto;
+import com.b2c.prototype.modal.dto.payload.option.item.OptionItemDto;
+import com.b2c.prototype.modal.dto.payload.option.item.TimeDurationOptionDto;
+import com.b2c.prototype.modal.dto.payload.option.item.ZoneOptionDto;
 import com.b2c.prototype.modal.dto.payload.order.single.ResponseCustomerOrderDetails;
-import com.b2c.prototype.modal.entity.address.Country;
+import com.b2c.prototype.modal.entity.option.OptionGroup;
+import com.b2c.prototype.modal.entity.option.OptionItemCost;
 import com.b2c.prototype.modal.entity.option.TimeDurationOption;
 import com.b2c.prototype.modal.entity.option.ZoneOption;
+import com.b2c.prototype.modal.entity.option.ZoneOptionGroup;
 import com.b2c.prototype.modal.entity.order.CustomerSingleDeliveryOrder;
 import com.b2c.prototype.modal.entity.price.Price;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.b2c.prototype.util.Constant.VALUE;
 
@@ -27,64 +40,141 @@ public class OrderTransformService implements IOrderTransformService {
         this.generalEntityDao = generalEntityDao;
     }
 
+//    @Override
+//    public ZoneOptionDto mapZoneOptionToZoneOptionDto(ZoneOption zoneOption) {
+//        return ZoneOptionDto.builder()
+//                .label(zoneOption.getLabel())
+//                .value(zoneOption.getValue())
+////                .city(zoneOption.getCity())
+//                .price(PriceDto.builder()
+//                        .amount(zoneOption.getPrice().getAmount())
+//                        .currency(CurrencyDto.builder()
+//                                .value(zoneOption.getPrice().getCurrency().getValue())
+//                                .label(zoneOption.getPrice().getCurrency().getLabel())
+//                                .build())
+//                        .build())
+//                .build();
+//    }
+//
+//    @Override
+//    public ZoneOption mapZoneOptionDtoToZoneOption(ZoneOptionDto zoneOptionDto) {
+//        return ZoneOption.builder()
+//                .label(zoneOptionDto.getLabel())
+//                .value(zoneOptionDto.getValue())
+//
+    ////                .city(zoneOptionDto.getCity())
+//                .price(Price.builder()
+//                        .amount(zoneOptionDto.getPrice().getAmount())
+//                        .currency(generalEntityDao.findEntity("Currency.findByValue", Pair.of(VALUE, zoneOptionDto.getPrice().getCurrency())))
+//                        .build())
+//                .build();
+//    }
+//
+//    @Override
+//    public TimeDurationOption mapTimeDurationOptionDtoToTimeDurationOption(TimeDurationOptionDto timeDurationOptionDto) {
+//        return TimeDurationOption.builder()
+//                .label(timeDurationOptionDto.getLabel())
+//                .value(timeDurationOptionDto.getValue())
+//                .timeZone(timeDurationOptionDto.getTimeZone())
+//                .startTime(timeDurationOptionDto.getStartTime())
+//                .endTime(timeDurationOptionDto.getEndTime())
+//                .durationInMin(Duration.between(
+//                        timeDurationOptionDto.getStartTime(),
+//                        timeDurationOptionDto.getEndTime())
+//                        .toMinutes())
+//                .price(Price.builder()
+//                        .amount(timeDurationOptionDto.getPrice().getAmount())
+//                        .currency(generalEntityDao.findEntity("Currency.findByValue", Pair.of(VALUE, timeDurationOptionDto.getPrice().getCurrency())))
+//                        .build())
+//                .build();
+//    }
+//
+//    @Override
+//    public TimeDurationOptionDto mapTimeDurationOptionToTimeDurationOptionDto(TimeDurationOption timeDurationOption) {
+//        return TimeDurationOptionDto.builder()
+//                .label(timeDurationOption.getLabel())
+//                .value(timeDurationOption.getValue())
+//                .timeZone(timeDurationOption.getTimeZone())
+//                .startTime(timeDurationOption.getStartTime())
+//                .endTime(timeDurationOption.getEndTime())
+//                .price(PriceDto.builder()
+//                        .amount(timeDurationOption.getPrice().getAmount())
+//                        .currency(CurrencyDto.builder()
+//                                .value(timeDurationOption.getPrice().getCurrency().getValue())
+//                                .label(timeDurationOption.getPrice().getCurrency().getLabel())
+//                                .build())
+//                        .build())
+//                .build();
+//    }
+
     @Override
-    public ZoneOptionDto mapZoneOptionToZoneOptionDto(ZoneOption zoneOption) {
-        return ZoneOptionDto.builder()
-                .label(zoneOption.getLabel())
-                .value(zoneOption.getValue())
-//                .city(zoneOption.getCity())
-                .price(PriceDto.builder()
-                        .amount(zoneOption.getPrice().getAmount())
-                        .currency(zoneOption.getPrice().getCurrency().getLabel())
-                        .build())
+    public OptionGroup mapTimeDurationOptionGroupDtoToOptionGroup(TimeDurationOptionGroupDto timeDurationOptionGroupDto) {
+        OptionGroup optionGroup =  OptionGroup.builder()
+                .label(timeDurationOptionGroupDto.getLabel())
+                .value(timeDurationOptionGroupDto.getValue())
+                .timeDurationOptions(timeDurationOptionGroupDto.getTimeDurationOptions().stream()
+                        .map(timeDurationOptionDto -> TimeDurationOption.builder()
+                                .label(timeDurationOptionDto.getLabel())
+                                .value(timeDurationOptionDto.getValue())
+                                .startTime(timeDurationOptionDto.getStartTime())
+                                .endTime(timeDurationOptionDto.getEndTime())
+                                .timeZone(timeDurationOptionDto.getTimeZone())
+                                .durationInMin(Duration.between(
+                                                timeDurationOptionDto.getStartTime(),
+                                                timeDurationOptionDto.getEndTime())
+                                        .toMinutes())
+                                .price(Price.builder()
+                                        .amount(timeDurationOptionDto.getPrice().getAmount())
+                                        .currency(generalEntityDao.findEntity("Currency.findByValue", Pair.of(VALUE, timeDurationOptionDto.getPrice().getCurrency().getValue())))
+                                        .build())
+                                .build())
+                        .collect(Collectors.toSet())
+                )
+                .build();
+
+        optionGroup.getTimeDurationOptions().forEach(optionGroup::addTimeDurationOption);
+        return optionGroup;
+    }
+
+    @Override
+    public TimeDurationOptionGroupDto mapOptionGroupToTimeDurationOptionGroupDto(OptionGroup optionGroup) {
+        return TimeDurationOptionGroupDto.builder()
+                .label(optionGroup.getLabel())
+                .value(optionGroup.getValue())
+                .timeDurationOptions(optionGroup.getTimeDurationOptions().stream()
+                        .map(timeDurationOption -> TimeDurationOptionDto.builder()
+                                .searchValue(timeDurationOption.getValue())
+                                .label(timeDurationOption.getLabel())
+                                .value(timeDurationOption.getValue())
+                                .startTime(timeDurationOption.getStartTime())
+                                .endTime(timeDurationOption.getEndTime())
+                                .timeZone(timeDurationOption.getTimeZone())
+                                .price(PriceDto.builder()
+                                        .amount(timeDurationOption.getPrice().getAmount())
+                                        .currency(CurrencyDto.builder()
+                                                .label(timeDurationOption.getPrice().getCurrency().getLabel())
+                                                .value(timeDurationOption.getPrice().getCurrency().getValue())
+                                                .build())
+                                        .build())
+                                .build())
+                        .collect(Collectors.toList())
+                )
                 .build();
     }
 
     @Override
-    public ZoneOption mapZoneOptionDtoToZoneOption(ZoneOptionDto zoneOptionDto) {
-        return ZoneOption.builder()
-                .label(zoneOptionDto.getLabel())
-                .value(zoneOptionDto.getValue())
-
-//                .city(zoneOptionDto.getCity())
-                .price(Price.builder()
-                        .amount(zoneOptionDto.getPrice().getAmount())
-                        .currency(generalEntityDao.findEntity("Currency.findByValue", Pair.of(VALUE, zoneOptionDto.getPrice().getCurrency())))
-                        .build())
-                .build();
-    }
-
-    @Override
-    public TimeDurationOption mapTimeDurationOptionDtoToTimeDurationOption(TimeDurationOptionDto timeDurationOptionDto) {
-        return TimeDurationOption.builder()
-                .label(timeDurationOptionDto.getLabel())
-                .value(timeDurationOptionDto.getValue())
-                .timeZone(timeDurationOptionDto.getTimeZone())
-                .startTime(timeDurationOptionDto.getStartTime())
-                .endTime(timeDurationOptionDto.getEndTime())
-                .durationInMin(Duration.between(
-                        timeDurationOptionDto.getStartTime(),
-                        timeDurationOptionDto.getEndTime())
-                        .toMinutes())
-                .price(Price.builder()
-                        .amount(timeDurationOptionDto.getPrice().getAmount())
-                        .currency(generalEntityDao.findEntity("Currency.findByValue", Pair.of(VALUE, timeDurationOptionDto.getPrice().getCurrency())))
-                        .build())
-                .build();
-    }
-
-    @Override
-    public TimeDurationOptionDto mapTimeDurationOptionToTimeDurationOptionDto(TimeDurationOption timeDurationOption) {
-        return TimeDurationOptionDto.builder()
-                .label(timeDurationOption.getLabel())
-                .value(timeDurationOption.getValue())
-                .timeZone(timeDurationOption.getTimeZone())
-                .startTime(timeDurationOption.getStartTime())
-                .endTime(timeDurationOption.getEndTime())
-                .price(PriceDto.builder()
-                        .amount(timeDurationOption.getPrice().getAmount())
-                        .currency(timeDurationOption.getPrice().getCurrency().getLabel())
-                        .build())
+    public ZoneOptionGroupDto mapZoneOptionGroupToZoneOptionGroupDto(ZoneOptionGroup zoneOptionGroup) {
+        return ZoneOptionGroupDto.builder()
+                .label(zoneOptionGroup.getLabel())
+                .value(zoneOptionGroup.getValue())
+                .zoneOptions(zoneOptionGroup.getZoneOptions().stream()
+                        .map(timeDurationOption -> ZoneOptionDto.builder()
+                                .searchValue(timeDurationOption.getValue())
+                                .label(timeDurationOption.getLabel())
+                                .value(timeDurationOption.getValue())
+                                .build())
+                        .collect(Collectors.toList())
+                )
                 .build();
     }
 

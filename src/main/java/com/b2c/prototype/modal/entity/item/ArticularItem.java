@@ -62,19 +62,19 @@ import java.util.Set;
                         "LEFT JOIN FETCH d.currency c " +
                         "WHERE ai.articularUniqId = :articularId"
         ),
-        @NamedQuery(
-                name = "ArticularItem.findItemDataByArticularId",
-                query = "SELECT DISTINCT id FROM MetaData id " +
-                        "LEFT JOIN FETCH id.articularItemSet ai " +
-                        "LEFT JOIN FETCH ai.fullPrice fp " +
-                        "LEFT JOIN FETCH fp.currency " +
-                        "LEFT JOIN FETCH ai.totalPrice tp " +
-                        "LEFT JOIN FETCH tp.currency " +
-                        "LEFT JOIN FETCH ai.discount d " +
-                        "LEFT JOIN FETCH d.currency " +
-                        "LEFT JOIN FETCH d.articularItemList da " +
-                        "WHERE :articularUniqId IN (SELECT a.articularUniqId FROM id.articularItemSet a)"
-        ),
+//        @NamedQuery(
+//                name = "ArticularItem.findItemDataByArticularId",
+//                query = "SELECT DISTINCT id FROM MetaData id " +
+//                        "LEFT JOIN FETCH id.articularItemSet ai " +
+//                        "LEFT JOIN FETCH ai.fullPrice fp " +
+//                        "LEFT JOIN FETCH fp.currency " +
+//                        "LEFT JOIN FETCH ai.totalPrice tp " +
+//                        "LEFT JOIN FETCH tp.currency " +
+//                        "LEFT JOIN FETCH ai.discount d " +
+//                        "LEFT JOIN FETCH d.currency " +
+//                        "LEFT JOIN FETCH d.articularItemList da " +
+//                        "WHERE :articularUniqId IN (SELECT a.articularUniqId FROM id.articularItemSet a)"
+//        ),
         @NamedQuery(
                 name = "ArticularItem.findByOptionItemValueAndGroup",
                 query = "SELECT ai FROM ArticularItem ai " +
@@ -146,6 +146,9 @@ public class ArticularItem {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "discount_id")
     private Discount discount;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "metadata_id")
+    private MetaData metadata;
 
     public void addOptionItem(OptionItem optionItem) {
         this.optionItems.add(optionItem);

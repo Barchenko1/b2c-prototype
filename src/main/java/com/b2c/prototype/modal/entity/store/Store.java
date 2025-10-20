@@ -72,7 +72,7 @@ import java.util.List;
                         "LEFT JOIN FETCH sas.articularItemQuantities aiq " +
                         "LEFT JOIN FETCH aiq.articularItem ai " +
                         "WHERE c.value = :value " +
-                        "AND a.city =: value"
+                        "AND a.city =:value"
         ),
         @NamedQuery(
                 name = "Store.findStoreWithAddressArticularItemQuantityByArticularId",

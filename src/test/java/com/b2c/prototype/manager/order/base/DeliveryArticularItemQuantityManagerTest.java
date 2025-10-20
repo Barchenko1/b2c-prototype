@@ -327,7 +327,7 @@ class DeliveryArticularItemQuantityManagerTest {
     private PriceDto getPriceDto(double amount) {
         return PriceDto.builder()
                 .amount(amount)
-                .currency(getCurrency().getValue())
+//                .currency(getCurrency().getValue())
                 .build();
     }
 

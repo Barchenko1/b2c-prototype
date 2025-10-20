@@ -48,9 +48,9 @@ class ItemDaoTest extends AbstractDaoTest {
         Item entity = getItem();
         entity.setId(0);
         entity.getMetaData().setId(0);
-        entity.getMetaData().getBrand().setId(0);
-        entity.getMetaData().getItemType().setId(0);
-        entity.getMetaData().getCategory().setId(0);
+//        entity.getMetaData().getBrand().setId(0);
+//        entity.getMetaData().getItemType().setId(0);
+//        entity.getMetaData().getCategory().setId(0);
         entity.getArticularItems().forEach(articularItem -> {
             articularItem.setId(0);
 
@@ -162,9 +162,9 @@ class ItemDaoTest extends AbstractDaoTest {
                 .id(1L)
                 .metadataUniqId("123")
                 .description(description)
-                .category(category)
-                .brand(brand)
-                .itemType(itemType)
+//                .category(category)
+//                .brand(brand)
+//                .itemType(itemType)
                 .build();
     }
 

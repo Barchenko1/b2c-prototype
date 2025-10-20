@@ -157,9 +157,9 @@ public class ArticularStockDaoTest extends AbstractDaoTest {
                 .id(1L)
                 .metadataUniqId("123")
                 .description(description)
-                .category(category)
-                .brand(brand)
-                .itemType(itemType)
+//                .category(category)
+//                .brand(brand)
+//                .itemType(itemType)
                 .build();
     }
 

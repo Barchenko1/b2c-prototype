@@ -1,9 +1,9 @@
 //package com.b2c.prototype.e2e.controller.basic;
 //
 //import com.b2c.prototype.e2e.BasicE2ETest;
-//import com.b2c.prototype.modal.dto.payload.option.OptionGroupDto;
+//import com.b2c.prototype.modal.dto.payload.option.group.OptionItemGroupDto;
 //import com.b2c.prototype.modal.dto.payload.option.OptionGroupOptionItemSetDto;
-//import com.b2c.prototype.modal.dto.payload.option.OptionItemDto;
+//import com.b2c.prototype.modal.dto.payload.option.item.OptionItemDto;
 //import com.b2c.prototype.modal.dto.payload.option.SingleOptionItemDto;
 //import com.fasterxml.jackson.core.JsonProcessingException;
 //import com.fasterxml.jackson.core.type.TypeReference;
@@ -118,7 +118,7 @@
 //    public void testUpdateOptionItemByGroup() {
 //        // loadDataSet("/datasets/e2e/item/articular_item/testE2EAllOptionItemColorDataSet.yml");
 //        SingleOptionItemDto singleOptionItemDto = SingleOptionItemDto.builder()
-//                .optionGroup(OptionGroupDto.builder()
+//                .optionGroup(OptionItemGroupDto.builder()
 //                        .value("Color")
 //                        .label("Color")
 //                        .build())
@@ -228,7 +228,7 @@
 //    public void testGetOptionItemList() {
 //        // loadDataSet("/datasets/e2e/item/articular_item/testE2EArticularIdOptionItemSizeDataSet.yml");
 //        OptionGroupOptionItemSetDto expectedDto = OptionGroupOptionItemSetDto.builder()
-//                .optionGroup(OptionGroupDto.builder()
+//                .optionGroup(OptionItemGroupDto.builder()
 //                        .label("Size")
 //                        .value("Size")
 //                        .build())
@@ -314,8 +314,8 @@
 //                .build();
 //    }
 //
-//    private OptionGroupDto getOptionGroupDto(String value) {
-//        return OptionGroupDto.builder()
+//    private OptionItemGroupDto getOptionGroupDto(String value) {
+//        return OptionItemGroupDto.builder()
 //                .label(value)
 //                .value(value)
 //                .build();

@@ -1,6 +1,5 @@
 package com.b2c.prototype.modal.entity.option;
 
-import com.b2c.prototype.dao.AbstractEntityDao;
 import com.b2c.prototype.modal.base.constant.AbstractConstantEntity;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.price.Price;

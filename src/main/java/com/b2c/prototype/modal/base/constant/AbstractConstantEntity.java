@@ -23,7 +23,7 @@ public class AbstractConstantEntity implements IConstant {
     private long id;
     @Column(name = "label", nullable = false)
     private String label;
-    @Column(name = "value", unique = true, nullable = false)
+    @Column(name = "value", nullable = false)
     private String value;
 
 }

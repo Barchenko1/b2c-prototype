@@ -48,20 +48,20 @@ public class ArticularItemManager implements IArticularItemManager {
         MetaData metaData = generalEntityDao.findEntity(
                 "ArticularItem.findItemDataByArticularId",
                 Pair.of(ARTICULAR_ID, articularId));
-        metaData.getArticularItemSet().stream()
-                .filter(ai -> ai.getArticularUniqId().equals(articularId))
-                .findFirst()
-                .ifPresent(articularItem -> {
-                    Discount discount = articularItem.getDiscount();
-                    articularItem.setDiscount(null);
-                    metaData.getArticularItemSet().remove(articularItem);
-                    generalEntityDao.removeEntity(articularItem);
-                    if (discount != null &&
-                            discount.getArticularItemList().size() == 1 &&
-                            discount.getArticularItemList().get(0).getArticularUniqId().equals(articularId)) {
-                        generalEntityDao.removeEntity(discount);
-                    }
-                });
+//        metaData.getArticularItemSet().stream()
+//                .filter(ai -> ai.getArticularUniqId().equals(articularId))
+//                .findFirst()
+//                .ifPresent(articularItem -> {
+//                    Discount discount = articularItem.getDiscount();
+//                    articularItem.setDiscount(null);
+//                    metaData.getArticularItemSet().remove(articularItem);
+//                    generalEntityDao.removeEntity(articularItem);
+//                    if (discount != null &&
+//                            discount.getArticularItemList().size() == 1 &&
+//                            discount.getArticularItemList().get(0).getArticularUniqId().equals(articularId)) {
+//                        generalEntityDao.removeEntity(discount);
+//                    }
+//                });
     }
 
     @Override

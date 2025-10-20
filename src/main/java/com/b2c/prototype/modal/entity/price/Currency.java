@@ -15,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @NamedQueries({
         @NamedQuery(
                 name = "Currency.findByValue",
-                query = "SELECT c FROM Currency c WHERE c.value = : value"
+                query = "SELECT c FROM Currency c WHERE c.value = :value"
         ),
         @NamedQuery(
                 name = "Currency.all",

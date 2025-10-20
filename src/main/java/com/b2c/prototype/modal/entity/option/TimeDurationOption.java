@@ -9,8 +9,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -30,28 +28,6 @@ import java.time.ZoneId;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-@NamedQueries({
-        @NamedQuery(
-                name = "TimeDurationOption.findAllWithPriceAndCurrency",
-                query = "SELECT td FROM TimeDurationOption td " +
-                        "LEFT JOIN FETCH td.price p " +
-                        "LEFT JOIN FETCH p.currency c " +
-                        "WHERE td.startTime = :start AND td.endTime = :end"
-        ),
-        @NamedQuery(
-                name = "TimeDurationOption.findTimeDurationByValue",
-                query = "SELECT td FROM TimeDurationOption td " +
-                        "LEFT JOIN FETCH td.price p " +
-                        "LEFT JOIN FETCH p.currency c " +
-                        "WHERE td.value = : value"
-        ),
-        @NamedQuery(
-                name = "TimeDurationOption.all",
-                query = "SELECT td FROM TimeDurationOption td " +
-                        "LEFT JOIN FETCH td.price p " +
-                        "LEFT JOIN FETCH p.currency c"
-        )
-})
 public class TimeDurationOption extends AbstractConstantEntity {
     private LocalDateTime startTime;
     private LocalDateTime endTime;

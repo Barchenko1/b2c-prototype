@@ -127,7 +127,7 @@ public class CommissionManager implements ICommissionManager {
             return ResponseBuyerCommissionInfoDto.builder()
                     .sumPrice(PriceDto.builder()
                             .amount(commissionPrice.getAmount())
-                            .currency(commissionPrice.getCurrency().getLabel())
+//                            .currency(commissionPrice.getCurrency())
                             .build())
                     .build();
         }

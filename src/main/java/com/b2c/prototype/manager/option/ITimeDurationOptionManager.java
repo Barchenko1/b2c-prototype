@@ -1,14 +1,14 @@
 package com.b2c.prototype.manager.option;
 
-import com.b2c.prototype.modal.dto.payload.option.TimeDurationOptionDto;
+import com.b2c.prototype.modal.dto.payload.option.group.TimeDurationOptionGroupDto;
+import com.b2c.prototype.modal.entity.option.OptionGroup;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ITimeDurationOptionManager {
-    void persistEntity(TimeDurationOptionDto timeDurationOptionDto);
-    void mergeEntity(String value, TimeDurationOptionDto timeDurationOptionDto);
+    void persistEntity(TimeDurationOptionGroupDto timeDurationOptionDto);
+    void mergeEntity(String value, TimeDurationOptionGroupDto timeDurationOptionGroupDto);
     void removeEntity(String value);
-    TimeDurationOptionDto getEntity(String value);
-    List<TimeDurationOptionDto> getEntities();
+    OptionGroup getEntity(String value);
+    List<OptionGroup> getEntities();
 }

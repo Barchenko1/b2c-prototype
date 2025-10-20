@@ -36,14 +36,14 @@ class MetaDataDaoTest extends AbstractDaoTest {
     public void persistEntity_success() {
         MetaData entity = getMetaData();
         entity.setId(0);
-        entity.getBrand().setId(0);
-        entity.getItemType().setId(0);
+//        entity.getBrand().setId(0);
+//        entity.getItemType().setId(0);
         Category category = Category.builder()
                 .id(0L)
                 .value("parent")
                 .label("parent")
                 .build();
-       entity.setCategory(category);
+//       entity.setCategory(category);
 
         generalEntityDao.persistEntity(entity);
     }
@@ -155,9 +155,9 @@ class MetaDataDaoTest extends AbstractDaoTest {
                 .id(1L)
                 .metadataUniqId("123")
                 .description(description)
-                .category(category)
-                .brand(brand)
-                .itemType(itemType)
+//                .category(category)
+//                .brand(brand)
+//                .itemType(itemType)
                 .build();
     }
 

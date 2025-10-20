@@ -1,0 +1,45 @@
+currency:
+  - id: 1
+    value: "USD"
+    label: "USD"
+price:
+  - id: 1
+    amount: 10.0
+    currency_id: 1
+  - id: 2
+    amount: 10.0
+    currency_id: 1
+  - id: 3
+    amount: 10.0
+    currency_id: 1
+  - id: 4
+    amount: 20.0
+    currency_id: 1
+option_group:
+  - id: 1
+    label: "Modal"
+    value: "Modal"
+  - id: 2
+    label: "Color"
+    value: "Color"
+option_item_cost:
+  - id: 1
+    value: "Modal1"
+    label: "Modal1"
+    price_id: 1
+    option_group_id: 1
+  - id: 2
+    value: "Modal2"
+    label: "Modal2"
+    price_id: 2
+    option_group_id: 1
+  - id: 3
+    value: "Blue"
+    label: "Blue"
+    price_id: 3
+    option_group_id: 2
+  - id: 4
+    value: "Red"
+    label: "Red"
+    price_id: 4
+    option_group_id: 2

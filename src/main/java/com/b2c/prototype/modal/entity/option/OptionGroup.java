@@ -7,7 +7,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,9 +15,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
@@ -26,19 +23,32 @@ import java.util.Set;
 @Table(name = "option_group")
 @NamedQueries({
         @NamedQuery(
+                name = "OptionGroup.findByValue",
+                query = "SELECT og FROM OptionGroup og " +
+                        "WHERE og.value = :value"
+        ),
+        @NamedQuery(
                 name = "OptionGroup.findByValueWithOptionItems",
                 query = "SELECT og FROM OptionGroup og " +
                         "LEFT JOIN FETCH og.optionItems oi " +
+                        "LEFT JOIN FETCH og.timeDurationOptions tdo " +
                         "LEFT JOIN FETCH og.optionItemCosts oic " +
-                        "WHERE og.value = : value"
+                        "LEFT JOIN FETCH oic.price oicp " +
+                        "LEFT JOIN FETCH oicp.currency oicpc " +
+                        "LEFT JOIN FETCH tdo.price tdop " +
+                        "LEFT JOIN FETCH tdop.currency tdopc " +
+                        "WHERE og.value = :value"
         ),
         @NamedQuery(
-                name = "OptionGroup.findWithOptionItems",
+                name = "OptionGroup.withOptionItems",
                 query = "SELECT og FROM OptionGroup og " +
                         "LEFT JOIN FETCH og.optionItems oi " +
+                        "LEFT JOIN FETCH og.timeDurationOptions tdo " +
                         "LEFT JOIN FETCH og.optionItemCosts oic " +
-                        "LEFT JOIN FETCH oi.articularItems oia " +
-                        "LEFT JOIN FETCH oic.articularItems oica"
+                        "LEFT JOIN FETCH oic.price oicp " +
+                        "LEFT JOIN FETCH oicp.currency oicpc " +
+                        "LEFT JOIN FETCH tdo.price tdop " +
+                        "LEFT JOIN FETCH tdop.currency tdopc"
         ),
         @NamedQuery(
                 name = "OptionGroup.withOptionItemsAndArticularItems",

@@ -1,19 +1,16 @@
 package com.b2c.prototype.transform.order;
 
-import com.b2c.prototype.modal.dto.payload.option.TimeDurationOptionDto;
-import com.b2c.prototype.modal.dto.payload.option.ZoneOptionDto;
+import com.b2c.prototype.modal.dto.payload.option.group.TimeDurationOptionGroupDto;
+import com.b2c.prototype.modal.dto.payload.option.group.ZoneOptionGroupDto;
 import com.b2c.prototype.modal.dto.payload.order.single.ResponseCustomerOrderDetails;
-import com.b2c.prototype.modal.entity.option.TimeDurationOption;
-import com.b2c.prototype.modal.entity.option.ZoneOption;
+import com.b2c.prototype.modal.entity.option.OptionGroup;
+import com.b2c.prototype.modal.entity.option.ZoneOptionGroup;
 import com.b2c.prototype.modal.entity.order.CustomerSingleDeliveryOrder;
 
 public interface IOrderTransformService {
-    ZoneOptionDto mapZoneOptionToZoneOptionDto(ZoneOption zoneOption);
-    ZoneOption mapZoneOptionDtoToZoneOption(ZoneOptionDto zoneOptionDto);
-
-
-    TimeDurationOption mapTimeDurationOptionDtoToTimeDurationOption(TimeDurationOptionDto timeDurationOptionDto);
-    TimeDurationOptionDto mapTimeDurationOptionToTimeDurationOptionDto(TimeDurationOption timeDurationOption);
+    OptionGroup mapTimeDurationOptionGroupDtoToOptionGroup(TimeDurationOptionGroupDto timeDurationOptionGroupDto);
+    TimeDurationOptionGroupDto mapOptionGroupToTimeDurationOptionGroupDto(OptionGroup optionGroup);
+    ZoneOptionGroupDto mapZoneOptionGroupToZoneOptionGroupDto(ZoneOptionGroup zoneOptionGroup);
 
     ResponseCustomerOrderDetails mapCustomerSingleDeliveryOrderToResponseCustomerOrderDetails(CustomerSingleDeliveryOrder customerSingleDeliveryOrder);
 }

@@ -15,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @NamedQueries({
         @NamedQuery(
                 name = "ItemType.findByValue",
-                query = "SELECT i FROM ItemType i WHERE i.value = : value"
+                query = "SELECT i FROM ItemType i WHERE i.value = :value"
         ),
         @NamedQuery(
                 name = "ItemType.all",

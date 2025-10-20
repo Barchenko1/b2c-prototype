@@ -27,17 +27,16 @@ import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.discount.InitDiscountDto;
 import com.b2c.prototype.modal.dto.payload.item.MetaDataDto;
 import com.b2c.prototype.modal.dto.payload.message.MessageDto;
-import com.b2c.prototype.modal.dto.payload.option.OptionGroupDto;
-import com.b2c.prototype.modal.dto.payload.option.OptionItemDto;
+import com.b2c.prototype.modal.dto.payload.option.group.OptionItemGroupDto;
 import com.b2c.prototype.modal.dto.payload.item.PriceDto;
 import com.b2c.prototype.modal.dto.payload.user.RegistrationUserDetailsDto;
 import com.b2c.prototype.modal.dto.payload.review.ReviewDto;
 import com.b2c.prototype.modal.dto.payload.store.StoreDto;
-import com.b2c.prototype.modal.dto.payload.option.TimeDurationOptionDto;
+import com.b2c.prototype.modal.dto.payload.option.item.TimeDurationOptionDto;
 import com.b2c.prototype.modal.dto.payload.user.UserAddressDto;
 import com.b2c.prototype.modal.dto.payload.user.UserCreditCardDto;
 import com.b2c.prototype.modal.dto.payload.user.UserDetailsDto;
-import com.b2c.prototype.modal.dto.payload.option.ZoneOptionDto;
+import com.b2c.prototype.modal.dto.payload.option.item.ZoneOptionDto;
 import com.b2c.prototype.modal.dto.payload.constant.BrandDto;
 import com.b2c.prototype.modal.dto.payload.constant.CategoryValueDto;
 import com.b2c.prototype.modal.dto.payload.constant.ItemTypeDto;
@@ -64,7 +63,6 @@ import com.b2c.prototype.modal.entity.order.CustomerSingleDeliveryOrder;
 import com.b2c.prototype.modal.entity.payment.CommissionValue;
 import com.b2c.prototype.modal.entity.payment.MinMaxCommission;
 import com.b2c.prototype.modal.entity.message.Message;
-import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.modal.entity.option.ZoneOption;
 import com.b2c.prototype.modal.entity.order.DeliveryArticularItemQuantity;
@@ -629,40 +627,40 @@ public class TransformationEntityConfiguration {
         };
     }
 
-    private Function<CustomerSingleDeliveryOrder, PriceDto> mapOrderToTotalPriceDtoFunction() {
-        return customerSingleDeliveryOrder -> {
-            MultiCurrencyPriceInfo totalMultiCurrencyPriceInfo = customerSingleDeliveryOrder.getPayment().getTotalMultiCurrencyPriceInfo();
-            return PriceDto.builder()
-                    .amount(totalMultiCurrencyPriceInfo.getCurrentPrice().getAmount())
-                    .currency(totalMultiCurrencyPriceInfo.getCurrentPrice().getCurrency().getValue())
-                    .build();
-        };
-    }
+//    private Function<CustomerSingleDeliveryOrder, PriceDto> mapOrderToTotalPriceDtoFunction() {
+//        return customerSingleDeliveryOrder -> {
+//            MultiCurrencyPriceInfo totalMultiCurrencyPriceInfo = customerSingleDeliveryOrder.getPayment().getTotalMultiCurrencyPriceInfo();
+//            return PriceDto.builder()
+//                    .amount(totalMultiCurrencyPriceInfo.getCurrentPrice().getAmount())
+//                    .currency(totalMultiCurrencyPriceInfo.getCurrentPrice().getCurrency().getValue())
+//                    .build();
+//        };
+//    }
 
-    private Function<ArticularItem, PriceDto> mapItemDataOptionToFullPriceDtoFunction() {
-        return itemDataOption -> {
-            Price fullPrice = itemDataOption.getFullPrice();
-            return PriceDto.builder()
-                    .amount(fullPrice.getAmount())
-                    .currency(fullPrice.getCurrency().getValue())
-                    .build();
-        };
-    }
+//    private Function<ArticularItem, PriceDto> mapItemDataOptionToFullPriceDtoFunction() {
+//        return itemDataOption -> {
+//            Price fullPrice = itemDataOption.getFullPrice();
+//            return PriceDto.builder()
+//                    .amount(fullPrice.getAmount())
+//                    .currency(fullPrice.getCurrency().getValue())
+//                    .build();
+//        };
+//    }
 
-    private Function<ArticularItem, PriceDto> mapItemDataOptionToTotalPriceDtoFunction() {
-        return itemDataOption -> {
-            Price fullPrice = itemDataOption.getTotalPrice();
-            return PriceDto.builder()
-                    .amount(fullPrice.getAmount())
-                    .currency(fullPrice.getCurrency().getValue())
-                    .build();
-        };
-    }
+//    private Function<ArticularItem, PriceDto> mapItemDataOptionToTotalPriceDtoFunction() {
+//        return itemDataOption -> {
+//            Price fullPrice = itemDataOption.getTotalPrice();
+//            return PriceDto.builder()
+//                    .amount(fullPrice.getAmount())
+//                    .currency(fullPrice.getCurrency().getValue())
+//                    .build();
+//        };
+//    }
 
     private Function<Price, PriceDto> mapPriceToPriceDtoFunction() {
         return price -> PriceDto.builder()
                 .amount(price.getAmount())
-                .currency(price.getCurrency().getValue())
+//                .currency(price.getCurrency().getValue())
                 .build();
     }
 
@@ -707,7 +705,7 @@ public class TransformationEntityConfiguration {
 //
 //    Function<OptionGroup, OptionGroupOptionItemSetDto> mapOptionGroupToOptionItemDto() {
 //        return optionGroup -> {
-//            OptionGroupDto optionGroupDto = OptionGroupDto.builder()
+//            OptionItemGroupDto optionGroupDto = OptionItemGroupDto.builder()
 //                    .label(optionGroup.getLabel())
 //                    .value(optionGroup.getValue())
 //                    .build();
@@ -730,7 +728,7 @@ public class TransformationEntityConfiguration {
 //    private Function<ArticularItem, List<OptionGroupOptionItemSetDto>> mapArticularItemToOptionItemDtoList() {
 //        return articularItem -> articularItem.getOptionItems().stream()
 //                .map(optionItem -> OptionGroupOptionItemSetDto.builder()
-//                        .optionGroup(OptionGroupDto.builder()
+//                        .optionGroup(OptionItemGroupDto.builder()
 //                                .label(optionItem.getOptionGroup().getLabel())
 //                                .value(optionItem.getOptionGroup().getValue())
 //                                .build())
@@ -754,7 +752,7 @@ public class TransformationEntityConfiguration {
 //                .entrySet().stream()
 //                .map(entry ->
 //                        OptionGroupOptionItemSetDto.builder()
-//                            .optionGroup(OptionGroupDto.builder()
+//                            .optionGroup(OptionItemGroupDto.builder()
 //                                    .label(entry.getKey().getLabel())
 //                                    .value(entry.getKey().getValue())
 //                                    .build())
@@ -785,7 +783,7 @@ public class TransformationEntityConfiguration {
 //                            .build());
 
 //            Set<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoSet = getOptionGroupOptionItemSetDtoSet(itemDataDto.getArticularItemSet());
-            Set<OptionGroupDto> optionGroupDtoSet = new HashSet<>();
+            Set<OptionItemGroupDto> optionItemGroupDtoSet = new HashSet<>();
 //            Set<OptionGroup> optionGroups = mapOptionGroupOptionItemSetDtoListToOptionGroupSet().apply(session, null);
 //            Set<OptionItemDto> optionGroups = new HashSet<>();
 //            Set<OptionItem> optionItems = optionGroups.stream()
@@ -803,7 +801,7 @@ public class TransformationEntityConfiguration {
 //                    .category(category)
 //                    .brand(brand)
 //                    .itemType(itemType)
-                    .articularItemSet(articularItemSet)
+//                    .articularItemSet(articularItemSet)
                     .build();
         };
     }
@@ -819,13 +817,13 @@ public class TransformationEntityConfiguration {
 //                    "MetaData.findItemDataWithFullRelations",
 //                    new Parameter("itemId", itemId));
             MetaData existingMetaData = null;
-            Map<String, ArticularItem> existingArticularItemMap = existingMetaData.getArticularItemSet().stream()
-                    .collect(Collectors.toMap(
-                            ArticularItem::getArticularUniqId,
-                            articularItem -> articularItem
-                    ));
+//            Map<String, ArticularItem> existingArticularItemMap = existingMetaData.getArticularItemSet().stream()
+//                    .collect(Collectors.toMap(
+//                            ArticularItem::getArticularUniqId,
+//                            articularItem -> articularItem
+//                    ));
 //            Set<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoSet = getOptionGroupOptionItemSetDtoSet(articularItemDtoSet);
-            Set<OptionGroupDto> optionGroupDtoSet = new HashSet<>();
+            Set<OptionItemGroupDto> optionItemGroupDtoSet = new HashSet<>();
 //            Set<OptionGroup> optionGroups = mapOptionGroupOptionItemSetDtoListToOptionGroupSet().apply(session, null);
 //            Set<OptionItem> optionItems = optionGroups.stream()
 //                    .flatMap(og -> og.getOptionItems().stream())
@@ -835,22 +833,22 @@ public class TransformationEntityConfiguration {
                     session,
                     articularItemDtoSet,
                     null,
-                    existingArticularItemMap);
-            List<ArticularItem> nonUpdatedArticularList = existingMetaData.getArticularItemSet().stream()
-                    .filter(existingItem -> articularItemSet.stream()
-                            .noneMatch(newItem -> newItem.getArticularUniqId().equals(existingItem.getArticularUniqId())))
-                    .toList();
-            Set<ArticularItem> mergedArticularItemSet = Stream.concat(articularItemSet.stream(), nonUpdatedArticularList.stream())
-                            .collect(Collectors.toSet());
+                    null);
+//            List<ArticularItem> nonUpdatedArticularList = existingMetaData.getArticularItemSet().stream()
+//                    .filter(existingItem -> articularItemSet.stream()
+//                            .noneMatch(newItem -> newItem.getArticularUniqId().equals(existingItem.getArticularUniqId())))
+//                    .toList();
+//            Set<ArticularItem> mergedArticularItemSet = Stream.concat(articularItemSet.stream(), nonUpdatedArticularList.stream())
+//                            .collect(Collectors.toSet());
 
             return MetaData.builder()
                     .id(existingMetaData.getId())
 //                    .itemId(existingMetaData.getItemId())
                     .description(existingMetaData.getDescription())
-                    .category(existingMetaData.getCategory())
-                    .brand(existingMetaData.getBrand())
-                    .itemType(existingMetaData.getItemType())
-                    .articularItemSet(mergedArticularItemSet)
+//                    .category(existingMetaData.getCategory())
+//                    .brand(existingMetaData.getBrand())
+//                    .itemType(existingMetaData.getItemType())
+//                    .articularItemSet(mergedArticularItemSet)
                     .build();
         });
     }
@@ -865,11 +863,11 @@ public class TransformationEntityConfiguration {
 //                    "MetaData.findItemDataWithFullRelations",
 //                    new Parameter("itemId", itemId));
             MetaData existingMetaData = null;
-            Map<String, ArticularItem> existingArticularItemMap = existingMetaData.getArticularItemSet().stream()
-                    .collect(Collectors.toMap(
-                            ArticularItem::getArticularUniqId,
-                            articularItem -> articularItem
-                    ));
+//            Map<String, ArticularItem> existingArticularItemMap = existingMetaData.getArticularItemSet().stream()
+//                    .collect(Collectors.toMap(
+//                            ArticularItem::getArticularUniqId,
+//                            articularItem -> articularItem
+//                    ));
 
 //            Category category = sessionEntityFetcher.fetchOptionalCategory(session, metaDataDto.getCategory().getValue())
 //                    .orElse(Category.builder()
@@ -888,7 +886,7 @@ public class TransformationEntityConfiguration {
 //                            .build());
 
 //            Set<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoSet = getOptionGroupOptionItemSetDtoSet(metaDataDto.getArticularItemSet());
-            Set<OptionGroupDto> optionGroupDtoSet = new HashSet<>();
+            Set<OptionItemGroupDto> optionItemGroupDtoSet = new HashSet<>();
 //            Set<OptionGroup> optionGroups = mapOptionGroupOptionItemSetDtoListToOptionGroupSet().apply(session, null);
 //            Set<OptionItem> optionItems = optionGroups.stream()
 //                    .flatMap(og -> og.getOptionItems().stream())
@@ -898,7 +896,7 @@ public class TransformationEntityConfiguration {
                     session,
                     metaDataDto.getArticularItemSet(),
                     null,
-                    existingArticularItemMap);
+                    null);
 
             return MetaData.builder()
                     .id(existingMetaData.getId())
@@ -907,7 +905,7 @@ public class TransformationEntityConfiguration {
 //                    .category(category)
 //                    .brand(brand)
 //                    .itemType(itemType)
-                    .articularItemSet(articularItemSet)
+//                    .articularItemSet(articularItemSet)
                     .build();
         };
     }
@@ -1136,21 +1134,21 @@ public class TransformationEntityConfiguration {
         return itemData -> ResponseMetaDataDto.builder()
 //                .itemId(itemData.getItemId())
                 .description(itemData.getDescription())
-                .brand(BrandDto.builder()
-                        .label(itemData.getBrand().getLabel())
-                        .value(itemData.getBrand().getValue())
-                        .build())
-                .itemType(ItemTypeDto.builder()
-                        .label(itemData.getItemType().getLabel())
-                        .value(itemData.getItemType().getValue())
-                        .build())
-                .category(CategoryValueDto.builder()
-                        .label(itemData.getCategory().getLabel())
-                        .value(itemData.getCategory().getValue())
-                        .build())
-                .articularItems(itemData.getArticularItemSet().stream()
-                        .map(mapArticularItemToResponseArticularDto())
-                        .collect(Collectors.toSet()))
+//                .brand(BrandDto.builder()
+//                        .label(itemData.getBrand().getLabel())
+//                        .value(itemData.getBrand().getValue())
+//                        .build())
+//                .itemType(ItemTypeDto.builder()
+//                        .label(itemData.getItemType().getLabel())
+//                        .value(itemData.getItemType().getValue())
+//                        .build())
+//                .category(CategoryValueDto.builder()
+//                        .label(itemData.getCategory().getLabel())
+//                        .value(itemData.getCategory().getValue())
+//                        .build())
+//                .articularItems(itemData.getArticularItemSet().stream()
+//                        .map(mapArticularItemToResponseArticularDto())
+//                        .collect(Collectors.toSet()))
                 .build();
     }
 
@@ -1177,7 +1175,7 @@ public class TransformationEntityConfiguration {
 //                .entrySet().stream()
 //                .map(entry ->
 //                        OptionGroupOptionItemSetDto.builder()
-//                                .optionGroup(OptionGroupDto.builder()
+//                                .optionGroup(OptionItemGroupDto.builder()
 //                                        .label(entry.getKey().getLabel())
 //                                        .value(entry.getKey().getValue())
 //                                        .build())

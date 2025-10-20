@@ -15,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @NamedQueries({
         @NamedQuery(
                 name = "MessageType.findByValue",
-                query = "SELECT m FROM MessageType m WHERE m.value = : value"
+                query = "SELECT m FROM MessageType m WHERE m.value = :value"
         ),
         @NamedQuery(
                 name = "MessageType.all",

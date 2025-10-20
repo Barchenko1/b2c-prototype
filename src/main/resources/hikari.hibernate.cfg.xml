@@ -19,8 +19,6 @@
     <entity class="com.b2c.prototype.modal.entity.address.UserAddress" />
     <entity class="com.b2c.prototype.modal.entity.address.Country" />
 
-    <entity class="com.b2c.prototype.modal.entity.option.TimeDurationOption" />
-    <entity class="com.b2c.prototype.modal.entity.option.ZoneOption" />
     <entity class="com.b2c.prototype.modal.entity.delivery.DeliveryType" />
     <entity class="com.b2c.prototype.modal.entity.delivery.Delivery" />
 
@@ -44,8 +42,13 @@
     <entity class="com.b2c.prototype.modal.entity.option.OptionItem" />
     <entity class="com.b2c.prototype.modal.entity.option.OptionItemCost" />
 
+    <entity class="com.b2c.prototype.modal.entity.option.ZoneOptionGroup" />
+    <entity class="com.b2c.prototype.modal.entity.option.ZoneOption" />
+    <entity class="com.b2c.prototype.modal.entity.option.TimeDurationOption" />
+
     <entity class="com.b2c.prototype.modal.entity.item.MetaData" />
     <entity class="com.b2c.prototype.modal.entity.item.ArticularItem" />
+    <entity class="com.b2c.prototype.modal.entity.item.ArticularGroup" />
     <entity class="com.b2c.prototype.modal.entity.item.Item" />
     <entity class="com.b2c.prototype.modal.entity.item.ArticularItemQuantity" />
 

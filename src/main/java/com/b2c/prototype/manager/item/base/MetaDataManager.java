@@ -32,8 +32,8 @@ public class MetaDataManager implements IMetaDataManager {
     public void saveMetaData(MetaDataDto metaDataDto) {
         MetaData metaData = itemTransformService.mapMetaDataDtoToMetaDataDto(metaDataDto);
 //            metaData.setItemId(getUUID());
-        metaData.getArticularItemSet().forEach(articularItem ->
-                articularItem.setArticularUniqId(getUUID()));
+//        metaData.getArticularItemSet().forEach(articularItem ->
+//                articularItem.setArticularUniqId(getUUID()));
         generalEntityDao.mergeEntity(metaData);
     }
 

@@ -15,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @NamedQueries({
         @NamedQuery(
                 name = "DeliveryType.findByValue",
-                query = "SELECT dt FROM DeliveryType dt WHERE dt.value = : value"
+                query = "SELECT dt FROM DeliveryType dt WHERE dt.value = :value"
         ),
         @NamedQuery(
                 name = "DeliveryType.all",

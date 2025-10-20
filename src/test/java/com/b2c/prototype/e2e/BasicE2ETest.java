@@ -1,10 +1,13 @@
 package com.b2c.prototype.e2e;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.github.database.rider.core.api.configuration.DBUnit;
 import com.github.database.rider.junit5.api.DBRider;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +20,9 @@ import org.springframework.util.MultiValueMap;
 
 import javax.sql.DataSource;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.Map;
 
 @DBRider
@@ -25,10 +31,24 @@ import java.util.Map;
 public class BasicE2ETest {
 
     protected WebTestClient webTestClient;
-    protected final ObjectMapper objectMapper = JsonMapper.builder()
-            .addModule(new JavaTimeModule())
-            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-            .build();
+    protected final ObjectMapper objectMapper = getObjectMapper();
+
+    private ObjectMapper getObjectMapper() {
+        DateTimeFormatter ldtSerialize = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter ldtDeserialize = new DateTimeFormatterBuilder()
+                .appendOptional(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))
+                .appendOptional(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                .toFormatter();
+        JavaTimeModule javaTime = new JavaTimeModule();
+        javaTime.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(ldtSerialize));
+        javaTime.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(ldtDeserialize));
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(javaTime);
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        return mapper;
+    }
 
     @Autowired
     private DataSource dataSource;

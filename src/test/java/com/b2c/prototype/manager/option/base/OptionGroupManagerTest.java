@@ -7,8 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,7 +18,7 @@ class OptionGroupManagerTest extends AbstractConstantEntityManagerTest<OptionGro
     private Function<OptionGroup, ConstantPayloadDto> mapEntityToDtoFunction;
     @Mock
     private Function<ConstantPayloadDto, OptionGroup> mapDtoToEntityFunction;
-    private OptionGroupManager optionGroupManager;
+    private OptionItemGroupManager optionGroupManager;
 
     @BeforeEach
     void setUp() {

@@ -126,18 +126,18 @@ class MetaDataManagerTest {
 
     private MetaData getMetaData() {
         return MetaData.builder()
-                .category(Category.builder()
-                        .label("categoryLabel")
-                        .value("categoryValue")
-                        .build())
-                .itemType(ItemType.builder()
-                        .label("itemTypeLabel")
-                        .value("itemTypeValue")
-                        .build())
-                .brand(Brand.builder()
-                        .label("brandLabel")
-                        .value("brandValue")
-                        .build())
+//                .category(Category.builder()
+//                        .label("categoryLabel")
+//                        .value("categoryValue")
+//                        .build())
+//                .itemType(ItemType.builder()
+//                        .label("itemTypeLabel")
+//                        .value("itemTypeValue")
+//                        .build())
+//                .brand(Brand.builder()
+//                        .label("brandLabel")
+//                        .value("brandValue")
+//                        .build())
                 .build();
     }
 

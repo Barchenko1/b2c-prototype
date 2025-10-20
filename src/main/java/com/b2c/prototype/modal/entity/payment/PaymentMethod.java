@@ -15,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @NamedQueries({
         @NamedQuery(
                 name = "PaymentMethod.findByValue",
-                query = "SELECT p FROM PaymentMethod p WHERE p.value = : value"
+                query = "SELECT p FROM PaymentMethod p WHERE p.value = :value"
         ),
         @NamedQuery(
                 name = "PaymentMethod.all",
