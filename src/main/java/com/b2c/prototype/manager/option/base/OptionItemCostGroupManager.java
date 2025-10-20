@@ -12,6 +12,7 @@ import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -82,85 +83,91 @@ public class OptionItemCostGroupManager implements IOptionItemCostGroupManager {
             throw new IllegalArgumentException("OptionGroup not found by old value: " + searchValue);
         }
 
-        // 2) Update group's own basic fields (assuming AbstractConstantDto carries label/value)
         copyUpdatableFields(group, dto);
 
-        // 3) Build lookup for existing items by their CURRENT value
         final Map<String, OptionItemCost> currentByValue = group.getOptionItemCosts().stream()
                 .filter(Objects::nonNull)
-                .filter(oi -> oi.getValue() != null)
+                .filter(t -> t.getValue() != null)
                 .collect(toMap(OptionItemCost::getValue, Function.identity(), (a, b) -> a, LinkedHashMap::new));
 
-        // 4) Track which existing items we kept/updated
         final Set<OptionItemCost> matchedExisting = new HashSet<>();
-
-        // Defensive: normalize incoming list
         final List<OptionItemCostDto> incoming = Optional.ofNullable(dto.getOptionItemCosts())
                 .orElseGet(Collections::emptyList);
 
-        // 5) First pass: update existing items (identified by searchValue if present, otherwise by value)
+        // UPDATE EXISTING
         incoming.forEach(itemDto -> {
             if (itemDto == null) return;
-
-            final String lookupKey = itemDto.getSearchValue() != null
-                    ? itemDto.getSearchValue()
-                    : itemDto.getValue(); // fall back to its current value
-
-            OptionItemCost existing = null;
-            if (lookupKey != null) {
-                existing = currentByValue.get(lookupKey);
-            }
+            final String lookupKey = itemDto.getSearchValue() != null ? itemDto.getSearchValue() : itemDto.getValue();
+            OptionItemCost existing = lookupKey == null ? null : currentByValue.get(lookupKey);
 
             if (existing != null) {
-                // Update fields
                 if (itemDto.getLabel() != null) existing.setLabel(itemDto.getLabel());
+
+                // rename (guard against collision)
                 if (itemDto.getValue() != null && !itemDto.getValue().equals(existing.getValue())) {
-                    // Guard: avoid collision after rename
                     if (currentByValue.containsKey(itemDto.getValue()) && currentByValue.get(itemDto.getValue()) != existing) {
-                        throw new IllegalStateException("OptionItem value collision on rename: " + itemDto.getValue());
+                        throw new IllegalStateException("TimeDurationOption value collision on rename: " + itemDto.getValue());
                     }
-                    // Update maps to keep them consistent for later lookups
                     currentByValue.remove(existing.getValue());
                     existing.setValue(itemDto.getValue());
                     currentByValue.put(existing.getValue(), existing);
+                }
+
+                // price update (no manual IDs; cascade handles insert/update)
+                if (itemDto.getPrice() != null) {
+                    Price p = existing.getPrice();
+                    if (p == null) {
+                        p = Price.builder().build();
+                        existing.setPrice(p);
+                    }
+                    if (itemDto.getPrice().getAmount() != null) {
+                        p.setAmount(itemDto.getPrice().getAmount());
+                    }
+                    if (itemDto.getPrice().getCurrency() != null && itemDto.getPrice().getCurrency().getValue() != null) {
+                        p.setCurrency(
+                                generalEntityDao.findEntity("Currency.findByValue",
+                                        Pair.of(VALUE, itemDto.getPrice().getCurrency().getValue()))
+                        );
+                    }
                 }
 
                 matchedExisting.add(existing);
             }
         });
 
-        // 6) Second pass: create brand-new items (searchValue == null AND no existing with that value)
+        // CREATE NEW (unchanged from your code)
         incoming.stream()
                 .filter(Objects::nonNull)
-                .filter(d -> d.getSearchValue() == null)           // explicit "new"
+                .filter(d -> d.getSearchValue() == null)
                 .forEach(d -> {
                     final String newVal = d.getValue();
                     if (newVal == null || newVal.trim().isEmpty()) {
-                        throw new IllegalArgumentException("New OptionItem must have non-null 'value'.");
+                        throw new IllegalArgumentException("New TimeDurationOption must have non-null 'value'.");
                     }
-                    // If already updated an existing to this value in step 5, skip creating duplicate
                     if (!currentByValue.containsKey(newVal)) {
                         OptionItemCost created = OptionItemCost.builder()
                                 .label(d.getLabel())
                                 .value(newVal)
-                                .price(Price.builder()
+                                .price(d.getPrice() != null
+                                        ? Price.builder()
                                         .amount(d.getPrice().getAmount())
-                                        .currency(generalEntityDao.findEntity("Currency.findByValue", Pair.of("value", d.getPrice().getCurrency().getValue())))
-                                        .build())
+                                        .currency(generalEntityDao.findEntity("Currency.findByValue",
+                                                Pair.of(VALUE, d.getPrice().getCurrency().getValue())))
+                                        .build()
+                                        : null)
                                 .build();
-                        group.addOptionItemCost(created);               // maintains both sides
+                        group.addOptionItemCost(created);
                         currentByValue.put(newVal, created);
                         matchedExisting.add(created);
                     }
                 });
 
-        // 7) Remove items that are no longer present in the DTO (orphanRemoval=true will delete)
-        final List<OptionItemCost> toRemove = group.getOptionItemCosts().stream()
+        // REMOVE ORPHANS (unchanged)
+        group.getOptionItemCosts().stream()
                 .filter(Objects::nonNull)
-                .filter(oi -> !matchedExisting.contains(oi))
-                .toList();
-
-        toRemove.forEach(group::removeOptionItemCost);
+                .filter(t -> !matchedExisting.contains(t))
+                .toList()
+                .forEach(group::removeOptionItemCost);
 
         return group;
     }

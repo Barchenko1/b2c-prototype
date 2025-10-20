@@ -76,101 +76,6 @@ public class TimeDurationOptionManager implements ITimeDurationOptionManager {
                 "OptionGroup.withOptionItems", (Pair<String, ?>) null);
     }
 
-//    private OptionGroup syncItemsAllowingValueChange(String searchValue, OptionGroup group, TimeDurationOptionGroupDto dto) {
-//        if (group == null) {
-//            throw new IllegalArgumentException("OptionGroup not found by old value: " + searchValue);
-//        }
-//
-//        // 2) Update group's own basic fields (assuming AbstractConstantDto carries label/value)
-//        copyUpdatableFields(group, dto);
-//
-//        // 3) Build lookup for existing items by their CURRENT value
-//        final Map<String, TimeDurationOption> currentByValue = group.getTimeDurationOptions().stream()
-//                .filter(Objects::nonNull)
-//                .filter(oi -> oi.getValue() != null)
-//                .collect(toMap(TimeDurationOption::getValue, Function.identity(), (a, b) -> a, LinkedHashMap::new));
-//
-//        // 4) Track which existing items we kept/updated
-//        final Set<TimeDurationOption> matchedExisting = new HashSet<>();
-//
-//        // Defensive: normalize incoming list
-//        final List<TimeDurationOptionDto> incoming = Optional.ofNullable(dto.getTimeDurationOptions())
-//                .orElseGet(Collections::emptyList);
-//
-//        // 5) First pass: update existing items (identified by searchValue if present, otherwise by value)
-//        incoming.forEach(itemDto -> {
-//            if (itemDto == null) return;
-//
-//            final String lookupKey = itemDto.getSearchValue() != null
-//                    ? itemDto.getSearchValue()
-//                    : itemDto.getValue(); // fall back to its current value
-//
-//            TimeDurationOption existing = null;
-//            if (lookupKey != null) {
-//                existing = currentByValue.get(lookupKey);
-//            }
-//
-//            if (existing != null) {
-//                // Update fields
-//                if (itemDto.getLabel() != null) existing.setLabel(itemDto.getLabel());
-//                if (itemDto.getValue() != null && !itemDto.getValue().equals(existing.getValue())) {
-//                    // Guard: avoid collision after rename
-//                    if (currentByValue.containsKey(itemDto.getValue()) && currentByValue.get(itemDto.getValue()) != existing) {
-//                        throw new IllegalStateException("OptionItem value collision on rename: " + itemDto.getValue());
-//                    }
-//                    // Update maps to keep them consistent for later lookups
-//                    currentByValue.remove(existing.getValue());
-//                    existing.setValue(itemDto.getValue());
-//                    currentByValue.put(existing.getValue(), existing);
-//                }
-//
-//                matchedExisting.add(existing);
-//            }
-//        });
-//
-//        // 6) Second pass: create brand-new items (searchValue == null AND no existing with that value)
-//        incoming.stream()
-//                .filter(Objects::nonNull)
-//                .filter(d -> d.getSearchValue() == null)           // explicit "new"
-//                .forEach(d -> {
-//                    final String newVal = d.getValue();
-//                    if (newVal == null || newVal.trim().isEmpty()) {
-//                        throw new IllegalArgumentException("New OptionItem must have non-null 'value'.");
-//                    }
-//                    // If already updated an existing to this value in step 5, skip creating duplicate
-//                    if (!currentByValue.containsKey(newVal)) {
-//                        TimeDurationOption created = TimeDurationOption.builder()
-//                                .label(d.getLabel())
-//                                .value(newVal)
-//                                .startTime(d.getStartTime())
-//                                .endTime(d.getEndTime())
-//                                .timeZone(d.getTimeZone())
-//                                .durationInMin(Duration.between(
-//                                                d.getStartTime(),
-//                                                d.getEndTime())
-//                                        .toMinutes())
-//                                .price(Price.builder()
-//                                        .amount(d.getPrice().getAmount())
-//                                        .currency(generalEntityDao.findEntity("Currency.findByValue", Pair.of(VALUE, d.getPrice().getCurrency().getValue())))
-//                                        .build())
-//                                .build();
-//                        group.addTimeDurationOption(created);               // maintains both sides
-//                        currentByValue.put(newVal, created);
-//                        matchedExisting.add(created);
-//                    }
-//                });
-//
-//        // 7) Remove items that are no longer present in the DTO (orphanRemoval=true will delete)
-//        final List<TimeDurationOption> toRemove = group.getTimeDurationOptions().stream()
-//                .filter(Objects::nonNull)
-//                .filter(oi -> !matchedExisting.contains(oi))
-//                .toList();
-//
-//        toRemove.forEach(group::removeTimeDurationOption);
-//
-//        return group;
-//    }
-
     private OptionGroup syncItemsAllowingValueChange(String searchValue, OptionGroup group, TimeDurationOptionGroupDto dto) {
         if (group == null) {
             throw new IllegalArgumentException("OptionGroup not found by old value: " + searchValue);
@@ -282,7 +187,6 @@ public class TimeDurationOptionManager implements ITimeDurationOptionManager {
 
         return group;
     }
-
 
     private void copyUpdatableFields(OptionGroup target, TimeDurationOptionGroupDto source) {
         if (source.getLabel() != null) {

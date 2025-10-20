@@ -10,10 +10,10 @@ price:
     amount: 10.0
     currency_id: 1
   - id: 3
-    amount: 10.0
+    amount: 20.0
     currency_id: 1
   - id: 4
-    amount: 20.0
+    amount: 10.0
     currency_id: 1
 option_group:
   - id: 1
