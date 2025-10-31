@@ -2,8 +2,6 @@ package com.b2c.prototype.manager.userdetails.basic;
 
 import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.dto.payload.user.UserCreditCardDto;
-import com.b2c.prototype.modal.dto.payload.order.ResponseCreditCardDto;
-import com.b2c.prototype.modal.dto.payload.user.ResponseUserCreditCardDto;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
 import com.b2c.prototype.modal.entity.user.UserCreditCard;
 import com.b2c.prototype.modal.entity.user.UserDetails;
@@ -132,7 +130,7 @@ public class UserCreditCardManager implements IUserCreditCardManager {
     }
 
     @Override
-    public ResponseUserCreditCardDto getDefaultUserCreditCard(String userId) {
+    public UserCreditCardDto getDefaultUserCreditCard(String userId) {
         UserDetails userDetails = generalEntityDao.findEntity(
                 "UserDetails.findUserCreditCardsByUserId",
                 Pair.of(USER_ID, userId));
@@ -145,7 +143,7 @@ public class UserCreditCardManager implements IUserCreditCardManager {
     }
 
     @Override
-    public List<ResponseUserCreditCardDto> getCreditCardListByUserId(String userId) {
+    public List<UserCreditCardDto> getCreditCardListByUserId(String userId) {
         UserDetails userDetails = generalEntityDao.findEntity(
                 "UserDetails.findUserCreditCardsByUserId",
                 Pair.of(USER_ID, userId));
@@ -156,7 +154,7 @@ public class UserCreditCardManager implements IUserCreditCardManager {
     }
 
     @Override
-    public List<ResponseCreditCardDto> getAllCreditCardByCardNumber(String cardNumber) {
+    public List<UserCreditCardDto> getAllCreditCardByCardNumber(String cardNumber) {
         List<CreditCard> creditCards = generalEntityDao.findEntityList(
                 "UserCreditCard.findByCreditCardNumber",
                 Pair.of("cardNumber", cardNumber));

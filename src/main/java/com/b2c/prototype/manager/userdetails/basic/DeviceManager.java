@@ -3,7 +3,6 @@ package com.b2c.prototype.manager.userdetails.basic;
 import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.manager.userdetails.IDeviceManager;
 import com.b2c.prototype.modal.dto.payload.user.DeviceDto;
-import com.b2c.prototype.modal.dto.payload.user.ResponseDeviceDto;
 import com.b2c.prototype.modal.entity.user.Device;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.transform.userdetails.IUserDetailsTransformService;
@@ -77,15 +76,15 @@ public class DeviceManager implements IDeviceManager {
     }
 
     @Override
-    public List<ResponseDeviceDto> getDevicesByUserId(String userId, String clientId) {
+    public List<DeviceDto> getDevicesByUserId(String userId, String clientId) {
         UserDetails userDetails = generalEntityDao.findEntity(
                 "UserDetails.findAllDevicesByUserId",
                 Pair.of(USER_ID, userId));
 
         return userDetails.getDevices().stream()
                 .map(device -> {
-                    ResponseDeviceDto responseDeviceDto =
-                            userDetailsTransformService.mapDeviceToResponseDeviceDto(device);
+                    DeviceDto responseDeviceDto =
+                            userDetailsTransformService.mapDeviceToDeviceDto(device);
                     responseDeviceDto.setThisDevice(device.getIpAddress().equals(clientId));
                     return responseDeviceDto;
                 })

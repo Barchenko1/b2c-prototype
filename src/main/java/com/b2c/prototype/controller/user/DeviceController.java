@@ -1,7 +1,6 @@
 package com.b2c.prototype.controller.user;
 
 import com.b2c.prototype.modal.dto.payload.user.DeviceDto;
-import com.b2c.prototype.modal.dto.payload.user.ResponseDeviceDto;
 import com.b2c.prototype.processor.user.IDeviceProcess;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +41,7 @@ public class DeviceController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ResponseDeviceDto> getDevicesByUserId(ServerWebExchange request,
+    public List<DeviceDto> getDevicesByUserId(ServerWebExchange request,
                                                       @RequestParam final Map<String, String> requestParams) {
         return deviceProcess.getDevicesByUserId(requestParams, request);
     }

@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -21,6 +21,8 @@ public class ContactInfoDto {
     private String lastName;
     private ContactPhoneDto contactPhone;
     private String email;
+    private boolean isEmailVerified;
+    private boolean isPhoneVerified;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date birthdayDate;
+    private LocalDate birthdayDate;
 }

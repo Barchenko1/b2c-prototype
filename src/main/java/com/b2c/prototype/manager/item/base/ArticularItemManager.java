@@ -4,8 +4,6 @@ import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.dto.common.SearchFieldUpdateCollectionEntityDto;
 import com.b2c.prototype.modal.dto.payload.item.ArticularItemDto;
 import com.b2c.prototype.modal.dto.payload.item.ResponseArticularItemDto;
-import com.b2c.prototype.modal.entity.item.Discount;
-import com.b2c.prototype.modal.entity.item.MetaData;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.manager.item.IArticularItemManager;
 import com.b2c.prototype.transform.item.IItemTransformService;
@@ -45,9 +43,9 @@ public class ArticularItemManager implements IArticularItemManager {
 
     @Override
     public void deleteArticularItem(String articularId) {
-        MetaData metaData = generalEntityDao.findEntity(
-                "ArticularItem.findItemDataByArticularId",
-                Pair.of(ARTICULAR_ID, articularId));
+//        MetaData metaData = generalEntityDao.findEntity(
+//                "ArticularItem.findItemDataByArticularId",
+//                Pair.of(ARTICULAR_ID, articularId));
 //        metaData.getArticularItemSet().stream()
 //                .filter(ai -> ai.getArticularUniqId().equals(articularId))
 //                .findFirst()

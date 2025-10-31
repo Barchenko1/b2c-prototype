@@ -1,0 +1,27 @@
+country:
+  - id: 1
+    label: "USA"
+    value: "USA"
+currency:
+  - id: 1
+    value: "USD"
+    label: "USD"
+price:
+  - amount: 10.0
+    currency_id: 1
+  - amount: 10.0
+    currency_id: 1
+zone_option_group:
+  - label: "CA-Zone"
+    value: "CA-Zone"
+    city: "California"
+    country_id: 1
+zone_option:
+  - label: "CA-ZoneA"
+    value: "CA-ZoneA"
+    price_id: 1
+    option_group_id: 1
+  - label: "CA-ZoneB"
+    value: "CA-ZoneB"
+    price_id: 2
+    option_group_id: 1

@@ -1,8 +1,6 @@
 package com.b2c.prototype.controller.user;
 
 import com.b2c.prototype.modal.dto.payload.user.UserCreditCardDto;
-import com.b2c.prototype.modal.dto.payload.order.ResponseCreditCardDto;
-import com.b2c.prototype.modal.dto.payload.user.ResponseUserCreditCardDto;
 import com.b2c.prototype.processor.user.IUserCreditCardProcess;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -47,17 +45,17 @@ public class UserCreditCardController {
     }
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ResponseCreditCardDto> getAddresses(@RequestParam final Map<String, String> requestParams) {
+    public List<UserCreditCardDto> getAddresses(@RequestParam final Map<String, String> requestParams) {
         return userCreditCardProcess.getAllCreditCardByCardNumber(requestParams);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ResponseUserCreditCardDto> getCreditCardListByUserId(@RequestParam final Map<String, String> requestParams) {
+    public List<UserCreditCardDto> getCreditCardListByUserId(@RequestParam final Map<String, String> requestParams) {
         return userCreditCardProcess.getUserCreditCardListByUserId(requestParams);
     }
 
     @GetMapping(value = "/default", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseUserCreditCardDto getDefaultUserCreditCard(@RequestParam final Map<String, String> requestParams) {
+    public UserCreditCardDto getDefaultUserCreditCard(@RequestParam final Map<String, String> requestParams) {
         return userCreditCardProcess.getDefaultUserCreditCard(requestParams);
     }
 }

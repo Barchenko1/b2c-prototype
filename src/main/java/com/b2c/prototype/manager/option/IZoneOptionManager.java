@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IZoneOptionManager {
-    void persistEntity(ZoneOptionGroup zoneOptionGroup);
+    void persistEntity(ZoneOptionGroupDto zoneOptionGroup);
     void mergeEntity(String value, ZoneOptionGroupDto zoneOptionGroupDto);
     void removeEntity(String value);
 

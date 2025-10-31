@@ -1,5 +1,6 @@
 package com.b2c.prototype.manager.address.base;
 
+import com.b2c.prototype.modal.dto.payload.constant.CountryDto;
 import com.b2c.prototype.modal.dto.payload.order.AddressDto;
 import com.b2c.prototype.modal.dto.payload.user.UserAddressDto;
 import com.b2c.prototype.modal.entity.address.Address;
@@ -225,7 +226,10 @@ class AddressManagerTest {
 
     private AddressDto getAddressDto() {
         return AddressDto.builder()
-//                .country("USA")
+                .country(CountryDto.builder()
+                        .label("USA")
+                        .value("USA")
+                        .build())
                 .city("city")
                 .street("street")
                 .buildingNumber("1")

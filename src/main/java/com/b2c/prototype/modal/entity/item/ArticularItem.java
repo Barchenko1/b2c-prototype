@@ -147,8 +147,8 @@ public class ArticularItem {
     @JoinColumn(name = "discount_id")
     private Discount discount;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "metadata_id")
-    private MetaData metadata;
+    @JoinColumn(name = "articular_group_id")
+    private ArticularGroup articularGroup;
 
     public void addOptionItem(OptionItem optionItem) {
         this.optionItems.add(optionItem);

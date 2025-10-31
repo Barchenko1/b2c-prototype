@@ -3,7 +3,6 @@ package com.b2c.prototype.processor.user.base;
 import com.b2c.prototype.manager.address.IUserAddressManager;
 import com.b2c.prototype.modal.dto.payload.order.AddressDto;
 import com.b2c.prototype.modal.dto.payload.user.UserAddressDto;
-import com.b2c.prototype.modal.dto.payload.user.ResponseUserAddressDto;
 import com.b2c.prototype.processor.user.IUserAddressProcess;
 import org.springframework.stereotype.Service;
 
@@ -45,13 +44,13 @@ public class UserAddressProcess implements IUserAddressProcess {
     }
 
     @Override
-    public ResponseUserAddressDto getDefaultUserAddress(Map<String, String> requestParams) {
+    public UserAddressDto getDefaultUserAddress(Map<String, String> requestParams) {
         String userId = requestParams.get("userId");
         return userAddressManager.getDefaultUserAddress(userId);
     }
 
     @Override
-    public List<ResponseUserAddressDto> getUserAddressListByUserId(Map<String, String> requestParams) {
+    public List<UserAddressDto> getUserAddressListByUserId(Map<String, String> requestParams) {
         String userId = requestParams.get("userId");
         return userAddressManager.getUserAddressesByUserId(userId);
     }

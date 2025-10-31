@@ -6,6 +6,7 @@ import com.b2c.prototype.modal.dto.payload.option.item.OptionItemDto;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.manager.option.IOptionItemGroupManager;
 import com.b2c.prototype.modal.entity.option.OptionItem;
+import com.b2c.prototype.transform.item.IItemTransformService;
 import com.nimbusds.jose.util.Pair;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -27,12 +28,15 @@ import static java.util.stream.Collectors.toMap;
 public class OptionItemGroupManager implements IOptionItemGroupManager {
 
     private final IGeneralEntityDao generalEntityDao;
+    private final IItemTransformService itemTransformService;
 
-    public OptionItemGroupManager(IGeneralEntityDao generalEntityDao) {
+    public OptionItemGroupManager(IGeneralEntityDao generalEntityDao, IItemTransformService itemTransformService) {
         this.generalEntityDao = generalEntityDao;
+        this.itemTransformService = itemTransformService;
     }
 
-    public void persistEntity(OptionGroup entity) {
+    public void persistEntity(OptionItemGroupDto optionItemGroupDto) {
+        OptionGroup entity = itemTransformService.mapOptionItemGroupDtoToOptionGroupDto(optionItemGroupDto);
         generalEntityDao.persistEntity(entity);
     }
 

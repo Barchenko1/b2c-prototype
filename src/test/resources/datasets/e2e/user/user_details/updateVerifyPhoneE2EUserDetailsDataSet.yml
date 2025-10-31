@@ -16,9 +16,9 @@ user_details:
     user_id: "123"
     username: "john.doe"
     date_of_create: "2024-03-03 12:00:00"
-    is_contact_phone_verified: false
+    is_contact_phone_verified: true
     is_email_verified: false
-    is_active: true
+    is_active: false
     contact_info_id: 1
 country:
   - id: 1
@@ -36,8 +36,8 @@ address:
 credit_card:
   - id: 1
     card_number: "4444-1111-2222-3333"
-    monthOfExpire: 6
-    yearOfExpire: 2028
+    month_of_expire: 6
+    year_of_expire: 2028
     cvv: 123
     owner_name: "John"
     owner_second_name: "Doe"

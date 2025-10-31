@@ -3,7 +3,6 @@ package com.b2c.prototype.manager.address.base;
 import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.dto.payload.order.AddressDto;
 import com.b2c.prototype.modal.dto.payload.user.UserAddressDto;
-import com.b2c.prototype.modal.dto.payload.user.ResponseUserAddressDto;
 import com.b2c.prototype.modal.entity.address.UserAddress;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 import com.b2c.prototype.manager.address.IUserAddressManager;
@@ -134,25 +133,25 @@ public class UserAddressManager implements IUserAddressManager {
     }
 
     @Override
-    public List<ResponseUserAddressDto> getUserAddressesByUserId(String userId) {
+    public List<UserAddressDto> getUserAddressesByUserId(String userId) {
         UserDetails userDetails = generalEntityDao.findEntity(
                 "UserDetails.findAddressesByUserId",
                 Pair.of(USER_ID, userId));
 
         return userDetails.getUserAddresses().stream()
-                .map(userDetailsTransformService::mapUserAddressToResponseUserAddressDto)
+                .map(userDetailsTransformService::mapUserAddressToUserAddressDto)
                 .toList();
     }
 
     @Override
-    public ResponseUserAddressDto getDefaultUserAddress(String userId) {
+    public UserAddressDto getDefaultUserAddress(String userId) {
         UserDetails userDetails = generalEntityDao.findEntity(
                 "UserDetails.findAddressesByUserId",
                 Pair.of(USER_ID, userId));
 
         return userDetails.getUserAddresses().stream()
                 .filter(UserAddress::isDefault)
-                .map(userDetailsTransformService::mapUserAddressToResponseUserAddressDto)
+                .map(userDetailsTransformService::mapUserAddressToUserAddressDto)
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("User has no such default address"));
     }

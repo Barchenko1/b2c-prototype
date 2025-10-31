@@ -2,7 +2,6 @@ package com.b2c.prototype.controller.user;
 
 import com.b2c.prototype.modal.dto.payload.user.RegistrationUserDetailsDto;
 import com.b2c.prototype.modal.dto.payload.user.UserDetailsDto;
-import com.b2c.prototype.modal.dto.payload.user.ResponseUserDetailsDto;
 import com.b2c.prototype.processor.user.IUserDetailsProcess;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/user/details")
 public class UserDetailsController {
     private final IUserDetailsProcess userDetailsProcess;
 
@@ -36,17 +35,9 @@ public class UserDetailsController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(value = "/full", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> saveUserDetails(@RequestParam final Map<String, String> requestParams,
-                                                @RequestBody final UserDetailsDto userDetailsDto) {
-        userDetailsProcess.saveUserDetails(requestParams, userDetailsDto);
-        return ResponseEntity.ok().build();
-    }
-
-
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> putIUserDetails(@RequestParam final Map<String, String> requestParams,
-                                                @RequestBody final UserDetailsDto userDetailsDto) {
+    public ResponseEntity<Void> putUserDetails(@RequestParam final Map<String, String> requestParams,
+                                               @RequestBody final UserDetailsDto userDetailsDto) {
         userDetailsProcess.updateUserDetailsByUserId(requestParams, userDetailsDto);
         return ResponseEntity.ok().build();
     }
@@ -83,12 +74,12 @@ public class UserDetailsController {
     }
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ResponseUserDetailsDto> getUserDetailsList(@RequestParam final Map<String, String> requestParams) {
+    public List<UserDetailsDto> getUserDetailsList(@RequestParam final Map<String, String> requestParams) {
         return userDetailsProcess.getUserDetails(requestParams);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseUserDetailsDto> getUserDetails(@RequestParam final Map<String, String> requestParams) {
+    public ResponseEntity<UserDetailsDto> getUserDetails(@RequestParam final Map<String, String> requestParams) {
         return new ResponseEntity<>(userDetailsProcess.getUserDetailsByUserId(requestParams), HttpStatus.OK);
     }
 }

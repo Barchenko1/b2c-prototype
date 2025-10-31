@@ -10,6 +10,8 @@ import com.b2c.prototype.modal.entity.order.CustomerSingleDeliveryOrder;
 public interface IOrderTransformService {
     OptionGroup mapTimeDurationOptionGroupDtoToOptionGroup(TimeDurationOptionGroupDto timeDurationOptionGroupDto);
     TimeDurationOptionGroupDto mapOptionGroupToTimeDurationOptionGroupDto(OptionGroup optionGroup);
+
+    ZoneOptionGroup mapZoneOptionGroupDtoToZoneOptionGroup(ZoneOptionGroupDto zoneOptionGroupDto);
     ZoneOptionGroupDto mapZoneOptionGroupToZoneOptionGroupDto(ZoneOptionGroup zoneOptionGroup);
 
     ResponseCustomerOrderDetails mapCustomerSingleDeliveryOrderToResponseCustomerOrderDetails(CustomerSingleDeliveryOrder customerSingleDeliveryOrder);

@@ -2,7 +2,6 @@ package com.b2c.prototype.manager.address;
 
 import com.b2c.prototype.modal.dto.payload.order.AddressDto;
 import com.b2c.prototype.modal.dto.payload.user.UserAddressDto;
-import com.b2c.prototype.modal.dto.payload.user.ResponseUserAddressDto;
 
 import java.util.List;
 
@@ -12,8 +11,8 @@ public interface IUserAddressManager {
     void setDefaultUserCreditCard(String userId, String addressId);
     void deleteUserAddress(String userId, String addressId);
 
-    ResponseUserAddressDto getDefaultUserAddress(String userId);
-    List<ResponseUserAddressDto> getUserAddressesByUserId(String userId);
+    UserAddressDto getDefaultUserAddress(String userId);
+    List<UserAddressDto> getUserAddressesByUserId(String userId);
     List<AddressDto> getAllAddressesByAddressId(String addressId);
 
 }

@@ -1,7 +1,9 @@
 package com.b2c.prototype.modal.entity.item;
 
+import com.b2c.prototype.transform.converter.ItemDataDescriptionConverter;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -9,6 +11,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -19,11 +23,51 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 
 @Entity
 @Table(name = "articular_group")
-
+@NamedQueries({
+        @NamedQuery(
+                name = "ArticularGroup.full",
+                query = "SELECT d FROM ArticularGroup d"
+        ),
+        @NamedQuery(
+                name = "ArticularGroup.findByValue",
+                query = "SELECT d FROM ArticularGroup d WHERE d.articularGroupId = :articularGroupId"
+        ),
+        @NamedQuery(
+                name = "ArticularGroup.findAllWithFullRelations",
+                query = "SELECT DISTINCT ag FROM ArticularGroup ag " +
+                        "LEFT JOIN FETCH ag.articularItemSet ai " +
+                        "LEFT JOIN FETCH ai.optionItems oi " +
+                        "LEFT JOIN FETCH oi.optionGroup og " +
+                        "LEFT JOIN FETCH ai.fullPrice fp " +
+                        "LEFT JOIN FETCH fp.currency fpc " +
+                        "LEFT JOIN FETCH ai.totalPrice tp " +
+                        "LEFT JOIN FETCH tp.currency tpc " +
+                        "LEFT JOIN FETCH ai.discount d " +
+                        "LEFT JOIN FETCH d.currency dc " +
+                        "LEFT JOIN FETCH d.articularItemList dai"
+        ),
+        @NamedQuery(
+                name = "ArticularGroup.findItemDataWithFullRelations",
+                query = "SELECT DISTINCT ag FROM ArticularGroup ag " +
+                        "LEFT JOIN FETCH ag.articularItemSet ai " +
+                        "LEFT JOIN FETCH ai.optionItems oi " +
+                        "LEFT JOIN FETCH oi.optionGroup og " +
+                        "LEFT JOIN FETCH ai.fullPrice fp " +
+                        "LEFT JOIN FETCH fp.currency fpc " +
+                        "LEFT JOIN FETCH ai.totalPrice tp " +
+                        "LEFT JOIN FETCH tp.currency tpc " +
+                        "LEFT JOIN FETCH ai.discount d " +
+                        "LEFT JOIN FETCH d.currency dc " +
+                        "LEFT JOIN FETCH d.articularItemList dai " +
+                        "WHERE ag.articularGroupId = :articularGroupId"
+        )
+})
 @Data
 @Builder
 @NoArgsConstructor
@@ -50,4 +94,8 @@ public class ArticularGroup {
     @ToString.Exclude
     @Builder.Default
     private Set<ArticularItem> articularItemSet = new HashSet<>();
+    @Column(name = "description", columnDefinition = "TEXT")
+    @Convert(converter = ItemDataDescriptionConverter.class)
+    @Builder.Default
+    private Map<String, String> description = new LinkedHashMap<>();
 }

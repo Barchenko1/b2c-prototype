@@ -54,16 +54,16 @@ user_address:
 credit_card:
   - id: 1
     card_number: "4444-1111-2222-3333"
-    monthOfExpire: 6
-    yearOfExpire: 2028
+    month_of_expire: 6
+    year_of_expire: 2028
     cvv: 123
     owner_name: "John"
     owner_second_name: "Doe"
     is_active: true
   - id: 2
     card_number: "4444-1111-2222-3331"
-    monthOfExpire: 6
-    yearOfExpire: 2028
+    month_of_expire: 6
+    year_of_expire: 2028
     cvv: 123
     owner_name: "John"
     owner_second_name: "Doe"

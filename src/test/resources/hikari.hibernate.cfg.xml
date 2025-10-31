@@ -37,10 +37,6 @@
     <named-query name="Category.findById">
         <query>select e from Category e where e.id = :id</query>
     </named-query>
-    <named-query name="MetaData.findById">
-        <query>SELECT e FROM MetaData e where e.id = :id
-        </query>
-    </named-query>
     <named-query name="ArticularItem.findById">
         <query>SELECT e FROM ArticularItem e
 
@@ -63,8 +59,6 @@
         <query>SELECT e FROM Item e
 
             LEFT JOIN FETCH e.articularItems ai
-
-            LEFT JOIN FETCH e.metaData md
 
             LEFT JOIN FETCH e.posts p
             LEFT JOIN FETCH e.reviews re
@@ -520,7 +514,6 @@
     <entity class="com.b2c.prototype.modal.entity.option.ZoneOption" />
     <entity class="com.b2c.prototype.modal.entity.option.TimeDurationOption" />
 
-    <entity class="com.b2c.prototype.modal.entity.item.MetaData" />
     <entity class="com.b2c.prototype.modal.entity.item.ArticularItem" />
     <entity class="com.b2c.prototype.modal.entity.item.ArticularGroup" />
     <entity class="com.b2c.prototype.modal.entity.item.Item" />

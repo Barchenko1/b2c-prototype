@@ -12,7 +12,6 @@ import com.b2c.prototype.modal.dto.payload.order.single.CustomerSingleDeliveryOr
 import com.b2c.prototype.modal.dto.payload.order.PaymentDto;
 import com.b2c.prototype.modal.dto.payload.item.PriceDto;
 import com.b2c.prototype.modal.dto.payload.user.UserDetailsDto;
-import com.b2c.prototype.modal.dto.payload.order.ResponseCreditCardDto;
 import com.b2c.prototype.modal.dto.payload.order.single.ResponseCustomerOrderDetails;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
@@ -316,7 +315,7 @@ class DeliveryArticularItemQuantityManagerTest {
     private ContactInfoDto getContactInfoDto() {
         return ContactInfoDto.builder()
                 .contactPhone(ContactPhoneDto.builder()
-                        .countryPhoneCode("USA")
+//                        .countryPhoneCode("USA")
                         .phoneNumber("newPhoneNumber")
                         .build())
                 .firstName("newName")
@@ -350,16 +349,16 @@ class DeliveryArticularItemQuantityManagerTest {
                 .build();
     }
 
-    private ResponseCreditCardDto getResponseCreditCardDto() {
-        return ResponseCreditCardDto.builder()
-                .cardNumber("1234-5678-9012-3456")
-                .monthOfExpire(6)
-                .yearOfExpire(28)
-                .isActive(true)
-                .ownerName("John")
-                .ownerSecondName("Doe")
-                .build();
-    }
+//    private ResponseCreditCardDto getResponseCreditCardDto() {
+//        return ResponseCreditCardDto.builder()
+//                .cardNumber("1234-5678-9012-3456")
+//                .monthOfExpire(6)
+//                .yearOfExpire(28)
+//                .isActive(true)
+//                .ownerName("John")
+//                .ownerSecondName("Doe")
+//                .build();
+//    }
 
     private PaymentDto getPaymentDto() {
         return PaymentDto.builder()
@@ -390,8 +389,8 @@ class DeliveryArticularItemQuantityManagerTest {
 
     private UserDetailsDto getUserDetailsDto() {
         return UserDetailsDto.builder()
-                .creditCard(getCreditCardDto())
-                .address(getAddressDto())
+//                .creditCard(getCreditCardDto())
+//                .address(getAddressDto())
                 .contactInfo(getContactInfoDto())
                 .build();
     }

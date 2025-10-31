@@ -15,7 +15,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class DiscountControllerE2ETest extends BasicE2ETest {
 
-    private static final String URL_TEMPLATE = "/api/v1/discount";
+    private static final String URL_TEMPLATE = "/api/v1/item/discount";
 
     @Test
     @DataSet(value = "datasets/e2e/item/discount/emptyE2EDiscountDataSet.yml", cleanBefore = true)

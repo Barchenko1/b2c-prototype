@@ -47,7 +47,7 @@ class ItemDaoTest extends AbstractDaoTest {
     public void persistEntity_success() {
         Item entity = getItem();
         entity.setId(0);
-        entity.getMetaData().setId(0);
+//        entity.getMetaData().setId(0);
 //        entity.getMetaData().getBrand().setId(0);
 //        entity.getMetaData().getItemType().setId(0);
 //        entity.getMetaData().getCategory().setId(0);
@@ -285,7 +285,7 @@ class ItemDaoTest extends AbstractDaoTest {
         Item item = Item.builder()
                 .id(1L)
                 .itemUniqId("123")
-                .metaData(metaData)
+//                .metaData(metaData)
                 .articularItems(List.of(articularItem))
                 .build();
         addReview(item);

@@ -46,7 +46,6 @@
     <entity class="com.b2c.prototype.modal.entity.option.ZoneOption" />
     <entity class="com.b2c.prototype.modal.entity.option.TimeDurationOption" />
 
-    <entity class="com.b2c.prototype.modal.entity.item.MetaData" />
     <entity class="com.b2c.prototype.modal.entity.item.ArticularItem" />
     <entity class="com.b2c.prototype.modal.entity.item.ArticularGroup" />
     <entity class="com.b2c.prototype.modal.entity.item.Item" />

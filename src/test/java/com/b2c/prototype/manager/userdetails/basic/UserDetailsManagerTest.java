@@ -6,7 +6,6 @@ import com.b2c.prototype.modal.dto.payload.order.ContactPhoneDto;
 import com.b2c.prototype.modal.dto.payload.order.CreditCardDto;
 import com.b2c.prototype.modal.dto.payload.user.RegistrationUserDetailsDto;
 import com.b2c.prototype.modal.dto.payload.user.UserDetailsDto;
-import com.b2c.prototype.modal.dto.payload.user.ResponseUserDetailsDto;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
@@ -88,7 +87,7 @@ class UserDetailsManagerTest {
         UserDetailsDto userDetailsDto = getUserDetailsDto();
         UserDetails userDetails = getUserDetails();
 
-        ResponseUserDetailsDto result = userDetailsManager.getUserDetailsByUserId(userId);
+        UserDetailsDto result = userDetailsManager.getUserDetailsByUserId(userId);
 
         assertEquals(userDetailsDto, result);
     }
@@ -98,7 +97,7 @@ class UserDetailsManagerTest {
         UserDetailsDto userDetailsDto = getUserDetailsDto();
         UserDetails userDetails = getUserDetails();
 
-        List<ResponseUserDetailsDto> result = userDetailsManager.getResponseUserDetails();
+        List<UserDetailsDto> result = userDetailsManager.getUserDetails();
 
         assertNotNull(result);
         assertEquals(1, result.size());
@@ -107,31 +106,31 @@ class UserDetailsManagerTest {
 
     private UserDetailsDto getUserDetailsDto() {
         return UserDetailsDto.builder()
-                .address(AddressDto.builder()
-//                        .country("+11")
-                        .city("city")
-                        .street("street")
-                        .buildingNumber("1")
-                        .florNumber(9)
-                        .apartmentNumber(101)
-                        .zipCode("90000")
-                        .build())
+//                .address(AddressDto.builder()
+////                        .country("+11")
+//                        .city("city")
+//                        .street("street")
+//                        .buildingNumber("1")
+//                        .florNumber(9)
+//                        .apartmentNumber(101)
+//                        .zipCode("90000")
+//                        .build())
                 .contactInfo(ContactInfoDto.builder()
                         .firstName("name")
                         .lastName("lastName")
                         .email("email@email.com")
                         .contactPhone(ContactPhoneDto.builder()
-                                .countryPhoneCode("+11")
+//                                .countryPhoneCode("+11")
                                 .phoneNumber("phoneNumber")
                                 .build())
                         .build())
-                .creditCard(CreditCardDto.builder()
-                        .cardNumber("4444-1111-2222-3333")
-                        .monthOfExpire(6)
-                        .yearOfExpire(28)
-                        .ownerName("name")
-                        .ownerSecondName("secondName")
-                        .build())
+//                .creditCard(CreditCardDto.builder()
+//                        .cardNumber("4444-1111-2222-3333")
+//                        .monthOfExpire(6)
+//                        .yearOfExpire(28)
+//                        .ownerName("name")
+//                        .ownerSecondName("secondName")
+//                        .build())
                 .build();
     }
 
@@ -191,39 +190,4 @@ class UserDetailsManagerTest {
                 .build();
     }
 
-    Function<UserDetails, UserDetailsDto> transformationFunction = userDetails -> {
-        ContactInfo contactInfo = userDetails.getContactInfo();
-        ContactInfoDto contactInfoDto = ContactInfoDto.builder()
-                .contactPhone(ContactPhoneDto.builder()
-                        .phoneNumber(contactInfo.getContactPhone().getPhoneNumber())
-                        .countryPhoneCode(contactInfo.getContactPhone().getCountryPhoneCode().getValue())
-                        .build())
-                .firstName(userDetails.getContactInfo().getFirstName())
-                .lastName(userDetails.getContactInfo().getLastName())
-                .build();
-        Address address = (Address) userDetails.getUserAddresses().stream().toList().get(0).getAddress();
-        AddressDto addressDto = AddressDto.builder()
-                .apartmentNumber(address.getApartmentNumber())
-                .buildingNumber(address.getBuildingNumber())
-                .city(address.getCity())
-                .zipCode(address.getZipCode())
-                .street(address.getStreet())
-                .florNumber(address.getFlorNumber())
-//                .country(address.getCountry().getValue())
-                .build();
-        UserCreditCard userCreditCard = userDetails.getUserCreditCards().stream().toList().get(0);
-        CreditCard creditCard = userCreditCard.getCreditCard();
-        CreditCardDto creditCardDto = CreditCardDto.builder()
-                .cardNumber(creditCard.getCardNumber())
-                .monthOfExpire(creditCard.getMonthOfExpire())
-                .yearOfExpire(creditCard.getYearOfExpire())
-                .ownerSecondName(creditCard.getOwnerSecondName())
-                .ownerName(creditCard.getOwnerName())
-                .build();
-        return UserDetailsDto.builder()
-                .contactInfo(contactInfoDto)
-                .creditCard(creditCardDto)
-                .address(addressDto)
-                .build();
-    };
 }

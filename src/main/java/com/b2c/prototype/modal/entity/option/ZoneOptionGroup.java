@@ -30,31 +30,21 @@ import java.util.Set;
 @Table(name = "zone_option_group")
 @NamedQueries({
         @NamedQuery(
-                name = "ZoneOptionGroup.findByValueWithOptionItems",
-                query = "SELECT og FROM OptionGroup og " +
-                        "LEFT JOIN FETCH og.optionItems oi " +
-                        "LEFT JOIN FETCH og.optionItemCosts oic " +
-                        "WHERE og.value = :value"
+                name = "ZoneOptionGroup.findByValue",
+                query = "SELECT zog FROM ZoneOptionGroup zog " +
+                        "LEFT JOIN FETCH zog.country zogc " +
+                        "LEFT JOIN FETCH zog.zoneOptions zogz " +
+                        "LEFT JOIN FETCH zogz.price zogzp " +
+                        "LEFT JOIN FETCH zogzp.currency zogzpc " +
+                        "WHERE zog.value = :value"
         ),
         @NamedQuery(
-                name = "ZoneOptionGroup.findWithOptionItems",
-                query = "SELECT og FROM OptionGroup og " +
-                        "LEFT JOIN FETCH og.optionItems oi " +
-                        "LEFT JOIN FETCH og.optionItemCosts oic " +
-                        "LEFT JOIN FETCH oi.articularItems oia " +
-                        "LEFT JOIN FETCH oic.articularItems oica"
-        ),
-        @NamedQuery(
-                name = "ZoneOptionGroup.withOptionItemsAndArticularItems",
-                query = "SELECT DISTINCT og FROM OptionGroup og " +
-                        "LEFT JOIN FETCH og.optionItems oi " +
-                        "LEFT JOIN FETCH oi.articularItems ai " +
-                        "LEFT JOIN FETCH ai.optionItems ao " +
-                        "LEFT JOIN FETCH ai.totalPrice t " +
-                        "LEFT JOIN FETCH ai.fullPrice f " +
-                        "LEFT JOIN FETCH t.currency c1 " +
-                        "LEFT JOIN FETCH f.currency c2 " +
-                        "WHERE og.value = :value"
+                name = "ZoneOptionGroup.all",
+                query = "SELECT zog FROM ZoneOptionGroup zog " +
+                        "LEFT JOIN FETCH zog.country zogc " +
+                        "LEFT JOIN FETCH zog.zoneOptions zogz " +
+                        "LEFT JOIN FETCH zogz.price zogzp " +
+                        "LEFT JOIN FETCH zogzp.currency zogzpc "
         )
 })
 @Data

@@ -33,9 +33,14 @@ import java.util.Set;
         @NamedQuery(
                 name = "UserDetails.findByUserId",
                 query = "SELECT DISTINCT u FROM UserDetails u " +
-                        "LEFT JOIN FETCH u.contactInfo " +
-                        "LEFT JOIN FETCH u.userAddresses " +
-                        "LEFT JOIN FETCH u.userCreditCards " +
+                        "LEFT JOIN FETCH u.contactInfo uc " +
+                        "LEFT JOIN FETCH uc.contactPhone ucp " +
+                        "LEFT JOIN FETCH ucp.countryPhoneCode ucpc " +
+                        "LEFT JOIN FETCH u.userAddresses ua " +
+                        "LEFT JOIN FETCH ua.address uac " +
+                        "LEFT JOIN FETCH uac.country uacc " +
+                        "LEFT JOIN FETCH u.userCreditCards ucc " +
+                        "LEFT JOIN FETCH ucc.creditCard uccc " +
                         "LEFT JOIN FETCH u.devices d " +
                         "WHERE u.userId = :userId"
         ),
@@ -91,7 +96,7 @@ public class UserDetails {
     private long id;
     @Column(name = "user_id", nullable = false, unique = true, updatable = false)
     private String userId;
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String username;
     @Column(nullable = false)
     private LocalDateTime dateOfCreate;

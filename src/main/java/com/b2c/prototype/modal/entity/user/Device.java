@@ -38,4 +38,5 @@ public class Device {
     private String timezone;
     private String language;
     private String platform;
+    private boolean isThisDevice;
 }

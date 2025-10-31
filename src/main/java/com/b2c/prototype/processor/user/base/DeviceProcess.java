@@ -2,7 +2,6 @@ package com.b2c.prototype.processor.user.base;
 
 import com.b2c.prototype.manager.userdetails.IDeviceManager;
 import com.b2c.prototype.modal.dto.payload.user.DeviceDto;
-import com.b2c.prototype.modal.dto.payload.user.ResponseDeviceDto;
 import com.b2c.prototype.processor.user.IDeviceProcess;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ServerWebExchange;
@@ -38,7 +37,7 @@ public class DeviceProcess implements IDeviceProcess {
     }
 
     @Override
-    public List<ResponseDeviceDto> getDevicesByUserId(Map<String, String> requestParams,
+    public List<DeviceDto> getDevicesByUserId(Map<String, String> requestParams,
                                                       ServerWebExchange exchange) {
         String userId = requestParams.get("userId");
         String clientIp = getClientIp(exchange);

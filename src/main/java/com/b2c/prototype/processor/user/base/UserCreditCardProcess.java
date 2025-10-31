@@ -2,8 +2,6 @@ package com.b2c.prototype.processor.user.base;
 
 import com.b2c.prototype.manager.userdetails.IUserCreditCardManager;
 import com.b2c.prototype.modal.dto.payload.user.UserCreditCardDto;
-import com.b2c.prototype.modal.dto.payload.order.ResponseCreditCardDto;
-import com.b2c.prototype.modal.dto.payload.user.ResponseUserCreditCardDto;
 import com.b2c.prototype.processor.user.IUserCreditCardProcess;
 import org.springframework.stereotype.Service;
 
@@ -45,19 +43,19 @@ public class UserCreditCardProcess implements IUserCreditCardProcess {
     }
 
     @Override
-    public ResponseUserCreditCardDto getDefaultUserCreditCard(Map<String, String> requestParams) {
+    public UserCreditCardDto getDefaultUserCreditCard(Map<String, String> requestParams) {
         String userId = requestParams.get("userId");
         return creditCardManager.getDefaultUserCreditCard(userId);
     }
 
     @Override
-    public List<ResponseUserCreditCardDto> getUserCreditCardListByUserId(Map<String, String> requestParams) {
+    public List<UserCreditCardDto> getUserCreditCardListByUserId(Map<String, String> requestParams) {
         String userId = requestParams.get("userId");
         return creditCardManager.getCreditCardListByUserId(userId);
     }
 
     @Override
-    public List<ResponseCreditCardDto> getAllCreditCardByCardNumber(Map<String, String> requestParams) {
+    public List<UserCreditCardDto> getAllCreditCardByCardNumber(Map<String, String> requestParams) {
         String cardNumber = requestParams.get("cardNumber");
         return creditCardManager.getAllCreditCardByCardNumber(cardNumber);
     }

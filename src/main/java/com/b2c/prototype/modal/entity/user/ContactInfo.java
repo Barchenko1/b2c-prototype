@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -17,6 +18,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -33,12 +36,11 @@ public class ContactInfo {
     private String firstName;
     private String lastName;
     private String email;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
     @JoinColumn(name = "contact_phone_id")
     private ContactPhone contactPhone;
     private boolean isEmailVerified;
     private boolean isContactPhoneVerified;
     @Column(name = "birthday_date")
-    @Temporal(TemporalType.DATE)
-    private Date birthdayDate;
+    private LocalDate birthdayDate;
 }

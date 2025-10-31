@@ -1,11 +1,7 @@
 package com.b2c.prototype.processor.option.base;
 
 import com.b2c.prototype.manager.option.IZoneOptionManager;
-import com.b2c.prototype.modal.dto.payload.option.group.OptionItemGroupDto;
 import com.b2c.prototype.modal.dto.payload.option.group.ZoneOptionGroupDto;
-import com.b2c.prototype.modal.dto.payload.option.item.ZoneOptionDto;
-import com.b2c.prototype.modal.entity.option.OptionGroup;
-import com.b2c.prototype.modal.entity.option.ZoneOptionGroup;
 import com.b2c.prototype.processor.option.IZoneOptionProcess;
 import com.b2c.prototype.transform.order.IOrderTransformService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,7 +28,7 @@ public class ZoneOptionProcess implements IZoneOptionProcess {
 
     @Override
     public void persistEntity(Map<String, Object> payload) {
-        ZoneOptionGroup entity = objectMapper.convertValue(payload, ZoneOptionGroup.class);
+        ZoneOptionGroupDto entity = objectMapper.convertValue(payload, ZoneOptionGroupDto.class);
         zoneOptionManager.persistEntity(entity);
     }
 

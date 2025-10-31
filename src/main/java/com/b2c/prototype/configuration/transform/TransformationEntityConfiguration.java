@@ -1,14 +1,9 @@
 package com.b2c.prototype.configuration.transform;
 
 import com.b2c.prototype.modal.base.constant.AbstractConstantEntity;
-import com.b2c.prototype.modal.dto.payload.item.ResponseMetaDataDto;
 import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
-import com.b2c.prototype.modal.entity.item.MetaData;
-import com.b2c.prototype.modal.entity.payment.MultiCurrencyPriceInfo;
 import com.b2c.prototype.modal.constant.FeeType;
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
-import com.b2c.prototype.modal.dto.common.SearchFieldUpdateCollectionEntityDto;
-import com.b2c.prototype.modal.dto.common.SearchFieldUpdateEntityDto;
 import com.b2c.prototype.modal.dto.payload.commission.MinMaxCommissionDto;
 import com.b2c.prototype.modal.dto.payload.order.AddressDto;
 import com.b2c.prototype.modal.dto.payload.item.ArticularItemDto;
@@ -25,9 +20,7 @@ import com.b2c.prototype.modal.dto.payload.review.ReviewCommentDto;
 import com.b2c.prototype.modal.dto.payload.user.DeviceDto;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.discount.InitDiscountDto;
-import com.b2c.prototype.modal.dto.payload.item.MetaDataDto;
 import com.b2c.prototype.modal.dto.payload.message.MessageDto;
-import com.b2c.prototype.modal.dto.payload.option.group.OptionItemGroupDto;
 import com.b2c.prototype.modal.dto.payload.item.PriceDto;
 import com.b2c.prototype.modal.dto.payload.user.RegistrationUserDetailsDto;
 import com.b2c.prototype.modal.dto.payload.review.ReviewDto;
@@ -37,20 +30,11 @@ import com.b2c.prototype.modal.dto.payload.user.UserAddressDto;
 import com.b2c.prototype.modal.dto.payload.user.UserCreditCardDto;
 import com.b2c.prototype.modal.dto.payload.user.UserDetailsDto;
 import com.b2c.prototype.modal.dto.payload.option.item.ZoneOptionDto;
-import com.b2c.prototype.modal.dto.payload.constant.BrandDto;
-import com.b2c.prototype.modal.dto.payload.constant.CategoryValueDto;
-import com.b2c.prototype.modal.dto.payload.constant.ItemTypeDto;
-import com.b2c.prototype.modal.dto.payload.item.ResponseArticularItemDto;
 import com.b2c.prototype.modal.dto.payload.commission.ResponseMinMaxCommissionDto;
-import com.b2c.prototype.modal.dto.payload.order.ResponseCreditCardDto;
-import com.b2c.prototype.modal.dto.payload.user.ResponseDeviceDto;
 import com.b2c.prototype.modal.dto.payload.message.ResponseMessageOverviewDto;
 import com.b2c.prototype.modal.dto.payload.message.ResponseMessagePayloadDto;
 import com.b2c.prototype.modal.dto.payload.review.ResponseReviewDto;
 import com.b2c.prototype.modal.dto.payload.store.ResponseStoreDto;
-import com.b2c.prototype.modal.dto.payload.user.ResponseUserAddressDto;
-import com.b2c.prototype.modal.dto.payload.user.ResponseUserCreditCardDto;
-import com.b2c.prototype.modal.dto.payload.user.ResponseUserDetailsDto;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.UserAddress;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
@@ -83,9 +67,6 @@ import org.hibernate.Session;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -94,7 +75,6 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.b2c.prototype.util.Util.getUUID;
 
@@ -213,12 +193,6 @@ public class TransformationEntityConfiguration {
 //        transformationFunctionService.addTransformationFunction(Address.class, AddressDto.class, mapAddressToAddressDtoFunction());
 //    }
 //
-//    private void loadCreditCardFunctions(ITransformationFunctionService transformationFunctionService) {
-//        transformationFunctionService.addTransformationFunction(UserCreditCardDto.class, UserCreditCard.class, mapUserCreditCardDtoToUserCreditCardFunction());
-//        transformationFunctionService.addTransformationFunction(UserCreditCard.class, ResponseUserCreditCardDto.class, mapUserCreditCardToResponseUserCardDtoFunction());
-//        transformationFunctionService.addTransformationFunction(CreditCard.class, ResponseCreditCardDto.class, mapCreditCardToResponseCardDtoFunction());
-//    }
-//
 //    private void loadDeviceFunctions(ITransformationFunctionService transformationFunctionService) {
 //        transformationFunctionService.addTransformationFunction(DeviceDto.class, Device.class, mapDeviceDtoToDeviceFunction());
 //        transformationFunctionService.addTransformationFunction(Device.class, ResponseDeviceDto.class, mapDeviceToResponseDeviceDtoFunction());
@@ -322,13 +296,6 @@ public class TransformationEntityConfiguration {
                 .build();
     }
 
-    private Function<UserAddress, ResponseUserAddressDto> mapUserAddressToResponseUserAddressDtoFunction() {
-        return userAddress -> ResponseUserAddressDto.builder()
-                .address(mapAddressToAddressDtoFunction().apply(userAddress.getAddress()))
-                .isDefault(userAddress.isDefault())
-                .build();
-    }
-
     private Function<UserAddress, AddressDto> mapUserAddressToAddressDtoDtoFunction() {
         return userAddress -> mapAddressToAddressDtoFunction().apply(userAddress.getAddress());
     }
@@ -363,27 +330,6 @@ public class TransformationEntityConfiguration {
         return userCreditCardDto -> UserCreditCard.builder()
                 .creditCard(mapCreditCardDtoToCreditCardFunction().apply(userCreditCardDto.getCreditCard()))
                 .isDefault(userCreditCardDto.isDefault())
-                .build();
-    }
-
-    private Function<UserCreditCard, ResponseUserCreditCardDto> mapUserCreditCardToResponseUserCardDtoFunction() {
-        return userCreditCard -> {
-            CreditCard creditCard = userCreditCard.getCreditCard();
-            return ResponseUserCreditCardDto.builder()
-                    .creditCard(mapCreditCardToResponseCardDtoFunction().apply(creditCard))
-                    .isDefault(userCreditCard.isDefault())
-                    .build();
-        };
-    }
-
-    private Function<CreditCard, ResponseCreditCardDto> mapCreditCardToResponseCardDtoFunction() {
-        return creditCard -> ResponseCreditCardDto.builder()
-                .cardNumber(creditCard.getCardNumber())
-                .monthOfExpire(creditCard.getMonthOfExpire())
-                .yearOfExpire(creditCard.getYearOfExpire())
-                .isActive(CardUtil.isCardActive(creditCard.getMonthOfExpire(), creditCard.getYearOfExpire()))
-                .ownerName(creditCard.getOwnerName())
-                .ownerSecondName(creditCard.getOwnerSecondName())
                 .build();
     }
 
@@ -429,84 +375,6 @@ public class TransformationEntityConfiguration {
         };
     }
 
-    Function<UserDetails, ContactInfoDto> mapUserDetailsToContactInfoDtoFunction() {
-        return userDetails -> {
-            ContactInfo contactInfo = userDetails.getContactInfo();
-            ContactPhone contactPhone = contactInfo.getContactPhone();
-            return ContactInfoDto.builder()
-                    .firstName(contactInfo.getFirstName())
-                    .lastName(contactInfo.getLastName())
-                    .email(contactInfo.getEmail())
-                    .birthdayDate(contactInfo.getBirthdayDate())
-                    .contactPhone(ContactPhoneDto.builder()
-                            .phoneNumber(contactPhone.getPhoneNumber())
-                            .countryPhoneCode(contactPhone.getCountryPhoneCode().getValue())
-                            .build())
-                    .build();
-        };
-    }
-
-    private Function<RegistrationUserDetailsDto, UserDetails> mapRegistrationUserDetailsDtoToUserDetailsFunction() {
-        return registrationUserDetailsDto -> {
-            ContactInfo contactInfo = ContactInfo.builder()
-                    .email(registrationUserDetailsDto.getEmail())
-                    .build();
-            return UserDetails.builder()
-//                    .username(getEmailPrefix(registrationUserDetailsDto.getEmail()))
-                    .userId(getUUID())
-//                    .dateOfCreate(getCurrentTimeMillis())
-                    .contactInfo(contactInfo)
-                    .build();
-        };
-    }
-
-    private BiFunction<Session, SearchFieldUpdateEntityDto<UserDetailsDto>, UserDetails> mapSearchFieldUpdateEntityDtoToUserDetailsFunction() {
-        return (session, userDetailsDtoSearchFieldUpdateEntityDto) -> mapUserDetailsDtoToUserDetailsFunction()
-                .apply(session, userDetailsDtoSearchFieldUpdateEntityDto.getUpdateDto());
-    }
-
-    private BiFunction<Session, UserDetailsDto, UserDetails> mapUserDetailsDtoToUserDetailsFunction() {
-        return (session, userDetailsDto) -> {
-//            ContactInfo contactInfo = mapContactInfoDtoToContactInfoFunction().apply(session, userDetailsDto.getContactInfo());
-            ContactInfo contactInfo = null;
-            Address address = mapAddressDtoToAddressFunction().apply(session, userDetailsDto.getAddress());
-            UserAddress userAddress = UserAddress.builder()
-                    .address(address)
-                    .isDefault(false)
-                    .build();
-            UserCreditCard userCreditCard = mapCreditCardDtoUserCreditCardDtoFunction().apply(userDetailsDto.getCreditCard());
-            return UserDetails.builder()
-//                    .username(getEmailPrefix(userDetailsDto.getContactInfo().getEmail()))
-                    .userId(getUUID())
-//                    .dateOfCreate(getCurrentTimeMillis())
-                    .contactInfo(contactInfo)
-                    .userAddresses(Set.of(userAddress))
-                    .userCreditCards(Set.of(userCreditCard))
-                    .build();
-        };
-    }
-
-    private Function<UserDetails, ResponseUserDetailsDto> mapUserDetailsToUserResponseUserDetailsDtoFunction() {
-        return userDetails -> {
-            ContactInfoDto contactInfoDto = mapUserDetailsToContactInfoDtoFunction().apply(userDetails);
-            List<UserAddressDto> addressDtoList = userDetails.getUserAddresses().stream()
-                    .map(mapUserAddressToUserAddressDtoFunction())
-                    .toList();
-            List<ResponseUserCreditCardDto> responseCreditCardDtoList = userDetails.getUserCreditCards().stream()
-                    .map(ucc -> mapUserCreditCardToResponseUserCardDtoFunction().apply(ucc))
-                    .toList();
-            List<ResponseDeviceDto> responseDeviceDtoList = userDetails.getDevices().stream()
-                    .map(d -> mapDeviceToResponseDeviceDtoFunction().apply(d))
-                    .toList();
-            return ResponseUserDetailsDto.builder()
-                    .contactInfo(contactInfoDto)
-                    .creditCards(responseCreditCardDtoList)
-                    .addresses(addressDtoList)
-                    .devices(responseDeviceDtoList)
-                    .build();
-        };
-    }
-
     private Function<DeviceDto, Device> mapDeviceDtoToDeviceFunction() {
         return deviceDto -> Device.builder()
                 .loginTime(LocalDateTime.now())
@@ -516,19 +384,6 @@ public class TransformationEntityConfiguration {
                 .timezone(deviceDto.getTimezone())
                 .language(deviceDto.getLanguage())
                 .platform(deviceDto.getPlatform())
-                .build();
-    }
-
-    private Function<Device, ResponseDeviceDto> mapDeviceToResponseDeviceDtoFunction() {
-        return device -> ResponseDeviceDto.builder()
-                .ipAddress(device.getIpAddress())
-                .loginTime(device.getLoginTime().atZone(ZoneId.of("UTC")))
-                .screenHeight(device.getScreenHeight())
-                .screenWidth(device.getScreenWidth())
-                .userAgent(device.getUserAgent())
-                .timezone(device.getTimezone())
-                .language(device.getLanguage())
-                .platform(device.getPlatform())
                 .build();
     }
 
@@ -764,152 +619,6 @@ public class TransformationEntityConfiguration {
 //                .collect(Collectors.toSet());
 //    }
 
-    private BiFunction<Session, MetaDataDto, MetaData> mapItemDataDtoToItemDataFunction() {
-        return (session, itemDataDto) -> {
-//            Category category = sessionEntityFetcher.fetchOptionalCategory(session, itemDataDto.getCategory().getValue())
-//                    .orElse(Category.builder()
-//                            .label(itemDataDto.getCategory().getLabel())
-//                            .value(itemDataDto.getCategory().getValue())
-//                            .build());
-//            Brand brand = sessionEntityFetcher.fetchOptionalBrand(session, itemDataDto.getBrand().getValue())
-//                    .orElse(Brand.builder()
-//                            .label(itemDataDto.getBrand().getLabel())
-//                            .value(itemDataDto.getBrand().getValue())
-//                            .build());
-//            ItemType itemType = sessionEntityFetcher.fetchOptionalItemType(session, itemDataDto.getItemType().getValue())
-//                    .orElse(ItemType.builder()
-//                            .label(itemDataDto.getItemType().getLabel())
-//                            .value(itemDataDto.getItemType().getValue())
-//                            .build());
-
-//            Set<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoSet = getOptionGroupOptionItemSetDtoSet(itemDataDto.getArticularItemSet());
-            Set<OptionItemGroupDto> optionItemGroupDtoSet = new HashSet<>();
-//            Set<OptionGroup> optionGroups = mapOptionGroupOptionItemSetDtoListToOptionGroupSet().apply(session, null);
-//            Set<OptionItemDto> optionGroups = new HashSet<>();
-//            Set<OptionItem> optionItems = optionGroups.stream()
-//                    .flatMap(og -> og.getOptionItems().stream())
-//                    .collect(Collectors.toSet());
-
-            Set<ArticularItem> articularItemSet = mapArticularItemSet(
-                    session,
-                    itemDataDto.getArticularItemSet(),
-                    null,
-                    Collections.emptyMap());
-
-            return MetaData.builder()
-                    .description(itemDataDto.getDescription())
-//                    .category(category)
-//                    .brand(brand)
-//                    .itemType(itemType)
-//                    .articularItemSet(articularItemSet)
-                    .build();
-        };
-    }
-
-    private BiFunction<Session, SearchFieldUpdateCollectionEntityDto<ArticularItemDto>, MetaData> mapSearchFieldUpdateCollectionEntityDtoToItemDataFunction() {
-        return ((session, searchFieldUpdateCollectionEntityDto) -> {
-            String itemId = searchFieldUpdateCollectionEntityDto.getSearchField();
-            List<ArticularItemDto> articularItemDtoList = searchFieldUpdateCollectionEntityDto.getUpdateDtoSet();
-            Set<ArticularItemDto> articularItemDtoSet = new HashSet<>(articularItemDtoList);
-//            MetaData existingMetaData = queryService.getNamedQueryEntity(
-//                    session,
-//                    MetaData.class,
-//                    "MetaData.findItemDataWithFullRelations",
-//                    new Parameter("itemId", itemId));
-            MetaData existingMetaData = null;
-//            Map<String, ArticularItem> existingArticularItemMap = existingMetaData.getArticularItemSet().stream()
-//                    .collect(Collectors.toMap(
-//                            ArticularItem::getArticularUniqId,
-//                            articularItem -> articularItem
-//                    ));
-//            Set<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoSet = getOptionGroupOptionItemSetDtoSet(articularItemDtoSet);
-            Set<OptionItemGroupDto> optionItemGroupDtoSet = new HashSet<>();
-//            Set<OptionGroup> optionGroups = mapOptionGroupOptionItemSetDtoListToOptionGroupSet().apply(session, null);
-//            Set<OptionItem> optionItems = optionGroups.stream()
-//                    .flatMap(og -> og.getOptionItems().stream())
-//                    .collect(Collectors.toSet());
-
-            Set<ArticularItem> articularItemSet = mapArticularItemSet(
-                    session,
-                    articularItemDtoSet,
-                    null,
-                    null);
-//            List<ArticularItem> nonUpdatedArticularList = existingMetaData.getArticularItemSet().stream()
-//                    .filter(existingItem -> articularItemSet.stream()
-//                            .noneMatch(newItem -> newItem.getArticularUniqId().equals(existingItem.getArticularUniqId())))
-//                    .toList();
-//            Set<ArticularItem> mergedArticularItemSet = Stream.concat(articularItemSet.stream(), nonUpdatedArticularList.stream())
-//                            .collect(Collectors.toSet());
-
-            return MetaData.builder()
-                    .id(existingMetaData.getId())
-//                    .itemId(existingMetaData.getItemId())
-                    .description(existingMetaData.getDescription())
-//                    .category(existingMetaData.getCategory())
-//                    .brand(existingMetaData.getBrand())
-//                    .itemType(existingMetaData.getItemType())
-//                    .articularItemSet(mergedArticularItemSet)
-                    .build();
-        });
-    }
-
-    private BiFunction<Session, SearchFieldUpdateEntityDto<MetaDataDto>, MetaData> mapSearchFieldUpdateEntityDtoToItemDataFunction() {
-        return (session, itemDataSearchFieldUpdateDto) -> {
-            String itemId = itemDataSearchFieldUpdateDto.getSearchField();
-            MetaDataDto metaDataDto = itemDataSearchFieldUpdateDto.getUpdateDto();
-//            MetaData existingMetaData = queryService.getNamedQueryEntity(
-//                    session,
-//                    MetaData.class,
-//                    "MetaData.findItemDataWithFullRelations",
-//                    new Parameter("itemId", itemId));
-            MetaData existingMetaData = null;
-//            Map<String, ArticularItem> existingArticularItemMap = existingMetaData.getArticularItemSet().stream()
-//                    .collect(Collectors.toMap(
-//                            ArticularItem::getArticularUniqId,
-//                            articularItem -> articularItem
-//                    ));
-
-//            Category category = sessionEntityFetcher.fetchOptionalCategory(session, metaDataDto.getCategory().getValue())
-//                    .orElse(Category.builder()
-//                            .label(metaDataDto.getCategory().getLabel())
-//                            .value(metaDataDto.getCategory().getValue())
-//                            .build());
-//            Brand brand = sessionEntityFetcher.fetchOptionalBrand(session, metaDataDto.getBrand().getValue())
-//                    .orElse(Brand.builder()
-//                            .label(metaDataDto.getBrand().getLabel())
-//                            .value(metaDataDto.getBrand().getValue())
-//                            .build());
-//            ItemType itemType = sessionEntityFetcher.fetchOptionalItemType(session, metaDataDto.getItemType().getValue())
-//                    .orElse(ItemType.builder()
-//                            .label(metaDataDto.getItemType().getLabel())
-//                            .value(metaDataDto.getItemType().getValue())
-//                            .build());
-
-//            Set<OptionGroupOptionItemSetDto> optionGroupOptionItemSetDtoSet = getOptionGroupOptionItemSetDtoSet(metaDataDto.getArticularItemSet());
-            Set<OptionItemGroupDto> optionItemGroupDtoSet = new HashSet<>();
-//            Set<OptionGroup> optionGroups = mapOptionGroupOptionItemSetDtoListToOptionGroupSet().apply(session, null);
-//            Set<OptionItem> optionItems = optionGroups.stream()
-//                    .flatMap(og -> og.getOptionItems().stream())
-//                    .collect(Collectors.toSet());
-
-            Set<ArticularItem> articularItemSet = mapArticularItemSet(
-                    session,
-                    metaDataDto.getArticularItemSet(),
-                    null,
-                    null);
-
-            return MetaData.builder()
-                    .id(existingMetaData.getId())
-//                    .itemId(existingMetaData.getItemId())
-                    .description(metaDataDto.getDescription())
-//                    .category(category)
-//                    .brand(brand)
-//                    .itemType(itemType)
-//                    .articularItemSet(articularItemSet)
-                    .build();
-        };
-    }
-
     private Set<ArticularItem> mapArticularItemSet(Session session,
                                                    Set<ArticularItemDto> articularItemDtoSet,
                                                    Set<OptionItem> optionItems,
@@ -1127,41 +836,6 @@ public class TransformationEntityConfiguration {
                             .build();
                 })
                 .collect(Collectors.toList());
-    }
-
-
-    private Function<MetaData, ResponseMetaDataDto> mapItemDataToResponseItemDataDtoFunction() {
-        return itemData -> ResponseMetaDataDto.builder()
-//                .itemId(itemData.getItemId())
-                .description(itemData.getDescription())
-//                .brand(BrandDto.builder()
-//                        .label(itemData.getBrand().getLabel())
-//                        .value(itemData.getBrand().getValue())
-//                        .build())
-//                .itemType(ItemTypeDto.builder()
-//                        .label(itemData.getItemType().getLabel())
-//                        .value(itemData.getItemType().getValue())
-//                        .build())
-//                .category(CategoryValueDto.builder()
-//                        .label(itemData.getCategory().getLabel())
-//                        .value(itemData.getCategory().getValue())
-//                        .build())
-//                .articularItems(itemData.getArticularItemSet().stream()
-//                        .map(mapArticularItemToResponseArticularDto())
-//                        .collect(Collectors.toSet()))
-                .build();
-    }
-
-    private Function<ArticularItem, ResponseArticularItemDto> mapArticularItemToResponseArticularDto() {
-        return articularItem -> ResponseArticularItemDto.builder()
-                .articularId(articularItem.getArticularUniqId())
-                .productName(articularItem.getProductName())
-                .fullPrice(mapPriceToPriceDtoFunction().apply(articularItem.getFullPrice()))
-                .totalPrice(mapPriceToPriceDtoFunction().apply(articularItem.getTotalPrice()))
-                .status(mapArticularStatusToConstantPayloadDtoFunction().apply(articularItem.getStatus()))
-                .discount(mapDiscountToInitDiscountDto().apply(articularItem.getDiscount()))
-//                .options(mapOptionItemSetToSingleOptionItemDtoSetFunction().apply(articularItem.getOptionItems()))
-                .build();
     }
 
 //    private Function<Set<OptionItem>, Set<OptionGroupOptionItemSetDto>> mapOptionItemSetToSingleOptionItemDtoSetFunction() {

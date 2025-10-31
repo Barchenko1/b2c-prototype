@@ -72,7 +72,6 @@
         <mapping class="com.b2c.prototype.modal.entity.option.TimeDurationOption" />
 
         <mapping class="com.b2c.prototype.modal.entity.item.ArticularItem" />
-        <mapping class="com.b2c.prototype.modal.entity.item.MetaData" />
         <mapping class="com.b2c.prototype.modal.entity.item.Item" />
         <mapping class="com.b2c.prototype.modal.entity.item.ArticularItemQuantity" />
 

@@ -1,8 +1,6 @@
 package com.b2c.prototype.manager.userdetails;
 
 import com.b2c.prototype.modal.dto.payload.user.UserCreditCardDto;
-import com.b2c.prototype.modal.dto.payload.order.ResponseCreditCardDto;
-import com.b2c.prototype.modal.dto.payload.user.ResponseUserCreditCardDto;
 
 import java.util.List;
 
@@ -12,7 +10,7 @@ public interface IUserCreditCardManager {
     void setDefaultUserCreditCard(String userId, String cardNumber);
     void deleteCreditCardByUserId(String userId, String cardNumber);
 
-    ResponseUserCreditCardDto getDefaultUserCreditCard(String userId);
-    List<ResponseUserCreditCardDto> getCreditCardListByUserId(String userId);
-    List<ResponseCreditCardDto> getAllCreditCardByCardNumber(String cardNumber);
+    UserCreditCardDto getDefaultUserCreditCard(String userId);
+    List<UserCreditCardDto> getCreditCardListByUserId(String userId);
+    List<UserCreditCardDto> getAllCreditCardByCardNumber(String cardNumber);
 }

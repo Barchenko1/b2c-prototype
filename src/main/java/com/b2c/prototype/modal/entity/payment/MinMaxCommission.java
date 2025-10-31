@@ -52,7 +52,5 @@ public class MinMaxCommission {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(nullable = false)
     private Price changeCommissionPrice;
-//    @UpdateTimestamp
-//    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime lastUpdateTimestamp;
 }

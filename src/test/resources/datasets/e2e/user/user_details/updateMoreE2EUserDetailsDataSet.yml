@@ -1,0 +1,155 @@
+country_phone_code:
+  - id: 1
+    value: "+11"
+    label: "+11"
+contact_phone:
+  - id: 1
+    phone_number: "111-111-111"
+    country_phone_code_id: 1
+  - id: 2
+    phone_number: "333-333-333"
+    country_phone_code_id: 1
+contact_info:
+  - id: 1
+    first_name: "John"
+    last_name: "Doe"
+    email: "john.doe@example.com"
+    birthday_date: "1996-01-01"
+    is_contact_phone_verified: true
+    is_email_verified: true
+    contact_phone_id: 1
+  - id: 2
+    first_name: "John2"
+    last_name: "Doe2"
+    email: "john.doe2@example.com"
+    birthday_date: "1996-01-01"
+    is_contact_phone_verified: false
+    is_email_verified: false
+    contact_phone_id: 2
+user_details:
+  - id: 1
+    user_id: "111"
+    username: "john.doe"
+    date_of_create: "2024-03-03 12:00:00"
+    is_active: true
+    contact_info_id: 1
+  - id: 2
+    user_id: "123"
+    username: "john.doe2"
+    date_of_create: "2024-03-03 12:00:00"
+    is_active: false
+    contact_info_id: 2
+country:
+  - id: 1
+    label: "USA"
+    value: "USA"
+address:
+  - id: 1
+    street: "street"
+    building_number: 10
+    flor_number: 9
+    apartment_number: 201
+    zip_code: 90000
+    city: "city"
+    country_id: 1
+  - id: 2
+    street: "street2"
+    building_number: 10
+    flor_number: 9
+    apartment_number: 101
+    zip_code: 91000
+    city: "city2"
+    country_id: 1
+  - id: 3
+    street: "street3"
+    building_number: 3
+    flor_number: 3
+    apartment_number: 333
+    zip_code: 33000
+    city: "city3"
+    country_id: 1
+user_address:
+  - id: 1
+    address_id: 1
+    is_default: true
+    user_details_id: 1
+  - id: 2
+    address_id: 2
+    is_default: false
+    user_details_id: 2
+  - id: 2
+    address_id: 3
+    is_default: false
+    user_details_id: 2
+credit_card:
+  - id: 1
+    card_number: "4444-1111-2222-3333"
+    month_of_expire: 6
+    year_of_expire: 28
+    cvv: 123
+    owner_name: "John"
+    owner_second_name: "Doe"
+    is_active: true
+  - id: 2
+    card_number: "4444-1111-2222-2222"
+    month_of_expire: 9
+    year_of_expire: 29
+    cvv: 1235
+    owner_name: "John2"
+    owner_second_name: "Doe2"
+    is_active: false
+  - id: 3
+    card_number: "3333-3333-3333-3333"
+    month_of_expire: 3
+    year_of_expire: 30
+    cvv: 123
+    owner_name: "John3"
+    owner_second_name: "Doe3"
+    is_active: false
+user_credit_card:
+  - id: 1
+    credit_card_id: 1
+    user_details_id: 1
+    is_default: true
+  - id: 2
+    credit_card_id: 2
+    user_details_id: 2
+    is_default: false
+  - id: 2
+    credit_card_id: 3
+    user_details_id: 2
+    is_default: false
+device:
+  - id: 1
+    login_time: "2024-03-03 12:00:00"
+    user_agent: "agent"
+    ip_address: "ipAddress"
+    language: "language"
+    timezone: "timezone"
+    platform: "platform"
+    screen_height: 1080
+    screen_width: 1920
+    is_this_device: true
+    user_details_id: 1
+  - id: 2
+    login_time: "2024-03-03 12:00:00"
+    user_agent: "agent2"
+    ip_address: "ipAddress2"
+    language: "language2"
+    timezone: "timezone2"
+    platform: "platform2"
+    screen_height: 1080
+    screen_width: 1920
+    is_this_device: false
+    user_details_id: 2
+  - id: 2
+    login_time: "2024-03-03 12:00:00"
+    user_agent: "agent3"
+    ip_address: "ipAddress3"
+    language: "language3"
+    timezone: "timezone3"
+    platform: "platform3"
+    screen_height: 1080
+    screen_width: 1920
+    is_this_device: false
+    user_details_id: 2

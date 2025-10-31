@@ -18,6 +18,7 @@ public class CreditCardDto {
     private int monthOfExpire;
     private int yearOfExpire;
     private String cvv;
+    private boolean isActive;
     private String ownerName;
     private String ownerSecondName;
 }

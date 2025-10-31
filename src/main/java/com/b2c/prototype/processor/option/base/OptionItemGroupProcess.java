@@ -2,7 +2,6 @@ package com.b2c.prototype.processor.option.base;
 
 import com.b2c.prototype.manager.option.IOptionItemGroupManager;
 import com.b2c.prototype.modal.dto.payload.option.group.OptionItemGroupDto;
-import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.processor.option.IOptionItemGroupProcess;
 import com.b2c.prototype.transform.item.IItemTransformService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,8 +28,7 @@ public class OptionItemGroupProcess implements IOptionItemGroupProcess {
     @Override
     public void persistEntity(Map<String, Object> payload) {
         OptionItemGroupDto optionItemGroupDto = objectMapper.convertValue(payload, OptionItemGroupDto.class);
-        OptionGroup optionGroup = itemTransformService.mapOptionItemGroupDtoToOptionGroupDto(optionItemGroupDto);
-        optionGroupManager.persistEntity(optionGroup);
+        optionGroupManager.persistEntity(optionItemGroupDto);
     }
 
     @Override

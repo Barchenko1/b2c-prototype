@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.b2c.prototype.util.Constant.ITEM_ID;
-import static com.b2c.prototype.util.Util.getUUID;
 
 @Service
 public class MetaDataManager implements IMetaDataManager {

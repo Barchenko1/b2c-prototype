@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IOptionItemGroupManager {
-    void persistEntity(OptionGroup entity);
+    void persistEntity(OptionItemGroupDto optionItemGroupDto);
     void mergeEntity(String searchValue, OptionItemGroupDto optionItemGroupDto);
     void removeEntity(String value);
     OptionGroup getEntity(String value);

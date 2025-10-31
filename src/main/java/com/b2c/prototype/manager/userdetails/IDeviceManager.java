@@ -1,7 +1,6 @@
 package com.b2c.prototype.manager.userdetails;
 
 import com.b2c.prototype.modal.dto.payload.user.DeviceDto;
-import com.b2c.prototype.modal.dto.payload.user.ResponseDeviceDto;
 
 import java.util.List;
 
@@ -10,5 +9,5 @@ public interface IDeviceManager {
     void deactivateCurrentDevice(String userId, String deviceName);
     void deleteDevice(String userId, DeviceDto deviceDto);
 
-    List<ResponseDeviceDto> getDevicesByUserId(String userId, String clientIp);
+    List<DeviceDto> getDevicesByUserId(String userId, String clientIp);
 }

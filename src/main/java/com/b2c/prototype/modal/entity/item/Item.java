@@ -67,8 +67,8 @@ public class Item {
     @Column(name = "item_uniq_id", unique = true, nullable = false)
     private String itemUniqId;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "meta_data_id")
-    private MetaData metaData;
+    @JoinColumn(name = "articular_group_id")
+    private ArticularGroup articularGroup;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "item_id")
     @Builder.Default

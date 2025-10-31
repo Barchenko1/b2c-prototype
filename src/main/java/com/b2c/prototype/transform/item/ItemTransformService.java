@@ -140,7 +140,8 @@ public class ItemTransformService implements IItemTransformService {
                                 .value(optionItemCostDto.getValue())
                                 .price(Price.builder()
                                         .amount(optionItemCostDto.getPrice().getAmount())
-                                        .currency(generalEntityDao.findEntity("Currency.findByValue", Pair.of(VALUE, optionItemCostDto.getPrice().getCurrency().getValue())))
+                                        .currency(generalEntityDao.findEntity("Currency.findByValue",
+                                                Pair.of(VALUE, optionItemCostDto.getPrice().getCurrency().getValue())))
                                         .build())
                                 .build())
                         .collect(Collectors.toSet())
