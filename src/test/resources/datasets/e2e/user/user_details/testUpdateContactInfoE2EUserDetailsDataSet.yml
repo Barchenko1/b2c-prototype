@@ -7,7 +7,7 @@ contact_phone:
     phone_number: "111-111-111"
     country_phone_code_id: 1
   - id: 2
-    phone_number: "222-222-222"
+    phone_number: "333-333-333"
     country_phone_code_id: 1
 contact_info:
   - id: 1
@@ -19,11 +19,11 @@ contact_info:
     is_email_verified: true
     contact_phone_id: 1
   - id: 2
-    first_name: "John2"
-    last_name: "Doe2"
-    email: "john.doe2@example.com"
-    birthday_date: "1996-01-01"
-    is_contact_phone_verified: true
+    first_name: "Update John2"
+    last_name: "Update Doe2"
+    email: "Update john.doe2@example.com"
+    birthday_date: "1997-01-01"
+    is_contact_phone_verified: false
     is_email_verified: false
     contact_phone_id: 2
 user_details:
@@ -35,9 +35,9 @@ user_details:
     contact_info_id: 1
   - id: 2
     user_id: "123"
-    username: "john.doe2"
+    username: "Update john.doe2"
     date_of_create: "2024-03-03 12:00:00.0"
-    is_active: true
+    is_active: false
     contact_info_id: 2
 country:
   - id: 1

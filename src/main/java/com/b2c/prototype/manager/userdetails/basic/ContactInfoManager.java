@@ -35,7 +35,7 @@ public class ContactInfoManager implements IContactInfoManager {
     @Override
     public void saveUpdateContactInfoByUserId(String userId, ContactInfoDto contactInfoDto) {
         UserDetails userDetails = generalEntityDao.findEntity(
-                "UserDetails.findFullUserDetailsByUserId",
+                "UserDetails.findByUserId",
                 Pair.of(USER_ID, userId));
         ContactInfo newContactInfo = generalEntityTransformService.mapContactInfoDtoToContactInfo(contactInfoDto);
         ContactInfo contactInfo = userDetails.getContactInfo();
@@ -49,7 +49,7 @@ public class ContactInfoManager implements IContactInfoManager {
     @Override
     public void deleteContactInfoByUserId(String userId) {
         UserDetails userDetails = generalEntityDao.findEntity(
-                "UserDetails.findFullUserDetailsByUserId",
+                "UserDetails.findByUserId",
                 Pair.of(USER_ID, userId));
         ContactInfo contactInfo = userDetails.getContactInfo();
         if (contactInfo != null) {
@@ -62,7 +62,7 @@ public class ContactInfoManager implements IContactInfoManager {
     @Override
     public ContactInfoDto getContactInfoByUserId(String userId) {
         UserDetails userDetails = generalEntityDao.findEntity(
-                "UserDetails.findFullUserDetailsByUserId",
+                "UserDetails.findByUserId",
                 Pair.of(USER_ID, userId));
 
         return Optional.of(userDetails)

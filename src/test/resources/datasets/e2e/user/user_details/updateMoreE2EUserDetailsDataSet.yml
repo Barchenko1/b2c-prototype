@@ -19,10 +19,10 @@ contact_info:
     is_email_verified: true
     contact_phone_id: 1
   - id: 2
-    first_name: "John2"
-    last_name: "Doe2"
-    email: "john.doe2@example.com"
-    birthday_date: "1996-01-01"
+    first_name: "Update John2"
+    last_name: "Update Doe2"
+    email: "Update john.doe2@example.com"
+    birthday_date: "1997-01-01"
     is_contact_phone_verified: false
     is_email_verified: false
     contact_phone_id: 2
@@ -30,13 +30,13 @@ user_details:
   - id: 1
     user_id: "111"
     username: "john.doe"
-    date_of_create: "2024-03-03 12:00:00"
+    date_of_create: "2024-03-03 12:00:00.0"
     is_active: true
     contact_info_id: 1
   - id: 2
     user_id: "123"
-    username: "john.doe2"
-    date_of_create: "2024-03-03 12:00:00"
+    username: "Update john.doe2"
+    date_of_create: "2024-03-03 12:00:00.0"
     is_active: false
     contact_info_id: 2
 country:
@@ -49,24 +49,24 @@ address:
     building_number: 10
     flor_number: 9
     apartment_number: 201
-    zip_code: 90000
+    zip_code: "90000"
     city: "city"
     country_id: 1
   - id: 2
-    street: "street2"
-    building_number: 10
-    flor_number: 9
-    apartment_number: 101
-    zip_code: 91000
-    city: "city2"
+    street: "Update street2"
+    building_number: "10/2"
+    flor_number: 99
+    apartment_number: 2011
+    zip_code: "Update 90000"
+    city: "Update city2"
     country_id: 1
   - id: 3
-    street: "street3"
-    building_number: 3
+    street: "New street3"
+    building_number: 33
     flor_number: 3
     apartment_number: 333
-    zip_code: 33000
-    city: "city3"
+    zip_code: "New 90000"
+    city: "New city3"
     country_id: 1
 user_address:
   - id: 1
@@ -77,7 +77,7 @@ user_address:
     address_id: 2
     is_default: false
     user_details_id: 2
-  - id: 2
+  - id: 3
     address_id: 3
     is_default: false
     user_details_id: 2
@@ -86,25 +86,25 @@ credit_card:
     card_number: "4444-1111-2222-3333"
     month_of_expire: 6
     year_of_expire: 28
-    cvv: 123
+    cvv: "818"
     owner_name: "John"
     owner_second_name: "Doe"
     is_active: true
-  - id: 2
-    card_number: "4444-1111-2222-2222"
-    month_of_expire: 9
-    year_of_expire: 29
-    cvv: 1235
-    owner_name: "John2"
-    owner_second_name: "Doe2"
-    is_active: false
   - id: 3
-    card_number: "3333-3333-3333-3333"
-    month_of_expire: 3
-    year_of_expire: 30
-    cvv: 123
-    owner_name: "John3"
-    owner_second_name: "Doe3"
+    card_number: "New 4444-1111-2222-3333"
+    month_of_expire: 33
+    year_of_expire: 33
+    cvv: "New 818"
+    owner_name: "New John"
+    owner_second_name: "New Doe"
+    is_active: false
+  - id: 2
+    card_number: "Update 4444-1111-2222-3333"
+    month_of_expire: 22
+    year_of_expire: 22
+    cvv: "Update 818"
+    owner_name: "Update John"
+    owner_second_name: "Update Doe"
     is_active: false
 user_credit_card:
   - id: 1
@@ -115,7 +115,7 @@ user_credit_card:
     credit_card_id: 2
     user_details_id: 2
     is_default: false
-  - id: 2
+  - id: 3
     credit_card_id: 3
     user_details_id: 2
     is_default: false
@@ -132,24 +132,24 @@ device:
     is_this_device: true
     user_details_id: 1
   - id: 2
-    login_time: "2024-03-03 12:00:00"
-    user_agent: "agent2"
-    ip_address: "ipAddress2"
-    language: "language2"
-    timezone: "timezone2"
-    platform: "platform2"
-    screen_height: 1080
-    screen_width: 1920
+    login_time: "2025-03-03 12:00:00"
+    user_agent: "New agent"
+    ip_address: "New ipAddress"
+    language: "New language"
+    timezone: "New timezone"
+    platform: "New platform"
+    screen_height: 1000
+    screen_width: 2000
     is_this_device: false
     user_details_id: 2
-  - id: 2
-    login_time: "2024-03-03 12:00:00"
-    user_agent: "agent3"
-    ip_address: "ipAddress3"
-    language: "language3"
-    timezone: "timezone3"
-    platform: "platform3"
-    screen_height: 1080
-    screen_width: 1920
+  - id: 3
+    login_time: "2025-03-03 12:00:00"
+    user_agent: "Update agent"
+    ip_address: "Update ipAddress"
+    language: "Update language"
+    timezone: "Update timezone"
+    platform: "Update platform"
+    screen_height: 1000
+    screen_width: 2000
     is_this_device: false
     user_details_id: 2

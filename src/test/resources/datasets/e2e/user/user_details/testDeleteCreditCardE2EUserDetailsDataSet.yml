@@ -24,7 +24,7 @@ contact_info:
     email: "john.doe2@example.com"
     birthday_date: "1996-01-01"
     is_contact_phone_verified: true
-    is_email_verified: false
+    is_email_verified: true
     contact_phone_id: 2
 user_details:
   - id: 1
@@ -78,23 +78,11 @@ credit_card:
     owner_name: "John"
     owner_second_name: "Doe"
     is_active: true
-  - id: 2
-    card_number: "4444-1111-2222-2222"
-    month_of_expire: 9
-    year_of_expire: 29
-    cvv: "818"
-    owner_name: "John2"
-    owner_second_name: "Doe2"
-    is_active: true
 user_credit_card:
   - id: 1
     credit_card_id: 1
     user_details_id: 1
     is_default: true
-  - id: 2
-    credit_card_id: 2
-    user_details_id: 2
-    is_default: false
 device:
   - id: 1
     login_time: "2024-03-03 12:00:00"

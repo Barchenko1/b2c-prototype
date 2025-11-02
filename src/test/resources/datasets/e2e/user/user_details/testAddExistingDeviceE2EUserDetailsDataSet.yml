@@ -24,7 +24,7 @@ contact_info:
     email: "john.doe2@example.com"
     birthday_date: "1996-01-01"
     is_contact_phone_verified: true
-    is_email_verified: false
+    is_email_verified: true
     contact_phone_id: 2
 user_details:
   - id: 1
@@ -108,7 +108,7 @@ device:
     is_this_device: true
     user_details_id: 1
   - id: 2
-    login_time: "2024-03-03 12:00:00"
+    login_time: "2025-03-03 12:00:00"
     user_agent: "agent2"
     ip_address: "ipAddress2"
     language: "language2"

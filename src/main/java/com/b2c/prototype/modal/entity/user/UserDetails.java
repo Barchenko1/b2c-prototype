@@ -45,7 +45,20 @@ import java.util.Set;
                         "WHERE u.userId = :userId"
         ),
         @NamedQuery(
-                name = "UserDetails.findAddressesByUserId",
+                name = "UserDetails.findAllUserDetails",
+                query = "SELECT DISTINCT u FROM UserDetails u " +
+                        "LEFT JOIN FETCH u.contactInfo uc " +
+                        "LEFT JOIN FETCH uc.contactPhone ucp " +
+                        "LEFT JOIN FETCH ucp.countryPhoneCode ucpc " +
+                        "LEFT JOIN FETCH u.userAddresses ua " +
+                        "LEFT JOIN FETCH ua.address uac " +
+                        "LEFT JOIN FETCH uac.country uacc " +
+                        "LEFT JOIN FETCH u.userCreditCards ucc " +
+                        "LEFT JOIN FETCH ucc.creditCard uccc " +
+                        "LEFT JOIN FETCH u.devices d"
+        ),
+        @NamedQuery(
+                name = "UserDetails.findUserAddressesByUserId",
                 query = "SELECT DISTINCT u FROM UserDetails u " +
                         "LEFT JOIN FETCH u.contactInfo ci " +
                         "LEFT JOIN FETCH u.userAddresses ua " +
@@ -62,28 +75,7 @@ import java.util.Set;
                         "WHERE u.userId = :userId"
         ),
         @NamedQuery(
-                name = "UserDetails.findFullUserDetailsByUserId",
-                query = "SELECT DISTINCT u FROM UserDetails u " +
-                        "LEFT JOIN FETCH u.contactInfo ci " +
-                        "LEFT JOIN FETCH ci.contactPhone cp " +
-                        "LEFT JOIN FETCH cp.countryPhoneCode cpc " +
-                        "LEFT JOIN FETCH u.userAddresses " +
-                        "LEFT JOIN FETCH u.userCreditCards " +
-                        "LEFT JOIN FETCH u.devices d " +
-                        "WHERE u.userId = :userId"
-        ),
-        @NamedQuery(
-                name = "UserDetails.findAllFullUserDetailsByUserId",
-                query = "SELECT DISTINCT u FROM UserDetails u " +
-                        "LEFT JOIN FETCH u.contactInfo ci " +
-                        "LEFT JOIN FETCH ci.contactPhone cp " +
-                        "LEFT JOIN FETCH cp.countryPhoneCode cpc " +
-                        "LEFT JOIN FETCH u.userAddresses " +
-                        "LEFT JOIN FETCH u.userCreditCards " +
-                        "LEFT JOIN FETCH u.devices d "
-        ),
-        @NamedQuery(
-                name = "UserDetails.findAllDevicesByUserId",
+                name = "UserDetails.findDevicesByUserId",
                 query = "SELECT DISTINCT u FROM UserDetails u " +
                         "LEFT JOIN FETCH u.devices d " +
                         "WHERE u.userId = :userId"

@@ -30,13 +30,13 @@ user_details:
   - id: 1
     user_id: "111"
     username: "john.doe"
-    date_of_create: "2024-03-03 12:00:00"
+    date_of_create: "2024-03-03 12:00:00.0"
     is_active: true
     contact_info_id: 1
   - id: 2
     user_id: "123"
     username: "john.doe2"
-    date_of_create: "2024-03-03 12:00:00"
+    date_of_create: "2024-03-03 12:00:00.0"
     is_active: true
     contact_info_id: 2
 country:
@@ -44,36 +44,30 @@ country:
     label: "USA"
     value: "USA"
 address:
-  - street: "street"
+  - id: 1
+    street: "street"
     building_number: 10
     flor_number: 9
     apartment_number: 201
     zip_code: 90000
     city: "city"
     country_id: 1
-  - street: "street2"
-    building_number: 10
-    flor_number: 9
-    apartment_number: 101
-    zip_code: 91000
-    city: "city2"
-    country_id: 1
 user_address:
-  - address_id: 1
+  - id: 1
+    address_id: 1
     is_default: true
     user_details_id: 1
-  - address_id: 2
-    is_default: true
-    user_details_id: 2
 credit_card:
-  - card_number: "4444-1111-2222-3333"
+  - id: 1
+    card_number: "4444-1111-2222-3333"
     month_of_expire: 6
     year_of_expire: 28
     cvv: "818"
     owner_name: "John"
     owner_second_name: "Doe"
     is_active: true
-  - card_number: "4444-1111-2222-2222"
+  - id: 2
+    card_number: "4444-1111-2222-2222"
     month_of_expire: 9
     year_of_expire: 29
     cvv: "818"
@@ -81,14 +75,17 @@ credit_card:
     owner_second_name: "Doe2"
     is_active: true
 user_credit_card:
-  - credit_card_id: 1
+  - id: 1
+    credit_card_id: 1
     user_details_id: 1
     is_default: true
-  - credit_card_id: 2
+  - id: 2
+    credit_card_id: 2
     user_details_id: 2
-    is_default: true
+    is_default: false
 device:
-  - login_time: "2024-03-03 12:00:00"
+  - id: 1
+    login_time: "2024-03-03 12:00:00"
     user_agent: "agent"
     ip_address: "ipAddress"
     language: "language"
@@ -98,7 +95,8 @@ device:
     screen_width: 1920
     is_this_device: true
     user_details_id: 1
-  - login_time: "2024-03-03 12:00:00"
+  - id: 2
+    login_time: "2024-03-03 12:00:00"
     user_agent: "agent2"
     ip_address: "ipAddress2"
     language: "language2"

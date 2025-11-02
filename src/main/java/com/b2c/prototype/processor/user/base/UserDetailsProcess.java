@@ -2,7 +2,11 @@ package com.b2c.prototype.processor.user.base;
 
 import com.b2c.prototype.manager.userdetails.IUserDetailsManager;
 import com.b2c.prototype.modal.dto.payload.user.RegistrationUserDetailsDto;
+import com.b2c.prototype.modal.dto.payload.user.UserDetailsAddCollectionDto;
+import com.b2c.prototype.modal.dto.payload.user.UserDetailsContactInfoDto;
 import com.b2c.prototype.modal.dto.payload.user.UserDetailsDto;
+import com.b2c.prototype.modal.dto.payload.user.UserDetailsRemoveCollectionDto;
+import com.b2c.prototype.modal.dto.payload.user.UserDetailsStatusDto;
 import com.b2c.prototype.processor.user.IUserDetailsProcess;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
@@ -29,35 +33,58 @@ public class UserDetailsProcess implements IUserDetailsProcess {
 
     @Override
     public void updateUserDetailsByUserId(Map<String, String> requestParams, UserDetailsDto userDetailsDto) {
-        String userId = requestParams.get("userId");
-        userDetailsManager.updateUserDetailsByUserId(userId, userDetailsDto);
+        userDetailsManager.updateUserDetailsByUserId(userDetailsDto);
     }
 
     @Override
-    public void updateUserStatusByUserId(Map<String, String> requestParams) {
-        String userId = requestParams.get("userId");
-        boolean status = Boolean.parseBoolean(requestParams.get("status"));
-        userDetailsManager.updateUserStatusByUserId(userId, status);
+    public void updateUserDetailsContactInfo(UserDetailsContactInfoDto userDetailsContactInfoDto) {
+        userDetailsManager.updateUserDetailsContactInfo(userDetailsContactInfoDto);
     }
 
     @Override
-    public void updateUserVerifyEmailByUserId(Map<String, String> requestParams) {
-        String userId = requestParams.get("userId");
-        boolean status = Boolean.parseBoolean(requestParams.get("verifyEmail"));
-        userDetailsManager.updateUserVerifyEmailByUserId(userId, status);
+    public void updateUserDetailsStatus(UserDetailsStatusDto userDetailsStatusDto) {
+        userDetailsManager.updateUserDetailsStatus(userDetailsStatusDto);
     }
 
     @Override
-    public void updateUserVerifyPhoneByUserId(Map<String, String> requestParams) {
-        String userId = requestParams.get("userId");
-        boolean status = Boolean.parseBoolean(requestParams.get("verifyPhone"));
-        userDetailsManager.updateUserVerifyPhoneByUserId(userId, status);
+    public void updateUserDetailsVerifyEmail(UserDetailsStatusDto userDetailsStatusDto) {
+        userDetailsManager.updateUserDetailsVerifyEmail(userDetailsStatusDto);
+    }
+
+    @Override
+    public void updateUserDetailsVerifyPhone(UserDetailsStatusDto userDetailsStatusDto) {
+        userDetailsManager.updateUserDetailsVerifyPhone(userDetailsStatusDto);
     }
 
     @Override
     public void deleteUserDetailsByUserId(Map<String, String> requestParams) {
         String userId = requestParams.get("userId");
         userDetailsManager.deleteUserDetailsByUserId(userId);
+    }
+
+    @Override
+    public void addUserDetailsAddress(UserDetailsAddCollectionDto userDetailsAddCollectionDto) {
+        userDetailsManager.addUserDetailsAddress(userDetailsAddCollectionDto);
+    }
+
+    @Override
+    public void addUserDetailsCreditCard(UserDetailsAddCollectionDto userDetailsAddCollectionDto) {
+        userDetailsManager.addUserDetailsCreditCard(userDetailsAddCollectionDto);
+    }
+
+    @Override
+    public void addUserDetailsDevice(UserDetailsAddCollectionDto userDetailsAddCollectionDto) {
+        userDetailsManager.addUserDetailsDevice(userDetailsAddCollectionDto);
+    }
+
+    @Override
+    public void deleteUserDetailsAddress(UserDetailsRemoveCollectionDto userDetailsRemoveCollectionDto) {
+        userDetailsManager.deleteUserDetailsAddress(userDetailsRemoveCollectionDto);
+    }
+
+    @Override
+    public void deleteUserDetailsCreditCard(UserDetailsRemoveCollectionDto userDetailsRemoveCollectionDto) {
+        userDetailsManager.deleteUserDetailsCreditCard(userDetailsRemoveCollectionDto);
     }
 
     @Override

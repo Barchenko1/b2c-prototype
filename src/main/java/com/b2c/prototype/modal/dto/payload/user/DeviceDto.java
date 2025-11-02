@@ -1,7 +1,5 @@
 package com.b2c.prototype.modal.dto.payload.user;
 
-import com.b2c.prototype.util.DateTimeDeserializer;
-import com.b2c.prototype.util.DateTimeSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -14,7 +12,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 
 @Data
 @Builder

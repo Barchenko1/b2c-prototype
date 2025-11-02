@@ -24,7 +24,7 @@ contact_info:
     email: "john.doe2@example.com"
     birthday_date: "1996-01-01"
     is_contact_phone_verified: true
-    is_email_verified: false
+    is_email_verified: true
     contact_phone_id: 2
 user_details:
   - id: 1
@@ -94,7 +94,7 @@ user_credit_card:
   - id: 2
     credit_card_id: 2
     user_details_id: 2
-    is_default: false
+    is_default: true
 device:
   - id: 1
     login_time: "2024-03-03 12:00:00"

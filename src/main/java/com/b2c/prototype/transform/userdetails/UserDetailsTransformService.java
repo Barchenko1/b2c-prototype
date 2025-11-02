@@ -14,6 +14,7 @@ import com.b2c.prototype.modal.dto.payload.user.DeviceDto;
 import com.b2c.prototype.modal.dto.payload.user.RegistrationUserDetailsDto;
 import com.b2c.prototype.modal.dto.payload.user.UserAddressDto;
 import com.b2c.prototype.modal.dto.payload.user.UserCreditCardDto;
+import com.b2c.prototype.modal.dto.payload.user.UserDetailsContactInfoDto;
 import com.b2c.prototype.modal.dto.payload.user.UserDetailsDto;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
@@ -93,61 +94,26 @@ public class UserDetailsTransformService implements IUserDetailsTransformService
                 .isActive(userDetailsDto.isActive())
                 .username(userDetailsDto.getUsername())
                 .dateOfCreate(userDetailsDto.getDateOfCreate())
-                .contactInfo(ContactInfo.builder()
-                        .firstName(userDetailsDto.getContactInfo().getFirstName())
-                        .lastName(userDetailsDto.getContactInfo().getLastName())
-                        .email(userDetailsDto.getContactInfo().getEmail())
-                        .isEmailVerified(userDetailsDto.getContactInfo().isEmailVerified())
-                        .isContactPhoneVerified(userDetailsDto.getContactInfo().isPhoneVerified())
-                        .contactPhone(ContactPhone.builder()
-                                .countryPhoneCode(generalEntityDao.findEntity("CountryPhoneCode.findByValue",
-                                        Pair.of(VALUE, userDetailsDto.getContactInfo().getContactPhone().getCountryPhoneCode().getValue())))
-                                .phoneNumber(userDetailsDto.getContactInfo().getContactPhone().getPhoneNumber())
-                                .build())
-                        .birthdayDate(userDetailsDto.getContactInfo().getBirthdayDate())
-                        .build())
+                .contactInfo(mapContactInfoDtoToContactInfo(userDetailsDto.getContactInfo()))
                 .userCreditCards(userDetailsDto.getCreditCards().stream()
-                        .map(userCreditCard -> UserCreditCard.builder()
-                                .creditCard(CreditCard.builder()
-                                        .cardNumber(userCreditCard.getCreditCard().getCardNumber())
-                                        .monthOfExpire(userCreditCard.getCreditCard().getMonthOfExpire())
-                                        .yearOfExpire(userCreditCard.getCreditCard().getYearOfExpire())
-                                        .cvv(userCreditCard.getCreditCard().getCvv())
-                                        .isActive(userCreditCard.getCreditCard().isActive())
-                                        .ownerName(userCreditCard.getCreditCard().getOwnerName())
-                                        .ownerSecondName(userCreditCard.getCreditCard().getOwnerSecondName())
-                                        .build())
-                                .isDefault(userCreditCard.isDefault())
-                                .build())
+                        .map(this::mapUserCreditCardDtoToUserCreditCard)
                         .collect(Collectors.toSet()))
                 .userAddresses(userDetailsDto.getAddresses().stream()
-                        .map(userAddressDto -> UserAddress.builder()
-                                .address(Address.builder()
-                                        .country(generalEntityDao.findEntity("Country.findByValue",
-                                                Pair.of(VALUE, userAddressDto.getAddress().getCountry().getValue())))
-                                        .city(userAddressDto.getAddress().getCity())
-                                        .street(userAddressDto.getAddress().getStreet())
-                                        .buildingNumber(userAddressDto.getAddress().getBuildingNumber())
-                                        .florNumber(userAddressDto.getAddress().getFlorNumber())
-                                        .apartmentNumber(userAddressDto.getAddress().getApartmentNumber())
-                                        .zipCode(userAddressDto.getAddress().getZipCode())
-                                        .build())
-                                .isDefault(userAddressDto.isDefault())
-                                .build())
+                        .map(this::mapUserAddressDtoToUserAddress)
                         .collect(Collectors.toSet()))
                 .devices(userDetailsDto.getDevices().stream()
-                        .map(deviceDto -> Device.builder()
-                                .ipAddress(deviceDto.getIpAddress())
-                                .loginTime(deviceDto.getLoginTime())
-                                .userAgent(deviceDto.getUserAgent())
-                                .screenWidth(deviceDto.getScreenWidth())
-                                .screenHeight(deviceDto.getScreenHeight())
-                                .timezone(deviceDto.getTimezone())
-                                .language(deviceDto.getLanguage())
-                                .platform(deviceDto.getPlatform())
-                                .isThisDevice(deviceDto.isThisDevice())
-                                .build())
+                        .map(this::mapDeviceDtoToDevice)
                         .collect(Collectors.toSet()))
+                .build();
+    }
+
+    @Override
+    public UserDetails mapUserDetailsContactInfoDtoToUserDetails(UserDetailsContactInfoDto userDetailsContactInfoDto) {
+        return UserDetails.builder()
+                .userId(userDetailsContactInfoDto.getUserId())
+                .isActive(userDetailsContactInfoDto.isActive())
+                .username(userDetailsContactInfoDto.getUsername())
+                .contactInfo(mapContactInfoDtoToContactInfo(userDetailsContactInfoDto.getContactInfo()))
                 .build();
     }
 
@@ -158,99 +124,171 @@ public class UserDetailsTransformService implements IUserDetailsTransformService
                 .isActive(userDetails.isActive())
                 .username(userDetails.getUsername())
                 .dateOfCreate(userDetails.getDateOfCreate())
-                .contactInfo(ContactInfoDto.builder()
-                        .firstName(userDetails.getContactInfo().getFirstName())
-                        .lastName(userDetails.getContactInfo().getLastName())
-                        .email(userDetails.getContactInfo().getEmail())
-                        .isEmailVerified(userDetails.getContactInfo().isEmailVerified())
-                        .isPhoneVerified(userDetails.getContactInfo().isContactPhoneVerified())
-                        .contactPhone(ContactPhoneDto.builder()
-                                .countryPhoneCode(CountryPhoneCodeDto.builder()
-                                        .label(userDetails.getContactInfo().getContactPhone().getCountryPhoneCode().getLabel())
-                                        .value(userDetails.getContactInfo().getContactPhone().getCountryPhoneCode().getValue())
-                                        .build())
-                                .phoneNumber(userDetails.getContactInfo().getContactPhone().getPhoneNumber())
-                                .build())
-                        .birthdayDate(userDetails.getContactInfo().getBirthdayDate())
-                        .build())
+                .contactInfo(mapContactInfoToContactInfoDto(userDetails.getContactInfo()))
                 .creditCards(userDetails.getUserCreditCards().stream()
-                        .map(userCreditCard -> UserCreditCardDto.builder()
-                                .creditCard(CreditCardDto.builder()
-                                        .cardNumber(userCreditCard.getCreditCard().getCardNumber())
-                                        .monthOfExpire(userCreditCard.getCreditCard().getMonthOfExpire())
-                                        .yearOfExpire(userCreditCard.getCreditCard().getYearOfExpire())
-                                        .isActive(userCreditCard.getCreditCard().isActive())
-                                        .ownerName(userCreditCard.getCreditCard().getOwnerName())
-                                        .ownerSecondName(userCreditCard.getCreditCard().getOwnerSecondName())
-                                        .build())
-                                .isDefault(userCreditCard.isDefault())
-                                .build())
+                        .map(this::mapUserCreditCardToUserCreditCardDto)
                         .toList())
                 .addresses(userDetails.getUserAddresses().stream()
-                        .map(userAddress -> UserAddressDto.builder()
-                                .address(AddressDto.builder()
-                                        .country(CountryDto.builder()
-                                                .label(userAddress.getAddress().getCountry().getLabel())
-                                                .value(userAddress.getAddress().getCountry().getValue())
-                                                .build())
-                                        .city(userAddress.getAddress().getCity())
-                                        .street(userAddress.getAddress().getStreet())
-                                        .buildingNumber(userAddress.getAddress().getBuildingNumber())
-                                        .florNumber(userAddress.getAddress().getFlorNumber())
-                                        .apartmentNumber(userAddress.getAddress().getApartmentNumber())
-                                        .zipCode(userAddress.getAddress().getZipCode())
-                                        .build())
-                                .isDefault(userAddress.isDefault())
-                                .build())
+                        .map(this::mapUserAddressToUserAddressDto)
                         .toList())
                 .devices(userDetails.getDevices().stream()
-                        .map(device -> DeviceDto.builder()
-                                .ipAddress(device.getIpAddress())
-                                .loginTime(device.getLoginTime())
-                                .userAgent(device.getUserAgent())
-                                .screenWidth(device.getScreenWidth())
-                                .screenHeight(device.getScreenHeight())
-                                .timezone(device.getTimezone())
-                                .language(device.getLanguage())
-                                .platform(device.getPlatform())
-                                .isThisDevice(device.isThisDevice())
-                                .build())
+                        .map(this::mapDeviceToDeviceDto)
                         .toList())
                 .build();
     }
 
     @Override
-    public UserAddressDto mapUserAddressToUserAddressDto(UserAddress userAddress) {
-        return null;
+    public ContactInfo mapContactInfoDtoToContactInfo(ContactInfoDto contactInfoDto) {
+        return ContactInfo.builder()
+                .firstName(contactInfoDto.getFirstName())
+                .lastName(contactInfoDto.getLastName())
+                .email(contactInfoDto.getEmail())
+                .isEmailVerified(contactInfoDto.isEmailVerified())
+                .isContactPhoneVerified(contactInfoDto.isPhoneVerified())
+                .contactPhone(ContactPhone.builder()
+                        .countryPhoneCode(generalEntityDao.findEntity("CountryPhoneCode.findByValue",
+                                Pair.of(VALUE, contactInfoDto.getContactPhone().getCountryPhoneCode().getValue())))
+                        .phoneNumber(contactInfoDto.getContactPhone().getPhoneNumber())
+                        .build())
+                .birthdayDate(contactInfoDto.getBirthdayDate())
+                .build();
     }
 
     @Override
-    public AddressDto mapUserAddressToAddressDto(UserAddress userAddress) {
-        return null;
+    public ContactInfoDto mapContactInfoToContactInfoDto(ContactInfo contactInfo) {
+        return ContactInfoDto.builder()
+                .firstName(contactInfo.getFirstName())
+                .lastName(contactInfo.getLastName())
+                .email(contactInfo.getEmail())
+                .isEmailVerified(contactInfo.isEmailVerified())
+                .isPhoneVerified(contactInfo.isContactPhoneVerified())
+                .contactPhone(ContactPhoneDto.builder()
+                        .countryPhoneCode(CountryPhoneCodeDto.builder()
+                                .label(contactInfo.getContactPhone().getCountryPhoneCode().getLabel())
+                                .value(contactInfo.getContactPhone().getCountryPhoneCode().getValue())
+                                .build())
+                        .phoneNumber(contactInfo.getContactPhone().getPhoneNumber())
+                        .build())
+                .birthdayDate(contactInfo.getBirthdayDate())
+                .build();
+    }
+
+    @Override
+    public UserAddressDto mapUserAddressToUserAddressDto(UserAddress userAddress) {
+        return UserAddressDto.builder()
+                .address(mapAddressToAddressDto(userAddress.getAddress()))
+                .isDefault(userAddress.isDefault())
+                .build();
+    }
+
+    @Override
+    public UserAddress mapUserAddressDtoToUserAddress(UserAddressDto userAddressDto) {
+        return UserAddress.builder()
+                .address(mapAddressDtoToAddress(userAddressDto.getAddress()))
+                .isDefault(userAddressDto.isDefault())
+                .build();
+    }
+
+    @Override
+    public AddressDto mapAddressToAddressDto(Address address) {
+        return AddressDto.builder()
+                .country(CountryDto.builder()
+                        .label(address.getCountry().getLabel())
+                        .value(address.getCountry().getValue())
+                        .build())
+                .city(address.getCity())
+                .street(address.getStreet())
+                .buildingNumber(address.getBuildingNumber())
+                .florNumber(address.getFlorNumber())
+                .apartmentNumber(address.getApartmentNumber())
+                .zipCode(address.getZipCode())
+                .build();
+    }
+
+    @Override
+    public Address mapAddressDtoToAddress(AddressDto addressDto) {
+        return Address.builder()
+                .country(generalEntityDao.findEntity("Country.findByValue",
+                        Pair.of(VALUE, addressDto.getCountry().getValue())))
+                .city(addressDto.getCity())
+                .street(addressDto.getStreet())
+                .buildingNumber(addressDto.getBuildingNumber())
+                .florNumber(addressDto.getFlorNumber())
+                .apartmentNumber(addressDto.getApartmentNumber())
+                .zipCode(addressDto.getZipCode())
+                .build();
     }
 
     @Override
     public Device mapDeviceDtoToDevice(DeviceDto deviceDto) {
-        return null;
+        return Device.builder()
+                .ipAddress(deviceDto.getIpAddress())
+                .loginTime(deviceDto.getLoginTime())
+                .userAgent(deviceDto.getUserAgent())
+                .screenWidth(deviceDto.getScreenWidth())
+                .screenHeight(deviceDto.getScreenHeight())
+                .timezone(deviceDto.getTimezone())
+                .language(deviceDto.getLanguage())
+                .platform(deviceDto.getPlatform())
+                .isThisDevice(deviceDto.isThisDevice())
+                .build();
     }
 
     @Override
     public DeviceDto mapDeviceToDeviceDto(Device device) {
-        return null;
+        return DeviceDto.builder()
+                .ipAddress(device.getIpAddress())
+                .loginTime(device.getLoginTime())
+                .userAgent(device.getUserAgent())
+                .screenWidth(device.getScreenWidth())
+                .screenHeight(device.getScreenHeight())
+                .timezone(device.getTimezone())
+                .language(device.getLanguage())
+                .platform(device.getPlatform())
+                .isThisDevice(device.isThisDevice())
+                .build();
     }
 
     @Override
-    public UserCreditCard mapUserCreditCardToUserCreditCardDto(UserCreditCardDto userCreditCardDto) {
-        return null;
+    public UserCreditCard mapUserCreditCardDtoToUserCreditCard(UserCreditCardDto userCreditCardDto) {
+        return UserCreditCard.builder()
+                .creditCard(mapCreditCardDtoToCreditCard(userCreditCardDto.getCreditCard()))
+                .isDefault(userCreditCardDto.isDefault())
+                .build();
     }
 
     @Override
-    public UserCreditCardDto mapUserCreditCardToResponseUserCreditCard(UserCreditCard userCreditCard) {
-        return null;
+    public UserCreditCardDto mapUserCreditCardToUserCreditCardDto(UserCreditCard userCreditCard) {
+        return UserCreditCardDto.builder()
+                .creditCard(mapCreditCardToCreditCardDto(userCreditCard.getCreditCard()))
+                .isDefault(userCreditCard.isDefault())
+                .build();
     }
 
     @Override
-    public UserCreditCardDto mapUserCreditCardToResponseCreditCard(CreditCard creditCard) {
-        return null;
+    public CreditCard mapCreditCardDtoToCreditCard(CreditCardDto creditCardDto) {
+        return CreditCard.builder()
+                .cardNumber(creditCardDto.getCardNumber())
+                .monthOfExpire(creditCardDto.getMonthOfExpire())
+                .yearOfExpire(creditCardDto.getYearOfExpire())
+                .cvv(creditCardDto.getCvv())
+                .isActive(creditCardDto.isActive())
+                .ownerName(creditCardDto.getOwnerName())
+                .ownerSecondName(creditCardDto.getOwnerSecondName())
+                .build();
     }
+
+    @Override
+    public CreditCardDto mapCreditCardToCreditCardDto(CreditCard creditCard) {
+        return CreditCardDto.builder()
+                .cardNumber(creditCard.getCardNumber())
+                .monthOfExpire(creditCard.getMonthOfExpire())
+                .yearOfExpire(creditCard.getYearOfExpire())
+                .cvv(creditCard.getCvv())
+                .isActive(creditCard.isActive())
+                .ownerName(creditCard.getOwnerName())
+                .ownerSecondName(creditCard.getOwnerSecondName())
+                .build();
+    }
+
 }

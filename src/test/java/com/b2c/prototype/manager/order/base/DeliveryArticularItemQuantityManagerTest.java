@@ -409,7 +409,7 @@ class DeliveryArticularItemQuantityManagerTest {
                 .payment(getPaymentDto())
                 .delivery(getDeliveryDto())
                 .articularItemQuantityList(List.of(getArticularItemQuantityDto()))
-                .user(null)
+                .userId("")
                 .note("note")
                 .build();
     }

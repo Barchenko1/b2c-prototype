@@ -135,7 +135,7 @@ public class UserAddressManager implements IUserAddressManager {
     @Override
     public List<UserAddressDto> getUserAddressesByUserId(String userId) {
         UserDetails userDetails = generalEntityDao.findEntity(
-                "UserDetails.findAddressesByUserId",
+                "UserDetails.findUserAddressesByUserId",
                 Pair.of(USER_ID, userId));
 
         return userDetails.getUserAddresses().stream()
@@ -146,7 +146,7 @@ public class UserAddressManager implements IUserAddressManager {
     @Override
     public UserAddressDto getDefaultUserAddress(String userId) {
         UserDetails userDetails = generalEntityDao.findEntity(
-                "UserDetails.findAddressesByUserId",
+                "UserDetails.findUserAddressesByUserId",
                 Pair.of(USER_ID, userId));
 
         return userDetails.getUserAddresses().stream()
@@ -162,9 +162,10 @@ public class UserAddressManager implements IUserAddressManager {
                 "UserAddress.findByUserAddressCombination",
                 Pair.of("userAddressCombination", addressId));
 
-        return userAddressList.stream()
-                .map(userDetailsTransformService::mapUserAddressToAddressDto)
-                .toList();
+        return List.of();
+//        return userAddressList.stream()
+//                .map(userDetailsTransformService::mapUserAddressToUserAddressDto)
+//                .toList();
     }
 
 }

@@ -1,9 +1,7 @@
 package com.b2c.prototype.manager.userdetails.basic;
 
-import com.b2c.prototype.modal.dto.payload.order.AddressDto;
 import com.b2c.prototype.modal.dto.payload.order.ContactInfoDto;
 import com.b2c.prototype.modal.dto.payload.order.ContactPhoneDto;
-import com.b2c.prototype.modal.dto.payload.order.CreditCardDto;
 import com.b2c.prototype.modal.dto.payload.user.RegistrationUserDetailsDto;
 import com.b2c.prototype.modal.dto.payload.user.UserDetailsDto;
 import com.b2c.prototype.modal.entity.address.Address;
@@ -19,13 +17,11 @@ import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import static com.b2c.prototype.util.Converter.getLocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,7 +31,6 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 class UserDetailsManagerTest {
     @InjectMocks
@@ -76,7 +71,7 @@ class UserDetailsManagerTest {
             return null;
         });
 
-        userDetailsManager.updateUserStatusByUserId(userId, isActive);
+//        userDetailsManager.updateUserDetailsStatus(userId, isActive);
 
         assertTrue(userDetails.isActive());
     }

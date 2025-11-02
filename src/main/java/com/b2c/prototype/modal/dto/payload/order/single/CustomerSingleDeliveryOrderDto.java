@@ -3,7 +3,6 @@ package com.b2c.prototype.modal.dto.payload.order.single;
 import com.b2c.prototype.modal.dto.payload.order.ArticularItemQuantityDto;
 import com.b2c.prototype.modal.dto.payload.order.ContactInfoDto;
 import com.b2c.prototype.modal.dto.payload.order.PaymentDto;
-import com.b2c.prototype.modal.dto.payload.user.UserDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -20,7 +19,7 @@ import java.util.List;
 @JsonIgnoreProperties
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CustomerSingleDeliveryOrderDto {
-    private UserDto user;
+    private String userId;
     private ContactInfoDto contactInfo;
     private List<ArticularItemQuantityDto> articularItemQuantityList;
     private DeliveryDto delivery;

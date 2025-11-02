@@ -36,7 +36,7 @@ public class ContactInfo {
     private String firstName;
     private String lastName;
     private String email;
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "contact_phone_id")
     private ContactPhone contactPhone;
     private boolean isEmailVerified;

@@ -1,6 +1,8 @@
 package com.b2c.prototype.modal.entity.item;
 
+import com.b2c.prototype.modal.entity.option.ZoneOptionGroup;
 import com.b2c.prototype.modal.entity.price.Currency;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,6 +10,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
@@ -74,4 +77,10 @@ public class Discount {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private List<ArticularItem> articularItemList = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+    @JoinColumn(name = "discount_group_id", nullable = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonIgnore
+    protected DiscountGroup discountGroup;
 }

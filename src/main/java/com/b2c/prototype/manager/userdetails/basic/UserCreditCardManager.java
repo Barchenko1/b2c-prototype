@@ -35,7 +35,7 @@ public class UserCreditCardManager implements IUserCreditCardManager {
         UserDetails userDetails = generalEntityDao.findEntity(
                 "UserDetails.findUserCreditCardsByUserId",
                 Pair.of(USER_ID, userId));
-        UserCreditCard newUserCreditCard = userDetailsTransformService.mapUserCreditCardToUserCreditCardDto(userCreditCardDto);
+        UserCreditCard newUserCreditCard = userDetailsTransformService.mapUserCreditCardDtoToUserCreditCard(userCreditCardDto);
         boolean isAllCreditCardsFalse = userDetails.getUserCreditCards().stream()
                 .noneMatch(UserCreditCard::isDefault);
 
@@ -57,7 +57,7 @@ public class UserCreditCardManager implements IUserCreditCardManager {
         UserDetails userDetails = generalEntityDao.findEntity(
                 "UserDetails.findUserCreditCardsByUserId",
                 Pair.of(USER_ID, userId));
-        UserCreditCard newUserCreditCard = userDetailsTransformService.mapUserCreditCardToUserCreditCardDto(userCreditCardDto);
+        UserCreditCard newUserCreditCard = userDetailsTransformService.mapUserCreditCardDtoToUserCreditCard(userCreditCardDto);
         boolean isAllCreditCardsFalse = userDetails.getUserCreditCards().stream()
                 .noneMatch(UserCreditCard::isDefault);
 
@@ -137,7 +137,7 @@ public class UserCreditCardManager implements IUserCreditCardManager {
 
         return userDetails.getUserCreditCards().stream()
                 .filter(UserCreditCard::isDefault)
-                .map(userDetailsTransformService::mapUserCreditCardToResponseUserCreditCard)
+                .map(userDetailsTransformService::mapUserCreditCardToUserCreditCardDto)
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("User has no such default credit card"));
     }
@@ -149,7 +149,7 @@ public class UserCreditCardManager implements IUserCreditCardManager {
                 Pair.of(USER_ID, userId));
 
         return userDetails.getUserCreditCards().stream()
-                .map(userDetailsTransformService::mapUserCreditCardToResponseUserCreditCard)
+                .map(userDetailsTransformService::mapUserCreditCardToUserCreditCardDto)
                 .toList();
     }
 
@@ -158,9 +158,11 @@ public class UserCreditCardManager implements IUserCreditCardManager {
         List<CreditCard> creditCards = generalEntityDao.findEntityList(
                 "UserCreditCard.findByCreditCardNumber",
                 Pair.of("cardNumber", cardNumber));
-        return creditCards.stream()
-                .map(userDetailsTransformService::mapUserCreditCardToResponseCreditCard)
-                .toList();
+
+        return List.of();
+//        return creditCards.stream()
+//                .map(userDetailsTransformService::mapUserCreditCardToUserCreditCardDto)
+//                .toList();
     }
 
 }

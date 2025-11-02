@@ -24,7 +24,7 @@ contact_info:
     email: "john.doe2@example.com"
     birthday_date: "1996-01-01"
     is_contact_phone_verified: true
-    is_email_verified: false
+    is_email_verified: true
     contact_phone_id: 2
 user_details:
   - id: 1
@@ -60,6 +60,14 @@ address:
     zip_code: 91000
     city: "city2"
     country_id: 1
+  - id: 3
+    street: "street3"
+    building_number: 33
+    flor_number: 9
+    apartment_number: 303
+    zip_code: 91000
+    city: "city3"
+    country_id: 1
 user_address:
   - id: 1
     address_id: 1
@@ -68,6 +76,10 @@ user_address:
   - id: 2
     address_id: 2
     is_default: false
+    user_details_id: 2
+  - id: 3
+    address_id: 3
+    is_default: true
     user_details_id: 2
 credit_card:
   - id: 1

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserStatusDto {
+public class UserDetailsStatusDto {
     private String userId;
     private boolean status;
 }

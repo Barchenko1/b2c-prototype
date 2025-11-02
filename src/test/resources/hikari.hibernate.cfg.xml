@@ -496,6 +496,7 @@
     <entity class="com.b2c.prototype.modal.entity.user.UserCreditCard" />
 
     <entity class="com.b2c.prototype.modal.entity.item.Discount" />
+    <entity class="com.b2c.prototype.modal.entity.item.DiscountGroup" />
     <entity class="com.b2c.prototype.modal.entity.payment.CommissionValue" />
     <entity class="com.b2c.prototype.modal.entity.payment.MinMaxCommission" />
 

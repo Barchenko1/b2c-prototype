@@ -24,7 +24,7 @@ contact_info:
     email: "john.doe2@example.com"
     birthday_date: "1996-01-01"
     is_contact_phone_verified: true
-    is_email_verified: false
+    is_email_verified: true
     contact_phone_id: 2
 user_details:
   - id: 1
@@ -114,6 +114,17 @@ device:
     language: "language2"
     timezone: "timezone2"
     platform: "platform2"
+    screen_height: 1080
+    screen_width: 1920
+    is_this_device: false
+    user_details_id: 2
+  - id: 3
+    login_time: "2025-03-03 12:00:00"
+    user_agent: "agent3"
+    ip_address: "ipAddress3"
+    language: "language3"
+    timezone: "timezone3"
+    platform: "platform3"
     screen_height: 1080
     screen_width: 1920
     is_this_device: true

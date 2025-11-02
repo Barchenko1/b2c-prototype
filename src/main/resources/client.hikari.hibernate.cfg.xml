@@ -50,6 +50,7 @@
         <mapping class="com.b2c.prototype.modal.entity.user.UserCreditCard" />
 
         <mapping class="com.b2c.prototype.modal.entity.item.Discount" />
+        <mapping class="com.b2c.prototype.modal.entity.item.DiscountGroup" />
         <mapping class="com.b2c.prototype.modal.entity.payment.CommissionValue" />
         <mapping class="com.b2c.prototype.modal.entity.payment.MinMaxCommission" />
         <mapping class="com.b2c.prototype.modal.entity.payment.CurrencyCoefficient" />

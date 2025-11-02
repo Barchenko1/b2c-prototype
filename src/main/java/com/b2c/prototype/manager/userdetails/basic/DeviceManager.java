@@ -30,7 +30,7 @@ public class DeviceManager implements IDeviceManager {
     @Override
     public void activateCurrentDevice(String userId, String clientIp, DeviceDto deviceDto) {
         UserDetails userDetails = generalEntityDao.findEntity(
-                "UserDetails.findAllDevicesByUserId",
+                "UserDetails.findDevicesByUserId",
                 Pair.of(USER_ID, userId));
         Device newDevice = userDetailsTransformService.mapDeviceDtoToDevice(deviceDto);
 
@@ -59,7 +59,7 @@ public class DeviceManager implements IDeviceManager {
     @Override
     public void deleteDevice(String userId, DeviceDto deviceDto) {
         UserDetails userDetails = generalEntityDao.findEntity(
-                "UserDetails.findAllDevicesByUserId",
+                "UserDetails.findDevicesByUserId",
                 Pair.of(USER_ID, userId));
 
         userDetails.getDevices().stream()
@@ -78,7 +78,7 @@ public class DeviceManager implements IDeviceManager {
     @Override
     public List<DeviceDto> getDevicesByUserId(String userId, String clientId) {
         UserDetails userDetails = generalEntityDao.findEntity(
-                "UserDetails.findAllDevicesByUserId",
+                "UserDetails.findDevicesByUserId",
                 Pair.of(USER_ID, userId));
 
         return userDetails.getDevices().stream()
