@@ -363,7 +363,7 @@ public class UserDetailsManager implements IUserDetailsManager {
     }
 
     private boolean isAddressExist(Address existingAddress, Address newAddress) {
-        return existingAddress.getCountry().getValue().equals(newAddress.getCountry().getValue())
+        return existingAddress.getCountry().getKey().equals(newAddress.getCountry().getKey())
                 && existingAddress.getCity().equals(newAddress.getCity())
                 && existingAddress.getStreet().equals(newAddress.getStreet())
                 && existingAddress.getBuildingNumber().equals(newAddress.getBuildingNumber())

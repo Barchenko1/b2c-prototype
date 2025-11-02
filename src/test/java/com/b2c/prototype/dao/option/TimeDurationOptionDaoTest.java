@@ -42,7 +42,7 @@ class TimeDurationOptionDaoTest extends AbstractDaoTest {
     @ExpectedDataSet(value = "datasets/dao/delivery/time_duration_option/updateTimeDurationOptionDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         TimeDurationOption entity = getTimeDurationOption();
-        entity.setLabel("Update 1-10");
+        entity.setValue("Update 1-10");
 //        entity.setValue("Update 1-10");
         entity.getPrice().setAmount(20);
 
@@ -97,7 +97,7 @@ class TimeDurationOptionDaoTest extends AbstractDaoTest {
     private TimeDurationOption getTimeDurationOption() {
         Currency currency = Currency.builder()
                 .id(1L)
-                .label("USD")
+                .key("USD")
                 .value("USD")
                 .build();
         Price price = Price.builder()
@@ -107,8 +107,8 @@ class TimeDurationOptionDaoTest extends AbstractDaoTest {
                 .build();
         return TimeDurationOption.builder()
                 .id(1L)
-                .label("1-10")
-//                .value("1-10")
+                .key("1-10")
+                .value("1-10")
                 .durationInMin(120)
                 .price(price)
                 .build();

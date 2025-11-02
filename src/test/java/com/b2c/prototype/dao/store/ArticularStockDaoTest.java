@@ -139,13 +139,13 @@ public class ArticularStockDaoTest extends AbstractDaoTest {
         Brand brand = Brand.builder()
                 .id(1L)
                 .value("Hermes")
-                .label("Hermes")
+                .key("Hermes")
                 .build();
         Category category = getCategory();
         ItemType itemType = ItemType.builder()
                 .id(1L)
                 .value("Clothes")
-                .label("Clothes")
+                .key("Clothes")
                 .build();
 
         Map<String, String> description = new HashMap<>(){{
@@ -166,23 +166,23 @@ public class ArticularStockDaoTest extends AbstractDaoTest {
     private ArticularItem getArticularItem() {
         Currency currency = Currency.builder()
                 .id(1L)
-                .label("USD")
+                .key("USD")
                 .value("USD")
                 .build();
         OptionGroup optionGroup = OptionGroup.builder()
                 .id(1L)
                 .value("Size")
-                .label("Size")
+                .key("Size")
                 .build();
         OptionItem optionItemL = OptionItem.builder()
                 .id(1L)
                 .value("L")
-                .label("L")
+                .key("L")
                 .build();
         OptionItem optionItemM = OptionItem.builder()
                 .id(2L)
                 .value("M")
-                .label("M")
+                .key("M")
                 .build();
 
         optionGroup.addOptionItem(optionItemL);
@@ -207,7 +207,7 @@ public class ArticularStockDaoTest extends AbstractDaoTest {
                 .build();
         ArticularStatus articularStatus = ArticularStatus.builder()
                 .id(1L)
-                .label("NEW")
+                .key("NEW")
                 .value("NEW")
                 .build();
 
@@ -236,7 +236,7 @@ public class ArticularStockDaoTest extends AbstractDaoTest {
         AvailabilityStatus availabilityStatus = AvailabilityStatus.builder()
                 .id(1L)
                 .value("Available")
-                .label("Available")
+                .key("Available")
                 .build();
         return ArticularStock.builder()
                 .id(1L)

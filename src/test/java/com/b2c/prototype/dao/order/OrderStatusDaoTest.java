@@ -35,7 +35,7 @@ class OrderStatusDaoTest extends AbstractDaoTest {
     @ExpectedDataSet(value = "datasets/dao/order/order_status/updateOrderStatusDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         OrderStatus entity = getOrderStatus();
-        entity.setValue("Update Pending");
+        entity.setKey("Update Pending");
 
         generalEntityDao.mergeEntity(entity);
     }
@@ -89,7 +89,7 @@ class OrderStatusDaoTest extends AbstractDaoTest {
         return OrderStatus.builder()
                 .id(1L)
                 .value("Pending")
-                .label("Pending")
+                .key("Pending")
                 .build();
     }
 

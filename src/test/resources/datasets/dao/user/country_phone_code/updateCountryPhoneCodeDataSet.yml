@@ -1,4 +1,4 @@
 country_phone_code:
   - id: 1
     value: "Update +11"
-    label: "Update +11"
+    key: "Update +11"

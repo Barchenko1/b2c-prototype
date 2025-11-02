@@ -38,7 +38,7 @@ class ContactPhoneDaoTest extends AbstractDaoTest {
         ContactPhone entity = getContactPhone();
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(2L)
-                .label("+22")
+                .key("+22")
                 .value("+22")
                 .build();
         entity.setCountryPhoneCode(countryPhoneCode);
@@ -96,7 +96,7 @@ class ContactPhoneDaoTest extends AbstractDaoTest {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(1L)
                 .value("+11")
-                .label("+11")
+                .key("+11")
                 .build();
         return ContactPhone.builder()
                 .id(1L)

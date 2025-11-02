@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-import static com.b2c.prototype.util.Constant.VALUE;
+import static com.b2c.prototype.util.Constant.KEY;
 
 @Service
 public class AvailabilityStatusManager implements IAvailabilityStatusManager {
@@ -30,7 +30,7 @@ public class AvailabilityStatusManager implements IAvailabilityStatusManager {
     @Override
     public void mergeEntity(String searchValue, AvailabilityStatus entity) {
         AvailabilityStatus fetchedEntity =
-                generalEntityDao.findEntity("AvailabilityStatus.findByValue", Pair.of(VALUE, searchValue));
+                generalEntityDao.findEntity("AvailabilityStatus.findByKey", Pair.of(KEY, searchValue));
         entity.setId(fetchedEntity.getId());
         generalEntityDao.mergeEntity(entity);
     }
@@ -38,16 +38,16 @@ public class AvailabilityStatusManager implements IAvailabilityStatusManager {
     @Transactional
     @Override
     public void removeEntity(String value) {
-        AvailabilityStatus fetchedEntity = generalEntityDao.findEntity("AvailabilityStatus.findByValue", Pair.of(VALUE, value));
+        AvailabilityStatus fetchedEntity = generalEntityDao.findEntity("AvailabilityStatus.findByKey", Pair.of(KEY, value));
         generalEntityDao.removeEntity(fetchedEntity);
     }
 
     public AvailabilityStatus getEntity(String value) {
-        return generalEntityDao.findEntity("AvailabilityStatus.findByValue", Pair.of(VALUE, value));
+        return generalEntityDao.findEntity("AvailabilityStatus.findByKey", Pair.of(KEY, value));
     }
 
     public Optional<AvailabilityStatus> getEntityOptional(String value) {
-        AvailabilityStatus entity = generalEntityDao.findEntity("AvailabilityStatus.findByValue", Pair.of(VALUE, value));
+        AvailabilityStatus entity = generalEntityDao.findEntity("AvailabilityStatus.findByKey", Pair.of(KEY, value));
         return Optional.of(entity);
     }
 

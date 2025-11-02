@@ -21,7 +21,7 @@ import static com.b2c.prototype.util.CategoryUtil.flattenCategory;
 import static com.b2c.prototype.util.CategoryUtil.getAllValues;
 import static com.b2c.prototype.util.CategoryUtil.getValues;
 import static com.b2c.prototype.util.CategoryUtil.validateNoDuplicates;
-import static com.b2c.prototype.util.Constant.VALUE;
+import static com.b2c.prototype.util.Constant.KEY;
 
 @Slf4j
 @Service
@@ -41,8 +41,8 @@ public class CategoryManager implements ICategoryManager {
     @Override
     public void updateSingleCategory(CategoryDto categoryDto) {
         Optional<Category> optionalCategory = generalEntityDao.findOptionEntity(
-                "Category.findByValue",
-                Pair.of(VALUE, categoryDto.getOldValue()));
+                "Category.findByKey",
+                Pair.of(KEY, categoryDto.getOldValue()));
         if (optionalCategory.isPresent()) {
             Category category = optionalCategory.get();
             List<String> values = getValues(category);
@@ -69,8 +69,8 @@ public class CategoryManager implements ICategoryManager {
     @Override
     public void deleteCategory(String categoryValue) {
         Optional<Category> optionalCategory = generalEntityDao.findOptionEntity(
-                "Category.findByValue",
-                Pair.of(VALUE, categoryValue));
+                "Category.findByKey",
+                Pair.of(KEY, categoryValue));
         if (optionalCategory.isPresent()) {
             Category category = optionalCategory.get();
             generalEntityDao.removeEntity(category);
@@ -81,8 +81,8 @@ public class CategoryManager implements ICategoryManager {
     public CategoryDto getCategoryByCategoryName(String categoryName) {
         AtomicReference<CategoryDto> categoryDto = new AtomicReference<>();
         Optional<Category> optionalCategory = generalEntityDao.findOptionEntity(
-                "Category.findByValue",
-                Pair.of(VALUE, categoryName));
+                "Category.findByKey",
+                Pair.of(KEY, categoryName));
         categoryDto.set(optionalCategory
                 .map(CategoryUtil::toDto)
                 .orElseThrow(() -> new RuntimeException("Category not found")));

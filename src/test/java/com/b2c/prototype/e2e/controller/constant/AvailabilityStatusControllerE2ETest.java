@@ -38,15 +38,15 @@ public class AvailabilityStatusControllerE2ETest extends BasicE2ETest {
     @ExpectedDataSet(value = "datasets/e2e/store/availability_status/updateE2EAvailabilityStatusDataSet.yml", orderBy = "id")
     public void testUpdateEntity() {
         ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .label("Available")
                 .value("Update Available")
+                .key("Update Available")
                 .build();
 
         String jsonPayload = writeValueAsString(constantPayloadDto);
         webTestClient.put()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "Available")
+                        .queryParam("key", "Available")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -60,15 +60,15 @@ public class AvailabilityStatusControllerE2ETest extends BasicE2ETest {
     @ExpectedDataSet(value = "datasets/e2e/store/availability_status/updateE2EAvailabilityStatusDataSet.yml", orderBy = "id")
     public void testPatchEntity() {
         ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .label("Available")
                 .value("Update Available")
+                .key("Update Available")
                 .build();
 
         String jsonPayload = writeValueAsString(constantPayloadDto);
         webTestClient.patch()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "Available")
+                        .queryParam("key", "Available")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -84,7 +84,7 @@ public class AvailabilityStatusControllerE2ETest extends BasicE2ETest {
         webTestClient.delete()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "Unavailable")
+                        .queryParam("key", "Unavailable")
                         .build())
                 .accept(MediaType.TEXT_PLAIN)
                 .exchange()
@@ -96,12 +96,12 @@ public class AvailabilityStatusControllerE2ETest extends BasicE2ETest {
     public void testGetEntities() {
         List<AvailabilityStatusDto> constantPayloadDtoList = List.of(
                 AvailabilityStatusDto.builder()
-                        .label("Available")
                         .value("Available")
+                        .key("Available")
                         .build(),
                 AvailabilityStatusDto.builder()
-                        .label("Unavailable")
                         .value("Unavailable")
+                        .key("Unavailable")
                         .build());
 
         List<AvailabilityStatusDto> actual =
@@ -122,14 +122,14 @@ public class AvailabilityStatusControllerE2ETest extends BasicE2ETest {
     @DataSet(value = "datasets/e2e/store/availability_status/testE2EAvailabilityStatusDataSet.yml", cleanBefore = true)
     public void testGetEntity() {
         AvailabilityStatusDto expected = AvailabilityStatusDto.builder()
-                .label("Unavailable")
                 .value("Unavailable")
+                .key("Unavailable")
                 .build();
 
         AvailabilityStatusDto actual = webTestClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "Unavailable")
+                        .queryParam("key", "Unavailable")
                         .build())
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
@@ -144,8 +144,8 @@ public class AvailabilityStatusControllerE2ETest extends BasicE2ETest {
 
     private ConstantPayloadDto getConstantPayloadDto() {
         return ConstantPayloadDto.builder()
-                .label("Unavailable")
                 .value("Unavailable")
+                .key("Unavailable")
                 .build();
     }
 }

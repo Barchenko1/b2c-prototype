@@ -1,21 +1,21 @@
 brand:
   - id: 1
     value: "TechBrand"
-    label: "TechBrand"
+    key: "TechBrand"
   - id: 2
     value: "Update TechBrand"
-    label: "Update TechBrand"
+    key: "Update TechBrand"
 item_type:
   - id: 1
     value: "Electronic"
-    label: "Electronic"
+    key: "Electronic"
   - id: 2
     value: "Update Electronic"
-    label: "Update Electronic"
+    key: "Update Electronic"
 currency:
   - id: 1
     value: "USD"
-    label: "USD"
+    key: "USD"
 price:
   - id: 1
     amount: 1000
@@ -53,54 +53,54 @@ discount:
     currency_id: 1
 option_group:
   - id: 1
-    label: "Size"
+    key: "Size"
     value: "Size"
   - id: 2
-    label: "Color"
+    key: "Color"
     value: "Color"
 option_item:
   - id: 1
     value: "L"
-    label: "L"
+    key: "L"
     option_group_id: 1
   - id: 2
     value: "M"
-    label: "M"
+    key: "M"
     option_group_id: 1
   - id: 3
     value: "16"
-    label: "16"
+    key: "16"
     option_group_id: 1
   - id: 4
     value: "Red"
-    label: "Red"
+    key: "Red"
     option_group_id: 2
   - id: 5
     value: "Blue"
-    label: "Blue"
+    key: "Blue"
     option_group_id: 2
 category:
   - id: 1
-    label: "Electronic"
+    key: "Electronic"
     value: "Electronic"
   - id: 2
     category_id: 1
-    label: "Laptop"
+    key: "Laptop"
     value: "Laptop"
   - id: 3
-    label: "Update Electronic"
+    key: "Update Electronic"
     value: "Update Electronic"
   - id: 4
     category_id: 3
-    label: "Update Laptop"
+    key: "Update Laptop"
     value: "Update Laptop"
 articular_status:
   - id: 1
     value: "NEW"
-    label: "NEW"
+    key: "NEW"
   - id: 2
     value: "COMMON"
-    label: "COMMON"
+    key: "COMMON"
 metadata:
   - id: 1
     metadata_uniq_id: 123

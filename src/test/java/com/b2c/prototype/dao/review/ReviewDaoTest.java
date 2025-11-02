@@ -99,7 +99,7 @@ class ReviewDaoTest extends AbstractDaoTest {
                 .build();
         ReviewStatus reviewStatus = ReviewStatus.builder()
                 .id(1L)
-                .label("Pending")
+                .key("Pending")
                 .value("PENDING")
                 .build();
         return Review.builder()

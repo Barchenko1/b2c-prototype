@@ -35,7 +35,7 @@ class BrandDaoTest extends AbstractDaoTest {
     @ExpectedDataSet(value = "datasets/dao/item/brand/updateBrandDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         Brand entity = getBrand();
-        entity.setValue("Update Apple");
+        entity.setKey("Update Apple");
 
         generalEntityDao.mergeEntity(entity);
     }
@@ -89,7 +89,7 @@ class BrandDaoTest extends AbstractDaoTest {
         return Brand.builder()
                 .id(1L)
                 .value("Apple")
-                .label("Apple")
+                .key("Apple")
                 .build();
     }
 

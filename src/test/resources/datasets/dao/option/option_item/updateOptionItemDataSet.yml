@@ -1,9 +1,9 @@
 option_group:
   - id: 1
     value: "Size"
-    label: "Size"
+    key: "Size"
 option_item:
   - id: 1
     value: "XL"
-    label: "XL"
+    key: "XL"
     option_group_id: 1

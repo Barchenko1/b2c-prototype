@@ -48,8 +48,8 @@ class CustomerSingleDeliveryOrderDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     private static final Map<String, Currency> CACHE = new HashMap<>(){{
-        put("USD", Currency.builder().id(1L).label("USD").value("USD").build());
-        put("EUR", Currency.builder().id(2L).label("EUR").value("EUR").build());
+        put("USD", Currency.builder().id(1L).key("USD").value("USD").build());
+        put("EUR", Currency.builder().id(2L).key("EUR").value("EUR").build());
     }};
 
     @Test
@@ -104,7 +104,7 @@ class CustomerSingleDeliveryOrderDaoTest extends AbstractDaoTest {
 
         OrderStatus orderStatus = OrderStatus.builder()
                 .id(2L)
-                .label("Done")
+                .key("Done")
                 .value("Done")
                 .build();
         entity.setStatus(orderStatus);
@@ -161,7 +161,7 @@ class CustomerSingleDeliveryOrderDaoTest extends AbstractDaoTest {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(1L)
                 .value("+11")
-                .label("+11")
+                .key("+11")
                 .build();
         ContactPhone contactPhone = ContactPhone.builder()
                 .id(1L)
@@ -184,7 +184,7 @@ class CustomerSingleDeliveryOrderDaoTest extends AbstractDaoTest {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(1L)
                 .value("+11")
-                .label("+11")
+                .key("+11")
                 .build();
         ContactPhone contactPhone = ContactPhone.builder()
                 .id(2L)
@@ -207,14 +207,14 @@ class CustomerSingleDeliveryOrderDaoTest extends AbstractDaoTest {
         return OrderStatus.builder()
                 .id(1L)
                 .value("Pending")
-                .label("Pending")
+                .key("Pending")
                 .build();
     }
 
     private Delivery getDelivery() {
         Country country = Country.builder()
                 .id(1L)
-                .label("USA")
+                .key("USA")
                 .value("USA")
                 .build();
         Address address = Address.builder()
@@ -229,7 +229,7 @@ class CustomerSingleDeliveryOrderDaoTest extends AbstractDaoTest {
         DeliveryType deliveryType = DeliveryType.builder()
                 .id(1L)
                 .value("Type")
-                .label("Type")
+                .key("Type")
                 .build();
 
         return Delivery.builder()
@@ -244,17 +244,17 @@ class CustomerSingleDeliveryOrderDaoTest extends AbstractDaoTest {
         OptionGroup optionGroup = OptionGroup.builder()
                 .id(1L)
                 .value("Size")
-                .label("Size")
+                .key("Size")
                 .build();
         OptionItem optionItemL = OptionItem.builder()
                 .id(1L)
                 .value("L")
-                .label("L")
+                .key("L")
                 .build();
         OptionItem optionItemM = OptionItem.builder()
                 .id(2L)
                 .value("M")
-                .label("M")
+                .key("M")
                 .build();
 
         optionGroup.addOptionItem(optionItemL);
@@ -279,7 +279,7 @@ class CustomerSingleDeliveryOrderDaoTest extends AbstractDaoTest {
                 .build();
         ArticularStatus articularStatus = ArticularStatus.builder()
                 .id(1L)
-                .label("NEW")
+                .key("NEW")
                 .value("NEW")
                 .build();
 
@@ -318,7 +318,7 @@ class CustomerSingleDeliveryOrderDaoTest extends AbstractDaoTest {
         PaymentMethod paymentMethod = PaymentMethod.builder()
                 .id(1L)
                 .value("Card")
-                .label("Card")
+                .key("Card")
                 .build();
         Currency currencyUsd = CACHE.get("USD");
         Currency currencyEur = CACHE.get("EUR");
@@ -407,7 +407,7 @@ class CustomerSingleDeliveryOrderDaoTest extends AbstractDaoTest {
 
         PaymentStatus paymentStatus = PaymentStatus.builder()
                 .id(1L)
-                .label("Done")
+                .key("Done")
                 .value("Done")
                 .build();
 

@@ -1,4 +1,4 @@
 message_type:
   - id: 1
     value: "Update InMail"
-    label: "InMail"
+    key: "InMail"

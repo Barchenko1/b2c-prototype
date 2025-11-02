@@ -98,11 +98,11 @@ class ZoneOptionDaoTest extends AbstractDaoTest {
         Country country = Country.builder()
                 .id(1L)
                 .value("Country")
-                .label("Country")
+                .key("Country")
                 .build();
         Currency currency = Currency.builder()
                 .id(1L)
-                .label("USD")
+                .key("USD")
                 .value("USD")
                 .build();
         Price price = Price.builder()

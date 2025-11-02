@@ -96,7 +96,7 @@ public class CommissionValueDaoTest extends AbstractDaoTest {
         Currency currency = Currency.builder()
                 .id(1L)
                 .value("USD")
-                .label("USD")
+                .key("USD")
                 .build();
 
         return CommissionValue.builder()

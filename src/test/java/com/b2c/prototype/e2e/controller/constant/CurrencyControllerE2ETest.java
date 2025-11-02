@@ -38,15 +38,15 @@ public class CurrencyControllerE2ETest extends BasicE2ETest {
     @ExpectedDataSet(value = "datasets/e2e/item/currency/updateE2ECurrencyDataSet.yml", orderBy = "id")
     public void testUpdateEntity() {
         ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .label("USD")
                 .value("Update USD")
+                .key("Update USD")
                 .build();
 
         String jsonPayload = writeValueAsString(constantPayloadDto);
         webTestClient.put()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "USD")
+                        .queryParam("key", "USD")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -60,15 +60,15 @@ public class CurrencyControllerE2ETest extends BasicE2ETest {
     @ExpectedDataSet(value = "datasets/e2e/item/currency/updateE2ECurrencyDataSet.yml", orderBy = "id")
     public void testPatchEntity() {
         ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .label("USD")
                 .value("Update USD")
+                .key("Update USD")
                 .build();
 
         String jsonPayload = writeValueAsString(constantPayloadDto);
         webTestClient.patch()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "USD")
+                        .queryParam("key", "USD")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -84,7 +84,7 @@ public class CurrencyControllerE2ETest extends BasicE2ETest {
         webTestClient.delete()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "USD")
+                        .queryParam("key", "USD")
                         .build())
                 .accept(MediaType.TEXT_PLAIN)
                 .exchange()
@@ -96,12 +96,12 @@ public class CurrencyControllerE2ETest extends BasicE2ETest {
     public void testGetEntities() {
         List<CurrencyDto> constantPayloadDtoList = List.of(
                 CurrencyDto.builder()
-                        .label("EUR")
                         .value("EUR")
+                        .key("EUR")
                         .build(),
                 CurrencyDto.builder()
-                        .label("USD")
                         .value("USD")
+                        .key("USD")
                         .build());
 
         List<CurrencyDto> actual =
@@ -122,15 +122,15 @@ public class CurrencyControllerE2ETest extends BasicE2ETest {
     @DataSet(value = "datasets/e2e/item/currency/testE2ECurrencyDataSet.yml", cleanBefore = true)
     public void testGetEntity() {
         CurrencyDto expected = CurrencyDto.builder()
-                .label("USD")
                 .value("USD")
+                .key("USD")
                 .build();
 
         CurrencyDto actual =
                 webTestClient.get()
                         .uri(uriBuilder -> uriBuilder
                                 .path(URL_TEMPLATE)
-                                .queryParam("value", "USD")
+                                .queryParam("key", "USD")
                                 .build())
                         .accept(MediaType.APPLICATION_JSON)
                         .exchange()
@@ -145,8 +145,8 @@ public class CurrencyControllerE2ETest extends BasicE2ETest {
 
     private ConstantPayloadDto getConstantPayloadDto() {
         return ConstantPayloadDto.builder()
-                .label("USD")
                 .value("USD")
+                .key("USD")
                 .build();
     }
 

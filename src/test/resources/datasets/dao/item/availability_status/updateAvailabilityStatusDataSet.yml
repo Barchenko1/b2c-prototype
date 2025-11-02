@@ -1,4 +1,4 @@
 availability_status:
   - id: 1
     value: "Update Available"
-    label: "Available"
+    key: "Available"

@@ -2,24 +2,24 @@ credit_card: []
 payment_method:
   - id: 1
     value: "Card"
-    label: "Card"
+    key: "Card"
   - id: 2
     value: "Blik"
-    label: "Blik"
+    key: "Blik"
 payment_status:
   - id: 1
     value: "Done"
-    label: "Done"
+    key: "Done"
   - id: 2
     value: "Approved"
-    label: "Approved"
+    key: "Approved"
 currency:
   - id: 1
     value: "USD"
-    label: "USD"
+    key: "USD"
   - id: 2
     value: "EUR"
-    label: "EUR"
+    key: "EUR"
 discount:
   - id: 1
     amount: 5

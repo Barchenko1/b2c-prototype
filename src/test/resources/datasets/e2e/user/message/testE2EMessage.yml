@@ -1,7 +1,7 @@
 country_phone_code:
   - id: 1
     value: "+11"
-    label: "+11"
+    key: "+11"
 contact_phone:
   - id: 1
     phone_number: "111-111-111"
@@ -23,7 +23,7 @@ user_details:
     contact_info_id: 1
 country:
   - id: 1
-    label: "USA"
+    key: "USA"
     value: "USA"
 address:
   - id: 1
@@ -55,17 +55,17 @@ user_credit_card:
     is_default: true
 message_status:
   - id: 1
-    label: "unread"
+    key: "unread"
     value: "unread"
   - id: 2
-    label: "read"
+    key: "read"
     value: "read"
   - id: 3
-    label: "deleted"
+    key: "deleted"
     value: "deleted"
 message_type:
   - id: 1
-    label: "APP_NOTIFICATION"
+    key: "APP_NOTIFICATION"
     value: "APP_NOTIFICATION"
 message_box:
   - id: 1

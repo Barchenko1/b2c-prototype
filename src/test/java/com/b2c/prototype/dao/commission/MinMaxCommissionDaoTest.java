@@ -99,7 +99,7 @@ public class MinMaxCommissionDaoTest extends AbstractDaoTest {
         Currency currency = Currency.builder()
                 .id(1L)
                 .value("USD")
-                .label("USD")
+                .key("USD")
                 .build();
         Price price = Price.builder()
                 .id(1L)

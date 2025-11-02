@@ -1,5 +1,5 @@
 option_group:
   - id: 1
-    label: "Color"
+    key: "Color"
     value: "Color"
 option_item: []

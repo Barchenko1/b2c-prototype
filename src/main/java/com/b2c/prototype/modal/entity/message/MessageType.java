@@ -14,8 +14,8 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @NamedQueries({
         @NamedQuery(
-                name = "MessageType.findByValue",
-                query = "SELECT m FROM MessageType m WHERE m.value = :value"
+                name = "MessageType.findByKey",
+                query = "SELECT m FROM MessageType m WHERE m.key = :key"
         ),
         @NamedQuery(
                 name = "MessageType.all",

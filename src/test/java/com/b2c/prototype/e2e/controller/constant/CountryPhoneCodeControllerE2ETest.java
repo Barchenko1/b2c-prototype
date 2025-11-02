@@ -40,15 +40,15 @@ public class CountryPhoneCodeControllerE2ETest extends BasicE2ETest {
     @ExpectedDataSet(value = "datasets/e2e/user/country_phone_code/updateE2ECountryPhoneCodeDataSet.yml", orderBy = "id")
     public void testUpdateEntity() {
         ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .label("+11")
                 .value("Update +11")
+                .key("Update +11")
                 .build();
 
         String jsonPayload = writeValueAsString(constantPayloadDto);
         webTestClient.put()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", UriUtils.encode("+11", StandardCharsets.UTF_8))
+                        .queryParam("key", UriUtils.encode("+11", StandardCharsets.UTF_8))
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -62,15 +62,15 @@ public class CountryPhoneCodeControllerE2ETest extends BasicE2ETest {
     @ExpectedDataSet(value = "datasets/e2e/user/country_phone_code/updateE2ECountryPhoneCodeDataSet.yml", orderBy = "id")
     public void testPatchEntity() {
         ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .label("+11")
                 .value("Update +11")
+                .key("Update +11")
                 .build();
 
         String jsonPayload = writeValueAsString(constantPayloadDto);
         webTestClient.patch()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", UriUtils.encode("+11", StandardCharsets.UTF_8))
+                        .queryParam("key", UriUtils.encode("+11", StandardCharsets.UTF_8))
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -86,7 +86,7 @@ public class CountryPhoneCodeControllerE2ETest extends BasicE2ETest {
         webTestClient.delete()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", UriUtils.encode("+22", StandardCharsets.UTF_8))
+                        .queryParam("key", UriUtils.encode("+22", StandardCharsets.UTF_8))
                         .build())
                 .accept(MediaType.TEXT_PLAIN)
                 .exchange()
@@ -98,12 +98,12 @@ public class CountryPhoneCodeControllerE2ETest extends BasicE2ETest {
     public void testGetEntities() {
         List<CountryPhoneCodeDto> constantPayloadDtoList = List.of(
                 CountryPhoneCodeDto.builder()
-                        .label("+11")
                         .value("+11")
+                        .key("+11")
                         .build(),
                 CountryPhoneCodeDto.builder()
-                        .label("+22")
                         .value("+22")
+                        .key("+22")
                         .build());
 
         List<CountryPhoneCodeDto> actual =
@@ -124,15 +124,15 @@ public class CountryPhoneCodeControllerE2ETest extends BasicE2ETest {
     @DataSet(value = "datasets/e2e/user/country_phone_code/testE2ECountryPhoneCodeDataSet.yml", cleanBefore = true)
     public void testGetEntity() {
         CountryPhoneCodeDto currencyDto = CountryPhoneCodeDto.builder()
-                .label("+22")
                 .value("+22")
+                .key("+22")
                 .build();
 
         CountryPhoneCodeDto actual =
                 webTestClient.get()
                         .uri(uriBuilder -> uriBuilder
                                 .path(URL_TEMPLATE)
-                                .queryParam("value", UriUtils.encode("+22", StandardCharsets.UTF_8))
+                                .queryParam("key", UriUtils.encode("+22", StandardCharsets.UTF_8))
                                 .build())
                         .accept(MediaType.APPLICATION_JSON)
                         .exchange()
@@ -147,8 +147,8 @@ public class CountryPhoneCodeControllerE2ETest extends BasicE2ETest {
 
     private ConstantPayloadDto getConstantPayloadDto() {
         return ConstantPayloadDto.builder()
-                .label("+22")
                 .value("+22")
+                .key("+22")
                 .build();
     }
 

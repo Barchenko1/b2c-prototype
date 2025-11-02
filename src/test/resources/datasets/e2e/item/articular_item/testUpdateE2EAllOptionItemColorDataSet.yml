@@ -1,14 +1,14 @@
 option_group:
   - id: 1
-    label: "Color"
+    key: "Color"
     value: "Color"
 option_item:
-  - label: "Orange"
+  - key: "Orange"
     value: "Orange"
     option_group_id: 1
-  - label: "Blue"
+  - key: "Blue"
     value: "Blue"
     option_group_id: 1
-  - label: "Red"
+  - key: "Red"
     value: "Red"
     option_group_id: 1

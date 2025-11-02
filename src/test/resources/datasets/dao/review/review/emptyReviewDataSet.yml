@@ -11,9 +11,9 @@ rating:
     value: 5
 review_status:
   - id: 1
-    label: "Pending"
+    key: "Pending"
     value: "PENDING"
   - id: 2
-    label: "done"
+    key: "done"
     value: "DONE"
 review: []

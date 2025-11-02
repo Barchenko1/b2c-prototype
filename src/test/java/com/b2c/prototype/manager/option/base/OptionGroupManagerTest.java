@@ -33,8 +33,8 @@ class OptionGroupManagerTest extends AbstractConstantEntityManagerTest<OptionGro
     @Test
     public void testPersistEntity() {
         ConstantPayloadDto dto = ConstantPayloadDto.builder()
-                .label("testLabel")
-                .value("testValue")
+                .value("testLabel")
+                .key("testValue")
                 .build();
         OptionGroup testValue = createTestValue();
 
@@ -49,8 +49,8 @@ class OptionGroupManagerTest extends AbstractConstantEntityManagerTest<OptionGro
     @Test
     public void testMergeEntity() {
         ConstantPayloadDto newDto = ConstantPayloadDto.builder()
-                .label("newLabel")
-                .value("newValue")
+                .value("newLabel")
+                .key("newValue")
                 .build();
 
         OptionGroup testValue = OptionGroup.builder()
@@ -62,7 +62,7 @@ class OptionGroupManagerTest extends AbstractConstantEntityManagerTest<OptionGro
 
 //        optionGroupManager.mergeEntity("testValue", newDto);
 
-        verifyUpdateEntity(testValue, newDto.getValue());
+        verifyUpdateEntity(testValue, newDto.getKey());
     }
 
     @Test

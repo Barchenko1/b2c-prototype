@@ -1,4 +1,4 @@
 country:
-  - label: "CANADA"
+  - key: "CANADA"
     value: "CANADA"
     flag_image_path: "/images/canada.jpg"

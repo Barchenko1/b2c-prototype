@@ -1,11 +1,11 @@
 country:
   - id: 1
-    label: "Country"
+    key: "Country"
     value: "Country"
 currency:
   - id: 1
     value: "USD"
-    label: "USD"
+    key: "USD"
 price:
   - id: 1
     amount: 10

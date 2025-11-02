@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-import static com.b2c.prototype.util.Constant.VALUE;
+import static com.b2c.prototype.util.Constant.KEY;
 
 @Service
 public class PaymentMethodManager implements IPaymentMethodManager {
@@ -28,23 +28,23 @@ public class PaymentMethodManager implements IPaymentMethodManager {
     @Transactional
     public void mergeEntity(String searchValue, PaymentMethod payload) {
         PaymentMethod fetchedEntity =
-                generalEntityDao.findEntity("PaymentMethod.findByValue", Pair.of(VALUE, searchValue));
+                generalEntityDao.findEntity("PaymentMethod.findByKey", Pair.of(KEY, searchValue));
         payload.setId(fetchedEntity.getId());
         generalEntityDao.mergeEntity(payload);
     }
 
     @Transactional
     public void removeEntity(String value) {
-        PaymentMethod fetchedEntity = generalEntityDao.findEntity("PaymentMethod.findByValue", Pair.of(VALUE, value));
+        PaymentMethod fetchedEntity = generalEntityDao.findEntity("PaymentMethod.findByKey", Pair.of(KEY, value));
         generalEntityDao.removeEntity(fetchedEntity);
     }
 
     public PaymentMethod getEntity(String value) {
-        return generalEntityDao.findEntity("PaymentMethod.findByValue", Pair.of(VALUE, value));
+        return generalEntityDao.findEntity("PaymentMethod.findByKey", Pair.of(KEY, value));
     }
 
     public Optional<PaymentMethod> getEntityOptional(String value) {
-        PaymentMethod entity = generalEntityDao.findEntity("PaymentMethod.findByValue", Pair.of(VALUE, value));
+        PaymentMethod entity = generalEntityDao.findEntity("PaymentMethod.findByKey", Pair.of(KEY, value));
         return Optional.of(entity);
     }
 

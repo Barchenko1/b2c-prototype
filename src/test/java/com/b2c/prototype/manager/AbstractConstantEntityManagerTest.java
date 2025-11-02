@@ -24,19 +24,17 @@ public abstract class AbstractConstantEntityManagerTest<E> {
     }
 
     protected void verifyUpdateEntity(E entity, String newValue) {
-//        
-//        verify(dao).findEntityAndUpdate(entity, parameter);
+
     }
 
     protected void verifyDeleteEntity(String value) {
-//        Parameter parameter = parameterFactory.createStringParameter(VALUE, value);
-//        verify(dao).findEntityAndDelete(parameter);
+
     }
 
     protected ConstantPayloadDto getResponseOneFieldEntityDto() {
         return ConstantPayloadDto.builder()
-                .value("testValue")
-                .label("label")
+                .key("testValue")
+                .value("label")
                 .build();
     }
 

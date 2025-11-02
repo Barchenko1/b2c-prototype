@@ -1,7 +1,7 @@
 brand:
   - id: 1
     value: "Android"
-    label: "Android"
+    key: "Android"
   - id: 2
     value: "Apple"
-    label: "Apple"
+    key: "Apple"

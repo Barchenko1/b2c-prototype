@@ -34,8 +34,8 @@ public class AvailabilityStatusDaoTest extends AbstractDaoTest {
     @ExpectedDataSet(value = "datasets/dao/store/availability_status/updateAvailabilityStatusDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         AvailabilityStatus entity = getAvailabilityStatus();
-        entity.setLabel("Unavailable");
         entity.setValue("Unavailable");
+        entity.setKey("Unavailable");
 
         generalEntityDao.mergeEntity(entity);
     }
@@ -89,7 +89,7 @@ public class AvailabilityStatusDaoTest extends AbstractDaoTest {
         return AvailabilityStatus.builder()
                 .id(1L)
                 .value("Available")
-                .label("Available")
+                .key("Available")
                 .build();
     }
 }

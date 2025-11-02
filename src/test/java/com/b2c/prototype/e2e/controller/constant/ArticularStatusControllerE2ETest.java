@@ -39,15 +39,15 @@ public class ArticularStatusControllerE2ETest extends BasicE2ETest {
     @ExpectedDataSet(value = "datasets/e2e/item/articular_status/updateE2EArticularStatusDataSet.yml", orderBy = "id")
     public void testUpdateEntity() {
         ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .label("Test1")
                 .value("Update Test1")
+                .key("Update Test1")
                 .build();
 
         String jsonPayload = writeValueAsString(constantPayloadDto);
         webTestClient.put()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "Test1")
+                        .queryParam("key", "Test1")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -61,15 +61,15 @@ public class ArticularStatusControllerE2ETest extends BasicE2ETest {
     @ExpectedDataSet(value = "datasets/e2e/item/articular_status/updateE2EArticularStatusDataSet.yml", orderBy = "id")
     public void testPatchEntity() {
         ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .label("Test1")
                 .value("Update Test1")
+                .key("Update Test1")
                 .build();
 
         String jsonPayload = writeValueAsString(constantPayloadDto);
         webTestClient.patch()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "Test1")
+                        .queryParam("key", "Test1")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -85,7 +85,7 @@ public class ArticularStatusControllerE2ETest extends BasicE2ETest {
         webTestClient.delete()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "Test2")
+                        .queryParam("key", "Test2")
                         .build())
                 .accept(MediaType.TEXT_PLAIN)
                 .exchange()
@@ -97,12 +97,12 @@ public class ArticularStatusControllerE2ETest extends BasicE2ETest {
     public void testGetEntities() {
         List<ArticularStatusDto> constantPayloadDtoList = List.of(
                 ArticularStatusDto.builder()
-                        .label("Test1")
                         .value("Test1")
+                        .key("Test1")
                         .build(),
                 ArticularStatusDto.builder()
-                        .label("Test2")
                         .value("Test2")
+                        .key("Test2")
                         .build());
 
         List<ArticularStatusDto> actual =
@@ -123,14 +123,14 @@ public class ArticularStatusControllerE2ETest extends BasicE2ETest {
     @DataSet(value = "datasets/e2e/item/articular_status/testE2EArticularStatusDataSet.yml", cleanBefore = true)
     public void testGetEntity() {
         AvailabilityStatusDto expected = AvailabilityStatusDto.builder()
-                .label("Test2")
                 .value("Test2")
+                .key("Test2")
                 .build();
 
         AvailabilityStatusDto actual = webTestClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "Test2")
+                        .queryParam("key", "Test2")
                         .build())
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
@@ -145,8 +145,8 @@ public class ArticularStatusControllerE2ETest extends BasicE2ETest {
 
     private ConstantPayloadDto getConstantPayloadDto() {
         return ConstantPayloadDto.builder()
-                .label("Test2")
                 .value("Test2")
+                .key("Test2")
                 .build();
     }
 

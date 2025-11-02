@@ -1,38 +1,38 @@
 brand:
   - id: 1
     value: "Hermes"
-    label: "Hermes"
+    key: "Hermes"
 item_type:
   - id: 1
     value: "Clothes"
-    label: "Clothes"
+    key: "Clothes"
 category:
   - id: 1
-    label: "category"
+    key: "category"
     value: "category"
 currency:
   - id: 1
     value: "USD"
-    label: "USD"
+    key: "USD"
 price: []
 discount: []
 option_group:
   - id: 1
-    label: "Size"
+    key: "Size"
     value: "Size"
 option_item:
   - id: 1
     value: "L"
-    label: "L"
+    key: "L"
     option_group_id: 1
   - id: 2
     value: "M"
-    label: "M"
+    key: "M"
     option_group_id: 1
 articular_status:
   - id: 1
     value: "NEW"
-    label: "NEW"
+    key: "NEW"
 metadata: []
 articular_item: []
 post: []

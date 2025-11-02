@@ -1,7 +1,7 @@
 currency:
   - id: 1
     value: "USD"
-    label: "USD"
+    key: "USD"
 discount:
   - id: 1
     amount: 20

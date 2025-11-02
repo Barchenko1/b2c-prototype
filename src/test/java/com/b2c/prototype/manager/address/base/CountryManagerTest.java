@@ -7,8 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -49,8 +47,8 @@ class CountryManagerTest extends AbstractConstantEntityManagerTest<Country> {
     @Test
     public void testMergeEntity() {
         CountryDto newDto = CountryDto.builder()
-                .label("newLabel")
-                .value("newValue")
+                .value("newLabel")
+                .key("newValue")
                 .build();
 
         Country testValue = Country.builder()
@@ -120,14 +118,14 @@ class CountryManagerTest extends AbstractConstantEntityManagerTest<Country> {
     private Country createTestValue() {
         return Country.builder()
                 .value("testValue")
-                .label("testLabel")
+                .key("testLabel")
                 .build();
     }
 
     private CountryDto getCountryDto() {
         return CountryDto.builder()
-                .value("testValue")
-                .label("testLabel")
+                .key("testValue")
+                .value("testLabel")
                 .build();
     }
 }

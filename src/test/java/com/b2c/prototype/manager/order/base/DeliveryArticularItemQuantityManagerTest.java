@@ -139,7 +139,7 @@ class DeliveryArticularItemQuantityManagerTest {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(1L)
                 .value("+11")
-                .label("+11")
+                .key("+11")
                 .build();
         ContactPhone contactPhone = ContactPhone.builder()
                 .id(1L)
@@ -157,7 +157,7 @@ class DeliveryArticularItemQuantityManagerTest {
     private Address createAddress() {
         Country country = Country.builder()
                 .id(1L)
-                .label("USA")
+                .key("USA")
                 .value("USA")
                 .build();
         return Address.builder()
@@ -201,7 +201,7 @@ class DeliveryArticularItemQuantityManagerTest {
                 .build();
         Currency currency = Currency.builder()
                 .id(1L)
-                .label("USD")
+                .key("USD")
                 .value("USD")
                 .build();
         Discount discount = Discount.builder()

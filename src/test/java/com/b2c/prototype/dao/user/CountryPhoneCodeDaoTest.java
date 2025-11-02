@@ -35,8 +35,8 @@ class CountryPhoneCodeDaoTest extends AbstractDaoTest {
     @ExpectedDataSet(value = "datasets/dao/user/country_phone_code/updateCountryPhoneCodeDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         CountryPhoneCode entity = getCountryPhoneCode();
-        entity.setLabel("Update +11");
         entity.setValue("Update +11");
+        entity.setKey("Update +11");
 
         generalEntityDao.mergeEntity(entity);
     }
@@ -90,7 +90,7 @@ class CountryPhoneCodeDaoTest extends AbstractDaoTest {
         return CountryPhoneCode.builder()
                 .id(1L)
                 .value("+11")
-                .label("+11")
+                .key("+11")
                 .build();
     }
 

@@ -1,10 +1,10 @@
 message_status:
   - id: 1
-    label: "New"
+    key: "New"
     value: "New"
 message_type:
   - id: 1
-    label: "InMail"
+    key: "InMail"
     value: "InMail"
 message_template: []
 message: []

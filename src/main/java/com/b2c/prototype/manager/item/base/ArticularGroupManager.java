@@ -5,7 +5,7 @@ import com.b2c.prototype.modal.dto.common.SearchFieldUpdateEntityDto;
 import com.b2c.prototype.modal.dto.payload.item.MetaDataDto;
 import com.b2c.prototype.modal.dto.payload.item.ResponseMetaDataDto;
 import com.b2c.prototype.modal.entity.item.MetaData;
-import com.b2c.prototype.manager.item.IMetaDataManager;
+import com.b2c.prototype.manager.item.IArticularGroupManager;
 import com.b2c.prototype.transform.item.IItemTransformService;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
@@ -16,19 +16,19 @@ import java.util.Optional;
 import static com.b2c.prototype.util.Constant.ITEM_ID;
 
 @Service
-public class MetaDataManager implements IMetaDataManager {
+public class ArticularGroupManager implements IArticularGroupManager {
 
     private final IGeneralEntityDao generalEntityDao;
     private final IItemTransformService itemTransformService;
 
-    public MetaDataManager(IGeneralEntityDao generalEntityDao,
-                           IItemTransformService itemTransformService) {
+    public ArticularGroupManager(IGeneralEntityDao generalEntityDao,
+                                 IItemTransformService itemTransformService) {
         this.generalEntityDao = generalEntityDao;
         this.itemTransformService = itemTransformService;
     }
 
     @Override
-    public void saveMetaData(MetaDataDto metaDataDto) {
+    public void saveArticularGroup(MetaDataDto metaDataDto) {
         MetaData metaData = itemTransformService.mapMetaDataDtoToMetaDataDto(metaDataDto);
 //            metaData.setItemId(getUUID());
 //        metaData.getArticularItemSet().forEach(articularItem ->
@@ -37,7 +37,7 @@ public class MetaDataManager implements IMetaDataManager {
     }
 
     @Override
-    public void updateMetaData(String itemId, MetaDataDto metaDataDto) {
+    public void updateArticularGroup(String itemId, MetaDataDto metaDataDto) {
         SearchFieldUpdateEntityDto<MetaDataDto> updateDto = SearchFieldUpdateEntityDto.<MetaDataDto>builder()
                 .searchField(itemId)
                 .updateDto(metaDataDto)
@@ -48,16 +48,16 @@ public class MetaDataManager implements IMetaDataManager {
     }
 
     @Override
-    public void deleteMetaData(String itemId) {
+    public void deleteArticularGroup(String itemId) {
         MetaData metaData = generalEntityDao.findEntity(
-                "MetaData.findByValue",
+                "MetaData.findByKey",
                 Pair.of(ITEM_ID, itemId));
 
         generalEntityDao.removeEntity(metaData);
     }
 
     @Override
-    public ResponseMetaDataDto getMetaData(String itemId) {
+    public ResponseMetaDataDto getArticularGroup(String itemId) {
         MetaData metaData = generalEntityDao.findEntity(
                 "MetaData.findItemDataWithFullRelations",
                 Pair.of(ITEM_ID, itemId));
@@ -68,7 +68,7 @@ public class MetaDataManager implements IMetaDataManager {
     }
 
     @Override
-    public List<ResponseMetaDataDto> getMetaDataList() {
+    public List<ResponseMetaDataDto> getArticularGroupList() {
         List<MetaData> metaDataList = generalEntityDao.findEntityList(
                 "MetaData.findAllWithFullRelations", (Pair<String, ?>) null);
 

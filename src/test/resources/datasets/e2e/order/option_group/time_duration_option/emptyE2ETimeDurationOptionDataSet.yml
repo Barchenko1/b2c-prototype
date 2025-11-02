@@ -1,17 +1,17 @@
 currency:
   - id: 1
     value: "USD"
-    label: "USD"
+    key: "USD"
 price:
   - amount: 20.0
     currency_id: 1
   - amount: 10.0
     currency_id: 1
 option_group:
-  - label: "CA"
+  - key: "CA"
     value: "CA"
 time_duration_option:
-  - label: "9-11"
+  - key: "CA_9-11"
     value: "9-11"
     start_time: "1970-01-01 09:00:00"
     end_time: "1970-01-01 11:00:00"
@@ -19,7 +19,7 @@ time_duration_option:
     duration_in_min: 120
     price_id: 1
     option_group_id: 1
-  - label: "12-14"
+  - key: "CA_12-14"
     value: "12-14"
     start_time: "1970-01-01 12:00:00"
     end_time: "1970-01-01 14:00:00"

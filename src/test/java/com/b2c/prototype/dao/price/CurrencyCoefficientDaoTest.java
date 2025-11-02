@@ -90,12 +90,12 @@ class CurrencyCoefficientDaoTest extends AbstractDaoTest {
     private CurrencyCoefficient getCurrencyCoefficient() {
         Currency currencyFrom = Currency.builder()
                 .id(1L)
-                .label("USD")
+                .key("USD")
                 .value("USD")
                 .build();
         Currency currencyTo = Currency.builder()
                 .id(2L)
-                .label("EUR")
+                .key("EUR")
                 .value("EUR")
                 .build();
         return CurrencyCoefficient.builder()

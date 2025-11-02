@@ -30,13 +30,13 @@ import java.util.Set;
 @Table(name = "zone_option_group")
 @NamedQueries({
         @NamedQuery(
-                name = "ZoneOptionGroup.findByValue",
+                name = "ZoneOptionGroup.findByKey",
                 query = "SELECT zog FROM ZoneOptionGroup zog " +
                         "LEFT JOIN FETCH zog.country zogc " +
                         "LEFT JOIN FETCH zog.zoneOptions zogz " +
                         "LEFT JOIN FETCH zogz.price zogzp " +
                         "LEFT JOIN FETCH zogzp.currency zogzpc " +
-                        "WHERE zog.value = :value"
+                        "WHERE zog.key = :key"
         ),
         @NamedQuery(
                 name = "ZoneOptionGroup.all",

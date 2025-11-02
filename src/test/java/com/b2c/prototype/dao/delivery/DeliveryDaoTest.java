@@ -98,7 +98,7 @@ class DeliveryDaoTest extends AbstractDaoTest {
     private Delivery getDelivery() {
         Country country = Country.builder()
                 .id(1L)
-                .label("USA")
+                .key("USA")
                 .value("USA")
                 .build();
         Address address = Address.builder()
@@ -113,7 +113,7 @@ class DeliveryDaoTest extends AbstractDaoTest {
         DeliveryType deliveryType = DeliveryType.builder()
                 .id(1L)
                 .value("Type")
-                .label("Type")
+                .key("Type")
                 .build();
 
         return Delivery.builder()

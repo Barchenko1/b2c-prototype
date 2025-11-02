@@ -20,8 +20,8 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NamedQueries({
         @NamedQuery(
-                name = "Country.findByValue",
-                query = "SELECT c FROM Country c WHERE c.value = :value"
+                name = "Country.findByKey",
+                query = "SELECT c FROM Country c WHERE c.key = :key"
         ),
         @NamedQuery(
                 name = "Country.all",

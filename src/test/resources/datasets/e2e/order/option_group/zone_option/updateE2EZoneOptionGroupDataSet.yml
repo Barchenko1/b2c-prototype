@@ -1,11 +1,11 @@
 country:
   - id: 1
-    label: "USA"
+    key: "USA"
     value: "USA"
 currency:
   - id: 1
     value: "USD"
-    label: "USD"
+    key: "USD"
 price:
   - id: 1
     amount: 10.0
@@ -14,40 +14,40 @@ price:
     amount: 10.0
     currency_id: 1
   - id: 3
-    amount: 20.0
+    amount: 30.0
     currency_id: 1
   - id: 4
-    amount: 30.0
+    amount: 20.0
     currency_id: 1
 zone_option_group:
   - id: 1
-    label: "CA-Zone"
+    key: "CA-Zone"
     value: "CA-Zone"
     city: "California"
     country_id: 1
   - id: 2
-    label: "NY-Zone2"
+    key: "NY-Zone2"
     value: "NY-Zone2"
     city: "New York2"
     country_id: 1
 zone_option:
   - id: 1
-    label: "CA-ZoneA"
+    key: "CA-ZoneA"
     value: "CA-ZoneA"
     price_id: 1
     option_group_id: 1
   - id: 2
-    label: "CA-ZoneB"
+    key: "CA-ZoneB"
     value: "CA-ZoneB"
     price_id: 2
     option_group_id: 1
   - id: 3
-    label: "NY-ZoneB2"
-    value: "NY-ZoneB2"
+    key: "NY-ZoneC"
+    value: "NY-ZoneC"
     price_id: 3
     option_group_id: 2
   - id: 4
-    label: "NY-ZoneC"
-    value: "NY-ZoneC"
+    key: "NY-ZoneB2"
+    value: "NY-ZoneB2"
     price_id: 4
     option_group_id: 2

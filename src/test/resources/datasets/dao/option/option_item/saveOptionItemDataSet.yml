@@ -1,6 +1,6 @@
 option_group:
   - value: "Size"
-    label: "Size"
+    key: "Size"
 option_item:
-  - label: "L"
+  - key: "L"
     value: "L"

@@ -31,10 +31,10 @@ import java.util.List;
 @AllArgsConstructor
 @NamedQueries({
         @NamedQuery(
-                name = "Category.findByValue",
+                name = "Category.findByKey",
                 query = "SELECT c FROM Category c " +
                         "LEFT JOIN FETCH c.childList cl1 " +
-                        "WHERE c.value = :value"
+                        "WHERE c.value = :key"
         ),
         @NamedQuery(
                 name = "Category.allParent",

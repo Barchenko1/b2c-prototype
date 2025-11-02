@@ -44,7 +44,7 @@ class ContactInfoDaoTest extends AbstractDaoTest {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(2L)
                 .value("+22")
-                .label("+22")
+                .key("+22")
                 .build();
         ContactPhone contactPhone = ContactPhone.builder()
                 .id(1L)
@@ -107,7 +107,7 @@ class ContactInfoDaoTest extends AbstractDaoTest {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(1L)
                 .value("+11")
-                .label("+11")
+                .key("+11")
                 .build();
         ContactPhone contactPhone = ContactPhone.builder()
                 .id(1L)

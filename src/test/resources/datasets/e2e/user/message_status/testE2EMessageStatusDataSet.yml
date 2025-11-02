@@ -1,7 +1,7 @@
 message_status:
   - id: 1
-    label: "New"
+    key: "New"
     value: "New"
   - id: 2
-    label: "Read"
+    key: "Read"
     value: "Read"

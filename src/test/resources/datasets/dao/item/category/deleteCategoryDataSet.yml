@@ -1,4 +1,4 @@
 category:
   - id: 1
-    label: "parent"
+    key: "parent"
     value: "parent"

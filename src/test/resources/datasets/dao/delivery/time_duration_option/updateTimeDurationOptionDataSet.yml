@@ -1,7 +1,7 @@
 currency:
   - id: 1
     value: "USD"
-    label: "USD"
+    key: "USD"
 price:
   - id: 1
     amount: 20
@@ -9,6 +9,6 @@ price:
 time_duration_option:
   - id: 1
     value: "Update 1-10"
-    label: "Update 1-10"
+    key: "Update 1-10"
     duration_in_min: 120
     price_id: 1

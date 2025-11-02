@@ -53,8 +53,8 @@ class OrderHistoryDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     private static final Map<String, Currency> CURRENCY_CACHE = new HashMap<>(){{
-        put("USD", Currency.builder().id(1L).label("USD").value("USD").build());
-        put("EUR", Currency.builder().id(2L).label("EUR").value("EUR").build());
+        put("USD", Currency.builder().id(1L).key("USD").value("USD").build());
+        put("EUR", Currency.builder().id(2L).key("EUR").value("EUR").build());
     }};
 
     @Test
@@ -115,7 +115,7 @@ class OrderHistoryDaoTest extends AbstractDaoTest {
 
         OrderStatus orderStatus = OrderStatus.builder()
                 .id(2L)
-                .label("Done")
+                .key("Done")
                 .value("Done")
                 .build();
         entity.getCustomerOrders().get(0).setStatus(orderStatus);
@@ -172,7 +172,7 @@ class OrderHistoryDaoTest extends AbstractDaoTest {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(1L)
                 .value("+11")
-                .label("+11")
+                .key("+11")
                 .build();
         ContactPhone contactPhone = ContactPhone.builder()
                 .id(1L)
@@ -195,7 +195,7 @@ class OrderHistoryDaoTest extends AbstractDaoTest {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(1L)
                 .value("+11")
-                .label("+11")
+                .key("+11")
                 .build();
         ContactPhone contactPhone = ContactPhone.builder()
                 .id(2L)
@@ -218,14 +218,14 @@ class OrderHistoryDaoTest extends AbstractDaoTest {
         return OrderStatus.builder()
                 .id(1L)
                 .value("Pending")
-                .label("Pending")
+                .key("Pending")
                 .build();
     }
 
     private Delivery getDelivery() {
         Country country = Country.builder()
                 .id(1L)
-                .label("USA")
+                .key("USA")
                 .value("USA")
                 .build();
         Address address = Address.builder()
@@ -241,7 +241,7 @@ class OrderHistoryDaoTest extends AbstractDaoTest {
         DeliveryType deliveryType = DeliveryType.builder()
                 .id(1L)
                 .value("Type")
-                .label("Type")
+                .key("Type")
                 .build();
 
         return Delivery.builder()
@@ -256,17 +256,17 @@ class OrderHistoryDaoTest extends AbstractDaoTest {
         OptionGroup optionGroup = OptionGroup.builder()
                 .id(1L)
                 .value("Size")
-                .label("Size")
+                .key("Size")
                 .build();
         OptionItem optionItemL = OptionItem.builder()
                 .id(1L)
                 .value("L")
-                .label("L")
+                .key("L")
                 .build();
         OptionItem optionItemM = OptionItem.builder()
                 .id(2L)
                 .value("M")
-                .label("M")
+                .key("M")
                 .build();
 
         optionGroup.addOptionItem(optionItemL);
@@ -291,7 +291,7 @@ class OrderHistoryDaoTest extends AbstractDaoTest {
                 .build();
         ArticularStatus articularStatus = ArticularStatus.builder()
                 .id(1L)
-                .label("NEW")
+                .key("NEW")
                 .value("NEW")
                 .build();
 
@@ -330,7 +330,7 @@ class OrderHistoryDaoTest extends AbstractDaoTest {
         PaymentMethod paymentMethod = PaymentMethod.builder()
                 .id(1L)
                 .value("Card")
-                .label("Card")
+                .key("Card")
                 .build();
         Currency currencyUsd = CURRENCY_CACHE.get("USD");
         Currency currencyEur = CURRENCY_CACHE.get("EUR");
@@ -419,7 +419,7 @@ class OrderHistoryDaoTest extends AbstractDaoTest {
 
         PaymentStatus paymentStatus = PaymentStatus.builder()
                 .id(1L)
-                .label("Done")
+                .key("Done")
                 .value("Done")
                 .build();
 
@@ -442,7 +442,7 @@ class OrderHistoryDaoTest extends AbstractDaoTest {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(1L)
                 .value("+11")
-                .label("+11")
+                .key("+11")
                 .build();
         ContactPhone contactPhone1 = ContactPhone.builder()
                 .id(2L)
@@ -494,7 +494,7 @@ class OrderHistoryDaoTest extends AbstractDaoTest {
     private UserDetails getUserDetails() {
         Country country = Country.builder()
                 .id(1L)
-                .label("USA")
+                .key("USA")
                 .value("USA")
                 .build();
         Address address = Address.builder()

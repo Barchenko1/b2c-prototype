@@ -38,15 +38,15 @@ public class BrandControllerE2ETest extends BasicE2ETest {
     @ExpectedDataSet(value = "datasets/e2e/item/brand/updateE2EBrandDataSet.yml", orderBy = "id")
     public void testUpdateEntity() {
         ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .label("Apple")
                 .value("Update Apple")
+                .key("Update Apple")
                 .build();
 
         String jsonPayload = writeValueAsString(constantPayloadDto);
         webTestClient.put()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "Apple")
+                        .queryParam("key", "Apple")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -60,15 +60,15 @@ public class BrandControllerE2ETest extends BasicE2ETest {
     @ExpectedDataSet(value = "datasets/e2e/item/brand/updateE2EBrandDataSet.yml", orderBy = "id")
     public void testPatchEntity() {
         ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .label("Apple")
                 .value("Update Apple")
+                .key("Update Apple")
                 .build();
 
         String jsonPayload = writeValueAsString(constantPayloadDto);
         webTestClient.patch()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "Apple")
+                        .queryParam("key", "Apple")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -84,7 +84,7 @@ public class BrandControllerE2ETest extends BasicE2ETest {
         webTestClient.delete()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "Apple")
+                        .queryParam("key", "Apple")
                         .build())
                 .accept(MediaType.TEXT_PLAIN)
                 .exchange()
@@ -96,12 +96,12 @@ public class BrandControllerE2ETest extends BasicE2ETest {
     public void testGetEntities() {
         List<BrandDto> constantPayloadDtoList = List.of(
                 BrandDto.builder()
-                        .label("Android")
                         .value("Android")
+                        .key("Android")
                         .build(),
                 BrandDto.builder()
-                        .label("Apple")
                         .value("Apple")
+                        .key("Apple")
                         .build());
 
         List<BrandDto> actual =
@@ -122,14 +122,14 @@ public class BrandControllerE2ETest extends BasicE2ETest {
     @DataSet(value = "datasets/e2e/item/brand/testE2EBrandDataSet.yml", cleanBefore = true)
     public void testGetEntity() {
         BrandDto expected = BrandDto.builder()
-                .label("Apple")
                 .value("Apple")
+                .key("Apple")
                 .build();
 
         BrandDto actual = webTestClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "Apple")
+                        .queryParam("key", "Apple")
                         .build())
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
@@ -144,8 +144,8 @@ public class BrandControllerE2ETest extends BasicE2ETest {
 
     private ConstantPayloadDto getConstantPayloadDto() {
         return ConstantPayloadDto.builder()
-                .label("Apple")
                 .value("Apple")
+                .key("Apple")
                 .build();
     }
 

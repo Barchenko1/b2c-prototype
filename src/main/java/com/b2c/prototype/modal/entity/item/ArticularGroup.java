@@ -35,7 +35,7 @@ import java.util.Set;
                 query = "SELECT d FROM ArticularGroup d"
         ),
         @NamedQuery(
-                name = "ArticularGroup.findByValue",
+                name = "ArticularGroup.findByKey",
                 query = "SELECT d FROM ArticularGroup d WHERE d.articularGroupId = :articularGroupId"
         ),
         @NamedQuery(

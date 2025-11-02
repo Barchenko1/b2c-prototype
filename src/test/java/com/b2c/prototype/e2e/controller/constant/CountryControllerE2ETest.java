@@ -37,15 +37,15 @@ public class CountryControllerE2ETest extends BasicE2ETest {
     @ExpectedDataSet(value = "datasets/e2e/order/country/updateE2ECountryDataSet.yml", orderBy = "id")
     public void testUpdateEntity() {
         CountryDto countryDto = CountryDto.builder()
-                .label("USA")
                 .value("Update USA")
+                .key("Update USA")
                 .flagImagePath("/images/usa.jpg")
                 .build();
         String jsonPayload = writeValueAsString(countryDto);
         webTestClient.put()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "USA")
+                        .queryParam("key", "USA")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -59,15 +59,15 @@ public class CountryControllerE2ETest extends BasicE2ETest {
     @ExpectedDataSet(value = "datasets/e2e/order/country/updateE2ECountryDataSet.yml", orderBy = "id")
     public void testPatchEntity() {
         CountryDto countryDto = CountryDto.builder()
-                .label("USA")
                 .value("Update USA")
+                .key("Update USA")
                 .flagImagePath("/images/usa.jpg")
                 .build();
         String jsonPayload = writeValueAsString(countryDto);
         webTestClient.patch()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "USA")
+                        .queryParam("key", "USA")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -83,7 +83,7 @@ public class CountryControllerE2ETest extends BasicE2ETest {
         webTestClient.delete()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "USA")
+                        .queryParam("key", "USA")
                         .build())
                 .accept(MediaType.TEXT_PLAIN)
                 .exchange()
@@ -95,13 +95,13 @@ public class CountryControllerE2ETest extends BasicE2ETest {
     public void testGetEntities() {
         List<CountryDto> constantPayloadDtoList = List.of(
                 CountryDto.builder()
-                        .label("CANADA")
                         .value("CANADA")
+                        .key("CANADA")
                         .flagImagePath("/images/canada.jpg")
                         .build(),
                 CountryDto.builder()
-                        .label("USA")
                         .value("USA")
+                        .key("USA")
                         .flagImagePath("/images/usa.jpg")
                         .build());
 
@@ -123,14 +123,14 @@ public class CountryControllerE2ETest extends BasicE2ETest {
     @DataSet(value = "datasets/e2e/order/country/testE2ECountryDataSet.yml", cleanBefore = true)
     public void testGetEntity() {
         CountryDto expected = CountryDto.builder()
-                .label("USA")
                 .value("USA")
+                .key("USA")
                 .flagImagePath("/images/usa.jpg")
                 .build();
         CountryDto actual = webTestClient.get()
                         .uri(uriBuilder -> uriBuilder
                                 .path(URL_TEMPLATE)
-                                .queryParam("value", "USA")
+                                .queryParam("key", "USA")
                                 .build())
                         .accept(MediaType.APPLICATION_JSON)
                         .exchange()
@@ -145,8 +145,8 @@ public class CountryControllerE2ETest extends BasicE2ETest {
 
     private CountryDto getCountryDto() {
         return CountryDto.builder()
-                .label("USA")
                 .value("USA")
+                .key("USA")
                 .flagImagePath("/images/usa.jpg")
                 .build();
     }

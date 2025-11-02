@@ -14,8 +14,8 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @NamedQueries({
         @NamedQuery(
-                name = "Brand.findByValue",
-                query = "SELECT b FROM Brand b WHERE b.value = :value"
+                name = "Brand.findByKey",
+                query = "SELECT b FROM Brand b WHERE b.key = :key"
         ),
         @NamedQuery(
                 name = "Brand.all",

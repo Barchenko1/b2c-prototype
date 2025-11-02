@@ -1,15 +1,15 @@
 brand:
   - id: 1
     value: "Hermes"
-    label: "Hermes"
+    key: "Hermes"
 item_type:
   - id: 1
     value: "Clothes"
-    label: "Clothes"
+    key: "Clothes"
 currency:
   - id: 1
     value: "USD"
-    label: "USD"
+    key: "USD"
 price:
   - id: 1
     amount: 27
@@ -29,28 +29,28 @@ discount:
     currency_id: 1
 option_group:
   - id: 1
-    label: "Size"
+    key: "Size"
     value: "Size"
 option_item:
   - id: 1
     value: "L"
-    label: "L"
+    key: "L"
     option_group_id: 1
   - id: 2
     value: "M"
-    label: "M"
+    key: "M"
     option_group_id: 1
 category:
   - id: 1
-    label: "parent"
+    key: "parent"
     value: "parent"
   - id: 2
     category_id: 1
-    label: "root"
+    key: "root"
     value: "root"
   - id: 3
     category_id: 2
-    label: "child"
+    key: "child"
     value: "child"
 metadata:
   - id: 1
@@ -65,10 +65,10 @@ articular_item:
 delivery_type:
   - id: 1
     value: "Post"
-    label: "Post"
+    key: "Post"
 country:
   - id: 1
-    label: "USA"
+    key: "USA"
     value: "USA"
 address:
   - id: 1
@@ -85,11 +85,11 @@ delivery:
     delivery_type_id: 1
 order_status:
   - id: 1
-    label: "CREATED"
+    key: "CREATED"
     value: "CREATED"
   - id: 2
     value: "PENDING"
-    label: "PENDING"
+    key: "PENDING"
 credit_card:
   - id: 1
     card_number: "4444-1111-2222-3333"
@@ -102,10 +102,10 @@ credit_card:
 payment_method:
   - id: 1
     value: "CreditCard"
-    label: "CreditCard"
+    key: "CreditCard"
   - id: 2
     value: "Blik"
-    label: "Blik"
+    key: "Blik"
 payment:
   - id: 1
     upayment_id: "1"
@@ -116,7 +116,7 @@ payment:
 country_phone_code:
   - id: 1
     value: "+11"
-    label: "+11"
+    key: "+11"
 contact_phone:
   - id: 1
     phone_number: "111-111-111"

@@ -30,7 +30,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
 
-import static com.b2c.prototype.util.Constant.VALUE;
+import static com.b2c.prototype.util.Constant.KEY;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -97,12 +97,12 @@ public class ItemTransformService implements IItemTransformService {
     @Override
     public OptionGroup mapOptionItemGroupDtoToOptionGroupDto(OptionItemGroupDto optionItemGroupDto) {
         OptionGroup optionGroup = OptionGroup.builder()
-                .label(optionItemGroupDto.getLabel())
                 .value(optionItemGroupDto.getValue())
+                .key(optionItemGroupDto.getKey())
                 .optionItems(optionItemGroupDto.getOptionItems().stream()
                         .map(optionItemDto -> OptionItem.builder()
-                                .label(optionItemDto.getLabel())
                                 .value(optionItemDto.getValue())
+                                .key(optionItemDto.getKey())
                                 .build()
                         )
                         .collect(Collectors.toSet())
@@ -116,15 +116,15 @@ public class ItemTransformService implements IItemTransformService {
     @Override
     public OptionItemGroupDto mapOptionGroupToOptionItemGroupDto(OptionGroup optionGroup) {
         return OptionItemGroupDto.builder()
-                .label(optionGroup.getLabel())
                 .value(optionGroup.getValue())
+                .key(optionGroup.getKey())
                 .optionItems(optionGroup.getOptionItems().stream()
                         .map(optionItem -> OptionItemDto.builder()
-                                .searchValue(optionItem.getValue())
-                                .label(optionItem.getLabel())
+                                .searchValue(optionItem.getKey())
                                 .value(optionItem.getValue())
+                                .key(optionItem.getKey())
                                 .build())
-                        .toList()
+                        .collect(Collectors.toList())
                 )
                 .build();
     }
@@ -132,16 +132,16 @@ public class ItemTransformService implements IItemTransformService {
     @Override
     public OptionGroup mapOptionItemCostGroupDtoToOptionGroupDto(OptionItemCostGroupDto optionItemCostGroupDto) {
         OptionGroup optionGroup = OptionGroup.builder()
-                .label(optionItemCostGroupDto.getLabel())
                 .value(optionItemCostGroupDto.getValue())
+                .key(optionItemCostGroupDto.getKey())
                 .optionItemCosts(optionItemCostGroupDto.getOptionItemCosts().stream()
                         .map(optionItemCostDto -> OptionItemCost.builder()
-                                .label(optionItemCostDto.getLabel())
                                 .value(optionItemCostDto.getValue())
+                                .key(optionItemCostDto.getKey())
                                 .price(Price.builder()
                                         .amount(optionItemCostDto.getPrice().getAmount())
-                                        .currency(generalEntityDao.findEntity("Currency.findByValue",
-                                                Pair.of(VALUE, optionItemCostDto.getPrice().getCurrency().getValue())))
+                                        .currency(generalEntityDao.findEntity("Currency.findByKey",
+                                                Pair.of(KEY, optionItemCostDto.getPrice().getCurrency().getKey())))
                                         .build())
                                 .build())
                         .collect(Collectors.toSet())
@@ -155,18 +155,18 @@ public class ItemTransformService implements IItemTransformService {
     @Override
     public OptionItemCostGroupDto mapOptionGroupToOptionItemCostGroupDto(OptionGroup optionGroup) {
         return OptionItemCostGroupDto.builder()
-                .label(optionGroup.getLabel())
                 .value(optionGroup.getValue())
+                .key(optionGroup.getKey())
                 .optionItemCosts(optionGroup.getOptionItemCosts().stream()
                         .map(optionItemCost -> OptionItemCostDto.builder()
-                                .searchValue(optionItemCost.getValue())
-                                .label(optionItemCost.getLabel())
+                                .searchValue(optionItemCost.getKey())
                                 .value(optionItemCost.getValue())
+                                .key(optionItemCost.getKey())
                                 .price(PriceDto.builder()
                                         .amount(optionItemCost.getPrice().getAmount())
                                         .currency(CurrencyDto.builder()
-                                                .label(optionItemCost.getPrice().getCurrency().getLabel())
                                                 .value(optionItemCost.getPrice().getCurrency().getValue())
+                                                .key(optionItemCost.getPrice().getCurrency().getKey())
                                                 .build())
                                         .build())
                                 .build())

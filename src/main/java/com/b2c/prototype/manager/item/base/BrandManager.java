@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-import static com.b2c.prototype.util.Constant.VALUE;
+import static com.b2c.prototype.util.Constant.KEY;
 
 @Service
 public class BrandManager implements IBrandManager {
@@ -28,22 +28,22 @@ public class BrandManager implements IBrandManager {
     @Override
     public void mergeEntity(String searchValue, Brand entity) {
         Brand fetchedEntity =
-                generalEntityDao.findEntity("Brand.findByValue", Pair.of(VALUE, searchValue));
+                generalEntityDao.findEntity("Brand.findByKey", Pair.of(KEY, searchValue));
         entity.setId(fetchedEntity.getId());
         generalEntityDao.mergeEntity(entity);
     }
 
     public void removeEntity(String value) {
-        Brand fetchedEntity = generalEntityDao.findEntity("Brand.findByValue", Pair.of(VALUE, value));
+        Brand fetchedEntity = generalEntityDao.findEntity("Brand.findByKey", Pair.of(KEY, value));
         generalEntityDao.removeEntity(fetchedEntity);
     }
 
     public Brand getEntity(String value) {
-        return generalEntityDao.findEntity("Brand.findByValue", Pair.of(VALUE, value));
+        return generalEntityDao.findEntity("Brand.findByKey", Pair.of(KEY, value));
     }
 
     public Optional<Brand> getEntityOptional(String value) {
-        Brand entity = generalEntityDao.findEntity("Brand.findByValue", Pair.of(VALUE, value));
+        Brand entity = generalEntityDao.findEntity("Brand.findByKey", Pair.of(KEY, value));
         return Optional.of(entity);
     }
 

@@ -1,7 +1,7 @@
 currency:
   - id: 1
     value: "USD"
-    label: "USD"
+    key: "USD"
 price:
   - id: 1
     amount: 10.0
@@ -17,25 +17,25 @@ price:
     currency_id: 1
 option_group:
   - id: 1
-    label: "Modal"
+    key: "Modal"
     value: "Modal"
   - id: 2
-    label: "Update Color"
+    key: "Update Color"
     value: "Update Color"
 option_item_cost:
   - value: "Modal1"
-    label: "Modal1"
+    key: "Modal1"
     price_id: 1
     option_group_id: 1
   - value: "Modal2"
-    label: "Modal2"
+    key: "Modal2"
     price_id: 2
     option_group_id: 1
   - value: "Update Red"
-    label: "Update Red"
+    key: "Update Red"
     price_id: 4
     option_group_id: 2
   - value: "Yellow"
-    label: "Yellow"
+    key: "Yellow"
     price_id: 5
     option_group_id: 2

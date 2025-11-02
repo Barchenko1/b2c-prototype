@@ -33,21 +33,21 @@ public class AvailabilityStatusController {
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> putConstantEntity(@RequestBody Map<String, Object> payload,
-                                                    @RequestParam(value = "value") final String value) {
-        availabilityStatusProcess.mergeEntity(payload, value);
+                                                    @RequestParam(value = "key") final String key) {
+        availabilityStatusProcess.mergeEntity(payload, key);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> patchConstantEntity(@RequestBody Map<String, Object> payload,
-                                                      @RequestParam(value = "value") final String value) {
-        availabilityStatusProcess.mergeEntity(payload, value);
+                                                      @RequestParam(value = "key") final String key) {
+        availabilityStatusProcess.mergeEntity(payload, key);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<String> deleteConstantEntity(@RequestParam(value = "value") final String value) {
-        availabilityStatusProcess.removeEntity(value);
+    public ResponseEntity<String> deleteConstantEntity(@RequestParam(value = "key") final String key) {
+        availabilityStatusProcess.removeEntity(key);
         return ResponseEntity.ok().build();
     }
 
@@ -58,7 +58,7 @@ public class AvailabilityStatusController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getConstantEntity(@RequestHeader(name = "Accept-Language", defaultValue = "en") String location,
-                                               @RequestParam(value = "value") final String value) {
-        return ResponseEntity.ok(availabilityStatusProcess.getEntity(location, value));
+                                               @RequestParam(value = "key") final String key) {
+        return ResponseEntity.ok(availabilityStatusProcess.getEntity(location, key));
     }
 }

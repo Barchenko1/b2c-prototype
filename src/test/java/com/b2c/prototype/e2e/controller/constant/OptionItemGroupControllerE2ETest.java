@@ -43,17 +43,17 @@ public class OptionItemGroupControllerE2ETest extends BasicE2ETest {
     @ExpectedDataSet(value = "datasets/e2e/item/option_group/option_item/updateE2EOptionItemGroupDataSet.yml", orderBy = "id")
     public void testUpdateEntity() {
         OptionItemGroupDto constantPayloadDto = OptionItemGroupDto.builder()
-                .label("Update Color")
                 .value("Update Color")
+                .key("Update Color")
                 .optionItems(List.of(
                         OptionItemDto.builder()
                                 .searchValue("Red")
-                                .label("Update Red")
                                 .value("Update Red")
+                                .key("Update Red")
                                 .build(),
                         OptionItemDto.builder()
-                                .label("Yellow")
                                 .value("Yellow")
+                                .key("Yellow")
                                 .build()
                         ))
                 .build();
@@ -62,7 +62,7 @@ public class OptionItemGroupControllerE2ETest extends BasicE2ETest {
         webTestClient.put()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "Color")
+                        .queryParam("key", "Color")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -76,17 +76,17 @@ public class OptionItemGroupControllerE2ETest extends BasicE2ETest {
     @ExpectedDataSet(value = "datasets/e2e/item/option_group/option_item/updateE2EOptionItemGroupDataSet.yml", orderBy = "id", ignoreCols = {"id"})
     public void testPatchEntity() {
         OptionItemGroupDto constantPayloadDto = OptionItemGroupDto.builder()
-                .label("Update Color")
                 .value("Update Color")
+                .key("Update Color")
                 .optionItems(List.of(
                         OptionItemDto.builder()
                                 .searchValue("Red")
-                                .label("Update Red")
                                 .value("Update Red")
+                                .key("Update Red")
                                 .build(),
                         OptionItemDto.builder()
-                                .label("Yellow")
                                 .value("Yellow")
+                                .key("Yellow")
                                 .build()
                 ))
                 .build();
@@ -95,7 +95,7 @@ public class OptionItemGroupControllerE2ETest extends BasicE2ETest {
         webTestClient.patch()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "Color")
+                        .queryParam("key", "Color")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -111,7 +111,7 @@ public class OptionItemGroupControllerE2ETest extends BasicE2ETest {
         webTestClient.delete()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "Color")
+                        .queryParam("key", "Color")
                         .build())
                 .accept(MediaType.TEXT_PLAIN)
                 .exchange()
@@ -123,33 +123,33 @@ public class OptionItemGroupControllerE2ETest extends BasicE2ETest {
     public void testGetEntities() {
         List<OptionItemGroupDto> constantPayloadDtoList = List.of(
                 OptionItemGroupDto.builder()
-                        .label("Color")
                         .value("Color")
+                        .key("Color")
                         .optionItems(List.of(
                                 OptionItemDto.builder()
                                         .searchValue("Red")
-                                        .label("Red")
                                         .value("Red")
+                                        .key("Red")
                                         .build(),
                                 OptionItemDto.builder()
                                         .searchValue("Blue")
-                                        .label("Blue")
                                         .value("Blue")
+                                        .key("Blue")
                                         .build()))
                         .build(),
                 OptionItemGroupDto.builder()
-                        .label("Modal")
                         .value("Modal")
+                        .key("Modal")
                         .optionItems(List.of(
                                 OptionItemDto.builder()
                                         .searchValue("Modal1")
-                                        .label("Modal1")
                                         .value("Modal1")
+                                        .key("Modal1")
                                         .build(),
                                 OptionItemDto.builder()
                                         .searchValue("Modal2")
-                                        .label("Modal2")
                                         .value("Modal2")
+                                        .key("Modal2")
                                         .build()
                         ))
                         .build());
@@ -174,25 +174,25 @@ public class OptionItemGroupControllerE2ETest extends BasicE2ETest {
     @DataSet(value = "datasets/e2e/item/option_group/option_item/testE2EOptionItemGroupDataSet.yml", cleanBefore = true)
     public void testGetEntity() {
         OptionItemGroupDto expected = OptionItemGroupDto.builder()
-                .label("Color")
                 .value("Color")
+                .key("Color")
                 .optionItems(List.of(
                         OptionItemDto.builder()
                                 .searchValue("Red")
-                                .label("Red")
                                 .value("Red")
+                                .key("Red")
                                 .build(),
                         OptionItemDto.builder()
                                 .searchValue("Blue")
-                                .label("Blue")
                                 .value("Blue")
+                                .key("Blue")
                                 .build()))
                 .build();
 
         OptionItemGroupDto actual = webTestClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "Color")
+                        .queryParam("key", "Color")
                         .build())
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
@@ -210,16 +210,16 @@ public class OptionItemGroupControllerE2ETest extends BasicE2ETest {
 
     private OptionItemGroupDto getOptionGroupDto() {
         return OptionItemGroupDto.builder()
-                .label("Color")
                 .value("Color")
+                .key("Color")
                 .optionItems(List.of(
                         OptionItemDto.builder()
-                                .label("Red")
                                 .value("Red")
+                                .key("Red")
                                 .build(),
                         OptionItemDto.builder()
-                                .label("Blue")
                                 .value("Blue")
+                                .key("Blue")
                                 .build()))
                 .build();
     }

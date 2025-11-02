@@ -1,4 +1,4 @@
 brand:
   - id: 1
     value: "Update Apple"
-    label: "Apple"
+    key: "Apple"

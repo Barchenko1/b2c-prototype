@@ -15,7 +15,7 @@ import org.springframework.test.context.jdbc.Sql;
 import java.time.ZoneId;
 import java.util.List;
 
-import static com.b2c.prototype.util.Constant.VALUE;
+import static com.b2c.prototype.util.Constant.KEY;
 import static com.b2c.prototype.util.Converter.getLocalDateTime;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -50,47 +50,12 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
     @Sql(statements = "ALTER SEQUENCE price_id_seq RESTART WITH 5",
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void testUpdateEntity() {
-        TimeDurationOptionGroupDto constantPayloadDto = TimeDurationOptionGroupDto.builder()
-                .label("NY")
-                .value("NY")
-                .timeDurationOptions(List.of(
-                        TimeDurationOptionDto.builder()
-                                .searchValue("12-14")
-                                .label("Update 12-14")
-                                .value("Update 12-14")
-                                .startTime(getLocalDateTime("1970-01-01 12:00:00"))
-                                .endTime(getLocalDateTime("1970-01-01 14:00:00"))
-                                .timeZone(ZoneId.of("UTC"))
-                                .price(PriceDto.builder()
-                                        .amount(20.0)
-                                        .currency(CurrencyDto.builder()
-                                                .label("USD")
-                                                .value("USD")
-                                                .build())
-                                        .build())
-                                .build(),
-                        TimeDurationOptionDto.builder()
-                                .searchValue(null)
-                                .label("16-18")
-                                .value("16-18")
-                                .startTime(getLocalDateTime("1970-01-01 16:00:00"))
-                                .endTime(getLocalDateTime("1970-01-01 18:00:00"))
-                                .timeZone(ZoneId.of("UTC"))
-                                .price(PriceDto.builder()
-                                        .amount(30.0)
-                                        .currency(CurrencyDto.builder()
-                                                .label("USD")
-                                                .value("USD")
-                                                .build())
-                                        .build())
-                                .build()
-                ))
-                .build();
+        TimeDurationOptionGroupDto constantPayloadDto = getUpdateTimeDurationOptionDto();
         String jsonPayload = writeValueAsString(constantPayloadDto);
         webTestClient.put()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam(VALUE, "NY")
+                        .queryParam(KEY, "NY")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -105,47 +70,12 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
     @Sql(statements = "ALTER SEQUENCE price_id_seq RESTART WITH 5",
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void testPatchEntity() {
-        TimeDurationOptionGroupDto constantPayloadDto = TimeDurationOptionGroupDto.builder()
-                .label("NY")
-                .value("NY")
-                .timeDurationOptions(List.of(
-                        TimeDurationOptionDto.builder()
-                                .searchValue("12-14")
-                                .label("Update 12-14")
-                                .value("Update 12-14")
-                                .startTime(getLocalDateTime("1970-01-01 12:00:00"))
-                                .endTime(getLocalDateTime("1970-01-01 14:00:00"))
-                                .timeZone(ZoneId.of("UTC"))
-                                .price(PriceDto.builder()
-                                        .amount(20.0)
-                                        .currency(CurrencyDto.builder()
-                                                .label("USD")
-                                                .value("USD")
-                                                .build())
-                                        .build())
-                                .build(),
-                        TimeDurationOptionDto.builder()
-                                .searchValue(null)
-                                .label("16-18")
-                                .value("16-18")
-                                .startTime(getLocalDateTime("1970-01-01 16:00:00"))
-                                .endTime(getLocalDateTime("1970-01-01 18:00:00"))
-                                .timeZone(ZoneId.of("UTC"))
-                                .price(PriceDto.builder()
-                                        .amount(30.0)
-                                        .currency(CurrencyDto.builder()
-                                                .label("USD")
-                                                .value("USD")
-                                                .build())
-                                        .build())
-                                .build()
-                ))
-                .build();
+        TimeDurationOptionGroupDto constantPayloadDto = getUpdateTimeDurationOptionDto();
         String jsonPayload = writeValueAsString(constantPayloadDto);
         webTestClient.patch()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam(VALUE, "NY")
+                        .queryParam(KEY, "NY")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -161,7 +91,7 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
         webTestClient.delete()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam(VALUE, "NY")
+                        .queryParam(KEY, "NY")
                         .build())
                 .accept(MediaType.TEXT_PLAIN)
                 .exchange()
@@ -173,12 +103,12 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
     public void testGetEntity() {
         TimeDurationOptionGroupDto expected = getTimeDurationOptionGroupDto();
         expected.getTimeDurationOptions().forEach(timeDurationOptionDto -> {
-            timeDurationOptionDto.setSearchValue(timeDurationOptionDto.getValue());
+            timeDurationOptionDto.setSearchValue(timeDurationOptionDto.getKey());
         });
         TimeDurationOptionGroupDto actual = webTestClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam(VALUE, "NY")
+                        .queryParam(KEY, "NY")
                         .build())
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
@@ -199,67 +129,67 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
     public void testGetEntities() {
         List<TimeDurationOptionGroupDto > expected = List.of(
                 TimeDurationOptionGroupDto.builder()
-                        .label("CA")
                         .value("CA")
+                        .key("CA")
                         .timeDurationOptions(List.of(
                                 TimeDurationOptionDto.builder()
-                                        .label("9-11")
                                         .value("9-11")
+                                        .key("CA_9-11")
                                         .startTime(getLocalDateTime("1970-01-01 09:00:00"))
                                         .endTime(getLocalDateTime("1970-01-01 11:00:00"))
                                         .timeZone(ZoneId.of("UTC"))
                                         .price(PriceDto.builder()
                                                 .amount(20.0)
                                                 .currency(CurrencyDto.builder()
-                                                        .label("USD")
                                                         .value("USD")
+                                                        .key("USD")
                                                         .build())
                                                 .build())
                                         .build(),
                                 TimeDurationOptionDto.builder()
-                                        .label("12-14")
                                         .value("12-14")
+                                        .key("CA_12-14")
                                         .startTime(getLocalDateTime("1970-01-01 12:00:00"))
                                         .endTime(getLocalDateTime("1970-01-01 14:00:00"))
                                         .timeZone(ZoneId.of("UTC"))
                                         .price(PriceDto.builder()
                                                 .amount(10.0)
                                                 .currency(CurrencyDto.builder()
-                                                        .label("USD")
                                                         .value("USD")
+                                                        .key("USD")
                                                         .build())
                                                 .build())
                                         .build()))
                         .build(),
                 TimeDurationOptionGroupDto.builder()
-                        .label("NY")
                         .value("NY")
+                        .key("NY")
                         .timeDurationOptions(List.of(
                                 TimeDurationOptionDto.builder()
-                                    .label("9-11")
                                     .value("9-11")
+                                    .key("NY_9-11")
                                     .startTime(getLocalDateTime("1970-01-01 09:00:00"))
                                     .endTime(getLocalDateTime("1970-01-01 11:00:00"))
                                     .timeZone(ZoneId.of("UTC"))
                                     .price(PriceDto.builder()
                                             .amount(20.0)
                                             .currency(CurrencyDto.builder()
-                                                    .label("USD")
                                                     .value("USD")
+                                                    .key("USD")
                                                     .build())
                                             .build())
                                     .build(),
                                 TimeDurationOptionDto.builder()
-                                        .label("12-14")
                                         .value("12-14")
+                                        .key("NY_12-14")
                                         .startTime(getLocalDateTime("1970-01-01 12:00:00"))
                                         .endTime(getLocalDateTime("1970-01-01 14:00:00"))
                                         .timeZone(ZoneId.of("UTC"))
                                         .price(PriceDto.builder()
                                                 .amount(10.0)
                                                 .currency(CurrencyDto.builder()
-                                                        .label("USD")
                                                         .value("USD")
+                                                        .key("USD")
                                                         .build())
                                                 .build())
                                         .build()))
@@ -268,7 +198,7 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
         expected.forEach(optionGroup ->
                 optionGroup.getTimeDurationOptions().forEach(
                 timeDurationOptionDto ->
-                        timeDurationOptionDto.setSearchValue(timeDurationOptionDto.getValue())));
+                        timeDurationOptionDto.setSearchValue(timeDurationOptionDto.getKey())));
 
         List<TimeDurationOptionGroupDto> actual = webTestClient.get()
                 .uri(URL_TEMPLATE + "/all")
@@ -288,34 +218,73 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
 
     private TimeDurationOptionGroupDto getTimeDurationOptionGroupDto() {
         return TimeDurationOptionGroupDto.builder()
-                .label("NY")
                 .value("NY")
+                .key("NY")
                 .timeDurationOptions(List.of(
                         TimeDurationOptionDto.builder()
-                                .label("9-11")
                                 .value("9-11")
+                                .key("NY_9-11")
                                 .startTime(getLocalDateTime("1970-01-01 09:00:00"))
                                 .endTime(getLocalDateTime("1970-01-01 11:00:00"))
                                 .timeZone(ZoneId.of("UTC"))
                                 .price(PriceDto.builder()
                                         .amount(20.0)
                                         .currency(CurrencyDto.builder()
-                                                .label("USD")
                                                 .value("USD")
+                                                .key("USD")
                                                 .build())
                                         .build())
                                 .build(),
                         TimeDurationOptionDto.builder()
-                                .label("12-14")
                                 .value("12-14")
+                                .key("NY_12-14")
                                 .startTime(getLocalDateTime("1970-01-01 12:00:00"))
                                 .endTime(getLocalDateTime("1970-01-01 14:00:00"))
                                 .timeZone(ZoneId.of("UTC"))
                                 .price(PriceDto.builder()
                                         .amount(10.0)
                                         .currency(CurrencyDto.builder()
-                                                .label("USD")
                                                 .value("USD")
+                                                .key("USD")
+                                                .build())
+                                        .build())
+                                .build()
+                ))
+                .build();
+    }
+
+    private TimeDurationOptionGroupDto getUpdateTimeDurationOptionDto() {
+        return TimeDurationOptionGroupDto.builder()
+                .value("NY")
+                .key("NY")
+                .timeDurationOptions(List.of(
+                        TimeDurationOptionDto.builder()
+                                .searchValue("NY_12-14")
+                                .value("Update 12-14")
+                                .key("Update 12-14")
+                                .startTime(getLocalDateTime("1970-01-01 12:00:00"))
+                                .endTime(getLocalDateTime("1970-01-01 14:00:00"))
+                                .timeZone(ZoneId.of("UTC"))
+                                .price(PriceDto.builder()
+                                        .amount(20.0)
+                                        .currency(CurrencyDto.builder()
+                                                .value("USD")
+                                                .key("USD")
+                                                .build())
+                                        .build())
+                                .build(),
+                        TimeDurationOptionDto.builder()
+                                .searchValue(null)
+                                .value("16-18")
+                                .key("NY_16-18")
+                                .startTime(getLocalDateTime("1970-01-01 16:00:00"))
+                                .endTime(getLocalDateTime("1970-01-01 18:00:00"))
+                                .timeZone(ZoneId.of("UTC"))
+                                .price(PriceDto.builder()
+                                        .amount(30.0)
+                                        .currency(CurrencyDto.builder()
+                                                .value("USD")
+                                                .key("USD")
                                                 .build())
                                         .build())
                                 .build()

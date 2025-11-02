@@ -133,7 +133,7 @@ class UserDetailsDaoTest extends AbstractDaoTest {
         CountryPhoneCode countryPhoneCode = CountryPhoneCode.builder()
                 .id(1L)
                 .value("+11")
-                .label("+11")
+                .key("+11")
                 .build();
         ContactPhone contactPhone = ContactPhone.builder()
                 .id(1L)
@@ -151,7 +151,7 @@ class UserDetailsDaoTest extends AbstractDaoTest {
                 .build();
         Country country = Country.builder()
                 .id(1L)
-                .label("USA")
+                .key("USA")
                 .value("USA")
                 .build();
         Address address = Address.builder()

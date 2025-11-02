@@ -13,7 +13,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-class DiscountControllerE2ETest extends BasicE2ETest {
+class DiscountGroupControllerE2ETest extends BasicE2ETest {
 
     private static final String URL_TEMPLATE = "/api/v1/item/discount";
 
@@ -46,7 +46,7 @@ class DiscountControllerE2ETest extends BasicE2ETest {
         webTestClient.put()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "Apple")
+                        .queryParam("key", "Apple")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -68,7 +68,7 @@ class DiscountControllerE2ETest extends BasicE2ETest {
         webTestClient.patch()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "Apple")
+                        .queryParam("key", "Apple")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -84,7 +84,7 @@ class DiscountControllerE2ETest extends BasicE2ETest {
         webTestClient.delete()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "Apple")
+                        .queryParam("key", "Apple")
                         .build())
                 .accept(MediaType.TEXT_PLAIN)
                 .exchange()
@@ -129,7 +129,7 @@ class DiscountControllerE2ETest extends BasicE2ETest {
         DiscountDto actual = webTestClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "Apple")
+                        .queryParam("key", "Apple")
                         .build())
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()

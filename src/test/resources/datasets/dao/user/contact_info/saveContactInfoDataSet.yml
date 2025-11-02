@@ -1,10 +1,10 @@
 country_phone_code:
   - id: 1
     value: "+11"
-    label: "+11"
+    key: "+11"
   - id: 2
     value: "+22"
-    label: "+22"
+    key: "+22"
 contact_phone:
   - id: 1
     phone_number: "111-111-111"

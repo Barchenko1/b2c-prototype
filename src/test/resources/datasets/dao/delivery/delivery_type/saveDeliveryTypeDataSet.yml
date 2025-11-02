@@ -1,3 +1,3 @@
 delivery_type:
   - value: "Post"
-    label: "Post"
+    key: "Post"

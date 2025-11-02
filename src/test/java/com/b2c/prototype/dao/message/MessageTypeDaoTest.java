@@ -35,7 +35,7 @@ class MessageTypeDaoTest extends AbstractDaoTest {
     @ExpectedDataSet(value = "datasets/dao/message/message_type/updateMessageTypeDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         MessageType entity = getMessageType();
-        entity.setValue("Update InMail");
+        entity.setKey("Update InMail");
 
         generalEntityDao.mergeEntity(entity);
     }
@@ -89,7 +89,7 @@ class MessageTypeDaoTest extends AbstractDaoTest {
         return MessageType.builder()
                 .id(1L)
                 .value("InMail")
-                .label("InMail")
+                .key("InMail")
                 .build();
     }
 }

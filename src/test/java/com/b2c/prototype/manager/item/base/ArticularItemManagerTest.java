@@ -183,7 +183,7 @@ class ArticularItemManagerTest {
                 .build();
         OptionItem optionItem = OptionItem.builder()
                 .value("L")
-                .label("L")
+                .key("L")
                 .optionGroup(optionGroup)
                 .build();
         return ArticularItem.builder()
@@ -226,7 +226,7 @@ class ArticularItemManagerTest {
                 .build();
         OptionItem optionItem = OptionItem.builder()
                 .value("L")
-                .label("L")
+                .key("L")
                 .optionGroup(optionGroup)
                 .build();
         return ArticularItem.builder()
@@ -248,7 +248,7 @@ class ArticularItemManagerTest {
     private Price getPrice(double amount) {
         Currency currency = Currency.builder()
                 .id(1L)
-                .label("USD")
+                .key("USD")
                 .value("USD")
                 .build();
         return Price.builder()

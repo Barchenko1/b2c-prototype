@@ -44,8 +44,8 @@ class OptionItemCostDaoTest extends AbstractDaoTest {
     @ExpectedDataSet(value = "datasets/dao/option/option_item_cost/updateOptionItemCostDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         OptionItemCost entity = getOptionItemCost();
-        entity.setLabel("XL");
         entity.setValue("XL");
+        entity.setKey("XL");
 
         generalEntityDao.mergeEntity(entity);
     }
@@ -98,7 +98,7 @@ class OptionItemCostDaoTest extends AbstractDaoTest {
     public OptionItemCost getOptionItemCost() {
         Currency currency = Currency.builder()
                 .id(1L)
-                .label("USD")
+                .key("USD")
                 .value("USD")
                 .build();
         Price price = Price.builder()
@@ -108,14 +108,14 @@ class OptionItemCostDaoTest extends AbstractDaoTest {
                 .build();
         OptionItemCost optionItemCost = OptionItemCost.builder()
                 .id(1)
-                .label("L")
+                .key("L")
                 .value("L")
                 .price(price)
                 .build();
         OptionGroup optionGroup = OptionGroup.builder()
                 .id(1L)
                 .value("Size")
-                .label("Size")
+                .key("Size")
                 .build();
 
         optionGroup.addOptionItemCost(optionItemCost);

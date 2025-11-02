@@ -15,7 +15,7 @@ import java.util.List;
 
 import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 import static com.b2c.prototype.util.Constant.STORE_ID;
-import static com.b2c.prototype.util.Constant.VALUE;
+import static com.b2c.prototype.util.Constant.KEY;
 
 @Service
 public class StoreManager implements IStoreManager {
@@ -87,7 +87,7 @@ public class StoreManager implements IStoreManager {
     public List<ResponseStoreDto> getAllResponseStoreByCountry(String countryName) {
         List<Store> stores = generalEntityDao.findEntityList(
                 "Store.findStoreWithAddressArticularItemQuantityByCountry",
-                Pair.of(VALUE, countryName));
+                Pair.of(KEY, countryName));
 
         return stores.stream()
                 .map(itemTransformService::mapStoreToResponseStoreDto)
@@ -99,7 +99,7 @@ public class StoreManager implements IStoreManager {
     public List<ResponseStoreDto> getAllResponseStoreByCountryAndCity(String countryName, String cityName) {
         List<Store> stores = generalEntityDao.findEntityList(
                 "Store.findStoreWithAddressArticularItemQuantityByCountryCity",
-                Pair.of(VALUE, countryName));
+                Pair.of(KEY, countryName));
 
         return stores.stream()
                 .map(itemTransformService::mapStoreToResponseStoreDto)

@@ -35,7 +35,7 @@ class PaymentMethodDaoTest extends AbstractDaoTest {
     @ExpectedDataSet(value = "datasets/dao/payment/payment_method/updatePaymentMethodDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         PaymentMethod entity = getPaymentMethod();
-        entity.setValue("Update Card");
+        entity.setKey("Update Card");
 
         generalEntityDao.mergeEntity(entity);
     }
@@ -89,7 +89,7 @@ class PaymentMethodDaoTest extends AbstractDaoTest {
         return PaymentMethod.builder()
                 .id(1L)
                 .value("Card")
-                .label("Card")
+                .key("Card")
                 .build();
     }
 

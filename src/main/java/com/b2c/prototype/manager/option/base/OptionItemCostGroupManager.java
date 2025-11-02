@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
-import static com.b2c.prototype.util.Constant.VALUE;
+import static com.b2c.prototype.util.Constant.KEY;
 import static java.util.stream.Collectors.toMap;
 
 @Service
@@ -48,7 +48,7 @@ public class OptionItemCostGroupManager implements IOptionItemCostGroupManager {
     public void mergeEntity(String searchValue, OptionItemCostGroupDto optionItemCostGroupDto) {
         OptionGroup group = generalEntityDao.findEntity(
                 "OptionGroup.findByValueWithOptionItems",
-                Pair.of("value", searchValue)
+                Pair.of(KEY, searchValue)
         );
         OptionGroup entity = syncItemsAllowingValueChange(searchValue, group, optionItemCostGroupDto);
         generalEntityDao.mergeEntity(entity);
@@ -57,18 +57,18 @@ public class OptionItemCostGroupManager implements IOptionItemCostGroupManager {
     @Transactional
     @Override
     public void removeEntity(String value) {
-        OptionGroup fetchedEntity = generalEntityDao.findEntity("OptionGroup.findByValue", Pair.of(VALUE, value));
+        OptionGroup fetchedEntity = generalEntityDao.findEntity("OptionGroup.findByKey", Pair.of(KEY, value));
         generalEntityDao.removeEntity(fetchedEntity);
     }
 
     @Override
     public OptionGroup getEntity(String value) {
-        return generalEntityDao.findEntity("OptionGroup.findByValueWithOptionItems", Pair.of(VALUE, value));
+        return generalEntityDao.findEntity("OptionGroup.findByValueWithOptionItems", Pair.of(KEY, value));
     }
 
     @Override
     public Optional<OptionGroup> getEntityOptional(String value) {
-        OptionGroup entity = generalEntityDao.findEntity("OptionGroup.findByValueWithOptionItems", Pair.of(VALUE, value));
+        OptionGroup entity = generalEntityDao.findEntity("OptionGroup.findByValueWithOptionItems", Pair.of(KEY, value));
         return Optional.of(entity);
     }
 
@@ -86,8 +86,8 @@ public class OptionItemCostGroupManager implements IOptionItemCostGroupManager {
 
         final Map<String, OptionItemCost> currentByValue = group.getOptionItemCosts().stream()
                 .filter(Objects::nonNull)
-                .filter(t -> t.getValue() != null)
-                .collect(toMap(OptionItemCost::getValue, Function.identity(), (a, b) -> a, LinkedHashMap::new));
+                .filter(t -> t.getKey() != null)
+                .collect(toMap(OptionItemCost::getKey, Function.identity(), (a, b) -> a, LinkedHashMap::new));
 
         final Set<OptionItemCost> matchedExisting = new HashSet<>();
         final List<OptionItemCostDto> incoming = Optional.ofNullable(dto.getOptionItemCosts())
@@ -96,20 +96,20 @@ public class OptionItemCostGroupManager implements IOptionItemCostGroupManager {
         // UPDATE EXISTING
         incoming.forEach(itemDto -> {
             if (itemDto == null) return;
-            final String lookupKey = itemDto.getSearchValue() != null ? itemDto.getSearchValue() : itemDto.getValue();
+            final String lookupKey = itemDto.getSearchValue() != null ? itemDto.getSearchValue() : itemDto.getKey();
             OptionItemCost existing = lookupKey == null ? null : currentByValue.get(lookupKey);
 
             if (existing != null) {
-                if (itemDto.getLabel() != null) existing.setLabel(itemDto.getLabel());
-
+                if (itemDto.getValue() != null) existing.setValue(itemDto.getValue());
+                if (itemDto.getKey() != null) existing.setKey(itemDto.getKey());
                 // rename (guard against collision)
-                if (itemDto.getValue() != null && !itemDto.getValue().equals(existing.getValue())) {
-                    if (currentByValue.containsKey(itemDto.getValue()) && currentByValue.get(itemDto.getValue()) != existing) {
-                        throw new IllegalStateException("TimeDurationOption value collision on rename: " + itemDto.getValue());
+                if (itemDto.getKey() != null && !itemDto.getKey().equals(existing.getKey())) {
+                    if (currentByValue.containsKey(itemDto.getKey()) && currentByValue.get(itemDto.getKey()) != existing) {
+                        throw new IllegalStateException("TimeDurationOption value collision on rename: " + itemDto.getKey());
                     }
-                    currentByValue.remove(existing.getValue());
-                    existing.setValue(itemDto.getValue());
-                    currentByValue.put(existing.getValue(), existing);
+                    currentByValue.remove(existing.getKey());
+                    existing.setKey(itemDto.getKey());
+                    currentByValue.put(existing.getKey(), existing);
                 }
 
                 // price update (no manual IDs; cascade handles insert/update)
@@ -122,10 +122,10 @@ public class OptionItemCostGroupManager implements IOptionItemCostGroupManager {
                     if (itemDto.getPrice().getAmount() != null) {
                         p.setAmount(itemDto.getPrice().getAmount());
                     }
-                    if (itemDto.getPrice().getCurrency() != null && itemDto.getPrice().getCurrency().getValue() != null) {
+                    if (itemDto.getPrice().getCurrency() != null && itemDto.getPrice().getCurrency().getKey() != null) {
                         p.setCurrency(
-                                generalEntityDao.findEntity("Currency.findByValue",
-                                        Pair.of(VALUE, itemDto.getPrice().getCurrency().getValue()))
+                                generalEntityDao.findEntity("Currency.findByKey",
+                                        Pair.of(KEY, itemDto.getPrice().getCurrency().getKey()))
                         );
                     }
                 }
@@ -139,24 +139,24 @@ public class OptionItemCostGroupManager implements IOptionItemCostGroupManager {
                 .filter(Objects::nonNull)
                 .filter(d -> d.getSearchValue() == null)
                 .forEach(d -> {
-                    final String newVal = d.getValue();
-                    if (newVal == null || newVal.trim().isEmpty()) {
+                    final String newKey = d.getKey();
+                    if (newKey == null || newKey.trim().isEmpty()) {
                         throw new IllegalArgumentException("New TimeDurationOption must have non-null 'value'.");
                     }
-                    if (!currentByValue.containsKey(newVal)) {
+                    if (!currentByValue.containsKey(newKey)) {
                         OptionItemCost created = OptionItemCost.builder()
-                                .label(d.getLabel())
-                                .value(newVal)
+                                .value(d.getValue())
+                                .key(newKey)
                                 .price(d.getPrice() != null
                                         ? Price.builder()
                                         .amount(d.getPrice().getAmount())
-                                        .currency(generalEntityDao.findEntity("Currency.findByValue",
-                                                Pair.of(VALUE, d.getPrice().getCurrency().getValue())))
+                                        .currency(generalEntityDao.findEntity("Currency.findByKey",
+                                                Pair.of(KEY, d.getPrice().getCurrency().getKey())))
                                         .build()
                                         : null)
                                 .build();
                         group.addOptionItemCost(created);
-                        currentByValue.put(newVal, created);
+                        currentByValue.put(newKey, created);
                         matchedExisting.add(created);
                     }
                 });
@@ -172,11 +172,11 @@ public class OptionItemCostGroupManager implements IOptionItemCostGroupManager {
     }
 
     private void copyUpdatableFields(OptionGroup target, OptionItemCostGroupDto source) {
-        if (source.getLabel() != null) {
-            target.setLabel(source.getLabel());
-        }
         if (source.getValue() != null) {
             target.setValue(source.getValue());
+        }
+        if (source.getKey() != null) {
+            target.setKey(source.getKey());
         }
     }
 }

@@ -1,8 +1,8 @@
 currency:
   - id: 1
     value: "USD"
-    label: "USD"
+    key: "USD"
   - id: 2
     value: "EUR"
-    label: "EUR"
+    key: "EUR"
 currency_coefficient: []

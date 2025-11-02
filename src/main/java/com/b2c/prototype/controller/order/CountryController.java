@@ -33,21 +33,21 @@ public class CountryController {
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> putConstantEntity(@RequestBody Map<String, Object> payload,
-                                                    @RequestParam(value = "value") final String value) {
-        countryProcess.mergeEntity(payload, value);
+                                                    @RequestParam(value = "key") final String key) {
+        countryProcess.mergeEntity(payload, key);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> patchConstantEntity(@RequestBody Map<String, Object> payload,
-                                                      @RequestParam(value = "value") final String value) {
-        countryProcess.mergeEntity(payload, value);
+                                                      @RequestParam(value = "key") final String key) {
+        countryProcess.mergeEntity(payload, key);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<String> deleteConstantEntity(@RequestParam(value = "value") final String value) {
-        countryProcess.removeEntity(value);
+    public ResponseEntity<String> deleteConstantEntity(@RequestParam(value = "key") final String key) {
+        countryProcess.removeEntity(key);
         return ResponseEntity.ok().build();
     }
 
@@ -58,7 +58,7 @@ public class CountryController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getConstantEntity(@RequestHeader(name = "Accept-Language", defaultValue = "en") String location,
-                                               @RequestParam(value = "value") final String value) {
-        return ResponseEntity.ok(countryProcess.getEntity(location, value));
+                                               @RequestParam(value = "key") final String key) {
+        return ResponseEntity.ok(countryProcess.getEntity(location, key));
     }
 }

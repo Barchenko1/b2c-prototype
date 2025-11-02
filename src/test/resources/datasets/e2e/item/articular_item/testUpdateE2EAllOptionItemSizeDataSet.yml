@@ -1,20 +1,20 @@
 option_group:
   - id: 1
-    label: "Size"
+    key: "Size"
     value: "Size"
   - id: 2
-    label: "USize"
+    key: "USize"
     value: "USize"
 option_item:
-  - label: "M"
+  - key: "M"
     value: "M"
     option_group_id: 1
-  - label: "L"
+  - key: "L"
     value: "L"
     option_group_id: 1
-  - label: "UXL"
+  - key: "UXL"
     value: "UXL"
     option_group_id: 2
-  - label: "S"
+  - key: "S"
     value: "S"
     option_group_id: 1

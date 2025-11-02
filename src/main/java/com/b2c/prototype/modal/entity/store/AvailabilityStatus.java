@@ -14,8 +14,8 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @NamedQueries({
         @NamedQuery(
-                name = "AvailabilityStatus.findByValue",
-                query = "SELECT e FROM AvailabilityStatus e WHERE e.value = :value"
+                name = "AvailabilityStatus.findByKey",
+                query = "SELECT e FROM AvailabilityStatus e WHERE e.key = :key"
         ),
         @NamedQuery(
                 name = "AvailabilityStatus.all",

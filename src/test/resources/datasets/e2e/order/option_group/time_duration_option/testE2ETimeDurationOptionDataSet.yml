@@ -1,7 +1,7 @@
 currency:
   - id: 1
     value: "USD"
-    label: "USD"
+    key: "USD"
 price:
   - id: 1
     amount: 20.0
@@ -17,14 +17,14 @@ price:
     currency_id: 1
 option_group:
   - id: 1
-    label: "CA"
+    key: "CA"
     value: "CA"
   - id: 2
-    label: "NY"
+    key: "NY"
     value: "NY"
 time_duration_option:
   - id: 1
-    label: "9-11"
+    key: "CA_9-11"
     value: "9-11"
     start_time: "1970-01-01 09:00:00.0"
     end_time: "1970-01-01 11:00:00.0"
@@ -33,7 +33,7 @@ time_duration_option:
     price_id: 1
     option_group_id: 1
   - id: 2
-    label: "12-14"
+    key: "CA_12-14"
     value: "12-14"
     start_time: "1970-01-01 12:00:00.0"
     end_time: "1970-01-01 14:00:00.0"
@@ -42,7 +42,7 @@ time_duration_option:
     price_id: 2
     option_group_id: 1
   - id: 3
-    label: "12-14"
+    key: "NY_12-14"
     value: "12-14"
     start_time: "1970-01-01 12:00:00.0"
     end_time: "1970-01-01 14:00:00.0"
@@ -51,7 +51,7 @@ time_duration_option:
     price_id: 3
     option_group_id: 2
   - id: 4
-    label: "9-11"
+    key: "NY_9-11"
     value: "9-11"
     start_time: "1970-01-01 09:00:00.0"
     end_time: "1970-01-01 11:00:00.0"

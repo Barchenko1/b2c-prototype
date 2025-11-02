@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-import static com.b2c.prototype.util.Constant.VALUE;
+import static com.b2c.prototype.util.Constant.KEY;
 
 @Service
 public class MessageTypeManager implements IMessageTypeManager {
@@ -28,22 +28,22 @@ public class MessageTypeManager implements IMessageTypeManager {
     @Transactional
     public void mergeEntity(String searchValue, MessageType payload) {
         MessageType fetchedEntity =
-                generalEntityDao.findEntity("MessageType.findByValue", Pair.of(VALUE, searchValue));
+                generalEntityDao.findEntity("MessageType.findByKey", Pair.of(KEY, searchValue));
         payload.setId(fetchedEntity.getId());
         generalEntityDao.mergeEntity(payload);
     }
 
     public void removeEntity(String value) {
-        MessageType fetchedEntity = generalEntityDao.findEntity("MessageType.findByValue", Pair.of(VALUE, value));
+        MessageType fetchedEntity = generalEntityDao.findEntity("MessageType.findByKey", Pair.of(KEY, value));
         generalEntityDao.removeEntity(fetchedEntity);
     }
 
     public MessageType getEntity(String value) {
-        return generalEntityDao.findEntity("MessageType.findByValue", Pair.of(VALUE, value));
+        return generalEntityDao.findEntity("MessageType.findByKey", Pair.of(KEY, value));
     }
 
     public Optional<MessageType> getEntityOptional(String value) {
-        MessageType entity = generalEntityDao.findEntity("MessageType.findByValue", Pair.of(VALUE, value));
+        MessageType entity = generalEntityDao.findEntity("MessageType.findByKey", Pair.of(KEY, value));
         return Optional.of(entity);
     }
 

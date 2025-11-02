@@ -1,5 +1,5 @@
 country:
   - id: 1
     value: "Update USA"
-    label: "USA"
+    key: "USA"
 

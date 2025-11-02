@@ -1,5 +1,6 @@
 package com.b2c.prototype.modal.entity.option;
 
+import com.b2c.prototype.modal.base.constant.AbstractConstantEntity;
 import com.b2c.prototype.modal.entity.price.Price;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
@@ -21,24 +22,26 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "zone_option")
 @Data
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @NamedQueries({
         @NamedQuery(
-                name = "ZoneOption.findByValue",
-                query = "SELECT zo FROM ZoneOption zo WHERE zo.value = :value"
+                name = "ZoneOption.findByKey",
+                query = "SELECT zo FROM ZoneOption zo WHERE zo.value = :key"
         ),
         @NamedQuery(
                 name = "ZoneOption.findAllWithPriceAndCurrency",
                 query = "SELECT zo FROM ZoneOption zo " +
                         "LEFT JOIN FETCH zo.price p " +
                         "LEFT JOIN FETCH p.currency c " +
-                        "WHERE zo.value = :value"
+                        "WHERE zo.value = :key"
         ),
         @NamedQuery(
                 name = "ZoneOption.all",
@@ -47,14 +50,11 @@ import lombok.ToString;
                         "LEFT JOIN FETCH p.currency c"
         )
 })
-public class ZoneOption {
+public class ZoneOption extends AbstractConstantEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
-    private String label;
-    @Column(unique = true, nullable = false)
-    private String value;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(nullable = false)
     private Price price;

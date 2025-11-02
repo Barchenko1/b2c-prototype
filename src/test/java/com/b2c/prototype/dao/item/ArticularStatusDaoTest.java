@@ -35,7 +35,7 @@ class ArticularStatusDaoTest extends AbstractDaoTest {
     @ExpectedDataSet(value = "datasets/dao/item/articular_status/updateArticularStatusDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         ArticularStatus entity = getArticularStatus();
-        entity.setValue("Update Test");
+        entity.setKey("Update Test");
 
         generalEntityDao.mergeEntity(entity);
     }
@@ -89,7 +89,7 @@ class ArticularStatusDaoTest extends AbstractDaoTest {
         return ArticularStatus.builder()
                 .id(1L)
                 .value("Test")
-                .label("Test")
+                .key("Test")
                 .build();
     }
 

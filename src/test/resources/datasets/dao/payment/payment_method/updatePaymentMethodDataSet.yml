@@ -1,4 +1,4 @@
 payment_method:
   - id: 1
     value: "Update Card"
-    label: "Card"
+    key: "Card"

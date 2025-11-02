@@ -21,7 +21,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
-import static com.b2c.prototype.util.Constant.VALUE;
+import static com.b2c.prototype.util.Constant.KEY;
 import static java.util.stream.Collectors.toMap;
 
 @Service
@@ -45,7 +45,7 @@ public class OptionItemGroupManager implements IOptionItemGroupManager {
     public void mergeEntity(String searchValue, OptionItemGroupDto optionItemGroupDto) {
         OptionGroup group = generalEntityDao.findEntity(
                 "OptionGroup.findByValueWithOptionItems",
-                Pair.of("value", searchValue)
+                Pair.of(KEY, searchValue)
         );
         OptionGroup entity = syncItemsAllowingValueChange(searchValue, group, optionItemGroupDto);
         generalEntityDao.mergeEntity(entity);
@@ -54,16 +54,16 @@ public class OptionItemGroupManager implements IOptionItemGroupManager {
     @Transactional
     @Override
     public void removeEntity(String value) {
-        OptionGroup fetchedEntity = generalEntityDao.findEntity("OptionGroup.findByValue", Pair.of(VALUE, value));
+        OptionGroup fetchedEntity = generalEntityDao.findEntity("OptionGroup.findByKey", Pair.of(KEY, value));
         generalEntityDao.removeEntity(fetchedEntity);
     }
 
     public OptionGroup getEntity(String value) {
-        return generalEntityDao.findEntity("OptionGroup.findByValueWithOptionItems", Pair.of(VALUE, value));
+        return generalEntityDao.findEntity("OptionGroup.findByValueWithOptionItems", Pair.of(KEY, value));
     }
 
     public Optional<OptionGroup> getEntityOptional(String value) {
-        OptionGroup entity = generalEntityDao.findEntity("OptionGroup.findByValueWithOptionItems", Pair.of(VALUE, value));
+        OptionGroup entity = generalEntityDao.findEntity("OptionGroup.findByValueWithOptionItems", Pair.of(KEY, value));
         return Optional.of(entity);
     }
 
@@ -83,8 +83,8 @@ public class OptionItemGroupManager implements IOptionItemGroupManager {
         // 3) Build lookup for existing items by their CURRENT value
         final Map<String, OptionItem> currentByValue = group.getOptionItems().stream()
                 .filter(Objects::nonNull)
-                .filter(oi -> oi.getValue() != null)
-                .collect(toMap(OptionItem::getValue, Function.identity(), (a, b) -> a, LinkedHashMap::new));
+                .filter(oi -> oi.getKey() != null)
+                .collect(toMap(OptionItem::getKey, Function.identity(), (a, b) -> a, LinkedHashMap::new));
 
         // 4) Track which existing items we kept/updated
         final Set<OptionItem> matchedExisting = new HashSet<>();
@@ -99,7 +99,7 @@ public class OptionItemGroupManager implements IOptionItemGroupManager {
 
             final String lookupKey = itemDto.getSearchValue() != null
                     ? itemDto.getSearchValue()
-                    : itemDto.getValue(); // fall back to its current value
+                    : itemDto.getKey(); // fall back to its current value
 
             OptionItem existing = null;
             if (lookupKey != null) {
@@ -108,16 +108,16 @@ public class OptionItemGroupManager implements IOptionItemGroupManager {
 
             if (existing != null) {
                 // Update fields
-                if (itemDto.getLabel() != null) existing.setLabel(itemDto.getLabel());
-                if (itemDto.getValue() != null && !itemDto.getValue().equals(existing.getValue())) {
+                if (itemDto.getValue() != null) existing.setValue(itemDto.getValue());
+                if (itemDto.getKey() != null && !itemDto.getKey().equals(existing.getKey())) {
                     // Guard: avoid collision after rename
-                    if (currentByValue.containsKey(itemDto.getValue()) && currentByValue.get(itemDto.getValue()) != existing) {
-                        throw new IllegalStateException("OptionItem value collision on rename: " + itemDto.getValue());
+                    if (currentByValue.containsKey(itemDto.getKey()) && currentByValue.get(itemDto.getKey()) != existing) {
+                        throw new IllegalStateException("OptionItem value collision on rename: " + itemDto.getKey());
                     }
                     // Update maps to keep them consistent for later lookups
-                    currentByValue.remove(existing.getValue());
-                    existing.setValue(itemDto.getValue());
-                    currentByValue.put(existing.getValue(), existing);
+                    currentByValue.remove(existing.getKey());
+                    existing.setKey(itemDto.getKey());
+                    currentByValue.put(existing.getKey(), existing);
                 }
 
                 matchedExisting.add(existing);
@@ -129,18 +129,18 @@ public class OptionItemGroupManager implements IOptionItemGroupManager {
                 .filter(Objects::nonNull)
                 .filter(d -> d.getSearchValue() == null)           // explicit "new"
                 .forEach(d -> {
-                    final String newVal = d.getValue();
-                    if (newVal == null || newVal.trim().isEmpty()) {
+                    final String newKey = d.getKey();
+                    if (newKey == null || newKey.trim().isEmpty()) {
                         throw new IllegalArgumentException("New OptionItem must have non-null 'value'.");
                     }
                     // If already updated an existing to this value in step 5, skip creating duplicate
-                    if (!currentByValue.containsKey(newVal)) {
+                    if (!currentByValue.containsKey(newKey)) {
                         OptionItem created = OptionItem.builder()
-                                .label(d.getLabel())
-                                .value(newVal)
+                                .value(d.getValue())
+                                .key(newKey)
                                 .build();
                         group.addOptionItem(created);               // maintains both sides
-                        currentByValue.put(newVal, created);
+                        currentByValue.put(newKey, created);
                         matchedExisting.add(created);
                     }
                 });
@@ -157,11 +157,11 @@ public class OptionItemGroupManager implements IOptionItemGroupManager {
     }
 
     private void copyUpdatableFields(OptionGroup target, OptionItemGroupDto source) {
-        if (source.getLabel() != null) {
-            target.setLabel(source.getLabel());
-        }
         if (source.getValue() != null) {
             target.setValue(source.getValue());
+        }
+        if (source.getKey() != null) {
+            target.setKey(source.getKey());
         }
     }
 }

@@ -35,7 +35,7 @@ class OptionGroupDaoTest extends AbstractDaoTest {
     @ExpectedDataSet(value = "datasets/dao/option/option_group/updateOptionGroupDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         OptionGroup entity = getOptionGroup();
-        entity.setValue("Update Color");
+        entity.setKey("Update Color");
 
         generalEntityDao.mergeEntity(entity);
     }
@@ -89,7 +89,7 @@ class OptionGroupDaoTest extends AbstractDaoTest {
         return OptionGroup.builder()
                 .id(1L)
                 .value("Color")
-                .label("Color")
+                .key("Color")
                 .build();
     }
 

@@ -38,15 +38,15 @@ public class MessageStatusControllerE2ETest extends BasicE2ETest {
     @ExpectedDataSet(value = "datasets/e2e/user/message_status/updateE2EMessageStatusDataSet.yml", orderBy = "id")
     public void testUpdateEntity() {
         ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .label("New")
                 .value("Update New")
+                .key("Update New")
                 .build();
 
         String jsonPayload = writeValueAsString(constantPayloadDto);
         webTestClient.put()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "New")
+                        .queryParam("key", "New")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -60,15 +60,15 @@ public class MessageStatusControllerE2ETest extends BasicE2ETest {
     @ExpectedDataSet(value = "datasets/e2e/user/message_status/updateE2EMessageStatusDataSet.yml", orderBy = "id")
     public void testPatchEntity() {
         ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .label("New")
                 .value("Update New")
+                .key("Update New")
                 .build();
 
         String jsonPayload = writeValueAsString(constantPayloadDto);
         webTestClient.patch()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "New")
+                        .queryParam("key", "New")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -84,7 +84,7 @@ public class MessageStatusControllerE2ETest extends BasicE2ETest {
         webTestClient.delete()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "Read")
+                        .queryParam("key", "Read")
                         .build())
                 .accept(MediaType.TEXT_PLAIN)
                 .exchange()
@@ -96,12 +96,12 @@ public class MessageStatusControllerE2ETest extends BasicE2ETest {
     public void testGetEntities() {
         List<MessageStatusDto> constantPayloadDtoList = List.of(
                 MessageStatusDto.builder()
-                        .label("New")
                         .value("New")
+                        .key("New")
                         .build(),
                 MessageStatusDto.builder()
-                        .label("Read")
                         .value("Read")
+                        .key("Read")
                         .build());
 
         List<MessageStatusDto> actual = webTestClient.get()
@@ -121,14 +121,14 @@ public class MessageStatusControllerE2ETest extends BasicE2ETest {
     @DataSet(value = "datasets/e2e/user/message_status/testE2EMessageStatusDataSet.yml", cleanBefore = true)
     public void testGetEntity() {
         MessageStatusDto expected = MessageStatusDto.builder()
-                .label("Read")
                 .value("Read")
+                .key("Read")
                 .build();
 
         MessageStatusDto actual = webTestClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "Read")
+                        .queryParam("key", "Read")
                         .build())
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
@@ -143,8 +143,8 @@ public class MessageStatusControllerE2ETest extends BasicE2ETest {
 
     private ConstantPayloadDto getConstantPayloadDto() {
         return ConstantPayloadDto.builder()
-                .label("Read")
                 .value("Read")
+                .key("Read")
                 .build();
     }
 

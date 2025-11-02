@@ -1,24 +1,24 @@
 option_group:
   - id: 1
-    label: "Modal"
+    key: "Modal"
     value: "Modal"
   - id: 2
-    label: "Color"
+    key: "Color"
     value: "Color"
 option_item:
   - id: 1
     value: "Modal1"
-    label: "Modal1"
+    key: "Modal1"
     option_group_id: 1
   - id: 2
     value: "Modal2"
-    label: "Modal2"
+    key: "Modal2"
     option_group_id: 1
   - id: 3
     value: "Red"
-    label: "Red"
+    key: "Red"
     option_group_id: 2
   - id: 4
     value: "Blue"
-    label: "Blue"
+    key: "Blue"
     option_group_id: 2

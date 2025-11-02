@@ -1,10 +1,10 @@
 currency:
   - id: 1
-    label: "USD"
+    key: "USD"
     value: "USD"
 price: []
 option_group:
   - id: 1
-    label: "Size"
+    key: "Size"
     value: "Size"
 option_item_cost: []

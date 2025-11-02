@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.b2c.prototype.util.Constant.USER_ID;
-import static com.b2c.prototype.util.Constant.VALUE;
+import static com.b2c.prototype.util.Constant.KEY;
 
 @Service
 public class MessageManager implements IMessageManager {
@@ -73,8 +73,8 @@ public class MessageManager implements IMessageManager {
                 Pair.of(USER_ID, messageId));
         Message message = getExistingMessage(messageBox, messageId);
         MessageStatus messageStatus = generalEntityDao.findEntity(
-                "MessageStatus.findByValue",
-                Pair.of(VALUE, status.getValue()));
+                "MessageStatus.findByKey",
+                Pair.of(KEY, status.getValue()));
         message.setStatus(messageStatus);
         generalEntityDao.mergeEntity(message);
     }

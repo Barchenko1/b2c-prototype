@@ -114,23 +114,23 @@ class StoreDaoTest extends AbstractDaoTest {
     private ArticularItem getArticularItem() {
         Currency currency = Currency.builder()
                 .id(1L)
-                .label("USD")
+                .key("USD")
                 .value("USD")
                 .build();
         OptionGroup optionGroup = OptionGroup.builder()
                 .id(1L)
                 .value("Size")
-                .label("Size")
+                .key("Size")
                 .build();
         OptionItem optionItemL = OptionItem.builder()
                 .id(1L)
                 .value("L")
-                .label("L")
+                .key("L")
                 .build();
         OptionItem optionItemM = OptionItem.builder()
                 .id(2L)
                 .value("M")
-                .label("M")
+                .key("M")
                 .build();
 
         optionGroup.addOptionItem(optionItemL);
@@ -155,7 +155,7 @@ class StoreDaoTest extends AbstractDaoTest {
                 .build();
         ArticularStatus articularStatus = ArticularStatus.builder()
                 .id(1L)
-                .label("NEW")
+                .key("NEW")
                 .value("NEW")
                 .build();
 
@@ -184,7 +184,7 @@ class StoreDaoTest extends AbstractDaoTest {
         AvailabilityStatus availabilityStatus = AvailabilityStatus.builder()
                 .id(1L)
                 .value("Available")
-                .label("Available")
+                .key("Available")
                 .build();
         return ArticularStock.builder()
                 .id(1L)
@@ -197,7 +197,7 @@ class StoreDaoTest extends AbstractDaoTest {
     private Store getStore() {
         Country country = Country.builder()
                 .id(1L)
-                .label("USA")
+                .key("USA")
                 .value("USA")
                 .build();
         Address address = Address.builder()

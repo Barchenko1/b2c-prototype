@@ -1,14 +1,14 @@
 brand:
   - id: 1
     value: "Hermes"
-    label: "Hermes"
+    key: "Hermes"
 item_type:
   - id: 1
     value: "Clothes"
-    label: "Clothes"
+    key: "Clothes"
 category:
   - id: 1
-    label: "parent"
+    key: "parent"
     value: "parent"
 metadata:
   - id: 1

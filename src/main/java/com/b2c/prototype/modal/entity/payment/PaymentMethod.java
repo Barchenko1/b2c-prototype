@@ -14,8 +14,8 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @NamedQueries({
         @NamedQuery(
-                name = "PaymentMethod.findByValue",
-                query = "SELECT p FROM PaymentMethod p WHERE p.value = :value"
+                name = "PaymentMethod.findByKey",
+                query = "SELECT p FROM PaymentMethod p WHERE p.key = :key"
         ),
         @NamedQuery(
                 name = "PaymentMethod.all",

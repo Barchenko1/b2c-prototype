@@ -1,6 +1,6 @@
 currency:
   - id: 1
-    label: "USD"
+    key: "USD"
     value: "USD"
 price:
   - id: 1
@@ -8,11 +8,11 @@ price:
     currency_id: 1
 option_group:
   - id: 1
-    label: "Size"
+    key: "Size"
     value: "Size"
 option_item_cost:
   - id: 1
-    label: "L"
+    key: "L"
     value: "L"
     price_id: 1
     option_group_id: 1

@@ -61,7 +61,7 @@ import java.util.List;
                         "LEFT JOIN FETCH s.articularStocks sas " +
                         "LEFT JOIN FETCH sas.articularItemQuantities aiq " +
                         "LEFT JOIN FETCH aiq.articularItem ai " +
-                        "WHERE c.value = :value"
+                        "WHERE c.key = :key"
         ),
         @NamedQuery(
                 name = "Store.findStoreWithAddressArticularItemQuantityByCountryCity",
@@ -71,8 +71,8 @@ import java.util.List;
                         "LEFT JOIN FETCH s.articularStocks sas " +
                         "LEFT JOIN FETCH sas.articularItemQuantities aiq " +
                         "LEFT JOIN FETCH aiq.articularItem ai " +
-                        "WHERE c.value = :value " +
-                        "AND a.city =:value"
+                        "WHERE c.key = :key " +
+                        "AND a.city =:key"
         ),
         @NamedQuery(
                 name = "Store.findStoreWithAddressArticularItemQuantityByArticularId",

@@ -33,21 +33,21 @@ public class ItemTypeController {
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> putConstantEntity(@RequestBody Map<String, Object> payload,
-                                                    @RequestParam(value = "value") final String value) {
-        itemTypeProcess.mergeEntity(payload, value);
+                                                    @RequestParam(value = "key") final String key) {
+        itemTypeProcess.mergeEntity(payload, key);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> patchConstantEntity(@RequestBody Map<String, Object> payload,
-                                                      @RequestParam(value = "value") final String value) {
-        itemTypeProcess.mergeEntity(payload, value);
+                                                      @RequestParam(value = "key") final String key) {
+        itemTypeProcess.mergeEntity(payload, key);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<String> deleteConstantEntity(@RequestParam(value = "value") final String value) {
-        itemTypeProcess.removeEntity(value);
+    public ResponseEntity<String> deleteConstantEntity(@RequestParam(value = "key") final String key) {
+        itemTypeProcess.removeEntity(key);
         return ResponseEntity.ok().build();
     }
 
@@ -58,7 +58,7 @@ public class ItemTypeController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getConstantEntity(@RequestHeader(name = "Accept-Language", defaultValue = "en") String location,
-                                               @RequestParam(value = "value") final String value) {
-        return ResponseEntity.ok(itemTypeProcess.getEntity(location, value));
+                                               @RequestParam(value = "key") final String key) {
+        return ResponseEntity.ok(itemTypeProcess.getEntity(location, key));
     }
 }

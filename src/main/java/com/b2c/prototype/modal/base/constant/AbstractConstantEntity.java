@@ -1,6 +1,5 @@
 package com.b2c.prototype.modal.base.constant;
 
-import com.b2c.prototype.modal.base.IConstant;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,13 +15,13 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AbstractConstantEntity implements IConstant {
+public class AbstractConstantEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
-    @Column(name = "label", nullable = false)
-    private String label;
+    @Column(name = "key", unique = true, nullable = false)
+    private String key;
     @Column(name = "value", nullable = false)
     private String value;
 

@@ -37,8 +37,8 @@ class OptionItemDaoTest extends AbstractDaoTest {
     @ExpectedDataSet(value = "datasets/dao/option/option_item/updateOptionItemDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         OptionItem entity = getOptionItem();
-        entity.setLabel("XL");
         entity.setValue("XL");
+        entity.setKey("XL");
 
         generalEntityDao.mergeEntity(entity);
     }
@@ -92,12 +92,12 @@ class OptionItemDaoTest extends AbstractDaoTest {
         OptionItem optionItem = OptionItem.builder()
                 .id(1L)
                 .value("L")
-                .label("L")
+                .key("L")
                 .build();
         OptionGroup optionGroup = OptionGroup.builder()
                 .id(1L)
                 .value("Size")
-                .label("Size")
+                .key("Size")
                 .build();
 
         optionGroup.addOptionItem(optionItem);

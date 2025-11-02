@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
-import static com.b2c.prototype.util.Constant.VALUE;
+import static com.b2c.prototype.util.Constant.KEY;
 import static java.util.stream.Collectors.toMap;
 
 @Service
@@ -48,8 +48,8 @@ public class ZoneOptionManager implements IZoneOptionManager {
     @Override
     public void mergeEntity(String searchValue, ZoneOptionGroupDto zoneOptionGroupDto) {
         ZoneOptionGroup group = generalEntityDao.findEntity(
-                "ZoneOptionGroup.findByValue",
-                Pair.of(VALUE, searchValue)
+                "ZoneOptionGroup.findByKey",
+                Pair.of(KEY, searchValue)
         );
         ZoneOptionGroup entity = syncItemsAllowingValueChange(searchValue, group, zoneOptionGroupDto);
         generalEntityDao.mergeEntity(entity);
@@ -58,18 +58,18 @@ public class ZoneOptionManager implements IZoneOptionManager {
     @Transactional
     @Override
     public void removeEntity(String value) {
-        ZoneOptionGroup zoneOptionGroup = generalEntityDao.findEntity("ZoneOptionGroup.findByValue", Pair.of(VALUE, value));
+        ZoneOptionGroup zoneOptionGroup = generalEntityDao.findEntity("ZoneOptionGroup.findByKey", Pair.of(KEY, value));
         generalEntityDao.removeEntity(zoneOptionGroup);
     }
 
     @Override
     public ZoneOptionGroup getEntity(String value) {
-        return generalEntityDao.findEntity("ZoneOptionGroup.findByValue", Pair.of(VALUE, value));
+        return generalEntityDao.findEntity("ZoneOptionGroup.findByKey", Pair.of(KEY, value));
     }
 
     @Override
     public Optional<ZoneOptionGroup> getEntityOptional(String value) {
-        return generalEntityDao.findOptionEntity("ZoneOptionGroup.findByValue", Pair.of(VALUE, value));
+        return generalEntityDao.findOptionEntity("ZoneOptionGroup.findByKey", Pair.of(KEY, value));
     }
 
     @Override
@@ -96,31 +96,21 @@ public class ZoneOptionManager implements IZoneOptionManager {
         // UPDATE EXISTING
         incoming.forEach(itemDto -> {
             if (itemDto == null) return;
-            final String lookupKey = itemDto.getSearchValue() != null ? itemDto.getSearchValue() : itemDto.getValue();
+            final String lookupKey = itemDto.getSearchValue() != null ? itemDto.getSearchValue() : itemDto.getKey();
             ZoneOption existing = lookupKey == null ? null : currentByValue.get(lookupKey);
 
             if (existing != null) {
-                if (itemDto.getLabel() != null) existing.setLabel(itemDto.getLabel());
-
+                if (itemDto.getValue() != null) existing.setValue(itemDto.getValue());
+                if (itemDto.getKey() != null) existing.setKey(itemDto.getKey());
                 // rename (guard against collision)
-                if (itemDto.getValue() != null && !itemDto.getValue().equals(existing.getValue())) {
-                    if (currentByValue.containsKey(itemDto.getValue()) && currentByValue.get(itemDto.getValue()) != existing) {
-                        throw new IllegalStateException("TimeDurationOption value collision on rename: " + itemDto.getValue());
+                if (itemDto.getKey() != null && !itemDto.getKey().equals(existing.getKey())) {
+                    if (currentByValue.containsKey(itemDto.getKey()) && currentByValue.get(itemDto.getKey()) != existing) {
+                        throw new IllegalStateException("TimeDurationOption value collision on rename: " + itemDto.getKey());
                     }
                     currentByValue.remove(existing.getValue());
-                    existing.setValue(itemDto.getValue());
+                    existing.setValue(itemDto.getKey());
                     currentByValue.put(existing.getValue(), existing);
                 }
-
-                // times + duration
-//                if (itemDto.getStartTime() != null) existing.setStartTime(itemDto.getStartTime());
-//                if (itemDto.getEndTime() != null) existing.setEndTime(itemDto.getEndTime());
-//                if (itemDto.getTimeZone() != null) existing.setTimeZone(itemDto.getTimeZone());
-//                if (existing.getStartTime() != null && existing.getEndTime() != null) {
-//                    existing.setDurationInMin(
-//                            Duration.between(existing.getStartTime(), existing.getEndTime()).toMinutes()
-//                    );
-//                }
 
                 // price update (no manual IDs; cascade handles insert/update)
                 if (itemDto.getPrice() != null) {
@@ -132,10 +122,10 @@ public class ZoneOptionManager implements IZoneOptionManager {
                     if (itemDto.getPrice().getAmount() != null) {
                         p.setAmount(itemDto.getPrice().getAmount());
                     }
-                    if (itemDto.getPrice().getCurrency() != null && itemDto.getPrice().getCurrency().getValue() != null) {
+                    if (itemDto.getPrice().getCurrency() != null && itemDto.getPrice().getCurrency().getKey() != null) {
                         p.setCurrency(
-                                generalEntityDao.findEntity("Currency.findByValue",
-                                        Pair.of(VALUE, itemDto.getPrice().getCurrency().getValue()))
+                                generalEntityDao.findEntity("Currency.findByKey",
+                                        Pair.of(KEY, itemDto.getPrice().getCurrency().getKey()))
                         );
                     }
                 }
@@ -149,24 +139,24 @@ public class ZoneOptionManager implements IZoneOptionManager {
                 .filter(Objects::nonNull)
                 .filter(d -> d.getSearchValue() == null)
                 .forEach(d -> {
-                    final String newVal = d.getValue();
-                    if (newVal == null || newVal.trim().isEmpty()) {
+                    final String newKey = d.getKey();
+                    if (newKey == null || newKey.trim().isEmpty()) {
                         throw new IllegalArgumentException("New TimeDurationOption must have non-null 'value'.");
                     }
-                    if (!currentByValue.containsKey(newVal)) {
+                    if (!currentByValue.containsKey(newKey)) {
                         ZoneOption created = ZoneOption.builder()
-                                .label(d.getLabel())
-                                .value(newVal)
+                                .value(d.getValue())
+                                .key(newKey)
                                 .price(d.getPrice() != null
                                         ? Price.builder()
                                         .amount(d.getPrice().getAmount())
-                                        .currency(generalEntityDao.findEntity("Currency.findByValue",
-                                                Pair.of(VALUE, d.getPrice().getCurrency().getValue())))
+                                        .currency(generalEntityDao.findEntity("Currency.findByKey",
+                                                Pair.of(KEY, d.getPrice().getCurrency().getKey())))
                                         .build()
                                         : null)
                                 .build();
                         group.addZoneOption(created);
-                        currentByValue.put(newVal, created);
+                        currentByValue.put(newKey, created);
                         matchedExisting.add(created);
                     }
                 });
@@ -182,17 +172,17 @@ public class ZoneOptionManager implements IZoneOptionManager {
     }
 
     private void copyUpdatableFields(ZoneOptionGroup target, ZoneOptionGroupDto source) {
-        if (source.getLabel() != null) {
-            target.setLabel(source.getLabel());
-        }
         if (source.getValue() != null) {
             target.setValue(source.getValue());
+        }
+        if (source.getKey() != null) {
+            target.setKey(source.getKey());
         }
         if (source.getCity() != null) {
             target.setCity(source.getCity());
         }
         if (source.getCountry() != null) {
-            target.setCountry(generalEntityDao.findEntity("Country.findByValue", Pair.of(VALUE, source.getCountry().getValue())));
+            target.setCountry(generalEntityDao.findEntity("Country.findByKey", Pair.of(KEY, source.getCountry().getKey())));
         }
     }
 }

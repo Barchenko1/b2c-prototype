@@ -6,10 +6,7 @@ import com.b2c.prototype.modal.dto.payload.constant.CategoryValueDto;
 import com.b2c.prototype.modal.dto.payload.constant.ItemTypeDto;
 import com.b2c.prototype.modal.dto.payload.item.ResponseMetaDataDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
-import com.b2c.prototype.modal.entity.item.Brand;
-import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.MetaData;
-import com.b2c.prototype.modal.entity.item.ItemType;
 
 
 import org.hibernate.Session;
@@ -32,7 +29,7 @@ import static org.mockito.Mockito.when;
 
 class MetaDataManagerTest {
     @InjectMocks
-    private MetaDataManager itemDataManager;
+    private ArticularGroupManager itemDataManager;
 
     @BeforeEach
     void setUp() {
@@ -52,7 +49,7 @@ class MetaDataManagerTest {
             return null;
         });
 
-        itemDataManager.saveMetaData(metaDataDto);
+        itemDataManager.saveArticularGroup(metaDataDto);
 
     }
 
@@ -70,7 +67,7 @@ class MetaDataManagerTest {
             return null;
         });
 
-        itemDataManager.updateMetaData(itemId, metaDataDto);
+        itemDataManager.updateArticularGroup(itemId, metaDataDto);
 
     }
 
@@ -84,7 +81,7 @@ class MetaDataManagerTest {
         Function<MetaData, ResponseMetaDataDto> function = mock(Function.class);
 
         when(function.apply(metaData)).thenReturn(responseDto);
-        ResponseMetaDataDto result = itemDataManager.getMetaData(itemId);
+        ResponseMetaDataDto result = itemDataManager.getArticularGroup(itemId);
 
         assertEquals(responseDto, result);
     }
@@ -101,7 +98,7 @@ class MetaDataManagerTest {
 //        when(itemDataDao.getEntityList()).thenReturn(List.of(metaData));
         when(function.apply(metaData)).thenReturn(responseDto);
 
-        List<ResponseMetaDataDto> result = itemDataManager.getMetaDataList();
+        List<ResponseMetaDataDto> result = itemDataManager.getArticularGroupList();
 
         assertEquals(responseDtoList, result);
     }
@@ -109,16 +106,16 @@ class MetaDataManagerTest {
     private ResponseMetaDataDto getResponseItemDataDto() {
         return ResponseMetaDataDto.builder()
                 .category(CategoryValueDto.builder()
-                        .label("categoryLabel")
-                        .value("categoryValue")
+                        .value("categoryLabel")
+                        .key("categoryValue")
                         .build())
                 .itemType(ItemTypeDto.builder()
-                        .label("itemTypeLabel")
-                        .value("itemTypeValue")
+                        .value("itemTypeLabel")
+                        .key("itemTypeValue")
                         .build())
                 .brand(BrandDto.builder()
-                        .label("brandLabel")
-                        .value("brandValue")
+                        .value("brandLabel")
+                        .key("brandValue")
                         .build())
 //                .description()
                 .build();
@@ -144,16 +141,16 @@ class MetaDataManagerTest {
     private MetaDataDto getMetaDataDto() {
         return MetaDataDto.builder()
                 .category(CategoryValueDto.builder()
-                        .label("categoryLabel")
-                        .value("categoryValue")
+                        .value("categoryLabel")
+                        .key("categoryValue")
                         .build())
                 .itemType(ItemTypeDto.builder()
-                        .label("itemTypeLabel")
-                        .value("itemTypeValue")
+                        .value("itemTypeLabel")
+                        .key("itemTypeValue")
                         .build())
                 .brand(BrandDto.builder()
-                        .label("brandLabel")
-                        .value("brandValue")
+                        .value("brandLabel")
+                        .key("brandValue")
                         .build())
                 .build();
     }

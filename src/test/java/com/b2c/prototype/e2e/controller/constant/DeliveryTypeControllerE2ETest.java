@@ -42,14 +42,14 @@ public class DeliveryTypeControllerE2ETest extends BasicE2ETest {
     @ExpectedDataSet(value = "datasets/e2e/order/delivery_type/updateE2EDeliveryTypeDataSet.yml", orderBy = "id")
     public void testUpdateEntity() {
         ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .label("Courier")
                 .value("Update Courier")
+                .key("Update Courier")
                 .build();
         String jsonPayload = writeValueAsString(constantPayloadDto);
         webTestClient.put()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "Courier")
+                        .queryParam("key", "Courier")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -63,14 +63,14 @@ public class DeliveryTypeControllerE2ETest extends BasicE2ETest {
     @ExpectedDataSet(value = "datasets/e2e/order/delivery_type/updateE2EDeliveryTypeDataSet.yml", orderBy = "id")
     public void testPatchEntity() {
         ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .label("Courier")
                 .value("Update Courier")
+                .key("Update Courier")
                 .build();
         String jsonPayload = writeValueAsString(constantPayloadDto);
         webTestClient.put()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "Courier")
+                        .queryParam("key", "Courier")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -86,7 +86,7 @@ public class DeliveryTypeControllerE2ETest extends BasicE2ETest {
         webTestClient.delete()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "Courier")
+                        .queryParam("key", "Courier")
                         .build())
                 .accept(MediaType.TEXT_PLAIN)
                 .exchange()
@@ -98,12 +98,12 @@ public class DeliveryTypeControllerE2ETest extends BasicE2ETest {
     public void testGetEntities() {
         List<DeliveryTypeDto> constantPayloadDtoList = List.of(
                 DeliveryTypeDto.builder()
-                        .label("Post")
                         .value("Post")
+                        .key("Post")
                         .build(),
                 DeliveryTypeDto.builder()
-                        .label("Courier")
                         .value("Courier")
+                        .key("Courier")
                         .build());
 
         List<DeliveryTypeDto> actual =
@@ -124,15 +124,15 @@ public class DeliveryTypeControllerE2ETest extends BasicE2ETest {
     @DataSet(value = "datasets/e2e/order/delivery_type/testE2EDeliveryTypeDataSet.yml", cleanBefore = true)
     public void testGetEntity() {
         DeliveryTypeDto expected = DeliveryTypeDto.builder()
-                .label("Courier")
                 .value("Courier")
+                .key("Courier")
                 .build();
 
         DeliveryTypeDto actual =
                 webTestClient.get()
                         .uri(uriBuilder -> uriBuilder
                                 .path(URL_TEMPLATE)
-                                .queryParam("value", "Courier")
+                                .queryParam("key", "Courier")
                                 .build())
                         .accept(MediaType.APPLICATION_JSON)
                         .exchange()
@@ -147,8 +147,8 @@ public class DeliveryTypeControllerE2ETest extends BasicE2ETest {
 
     private ConstantPayloadDto getConstantPayloadDto() {
         return ConstantPayloadDto.builder()
-                .label("Courier")
                 .value("Courier")
+                .key("Courier")
                 .build();
     }
 }

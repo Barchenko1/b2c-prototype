@@ -41,14 +41,14 @@ public class MessageTemplateController {
 
     @PatchMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> patchConstantEntity(@RequestBody Map<String, Object> payload,
-                                                      @RequestParam(value = "messageTemplateId") final String value) {
-        messageTemplateProcess.mergeEntity(payload, value);
+                                                      @RequestParam(value = "messageTemplateId") final String key) {
+        messageTemplateProcess.mergeEntity(payload, key);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<String> deleteConstantEntity(@RequestParam(value = "messageTemplateId") final String value) {
-        messageTemplateProcess.removeEntity(value);
+    public ResponseEntity<String> deleteConstantEntity(@RequestParam(value = "messageTemplateId") final String key) {
+        messageTemplateProcess.removeEntity(key);
         return ResponseEntity.ok().build();
     }
 

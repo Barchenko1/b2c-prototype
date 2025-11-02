@@ -1,7 +1,7 @@
 currency:
   - id: 1
     value: "USD"
-    label: "USD"
+    key: "USD"
 commission_value:
   - id: 1
     fee_type: 'FIXED'

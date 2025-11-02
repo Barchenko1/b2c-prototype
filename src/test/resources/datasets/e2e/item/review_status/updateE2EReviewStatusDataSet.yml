@@ -1,7 +1,7 @@
 review_status:
   - id: 1
-    label: "PENDING"
+    key: "Update PENDING"
     value: "Update PENDING"
   - id: 2
-    label: "DONE"
+    key: "DONE"
     value: "DONE"

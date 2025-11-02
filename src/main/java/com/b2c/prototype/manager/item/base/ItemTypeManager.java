@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-import static com.b2c.prototype.util.Constant.VALUE;
+import static com.b2c.prototype.util.Constant.KEY;
 
 @Service
 public class ItemTypeManager implements IItemTypeManager {
@@ -26,22 +26,22 @@ public class ItemTypeManager implements IItemTypeManager {
 
     public void mergeEntity(String searchValue, ItemType entity) {
         ItemType fetchedEntity =
-                generalEntityDao.findEntity("ItemType.findByValue", Pair.of(VALUE, searchValue));
+                generalEntityDao.findEntity("ItemType.findByKey", Pair.of(KEY, searchValue));
         entity.setId(fetchedEntity.getId());
         generalEntityDao.mergeEntity(entity);
     }
 
     public void removeEntity(String value) {
-        ItemType fetchedEntity = generalEntityDao.findEntity("ItemType.findByValue", Pair.of(VALUE, value));
+        ItemType fetchedEntity = generalEntityDao.findEntity("ItemType.findByKey", Pair.of(KEY, value));
         generalEntityDao.removeEntity(fetchedEntity);
     }
 
     public ItemType getEntity(String value) {
-        return generalEntityDao.findEntity("ItemType.findByValue", Pair.of(VALUE, value));
+        return generalEntityDao.findEntity("ItemType.findByKey", Pair.of(KEY, value));
     }
 
     public Optional<ItemType> getEntityOptional(String value) {
-        ItemType entity = generalEntityDao.findEntity("ItemType.findByValue", Pair.of(VALUE, value));
+        ItemType entity = generalEntityDao.findEntity("ItemType.findByKey", Pair.of(KEY, value));
         return Optional.of(entity);
     }
 

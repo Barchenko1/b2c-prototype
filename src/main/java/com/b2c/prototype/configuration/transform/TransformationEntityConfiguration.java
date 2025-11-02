@@ -13,7 +13,6 @@ import com.b2c.prototype.modal.dto.payload.order.ContactInfoDto;
 import com.b2c.prototype.modal.dto.payload.order.ContactPhoneDto;
 import com.b2c.prototype.modal.dto.payload.order.CreditCardDto;
 import com.b2c.prototype.modal.dto.payload.order.single.DeliveryDto;
-import com.b2c.prototype.modal.dto.payload.order.single.ResponseCustomerOrderDto;
 import com.b2c.prototype.modal.dto.payload.post.PostDto;
 import com.b2c.prototype.modal.dto.payload.review.ResponseReviewCommentDto;
 import com.b2c.prototype.modal.dto.payload.review.ReviewCommentDto;
@@ -22,15 +21,11 @@ import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.discount.InitDiscountDto;
 import com.b2c.prototype.modal.dto.payload.message.MessageDto;
 import com.b2c.prototype.modal.dto.payload.item.PriceDto;
-import com.b2c.prototype.modal.dto.payload.user.RegistrationUserDetailsDto;
 import com.b2c.prototype.modal.dto.payload.review.ReviewDto;
 import com.b2c.prototype.modal.dto.payload.store.StoreDto;
-import com.b2c.prototype.modal.dto.payload.option.item.TimeDurationOptionDto;
 import com.b2c.prototype.modal.dto.payload.user.UserAddressDto;
 import com.b2c.prototype.modal.dto.payload.user.UserCreditCardDto;
-import com.b2c.prototype.modal.dto.payload.user.UserDetailsDto;
 import com.b2c.prototype.modal.dto.payload.option.item.ZoneOptionDto;
-import com.b2c.prototype.modal.dto.payload.commission.ResponseMinMaxCommissionDto;
 import com.b2c.prototype.modal.dto.payload.message.ResponseMessageOverviewDto;
 import com.b2c.prototype.modal.dto.payload.message.ResponseMessagePayloadDto;
 import com.b2c.prototype.modal.dto.payload.review.ResponseReviewDto;
@@ -39,7 +34,6 @@ import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.UserAddress;
 import com.b2c.prototype.modal.entity.delivery.Delivery;
 import com.b2c.prototype.modal.entity.message.MessageTemplate;
-import com.b2c.prototype.modal.entity.option.TimeDurationOption;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.ArticularStatus;
 import com.b2c.prototype.modal.entity.item.Discount;
@@ -81,175 +75,21 @@ import static com.b2c.prototype.util.Util.getUUID;
 @Configuration
 public class TransformationEntityConfiguration {
 
-//    public TransformationEntityConfiguration(ITransformationFunctionService transformationFunctionService) {
-//        addConstantEntityTransformationFunctions(transformationFunctionService, Brand.class, Brand::new);
-//        addConstantEntityTransformationFunctions(transformationFunctionService, CountryPhoneCode.class, CountryPhoneCode::new);
-//        addConstantEntityTransformationFunctions(transformationFunctionService, Currency.class, Currency::new);
-//        addConstantEntityTransformationFunctions(transformationFunctionService, DeliveryType.class, DeliveryType::new);
-//        addConstantEntityTransformationFunctions(transformationFunctionService, ItemType.class, ItemType::new);
-//        addConstantEntityTransformationFunctions(transformationFunctionService, ArticularStatus.class, ArticularStatus::new);
-//        addConstantEntityTransformationFunctions(transformationFunctionService, MessageStatus.class, MessageStatus::new);
-//        addConstantEntityTransformationFunctions(transformationFunctionService, MessageType.class, MessageType::new);
-//        addConstantEntityTransformationFunctions(transformationFunctionService, OptionGroup.class, OptionGroup::new);
-//        addConstantEntityTransformationFunctions(transformationFunctionService, OrderStatus.class, OrderStatus::new);
-//        addConstantEntityTransformationFunctions(transformationFunctionService, PaymentMethod.class, PaymentMethod::new);
-////        addConstantEntityTransformationFunctions(transformationFunctionService, AvailabilityStatus.class, AvailabilityStatus::new);
-//        transformationFunctionService.addTransformationFunction(NumberConstantPayloadDto.class, Rating.class, mapOneIntegerFieldEntityDtoRatingFunction());
-//
-//        loadCountryFunctions(transformationFunctionService);
-//
-//        transformationFunctionService.addTransformationFunction(DeliveryArticularItemQuantity.class, AddressDto.class, mapOrderItemToAddressDtoFunction());
-//
-//        loadOptionItemFunctions(transformationFunctionService);
-//        loadItemDataFunctions(transformationFunctionService);
-//        loadArticularItemFunctions(transformationFunctionService);
-//        loadDiscountFunctions(transformationFunctionService);
-//        loadCustomerOrderFunctions(transformationFunctionService);
-//        loadUserDetailsFunctions(transformationFunctionService);
-//        loadContactInfoFunctions(transformationFunctionService);
-//        loadTimeDurationOptionFunctions(transformationFunctionService);
-//        loadZoneOptionFunctions(transformationFunctionService);
-//        loadAddressFunctions(transformationFunctionService);
-//        loadCreditCardFunctions(transformationFunctionService);
-//        loadDeviceFunctions(transformationFunctionService);
-//        loadCommissionFunctions(transformationFunctionService);
-//        loadStoreFunctions(transformationFunctionService);
-//        loadMessageFunctions(transformationFunctionService);
-//        loadPostFunctions(transformationFunctionService);
-//        loadReviewFunctions(transformationFunctionService);
-//
-//    }
-//
-//    private void loadCountryFunctions(ITransformationFunctionService transformationFunctionService) {
-//        transformationFunctionService.addTransformationFunction(CountryDto.class, Country.class, mapCountryDtoCountryFunction());
-//        transformationFunctionService.addTransformationFunction(Country.class, CountryDto.class, mapCountryEntityCountryDtoFunction());
-//    }
-//
-//    private void loadDiscountFunctions(ITransformationFunction transformationFunctionService) {
-//        transformationFunctionService.addTransformationFunction(DiscountDto.class, Discount.class, mapDiscountDtoToDiscountFunction());
-//        transformationFunctionService.addTransformationFunction(Discount.class, DiscountDto.class, mapDiscountToDiscountDtoFunction());
-//        transformationFunctionService.addTransformationFunction(ArticularItem.class, DiscountDto.class, mapItemDataOptionListToDiscountDtoFunction());
-//        transformationFunctionService.addTransformationFunction(ArticularItem.class, DiscountDto.class, "list", mapItemDataOptionListToDiscountDtoListFunction());
-//    }
-//
-//    private void loadItemDataFunctions(ITransformationFunctionService transformationFunctionService) {
-//        transformationFunctionService.addTransformationFunction(MetaDataDto.class, MetaData.class, mapItemDataDtoToItemDataFunction());
-//        transformationFunctionService.addTransformationFunction(SearchFieldUpdateEntityDto.class, MetaData.class, mapSearchFieldUpdateEntityDtoToItemDataFunction());
-//        transformationFunctionService.addTransformationFunction(MetaData.class, ResponseMetaDataDto.class, mapItemDataToResponseItemDataDtoFunction());
-//    }
-//
-//    private void loadArticularItemFunctions(ITransformationFunctionService transformationFunctionService) {
-//        transformationFunctionService.addTransformationFunction(SearchFieldUpdateCollectionEntityDto.class, MetaData.class, mapSearchFieldUpdateCollectionEntityDtoToItemDataFunction());
-//        transformationFunctionService.addTransformationFunction(ArticularItem.class, ResponseArticularItemDto.class, mapArticularItemToResponseArticularDto());
-//    }
-//
-//    private void loadOptionItemFunctions(ITransformationFunctionService transformationFunctionService) {
-//        transformationFunctionService.addTransformationFunction(OptionGroupOptionItemSetDto.class, OptionGroup.class, mapOptionItemDtoToOptionGroup());
-//        transformationFunctionService.addTransformationFunction(OptionGroupOptionItemSetDto.class, OptionGroup.class, "set", mapOptionGroupOptionItemSetDtoListToOptionGroupSet());
-//        transformationFunctionService.addTransformationFunction(ArticularItem.class, OptionItem.class, mapItemDataOptionToOptionItemFunction());
-//        transformationFunctionService.addTransformationFunction(OptionGroup.class, OptionGroupOptionItemSetDto.class, mapOptionGroupToOptionItemDto());
-//        transformationFunctionService.addTransformationFunction(ArticularItem.class, OptionGroupOptionItemSetDto.class, "list", mapArticularItemToOptionItemDtoList());
-//
-//        transformationFunctionService.addTransformationFunction(SingleOptionItemDto.class, OptionGroup.class, mapSingleOptionItemDtoToOptionGroup());
-//    }
-//
-//    private void loadCustomerOrderFunctions(ITransformationFunctionService transformationFunctionService) {
-//        transformationFunctionService.addTransformationFunction(ContactInfoDto.class, ContactInfo.class, mapContactInfoDtoToContactInfo());
-//        transformationFunctionService.addTransformationFunction(DeliveryDto.class, Delivery.class, mapDeliveryDtoToDeliveryFunction());
-//        transformationFunctionService.addTransformationFunction(ArticularItemQuantityDto.class, ArticularItemQuantity.class, mapArticularItemQuantityDtoToArticularItemQuantityFunction());
-//        transformationFunctionService.addTransformationFunction(CreditCardDto.class, CreditCard.class, mapCreditCardDtoToCreditCardFunction());
-//
-//        transformationFunctionService.addTransformationFunction(CustomerSingleDeliveryOrder.class, ResponseCustomerOrderDto.class, mapCustomerOrderToResponseCustomerOrderFunction());
-//    }
-//
-//    private void loadUserDetailsFunctions(ITransformationFunctionService transformationFunctionService) {
-//        transformationFunctionService.addTransformationFunction(RegistrationUserDetailsDto.class, UserDetails.class, mapRegistrationUserDetailsDtoToUserDetailsFunction());
-//        transformationFunctionService.addTransformationFunction(UserDetailsDto.class, UserDetails.class, mapUserDetailsDtoToUserDetailsFunction());
-//        transformationFunctionService.addTransformationFunction(SearchFieldUpdateEntityDto.class, UserDetails.class, mapSearchFieldUpdateEntityDtoToUserDetailsFunction());
-//        transformationFunctionService.addTransformationFunction(UserDetails.class, ResponseUserDetailsDto.class, mapUserDetailsToUserResponseUserDetailsDtoFunction());
-//    }
-//
-//    private void loadContactInfoFunctions(ITransformationFunctionService transformationFunctionService) {
-//        transformationFunctionService.addTransformationFunction(ContactInfoDto.class, ContactInfo.class, mapContactInfoDtoToContactInfoFunction());
-//        transformationFunctionService.addTransformationFunction(ContactInfo.class, ContactInfoDto.class, mapContactInfoToContactInfoDtoFunction());
-//        transformationFunctionService.addTransformationFunction(UserDetails.class, ContactInfoDto.class, mapUserDetailsToContactInfoDtoFunction());
-//    }
-//
-//    private void loadTimeDurationOptionFunctions(ITransformationFunctionService transformationFunctionService) {
-//        transformationFunctionService.addTransformationFunction(TimeDurationOptionDto.class, TimeDurationOption.class, mapTimeDurationOptionDtoToTimeDurationOptionFunction());
-//        transformationFunctionService.addTransformationFunction(TimeDurationOption.class, ResponseTimeDurationOptionDto.class, mapTimeDurationOptionToResponseTimeDurationOptionDtoFunction());
-//    }
-//
-//    private void loadZoneOptionFunctions(ITransformationFunctionService transformationFunctionService) {
-//        transformationFunctionService.addTransformationFunction(ZoneOptionDto.class, ZoneOption.class, mapZoneOptionDtoToZoneOptionFunction());
-//        transformationFunctionService.addTransformationFunction(ZoneOption.class, ZoneOptionDto.class, mapZoneOptionToZoneOptionDtoFunction());
-//    }
-//
-//    private void loadAddressFunctions(ITransformationFunctionService transformationFunctionService) {
-//        transformationFunctionService.addTransformationFunction(UserAddressDto.class, UserAddress.class, mapUserAddressDtoToUserAddressFunction());
-//        transformationFunctionService.addTransformationFunction(UserAddress.class, ResponseUserAddressDto.class, mapUserAddressToResponseUserAddressDtoFunction());
-//        transformationFunctionService.addTransformationFunction(UserAddress.class, AddressDto.class, mapUserAddressToAddressDtoDtoFunction());
-//        transformationFunctionService.addTransformationFunction(AddressDto.class, Address.class, mapAddressDtoToAddressFunction());
-//        transformationFunctionService.addTransformationFunction(Address.class, AddressDto.class, mapAddressToAddressDtoFunction());
-//    }
-//
-//    private void loadDeviceFunctions(ITransformationFunctionService transformationFunctionService) {
-//        transformationFunctionService.addTransformationFunction(DeviceDto.class, Device.class, mapDeviceDtoToDeviceFunction());
-//        transformationFunctionService.addTransformationFunction(Device.class, ResponseDeviceDto.class, mapDeviceToResponseDeviceDtoFunction());
-//    }
-//
-//    private void loadCommissionFunctions(ITransformationFunctionService transformationFunctionService) {
-//        transformationFunctionService.addTransformationFunction(MinMaxCommissionDto.class, MinMaxCommission.class, mapMinMaxCommissionDtoToMinMaxCommission());
-//        transformationFunctionService.addTransformationFunction(MinMaxCommission.class, ResponseMinMaxCommissionDto.class, mapMinMaxCommissionDtoToResponseMinMaxCommissionDto());
-//    }
-//
-//    private void loadStoreFunctions(ITransformationFunctionService transformationFunctionService) {
-//        transformationFunctionService.addTransformationFunction(StoreDto.class, Store.class, mapStoreDtoToStoreFunction());
-//        transformationFunctionService.addTransformationFunction(Store.class, ResponseStoreDto.class, mapStoreToResponseStoreDtoFunction());
-//    }
-//
-//    private void loadMessageFunctions(ITransformationFunctionService transformationFunctionService) {
-//        transformationFunctionService.addTransformationFunction(MessageDto.class, Message.class, mapMessageDtoToMessageFunction());
-//        transformationFunctionService.addTransformationFunction(MessageBox.class, ResponseMessageOverviewDto.class, mapMessageToResponseMessageOverviewDtoFunction());
-//        transformationFunctionService.addTransformationFunction(Message.class, ResponseMessageOverviewDto.class, mapMessageToResponseMessageOverviewDtoFunction());
-//        transformationFunctionService.addTransformationFunction(Message.class, ResponseMessagePayloadDto.class, mapMessageToResponseMessagePayloadDtoFunction());
-//
-//    }
-//
-//    private void loadPostFunctions(ITransformationFunctionService transformationFunctionService) {
-//        transformationFunctionService.addTransformationFunction(PostDto.class, Post.class, mapPostDtoToPostFunction());
-//        transformationFunctionService.addTransformationFunction(Post.class, ResponsePostDto.class, mapReviewDtoToReviewFunction());
-//        transformationFunctionService.addTransformationFunction(ReviewCommentDto.class, ReviewComment.class, mapReviewCommentDtoToReviewCommentFunction());
-//        transformationFunctionService.addTransformationFunction(ReviewComment.class, ResponseReviewCommentDto.class, mapReviewCommentToResponseReviewCommentDtoFunction());
-//    }
-//
-//    private void loadReviewFunctions(ITransformationFunctionService transformationFunctionService) {
-//        transformationFunctionService.addTransformationFunction(ReviewDto.class, Review.class, mapReviewDtoToReviewFunction());
-//        transformationFunctionService.addTransformationFunction(Review.class, ResponseReviewDto.class, mapReviewToResponseReviewDtoFunction());
-//    }
-
     private <T extends AbstractConstantEntity> Function<ConstantPayloadDto, T> mapConstantEntityPayloadDtoToConstantEntityFunction(Supplier<T> entitySupplier) {
         return constantPayloadDto -> {
             T entity = entitySupplier.get();
-            entity.setLabel(constantPayloadDto.getLabel());
             entity.setValue(constantPayloadDto.getValue());
+            entity.setKey(constantPayloadDto.getKey());
             return entity;
         };
     }
 
     private <T extends AbstractConstantEntity> Function<T, ConstantPayloadDto> mapConstantEntityToConstantEntityPayloadDtoFunction() {
         return abstractConstantEntity -> ConstantPayloadDto.builder()
-                .label(abstractConstantEntity.getLabel())
                 .value(abstractConstantEntity.getValue())
+                .key(abstractConstantEntity.getKey())
                 .build();
     }
-
-//    private <T extends AbstractConstantEntity> void addConstantEntityTransformationFunctions(ITransformationFunctionService transformationFunctionService,
-//                                                                                             Class<T> entityClass,
-//                                                                                             Supplier<T> entitySupplier) {
-//        transformationFunctionService.addTransformationFunction(ConstantPayloadDto.class, entityClass, mapConstantEntityPayloadDtoToConstantEntityFunction(entitySupplier));
-//        transformationFunctionService.addTransformationFunction(entityClass, ConstantPayloadDto.class, mapConstantEntityToConstantEntityPayloadDtoFunction());
-//    }
 
     private BiFunction<Session, AddressDto, Address> mapAddressDtoToAddressFunction() {
         return (session, addressDto) -> Address.builder()
@@ -353,8 +193,8 @@ public class TransformationEntityConfiguration {
             MessageTemplate messageTemplate = message.getMessageTemplate();
             return ResponseMessageOverviewDto.builder()
                     .title(messageTemplate.getTitle())
-                    .type(message.getType().getValue())
-                    .status(message.getStatus().getValue())
+                    .type(message.getType().getKey())
+                    .status(message.getStatus().getKey())
                     .build();
         };
     }
@@ -425,7 +265,7 @@ public class TransformationEntityConfiguration {
             return ResponseReviewDto.builder()
                     .title(review.getTitle())
                     .message(review.getMessage())
-                    .ratingValue(review.getRating().getValue())
+//                    .ratingValue(review.getRating().getValue())
 //                    .dateOfCreate(new Date(review.getDateOfCreate()))
                     .status(mapConstantEntityToConstantEntityPayloadDtoFunction().apply(review.getStatus()))
                     .username(userDetails.getUsername())
@@ -481,143 +321,6 @@ public class TransformationEntityConfiguration {
                     .build();
         };
     }
-
-//    private Function<CustomerSingleDeliveryOrder, PriceDto> mapOrderToTotalPriceDtoFunction() {
-//        return customerSingleDeliveryOrder -> {
-//            MultiCurrencyPriceInfo totalMultiCurrencyPriceInfo = customerSingleDeliveryOrder.getPayment().getTotalMultiCurrencyPriceInfo();
-//            return PriceDto.builder()
-//                    .amount(totalMultiCurrencyPriceInfo.getCurrentPrice().getAmount())
-//                    .currency(totalMultiCurrencyPriceInfo.getCurrentPrice().getCurrency().getValue())
-//                    .build();
-//        };
-//    }
-
-//    private Function<ArticularItem, PriceDto> mapItemDataOptionToFullPriceDtoFunction() {
-//        return itemDataOption -> {
-//            Price fullPrice = itemDataOption.getFullPrice();
-//            return PriceDto.builder()
-//                    .amount(fullPrice.getAmount())
-//                    .currency(fullPrice.getCurrency().getValue())
-//                    .build();
-//        };
-//    }
-
-//    private Function<ArticularItem, PriceDto> mapItemDataOptionToTotalPriceDtoFunction() {
-//        return itemDataOption -> {
-//            Price fullPrice = itemDataOption.getTotalPrice();
-//            return PriceDto.builder()
-//                    .amount(fullPrice.getAmount())
-//                    .currency(fullPrice.getCurrency().getValue())
-//                    .build();
-//        };
-//    }
-
-    private Function<Price, PriceDto> mapPriceToPriceDtoFunction() {
-        return price -> PriceDto.builder()
-                .amount(price.getAmount())
-//                .currency(price.getCurrency().getValue())
-                .build();
-    }
-
-    Function<ArticularItem, Set<OptionItem>> mapItemDataOptionToOptionItemFunction() {
-        return ArticularItem::getOptionItems;
-    }
-
-//    BiFunction<Session, OptionGroupOptionItemSetDto, OptionGroup> mapOptionItemDtoToOptionGroup() {
-//        return (session, optionItemDto) -> {
-////            Optional<OptionGroup> optionalResult =
-////                    sessionEntityFetcher.fetchOptionGroup(session, "OptionGroup.withOptionItems", optionItemDto.getOptionGroup().getValue());
-//            Optional<OptionGroup> optionalResult = Optional.empty();
-//            return optionalResult.map(existingOG -> {
-//                optionItemDto.getOptionItems().stream()
-//                        .filter(oi -> existingOG.getOptionItems().stream()
-//                                .noneMatch(v -> v.getValue().equals(oi.getValue())))
-//                        .forEach(newOption -> existingOG.getOptionItems().add(
-//                                OptionItem.builder()
-//                                        .label(newOption.getLabel())
-//                                        .value(newOption.getValue())
-//                                        .build()
-//                        ));
-//
-//                return existingOG;
-//            }).orElseGet(() -> {
-//                OptionGroup newOG = OptionGroup.builder()
-//                        .label(optionItemDto.getOptionGroup().getLabel())
-//                        .value(optionItemDto.getOptionGroup().getValue())
-//                        .build();
-//
-//                optionItemDto.getOptionItems().stream()
-//                        .map(item -> OptionItem.builder()
-//                                .label(item.getLabel())
-//                                .value(item.getValue())
-//                                .build())
-//                        .forEach(newOG::addOptionItem);
-//
-//                return newOG;
-//            });
-//        };
-//    }
-//
-//    Function<OptionGroup, OptionGroupOptionItemSetDto> mapOptionGroupToOptionItemDto() {
-//        return optionGroup -> {
-//            OptionItemGroupDto optionGroupDto = OptionItemGroupDto.builder()
-//                    .label(optionGroup.getLabel())
-//                    .value(optionGroup.getValue())
-//                    .build();
-//
-//            Set<OptionItemDto> constantPayloadDtoList = optionGroup.getOptionItems().stream()
-//                    .map(item -> OptionItemDto.builder()
-//                            .label(item.getLabel())
-//                            .value(item.getValue())
-//                            .build())
-//                    .collect(Collectors.toSet());
-//
-//
-//            return OptionGroupOptionItemSetDto.builder()
-//                    .optionGroup(optionGroupDto)
-//                    .optionItems(constantPayloadDtoList)
-//                    .build();
-//        };
-//    }
-//
-//    private Function<ArticularItem, List<OptionGroupOptionItemSetDto>> mapArticularItemToOptionItemDtoList() {
-//        return articularItem -> articularItem.getOptionItems().stream()
-//                .map(optionItem -> OptionGroupOptionItemSetDto.builder()
-//                        .optionGroup(OptionItemGroupDto.builder()
-//                                .label(optionItem.getOptionGroup().getLabel())
-//                                .value(optionItem.getOptionGroup().getValue())
-//                                .build())
-//                        .optionItems(Set.of(OptionItemDto.builder()
-//                                .label(optionItem.getLabel())
-//                                .value(optionItem.getValue())
-//                                .build()))
-//                        .build())
-//                .toList();
-//    }
-
-//    private Set<OptionGroupOptionItemSetDto> getOptionGroupOptionItemSetDtoSet(Set<ArticularItemDto> articularItemDtoSet) {
-//        return articularItemDtoSet.stream()
-//                .flatMap(articularItem -> articularItem.getOptions().stream())
-//                .collect(Collectors.groupingBy(
-//                        SingleOptionItemDto::getOptionGroup,
-//                        Collectors.mapping(
-//                                SingleOptionItemDto::getOptionItem,
-//                                Collectors.toSet())
-//                ))
-//                .entrySet().stream()
-//                .map(entry ->
-//                        OptionGroupOptionItemSetDto.builder()
-//                            .optionGroup(OptionItemGroupDto.builder()
-//                                    .label(entry.getKey().getLabel())
-//                                    .value(entry.getKey().getValue())
-//                                    .build())
-//                            .optionItems(entry.getValue().stream()
-//                                    .map(optionItem -> new OptionItemDto(optionItem.getLabel(), optionItem.getValue()))
-//                                    .collect(Collectors.toSet()))
-//                            .build()
-//                )
-//                .collect(Collectors.toSet());
-//    }
 
     private Set<ArticularItem> mapArticularItemSet(Session session,
                                                    Set<ArticularItemDto> articularItemDtoSet,
@@ -692,12 +395,6 @@ public class TransformationEntityConfiguration {
         };
     }
 
-    private Function<CustomerSingleDeliveryOrder, ResponseCustomerOrderDto> mapCustomerOrderToResponseCustomerOrderFunction() {
-        return customerSingleDeliveryOrder -> ResponseCustomerOrderDto.builder()
-
-                .build();
-    }
-
     private BiFunction<Session, ArticularItemQuantityDto, ArticularItemQuantity> mapArticularItemQuantityDtoToArticularItemQuantityFunction() {
         return (session, articularItemQuantityDto) -> {
             ArticularItem articularItem = null;
@@ -747,36 +444,13 @@ public class TransformationEntityConfiguration {
 
     private Function<Discount, InitDiscountDto> mapDiscountToInitDiscountDto() {
         return discount -> InitDiscountDto.builder()
-                .currency(discount.getCurrency().getValue())
+                .currency(discount.getCurrency().getKey())
                 .amount(discount.getAmount())
                 .charSequenceCode(discount.getCharSequenceCode())
                 .isActive(discount.isActive())
                 .isPercent(discount.isPercent())
                 .build();
     }
-
-//    private BiFunction<Session, Set<OptionGroupOptionItemSetDto>, Set<OptionGroup>> mapOptionGroupOptionItemSetDtoListToOptionGroupSet() {
-//        return (session, optionItemDtoList) -> optionItemDtoList.stream()
-//                .map(optionItemDto -> {
-////                    OptionGroup existingOG = sessionEntityFetcher.fetchOptionGroup(session, "OptionGroup.withOptionItemsAndArticularItems", optionItemDto.getOptionGroup().getValue())
-////                            .orElseGet(() -> OptionGroup.builder()
-////                                    .label(optionItemDto.getOptionGroup().getLabel())
-////                                    .value(optionItemDto.getOptionGroup().getValue())
-////                                    .build());
-//                    OptionGroup existingOG = null;
-//                    optionItemDto.getOptionItems().forEach(dtoOptionItem -> {
-//                        if (existingOG.getOptionItems().stream().noneMatch(oi -> oi.getValue().equals(dtoOptionItem.getValue()))) {
-//                            existingOG.addOptionItem(OptionItem.builder()
-//                                    .label(dtoOptionItem.getLabel())
-//                                    .value(dtoOptionItem.getValue())
-//                                    .build());
-//                        }
-//                    });
-//
-//                    return existingOG;
-//                })
-//                .collect(Collectors.toSet());
-//    }
 
     private BiFunction<Session, DiscountDto, Discount> mapDiscountDtoToDiscountFunction() {
         return (session, discountDto) -> {
@@ -793,7 +467,7 @@ public class TransformationEntityConfiguration {
 
     private Function<Discount, DiscountDto> mapDiscountToDiscountDtoFunction() {
         return discount -> DiscountDto.builder()
-                .currency(discount.getCurrency().getValue())
+                .currency(discount.getCurrency().getKey())
                 .amount(discount.getAmount())
                 .charSequenceCode(discount.getCharSequenceCode())
                 .isActive(discount.isActive())
@@ -807,7 +481,7 @@ public class TransformationEntityConfiguration {
                     .charSequenceCode(discount.getCharSequenceCode())
                     .amount(discount.getAmount())
                     .isActive(discount.isActive())
-                    .currency(discount.getCurrency() != null ? discount.getCurrency().getValue() : null)
+                    .currency(discount.getCurrency() != null ? discount.getCurrency().getKey() : null)
                     .articularIdSet(
                             itemDataOptionList.stream()
                                     .map(ArticularItem::getArticularUniqId)
@@ -831,40 +505,17 @@ public class TransformationEntityConfiguration {
                             .charSequenceCode(discount.getCharSequenceCode())
                             .amount(discount.getAmount())
                             .isActive(discount.isActive())
-                            .currency(discount.getCurrency() != null ? discount.getCurrency().getValue() : null)
+                            .currency(discount.getCurrency() != null ? discount.getCurrency().getKey() : null)
                             .articularIdSet(articularIdSet)
                             .build();
                 })
                 .collect(Collectors.toList());
     }
 
-//    private Function<Set<OptionItem>, Set<OptionGroupOptionItemSetDto>> mapOptionItemSetToSingleOptionItemDtoSetFunction() {
-//        return optionItemSet -> optionItemSet.stream()
-//                .collect(Collectors.groupingBy(
-//                        OptionItem::getOptionGroup,
-//                        Collectors.mapping(
-//                                optionItem -> optionItem,
-//                                Collectors.toSet())
-//                ))
-//                .entrySet().stream()
-//                .map(entry ->
-//                        OptionGroupOptionItemSetDto.builder()
-//                                .optionGroup(OptionItemGroupDto.builder()
-//                                        .label(entry.getKey().getLabel())
-//                                        .value(entry.getKey().getValue())
-//                                        .build())
-//                                .optionItems(entry.getValue().stream()
-//                                        .map(optionItem -> new OptionItemDto(optionItem.getLabel(), optionItem.getValue()))
-//                                        .collect(Collectors.toSet()))
-//                                .build()
-//                )
-//                .collect(Collectors.toSet());
-//    }
-
     private Function<ArticularStatus, ConstantPayloadDto> mapArticularStatusToConstantPayloadDtoFunction() {
         return articularStatus -> ConstantPayloadDto.builder()
-                .label(articularStatus.getLabel())
                 .value(articularStatus.getValue())
+                .key(articularStatus.getKey())
                 .build();
     }
 
@@ -886,34 +537,10 @@ public class TransformationEntityConfiguration {
 
             return DeliveryDto.builder()
                     .deliveryAddress(addressDto)
-                    .deliveryType(delivery.getDeliveryType().getValue())
+                    .deliveryType(delivery.getDeliveryType().getKey())
                     .build();
         };
     }
-
-    private BiFunction<Session, TimeDurationOptionDto, TimeDurationOption> mapTimeDurationOptionDtoToTimeDurationOptionFunction() {
-        return (session, timeDurationOptionDto) -> {
-            Price price = mapPriceDtoToPriceFunction().apply(session, timeDurationOptionDto.getPrice());
-            return TimeDurationOption.builder()
-//                    .durationInMin(timeDurationOptionDto.getDuration())
-                    .label(timeDurationOptionDto.getLabel())
-//                    .value(timeDurationOptionDto.getValue())
-                    .price(price)
-                    .build();
-        };
-    }
-
-//    private Function<TimeDurationOption, ResponseTimeDurationOptionDto> mapTimeDurationOptionToResponseTimeDurationOptionDtoFunction() {
-//        return timeDurationOption -> {
-//            PriceDto price = mapPriceToPriceDtoFunction().apply(timeDurationOption.getPrice());
-//            return ResponseTimeDurationOptionDto.builder()
-//                    .durationInMinutes(timeDurationOption.getDurationInMin())
-//                    .label(timeDurationOption.getLabel())
-//                    .value(timeDurationOption.getValue())
-//                    .price(price)
-//                    .build();
-//        };
-//    }
 
     private BiFunction<Session, ZoneOptionDto, ZoneOption> mapZoneOptionDtoToZoneOptionFunction() {
         return (session, zoneOptionDto) -> {
@@ -924,26 +551,6 @@ public class TransformationEntityConfiguration {
                     .price(price)
                     .build();
         };
-    }
-
-    private Function<ZoneOption, ZoneOptionDto> mapZoneOptionToZoneOptionDtoFunction() {
-        return zoneOption -> {
-            PriceDto price = mapPriceToPriceDtoFunction().apply(zoneOption.getPrice());
-            return ZoneOptionDto.builder()
-//                    .city(zoneOption.getCity())
-//                    .zoneName(zoneOption.getZoneName())
-                    .price(price)
-                    .build();
-        };
-    }
-
-    private Function<MinMaxCommission, ResponseMinMaxCommissionDto> mapMinMaxCommissionDtoToResponseMinMaxCommissionDto() {
-        return minMaxCommission -> ResponseMinMaxCommissionDto.builder()
-                .minCommissionValue(mapCommissionValueToCommissionValueDto().apply(minMaxCommission.getMinCommission()))
-                .maxCommissionValue(mapCommissionValueToCommissionValueDto().apply(minMaxCommission.getMaxCommission()))
-//                .commissionType(minMaxCommission.getCommissionType().name())
-                .changeCommissionPrice(mapPriceToPriceDtoFunction().apply(minMaxCommission.getChangeCommissionPrice()))
-                .build();
     }
 
     private BiFunction<Session, MinMaxCommissionDto, MinMaxCommission> mapMinMaxCommissionDtoToMinMaxCommission() {
@@ -959,7 +566,7 @@ public class TransformationEntityConfiguration {
         return cv -> CommissionValueDto.builder()
                 .amount(cv.getAmount())
                 .feeType(cv.getFeeType().name())
-                .currency(cv.getCurrency() != null ? cv.getCurrency().getValue() : null)
+                .currency(cv.getCurrency() != null ? cv.getCurrency().getKey() : null)
                 .build();
     }
 

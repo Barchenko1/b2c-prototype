@@ -108,12 +108,12 @@ class MessageBoxDaoTest extends AbstractDaoTest {
         MessageStatus messageStatus = MessageStatus.builder()
                 .id(1L)
                 .value("New")
-                .label("New")
+                .key("New")
                 .build();
         MessageType messageType = MessageType.builder()
                 .id(1L)
                 .value("InMail")
-                .label("InMail")
+                .key("InMail")
                 .build();
 
         MessageTemplate messageTemplate = MessageTemplate.builder()

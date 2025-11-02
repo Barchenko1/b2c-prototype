@@ -1,7 +1,7 @@
 category:
   - value: "parent"
-    label: "parent"
+    key: "parent"
   - value: "root"
-    label: "root"
+    key: "root"
   - value: "child"
-    label: "child"
+    key: "child"

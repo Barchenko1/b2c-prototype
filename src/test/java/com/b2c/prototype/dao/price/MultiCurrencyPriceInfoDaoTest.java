@@ -94,12 +94,12 @@ class MultiCurrencyPriceInfoDaoTest extends AbstractDaoTest {
     private MultiCurrencyPriceInfo getMultiCurrencyPriceInfo() {
         Currency currencyUsd = Currency.builder()
                 .id(1L)
-                .label("USD")
+                .key("USD")
                 .value("USD")
                 .build();
         Currency currencyEur = Currency.builder()
                 .id(2L)
-                .label("EUR")
+                .key("EUR")
                 .value("EUR")
                 .build();
 

@@ -7,8 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,8 +33,8 @@ class MessageStatusManagerTest extends AbstractConstantEntityManagerTest<Message
     @Test
     public void testPersistEntity() {
         ConstantPayloadDto dto = ConstantPayloadDto.builder()
-                .label("testLabel")
-                .value("testValue")
+                .value("testLabel")
+                .key("testValue")
                 .build();
         MessageStatus testValue = createTestValue();
         when(mapDtoToEntityFunction.apply(dto)).thenReturn(testValue);
@@ -50,8 +48,8 @@ class MessageStatusManagerTest extends AbstractConstantEntityManagerTest<Message
     @Test
     public void testMergeEntity() {
         ConstantPayloadDto newDto = ConstantPayloadDto.builder()
-                .label("newLabel")
-                .value("newValue")
+                .value("newLabel")
+                .key("newValue")
                 .build();
 
         MessageStatus testValue = MessageStatus.builder()
@@ -62,7 +60,7 @@ class MessageStatusManagerTest extends AbstractConstantEntityManagerTest<Message
 
 //        messageStatusManager.mergeEntity("testValue", newDto);
 
-        verifyUpdateEntity(testValue, newDto.getValue());
+        verifyUpdateEntity(testValue, newDto.getKey());
     }
 
     @Test

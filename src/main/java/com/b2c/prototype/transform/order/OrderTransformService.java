@@ -4,17 +4,12 @@ import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.dto.payload.constant.CountryDto;
 import com.b2c.prototype.modal.dto.payload.constant.CurrencyDto;
 import com.b2c.prototype.modal.dto.payload.item.PriceDto;
-import com.b2c.prototype.modal.dto.payload.option.group.OptionItemCostGroupDto;
-import com.b2c.prototype.modal.dto.payload.option.group.OptionItemGroupDto;
 import com.b2c.prototype.modal.dto.payload.option.group.TimeDurationOptionGroupDto;
 import com.b2c.prototype.modal.dto.payload.option.group.ZoneOptionGroupDto;
-import com.b2c.prototype.modal.dto.payload.option.item.OptionItemCostDto;
-import com.b2c.prototype.modal.dto.payload.option.item.OptionItemDto;
 import com.b2c.prototype.modal.dto.payload.option.item.TimeDurationOptionDto;
 import com.b2c.prototype.modal.dto.payload.option.item.ZoneOptionDto;
 import com.b2c.prototype.modal.dto.payload.order.single.ResponseCustomerOrderDetails;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
-import com.b2c.prototype.modal.entity.option.OptionItemCost;
 import com.b2c.prototype.modal.entity.option.TimeDurationOption;
 import com.b2c.prototype.modal.entity.option.ZoneOption;
 import com.b2c.prototype.modal.entity.option.ZoneOptionGroup;
@@ -24,13 +19,9 @@ import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.b2c.prototype.util.Constant.VALUE;
+import static com.b2c.prototype.util.Constant.KEY;
 
 @Service
 public class OrderTransformService implements IOrderTransformService {
@@ -44,12 +35,12 @@ public class OrderTransformService implements IOrderTransformService {
     @Override
     public OptionGroup mapTimeDurationOptionGroupDtoToOptionGroup(TimeDurationOptionGroupDto timeDurationOptionGroupDto) {
         OptionGroup optionGroup =  OptionGroup.builder()
-                .label(timeDurationOptionGroupDto.getLabel())
                 .value(timeDurationOptionGroupDto.getValue())
+                .key(timeDurationOptionGroupDto.getKey())
                 .timeDurationOptions(timeDurationOptionGroupDto.getTimeDurationOptions().stream()
                         .map(timeDurationOptionDto -> TimeDurationOption.builder()
-                                .label(timeDurationOptionDto.getLabel())
                                 .value(timeDurationOptionDto.getValue())
+                                .key(timeDurationOptionDto.getKey())
                                 .startTime(timeDurationOptionDto.getStartTime())
                                 .endTime(timeDurationOptionDto.getEndTime())
                                 .timeZone(timeDurationOptionDto.getTimeZone())
@@ -59,8 +50,8 @@ public class OrderTransformService implements IOrderTransformService {
                                         .toMinutes())
                                 .price(Price.builder()
                                         .amount(timeDurationOptionDto.getPrice().getAmount())
-                                        .currency(generalEntityDao.findEntity("Currency.findByValue",
-                                                Pair.of(VALUE, timeDurationOptionDto.getPrice().getCurrency().getValue())))
+                                        .currency(generalEntityDao.findEntity("Currency.findByKey",
+                                                Pair.of(KEY, timeDurationOptionDto.getPrice().getCurrency().getKey())))
                                         .build())
                                 .build())
                         .collect(Collectors.toSet())
@@ -74,21 +65,21 @@ public class OrderTransformService implements IOrderTransformService {
     @Override
     public TimeDurationOptionGroupDto mapOptionGroupToTimeDurationOptionGroupDto(OptionGroup optionGroup) {
         return TimeDurationOptionGroupDto.builder()
-                .label(optionGroup.getLabel())
                 .value(optionGroup.getValue())
+                .key(optionGroup.getKey())
                 .timeDurationOptions(optionGroup.getTimeDurationOptions().stream()
                         .map(timeDurationOption -> TimeDurationOptionDto.builder()
-                                .searchValue(timeDurationOption.getValue())
-                                .label(timeDurationOption.getLabel())
+                                .searchValue(timeDurationOption.getKey())
                                 .value(timeDurationOption.getValue())
+                                .key(timeDurationOption.getKey())
                                 .startTime(timeDurationOption.getStartTime())
                                 .endTime(timeDurationOption.getEndTime())
                                 .timeZone(timeDurationOption.getTimeZone())
                                 .price(PriceDto.builder()
                                         .amount(timeDurationOption.getPrice().getAmount())
                                         .currency(CurrencyDto.builder()
-                                                .label(timeDurationOption.getPrice().getCurrency().getLabel())
                                                 .value(timeDurationOption.getPrice().getCurrency().getValue())
+                                                .key(timeDurationOption.getPrice().getCurrency().getKey())
                                                 .build())
                                         .build())
                                 .build())
@@ -100,19 +91,19 @@ public class OrderTransformService implements IOrderTransformService {
     @Override
     public ZoneOptionGroup mapZoneOptionGroupDtoToZoneOptionGroup(ZoneOptionGroupDto zoneOptionGroupDto) {
         ZoneOptionGroup zoneOptionGroup = ZoneOptionGroup.builder()
-                .label(zoneOptionGroupDto.getLabel())
                 .value(zoneOptionGroupDto.getValue())
+                .key(zoneOptionGroupDto.getKey())
                 .city(zoneOptionGroupDto.getCity())
-                .country(generalEntityDao.findEntity("Country.findByValue",
-                        Pair.of(VALUE, zoneOptionGroupDto.getCountry().getValue())))
+                .country(generalEntityDao.findEntity("Country.findByKey",
+                        Pair.of(KEY, zoneOptionGroupDto.getCountry().getKey())))
                 .zoneOptions(zoneOptionGroupDto.getZoneOptions().stream()
                         .map(zoneOptionDto -> ZoneOption.builder()
-                                .label(zoneOptionDto.getLabel())
                                 .value(zoneOptionDto.getValue())
+                                .key(zoneOptionDto.getKey())
                                 .price(Price.builder()
                                         .amount(zoneOptionDto.getPrice().getAmount())
-                                        .currency(generalEntityDao.findEntity("Currency.findByValue",
-                                                Pair.of(VALUE, zoneOptionDto.getPrice().getCurrency().getValue())))
+                                        .currency(generalEntityDao.findEntity("Currency.findByKey",
+                                                Pair.of(KEY, zoneOptionDto.getPrice().getCurrency().getKey())))
                                         .build())
                                 .build())
                         .collect(Collectors.toSet())
@@ -126,23 +117,23 @@ public class OrderTransformService implements IOrderTransformService {
     @Override
     public ZoneOptionGroupDto mapZoneOptionGroupToZoneOptionGroupDto(ZoneOptionGroup zoneOptionGroup) {
         return ZoneOptionGroupDto.builder()
-                .label(zoneOptionGroup.getLabel())
                 .value(zoneOptionGroup.getValue())
+                .key(zoneOptionGroup.getKey())
                 .country(CountryDto.builder()
-                        .label(zoneOptionGroup.getCountry().getLabel())
                         .value(zoneOptionGroup.getCountry().getValue())
+                        .key(zoneOptionGroup.getCountry().getKey())
                         .build())
                 .city(zoneOptionGroup.getCity())
                 .zoneOptions(zoneOptionGroup.getZoneOptions().stream()
                         .map(zoneOption -> ZoneOptionDto.builder()
-                                .searchValue(zoneOption.getValue())
-                                .label(zoneOption.getLabel())
+                                .searchValue(zoneOption.getKey())
+                                .key(zoneOption.getKey())
                                 .value(zoneOption.getValue())
                                 .price(PriceDto.builder()
                                         .amount(zoneOption.getPrice().getAmount())
                                         .currency(CurrencyDto.builder()
-                                                .label(zoneOption.getPrice().getCurrency().getLabel())
                                                 .value(zoneOption.getPrice().getCurrency().getValue())
+                                                .key(zoneOption.getPrice().getCurrency().getKey())
                                                 .build())
                                         .build())
                                 .build())

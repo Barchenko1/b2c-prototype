@@ -44,7 +44,7 @@ public class RatingControllerE2ETest extends BasicE2ETest {
         webTestClient.put()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "2")
+                        .queryParam("key", "2")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -65,7 +65,7 @@ public class RatingControllerE2ETest extends BasicE2ETest {
         webTestClient.patch()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "2")
+                        .queryParam("key", "2")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -81,7 +81,7 @@ public class RatingControllerE2ETest extends BasicE2ETest {
         webTestClient.delete()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "2")
+                        .queryParam("key", "2")
                         .build())
                 .accept(MediaType.TEXT_PLAIN)
                 .exchange()
@@ -121,7 +121,7 @@ public class RatingControllerE2ETest extends BasicE2ETest {
         RatingDto actual = webTestClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "2")
+                        .queryParam("key", "2")
                         .build())
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()

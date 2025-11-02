@@ -35,7 +35,7 @@ class CurrencyDaoTest extends AbstractDaoTest {
     @ExpectedDataSet(value = "datasets/dao/price/currency/updateCurrencyDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         Currency entity = getCurrency();
-        entity.setValue("Update USD");
+        entity.setKey("Update USD");
 
         generalEntityDao.mergeEntity(entity);
     }
@@ -88,7 +88,7 @@ class CurrencyDaoTest extends AbstractDaoTest {
     private Currency getCurrency() {
         return Currency.builder()
                 .id(1L)
-                .label("USD")
+                .key("USD")
                 .value("USD")
                 .build();
     }

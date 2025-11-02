@@ -92,7 +92,7 @@ public class AddressDaoTest extends AbstractDaoTest {
     private Address getAddress() {
         Country country = Country.builder()
                 .id(1L)
-                .label("USA")
+                .key("USA")
                 .value("USA")
                 .build();
 

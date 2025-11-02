@@ -7,8 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,8 +33,8 @@ class DeliveryTypeManagerTest extends AbstractConstantEntityManagerTest<Delivery
     @Test
     public void testPersistEntity() {
         ConstantPayloadDto dto = ConstantPayloadDto.builder()
-                .label("testLabel")
-                .value("testValue")
+                .value("testLabel")
+                .key("testValue")
                 .build();
         DeliveryType testValue = createTestValue();
 
@@ -51,8 +49,8 @@ class DeliveryTypeManagerTest extends AbstractConstantEntityManagerTest<Delivery
     @Test
     public void testMergeEntity() {
         ConstantPayloadDto newDto = ConstantPayloadDto.builder()
-                .label("newLabel")
-                .value("newValue")
+                .value("newLabel")
+                .key("newValue")
                 .build();
 
         DeliveryType testValue = DeliveryType.builder()

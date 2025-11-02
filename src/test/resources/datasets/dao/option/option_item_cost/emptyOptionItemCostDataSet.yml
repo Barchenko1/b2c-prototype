@@ -1,6 +1,6 @@
 currency:
   - id: 1
-    label: "USD"
+    key: "USD"
     value: "USD"
 price: []
 option_group: []

@@ -103,7 +103,7 @@ class PriceDaoTest extends AbstractDaoTest {
     private Price getPrice() {
         Currency currency = Currency.builder()
                 .id(1L)
-                .label("USD")
+                .key("USD")
                 .value("USD")
                 .build();
 

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-import static com.b2c.prototype.util.Constant.VALUE;
+import static com.b2c.prototype.util.Constant.KEY;
 
 @Service
 public class DeliveryTypeManager implements IDeliveryTypeManager {
@@ -28,23 +28,23 @@ public class DeliveryTypeManager implements IDeliveryTypeManager {
     @Transactional
     public void mergeEntity(String searchValue, DeliveryType entity) {
         DeliveryType fetchedEntity =
-                generalEntityDao.findEntity("DeliveryType.findByValue", Pair.of(VALUE, searchValue));
+                generalEntityDao.findEntity("DeliveryType.findByKey", Pair.of(KEY, searchValue));
         entity.setId(fetchedEntity.getId());
         generalEntityDao.mergeEntity(entity);
     }
 
     @Transactional
     public void removeEntity(String value) {
-        DeliveryType fetchedEntity = generalEntityDao.findEntity("DeliveryType.findByValue", Pair.of(VALUE, value));
+        DeliveryType fetchedEntity = generalEntityDao.findEntity("DeliveryType.findByKey", Pair.of(KEY, value));
         generalEntityDao.removeEntity(fetchedEntity);
     }
 
     public DeliveryType getEntity(String value) {
-        return generalEntityDao.findEntity("DeliveryType.findByValue", Pair.of(VALUE, value));
+        return generalEntityDao.findEntity("DeliveryType.findByKey", Pair.of(KEY, value));
     }
 
     public Optional<DeliveryType> getEntityOptional(String value) {
-        DeliveryType entity = generalEntityDao.findEntity("DeliveryType.findByValue", Pair.of(VALUE, value));
+        DeliveryType entity = generalEntityDao.findEntity("DeliveryType.findByKey", Pair.of(KEY, value));
         return Optional.of(entity);
     }
 

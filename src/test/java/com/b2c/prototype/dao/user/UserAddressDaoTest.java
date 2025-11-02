@@ -95,7 +95,7 @@ class UserAddressDaoTest extends AbstractDaoTest {
     private UserAddress getUserAddress() {
         Country country = Country.builder()
                 .id(1L)
-                .label("USA")
+                .key("USA")
                 .value("USA")
                 .build();
         Address address = Address.builder()

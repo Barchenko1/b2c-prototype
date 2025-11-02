@@ -1,7 +1,7 @@
 availability_status:
   - id: 1
     value: "Available"
-    label: "Available"
+    key: "Available"
   - id: 2
     value: "Not Available"
-    label: "Not Available"
+    key: "Not Available"

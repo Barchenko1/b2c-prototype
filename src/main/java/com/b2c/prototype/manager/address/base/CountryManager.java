@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-import static com.b2c.prototype.util.Constant.VALUE;
+import static com.b2c.prototype.util.Constant.KEY;
 
 @Service
 public class CountryManager implements ICountryManager {
@@ -26,22 +26,22 @@ public class CountryManager implements ICountryManager {
 
     public void mergeEntity(String searchValue, Country entity) {
         Country fetchedEntity =
-                generalEntityDao.findEntity("Country.findByValue", Pair.of(VALUE, searchValue));
+                generalEntityDao.findEntity("Country.findByKey", Pair.of(KEY, searchValue));
         entity.setId(fetchedEntity.getId());
         generalEntityDao.mergeEntity(entity);
     }
 
     public void removeEntity(String value) {
-        Country fetchedEntity = generalEntityDao.findEntity("Country.findByValue", Pair.of(VALUE, value));
+        Country fetchedEntity = generalEntityDao.findEntity("Country.findByKey", Pair.of(KEY, value));
         generalEntityDao.removeEntity(fetchedEntity);
     }
 
     public Country getEntity(String value) {
-        return generalEntityDao.findEntity("Country.findByValue", Pair.of(VALUE, value));
+        return generalEntityDao.findEntity("Country.findByKey", Pair.of(KEY, value));
     }
 
     public Optional<Country> getEntityOptional(String value) {
-        Country entity = generalEntityDao.findEntity("Country.findByValue", Pair.of(VALUE, value));
+        Country entity = generalEntityDao.findEntity("Country.findByKey", Pair.of(KEY, value));
         return Optional.of(entity);
     }
 

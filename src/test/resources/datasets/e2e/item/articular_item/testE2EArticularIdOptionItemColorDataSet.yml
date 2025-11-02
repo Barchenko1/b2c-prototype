@@ -1,16 +1,16 @@
 option_group:
   - id: 1
-    label: "Color"
+    key: "Color"
     value: "Color"
 option_item:
   - id: 1
-    label: "Red"
+    key: "Red"
     value: "Red"
     option_group_id: 1
 currency:
   - id: 1
     value: "USD"
-    label: "USD"
+    key: "USD"
 price:
   - id: 1
     amount: 100

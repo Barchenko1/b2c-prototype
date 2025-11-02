@@ -1,6 +1,6 @@
 currency:
   - id: 1
     value: "USD"
-    label: "USD"
+    key: "USD"
 discount: []
 articular_item: []

@@ -14,6 +14,6 @@ import lombok.experimental.SuperBuilder;
 @JsonIgnoreProperties
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public abstract class AbstractConstantDto {
-    private String label;
     private String value;
+    private String key;
 }

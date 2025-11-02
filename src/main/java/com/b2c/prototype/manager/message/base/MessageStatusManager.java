@@ -1,7 +1,6 @@
 package com.b2c.prototype.manager.message.base;
 
 import com.b2c.prototype.dao.IGeneralEntityDao;
-import com.b2c.prototype.modal.entity.item.ItemType;
 import com.b2c.prototype.modal.entity.message.MessageStatus;
 import com.b2c.prototype.manager.message.IMessageStatusManager;
 
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-import static com.b2c.prototype.util.Constant.VALUE;
+import static com.b2c.prototype.util.Constant.KEY;
 
 @Service
 public class MessageStatusManager implements IMessageStatusManager {
@@ -32,7 +31,7 @@ public class MessageStatusManager implements IMessageStatusManager {
     @Override
     public void mergeEntity(String searchValue, MessageStatus entity) {
         MessageStatus fetchedEntity =
-                generalEntityDao.findEntity("MessageStatus.findByValue", Pair.of(VALUE, searchValue));
+                generalEntityDao.findEntity("MessageStatus.findByKey", Pair.of(KEY, searchValue));
         entity.setId(fetchedEntity.getId());
         generalEntityDao.mergeEntity(entity);
     }
@@ -40,16 +39,16 @@ public class MessageStatusManager implements IMessageStatusManager {
     @Transactional
     @Override
     public void removeEntity(String value) {
-        MessageStatus fetchedEntity = generalEntityDao.findEntity("MessageStatus.findByValue", Pair.of(VALUE, value));
+        MessageStatus fetchedEntity = generalEntityDao.findEntity("MessageStatus.findByKey", Pair.of(KEY, value));
         generalEntityDao.removeEntity(fetchedEntity);
     }
 
     public MessageStatus getEntity(String value) {
-        return generalEntityDao.findEntity("MessageStatus.findByValue", Pair.of(VALUE, value));
+        return generalEntityDao.findEntity("MessageStatus.findByKey", Pair.of(KEY, value));
     }
 
     public Optional<MessageStatus> getEntityOptional(String value) {
-        MessageStatus entity = generalEntityDao.findEntity("MessageStatus.findByValue", Pair.of(VALUE, value));
+        MessageStatus entity = generalEntityDao.findEntity("MessageStatus.findByKey", Pair.of(KEY, value));
         return Optional.of(entity);
     }
 

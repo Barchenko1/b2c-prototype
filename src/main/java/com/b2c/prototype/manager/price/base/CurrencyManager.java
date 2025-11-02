@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-import static com.b2c.prototype.util.Constant.VALUE;
+import static com.b2c.prototype.util.Constant.KEY;
 
 @Service
 public class CurrencyManager implements ICurrencyManager {
@@ -29,7 +29,7 @@ public class CurrencyManager implements ICurrencyManager {
     @Override
     public void mergeEntity(String searchValue, Currency entity) {
         Currency fetchedEntity =
-                generalEntityDao.findEntity("Currency.findByValue", Pair.of(VALUE, searchValue));
+                generalEntityDao.findEntity("Currency.findByKey", Pair.of(KEY, searchValue));
         entity.setId(fetchedEntity.getId());
         generalEntityDao.mergeEntity(entity);
     }
@@ -37,16 +37,16 @@ public class CurrencyManager implements ICurrencyManager {
     @Transactional
     @Override
     public void removeEntity(String value) {
-        Currency fetchedEntity = generalEntityDao.findEntity("Currency.findByValue", Pair.of(VALUE, value));
+        Currency fetchedEntity = generalEntityDao.findEntity("Currency.findByKey", Pair.of(KEY, value));
         generalEntityDao.removeEntity(fetchedEntity);
     }
 
     public Currency getEntity(String value) {
-        return generalEntityDao.findEntity("Currency.findByValue", Pair.of(VALUE, value));
+        return generalEntityDao.findEntity("Currency.findByKey", Pair.of(KEY, value));
     }
 
     public Optional<Currency> getEntityOptional(String value) {
-        Currency entity = generalEntityDao.findEntity("Currency.findByValue", Pair.of(VALUE, value));
+        Currency entity = generalEntityDao.findEntity("Currency.findByKey", Pair.of(KEY, value));
         return Optional.of(entity);
     }
 

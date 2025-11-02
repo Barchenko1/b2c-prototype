@@ -1,10 +1,10 @@
 articular_item: []
 option_group:
   - id: 1
-    label: "Size"
+    key: "Size"
     value: "Size"
 option_item:
   - id: 1
-    label: "L"
+    key: "L"
     value: "L"
     option_group_id: 1

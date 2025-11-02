@@ -1,17 +1,17 @@
 option_group:
   - id: 1
-    label: "Size"
+    key: "Size"
     value: "Size"
 option_item:
-  - label: "M"
+  - key: "M"
     value: "M"
     option_group_id: 1
-  - label: "L"
+  - key: "L"
     value: "L"
     option_group_id: 1
-  - label: "XL"
+  - key: "XL"
     value: "XL"
     option_group_id: 1
-  - label: "S"
+  - key: "S"
     value: "S"
     option_group_id: 1

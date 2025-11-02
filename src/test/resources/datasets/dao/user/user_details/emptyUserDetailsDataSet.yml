@@ -1,12 +1,12 @@
 country_phone_code:
   - id: 1
     value: "+11"
-    label: "+11"
+    key: "+11"
 contact_phone: []
 contact_info: []
 country:
   - id: 1
-    label: "USA"
+    key: "USA"
     value: "USA"
 address: []
 credit_card: []

@@ -75,9 +75,9 @@ public class PriceCalculationService implements IPriceCalculationService {
     }
 
     private Price calculateSellerPriceDiscount(Price totalPrice, Discount orderDiscount, CommissionValue commissionValue) {
-        String totalPriceCurrency = totalPrice.getCurrency().getValue();
-        String sellerCommissionCurrency = commissionValue.getCurrency().getValue();
-        String orderDiscountCurrency = orderDiscount.getCurrency().getValue();
+        String totalPriceCurrency = totalPrice.getCurrency().getKey();
+        String sellerCommissionCurrency = commissionValue.getCurrency().getKey();
+        String orderDiscountCurrency = orderDiscount.getCurrency().getKey();
         double sellerCommissionAmount = 0;
         if (totalPriceCurrency.equals(sellerCommissionCurrency) && sellerCommissionCurrency.equals(orderDiscountCurrency)) {
             sellerCommissionAmount = ((totalPrice.getAmount() - orderDiscount.getAmount()) / 100) * commissionValue.getAmount();
@@ -92,8 +92,8 @@ public class PriceCalculationService implements IPriceCalculationService {
     }
 
     private Price calculateSellerPrice(Price totalPrice, CommissionValue commissionValue) {
-        String totalPriceCurrency = totalPrice.getCurrency().getValue();
-        String sellerCommissionCurrency = commissionValue.getCurrency().getValue();
+        String totalPriceCurrency = totalPrice.getCurrency().getKey();
+        String sellerCommissionCurrency = commissionValue.getCurrency().getKey();
         double sellerCommissionAmount = 0;
         if (totalPriceCurrency.equals(sellerCommissionCurrency)) {
             sellerCommissionAmount = (totalPrice.getAmount() / 100) * commissionValue.getAmount();

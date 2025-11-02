@@ -35,7 +35,7 @@ class MessageStatusDaoTest extends AbstractDaoTest {
     @ExpectedDataSet(value = "datasets/dao/message/message_status/updateMessageStatusDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         MessageStatus entity = getMessageStatus();
-        entity.setValue("Update New");
+        entity.setKey("Update New");
 
         generalEntityDao.mergeEntity(entity);
     }
@@ -88,7 +88,7 @@ class MessageStatusDaoTest extends AbstractDaoTest {
     private MessageStatus getMessageStatus() {
         return MessageStatus.builder()
                 .id(1L)
-                .label("New")
+                .key("New")
                 .value("New")
                 .build();
     }

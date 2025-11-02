@@ -137,13 +137,13 @@ class MetaDataDaoTest extends AbstractDaoTest {
         Brand brand = Brand.builder()
                 .id(1L)
                 .value("Hermes")
-                .label("Hermes")
+                .key("Hermes")
                 .build();
         Category category = getCategory();
         ItemType itemType = ItemType.builder()
                 .id(1L)
                 .value("Clothes")
-                .label("Clothes")
+                .key("Clothes")
                 .build();
 
         Map<String, String> description = new HashMap<>(){{

@@ -1,4 +1,4 @@
 review_status:
   - id: 1
-    label: "new"
+    key: "new"
     value: "new"

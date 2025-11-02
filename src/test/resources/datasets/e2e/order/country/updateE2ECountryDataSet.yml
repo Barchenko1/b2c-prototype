@@ -1,9 +1,9 @@
 country:
   - id: 1
-    label: "CANADA"
+    key: "CANADA"
     value: "CANADA"
     flag_image_path: "/images/canada.jpg"
   - id: 2
-    label: "USA"
+    key: "Update USA"
     value: "Update USA"
     flag_image_path: "/images/usa.jpg"

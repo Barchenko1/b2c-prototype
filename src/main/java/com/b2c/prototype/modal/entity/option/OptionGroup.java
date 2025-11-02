@@ -23,9 +23,9 @@ import java.util.Set;
 @Table(name = "option_group")
 @NamedQueries({
         @NamedQuery(
-                name = "OptionGroup.findByValue",
+                name = "OptionGroup.findByKey",
                 query = "SELECT og FROM OptionGroup og " +
-                        "WHERE og.value = :value"
+                        "WHERE og.key = :key"
         ),
         @NamedQuery(
                 name = "OptionGroup.findByValueWithOptionItems",
@@ -37,7 +37,7 @@ import java.util.Set;
                         "LEFT JOIN FETCH oicp.currency oicpc " +
                         "LEFT JOIN FETCH tdo.price tdop " +
                         "LEFT JOIN FETCH tdop.currency tdopc " +
-                        "WHERE og.value = :value"
+                        "WHERE og.key = :key"
         ),
         @NamedQuery(
                 name = "OptionGroup.withOptionItems",
@@ -60,7 +60,7 @@ import java.util.Set;
                         "LEFT JOIN FETCH ai.fullPrice f " +
                         "LEFT JOIN FETCH t.currency c1 " +
                         "LEFT JOIN FETCH f.currency c2 " +
-                        "WHERE og.value = :value"
+                        "WHERE og.key = :key"
         )
 })
 @Data

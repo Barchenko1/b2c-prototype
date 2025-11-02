@@ -1,4 +1,4 @@
 delivery_type:
   - id: 1
     value: "Post"
-    label: "Post"
+    key: "Post"

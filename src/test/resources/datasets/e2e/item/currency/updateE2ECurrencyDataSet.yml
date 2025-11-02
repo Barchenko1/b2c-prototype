@@ -1,7 +1,7 @@
 currency:
   - id: 1
-    label: "EUR"
+    key: "EUR"
     value: "EUR"
   - id: 2
-    label: "USD"
+    key: "Update USD"
     value: "Update USD"

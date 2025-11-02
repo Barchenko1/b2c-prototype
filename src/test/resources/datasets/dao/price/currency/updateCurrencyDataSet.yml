@@ -1,4 +1,4 @@
 currency:
   - id: 1
     value: "Update USD"
-    label: "USD"
+    key: "USD"

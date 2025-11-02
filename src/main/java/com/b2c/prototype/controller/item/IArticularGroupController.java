@@ -2,7 +2,7 @@ package com.b2c.prototype.controller.item;
 
 import com.b2c.prototype.modal.dto.payload.item.MetaDataDto;
 import com.b2c.prototype.modal.dto.payload.item.ResponseMetaDataDto;
-import com.b2c.prototype.processor.item.IMetaDataProcessor;
+import com.b2c.prototype.processor.item.IArticularGroupProcessor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,49 +20,49 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/itemdata")
-public class ItemDataController {
-    private final IMetaDataProcessor itemDataProcessor;
+@RequestMapping("/api/v1/articular/group")
+public class IArticularGroupController {
+    private final IArticularGroupProcessor articularGroupProcessor;
 
-    public ItemDataController(IMetaDataProcessor itemDataProcessor) {
-        this.itemDataProcessor = itemDataProcessor;
+    public IArticularGroupController(IArticularGroupProcessor articularGroupProcessor) {
+        this.articularGroupProcessor = articularGroupProcessor;
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> saveItemData(@RequestParam final Map<String, String> requestParams,
                                              @RequestBody final MetaDataDto metaDataDto) {
-        itemDataProcessor.saveMetaData(requestParams, metaDataDto);
+        articularGroupProcessor.saveArticularGroup(requestParams, metaDataDto);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> putItemData(@RequestParam final Map<String, String> requestParams,
                                             @RequestBody final MetaDataDto metaDataDto) {
-        itemDataProcessor.updateMetaData(requestParams, metaDataDto);
+        articularGroupProcessor.updateArticularGroup(requestParams, metaDataDto);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> patchItemData(@RequestParam final Map<String, String> requestParams,
                                               @RequestBody final MetaDataDto metaDataDto) {
-        itemDataProcessor.updateMetaData(requestParams, metaDataDto);
+        articularGroupProcessor.updateArticularGroup(requestParams, metaDataDto);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<Void> deleteItemData(@RequestParam final Map<String, String> requestParams) {
-        itemDataProcessor.deleteMetaData(requestParams);
+        articularGroupProcessor.deleteArticularGroup(requestParams);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ResponseMetaDataDto> getItemDataList(@RequestParam final Map<String, String> requestParams) {
 
-        return itemDataProcessor.getMetaDataList(requestParams);
+        return articularGroupProcessor.getArticularGroupList(requestParams);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseMetaDataDto> getItemData(@RequestParam final Map<String, String> requestParams) {
-        return new ResponseEntity<>(itemDataProcessor.getMetaData(requestParams), HttpStatus.OK);
+        return new ResponseEntity<>(articularGroupProcessor.getArticularGroup(requestParams), HttpStatus.OK);
     }
 }

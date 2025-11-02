@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-import static com.b2c.prototype.util.Constant.VALUE;
+import static com.b2c.prototype.util.Constant.KEY;
 
 @Service
 public class RatingManager implements IRatingManager {
@@ -29,7 +29,7 @@ public class RatingManager implements IRatingManager {
     @Override
     public void mergeEntity(Integer searchValue, Rating entity) {
         Rating fetchedEntity =
-                generalEntityDao.findEntity("Rating.findByValue", Pair.of(VALUE, searchValue));
+                generalEntityDao.findEntity("Rating.findByKey", Pair.of(KEY, searchValue));
         entity.setId(fetchedEntity.getId());
         generalEntityDao.mergeEntity(entity);
     }
@@ -37,16 +37,16 @@ public class RatingManager implements IRatingManager {
     @Transactional
     @Override
     public void removeEntity(int value) {
-        Rating fetchedEntity = generalEntityDao.findEntity("Rating.findByValue", Pair.of(VALUE, value));
+        Rating fetchedEntity = generalEntityDao.findEntity("Rating.findByKey", Pair.of(KEY, value));
         generalEntityDao.removeEntity(fetchedEntity);
     }
 
     public Rating getEntity(int value) {
-        return generalEntityDao.findEntity("Rating.findByValue", Pair.of(VALUE, value));
+        return generalEntityDao.findEntity("Rating.findByKey", Pair.of(KEY, value));
     }
 
     public Optional<Rating> getEntityOptional(int value) {
-        Rating entity = generalEntityDao.findEntity("Rating.findByValue", Pair.of(VALUE, value));
+        Rating entity = generalEntityDao.findEntity("Rating.findByKey", Pair.of(KEY, value));
         return Optional.of(entity);
     }
 

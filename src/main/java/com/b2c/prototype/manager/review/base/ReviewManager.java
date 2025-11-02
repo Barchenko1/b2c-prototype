@@ -20,7 +20,7 @@ import java.util.Optional;
 
 import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 import static com.b2c.prototype.util.Constant.USER_ID;
-import static com.b2c.prototype.util.Constant.VALUE;
+import static com.b2c.prototype.util.Constant.KEY;
 import static com.b2c.prototype.util.ReviewCommentUtil.reviewCommentMap;
 
 @Service
@@ -232,8 +232,8 @@ public class ReviewManager implements IReviewManager {
 
     private ReviewStatus fetchReviewStatus(String statusValue) {
         return generalEntityDao.findEntity(
-                "ReviewStatus.findByValue",
-                Pair.of(VALUE, statusValue));
+                "ReviewStatus.findByKey",
+                Pair.of(KEY, statusValue));
     }
 
 }

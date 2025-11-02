@@ -14,8 +14,8 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @NamedQueries({
         @NamedQuery(
-                name = "OrderStatus.findByValue",
-                query = "SELECT o FROM OrderStatus o WHERE o.value = :value"
+                name = "OrderStatus.findByKey",
+                query = "SELECT o FROM OrderStatus o WHERE o.key = :key"
         ),
         @NamedQuery(
                 name = "OrderStatus.all",

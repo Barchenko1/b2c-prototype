@@ -39,15 +39,15 @@ public class PaymentMethodControllerE2ETest extends BasicE2ETest {
     @ExpectedDataSet(value = "datasets/e2e/order/payment_method/updateE2EPaymentMethodDataSet.yml", orderBy = "id")
     public void testUpdateEntity() {
         ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .label("Cash")
                 .value("Update Cash")
+                .key("Update Cash")
                 .build();
 
         String jsonPayload = writeValueAsString(constantPayloadDto);
         webTestClient.put()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "Cash")
+                        .queryParam("key", "Cash")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -61,15 +61,15 @@ public class PaymentMethodControllerE2ETest extends BasicE2ETest {
     @ExpectedDataSet(value = "datasets/e2e/order/payment_method/updateE2EPaymentMethodDataSet.yml", orderBy = "id")
     public void testPatchEntity() {
         ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .label("Cash")
                 .value("Update Cash")
+                .key("Update Cash")
                 .build();
 
         String jsonPayload = writeValueAsString(constantPayloadDto);
         webTestClient.patch()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "Cash")
+                        .queryParam("key", "Cash")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -85,7 +85,7 @@ public class PaymentMethodControllerE2ETest extends BasicE2ETest {
         webTestClient.delete()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "Cash")
+                        .queryParam("key", "Cash")
                         .build())
                 .accept(MediaType.TEXT_PLAIN)
                 .exchange()
@@ -97,12 +97,12 @@ public class PaymentMethodControllerE2ETest extends BasicE2ETest {
     public void testGetEntities() {
         List<PaymentMethodDto> constantPayloadDtoList = List.of(
                 PaymentMethodDto.builder()
-                        .label("Card")
                         .value("Card")
+                        .key("Card")
                         .build(),
                 PaymentMethodDto.builder()
-                        .label("Cash")
                         .value("Cash")
+                        .key("Cash")
                         .build());
 
         List<PaymentMethodDto> actual = webTestClient.get()
@@ -122,14 +122,14 @@ public class PaymentMethodControllerE2ETest extends BasicE2ETest {
     @DataSet(value = "datasets/e2e/order/payment_method/testE2EPaymentMethodDataSet.yml", cleanBefore = true)
     public void testGetEntity() {
         PaymentMethodDto expected = PaymentMethodDto.builder()
-                .label("Card")
                 .value("Card")
+                .key("Card")
                 .build();
 
         PaymentMethodDto actual = webTestClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("value", "Card")
+                        .queryParam("key", "Card")
                         .build())
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
@@ -144,8 +144,8 @@ public class PaymentMethodControllerE2ETest extends BasicE2ETest {
 
     private ConstantPayloadDto getConstantPayloadDto() {
         return ConstantPayloadDto.builder()
-                .label("Cash")
                 .value("Cash")
+                .key("Cash")
                 .build();
     }
 

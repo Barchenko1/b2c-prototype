@@ -35,7 +35,7 @@ class ItemTypeDaoTest extends AbstractDaoTest {
     @ExpectedDataSet(value = "datasets/dao/item/item_type/updateItemTypeDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         ItemType entity = getItemType();
-        entity.setValue("Update Clothes");
+        entity.setKey("Update Clothes");
 
         generalEntityDao.mergeEntity(entity);
     }
@@ -89,7 +89,7 @@ class ItemTypeDaoTest extends AbstractDaoTest {
         return ItemType.builder()
                 .id(1L)
                 .value("Clothes")
-                .label("Clothes")
+                .key("Clothes")
                 .build();
     }
 

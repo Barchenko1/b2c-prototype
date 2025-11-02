@@ -35,8 +35,8 @@ class ReviewStatusDaoTest extends AbstractDaoTest {
     @ExpectedDataSet(value = "datasets/dao/review/review_status/updateReviewStatusDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         ReviewStatus entity = getReviewStatus();
-        entity.setLabel("new");
         entity.setValue("new");
+        entity.setKey("new");
 
         generalEntityDao.mergeEntity(entity);
     }
@@ -90,7 +90,7 @@ class ReviewStatusDaoTest extends AbstractDaoTest {
 
         return ReviewStatus.builder()
                 .id(1L)
-                .label("Pending")
+                .key("Pending")
                 .value("Pending")
                 .build();
     }

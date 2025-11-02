@@ -35,7 +35,7 @@ public class CountryDaoTest extends AbstractDaoTest {
     @ExpectedDataSet(value = "datasets/dao/country/updateCountryDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         Country entity = getCountry();
-        entity.setValue("Update USA");
+        entity.setKey("Update USA");
 
         generalEntityDao.mergeEntity(entity);
     }
@@ -89,7 +89,7 @@ public class CountryDaoTest extends AbstractDaoTest {
         return Country.builder()
                 .id(1L)
                 .value("USA")
-                .label("USA")
+                .key("USA")
                 .build();
     }
 

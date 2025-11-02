@@ -8,7 +8,7 @@ public interface Constant {
     String PAYMENT_ID = "payment_uniq_id";
     String ITEM_ID = "itemId";
     String CHAR_SEQUENCE_CODE = "charSequenceCode";
-    String VALUE = "value";
+    String KEY = "key";
     String STORE_ID = "store_uniq_id";
     String MESSAGE_ID = "message_uniq_id";
     String MESSAGE_TEMPLATE_UNIQ_ID = "message_template_uniq_id";

@@ -17,36 +17,21 @@ import com.b2c.prototype.modal.dto.payload.user.UserCreditCardDto;
 import com.b2c.prototype.modal.dto.payload.user.UserDetailsContactInfoDto;
 import com.b2c.prototype.modal.dto.payload.user.UserDetailsDto;
 import com.b2c.prototype.modal.entity.address.Address;
-import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.address.UserAddress;
 import com.b2c.prototype.modal.entity.message.Message;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
-import com.b2c.prototype.modal.entity.user.CountryPhoneCode;
 import com.b2c.prototype.modal.entity.user.Device;
 import com.b2c.prototype.modal.entity.user.UserCreditCard;
 import com.b2c.prototype.modal.entity.user.UserDetails;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.nimbusds.jose.util.Pair;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.b2c.prototype.util.Constant.VALUE;
+import static com.b2c.prototype.util.Constant.KEY;
 import static com.b2c.prototype.util.Util.getUUID;
 
 @Service
@@ -146,8 +131,8 @@ public class UserDetailsTransformService implements IUserDetailsTransformService
                 .isEmailVerified(contactInfoDto.isEmailVerified())
                 .isContactPhoneVerified(contactInfoDto.isPhoneVerified())
                 .contactPhone(ContactPhone.builder()
-                        .countryPhoneCode(generalEntityDao.findEntity("CountryPhoneCode.findByValue",
-                                Pair.of(VALUE, contactInfoDto.getContactPhone().getCountryPhoneCode().getValue())))
+                        .countryPhoneCode(generalEntityDao.findEntity("CountryPhoneCode.findByKey",
+                                Pair.of(KEY, contactInfoDto.getContactPhone().getCountryPhoneCode().getKey())))
                         .phoneNumber(contactInfoDto.getContactPhone().getPhoneNumber())
                         .build())
                 .birthdayDate(contactInfoDto.getBirthdayDate())
@@ -164,8 +149,8 @@ public class UserDetailsTransformService implements IUserDetailsTransformService
                 .isPhoneVerified(contactInfo.isContactPhoneVerified())
                 .contactPhone(ContactPhoneDto.builder()
                         .countryPhoneCode(CountryPhoneCodeDto.builder()
-                                .label(contactInfo.getContactPhone().getCountryPhoneCode().getLabel())
                                 .value(contactInfo.getContactPhone().getCountryPhoneCode().getValue())
+                                .key(contactInfo.getContactPhone().getCountryPhoneCode().getKey())
                                 .build())
                         .phoneNumber(contactInfo.getContactPhone().getPhoneNumber())
                         .build())
@@ -193,8 +178,8 @@ public class UserDetailsTransformService implements IUserDetailsTransformService
     public AddressDto mapAddressToAddressDto(Address address) {
         return AddressDto.builder()
                 .country(CountryDto.builder()
-                        .label(address.getCountry().getLabel())
                         .value(address.getCountry().getValue())
+                        .key(address.getCountry().getKey())
                         .build())
                 .city(address.getCity())
                 .street(address.getStreet())
@@ -208,8 +193,8 @@ public class UserDetailsTransformService implements IUserDetailsTransformService
     @Override
     public Address mapAddressDtoToAddress(AddressDto addressDto) {
         return Address.builder()
-                .country(generalEntityDao.findEntity("Country.findByValue",
-                        Pair.of(VALUE, addressDto.getCountry().getValue())))
+                .country(generalEntityDao.findEntity("Country.findByKey",
+                        Pair.of(KEY, addressDto.getCountry().getKey())))
                 .city(addressDto.getCity())
                 .street(addressDto.getStreet())
                 .buildingNumber(addressDto.getBuildingNumber())

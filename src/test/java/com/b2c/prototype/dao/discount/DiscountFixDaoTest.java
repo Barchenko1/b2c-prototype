@@ -93,7 +93,7 @@ class DiscountFixDaoTest extends AbstractDaoTest {
     private Discount getDiscount() {
         Currency currency = Currency.builder()
                 .id(1L)
-                .label("USD")
+                .key("USD")
                 .value("USD")
                 .build();
         return Discount.builder()

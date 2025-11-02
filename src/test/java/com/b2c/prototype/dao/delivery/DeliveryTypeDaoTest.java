@@ -35,7 +35,7 @@ class DeliveryTypeDaoTest extends AbstractDaoTest {
     @ExpectedDataSet(value = "datasets/dao/delivery/delivery_type/updateDeliveryTypeDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         DeliveryType entity = getDeliveryType();
-        entity.setValue("Update Post");
+        entity.setKey("Update Post");
 
         generalEntityDao.mergeEntity(entity);
     }
@@ -88,7 +88,7 @@ class DeliveryTypeDaoTest extends AbstractDaoTest {
     private DeliveryType getDeliveryType() {
         return DeliveryType.builder()
                 .id(1L)
-                .label("Post")
+                .key("Post")
                 .value("Post")
                 .build();
 

@@ -18,8 +18,8 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NamedQueries({
         @NamedQuery(
-                name = "CountryPhoneCode.findByValue",
-                query = "SELECT c FROM CountryPhoneCode c WHERE c.value = :value"
+                name = "CountryPhoneCode.findByKey",
+                query = "SELECT c FROM CountryPhoneCode c WHERE c.key = :key"
         ),
         @NamedQuery(
                 name = "CountryPhoneCode.all",
