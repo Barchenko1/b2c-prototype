@@ -3,19 +3,24 @@ currency:
     value: "USD"
     key: "USD"
 price:
-  - amount: 10.0
+  - id: 1
+    amount: 10.0
     currency_id: 1
-  - amount: 10.0
+  - id: 2
+    amount: 10.0
     currency_id: 1
 option_group:
-  - key: "Modal"
+  - id: 1
+    key: "Modal"
     value: "Modal"
 option_item_cost:
-  - value: "Modal1"
+  - id: 1
+    value: "Modal1"
     key: "Modal1"
     price_id: 1
     option_group_id: 1
-  - value: "Modal2"
+  - id: 2
+    value: "Modal2"
     key: "Modal2"
     price_id: 2
     option_group_id: 1

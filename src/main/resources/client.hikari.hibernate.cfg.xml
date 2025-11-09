@@ -80,7 +80,9 @@
         <mapping class="com.b2c.prototype.modal.entity.message.MessageStatus" />
         <mapping class="com.b2c.prototype.modal.entity.message.MessageTemplate" />
         <mapping class="com.b2c.prototype.modal.entity.message.Message" />
+        <mapping class="com.b2c.prototype.modal.entity.message.MailMessage" />
         <mapping class="com.b2c.prototype.modal.entity.message.MessageBox" />
+        <mapping class="com.b2c.prototype.modal.entity.message.MessageGeneralBoard" />
 
         <mapping class="com.b2c.prototype.modal.entity.user.Device" />
         <mapping class="com.b2c.prototype.modal.entity.user.OrderHistory" />

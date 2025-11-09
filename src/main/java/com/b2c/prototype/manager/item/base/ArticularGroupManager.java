@@ -1,7 +1,6 @@
 package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.dao.IGeneralEntityDao;
-import com.b2c.prototype.modal.dto.common.SearchFieldUpdateEntityDto;
 import com.b2c.prototype.modal.dto.payload.item.MetaDataDto;
 import com.b2c.prototype.modal.dto.payload.item.ResponseMetaDataDto;
 import com.b2c.prototype.modal.entity.item.MetaData;
@@ -38,10 +37,6 @@ public class ArticularGroupManager implements IArticularGroupManager {
 
     @Override
     public void updateArticularGroup(String itemId, MetaDataDto metaDataDto) {
-        SearchFieldUpdateEntityDto<MetaDataDto> updateDto = SearchFieldUpdateEntityDto.<MetaDataDto>builder()
-                .searchField(itemId)
-                .updateDto(metaDataDto)
-                .build();
         MetaData metaData = itemTransformService.mapMetaDataDtoToMetaDataDto(metaDataDto);
 
         generalEntityDao.mergeEntity(metaData);

@@ -1,7 +1,7 @@
 package com.b2c.prototype.modal.dto.payload.item;
 
 import com.b2c.prototype.modal.dto.common.ConstantPayloadDto;
-import com.b2c.prototype.modal.dto.payload.discount.InitDiscountDto;
+import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.option.item.OptionItemDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,5 +22,5 @@ public class ResponseArticularItemDto {
     private PriceDto fullPrice;
     private PriceDto totalPrice;
     private ConstantPayloadDto status;
-    private InitDiscountDto discount;
+    private DiscountDto discount;
 }

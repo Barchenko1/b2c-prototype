@@ -54,7 +54,7 @@ class MessageBoxDaoTest extends AbstractDaoTest {
         message.setId(0);
         message.getMessageTemplate().setId(0);
 //        message.setMessageUniqId("messageUniqNumber2");
-        entity.addMessage(message);
+//        entity.addMessage(message);
 
         generalEntityDao.mergeEntity(entity);
     }
@@ -128,8 +128,8 @@ class MessageBoxDaoTest extends AbstractDaoTest {
                 .status(messageStatus)
                 .type(messageType)
 //                .messageUniqId("messageUniqNumber1")
-                .sender("sender@email.com")
-                .receivers(Set.of("receiver1@email.com", "receiver2@email.com"))
+//                .sender("sender@email.com")
+//                .receivers(Set.of("receiver1@email.com", "receiver2@email.com"))
                 .dateOfSend(getLocalDateTime("2024-03-03 12:00:00"))
                 .build();
     }
@@ -150,7 +150,7 @@ class MessageBoxDaoTest extends AbstractDaoTest {
                 .id(1L)
                 .userDetails(userDetails)
                 .build();
-        messageBox.addMessage(message);
+//        messageBox.addMessage(message);
 
         return messageBox;
     }

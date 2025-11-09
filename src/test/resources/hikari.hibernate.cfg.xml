@@ -167,11 +167,20 @@
         <query>SELECT e from MessageTemplate e WHERE e.id = :id</query>
     </named-query>
     <named-query name="MessageBox.findById">
-        <query>SELECT e from MessageBox e JOIN FETCH e.userDetails ud LEFT JOIN FETCH ud.devices LEFT JOIN FETCH ud.userAddresses LEFT JOIN FETCH ud.userCreditCards LEFT JOIN FETCH e.messages m LEFT JOIN FETCH m.messageTemplate LEFT JOIN FETCH m.status LEFT JOIN FETCH m.type LEFT JOIN FETCH m.receivers WHERE e.id = :id</query>
+        <query>SELECT e from MessageBox e
+            JOIN FETCH e.userDetails ud
+            LEFT JOIN FETCH ud.devices
+            LEFT JOIN FETCH ud.userAddresses
+            LEFT JOIN FETCH ud.userCreditCards
+            LEFT JOIN FETCH e.messages m
+            LEFT JOIN FETCH m.messageTemplate
+            LEFT JOIN FETCH m.status
+            LEFT JOIN FETCH m.type
+            WHERE e.id = :id</query>
     </named-query>
-    <named-query name="Message.findById">
+    <named-query name="MailMessage.findById">
         <query>SELECT e
-            FROM Message e
+            FROM MailMessage e
             LEFT JOIN FETCH e.messageTemplate
             LEFT JOIN FETCH e.status
             LEFT JOIN FETCH e.type
@@ -524,7 +533,9 @@
     <entity class="com.b2c.prototype.modal.entity.message.MessageStatus" />
     <entity class="com.b2c.prototype.modal.entity.message.MessageTemplate" />
     <entity class="com.b2c.prototype.modal.entity.message.Message" />
+    <entity class="com.b2c.prototype.modal.entity.message.MailMessage" />
     <entity class="com.b2c.prototype.modal.entity.message.MessageBox" />
+    <entity class="com.b2c.prototype.modal.entity.message.MessageGeneralBoard" />
 
     <entity class="com.b2c.prototype.modal.entity.user.Device" />
     <entity class="com.b2c.prototype.modal.entity.user.OrderHistory" />

@@ -19,8 +19,8 @@ public final class CategoryUtil {
         }
 
         Category category = Category.builder()
-                .label(dto.getLabel())
                 .value(dto.getValue())
+                .key(dto.getKey())
                 .childList(new ArrayList<>())
                 .build();
 
@@ -39,9 +39,9 @@ public final class CategoryUtil {
             return null;
         }
         return CategoryDto.builder()
-                .label(entity.getLabel())
                 .value(entity.getValue())
-                .oldValue(entity.getValue())
+                .key(entity.getKey())
+                .oldKey(entity.getKey())
                 .childList(entity.getChildList() != null
                         ? entity.getChildList().stream()
                         .map(CategoryUtil::toDto)
@@ -63,7 +63,7 @@ public final class CategoryUtil {
 
     private static Stream<String> flattenCategory(Category category) {
         return Stream.concat(
-                Stream.of(category.getValue()),
+                Stream.of(category.getKey()),
                 category.getChildList() == null ? Stream.empty() :
                         category.getChildList().stream().flatMap(CategoryUtil::flattenCategory)
         );
@@ -71,7 +71,7 @@ public final class CategoryUtil {
 
     private static Stream<String> flattenCategoryDto(CategoryDto categoryDto) {
         return Stream.concat(
-                Stream.of(categoryDto.getValue()),
+                Stream.of(categoryDto.getKey()),
                 categoryDto.getChildList() == null ? Stream.empty() :
                         categoryDto.getChildList().stream().flatMap(CategoryUtil::flattenCategoryDto)
         );
@@ -107,8 +107,8 @@ public final class CategoryUtil {
         Set<String> duplicateValues = new HashSet<>();
 
         for (CategoryDto dto : categoryDtoList) {
-            if (!Objects.equals(dto.getOldValue(), dto.getValue()) && existingValues.contains(dto.getValue())) {
-                duplicateValues.add(dto.getValue());
+            if (!Objects.equals(dto.getOldKey(), dto.getKey()) && existingValues.contains(dto.getKey())) {
+                duplicateValues.add(dto.getKey());
             }
         }
 

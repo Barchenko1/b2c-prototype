@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 public interface IOptionItemGroupProcess {
-    void persistEntity(final Map<String, Object> payload);
-    void mergeEntity(final Map<String, Object> payload, final String value);
+    void persistEntity(final OptionItemGroupDto payload);
+    void mergeEntity(final OptionItemGroupDto payload, final String value);
     void removeEntity(final String value);
 
     List<OptionItemGroupDto> getEntityList(final String location);

@@ -55,7 +55,7 @@ category:
     category_id: 2
     key: "child"
     value: "child"
-metadata:
+articular_group:
   - id: 1
     metadata_uniq_id: 123
     brand_id: 1

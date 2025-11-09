@@ -13,6 +13,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -65,24 +66,34 @@ public class MessageBox {
     private long id;
     @OneToOne(fetch = FetchType.LAZY)
     private UserDetails userDetails;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
-            name = "message_box_message",
-            joinColumns = {@JoinColumn(name = "message_box_id")},
-            inverseJoinColumns = {@JoinColumn(name = "message_id")}
-    )
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
+//    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+//    @JoinTable(
+//            name = "message_box_message",
+//            joinColumns = {@JoinColumn(name = "message_box_id")},
+//            inverseJoinColumns = {@JoinColumn(name = "message_id")}
+//    )
+//    @ToString.Exclude
+//    @EqualsAndHashCode.Exclude
+//    @Builder.Default
+//    private Set<Message> messages = new HashSet<>();
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "message_id")
     @Builder.Default
+    @EqualsAndHashCode.Exclude
     private Set<Message> messages = new HashSet<>();
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "mail_message_id")
+    @Builder.Default
+    @EqualsAndHashCode.Exclude
+    private Set<MailMessage> mailMessages = new HashSet<>();
 
-    public void addMessage(Message message) {
-        this.messages.add(message);
-        message.getBoxes().add(this);
-    }
-
-    public void removeMessage(Message message) {
-        this.messages.remove(message);
-        message.getBoxes().remove(this);
-    }
+//    public void addMessage(Message message) {
+//        this.messages.add(message);
+//        message.getBoxes().add(this);
+//    }
+//
+//    public void removeMessage(Message message) {
+//        this.messages.remove(message);
+//        message.getBoxes().remove(this);
+//    }
 }

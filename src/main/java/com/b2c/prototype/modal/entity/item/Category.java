@@ -3,7 +3,6 @@ package com.b2c.prototype.modal.entity.item;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -34,7 +33,7 @@ import java.util.List;
                 name = "Category.findByKey",
                 query = "SELECT c FROM Category c " +
                         "LEFT JOIN FETCH c.childList cl1 " +
-                        "WHERE c.value = :key"
+                        "WHERE c.key = :key"
         ),
         @NamedQuery(
                 name = "Category.allParent",
@@ -53,10 +52,10 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
-    @Column(name = "label", nullable = false)
-    private String label;
-    @Column(name = "value", unique = true, nullable = false)
+    @Column(name = "value", nullable = false)
     private String value;
+    @Column(name = "key", unique = true, nullable = false)
+    private String key;
     @ManyToOne
     @JoinColumn(name = "category_id")
     @ToString.Exclude

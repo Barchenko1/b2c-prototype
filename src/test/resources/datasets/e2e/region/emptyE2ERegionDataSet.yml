@@ -1,0 +1,12 @@
+currency:
+  - id: 1
+    value: "EUR"
+    key: "EUR"
+region:
+  - id: 1
+    code: "DE"
+    value: "Germany"
+    language: "German"
+    default_locale: "de-DE"
+    primary_currency_id: 1
+    timezone: "Europe/Berlin"

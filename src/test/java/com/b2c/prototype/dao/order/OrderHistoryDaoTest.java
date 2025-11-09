@@ -43,6 +43,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.b2c.prototype.util.Converter.getLocalDate;
 import static com.b2c.prototype.util.Converter.getLocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -389,7 +390,7 @@ class OrderHistoryDaoTest extends AbstractDaoTest {
                 .currencyFrom(currencyUsd)
                 .coefficient(0.95)
                 .currencyTo(currencyEur)
-                .dateOfCreate(getLocalDateTime("2024-03-03 12:00:00"))
+                .dateOfCreate(getLocalDate("2024-03-03"))
                 .build();
 
         MultiCurrencyPriceInfo fullMultiCurrencyPriceInfo = MultiCurrencyPriceInfo.builder()

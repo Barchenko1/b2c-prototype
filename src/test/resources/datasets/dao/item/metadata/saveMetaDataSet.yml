@@ -10,7 +10,7 @@ category:
   - id: 1
     key: "parent"
     value: "parent"
-metadata:
+articular_group:
   - id: 1
     metadata_uniq_id: "123"
     brand_id: 1

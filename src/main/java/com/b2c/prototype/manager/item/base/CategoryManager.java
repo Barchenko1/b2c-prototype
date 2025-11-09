@@ -42,7 +42,7 @@ public class CategoryManager implements ICategoryManager {
     public void updateSingleCategory(CategoryDto categoryDto) {
         Optional<Category> optionalCategory = generalEntityDao.findOptionEntity(
                 "Category.findByKey",
-                Pair.of(KEY, categoryDto.getOldValue()));
+                Pair.of(KEY, categoryDto.getOldKey()));
         if (optionalCategory.isPresent()) {
             Category category = optionalCategory.get();
             List<String> values = getValues(category);
@@ -51,8 +51,8 @@ public class CategoryManager implements ICategoryManager {
             if (!duplicates.isEmpty()) {
                 throw new RuntimeException("Duplicate values found: " + duplicates);
             }
-            category.setLabel(categoryDto.getLabel());
             category.setValue(categoryDto.getValue());
+            category.setKey(categoryDto.getKey());
             generalEntityDao.mergeEntity(category);
         }
     }
@@ -105,19 +105,19 @@ public class CategoryManager implements ICategoryManager {
             return null;
         }
 
-        Category category = (categoryDto.getOldValue() != null)
-                ? existingCategoryMap.get(categoryDto.getOldValue())
+        Category category = (categoryDto.getOldKey() != null)
+                ? existingCategoryMap.get(categoryDto.getOldKey())
                 : null;
 
         if (category == null) {
             category = new Category();
         }
 
-        category.setLabel(categoryDto.getLabel());
         category.setValue(categoryDto.getValue());
+        category.setKey(categoryDto.getKey());
 
         Map<String, Category> existingChildrenMap = category.getChildList().stream()
-                .collect(Collectors.toMap(Category::getValue, child -> child));
+                .collect(Collectors.toMap(Category::getKey, child -> child));
 
         List<Category> updatedChildren = new ArrayList<>();
 
@@ -145,7 +145,7 @@ public class CategoryManager implements ICategoryManager {
             throw new RuntimeException("Duplicate values found: " + duplicates);
         }
         Map<String, Category> existingCategoryMap = existingCategoryList.stream()
-                .collect(Collectors.toMap(Category::getValue, category -> category));
+                .collect(Collectors.toMap(Category::getKey, category -> category));
 
         categoryDtoList.forEach(categoryDto -> {
             Category updatedCategory = updateEntity(categoryDto, existingCategoryMap);

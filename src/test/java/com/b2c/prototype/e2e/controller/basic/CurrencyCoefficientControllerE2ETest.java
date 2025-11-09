@@ -1,115 +1,190 @@
-//package com.b2c.prototype.e2e.controller.basic;
-//
-//import com.b2c.prototype.e2e.BasicE2ETest;
-//import com.b2c.prototype.e2e.util.TestUtil;
-//import com.b2c.prototype.modal.dto.payload.commission.ResponseMinMaxCommissionDto;
-//import com.fasterxml.jackson.core.JsonProcessingException;
-//import com.fasterxml.jackson.core.type.TypeReference;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//import org.springframework.http.MediaType;
-//import org.springframework.test.web.servlet.MvcResult;
-//
-//import java.io.IOException;
-//import java.io.UnsupportedEncodingException;
-//import java.sql.Connection;
-//import java.sql.Statement;
-//import java.util.List;
-//import java.util.Map;
-//
-//import static org.junit.jupiter.api.Assertions.assertEquals;
-//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-//
-//public class CurrencyCoefficientControllerE2ETest extends BasicE2ETest {
-//
-//    private static final String URL_TEMPLATE = "/api/v1/currency/coefficient";
-//
-//    @Test
-//    void testSaveBuyerCommission() {
-//        try {
-//            mockMvc.perform(post(URL_TEMPLATE)
-//                            .contentType(MediaType.APPLICATION_JSON)
-//                            .content(TestUtil.readFile("json/commission/input/MinMaxBuyerCommissionDto.json")))
-//                    .andExpect(status().isOk());
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        // verifyExpectedData("/datasets/e2e/commission/testE2EBuyerCommission.yml",
-//                // new String[] {"id", "dateOfCreate", "user_id", "lastUpdateTimestamp", },
-//                // new String[] {"label", "value", "fee_type"}
-////        );
-//    }
-//
-//    @Test
-//    void testDeleteCommission() {
-//        // loadDataSet("/datasets/e2e/commission/testE2EBuyerCommission.yml");
-//        try {
-//            mockMvc.perform(delete(URL_TEMPLATE)
-//                            .params(getMultiValueMap(getRequestParams()))
-//                    .contentType(MediaType.APPLICATION_JSON))
-//                    .andExpect(status().isOk());
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-//    @Test
-//    void testGetCommission() {
-//        MvcResult mvcResult;
-//        try {
-//            mvcResult = mockMvc.perform(get(URL_TEMPLATE)
-//                            .params(getMultiValueMap(getRequestParams()))
-//                            .contentType(MediaType.APPLICATION_JSON))
-//                    .andExpect(status().isOk())
-//                    .andReturn();
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        try {
-//            String jsonResponse = mvcResult.getResponse().getContentAsString();
-//            ResponseMinMaxCommissionDto actual = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
-//            String expectedResultStr = TestUtil.readFile("json/commission/output/ResponseMinMaxCommissionDto.json");
-//            ResponseMinMaxCommissionDto expected = objectMapper.readValue(expectedResultStr, new TypeReference<>() {});
-//            assertEquals(expected, actual);
-//        } catch (JsonProcessingException | UnsupportedEncodingException e) {
-//            throw new RuntimeException("Error processing the JSON response", e);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-//    @Test
-//    void testGetCommissions() {
-//        MvcResult mvcResult;
-//        try {
-//            mvcResult = mockMvc.perform(get(URL_TEMPLATE + "/all")
-//                            .contentType(MediaType.APPLICATION_JSON))
-//                    .andExpect(status().isOk())
-//                    .andReturn();
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        try {
-//            String jsonResponse = mvcResult.getResponse().getContentAsString();
-//            List<ResponseMinMaxCommissionDto> actualList = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
-//            String expectedResultStr = TestUtil.readFile("json/commission/output/ResponseAllMinMaxCommissionDto.json");
-//            List<ResponseMinMaxCommissionDto> expectedList = objectMapper.readValue(expectedResultStr, new TypeReference<>() {});
-//            assertEquals(expectedList, actualList);
-//        } catch (JsonProcessingException | UnsupportedEncodingException e) {
-//            throw new RuntimeException("Error processing the JSON response", e);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-//    private Map<String, String> getRequestParams() {
-//        return Map.of("commissionType", "buyer");
-//    }
-//
-//}
+package com.b2c.prototype.e2e.controller.basic;
+
+import com.b2c.prototype.e2e.BasicE2ETest;
+import com.b2c.prototype.modal.dto.payload.constant.CurrencyDto;
+import com.b2c.prototype.modal.dto.payload.order.CurrencyConvertDateDto;
+import com.github.database.rider.core.api.dataset.DataSet;
+import com.github.database.rider.core.api.dataset.ExpectedDataSet;
+import org.junit.jupiter.api.Test;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.jdbc.Sql;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
+public class CurrencyCoefficientControllerE2ETest extends BasicE2ETest {
+
+    private static final String URL_TEMPLATE = "/api/v1/currency/coefficient";
+
+    @Test
+    @DataSet(value = "datasets/e2e/order/currency_coefficient/emptyCurrencyCoefficientDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/order/currency_coefficient/testCurrencyCoefficientDataSet.yml", orderBy = "id", ignoreCols = {"date_of_create"})
+    @Sql(statements = "ALTER SEQUENCE currency_coefficient_id_seq RESTART WITH 3",
+            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    void testSaveCurrencyCoefficient() {
+        CurrencyConvertDateDto dto = getCurrencyCoefficientDto();
+        String jsonPayload = writeValueAsString(dto);
+
+        webTestClient.post()
+                .uri(URL_TEMPLATE)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .bodyValue(jsonPayload)
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    @DataSet(value = "datasets/e2e/order/currency_coefficient/emptyCurrencyCoefficientDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/order/currency_coefficient/updateCurrencyCoefficientDataSet.yml", orderBy = "id", ignoreCols = {"date_of_create"})
+    void testUpdateCurrencyCoefficient() {
+        CurrencyConvertDateDto dto = CurrencyConvertDateDto.builder()
+                .currencyFrom(CurrencyDto.builder()
+                        .key("EUR")
+                        .value("EUR")
+                        .build())
+                .currencyTo(CurrencyDto.builder()
+                        .key("EUR")
+                        .value("EUR")
+                        .build())
+                .coefficient(1.05)
+                .build();
+        String jsonPayload = writeValueAsString(dto);
+
+        webTestClient.put()
+                .uri(uriBuilder -> uriBuilder
+                        .path(URL_TEMPLATE)
+                        .queryParam("dateOfCreate", "2024-03-04")
+                        .build())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .bodyValue(jsonPayload)
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    @DataSet(value = "datasets/e2e/order/currency_coefficient/emptyCurrencyCoefficientDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/order/currency_coefficient/deleteCurrencyCoefficientDataSet.yml", orderBy = "id")
+    void testDeleteCurrencyCoefficient() {
+        webTestClient.delete()
+                .uri(uriBuilder -> uriBuilder
+                        .path(URL_TEMPLATE)
+                        .queryParam("dateOfCreate", "2024-03-04")
+                        .build())
+                .accept(MediaType.TEXT_PLAIN)
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    @DataSet(value = "datasets/e2e/order/currency_coefficient/testCurrencyCoefficientDataSet.yml", cleanBefore = true)
+    void testGetCurrencyCoefficient() {
+        CurrencyConvertDateDto dto = CurrencyConvertDateDto.builder()
+                .currencyFrom(CurrencyDto.builder()
+                        .key("USD")
+                        .value("USD")
+                        .build())
+                .currencyTo(CurrencyDto.builder()
+                        .key("EUR")
+                        .value("EUR")
+                        .build())
+                .coefficient(0.95)
+                .dateOfCreate(LocalDate.parse("2024-03-03"))
+                .build();
+
+        CurrencyConvertDateDto actual = webTestClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path(URL_TEMPLATE)
+                        .queryParam("dateOfCreate", "2024-03-03")
+                        .build())
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                .expectBody(CurrencyConvertDateDto.class)
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(actual)
+                .usingRecursiveComparison()
+                .ignoringCollectionOrder()
+                .isEqualTo(dto);
+    }
+
+    @Test
+    @DataSet(value = "datasets/e2e/order/currency_coefficient/testCurrencyCoefficientDataSet.yml", cleanBefore = true)
+    void testGetCurrencyCoefficients() {
+        List<CurrencyConvertDateDto> constantPayloadDtoList = List.of(
+                CurrencyConvertDateDto.builder()
+                        .currencyFrom(CurrencyDto.builder()
+                                .key("USD")
+                                .value("USD")
+                                .build())
+                        .currencyTo(CurrencyDto.builder()
+                                .key("EUR")
+                                .value("EUR")
+                                .build())
+                        .coefficient(0.95)
+                        .dateOfCreate(LocalDate.parse("2024-03-03"))
+                        .build(),
+                CurrencyConvertDateDto.builder()
+                        .currencyFrom(CurrencyDto.builder()
+                                .key("USD")
+                                .value("USD")
+                                .build())
+                        .currencyTo(CurrencyDto.builder()
+                                .key("USD")
+                                .value("USD")
+                                .build())
+                        .coefficient(1)
+                        .dateOfCreate(LocalDate.parse("2024-03-04"))
+                        .build(),
+                CurrencyConvertDateDto.builder()
+                        .currencyFrom(CurrencyDto.builder()
+                                .key("EUR")
+                                .value("EUR")
+                                .build())
+                        .currencyTo(CurrencyDto.builder()
+                                .key("USD")
+                                .value("USD")
+                                .build())
+                        .coefficient(1.05)
+                        .dateOfCreate(LocalDate.parse("2024-03-04"))
+                        .build()
+        );
+        List<CurrencyConvertDateDto> actual = webTestClient.get()
+                .uri(URL_TEMPLATE + "/all")
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                .expectBody(new ParameterizedTypeReference<List<CurrencyConvertDateDto>>() {})
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(actual)
+                .usingRecursiveComparison()
+                .ignoringCollectionOrder()
+                .ignoringFields("dateOfCreate")
+                .isEqualTo(constantPayloadDtoList);
+    }
+
+    private CurrencyConvertDateDto getCurrencyCoefficientDto() {
+        return CurrencyConvertDateDto.builder()
+                .currencyFrom(CurrencyDto.builder()
+                        .key("EUR")
+                        .value("EUR")
+                        .build())
+                .currencyTo(CurrencyDto.builder()
+                        .key("USD")
+                        .value("USD")
+                        .build())
+                .coefficient(1.05)
+                .build();
+    }
+
+}

@@ -2,10 +2,12 @@ package com.b2c.prototype.transform.order;
 
 import com.b2c.prototype.modal.dto.payload.option.group.TimeDurationOptionGroupDto;
 import com.b2c.prototype.modal.dto.payload.option.group.ZoneOptionGroupDto;
+import com.b2c.prototype.modal.dto.payload.order.CurrencyConvertDateDto;
 import com.b2c.prototype.modal.dto.payload.order.single.ResponseCustomerOrderDetails;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.ZoneOptionGroup;
 import com.b2c.prototype.modal.entity.order.CustomerSingleDeliveryOrder;
+import com.b2c.prototype.modal.entity.payment.CurrencyCoefficient;
 
 public interface IOrderTransformService {
     OptionGroup mapTimeDurationOptionGroupDtoToOptionGroup(TimeDurationOptionGroupDto timeDurationOptionGroupDto);
@@ -13,6 +15,9 @@ public interface IOrderTransformService {
 
     ZoneOptionGroup mapZoneOptionGroupDtoToZoneOptionGroup(ZoneOptionGroupDto zoneOptionGroupDto);
     ZoneOptionGroupDto mapZoneOptionGroupToZoneOptionGroupDto(ZoneOptionGroup zoneOptionGroup);
+
+    CurrencyCoefficient mapCurrencyConvertDateDtoToCurrencyCoefficient(CurrencyConvertDateDto currencyConvertDateDto);
+    CurrencyConvertDateDto mapCurrencyCoefficientToCurrencyConvertDateDto(CurrencyCoefficient currencyCoefficient);
 
     ResponseCustomerOrderDetails mapCustomerSingleDeliveryOrderToResponseCustomerOrderDetails(CustomerSingleDeliveryOrder customerSingleDeliveryOrder);
 }

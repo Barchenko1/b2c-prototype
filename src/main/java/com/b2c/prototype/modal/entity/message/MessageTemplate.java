@@ -16,6 +16,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "message_template")
 @Data
@@ -41,6 +43,7 @@ public class MessageTemplate {
     private String messageTemplateUniqId;
     private String title;
     private String message;
+    private LocalDateTime dateOfCreate;
 
     @ManyToOne
     @JoinColumn(name = "message_template_id")

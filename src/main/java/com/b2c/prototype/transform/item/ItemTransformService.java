@@ -2,6 +2,8 @@ package com.b2c.prototype.transform.item;
 
 import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.dto.payload.constant.CurrencyDto;
+import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
+import com.b2c.prototype.modal.dto.payload.discount.DiscountGroupDto;
 import com.b2c.prototype.modal.dto.payload.item.ArticularItemDto;
 import com.b2c.prototype.modal.dto.payload.item.MetaDataDto;
 import com.b2c.prototype.modal.dto.payload.item.PriceDto;
@@ -17,6 +19,8 @@ import com.b2c.prototype.modal.dto.payload.review.ReviewDto;
 import com.b2c.prototype.modal.dto.payload.store.ResponseStoreDto;
 import com.b2c.prototype.modal.dto.payload.store.StoreDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
+import com.b2c.prototype.modal.entity.item.Discount;
+import com.b2c.prototype.modal.entity.item.DiscountGroup;
 import com.b2c.prototype.modal.entity.item.MetaData;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
@@ -28,8 +32,11 @@ import com.b2c.prototype.modal.entity.store.Store;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
+import static com.b2c.prototype.util.Constant.CODE;
 import static com.b2c.prototype.util.Constant.KEY;
 import static java.util.stream.Collectors.toList;
 
@@ -82,7 +89,6 @@ public class ItemTransformService implements IItemTransformService {
     public ResponseArticularItemDto mapArticularItemToResponseArticularItem(ArticularItem articularItem) {
         return null;
     }
-
 
     @Override
     public Review mapReviewDtoToReview(ReviewDto reviewDto) {
@@ -171,6 +177,58 @@ public class ItemTransformService implements IItemTransformService {
                                         .build())
                                 .build())
                         .collect(toList())
+                )
+                .build();
+    }
+
+    @Override
+    public DiscountGroup mapDiscountGroupDtoToDiscountGroup(DiscountGroupDto discountGroupDto) {
+        DiscountGroup discountGroup = DiscountGroup.builder()
+                .key(discountGroupDto.getKey())
+                .value(discountGroupDto.getValue())
+                .region(generalEntityDao.findEntity("Region.findByCode",
+                        Pair.of(CODE, discountGroupDto.getRegionCode())))
+                .discounts(discountGroupDto.getDiscounts().stream()
+                        .map(discountDto -> Discount.builder()
+                                .charSequenceCode(discountDto.getCharSequenceCode())
+                                .amount(discountDto.getAmount())
+                                .isPercent(discountDto.isPercent())
+                                .isActive(discountDto.isActive())
+                                .currency(generalEntityDao.findEntity("Currency.findByKey",
+                                        Pair.of(KEY, discountDto.getCurrency())))
+                                .articularItemList(discountDto.getArticularIdSet().stream()
+                                        .map(articularId -> generalEntityDao.<ArticularItem>findEntity(
+                                                "ArticularItem.findById", Pair.of(ARTICULAR_ID, articularId)
+                                        ))
+                                        .collect(Collectors.toList()))
+                                .build())
+                        .collect(Collectors.toSet())
+                )
+                .build();
+
+        discountGroup.getDiscounts().forEach(discountGroup::addDiscount);
+        return discountGroup;
+    }
+
+    @Override
+    public DiscountGroupDto mapDiscountGroupToDiscountGroupDto(DiscountGroup discountGroup) {
+        return DiscountGroupDto.builder()
+                .key(discountGroup.getKey())
+                .value(discountGroup.getValue())
+                .regionCode(discountGroup.getRegion().getCode())
+                .discounts(discountGroup.getDiscounts().stream()
+                        .map(discount -> DiscountDto.builder()
+                                .charSequenceCode(discount.getCharSequenceCode())
+                                .amount(discount.getAmount())
+                                .isPercent(discount.isPercent())
+                                .isActive(discount.isActive())
+                                .currency(generalEntityDao.findEntity("Currency.findByKey",
+                                        Pair.of(KEY, discount.getCurrency())))
+                                .articularIdSet(discount.getArticularItemList().stream()
+                                        .map(ArticularItem::getArticularUniqId)
+                                        .collect(Collectors.toSet()))
+                                .build())
+                        .toList()
                 )
                 .build();
     }

@@ -1,7 +1,6 @@
 package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.dao.IGeneralEntityDao;
-import com.b2c.prototype.modal.dto.common.SearchFieldUpdateCollectionEntityDto;
 import com.b2c.prototype.modal.dto.payload.item.ArticularItemDto;
 import com.b2c.prototype.modal.dto.payload.item.ResponseArticularItemDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
@@ -29,11 +28,6 @@ public class ArticularItemManager implements IArticularItemManager {
 
     @Override
     public void saveUpdateArticularItem(String itemId, List<ArticularItemDto> articularItemDtoList) {
-        SearchFieldUpdateCollectionEntityDto<ArticularItemDto> searchFieldUpdateCollectionEntityDto =
-                SearchFieldUpdateCollectionEntityDto.<ArticularItemDto>builder()
-                        .searchField(itemId)
-                        .updateDtoSet(articularItemDtoList)
-                        .build();
 //        MetaData metaData = transformationFunctionService.getEntity(
 //                MetaData.class,
 //                searchFieldUpdateCollectionEntityDto);

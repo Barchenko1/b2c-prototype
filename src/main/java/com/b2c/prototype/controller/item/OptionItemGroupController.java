@@ -1,5 +1,6 @@
 package com.b2c.prototype.controller.item;
 
+import com.b2c.prototype.modal.dto.payload.option.group.OptionItemGroupDto;
 import com.b2c.prototype.processor.option.IOptionItemGroupProcess;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,20 +28,20 @@ public class OptionItemGroupController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> saveConstantEntity(@RequestBody Map<String, Object> payload) {
+    public ResponseEntity<String> saveConstantEntity(@RequestBody OptionItemGroupDto payload) {
         optionGroupProcess.persistEntity(payload);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> putConstantEntity(@RequestBody Map<String, Object> payload,
+    public ResponseEntity<String> putConstantEntity(@RequestBody OptionItemGroupDto payload,
                                                     @RequestParam(value = "key") final String key) {
         optionGroupProcess.mergeEntity(payload, key);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> patchConstantEntity(@RequestBody Map<String, Object> payload,
+    public ResponseEntity<String> patchConstantEntity(@RequestBody OptionItemGroupDto payload,
                                                       @RequestParam(value = "key") final String key) {
         optionGroupProcess.mergeEntity(payload, key);
         return ResponseEntity.ok().build();

@@ -8,32 +8,26 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
 public class OptionItemGroupProcess implements IOptionItemGroupProcess {
-    private final ObjectMapper objectMapper;
     private final IOptionItemGroupManager optionGroupManager;
     private final IItemTransformService itemTransformService;
 
-    public OptionItemGroupProcess(ObjectMapper objectMapper,
-                                  IOptionItemGroupManager optionGroupManager,
+    public OptionItemGroupProcess(IOptionItemGroupManager optionGroupManager,
                                   IItemTransformService itemTransformService) {
-        this.objectMapper = objectMapper;
         this.optionGroupManager = optionGroupManager;
         this.itemTransformService = itemTransformService;
     }
 
     @Override
-    public void persistEntity(Map<String, Object> payload) {
-        OptionItemGroupDto optionItemGroupDto = objectMapper.convertValue(payload, OptionItemGroupDto.class);
+    public void persistEntity(OptionItemGroupDto optionItemGroupDto) {
         optionGroupManager.persistEntity(optionItemGroupDto);
     }
 
     @Override
-    public void mergeEntity(Map<String, Object> payload, String value) {
-        OptionItemGroupDto optionItemGroupDto = objectMapper.convertValue(payload, OptionItemGroupDto.class);
+    public void mergeEntity(OptionItemGroupDto optionItemGroupDto, String value) {
         optionGroupManager.mergeEntity(value, optionItemGroupDto);
     }
 

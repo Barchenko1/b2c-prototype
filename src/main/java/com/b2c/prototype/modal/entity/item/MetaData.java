@@ -1,15 +1,11 @@
 package com.b2c.prototype.modal.entity.item;
 
-import com.b2c.prototype.transform.converter.ItemDataDescriptionConverter;
+import com.b2c.prototype.transform.converter.ArticularGroupDescriptionConverter;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,7 +28,7 @@ public class MetaData {
     @Column(name = "metadata_uniq_id", unique = true, nullable = false)
     private String metadataUniqId;
     @Column(name = "description", columnDefinition = "TEXT")
-    @Convert(converter = ItemDataDescriptionConverter.class)
+    @Convert(converter = ArticularGroupDescriptionConverter.class)
     @Builder.Default
     private Map<String, String> description = new LinkedHashMap<>();
 }

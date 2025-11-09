@@ -56,7 +56,9 @@
     <entity class="com.b2c.prototype.modal.entity.message.MessageStatus" />
     <entity class="com.b2c.prototype.modal.entity.message.MessageTemplate" />
     <entity class="com.b2c.prototype.modal.entity.message.Message" />
+    <entity class="com.b2c.prototype.modal.entity.message.MailMessage" />
     <entity class="com.b2c.prototype.modal.entity.message.MessageBox" />
+    <entity class="com.b2c.prototype.modal.entity.message.MessageGeneralBoard" />
 
     <entity class="com.b2c.prototype.modal.entity.user.Device" />
     <entity class="com.b2c.prototype.modal.entity.user.OrderHistory" />

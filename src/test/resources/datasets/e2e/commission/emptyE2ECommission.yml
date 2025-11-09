@@ -1,7 +1,0 @@
-currency:
-  - id: 1
-    value: "USD"
-    key: "USD"
-price: []
-commission_value: []
-min_max_commission: []

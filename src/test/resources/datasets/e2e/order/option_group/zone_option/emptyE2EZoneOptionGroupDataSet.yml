@@ -7,21 +7,26 @@ currency:
     value: "USD"
     key: "USD"
 price:
-  - amount: 10.0
+  - id: 1
+    amount: 10.0
     currency_id: 1
-  - amount: 10.0
+  - id: 2
+    amount: 10.0
     currency_id: 1
 zone_option_group:
-  - key: "CA-Zone"
+  - id: 1
+    key: "CA-Zone"
     value: "CA-Zone"
     city: "California"
     country_id: 1
 zone_option:
-  - key: "CA-ZoneA"
+  - id: 1
+    key: "CA-ZoneA"
     value: "CA-ZoneA"
     price_id: 1
     option_group_id: 1
-  - key: "CA-ZoneB"
+  - id: 2
+    key: "CA-ZoneB"
     value: "CA-ZoneB"
     price_id: 2
     option_group_id: 1

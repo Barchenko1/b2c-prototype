@@ -1,0 +1,22 @@
+currency:
+  - id: 1
+    value: "EUR"
+    key: "EUR"
+  - id: 2
+    value: "USD"
+    key: "USD"
+region:
+  - id: 1
+    code: "DE"
+    value: "Germany"
+    language: "German"
+    default_locale: "de-DE"
+    primary_currency_id: 1
+    timezone: "Europe/Berlin"
+  - id: 2
+    code: "Update Global"
+    value: "Update Global"
+    language: "Update English"
+    default_locale: "Update en-US"
+    primary_currency_id: 1
+    timezone: "America/New_York"

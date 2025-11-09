@@ -1,4 +1,3 @@
-
 package com.b2c.prototype.e2e.controller.constant;
 
 import com.b2c.prototype.e2e.BasicE2ETest;
@@ -9,6 +8,7 @@ import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
@@ -19,12 +19,12 @@ public class OptionItemGroupControllerE2ETest extends BasicE2ETest {
     private final String URL_TEMPLATE = "/api/v1/option/group/item";
 
     @Test
-    @DataSet(value = "datasets/e2e/item/option_group/option_item/emptyE2EOptionItemGroupDataSet.yml", cleanBefore = true,
-            executeStatementsBefore = {
-                    "TRUNCATE TABLE option_item RESTART IDENTITY CASCADE",
-                    "TRUNCATE TABLE option_group RESTART IDENTITY CASCADE"
-    })
+    @DataSet(value = "datasets/e2e/item/option_group/option_item/emptyE2EOptionItemGroupDataSet.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/e2e/item/option_group/option_item/testE2EOptionItemGroupDataSet.yml", orderBy = "id")
+    @Sql(statements = {
+            "ALTER SEQUENCE option_item_id_seq RESTART WITH 3",
+            "ALTER SEQUENCE option_group_id_seq RESTART WITH 2",
+    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void testCreateEntity() {
         OptionItemGroupDto dto = getOptionGroupDto();
         String jsonPayload = writeValueAsString(dto);

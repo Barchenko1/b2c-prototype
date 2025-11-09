@@ -112,18 +112,18 @@ public class ArticularStockDaoTest extends AbstractDaoTest {
     private Category getCategory() {
         Category parent = Category.builder()
                 .id(1L)
-                .label("parent")
+                .key("parent")
                 .value("parent")
                 .build();
         Category root = Category.builder()
                 .id(2L)
-                .label("root")
+                .key("root")
                 .value("root")
                 .parent(parent)
                 .build();
         Category child = Category.builder()
                 .id(3L)
-                .label("child")
+                .key("child")
                 .value("child")
                 .build();
 

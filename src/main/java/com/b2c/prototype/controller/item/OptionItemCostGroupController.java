@@ -1,7 +1,7 @@
 package com.b2c.prototype.controller.item;
 
+import com.b2c.prototype.modal.dto.payload.option.group.OptionItemCostGroupDto;
 import com.b2c.prototype.processor.option.IOptionItemCostGroupProcess;
-import com.b2c.prototype.processor.option.IOptionItemGroupProcess;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
-
 @RestController
 @RequestMapping("/api/v1/option/group/item/cost")
 public class OptionItemCostGroupController {
@@ -28,20 +26,20 @@ public class OptionItemCostGroupController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> saveConstantEntity(@RequestBody Map<String, Object> payload) {
+    public ResponseEntity<String> saveConstantEntity(@RequestBody OptionItemCostGroupDto payload) {
         optionItemCostGroupProcess.persistEntity(payload);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> putConstantEntity(@RequestBody Map<String, Object> payload,
+    public ResponseEntity<String> putConstantEntity(@RequestBody OptionItemCostGroupDto payload,
                                                     @RequestParam(value = "key") final String key) {
         optionItemCostGroupProcess.mergeEntity(payload, key);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> patchConstantEntity(@RequestBody Map<String, Object> payload,
+    public ResponseEntity<String> patchConstantEntity(@RequestBody OptionItemCostGroupDto payload,
                                                       @RequestParam(value = "key") final String key) {
         optionItemCostGroupProcess.mergeEntity(payload, key);
         return ResponseEntity.ok().build();

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import java.util.Optional;
 
+import static com.b2c.prototype.util.Converter.getLocalDate;
 import static com.b2c.prototype.util.Converter.getLocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -119,7 +120,7 @@ class MultiCurrencyPriceInfoDaoTest extends AbstractDaoTest {
                 .currencyFrom(priceUsd.getCurrency())
                 .currencyTo(priceEur.getCurrency())
                 .coefficient(0.95)
-                .dateOfCreate(getLocalDateTime("2024-03-03 12:00:00"))
+                .dateOfCreate(getLocalDate("2024-03-03 12:00:00"))
                 .build();
 
         return MultiCurrencyPriceInfo.builder()

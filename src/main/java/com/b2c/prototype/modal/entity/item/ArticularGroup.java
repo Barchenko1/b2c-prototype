@@ -1,6 +1,6 @@
 package com.b2c.prototype.modal.entity.item;
 
-import com.b2c.prototype.transform.converter.ItemDataDescriptionConverter;
+import com.b2c.prototype.transform.converter.ArticularGroupDescriptionConverter;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -95,7 +95,7 @@ public class ArticularGroup {
     @Builder.Default
     private Set<ArticularItem> articularItemSet = new HashSet<>();
     @Column(name = "description", columnDefinition = "TEXT")
-    @Convert(converter = ItemDataDescriptionConverter.class)
+    @Convert(converter = ArticularGroupDescriptionConverter.class)
     @Builder.Default
     private Map<String, String> description = new LinkedHashMap<>();
 }

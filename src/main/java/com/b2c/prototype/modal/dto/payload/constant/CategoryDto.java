@@ -12,8 +12,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CategoryDto {
-    private String label;
     private String value;
-    private String oldValue;
+    private String key;
+    private String oldKey;
     private List<CategoryDto> childList;
 }

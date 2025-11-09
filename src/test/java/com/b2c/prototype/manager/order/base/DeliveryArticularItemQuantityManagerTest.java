@@ -1,6 +1,7 @@
 package com.b2c.prototype.manager.order.base;
 
 import com.b2c.prototype.modal.constant.PaymentMethodEnum;
+import com.b2c.prototype.modal.dto.payload.constant.CurrencyDto;
 import com.b2c.prototype.modal.dto.payload.order.AddressDto;
 import com.b2c.prototype.modal.dto.payload.order.ContactInfoDto;
 import com.b2c.prototype.modal.dto.payload.order.ContactPhoneDto;
@@ -334,7 +335,10 @@ class DeliveryArticularItemQuantityManagerTest {
         return DiscountDto.builder()
                 .charSequenceCode("CODE123")
                 .amount(20)
-                .currency("USA")
+                .currency(CurrencyDto.builder()
+                        .key("USA")
+                        .value("USA")
+                        .build())
                 .build();
     }
 

@@ -10,8 +10,8 @@ public interface IGeneralEntityDao {
     <E> E mergeEntity(E entity);
     <E> void removeEntity(E entity);
 
-    <E> E findAndUpdateEntity(String namedQuery, Pair<String, ?> pair, E updatedEntity);
     <E> void findAndRemoveEntity(String namedQuery, Pair<String, ?> pair);
+    <E> void findAndRemoveEntityList(String namedQuery, Pair<String, ?> pair);
 
     <E> E findEntity(String namedQuery, Pair<String, ?> pair);
     <E> Optional<E> findOptionEntity(String namedQuery, Pair<String, ?> pair);

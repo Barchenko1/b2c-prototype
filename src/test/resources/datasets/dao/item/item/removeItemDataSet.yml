@@ -33,7 +33,7 @@ articular_status:
   - id: 1
     value: "NEW"
     key: "NEW"
-metadata: []
+articular_group: []
 articular_item: []
 post: []
 rating:

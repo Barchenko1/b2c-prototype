@@ -41,7 +41,7 @@ class MetaDataDaoTest extends AbstractDaoTest {
         Category category = Category.builder()
                 .id(0L)
                 .value("parent")
-                .label("parent")
+                .key("parent")
                 .build();
 //       entity.setCategory(category);
 
@@ -110,18 +110,18 @@ class MetaDataDaoTest extends AbstractDaoTest {
     private Category getCategory() {
         Category parent = Category.builder()
                 .id(1L)
-                .label("parent")
+                .key("parent")
                 .value("parent")
                 .build();
         Category root = Category.builder()
                 .id(2L)
-                .label("root")
+                .key("root")
                 .value("root")
                 .parent(parent)
                 .build();
         Category child = Category.builder()
                 .id(3L)
-                .label("child")
+                .key("child")
                 .value("child")
                 .build();
 

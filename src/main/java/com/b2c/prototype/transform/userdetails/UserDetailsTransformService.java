@@ -1,14 +1,9 @@
 package com.b2c.prototype.transform.userdetails;
 
 import com.b2c.prototype.dao.IGeneralEntityDao;
-import com.b2c.prototype.modal.dto.payload.constant.CountryDto;
-import com.b2c.prototype.modal.dto.payload.constant.CountryPhoneCodeDto;
 import com.b2c.prototype.modal.dto.payload.message.MessageDto;
 import com.b2c.prototype.modal.dto.payload.message.ResponseMessageOverviewDto;
 import com.b2c.prototype.modal.dto.payload.message.ResponseMessagePayloadDto;
-import com.b2c.prototype.modal.dto.payload.order.AddressDto;
-import com.b2c.prototype.modal.dto.payload.order.ContactInfoDto;
-import com.b2c.prototype.modal.dto.payload.order.ContactPhoneDto;
 import com.b2c.prototype.modal.dto.payload.order.CreditCardDto;
 import com.b2c.prototype.modal.dto.payload.user.DeviceDto;
 import com.b2c.prototype.modal.dto.payload.user.RegistrationUserDetailsDto;
@@ -16,31 +11,31 @@ import com.b2c.prototype.modal.dto.payload.user.UserAddressDto;
 import com.b2c.prototype.modal.dto.payload.user.UserCreditCardDto;
 import com.b2c.prototype.modal.dto.payload.user.UserDetailsContactInfoDto;
 import com.b2c.prototype.modal.dto.payload.user.UserDetailsDto;
-import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.UserAddress;
 import com.b2c.prototype.modal.entity.message.Message;
 import com.b2c.prototype.modal.entity.payment.CreditCard;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
-import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.b2c.prototype.modal.entity.user.Device;
 import com.b2c.prototype.modal.entity.user.UserCreditCard;
 import com.b2c.prototype.modal.entity.user.UserDetails;
-import com.nimbusds.jose.util.Pair;
+import com.b2c.prototype.transform.constant.IGeneralEntityTransformService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
-import static com.b2c.prototype.util.Constant.KEY;
 import static com.b2c.prototype.util.Util.getUUID;
 
 @Service
 public class UserDetailsTransformService implements IUserDetailsTransformService {
 
     private final IGeneralEntityDao generalEntityDao;
+    private final IGeneralEntityTransformService generalEntityTransformService;
 
-    public UserDetailsTransformService(IGeneralEntityDao generalEntityDao) {
+    public UserDetailsTransformService(IGeneralEntityDao generalEntityDao,
+                                       IGeneralEntityTransformService generalEntityTransformService) {
         this.generalEntityDao = generalEntityDao;
+        this.generalEntityTransformService = generalEntityTransformService;
     }
 
     @Override
@@ -79,7 +74,8 @@ public class UserDetailsTransformService implements IUserDetailsTransformService
                 .isActive(userDetailsDto.isActive())
                 .username(userDetailsDto.getUsername())
                 .dateOfCreate(userDetailsDto.getDateOfCreate())
-                .contactInfo(mapContactInfoDtoToContactInfo(userDetailsDto.getContactInfo()))
+                .contactInfo(generalEntityTransformService
+                        .mapContactInfoDtoToContactInfo(userDetailsDto.getContactInfo()))
                 .userCreditCards(userDetailsDto.getCreditCards().stream()
                         .map(this::mapUserCreditCardDtoToUserCreditCard)
                         .collect(Collectors.toSet()))
@@ -98,7 +94,8 @@ public class UserDetailsTransformService implements IUserDetailsTransformService
                 .userId(userDetailsContactInfoDto.getUserId())
                 .isActive(userDetailsContactInfoDto.isActive())
                 .username(userDetailsContactInfoDto.getUsername())
-                .contactInfo(mapContactInfoDtoToContactInfo(userDetailsContactInfoDto.getContactInfo()))
+                .contactInfo(generalEntityTransformService
+                        .mapContactInfoDtoToContactInfo(userDetailsContactInfoDto.getContactInfo()))
                 .build();
     }
 
@@ -109,7 +106,8 @@ public class UserDetailsTransformService implements IUserDetailsTransformService
                 .isActive(userDetails.isActive())
                 .username(userDetails.getUsername())
                 .dateOfCreate(userDetails.getDateOfCreate())
-                .contactInfo(mapContactInfoToContactInfoDto(userDetails.getContactInfo()))
+                .contactInfo(generalEntityTransformService
+                        .mapContactInfoToContactInfoDto(userDetails.getContactInfo()))
                 .creditCards(userDetails.getUserCreditCards().stream()
                         .map(this::mapUserCreditCardToUserCreditCardDto)
                         .toList())
@@ -123,45 +121,10 @@ public class UserDetailsTransformService implements IUserDetailsTransformService
     }
 
     @Override
-    public ContactInfo mapContactInfoDtoToContactInfo(ContactInfoDto contactInfoDto) {
-        return ContactInfo.builder()
-                .firstName(contactInfoDto.getFirstName())
-                .lastName(contactInfoDto.getLastName())
-                .email(contactInfoDto.getEmail())
-                .isEmailVerified(contactInfoDto.isEmailVerified())
-                .isContactPhoneVerified(contactInfoDto.isPhoneVerified())
-                .contactPhone(ContactPhone.builder()
-                        .countryPhoneCode(generalEntityDao.findEntity("CountryPhoneCode.findByKey",
-                                Pair.of(KEY, contactInfoDto.getContactPhone().getCountryPhoneCode().getKey())))
-                        .phoneNumber(contactInfoDto.getContactPhone().getPhoneNumber())
-                        .build())
-                .birthdayDate(contactInfoDto.getBirthdayDate())
-                .build();
-    }
-
-    @Override
-    public ContactInfoDto mapContactInfoToContactInfoDto(ContactInfo contactInfo) {
-        return ContactInfoDto.builder()
-                .firstName(contactInfo.getFirstName())
-                .lastName(contactInfo.getLastName())
-                .email(contactInfo.getEmail())
-                .isEmailVerified(contactInfo.isEmailVerified())
-                .isPhoneVerified(contactInfo.isContactPhoneVerified())
-                .contactPhone(ContactPhoneDto.builder()
-                        .countryPhoneCode(CountryPhoneCodeDto.builder()
-                                .value(contactInfo.getContactPhone().getCountryPhoneCode().getValue())
-                                .key(contactInfo.getContactPhone().getCountryPhoneCode().getKey())
-                                .build())
-                        .phoneNumber(contactInfo.getContactPhone().getPhoneNumber())
-                        .build())
-                .birthdayDate(contactInfo.getBirthdayDate())
-                .build();
-    }
-
-    @Override
     public UserAddressDto mapUserAddressToUserAddressDto(UserAddress userAddress) {
         return UserAddressDto.builder()
-                .address(mapAddressToAddressDto(userAddress.getAddress()))
+                .address(generalEntityTransformService
+                        .mapAddressToAddressDto(userAddress.getAddress()))
                 .isDefault(userAddress.isDefault())
                 .build();
     }
@@ -169,38 +132,9 @@ public class UserDetailsTransformService implements IUserDetailsTransformService
     @Override
     public UserAddress mapUserAddressDtoToUserAddress(UserAddressDto userAddressDto) {
         return UserAddress.builder()
-                .address(mapAddressDtoToAddress(userAddressDto.getAddress()))
+                .address(generalEntityTransformService
+                        .mapAddressDtoToAddress(userAddressDto.getAddress()))
                 .isDefault(userAddressDto.isDefault())
-                .build();
-    }
-
-    @Override
-    public AddressDto mapAddressToAddressDto(Address address) {
-        return AddressDto.builder()
-                .country(CountryDto.builder()
-                        .value(address.getCountry().getValue())
-                        .key(address.getCountry().getKey())
-                        .build())
-                .city(address.getCity())
-                .street(address.getStreet())
-                .buildingNumber(address.getBuildingNumber())
-                .florNumber(address.getFlorNumber())
-                .apartmentNumber(address.getApartmentNumber())
-                .zipCode(address.getZipCode())
-                .build();
-    }
-
-    @Override
-    public Address mapAddressDtoToAddress(AddressDto addressDto) {
-        return Address.builder()
-                .country(generalEntityDao.findEntity("Country.findByKey",
-                        Pair.of(KEY, addressDto.getCountry().getKey())))
-                .city(addressDto.getCity())
-                .street(addressDto.getStreet())
-                .buildingNumber(addressDto.getBuildingNumber())
-                .florNumber(addressDto.getFlorNumber())
-                .apartmentNumber(addressDto.getApartmentNumber())
-                .zipCode(addressDto.getZipCode())
                 .build();
     }
 

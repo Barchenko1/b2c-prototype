@@ -2,9 +2,12 @@ package com.b2c.prototype.dao;
 
 import com.nimbusds.jose.util.Pair;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceUnitUtil;
 import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -37,15 +40,7 @@ public abstract class AbstractEntityDao implements IGeneralEntityDao{
 
     @Override
     @Transactional
-    public <E> E findAndUpdateEntity(String namedQuery, Pair<String, ?> pair, E updatedEntity) {
-        Query query = getQuery(namedQuery, pair);
-        E result = (E) query.getSingleResult();
-//        updatedEntity.set
-        return result;
-    }
-
-    @Override
-    @Transactional
+    @SuppressWarnings("unchecked")
     public <E> void findAndRemoveEntity(String namedQuery, Pair<String, ?> pair) {
         Query query = getQuery(namedQuery, pair);
         E result = (E) query.getSingleResult();
@@ -53,7 +48,17 @@ public abstract class AbstractEntityDao implements IGeneralEntityDao{
     }
 
     @Override
+    @Transactional
+    @SuppressWarnings("unchecked")
+    public <E> void findAndRemoveEntityList(String namedQuery, Pair<String, ?> pair) {
+        Query query = getQuery(namedQuery, pair);
+        List<E> resultList = query.getResultList();
+        resultList.forEach(entity -> entityManager.remove(entity));
+    }
+
+    @Override
     @Transactional(readOnly = true)
+    @SuppressWarnings("unchecked")
     public <E> E findEntity(String namedQuery, Pair<String, ?> pair) {
         Query query = getQuery(namedQuery, pair);
         E result = (E) query.getSingleResult();
@@ -62,14 +67,19 @@ public abstract class AbstractEntityDao implements IGeneralEntityDao{
 
     @Override
     @Transactional(readOnly = true)
+    @SuppressWarnings("unchecked")
     public <E> Optional<E> findOptionEntity(String namedQuery, Pair<String, ?> pair) {
-        Query query = getQuery(namedQuery, pair);
-        E result = (E) query.getSingleResult();
-        return Optional.of(result);
+        try {
+            TypedQuery<E> q = (TypedQuery<E>) getQuery(namedQuery, pair);
+            return Optional.ofNullable(q.getSingleResult());
+        } catch (NoResultException | EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
     @Transactional(readOnly = true)
+    @SuppressWarnings("unchecked")
     public <E> List<E> findEntityList(String namedQuery, Pair<String, ?> pair) {
         Query query = getQuery(namedQuery, pair);
         List<E> resultList = query.getResultList();
@@ -78,6 +88,7 @@ public abstract class AbstractEntityDao implements IGeneralEntityDao{
 
     @Override
     @Transactional(readOnly = true)
+    @SuppressWarnings("unchecked")
     public <E> E findEntity(String namedQuery, List<Pair<String, ?>> pairs) {
         Query query = getQuery(namedQuery, pairs);
         E result = (E) query.getSingleResult();
@@ -86,10 +97,14 @@ public abstract class AbstractEntityDao implements IGeneralEntityDao{
 
     @Override
     @Transactional(readOnly = true)
+    @SuppressWarnings("unchecked")
     public <E> Optional<E> findOptionEntity(String namedQuery, List<Pair<String, ?>> pairs) {
-        Query query = getQuery(namedQuery, pairs);
-        E result = (E) query.getSingleResult();
-        return Optional.of(result);
+        try {
+            TypedQuery<E> q = (TypedQuery<E>) getQuery(namedQuery, pairs);
+            return Optional.ofNullable(q.getSingleResult());
+        } catch (NoResultException | EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     @Override

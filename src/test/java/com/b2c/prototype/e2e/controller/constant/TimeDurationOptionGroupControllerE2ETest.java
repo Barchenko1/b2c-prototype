@@ -24,13 +24,13 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
     private static final String URL_TEMPLATE = "/api/v1/option/group/duration";
 
     @Test
-    @DataSet(value = "datasets/e2e/order/option_group/time_duration_option/emptyE2ETimeDurationOptionDataSet.yml", cleanBefore = true,
-            executeStatementsBefore = {
-                    "TRUNCATE TABLE time_duration_option RESTART IDENTITY CASCADE",
-                    "TRUNCATE TABLE option_group RESTART IDENTITY CASCADE",
-                    "TRUNCATE TABLE price RESTART IDENTITY CASCADE",
-            })
+    @DataSet(value = "datasets/e2e/order/option_group/time_duration_option/emptyE2ETimeDurationOptionDataSet.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/e2e/order/option_group/time_duration_option/testE2ETimeDurationOptionDataSet.yml", orderBy = "id")
+    @Sql(statements = {
+            "ALTER SEQUENCE time_duration_option_id_seq RESTART WITH 3",
+            "ALTER SEQUENCE option_group_id_seq RESTART WITH 2",
+            "ALTER SEQUENCE price_id_seq RESTART WITH 3",
+    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void testSaveEntity() {
         TimeDurationOptionGroupDto dto = getTimeDurationOptionGroupDto();
         String jsonPayload = writeValueAsString(dto);
@@ -53,26 +53,6 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
         TimeDurationOptionGroupDto constantPayloadDto = getUpdateTimeDurationOptionDto();
         String jsonPayload = writeValueAsString(constantPayloadDto);
         webTestClient.put()
-                .uri(uriBuilder -> uriBuilder
-                        .path(URL_TEMPLATE)
-                        .queryParam(KEY, "NY")
-                        .build())
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .bodyValue(jsonPayload)
-                .exchange()
-                .expectStatus().isOk();
-    }
-
-    @Test
-    @DataSet(value = "datasets/e2e/order/option_group/time_duration_option/testUpdateE2ETimeDurationOptionGroupDataSet.yml", cleanBefore = true, disableConstraints = true)
-    @ExpectedDataSet(value = "datasets/e2e/order/option_group/time_duration_option/updateE2ETimeDurationOptionDataSet.yml", orderBy = "id", ignoreCols = {"id"})
-    @Sql(statements = "ALTER SEQUENCE price_id_seq RESTART WITH 5",
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    public void testPatchEntity() {
-        TimeDurationOptionGroupDto constantPayloadDto = getUpdateTimeDurationOptionDto();
-        String jsonPayload = writeValueAsString(constantPayloadDto);
-        webTestClient.patch()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
                         .queryParam(KEY, "NY")

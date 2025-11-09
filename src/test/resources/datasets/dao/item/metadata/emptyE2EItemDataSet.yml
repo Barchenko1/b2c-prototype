@@ -46,7 +46,7 @@ articular_status:
   - id: 1
     value: "NEW"
     key: "NEW"
-metadata:
+articular_group:
   - id: 1
     metadata_uniq_id: 122
     description: "{\"par1\":\"desc1\",\"par2\":\"desc2\",\"par3\":\"desc3\"}"

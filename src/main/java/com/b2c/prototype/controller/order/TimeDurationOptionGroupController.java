@@ -1,11 +1,11 @@
 package com.b2c.prototype.controller.order;
 
-import com.b2c.prototype.processor.option.ITimeDurationOptionProcess;
+import com.b2c.prototype.modal.dto.payload.option.group.TimeDurationOptionGroupDto;
+import com.b2c.prototype.processor.option.ITimeDurationOptionGroupProcess;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,34 +14,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
-
 @RestController
 @RequestMapping("/api/v1/option/group/duration")
 public class TimeDurationOptionGroupController {
 
-    private final ITimeDurationOptionProcess timeDurationOptionProcess;
+    private final ITimeDurationOptionGroupProcess timeDurationOptionProcess;
 
-    public TimeDurationOptionGroupController(ITimeDurationOptionProcess timeDurationOptionProcess) {
+    public TimeDurationOptionGroupController(ITimeDurationOptionGroupProcess timeDurationOptionProcess) {
         this.timeDurationOptionProcess = timeDurationOptionProcess;
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> saveConstantEntity(@RequestBody Map<String, Object> payload) {
+    public ResponseEntity<String> saveConstantEntity(@RequestBody TimeDurationOptionGroupDto payload) {
         timeDurationOptionProcess.persistEntity(payload);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> putConstantEntity(@RequestBody Map<String, Object> payload,
+    public ResponseEntity<String> putConstantEntity(@RequestBody TimeDurationOptionGroupDto payload,
                                                     @RequestParam(value = "key") final String key) {
-        timeDurationOptionProcess.mergeEntity(payload, key);
-        return ResponseEntity.ok().build();
-    }
-
-    @PatchMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> patchConstantEntity(@RequestBody Map<String, Object> payload,
-                                                      @RequestParam(value = "key") final String key) {
         timeDurationOptionProcess.mergeEntity(payload, key);
         return ResponseEntity.ok().build();
     }

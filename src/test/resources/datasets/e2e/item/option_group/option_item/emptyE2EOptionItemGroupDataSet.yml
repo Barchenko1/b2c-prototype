@@ -1,10 +1,13 @@
 option_group:
-  - key: "Modal"
+  - id: 1
+    key: "Modal"
     value: "Modal"
 option_item:
-  - value: "Modal1"
+  - id: 1
+    value: "Modal1"
     key: "Modal1"
     option_group_id: 1
-  - value: "Modal2"
+  - id: 2
+    value: "Modal2"
     key: "Modal2"
     option_group_id: 1

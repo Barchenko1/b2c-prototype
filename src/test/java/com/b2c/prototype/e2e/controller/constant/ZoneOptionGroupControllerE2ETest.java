@@ -11,6 +11,7 @@ import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
@@ -21,13 +22,13 @@ public class ZoneOptionGroupControllerE2ETest extends BasicE2ETest {
     private static final String URL_TEMPLATE = "/api/v1/option/group/zone";
 
     @Test
-    @DataSet(value = "datasets/e2e/order/option_group/zone_option/emptyE2EZoneOptionGroupDataSet.yml", cleanBefore = true,
-            executeStatementsBefore = {
-                    "TRUNCATE TABLE zone_option_group RESTART IDENTITY CASCADE",
-                    "TRUNCATE TABLE zone_option RESTART IDENTITY CASCADE",
-                    "TRUNCATE TABLE price RESTART IDENTITY CASCADE",
-            })
+    @DataSet(value = "datasets/e2e/order/option_group/zone_option/emptyE2EZoneOptionGroupDataSet.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/e2e/order/option_group/zone_option/testE2EZoneOptionGroupDataSet.yml", orderBy = {"id"})
+    @Sql(statements = {
+            "ALTER SEQUENCE zone_option_id_seq RESTART WITH 3",
+            "ALTER SEQUENCE zone_option_group_id_seq RESTART WITH 2",
+            "ALTER SEQUENCE price_id_seq RESTART WITH 3",
+    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void testSaveEntity() {
         ZoneOptionGroupDto dto = getZoneOptionGroupDto();
         String jsonPayload = writeValueAsString(dto);

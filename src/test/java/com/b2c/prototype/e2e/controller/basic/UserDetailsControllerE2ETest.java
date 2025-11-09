@@ -35,16 +35,16 @@ class UserDetailsControllerE2ETest extends BasicE2ETest {
     private static final String URL_TEMPLATE = "/api/v1/user/details";
 
     @Test
-    @DataSet(value = "datasets/e2e/user/user_details/emptyE2EUserDetailsDataSet.yml", cleanBefore = true,
-            executeStatementsBefore = {
-                    "TRUNCATE TABLE user_details RESTART IDENTITY CASCADE",
-                    "TRUNCATE TABLE contact_info RESTART IDENTITY CASCADE",
-                    "TRUNCATE TABLE contact_phone RESTART IDENTITY CASCADE",
-                    "TRUNCATE TABLE address RESTART IDENTITY CASCADE",
-                    "TRUNCATE TABLE credit_card RESTART IDENTITY CASCADE"
-    })
+    @DataSet(value = "datasets/e2e/user/user_details/emptyE2EUserDetailsDataSet.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/e2e/user/user_details/testE2ERegistrationUserDetailsDataSet.yml", orderBy = {"id"},
             ignoreCols = {"user_id", "date_of_create"})
+    @Sql(statements = {
+            "ALTER SEQUENCE user_details_id_seq RESTART WITH 2",
+            "ALTER SEQUENCE contact_info_id_seq RESTART WITH 2",
+            "ALTER SEQUENCE contact_phone_id_seq RESTART WITH 2",
+            "ALTER SEQUENCE address_id_seq RESTART WITH 2",
+            "ALTER SEQUENCE credit_card_id_seq RESTART WITH 2",
+    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void testCreateNewUserDetails() {
         RegistrationUserDetailsDto dto = getRegistrationUserDetailsDto();
         String jsonPayload = writeValueAsString(dto);

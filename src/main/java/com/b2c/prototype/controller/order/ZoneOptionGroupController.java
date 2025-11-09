@@ -1,6 +1,7 @@
 package com.b2c.prototype.controller.order;
 
-import com.b2c.prototype.processor.option.IZoneOptionProcess;
+import com.b2c.prototype.modal.dto.payload.option.group.ZoneOptionGroupDto;
+import com.b2c.prototype.processor.option.IZoneOptionGroupProcess;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,27 +21,27 @@ import java.util.Map;
 @RequestMapping("/api/v1/option/group/zone")
 public class ZoneOptionGroupController {
 
-    private final IZoneOptionProcess zoneOptionProcess;
+    private final IZoneOptionGroupProcess zoneOptionProcess;
 
-    public ZoneOptionGroupController(IZoneOptionProcess zoneOptionProcess) {
+    public ZoneOptionGroupController(IZoneOptionGroupProcess zoneOptionProcess) {
         this.zoneOptionProcess = zoneOptionProcess;
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> saveConstantEntity(@RequestBody Map<String, Object> payload) {
+    public ResponseEntity<String> saveConstantEntity(@RequestBody ZoneOptionGroupDto payload) {
         zoneOptionProcess.persistEntity(payload);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> putConstantEntity(@RequestBody Map<String, Object> payload,
+    public ResponseEntity<String> putConstantEntity(@RequestBody ZoneOptionGroupDto payload,
                                                     @RequestParam(value = "key") final String key) {
         zoneOptionProcess.mergeEntity(payload, key);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> patchConstantEntity(@RequestBody Map<String, Object> payload,
+    public ResponseEntity<String> patchConstantEntity(@RequestBody ZoneOptionGroupDto payload,
                                                       @RequestParam(value = "key") final String key) {
         zoneOptionProcess.mergeEntity(payload, key);
         return ResponseEntity.ok().build();

@@ -43,8 +43,8 @@ class CategoryDaoTest extends AbstractDaoTest {
     public void mergeEntity_success() {
         Category entity = getCategoryChain();
         entity.getChildList().forEach(childEntity -> {
-            childEntity.setLabel("Update root");
             childEntity.setValue("Update root");
+            childEntity.setKey("Update root");
         });
 
         generalEntityDao.mergeEntity(entity);
@@ -98,18 +98,18 @@ class CategoryDaoTest extends AbstractDaoTest {
     private Category getCategoryChain() {
         Category parent = Category.builder()
                 .id(1L)
-                .label("parent")
+                .key("parent")
                 .value("parent")
                 .build();
         Category root = Category.builder()
                 .id(2L)
-                .label("root")
+                .key("root")
                 .value("root")
                 .parent(parent)
                 .build();
         Category child = Category.builder()
                 .id(3L)
-                .label("child")
+                .key("child")
                 .value("child")
                 .build();
 

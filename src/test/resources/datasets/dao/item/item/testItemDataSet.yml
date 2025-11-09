@@ -52,7 +52,7 @@ rating:
     value: 4
   - id: 5
     value: 5
-metadata:
+articular_group:
   - id: 1
     metadata_uniq_id: 123
     description: "{\"desc1\":\"desc1\",\"desc2\":\"desc2\"}"

@@ -1,6 +1,5 @@
 package com.b2c.prototype.modal.entity.item;
 
-import com.b2c.prototype.modal.entity.option.ZoneOptionGroup;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
@@ -16,18 +15,23 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.AssertTrue;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.Check;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "discount")
+@Check(
+        constraints = "(isPercent = true AND currency_id IS NULL) OR (isPercent = false AND currency_id IS NOT NULL)"
+)
 @NamedQueries({
         @NamedQuery(
                 name = "Discount.all",
@@ -83,4 +87,9 @@ public class Discount {
     @EqualsAndHashCode.Exclude
     @JsonIgnore
     protected DiscountGroup discountGroup;
+
+    @AssertTrue(message = "Invalid discount: currency required for fixed amount, forbidden for percentage")
+    public boolean isValidCombo() {
+        return (isPercent && currency == null) || (!isPercent && currency != null);
+    }
 }

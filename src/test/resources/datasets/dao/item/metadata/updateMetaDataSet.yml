@@ -18,7 +18,7 @@ category:
     category_id: 2
     key: "child"
     value: "child"
-metadata:
+articular_group:
   - id: 1
     metadata_uniq_id: "123"
     description: "{\"desc1\":\"desc1\",\"desc2\":\"desc2\",\"desc3\":\"desc3\"}"

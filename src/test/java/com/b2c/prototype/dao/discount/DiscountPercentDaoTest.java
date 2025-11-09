@@ -26,6 +26,7 @@ class DiscountPercentDaoTest extends AbstractDaoTest {
             "TRUNCATE TABLE discount RESTART IDENTITY CASCADE",
     })
     @ExpectedDataSet(value = "datasets/dao/item/discount/percent/saveDiscountDataSet.yml", orderBy = "id")
+
     public void persistEntity_success() {
         Discount entity = getDiscount();
         entity.setId(0);

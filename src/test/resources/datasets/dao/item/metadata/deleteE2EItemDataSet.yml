@@ -77,7 +77,7 @@ articular_status:
   - id: 2
     value: "COMMON"
     key: "COMMON"
-metadata:
+articular_group:
   - id: 1
     metadata_uniq_id: 122
     description: "{\"par1\":\"desc1\",\"par2\":\"desc2\",\"par3\":\"desc3\"}"

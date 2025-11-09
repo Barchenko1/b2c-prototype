@@ -17,6 +17,7 @@ import com.b2c.prototype.modal.entity.user.UserCreditCard;
 import com.b2c.prototype.modal.entity.user.UserDetails;
 
 import com.b2c.prototype.manager.userdetails.IUserDetailsManager;
+import com.b2c.prototype.transform.constant.IGeneralEntityTransformService;
 import com.b2c.prototype.transform.userdetails.IUserDetailsTransformService;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
@@ -35,11 +36,14 @@ public class UserDetailsManager implements IUserDetailsManager {
 
     private final IGeneralEntityDao generalEntityDao;
     private final IUserDetailsTransformService userDetailsTransformService;
+    private final IGeneralEntityTransformService generalEntityTransformService;
 
     public UserDetailsManager(IGeneralEntityDao generalEntityDao,
-                              IUserDetailsTransformService userDetailsTransformService) {
+                              IUserDetailsTransformService userDetailsTransformService,
+                              IGeneralEntityTransformService generalEntityTransformService) {
         this.generalEntityDao = generalEntityDao;
         this.userDetailsTransformService = userDetailsTransformService;
+        this.generalEntityTransformService = generalEntityTransformService;
     }
 
     @Override
@@ -205,7 +209,7 @@ public class UserDetailsManager implements IUserDetailsManager {
     public void deleteUserDetailsAddress(UserDetailsRemoveCollectionDto userDetailsRemoveCollectionDto) {
         UserDetails userDetail = generalEntityDao.findEntity(
                 "UserDetails.findByUserId", Pair.of(USER_ID, userDetailsRemoveCollectionDto.getUserId()));
-        Address address = userDetailsTransformService.mapAddressDtoToAddress(userDetailsRemoveCollectionDto.getAddress());
+        Address address = generalEntityTransformService.mapAddressDtoToAddress(userDetailsRemoveCollectionDto.getAddress());
 
         Optional<UserAddress> userAddressOptional = userDetail.getUserAddresses().stream()
                 .filter(existingUserCreditCard -> isAddressExist(existingUserCreditCard.getAddress(), address))

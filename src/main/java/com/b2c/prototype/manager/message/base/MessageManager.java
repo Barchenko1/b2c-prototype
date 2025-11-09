@@ -97,10 +97,10 @@ public class MessageManager implements IMessageManager {
                 Pair.of(USER_ID, userId));
 
         Message message = getExistingMessage(messageBox, messageId);
-        messageBox.removeMessage(message);
-        if (message.getBoxes().isEmpty()) {
-            generalEntityDao.removeEntity(message);
-        }
+//        messageBox.removeMessage(message);
+//        if (message.getBoxes().isEmpty()) {
+//            generalEntityDao.removeEntity(message);
+//        }
 //            session.merge(messageBox);
     }
 
@@ -113,12 +113,12 @@ public class MessageManager implements IMessageManager {
         List<Message> messagesToProcess = new ArrayList<>(messageBox.getMessages());
         List<Message> messagesToDelete = new ArrayList<>();
 
-        for (Message message : messagesToProcess) {
-            messageBox.removeMessage(message);
-            if (message.getBoxes().isEmpty()) {
-                messagesToDelete.add(message);
-            }
-        }
+//        for (Message message : messagesToProcess) {
+//            messageBox.removeMessage(message);
+//            if (message.getBoxes().isEmpty()) {
+//                messagesToDelete.add(message);
+//            }
+//        }
         messagesToProcess.forEach(generalEntityDao::removeEntity);
         generalEntityDao.mergeEntity(messageBox);
     }

@@ -1,0 +1,36 @@
+currency:
+  - id: 1
+    value: "EUR"
+    key: "EUR"
+  - id: 2
+    value: "USD"
+    key: "USD"
+region:
+  - id: 1
+    code: "DE"
+    value: "Germany"
+    language: "German"
+    default_locale: "de-DE"
+    primary_currency_id: 1
+    timezone: "Europe/Berlin"
+  - id: 2
+    code: "Global"
+    value: "Global"
+    language: "English"
+    default_locale: "en-US"
+    primary_currency_id: 2
+    timezone: "UTC"
+discount_group:
+  - id: 1
+    key: "Germany_group"
+    value: "Germany_group"
+    region_id: 1
+discount:
+  - id: 1
+    amount: 10
+    char_sequence_code: "abc1"
+    is_active: true
+    is_percent: false
+    currency_id: 1
+    discount_group_id: 1
+articular_item: []

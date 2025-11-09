@@ -21,6 +21,7 @@ import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.nimbusds.jose.util.Pair;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,11 +37,11 @@ class StoreDaoTest extends AbstractDaoTest {
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/dao/store/store/emptyStoreDataSet.yml", cleanBefore = true,
-            executeStatementsBefore = {
-                    "TRUNCATE TABLE address RESTART IDENTITY CASCADE",
-            })
+    @DataSet(value = "datasets/dao/store/store/emptyStoreDataSet.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/dao/store/store/saveStoreDataSet.yml", orderBy = "id")
+//    @Sql(statements = {
+////            "ALTER SEQUENCE address_id_seq RESTART WITH 1",
+//    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void persistEntity_success() {
         Store entity = getStore();
         entity.setId(0L);

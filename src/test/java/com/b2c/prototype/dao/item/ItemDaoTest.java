@@ -135,7 +135,7 @@ class ItemDaoTest extends AbstractDaoTest {
     private Category getCategory() {
         return Category.builder()
                 .id(1L)
-                .label("category")
+                .key("category")
                 .value("category")
                 .build();
     }

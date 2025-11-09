@@ -1,7 +1,6 @@
 package com.b2c.prototype.manager.option;
 
 import com.b2c.prototype.modal.dto.payload.option.group.ZoneOptionGroupDto;
-import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.ZoneOptionGroup;
 
 import java.util.List;

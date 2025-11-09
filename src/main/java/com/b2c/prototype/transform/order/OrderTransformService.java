@@ -8,17 +8,22 @@ import com.b2c.prototype.modal.dto.payload.option.group.TimeDurationOptionGroupD
 import com.b2c.prototype.modal.dto.payload.option.group.ZoneOptionGroupDto;
 import com.b2c.prototype.modal.dto.payload.option.item.TimeDurationOptionDto;
 import com.b2c.prototype.modal.dto.payload.option.item.ZoneOptionDto;
+import com.b2c.prototype.modal.dto.payload.order.CurrencyConvertDateDto;
 import com.b2c.prototype.modal.dto.payload.order.single.ResponseCustomerOrderDetails;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.TimeDurationOption;
 import com.b2c.prototype.modal.entity.option.ZoneOption;
 import com.b2c.prototype.modal.entity.option.ZoneOptionGroup;
 import com.b2c.prototype.modal.entity.order.CustomerSingleDeliveryOrder;
+import com.b2c.prototype.modal.entity.payment.CurrencyCoefficient;
+import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 import static com.b2c.prototype.util.Constant.KEY;
@@ -139,6 +144,34 @@ public class OrderTransformService implements IOrderTransformService {
                                 .build())
                         .collect(Collectors.toList())
                 )
+                .build();
+    }
+
+    @Override
+    public CurrencyCoefficient mapCurrencyConvertDateDtoToCurrencyCoefficient(CurrencyConvertDateDto currencyConvertDateDto) {
+        return CurrencyCoefficient.builder()
+                .currencyFrom(generalEntityDao.findEntity("Currency.findByKey",
+                        Pair.of(KEY, currencyConvertDateDto.getCurrencyFrom().getKey())))
+                .currencyTo(generalEntityDao.findEntity("Currency.findByKey",
+                        Pair.of(KEY, currencyConvertDateDto.getCurrencyTo().getKey())))
+                .coefficient(currencyConvertDateDto.getCoefficient())
+                .dateOfCreate(LocalDate.now())
+                .build();
+    }
+
+    @Override
+    public CurrencyConvertDateDto mapCurrencyCoefficientToCurrencyConvertDateDto(CurrencyCoefficient currencyCoefficient) {
+        return CurrencyConvertDateDto.builder()
+                .currencyFrom(CurrencyDto.builder()
+                        .key(currencyCoefficient.getCurrencyFrom().getKey())
+                        .value(currencyCoefficient.getCurrencyFrom().getValue())
+                        .build())
+                .currencyTo(CurrencyDto.builder()
+                        .key(currencyCoefficient.getCurrencyTo().getKey())
+                        .value(currencyCoefficient.getCurrencyTo().getValue())
+                        .build())
+                .coefficient(currencyCoefficient.getCoefficient())
+                .dateOfCreate(currencyCoefficient.getDateOfCreate())
                 .build();
     }
 
