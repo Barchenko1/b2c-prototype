@@ -15,6 +15,9 @@ price:
   - id: 5
     amount: 30.0
     currency_id: 1
+  - id: 6
+    amount: 30.0
+    currency_id: 1
 option_group:
   - id: 1
     key: "Modal"
@@ -23,19 +26,28 @@ option_group:
     key: "Update Color"
     value: "Update Color"
 option_item_cost:
-  - value: "Modal1"
+  - id: 1
+    value: "Modal1"
     key: "Modal1"
     price_id: 1
     option_group_id: 1
-  - value: "Modal2"
+  - id: 2
+    value: "Modal2"
     key: "Modal2"
     price_id: 2
     option_group_id: 1
-  - value: "Update Red"
+  - id: 3
+    value: "Update Red"
     key: "Update Red"
     price_id: 4
     option_group_id: 2
-  - value: "Yellow"
+  - id: 5
+    value: "Yellow"
     key: "Yellow"
     price_id: 5
+    option_group_id: 2
+  - id: 6
+    value: "White"
+    key: "White"
+    price_id: 6
     option_group_id: 2

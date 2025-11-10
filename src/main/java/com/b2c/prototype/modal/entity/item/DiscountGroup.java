@@ -24,7 +24,39 @@ import java.util.Set;
 @Entity
 @Table(name = "discount_group")
 @NamedQueries({
-
+        @NamedQuery(
+                name = "DiscountGroup.findAll",
+                query = "SELECT dg FROM DiscountGroup dg " +
+                        "LEFT JOIN FETCH dg.region r " +
+                        "LEFT JOIN FETCH dg.discounts d " +
+                        "LEFT JOIN FETCH d.currency dc " +
+                        "LEFT JOIN FETCH d.articularItemList da "
+        ),
+        @NamedQuery(
+                name = "DiscountGroup.findByKey",
+                query = "SELECT dg FROM DiscountGroup dg " +
+                        "LEFT JOIN FETCH dg.region r " +
+                        "LEFT JOIN FETCH dg.discounts d " +
+                        "LEFT JOIN FETCH d.currency dc " +
+                        "LEFT JOIN FETCH d.articularItemList da " +
+                        "WHERE dg.key = :key"
+        ),
+        @NamedQuery(
+                name = "DiscountGroup.findByDiscountCharSequenceCode",
+                query = "SELECT ai FROM ArticularItem ai " +
+                        "LEFT JOIN FETCH ai.discount d " +
+                        "LEFT JOIN FETCH d.articularItemList " +
+                        "LEFT JOIN FETCH d.currency " +
+                        "WHERE d.charSequenceCode = :charSequenceCode"
+        ),
+        @NamedQuery(
+                name = "DiscountGroup.findByDiscountNotNull",
+                query = "SELECT ai FROM ArticularItem ai " +
+                        "LEFT JOIN FETCH ai.discount d " +
+                        "LEFT JOIN FETCH d.articularItemList " +
+                        "LEFT JOIN FETCH d.currency " +
+                        "WHERE ai.discount IS NOT NULL"
+        )
 })
 @Data
 @Builder

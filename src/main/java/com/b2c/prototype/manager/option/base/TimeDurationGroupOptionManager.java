@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +53,7 @@ public class TimeDurationGroupOptionManager implements ITimeDurationGroupOptionM
                 "OptionGroup.findByValueWithOptionItems",
                 Pair.of(KEY, searchValue)
         );
-        OptionGroup entity = syncItemsAllowingValueChange(searchValue, group, timeDurationOptionGroupDto);
+        OptionGroup entity = syncItemsAllowingKeyChange(searchValue, group, timeDurationOptionGroupDto);
         generalEntityDao.mergeEntity(entity);
     }
 
@@ -76,7 +77,7 @@ public class TimeDurationGroupOptionManager implements ITimeDurationGroupOptionM
                 "OptionGroup.withOptionItems", (Pair<String, ?>) null);
     }
 
-    private OptionGroup syncItemsAllowingValueChange(String searchValue, OptionGroup group, TimeDurationOptionGroupDto dto) {
+    private OptionGroup syncItemsAllowingKeyChange(String searchValue, OptionGroup group, TimeDurationOptionGroupDto dto) {
         if (group == null) {
             throw new IllegalArgumentException("OptionGroup not found by old value: " + searchValue);
         }
@@ -88,20 +89,16 @@ public class TimeDurationGroupOptionManager implements ITimeDurationGroupOptionM
                 .filter(t -> t.getKey() != null)
                 .collect(toMap(TimeDurationOption::getKey, Function.identity(), (a, b) -> a, LinkedHashMap::new));
 
-        final Set<TimeDurationOption> matchedExisting = new HashSet<>();
+        final Set<TimeDurationOption> matchedExisting = Collections.newSetFromMap(new IdentityHashMap<>());
         final List<TimeDurationOptionDto> incoming = Optional.ofNullable(dto.getTimeDurationOptions())
                 .orElseGet(Collections::emptyList);
 
-        // UPDATE EXISTING
         incoming.forEach(itemDto -> {
             if (itemDto == null) return;
-            final String lookupKey = itemDto.getSearchValue() != null ? itemDto.getSearchValue() : itemDto.getKey();
+            final String lookupKey = itemDto.getSearchKey() != null ? itemDto.getSearchKey() : itemDto.getKey();
             TimeDurationOption existing = lookupKey == null ? null : currentByValue.get(lookupKey);
 
             if (existing != null) {
-                if (itemDto.getValue() != null) existing.setValue(itemDto.getValue());
-                if (itemDto.getKey() != null) existing.setKey(itemDto.getKey());
-                // rename (guard against collision)
                 if (itemDto.getKey() != null && !itemDto.getKey().equals(existing.getKey())) {
                     if (currentByValue.containsKey(itemDto.getKey()) && currentByValue.get(itemDto.getKey()) != existing) {
                         throw new IllegalStateException("TimeDurationOption value collision on rename: " + itemDto.getKey());
@@ -111,7 +108,9 @@ public class TimeDurationGroupOptionManager implements ITimeDurationGroupOptionM
                     currentByValue.put(existing.getKey(), existing);
                 }
 
-                // times + duration
+                if (itemDto.getValue() != null) existing.setValue(itemDto.getValue());
+                if (itemDto.getKey() != null) existing.setKey(itemDto.getKey());
+
                 if (itemDto.getStartTime() != null) existing.setStartTime(itemDto.getStartTime());
                 if (itemDto.getEndTime() != null) existing.setEndTime(itemDto.getEndTime());
                 if (itemDto.getTimeZone() != null) existing.setTimeZone(itemDto.getTimeZone());
@@ -121,7 +120,6 @@ public class TimeDurationGroupOptionManager implements ITimeDurationGroupOptionM
                     );
                 }
 
-                // price update (no manual IDs; cascade handles insert/update)
                 if (itemDto.getPrice() != null) {
                     Price p = existing.getPrice();
                     if (p == null) {
@@ -143,10 +141,9 @@ public class TimeDurationGroupOptionManager implements ITimeDurationGroupOptionM
             }
         });
 
-        // CREATE NEW (unchanged from your code)
         incoming.stream()
                 .filter(Objects::nonNull)
-                .filter(d -> d.getSearchValue() == null)
+                .filter(d -> d.getSearchKey() == null)
                 .forEach(d -> {
                     final String newKey = d.getKey();
                     if (newKey == null || newKey.trim().isEmpty()) {

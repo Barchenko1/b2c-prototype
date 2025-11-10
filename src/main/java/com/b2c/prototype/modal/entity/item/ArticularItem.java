@@ -46,6 +46,19 @@ import java.util.Set;
                         "LEFT JOIN FETCH d.currency"
         ),
         @NamedQuery(
+                name = "ArticularItem.full",
+                query = "SELECT DISTINCT ai FROM ArticularItem ai " +
+                        "LEFT JOIN FETCH ai.optionItems oi " +
+                        "LEFT JOIN FETCH oi.optionGroup og " +
+                        "LEFT JOIN FETCH ai.fullPrice fp " +
+                        "LEFT JOIN FETCH fp.currency " +
+                        "LEFT JOIN FETCH ai.totalPrice tp " +
+                        "LEFT JOIN FETCH tp.currency " +
+                        "LEFT JOIN FETCH ai.status s " +
+                        "LEFT JOIN FETCH ai.discount d " +
+                        "LEFT JOIN FETCH d.currency"
+        ),
+        @NamedQuery(
                 name = "ArticularItem.optionItems",
                 query = "SELECT DISTINCT ai FROM ArticularItem ai " +
                         "LEFT JOIN FETCH ai.optionItems oi " +
@@ -62,19 +75,6 @@ import java.util.Set;
                         "LEFT JOIN FETCH d.currency c " +
                         "WHERE ai.articularUniqId = :articularId"
         ),
-//        @NamedQuery(
-//                name = "ArticularItem.findItemDataByArticularId",
-//                query = "SELECT DISTINCT id FROM MetaData id " +
-//                        "LEFT JOIN FETCH id.articularItemSet ai " +
-//                        "LEFT JOIN FETCH ai.fullPrice fp " +
-//                        "LEFT JOIN FETCH fp.currency " +
-//                        "LEFT JOIN FETCH ai.totalPrice tp " +
-//                        "LEFT JOIN FETCH tp.currency " +
-//                        "LEFT JOIN FETCH ai.discount d " +
-//                        "LEFT JOIN FETCH d.currency " +
-//                        "LEFT JOIN FETCH d.articularItemList da " +
-//                        "WHERE :articularUniqId IN (SELECT a.articularUniqId FROM id.articularItemSet a)"
-//        ),
         @NamedQuery(
                 name = "ArticularItem.findByOptionItemValueAndGroup",
                 query = "SELECT ai FROM ArticularItem ai " +
@@ -97,7 +97,7 @@ import java.util.Set;
                         "LEFT JOIN FETCH tp.currency " +
                         "LEFT JOIN FETCH ai.discount d " +
                         "LEFT JOIN FETCH d.currency " +
-                        "WHERE ai.articularUniqId IN :articularIds"
+                        "WHERE ai.articularUniqId IN :articularId"
         )
 
 })

@@ -24,8 +24,8 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
     @DataSet(value = "datasets/e2e/item/discount/emptyE2EDiscountGroupDataSet.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/e2e/item/discount/testE2EDiscountGroupDataSet.yml", orderBy = "id")
     @Sql(statements = {
-            "ALTER SEQUENCE discount_id_seq RESTART WITH 2",
             "ALTER SEQUENCE discount_group_id_seq RESTART WITH 2",
+            "ALTER SEQUENCE discount_id_seq RESTART WITH 2",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void testCreateEntity() {
         DiscountGroupDto dto = getDiscountGroupDto();
@@ -42,15 +42,18 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
 
     @Test
     @DataSet(value = "datasets/e2e/item/discount/testE2EDiscountGroupDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/item/discount/updateE2EDiscountGroupDataSet.yml", orderBy = "id")
-    public void testUpdateEntity() {
-        DiscountGroupDto discountGroupDto = getUpdateDiscountGroupDto();
+    @ExpectedDataSet(value = "datasets/e2e/item/discount/updateE2EDiscountGroupDataSetMore.yml", orderBy = "id")
+    @Sql(statements = {
+            "ALTER SEQUENCE discount_id_seq RESTART WITH 4"
+    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    public void testUpdateEntityMore() {
+        DiscountGroupDto discountGroupDto = getUpdateDiscountGroupDtoMore();
         String jsonPayload = writeValueAsString(discountGroupDto);
 
         webTestClient.put()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("key", "Apple")
+                        .queryParam("key", "Global_group")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -61,15 +64,15 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
 
     @Test
     @DataSet(value = "datasets/e2e/item/discount/testE2EDiscountGroupDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/item/discount/updateE2EDiscountGroupDataSet.yml", orderBy = "id")
-    public void testPatchEntity() {
-        DiscountGroupDto discountGroupDto = getUpdateDiscountGroupDto();
+    @ExpectedDataSet(value = "datasets/e2e/item/discount/updateE2EDiscountGroupDataSetLess.yml", orderBy = "id")
+    public void testUpdateEntityLess() {
+        DiscountGroupDto discountGroupDto = getUpdateDiscountGroupDtoLess();
         String jsonPayload = writeValueAsString(discountGroupDto);
 
-        webTestClient.patch()
+        webTestClient.put()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("key", "Apple")
+                        .queryParam("key", "Global_group")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -85,7 +88,7 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
         webTestClient.delete()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("key", "Apple")
+                        .queryParam("key", "Global_group")
                         .build())
                 .accept(MediaType.TEXT_PLAIN)
                 .exchange()
@@ -97,12 +100,44 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
     public void testGetEntities() {
         List<DiscountGroupDto> expected = List.of(
                 DiscountGroupDto.builder()
-//                        .label("Android")
-//                        .value("Android")
+                        .key("Germany_group")
+                        .value("Germany_group")
+                        .regionCode("DE")
+                        .discounts(List.of(
+                                DiscountDto.builder()
+                                        .charSequenceCode("abc1")
+                                        .amount(10)
+                                        .currency(CurrencyDto.builder()
+                                                .key("EUR")
+                                                .value("EUR")
+                                                .build())
+                                        .isActive(true)
+                                        .articularIdSet(Set.of())
+                                        .build()))
                         .build(),
                 DiscountGroupDto.builder()
-//                        .label("Apple")
-//                        .value("Apple")
+                        .key("Global_group")
+                        .value("Global_group")
+                        .regionCode("Global")
+                        .discounts(List.of(
+                                DiscountDto.builder()
+                                        .charSequenceCode("abc2")
+                                        .amount(20)
+                                        .currency(CurrencyDto.builder()
+                                                .key("USD")
+                                                .value("USD")
+                                                .build())
+                                        .isActive(false)
+                                        .articularIdSet(Set.of())
+                                        .build(),
+                                DiscountDto.builder()
+                                        .charSequenceCode("abc3")
+                                        .amount(10)
+                                        .currency(null)
+                                        .isActive(false)
+                                        .isPercent(true)
+                                        .articularIdSet(Set.of())
+                                        .build()))
                         .build());
 
         List<DiscountGroupDto> actual =
@@ -126,14 +161,34 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
     @DataSet(value = "datasets/e2e/item/discount/testE2EDiscountGroupDataSet.yml", cleanBefore = true)
     public void testGetEntity() {
         DiscountGroupDto expected = DiscountGroupDto.builder()
-//                .label("Apple")
-//                .value("Apple")
+                .key("Global_group")
+                .value("Global_group")
+                .regionCode("Global")
+                .discounts(List.of(
+                        DiscountDto.builder()
+                                .charSequenceCode("abc2")
+                                .amount(20)
+                                .currency(CurrencyDto.builder()
+                                        .key("USD")
+                                        .value("USD")
+                                        .build())
+                                .isActive(false)
+                                .articularIdSet(Set.of())
+                                .build(),
+                        DiscountDto.builder()
+                                .charSequenceCode("abc3")
+                                .amount(10)
+                                .currency(null)
+                                .isActive(false)
+                                .isPercent(true)
+                                .articularIdSet(Set.of())
+                                .build()))
                 .build();
 
         DiscountGroupDto actual = webTestClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("key", "Apple")
+                        .queryParam("key", "Global_group")
                         .build())
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
@@ -153,11 +208,11 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
         return DiscountGroupDto.builder()
                 .key("Global_group")
                 .value("Global_group")
-                .regionCode("usa")
+                .regionCode("Global")
                 .discounts(List.of(
                         DiscountDto.builder()
                                 .charSequenceCode("abc2")
-                                .amount(10)
+                                .amount(20)
                                 .currency(CurrencyDto.builder()
                                         .key("USD")
                                         .value("USD")
@@ -176,30 +231,61 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
                 .build();
     }
 
-    private DiscountGroupDto getUpdateDiscountGroupDto() {
+    private DiscountGroupDto getUpdateDiscountGroupDtoMore() {
         return DiscountGroupDto.builder()
-                .key("Apple")
-                .value("")
-                .regionCode("usa")
+                .key("Update Global_group")
+                .value("Update Global_group")
+                .regionCode("DE")
                 .discounts(List.of(
                         DiscountDto.builder()
-                                .charSequenceCode("abc")
-                                .amount(10)
-                                .currency(CurrencyDto.builder()
-                                        .key("USD")
-                                        .value("USD")
-                                        .build())
+                                .searchKey("abc2")
+                                .charSequenceCode("Update abc2")
+                                .amount(2)
+                                .currency(null)
                                 .isActive(true)
+                                .isPercent(true)
                                 .articularIdSet(Set.of("123"))
                                 .build(),
                         DiscountDto.builder()
-                                .charSequenceCode("abc")
-                                .amount(10)
+                                .searchKey("abc3")
+                                .charSequenceCode("Update abc3")
+                                .amount(8)
                                 .currency(CurrencyDto.builder()
-                                        .key("USD")
-                                        .value("USD")
+                                        .key("EUR")
+                                        .value("EUR")
                                         .build())
                                 .isActive(true)
+                                .isPercent(false)
+                                .articularIdSet(Set.of("123"))
+                                .build(),
+                        DiscountDto.builder()
+                                .searchKey(null)
+                                .charSequenceCode("New abc4")
+                                .amount(5)
+                                .currency(CurrencyDto.builder()
+                                        .key("EUR")
+                                        .value("EUR")
+                                        .build())
+                                .isActive(true)
+                                .isPercent(false)
+                                .articularIdSet(Set.of("123"))
+                                .build()))
+                .build();
+    }
+
+    private DiscountGroupDto getUpdateDiscountGroupDtoLess() {
+        return DiscountGroupDto.builder()
+                .key("Update Global_group")
+                .value("Update Global_group")
+                .regionCode("DE")
+                .discounts(List.of(
+                        DiscountDto.builder()
+                                .searchKey("abc2")
+                                .charSequenceCode("Update abc2")
+                                .amount(2)
+                                .currency(null)
+                                .isActive(true)
+                                .isPercent(true)
                                 .articularIdSet(Set.of("123"))
                                 .build()))
                 .build();

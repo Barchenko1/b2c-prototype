@@ -29,37 +29,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "discount")
-@Check(
-        constraints = "(isPercent = true AND currency_id IS NULL) OR (isPercent = false AND currency_id IS NOT NULL)"
-)
-@NamedQueries({
-        @NamedQuery(
-                name = "Discount.all",
-                query = "SELECT d FROM Discount d"
-        ),
-        @NamedQuery(
-                name = "Discount.currency",
-                query = "SELECT d FROM Discount d " +
-                        "LEFT JOIN FETCH d.currency " +
-                        "WHERE d.charSequenceCode = :charSequenceCode"
-        ),
-        @NamedQuery(
-                name = "ArticularItem.findByDiscountCharSequenceCode",
-                query = "SELECT ai FROM ArticularItem ai " +
-                        "LEFT JOIN FETCH ai.discount d " +
-                        "LEFT JOIN FETCH d.articularItemList " +
-                        "LEFT JOIN FETCH d.currency " +
-                        "WHERE d.charSequenceCode = :charSequenceCode"
-        ),
-        @NamedQuery(
-                name = "ArticularItem.findByDiscountNotNull",
-                query = "SELECT ai FROM ArticularItem ai " +
-                        "LEFT JOIN FETCH ai.discount d " +
-                        "LEFT JOIN FETCH d.articularItemList " +
-                        "LEFT JOIN FETCH d.currency " +
-                        "WHERE ai.discount IS NOT NULL"
-        )
-})
+@Check(constraints = "(is_percent = true AND currency_id IS NULL) OR (is_percent = false AND currency_id IS NOT NULL)")
 @Data
 @Builder
 @AllArgsConstructor

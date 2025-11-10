@@ -113,8 +113,7 @@ public class CommissionManager implements ICommissionManager {
                 .toList();
 
         List<ArticularItem> articularItems = generalEntityDao.findEntityList(
-                "ArticularItem.findByArticularIds",
-                Pair.of("articularId", articularIdList));
+                "ArticularItem.findByArticularIds", Pair.of("articularId", articularIdList));
 
         if (optionalMinMaxCommission.isPresent()) {
             MinMaxCommission minMaxCommission = optionalMinMaxCommission.get();

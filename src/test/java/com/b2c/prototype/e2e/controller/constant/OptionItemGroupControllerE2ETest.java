@@ -39,21 +39,30 @@ public class OptionItemGroupControllerE2ETest extends BasicE2ETest {
     }
 
     @Test
-    @DataSet(value = "datasets/e2e/item/option_group/option_item/testUpdateE2EOptionItemGroupDataSet.yml", cleanBefore = true, disableConstraints = true)
-    @ExpectedDataSet(value = "datasets/e2e/item/option_group/option_item/updateE2EOptionItemGroupDataSet.yml", orderBy = "id")
-    public void testUpdateEntity() {
+    @DataSet(value = "datasets/e2e/item/option_group/option_item/testE2EOptionItemGroupDataSet.yml", cleanBefore = true, disableConstraints = true)
+    @ExpectedDataSet(value = "datasets/e2e/item/option_group/option_item/updateE2EOptionItemGroupDataSetMore.yml", orderBy = {"id"})
+    @Sql(statements = {
+            "ALTER SEQUENCE option_item_id_seq RESTART WITH 5",
+    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    public void testUpdateEntityMore() {
         OptionItemGroupDto constantPayloadDto = OptionItemGroupDto.builder()
                 .value("Update Color")
                 .key("Update Color")
                 .optionItems(List.of(
                         OptionItemDto.builder()
-                                .searchValue("Red")
+                                .searchKey("Red")
                                 .value("Update Red")
                                 .key("Update Red")
                                 .build(),
                         OptionItemDto.builder()
+                                .searchKey(null)
                                 .value("Yellow")
                                 .key("Yellow")
+                                .build(),
+                        OptionItemDto.builder()
+                                .searchKey(null)
+                                .value("White")
+                                .key("White")
                                 .build()
                         ))
                 .build();
@@ -72,21 +81,57 @@ public class OptionItemGroupControllerE2ETest extends BasicE2ETest {
     }
 
     @Test
-    @DataSet(value = "datasets/e2e/item/option_group/option_item/testUpdateE2EOptionItemGroupDataSet.yml", cleanBefore = true, disableConstraints = true)
-    @ExpectedDataSet(value = "datasets/e2e/item/option_group/option_item/updateE2EOptionItemGroupDataSet.yml", orderBy = "id", ignoreCols = {"id"})
+    @DataSet(value = "datasets/e2e/item/option_group/option_item/testE2EOptionItemGroupDataSet.yml", cleanBefore = true, disableConstraints = true)
+    @ExpectedDataSet(value = "datasets/e2e/item/option_group/option_item/updateE2EOptionItemGroupDataSetLess.yml", orderBy = "id")
+    public void testUpdateEntityLess() {
+        OptionItemGroupDto constantPayloadDto = OptionItemGroupDto.builder()
+                .value("Update Color")
+                .key("Update Color")
+                .optionItems(List.of(
+                        OptionItemDto.builder()
+                                .searchKey("Red")
+                                .value("Update Red")
+                                .key("Update Red")
+                                .build()
+                ))
+                .build();
+
+        String jsonPayload = writeValueAsString(constantPayloadDto);
+        webTestClient.put()
+                .uri(uriBuilder -> uriBuilder
+                        .path(URL_TEMPLATE)
+                        .queryParam("key", "Color")
+                        .build())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .bodyValue(jsonPayload)
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    @DataSet(value = "datasets/e2e/item/option_group/option_item/testE2EOptionItemGroupDataSet.yml", cleanBefore = true, disableConstraints = true)
+    @ExpectedDataSet(value = "datasets/e2e/item/option_group/option_item/updateE2EOptionItemGroupDataSetMore.yml", orderBy = "id", ignoreCols = {"id"})
+    @Sql(statements = {
+            "ALTER SEQUENCE option_item_id_seq RESTART WITH 5",
+    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void testPatchEntity() {
         OptionItemGroupDto constantPayloadDto = OptionItemGroupDto.builder()
                 .value("Update Color")
                 .key("Update Color")
                 .optionItems(List.of(
                         OptionItemDto.builder()
-                                .searchValue("Red")
+                                .searchKey("Red")
                                 .value("Update Red")
                                 .key("Update Red")
                                 .build(),
                         OptionItemDto.builder()
                                 .value("Yellow")
                                 .key("Yellow")
+                                .build(),
+                        OptionItemDto.builder()
+                                .value("White")
+                                .key("White")
                                 .build()
                 ))
                 .build();
@@ -127,12 +172,12 @@ public class OptionItemGroupControllerE2ETest extends BasicE2ETest {
                         .key("Color")
                         .optionItems(List.of(
                                 OptionItemDto.builder()
-                                        .searchValue("Red")
+                                        .searchKey("Red")
                                         .value("Red")
                                         .key("Red")
                                         .build(),
                                 OptionItemDto.builder()
-                                        .searchValue("Blue")
+                                        .searchKey("Blue")
                                         .value("Blue")
                                         .key("Blue")
                                         .build()))
@@ -142,12 +187,12 @@ public class OptionItemGroupControllerE2ETest extends BasicE2ETest {
                         .key("Modal")
                         .optionItems(List.of(
                                 OptionItemDto.builder()
-                                        .searchValue("Modal1")
+                                        .searchKey("Modal1")
                                         .value("Modal1")
                                         .key("Modal1")
                                         .build(),
                                 OptionItemDto.builder()
-                                        .searchValue("Modal2")
+                                        .searchKey("Modal2")
                                         .value("Modal2")
                                         .key("Modal2")
                                         .build()
@@ -178,12 +223,12 @@ public class OptionItemGroupControllerE2ETest extends BasicE2ETest {
                 .key("Color")
                 .optionItems(List.of(
                         OptionItemDto.builder()
-                                .searchValue("Red")
+                                .searchKey("Red")
                                 .value("Red")
                                 .key("Red")
                                 .build(),
                         OptionItemDto.builder()
-                                .searchValue("Blue")
+                                .searchKey("Blue")
                                 .value("Blue")
                                 .key("Blue")
                                 .build()))

@@ -46,11 +46,29 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
 
     @Test
     @DataSet(value = "datasets/e2e/order/option_group/time_duration_option/testUpdateE2ETimeDurationOptionGroupDataSet.yml", cleanBefore = true, disableConstraints = true)
-    @ExpectedDataSet(value = "datasets/e2e/order/option_group/time_duration_option/updateE2ETimeDurationOptionDataSet.yml", orderBy = "id", ignoreCols = {"id"})
+    @ExpectedDataSet(value = "datasets/e2e/order/option_group/time_duration_option/updateE2ETimeDurationOptionDataSetMore.yml", orderBy = "id", ignoreCols = {"id"})
     @Sql(statements = "ALTER SEQUENCE price_id_seq RESTART WITH 5",
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    public void testUpdateEntity() {
-        TimeDurationOptionGroupDto constantPayloadDto = getUpdateTimeDurationOptionDto();
+    public void testUpdateEntityMore() {
+        TimeDurationOptionGroupDto constantPayloadDto = getUpdateTimeDurationOptionDtoMore();
+        String jsonPayload = writeValueAsString(constantPayloadDto);
+        webTestClient.put()
+                .uri(uriBuilder -> uriBuilder
+                        .path(URL_TEMPLATE)
+                        .queryParam(KEY, "NY")
+                        .build())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .bodyValue(jsonPayload)
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    @DataSet(value = "datasets/e2e/order/option_group/time_duration_option/testUpdateE2ETimeDurationOptionGroupDataSet.yml", cleanBefore = true, disableConstraints = true)
+    @ExpectedDataSet(value = "datasets/e2e/order/option_group/time_duration_option/updateE2ETimeDurationOptionDataSetLess.yml", orderBy = "id", ignoreCols = {"id"})
+    public void testUpdateEntityLess() {
+        TimeDurationOptionGroupDto constantPayloadDto = getUpdateTimeDurationOptionDtoLess();
         String jsonPayload = writeValueAsString(constantPayloadDto);
         webTestClient.put()
                 .uri(uriBuilder -> uriBuilder
@@ -83,7 +101,7 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
     public void testGetEntity() {
         TimeDurationOptionGroupDto expected = getTimeDurationOptionGroupDto();
         expected.getTimeDurationOptions().forEach(timeDurationOptionDto -> {
-            timeDurationOptionDto.setSearchValue(timeDurationOptionDto.getKey());
+            timeDurationOptionDto.setSearchKey(timeDurationOptionDto.getKey());
         });
         TimeDurationOptionGroupDto actual = webTestClient.get()
                 .uri(uriBuilder -> uriBuilder
@@ -178,7 +196,7 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
         expected.forEach(optionGroup ->
                 optionGroup.getTimeDurationOptions().forEach(
                 timeDurationOptionDto ->
-                        timeDurationOptionDto.setSearchValue(timeDurationOptionDto.getKey())));
+                        timeDurationOptionDto.setSearchKey(timeDurationOptionDto.getKey())));
 
         List<TimeDurationOptionGroupDto> actual = webTestClient.get()
                 .uri(URL_TEMPLATE + "/all")
@@ -233,13 +251,13 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
                 .build();
     }
 
-    private TimeDurationOptionGroupDto getUpdateTimeDurationOptionDto() {
+    private TimeDurationOptionGroupDto getUpdateTimeDurationOptionDtoMore() {
         return TimeDurationOptionGroupDto.builder()
                 .value("NY")
                 .key("NY")
                 .timeDurationOptions(List.of(
                         TimeDurationOptionDto.builder()
-                                .searchValue("NY_12-14")
+                                .searchKey("NY_12-14")
                                 .value("Update 12-14")
                                 .key("Update 12-14")
                                 .startTime(getLocalDateTime("1970-01-01 12:00:00"))
@@ -254,7 +272,7 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
                                         .build())
                                 .build(),
                         TimeDurationOptionDto.builder()
-                                .searchValue(null)
+                                .searchKey(null)
                                 .value("16-18")
                                 .key("NY_16-18")
                                 .startTime(getLocalDateTime("1970-01-01 16:00:00"))
@@ -267,8 +285,31 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
                                                 .key("USD")
                                                 .build())
                                         .build())
+                                .build(),
+                        TimeDurationOptionDto.builder()
+                                .searchKey(null)
+                                .value("18-20")
+                                .key("NY_18-20")
+                                .startTime(getLocalDateTime("1970-01-01 18:00:00"))
+                                .endTime(getLocalDateTime("1970-01-01 20:00:00"))
+                                .timeZone(ZoneId.of("UTC"))
+                                .price(PriceDto.builder()
+                                        .amount(30.0)
+                                        .currency(CurrencyDto.builder()
+                                                .value("USD")
+                                                .key("USD")
+                                                .build())
+                                        .build())
                                 .build()
                 ))
+                .build();
+    }
+
+    private TimeDurationOptionGroupDto getUpdateTimeDurationOptionDtoLess() {
+        return TimeDurationOptionGroupDto.builder()
+                .value("NY")
+                .key("NY")
+                .timeDurationOptions(List.of())
                 .build();
     }
 

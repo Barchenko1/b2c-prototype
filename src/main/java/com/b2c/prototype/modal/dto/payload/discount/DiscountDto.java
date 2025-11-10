@@ -17,6 +17,7 @@ import java.util.Set;
 @JsonIgnoreProperties
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DiscountDto {
+    private String searchKey;
     private String charSequenceCode;
     private double amount;
     private boolean isActive;

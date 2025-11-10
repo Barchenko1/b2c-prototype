@@ -43,14 +43,18 @@ public class OptionItemCostGroupControllerE2ETest extends BasicE2ETest {
 
     @Test
     @DataSet(value = "datasets/e2e/item/option_group/option_item_cost/testE2EOptionItemCostGroupDataSet.yml", cleanBefore = true, disableConstraints = true)
-    @ExpectedDataSet(value = "datasets/e2e/item/option_group/option_item_cost/updateE2EOptionItemCostGroupDataSet.yml", orderBy = "id", ignoreCols = {"id","price_id"})
-    public void testUpdateEntity() {
+    @ExpectedDataSet(value = "datasets/e2e/item/option_group/option_item_cost/updateE2EOptionItemCostGroupDataSetMore.yml", orderBy = "id", ignoreCols = {"id","price_id"})
+    @Sql(statements = {
+            "ALTER SEQUENCE option_item_cost_id_seq RESTART WITH 5",
+            "ALTER SEQUENCE price_id_seq RESTART WITH 5"
+    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    public void testUpdateEntityMore() {
         OptionItemCostGroupDto constantPayloadDto = OptionItemCostGroupDto.builder()
                 .value("Update Color")
                 .key("Update Color")
                 .optionItemCosts(List.of(
                         OptionItemCostDto.builder()
-                                .searchValue("Red")
+                                .searchKey("Red")
                                 .value("Update Red")
                                 .key("Update Red")
                                 .price(PriceDto.builder()
@@ -62,11 +66,57 @@ public class OptionItemCostGroupControllerE2ETest extends BasicE2ETest {
                                         .build())
                                 .build(),
                         OptionItemCostDto.builder()
-                                .searchValue(null)
                                 .value("Yellow")
                                 .key("Yellow")
                                 .price(PriceDto.builder()
                                         .amount(30.0)
+                                        .currency(CurrencyDto.builder()
+                                                .value("USD")
+                                                .key("USD")
+                                                .build())
+                                        .build())
+                                .build(),
+                        OptionItemCostDto.builder()
+                                .value("White")
+                                .key("White")
+                                .price(PriceDto.builder()
+                                        .amount(30.0)
+                                        .currency(CurrencyDto.builder()
+                                                .value("USD")
+                                                .key("USD")
+                                                .build())
+                                        .build())
+                                .build()
+                ))
+                .build();
+
+        String jsonPayload = writeValueAsString(constantPayloadDto);
+        webTestClient.put()
+                .uri(uriBuilder -> uriBuilder
+                        .path(URL_TEMPLATE)
+                        .queryParam("key", "Color")
+                        .build())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .bodyValue(jsonPayload)
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    @DataSet(value = "datasets/e2e/item/option_group/option_item_cost/testE2EOptionItemCostGroupDataSet.yml", cleanBefore = true, disableConstraints = true)
+    @ExpectedDataSet(value = "datasets/e2e/item/option_group/option_item_cost/updateE2EOptionItemCostGroupDataSetLess.yml", orderBy = "id", ignoreCols = {"id","price_id"})
+    public void testUpdateEntityLess() {
+        OptionItemCostGroupDto constantPayloadDto = OptionItemCostGroupDto.builder()
+                .value("Update Color")
+                .key("Update Color")
+                .optionItemCosts(List.of(
+                        OptionItemCostDto.builder()
+                                .searchKey("Red")
+                                .value("Update Red")
+                                .key("Update Red")
+                                .price(PriceDto.builder()
+                                        .amount(20.0)
                                         .currency(CurrencyDto.builder()
                                                 .value("USD")
                                                 .key("USD")
@@ -91,14 +141,18 @@ public class OptionItemCostGroupControllerE2ETest extends BasicE2ETest {
 
     @Test
     @DataSet(value = "datasets/e2e/item/option_group/option_item_cost/testE2EOptionItemCostGroupDataSet.yml", cleanBefore = true, disableConstraints = true)
-    @ExpectedDataSet(value = "datasets/e2e/item/option_group/option_item_cost/updateE2EOptionItemCostGroupDataSet.yml", orderBy = "id", ignoreCols = {"id","price_id"})
+    @ExpectedDataSet(value = "datasets/e2e/item/option_group/option_item_cost/updateE2EOptionItemCostGroupDataSetMore.yml", orderBy = "id", ignoreCols = {"id","price_id"})
+    @Sql(statements = {
+            "ALTER SEQUENCE option_item_cost_id_seq RESTART WITH 5",
+            "ALTER SEQUENCE price_id_seq RESTART WITH 5"
+    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void testPatchEntity() {
         OptionItemCostGroupDto constantPayloadDto = OptionItemCostGroupDto.builder()
                 .value("Update Color")
                 .key("Update Color")
                 .optionItemCosts(List.of(
                         OptionItemCostDto.builder()
-                                .searchValue("Red")
+                                .searchKey("Red")
                                 .value("Update Red")
                                 .key("Update Red")
                                 .price(PriceDto.builder()
@@ -110,7 +164,7 @@ public class OptionItemCostGroupControllerE2ETest extends BasicE2ETest {
                                         .build())
                                 .build(),
                         OptionItemCostDto.builder()
-                                .searchValue(null)
+                                .searchKey(null)
                                 .value("Yellow")
                                 .key("Yellow")
                                 .price(PriceDto.builder()
@@ -120,7 +174,20 @@ public class OptionItemCostGroupControllerE2ETest extends BasicE2ETest {
                                                 .key("USD")
                                                 .build())
                                         .build())
-                                .build()))
+                                .build(),
+                        OptionItemCostDto.builder()
+                                .searchKey(null)
+                                .value("White")
+                                .key("White")
+                                .price(PriceDto.builder()
+                                        .amount(30.0)
+                                        .currency(CurrencyDto.builder()
+                                                .value("USD")
+                                                .key("USD")
+                                                .build())
+                                        .build())
+                                .build())
+                )
                 .build();
 
         String jsonPayload = writeValueAsString(constantPayloadDto);
@@ -159,7 +226,7 @@ public class OptionItemCostGroupControllerE2ETest extends BasicE2ETest {
                         .key("Color")
                         .optionItemCosts(List.of(
                                 OptionItemCostDto.builder()
-                                        .searchValue("Red")
+                                        .searchKey("Red")
                                         .value("Red")
                                         .key("Red")
                                         .price(PriceDto.builder()
@@ -171,7 +238,7 @@ public class OptionItemCostGroupControllerE2ETest extends BasicE2ETest {
                                                 .build())
                                         .build(),
                                 OptionItemCostDto.builder()
-                                        .searchValue("Blue")
+                                        .searchKey("Blue")
                                         .value("Blue")
                                         .key("Blue")
                                         .price(PriceDto.builder()
@@ -189,7 +256,7 @@ public class OptionItemCostGroupControllerE2ETest extends BasicE2ETest {
                         .key("Modal")
                         .optionItemCosts(List.of(
                                 OptionItemCostDto.builder()
-                                        .searchValue("Modal1")
+                                        .searchKey("Modal1")
                                         .value("Modal1")
                                         .key("Modal1")
                                         .price(PriceDto.builder()
@@ -201,7 +268,7 @@ public class OptionItemCostGroupControllerE2ETest extends BasicE2ETest {
                                                 .build())
                                         .build(),
                                 OptionItemCostDto.builder()
-                                        .searchValue("Modal2")
+                                        .searchKey("Modal2")
                                         .value("Modal2")
                                         .key("Modal2")
                                         .price(PriceDto.builder()
@@ -239,7 +306,7 @@ public class OptionItemCostGroupControllerE2ETest extends BasicE2ETest {
                 .key("Color")
                 .optionItemCosts(List.of(
                         OptionItemCostDto.builder()
-                                .searchValue("Red")
+                                .searchKey("Red")
                                 .value("Red")
                                 .key("Red")
                                 .price(PriceDto.builder()
@@ -251,7 +318,7 @@ public class OptionItemCostGroupControllerE2ETest extends BasicE2ETest {
                                         .build())
                                 .build(),
                         OptionItemCostDto.builder()
-                                .searchValue("Blue")
+                                .searchKey("Blue")
                                 .value("Blue")
                                 .key("Blue")
                                 .price(PriceDto.builder()
@@ -289,7 +356,7 @@ public class OptionItemCostGroupControllerE2ETest extends BasicE2ETest {
                 .key("Color")
                 .optionItemCosts(List.of(
                         OptionItemCostDto.builder()
-                                .searchValue(null)
+                                .searchKey(null)
                                 .value("Red")
                                 .key("Red")
                                 .price(PriceDto.builder()
@@ -301,7 +368,7 @@ public class OptionItemCostGroupControllerE2ETest extends BasicE2ETest {
                                         .build())
                                 .build(),
                         OptionItemCostDto.builder()
-                                .searchValue(null)
+                                .searchKey(null)
                                 .value("Blue")
                                 .key("Blue")
                                 .price(PriceDto.builder()

@@ -13,11 +13,8 @@ price:
   - id: 2
     amount: 10.0
     currency_id: 1
-  - id: 3
-    amount: 30.0
-    currency_id: 1
   - id: 4
-    amount: 20.0
+    amount: 30.0
     currency_id: 1
 zone_option_group:
   - id: 1
@@ -44,10 +41,5 @@ zone_option:
   - id: 3
     key: "NY-ZoneC"
     value: "NY-ZoneC"
-    price_id: 3
-    option_group_id: 2
-  - id: 4
-    key: "NY-ZoneB2"
-    value: "NY-ZoneB2"
     price_id: 4
     option_group_id: 2

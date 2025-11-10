@@ -51,10 +51,6 @@ import lombok.experimental.SuperBuilder;
         )
 })
 public class ZoneOption extends AbstractConstantEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false, nullable = false)
-    private long id;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(nullable = false)
     private Price price;

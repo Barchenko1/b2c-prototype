@@ -2,7 +2,6 @@ package com.b2c.prototype.modal.entity.payment;
 
 import com.b2c.prototype.modal.constant.FeeType;
 import com.b2c.prototype.modal.entity.price.Currency;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -23,7 +22,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(
         name = "commission_value"
-//        uniqueConstraints = @UniqueConstraint(columnNames = {"amount", "fee_type", "currency_id"})
 )
 @Data
 @Builder

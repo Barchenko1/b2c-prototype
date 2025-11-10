@@ -26,15 +26,15 @@ public class DiscountGroupProcess implements IDiscountGroupProcess {
     @Override
     public void updateDiscountGroup(Map<String, String> requestParams, DiscountGroupDto discountGroupDto) {
         String articularId = requestParams.get("articularId");
-        String charSequenceCode = requestParams.get("charSequenceCode");
-        if (articularId != null && charSequenceCode != null) {
+        String key = requestParams.get("key");
+        if (articularId != null && key != null) {
             throw new RuntimeException("Only one of 'articularId' or 'charSequenceCode' can be provided");
         }
         if (articularId != null) {
             discountManager.updateArticularDiscount(articularId, discountGroupDto);
         }
-        if (charSequenceCode != null) {
-            discountManager.updateDiscountGroup(charSequenceCode, discountGroupDto);
+        if (key != null) {
+            discountManager.updateDiscountGroup(key, discountGroupDto);
         }
     }
 
@@ -44,15 +44,15 @@ public class DiscountGroupProcess implements IDiscountGroupProcess {
     }
 
     @Override
-    public void deleteDiscountGroup(Map<String, String> requestParams) {
-        String charSequenceCode = requestParams.get("charSequenceCode");
-        discountManager.deleteDiscount(charSequenceCode);
+    public void removeDiscountGroup(Map<String, String> requestParams) {
+        String key = requestParams.get("key");
+        discountManager.removeDiscountGroup(key);
     }
 
     @Override
     public DiscountGroupDto getDiscountGroup(Map<String, String> requestParams) {
-        String charSequenceCode = requestParams.get("charSequenceCode");
-        return discountManager.getDiscountGroup(charSequenceCode);
+        String key = requestParams.get("key");
+        return discountManager.getDiscountGroup(key);
     }
 
     @Override

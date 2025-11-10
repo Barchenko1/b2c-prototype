@@ -80,8 +80,7 @@ public class ArticularItemManager implements IArticularItemManager {
     @Override
     public List<ResponseArticularItemDto> getResponseArticularItemDtoFiltered() {
         List<ArticularItem> articularItemList= generalEntityDao.findEntityList(
-                "ArticularItem.full",
-                (Pair<String, ?>) null);
+                "ArticularItem.full", (Pair<String, ?>) null);
 
         return articularItemList.stream()
                 .map(itemTransformService::mapArticularItemToResponseArticularItem)

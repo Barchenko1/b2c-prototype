@@ -16,14 +16,12 @@ import com.b2c.prototype.modal.entity.option.ZoneOption;
 import com.b2c.prototype.modal.entity.option.ZoneOptionGroup;
 import com.b2c.prototype.modal.entity.order.CustomerSingleDeliveryOrder;
 import com.b2c.prototype.modal.entity.payment.CurrencyCoefficient;
-import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 import static com.b2c.prototype.util.Constant.KEY;
@@ -74,7 +72,7 @@ public class OrderTransformService implements IOrderTransformService {
                 .key(optionGroup.getKey())
                 .timeDurationOptions(optionGroup.getTimeDurationOptions().stream()
                         .map(timeDurationOption -> TimeDurationOptionDto.builder()
-                                .searchValue(timeDurationOption.getKey())
+                                .searchKey(timeDurationOption.getKey())
                                 .value(timeDurationOption.getValue())
                                 .key(timeDurationOption.getKey())
                                 .startTime(timeDurationOption.getStartTime())
@@ -131,7 +129,7 @@ public class OrderTransformService implements IOrderTransformService {
                 .city(zoneOptionGroup.getCity())
                 .zoneOptions(zoneOptionGroup.getZoneOptions().stream()
                         .map(zoneOption -> ZoneOptionDto.builder()
-                                .searchValue(zoneOption.getKey())
+                                .searchKey(zoneOption.getKey())
                                 .key(zoneOption.getKey())
                                 .value(zoneOption.getValue())
                                 .price(PriceDto.builder()

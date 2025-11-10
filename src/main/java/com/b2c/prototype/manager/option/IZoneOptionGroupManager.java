@@ -6,7 +6,7 @@ import com.b2c.prototype.modal.entity.option.ZoneOptionGroup;
 import java.util.List;
 import java.util.Optional;
 
-public interface IZoneOptionManager {
+public interface IZoneOptionGroupManager {
     void persistEntity(ZoneOptionGroupDto zoneOptionGroup);
     void mergeEntity(String value, ZoneOptionGroupDto zoneOptionGroupDto);
     void removeEntity(String value);

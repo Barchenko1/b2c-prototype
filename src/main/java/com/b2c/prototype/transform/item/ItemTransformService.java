@@ -32,10 +32,8 @@ import com.b2c.prototype.modal.entity.store.Store;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 import static com.b2c.prototype.util.Constant.CODE;
 import static com.b2c.prototype.util.Constant.KEY;
 import static java.util.stream.Collectors.toList;
@@ -126,7 +124,7 @@ public class ItemTransformService implements IItemTransformService {
                 .key(optionGroup.getKey())
                 .optionItems(optionGroup.getOptionItems().stream()
                         .map(optionItem -> OptionItemDto.builder()
-                                .searchValue(optionItem.getKey())
+                                .searchKey(optionItem.getKey())
                                 .value(optionItem.getValue())
                                 .key(optionItem.getKey())
                                 .build())
@@ -165,7 +163,7 @@ public class ItemTransformService implements IItemTransformService {
                 .key(optionGroup.getKey())
                 .optionItemCosts(optionGroup.getOptionItemCosts().stream()
                         .map(optionItemCost -> OptionItemCostDto.builder()
-                                .searchValue(optionItemCost.getKey())
+                                .searchKey(optionItemCost.getKey())
                                 .value(optionItemCost.getValue())
                                 .key(optionItemCost.getKey())
                                 .price(PriceDto.builder()
@@ -194,13 +192,12 @@ public class ItemTransformService implements IItemTransformService {
                                 .amount(discountDto.getAmount())
                                 .isPercent(discountDto.isPercent())
                                 .isActive(discountDto.isActive())
-                                .currency(generalEntityDao.findEntity("Currency.findByKey",
-                                        Pair.of(KEY, discountDto.getCurrency())))
-                                .articularItemList(discountDto.getArticularIdSet().stream()
-                                        .map(articularId -> generalEntityDao.<ArticularItem>findEntity(
-                                                "ArticularItem.findById", Pair.of(ARTICULAR_ID, articularId)
-                                        ))
-                                        .collect(Collectors.toList()))
+                                .currency(discountDto.getCurrency() != null ?
+                                        generalEntityDao.findEntity("Currency.findByKey",
+                                                Pair.of(KEY, discountDto.getCurrency().getKey()))
+                                        : null)
+                                .articularItemList(generalEntityDao.findEntityList("ArticularItem.findByArticularIds",
+                                                Pair.of("articularId", discountDto.getArticularIdSet())))
                                 .build())
                         .collect(Collectors.toSet())
                 )
@@ -222,8 +219,12 @@ public class ItemTransformService implements IItemTransformService {
                                 .amount(discount.getAmount())
                                 .isPercent(discount.isPercent())
                                 .isActive(discount.isActive())
-                                .currency(generalEntityDao.findEntity("Currency.findByKey",
-                                        Pair.of(KEY, discount.getCurrency())))
+                                .currency(discount.getCurrency() != null
+                                        ? CurrencyDto.builder()
+                                            .key(discount.getCurrency().getKey())
+                                            .value(discount.getCurrency().getValue())
+                                            .build()
+                                        : null)
                                 .articularIdSet(discount.getArticularItemList().stream()
                                         .map(ArticularItem::getArticularUniqId)
                                         .collect(Collectors.toSet()))

@@ -55,7 +55,7 @@ public class DiscountGroupController {
 
     @DeleteMapping(produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<Void> deleteDiscountGroup(@RequestParam final Map<String, String> requestParams) {
-        discountGroupProcess.deleteDiscountGroup(requestParams);
+        discountGroupProcess.removeDiscountGroup(requestParams);
         return ResponseEntity.ok().build();
     }
 

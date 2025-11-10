@@ -5,6 +5,7 @@ import com.b2c.prototype.manager.option.IOptionItemCostGroupManager;
 import com.b2c.prototype.modal.dto.payload.option.group.OptionItemCostGroupDto;
 import com.b2c.prototype.modal.dto.payload.option.item.OptionItemCostDto;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
+import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.modal.entity.option.OptionItemCost;
 import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.transform.item.IItemTransformService;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +52,7 @@ public class OptionItemCostGroupManager implements IOptionItemCostGroupManager {
                 "OptionGroup.findByValueWithOptionItems",
                 Pair.of(KEY, searchValue)
         );
-        OptionGroup entity = syncItemsAllowingValueChange(searchValue, group, optionItemCostGroupDto);
+        OptionGroup entity = syncItemsAllowingKeyChange(searchValue, group, optionItemCostGroupDto);
         generalEntityDao.mergeEntity(entity);
     }
 
@@ -77,7 +79,7 @@ public class OptionItemCostGroupManager implements IOptionItemCostGroupManager {
         return generalEntityDao.findEntityList("OptionGroup.withOptionItems", (Pair<String, ?>) null);
     }
 
-    private OptionGroup syncItemsAllowingValueChange(String searchValue, OptionGroup group, OptionItemCostGroupDto dto) {
+    private OptionGroup syncItemsAllowingKeyChange(String searchValue, OptionGroup group, OptionItemCostGroupDto dto) {
         if (group == null) {
             throw new IllegalArgumentException("OptionGroup not found by old value: " + searchValue);
         }
@@ -86,33 +88,37 @@ public class OptionItemCostGroupManager implements IOptionItemCostGroupManager {
 
         final Map<String, OptionItemCost> currentByValue = group.getOptionItemCosts().stream()
                 .filter(Objects::nonNull)
-                .filter(t -> t.getKey() != null)
+                .filter(opi -> opi.getKey() != null)
                 .collect(toMap(OptionItemCost::getKey, Function.identity(), (a, b) -> a, LinkedHashMap::new));
 
-        final Set<OptionItemCost> matchedExisting = new HashSet<>();
+        final Set<OptionItemCost> matchedExisting = Collections.newSetFromMap(new IdentityHashMap<>());
         final List<OptionItemCostDto> incoming = Optional.ofNullable(dto.getOptionItemCosts())
                 .orElseGet(Collections::emptyList);
 
         // UPDATE EXISTING
         incoming.forEach(itemDto -> {
             if (itemDto == null) return;
-            final String lookupKey = itemDto.getSearchValue() != null ? itemDto.getSearchValue() : itemDto.getKey();
-            OptionItemCost existing = lookupKey == null ? null : currentByValue.get(lookupKey);
+            final String lookupKey = itemDto.getSearchKey() != null
+                    ? itemDto.getSearchKey()
+                    : itemDto.getKey();
+
+            OptionItemCost existing = null;
+            if (lookupKey != null) {
+                existing = currentByValue.get(lookupKey);
+            }
 
             if (existing != null) {
-                if (itemDto.getValue() != null) existing.setValue(itemDto.getValue());
-                if (itemDto.getKey() != null) existing.setKey(itemDto.getKey());
-                // rename (guard against collision)
                 if (itemDto.getKey() != null && !itemDto.getKey().equals(existing.getKey())) {
                     if (currentByValue.containsKey(itemDto.getKey()) && currentByValue.get(itemDto.getKey()) != existing) {
-                        throw new IllegalStateException("TimeDurationOption value collision on rename: " + itemDto.getKey());
+                        throw new IllegalStateException("Option item cost value collision on rename: " + itemDto.getKey());
                     }
                     currentByValue.remove(existing.getKey());
                     existing.setKey(itemDto.getKey());
                     currentByValue.put(existing.getKey(), existing);
                 }
+                if (itemDto.getValue() != null) existing.setValue(itemDto.getValue());
+                if (itemDto.getKey() != null) existing.setKey(itemDto.getKey());
 
-                // price update (no manual IDs; cascade handles insert/update)
                 if (itemDto.getPrice() != null) {
                     Price p = existing.getPrice();
                     if (p == null) {
@@ -137,23 +143,30 @@ public class OptionItemCostGroupManager implements IOptionItemCostGroupManager {
         // CREATE NEW (unchanged from your code)
         incoming.stream()
                 .filter(Objects::nonNull)
-                .filter(d -> d.getSearchValue() == null)
+                .filter(d -> d.getSearchKey() == null)
                 .forEach(d -> {
                     final String newKey = d.getKey();
                     if (newKey == null || newKey.trim().isEmpty()) {
-                        throw new IllegalArgumentException("New TimeDurationOption must have non-null 'value'.");
+                        throw new IllegalArgumentException("New Option item cost must have non-null 'key'.");
                     }
                     if (!currentByValue.containsKey(newKey)) {
+                        Price price = null;
+                        if (d.getPrice() != null) {
+                            price = Price.builder()
+                                    .amount(d.getPrice().getAmount())
+                                    .currency(
+                                            generalEntityDao.findEntity(
+                                                    "Currency.findByKey",
+                                                    Pair.of(KEY, d.getPrice().getCurrency().getKey())
+                                            )
+                                    )
+                                    .build();
+                        }
+
                         OptionItemCost created = OptionItemCost.builder()
-                                .value(d.getValue())
                                 .key(newKey)
-                                .price(d.getPrice() != null
-                                        ? Price.builder()
-                                        .amount(d.getPrice().getAmount())
-                                        .currency(generalEntityDao.findEntity("Currency.findByKey",
-                                                Pair.of(KEY, d.getPrice().getCurrency().getKey())))
-                                        .build()
-                                        : null)
+                                .value(d.getValue())
+                                .price(price)
                                 .build();
                         group.addOptionItemCost(created);
                         currentByValue.put(newKey, created);
@@ -161,7 +174,6 @@ public class OptionItemCostGroupManager implements IOptionItemCostGroupManager {
                     }
                 });
 
-        // REMOVE ORPHANS (unchanged)
         group.getOptionItemCosts().stream()
                 .filter(Objects::nonNull)
                 .filter(t -> !matchedExisting.contains(t))

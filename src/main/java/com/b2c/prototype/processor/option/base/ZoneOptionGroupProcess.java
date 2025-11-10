@@ -1,22 +1,20 @@
 package com.b2c.prototype.processor.option.base;
 
-import com.b2c.prototype.manager.option.IZoneOptionManager;
+import com.b2c.prototype.manager.option.IZoneOptionGroupManager;
 import com.b2c.prototype.modal.dto.payload.option.group.ZoneOptionGroupDto;
 import com.b2c.prototype.processor.option.IZoneOptionGroupProcess;
 import com.b2c.prototype.transform.order.IOrderTransformService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
 public class ZoneOptionGroupProcess implements IZoneOptionGroupProcess {
-    private final IZoneOptionManager zoneOptionManager;
+    private final IZoneOptionGroupManager zoneOptionManager;
     private final IOrderTransformService orderTransformService;
 
-    public ZoneOptionGroupProcess(IZoneOptionManager zoneOptionManager,
+    public ZoneOptionGroupProcess(IZoneOptionGroupManager zoneOptionManager,
                                   IOrderTransformService orderTransformService) {
         this.zoneOptionManager = zoneOptionManager;
         this.orderTransformService = orderTransformService;
@@ -33,8 +31,8 @@ public class ZoneOptionGroupProcess implements IZoneOptionGroupProcess {
     }
 
     @Override
-    public void removeEntity(String value) {
-        zoneOptionManager.removeEntity(value);
+    public void removeEntity(String key) {
+        zoneOptionManager.removeEntity(key);
     }
 
     @Override

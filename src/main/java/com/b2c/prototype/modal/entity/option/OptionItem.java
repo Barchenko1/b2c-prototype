@@ -35,13 +35,13 @@ public class OptionItem extends AbstractConstantEntity {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @JsonIgnore
-    protected OptionGroup optionGroup;
+    private OptionGroup optionGroup;
     @ManyToMany(mappedBy = "optionItems")
     @Builder.Default
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @JsonIgnore
-    protected Set<ArticularItem> articularItems = new HashSet<>();
+    private Set<ArticularItem> articularItems = new HashSet<>();
 
     public void addArticularItem(ArticularItem articularItem) {
         this.articularItems.add(articularItem);

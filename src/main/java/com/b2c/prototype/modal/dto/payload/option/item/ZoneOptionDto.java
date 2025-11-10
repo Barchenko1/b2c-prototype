@@ -14,6 +14,6 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ZoneOptionDto extends AbstractConstantDto {
-    private String searchValue;
+    private String searchKey;
     private PriceDto price;
 }

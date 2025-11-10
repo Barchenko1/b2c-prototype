@@ -88,14 +88,14 @@ public class OptionGroup extends AbstractConstantEntity {
         optionItem.setOptionGroup(null);
     }
 
-    public void addOptionItemCost(OptionItemCost optionItem) {
-        this.optionItemCosts.add(optionItem);
-        optionItem.setOptionGroup(this);
+    public void addOptionItemCost(OptionItemCost optionItemCost) {
+        this.optionItemCosts.add(optionItemCost);
+        optionItemCost.setOptionGroup(this);
     }
 
-    public void removeOptionItemCost(OptionItemCost optionItem) {
-        this.optionItemCosts.remove(optionItem);
-        optionItem.setOptionGroup(null);
+    public void removeOptionItemCost(OptionItemCost optionItemCost) {
+        this.optionItemCosts.remove(optionItemCost);
+        optionItemCost.setOptionGroup(null);
     }
 
     public void addTimeDurationOption(TimeDurationOption timeDurationOption) {

@@ -6,15 +6,23 @@ option_group:
     key: "Update Color"
     value: "Update Color"
 option_item:
-  - value: "Modal1"
+  - id: 1
+    value: "Modal1"
     key: "Modal1"
     option_group_id: 1
-  - value: "Modal2"
+  - id: 2
+    value: "Modal2"
     key: "Modal2"
     option_group_id: 1
-  - value: "Update Red"
+  - id: 3
+    value: "Update Red"
     key: "Update Red"
     option_group_id: 2
-  - value: "Yellow"
+  - id: 5
+    value: "Yellow"
     key: "Yellow"
+    option_group_id: 2
+  - id: 6
+    value: "White"
+    key: "White"
     option_group_id: 2

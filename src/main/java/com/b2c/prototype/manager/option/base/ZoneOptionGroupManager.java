@@ -1,7 +1,7 @@
 package com.b2c.prototype.manager.option.base;
 
 import com.b2c.prototype.dao.IGeneralEntityDao;
-import com.b2c.prototype.manager.option.IZoneOptionManager;
+import com.b2c.prototype.manager.option.IZoneOptionGroupManager;
 import com.b2c.prototype.modal.dto.payload.option.group.ZoneOptionGroupDto;
 import com.b2c.prototype.modal.dto.payload.option.item.ZoneOptionDto;
 import com.b2c.prototype.modal.entity.option.ZoneOption;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,18 +22,19 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.b2c.prototype.util.Constant.KEY;
 import static java.util.stream.Collectors.toMap;
 
 @Service
-public class ZoneOptionManager implements IZoneOptionManager {
+public class ZoneOptionGroupManager implements IZoneOptionGroupManager {
 
     private final IGeneralEntityDao generalEntityDao;
     private final IOrderTransformService orderTransformService;
 
-    public ZoneOptionManager(IGeneralEntityDao generalEntityDao,
-                             IOrderTransformService orderTransformService) {
+    public ZoneOptionGroupManager(IGeneralEntityDao generalEntityDao,
+                                  IOrderTransformService orderTransformService) {
         this.generalEntityDao = generalEntityDao;
         this.orderTransformService = orderTransformService;
     }
@@ -51,14 +53,15 @@ public class ZoneOptionManager implements IZoneOptionManager {
                 "ZoneOptionGroup.findByKey",
                 Pair.of(KEY, searchValue)
         );
-        ZoneOptionGroup entity = syncItemsAllowingValueChange(searchValue, group, zoneOptionGroupDto);
+        ZoneOptionGroup entity = syncItemsAllowingKeyChange(searchValue, group, zoneOptionGroupDto);
         generalEntityDao.mergeEntity(entity);
     }
 
     @Transactional
     @Override
-    public void removeEntity(String value) {
-        ZoneOptionGroup zoneOptionGroup = generalEntityDao.findEntity("ZoneOptionGroup.findByKey", Pair.of(KEY, value));
+    public void removeEntity(String key) {
+        ZoneOptionGroup zoneOptionGroup = generalEntityDao.findEntity("ZoneOptionGroup.findByKey",
+                Pair.of(KEY, key));
         generalEntityDao.removeEntity(zoneOptionGroup);
     }
 
@@ -77,7 +80,7 @@ public class ZoneOptionManager implements IZoneOptionManager {
         return generalEntityDao.findEntityList("ZoneOptionGroup.all", (Pair<String, ?>) null);
     }
 
-    private ZoneOptionGroup syncItemsAllowingValueChange(String searchValue, ZoneOptionGroup group, ZoneOptionGroupDto dto) {
+    private ZoneOptionGroup syncItemsAllowingKeyChange(String searchValue, ZoneOptionGroup group, ZoneOptionGroupDto dto) {
         if (group == null) {
             throw new IllegalArgumentException("OptionGroup not found by old value: " + searchValue);
         }
@@ -86,33 +89,31 @@ public class ZoneOptionManager implements IZoneOptionManager {
 
         final Map<String, ZoneOption> currentByValue = group.getZoneOptions().stream()
                 .filter(Objects::nonNull)
-                .filter(t -> t.getValue() != null)
-                .collect(toMap(ZoneOption::getValue, Function.identity(), (a, b) -> a, LinkedHashMap::new));
+                .filter(t -> t.getKey() != null)
+                .collect(toMap(ZoneOption::getKey, Function.identity(), (a, b) -> a, LinkedHashMap::new));
 
-        final Set<ZoneOption> matchedExisting = new HashSet<>();
+        final Set<ZoneOption> matchedExisting = Collections.newSetFromMap(new IdentityHashMap<>());
         final List<ZoneOptionDto> incoming = Optional.ofNullable(dto.getZoneOptions())
                 .orElseGet(Collections::emptyList);
 
-        // UPDATE EXISTING
         incoming.forEach(itemDto -> {
             if (itemDto == null) return;
-            final String lookupKey = itemDto.getSearchValue() != null ? itemDto.getSearchValue() : itemDto.getKey();
+            final String lookupKey = itemDto.getSearchKey() != null ? itemDto.getSearchKey() : itemDto.getKey();
             ZoneOption existing = lookupKey == null ? null : currentByValue.get(lookupKey);
 
             if (existing != null) {
-                if (itemDto.getValue() != null) existing.setValue(itemDto.getValue());
-                if (itemDto.getKey() != null) existing.setKey(itemDto.getKey());
-                // rename (guard against collision)
                 if (itemDto.getKey() != null && !itemDto.getKey().equals(existing.getKey())) {
                     if (currentByValue.containsKey(itemDto.getKey()) && currentByValue.get(itemDto.getKey()) != existing) {
                         throw new IllegalStateException("TimeDurationOption value collision on rename: " + itemDto.getKey());
                     }
-                    currentByValue.remove(existing.getValue());
+                    currentByValue.remove(existing.getKey());
                     existing.setValue(itemDto.getKey());
-                    currentByValue.put(existing.getValue(), existing);
+                    currentByValue.put(itemDto.getKey(), existing);
                 }
 
-                // price update (no manual IDs; cascade handles insert/update)
+                if (itemDto.getKey() != null) existing.setKey(itemDto.getKey());
+                if (itemDto.getValue() != null) existing.setValue(itemDto.getValue());
+
                 if (itemDto.getPrice() != null) {
                     Price p = existing.getPrice();
                     if (p == null) {
@@ -137,7 +138,7 @@ public class ZoneOptionManager implements IZoneOptionManager {
         // CREATE NEW (unchanged from your code)
         incoming.stream()
                 .filter(Objects::nonNull)
-                .filter(d -> d.getSearchValue() == null)
+                .filter(d -> d.getSearchKey() == null)
                 .forEach(d -> {
                     final String newKey = d.getKey();
                     if (newKey == null || newKey.trim().isEmpty()) {

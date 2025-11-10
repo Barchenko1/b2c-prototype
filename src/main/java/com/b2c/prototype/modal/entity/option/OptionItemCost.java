@@ -3,6 +3,7 @@ package com.b2c.prototype.modal.entity.option;
 import com.b2c.prototype.modal.base.constant.AbstractConstantEntity;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.price.Price;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -37,12 +38,14 @@ public class OptionItemCost extends AbstractConstantEntity {
     @JoinColumn(name = "option_group_id", nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    protected OptionGroup optionGroup;
+    @JsonIgnore
+    private OptionGroup optionGroup;
     @ManyToMany(mappedBy = "optionItemCosts")
     @Builder.Default
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    protected Set<ArticularItem> articularItems = new HashSet<>();
+    @JsonIgnore
+    private Set<ArticularItem> articularItems = new HashSet<>();
 
     public void addArticularItem(ArticularItem articularItem) {
         this.articularItems.add(articularItem);
