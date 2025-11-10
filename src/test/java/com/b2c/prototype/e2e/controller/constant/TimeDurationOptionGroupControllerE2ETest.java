@@ -25,7 +25,7 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
 
     @Test
     @DataSet(value = "datasets/e2e/order/option_group/time_duration_option/emptyE2ETimeDurationOptionDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/order/option_group/time_duration_option/testE2ETimeDurationOptionDataSet.yml", orderBy = "id")
+    @ExpectedDataSet(value = "datasets/e2e/order/option_group/time_duration_option/testE2ETimeDurationOptionGroupDataSet.yml", orderBy = "id")
     @Sql(statements = {
             "ALTER SEQUENCE time_duration_option_id_seq RESTART WITH 3",
             "ALTER SEQUENCE option_group_id_seq RESTART WITH 2",
@@ -45,7 +45,7 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
     }
 
     @Test
-    @DataSet(value = "datasets/e2e/order/option_group/time_duration_option/testUpdateE2ETimeDurationOptionGroupDataSet.yml", cleanBefore = true, disableConstraints = true)
+    @DataSet(value = "datasets/e2e/order/option_group/time_duration_option/testE2ETimeDurationOptionGroupDataSet.yml", cleanBefore = true, disableConstraints = true)
     @ExpectedDataSet(value = "datasets/e2e/order/option_group/time_duration_option/updateE2ETimeDurationOptionDataSetMore.yml", orderBy = "id", ignoreCols = {"id"})
     @Sql(statements = "ALTER SEQUENCE price_id_seq RESTART WITH 5",
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
@@ -65,7 +65,7 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
     }
 
     @Test
-    @DataSet(value = "datasets/e2e/order/option_group/time_duration_option/testUpdateE2ETimeDurationOptionGroupDataSet.yml", cleanBefore = true, disableConstraints = true)
+    @DataSet(value = "datasets/e2e/order/option_group/time_duration_option/testE2ETimeDurationOptionGroupDataSet.yml", cleanBefore = true, disableConstraints = true)
     @ExpectedDataSet(value = "datasets/e2e/order/option_group/time_duration_option/updateE2ETimeDurationOptionDataSetLess.yml", orderBy = "id", ignoreCols = {"id"})
     public void testUpdateEntityLess() {
         TimeDurationOptionGroupDto constantPayloadDto = getUpdateTimeDurationOptionDtoLess();
@@ -83,7 +83,7 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
     }
 
     @Test
-    @DataSet(value = "datasets/e2e/order/option_group/time_duration_option/testE2ETimeDurationOptionDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/e2e/order/option_group/time_duration_option/testE2ETimeDurationOptionGroupDataSet.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/e2e/order/option_group/time_duration_option/emptyE2ETimeDurationOptionDataSet.yml", orderBy = "id")
     public void testDeleteEntity() {
         webTestClient.delete()
@@ -97,7 +97,7 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
     }
 
     @Test
-    @DataSet(value = "datasets/e2e/order/option_group/time_duration_option/testE2ETimeDurationOptionDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/e2e/order/option_group/time_duration_option/testE2ETimeDurationOptionGroupDataSet.yml", cleanBefore = true)
     public void testGetEntity() {
         TimeDurationOptionGroupDto expected = getTimeDurationOptionGroupDto();
         expected.getTimeDurationOptions().forEach(timeDurationOptionDto -> {
@@ -123,7 +123,7 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
     }
 
     @Test
-    @DataSet(value = "datasets/e2e/order/option_group/time_duration_option/testE2ETimeDurationOptionDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/e2e/order/option_group/time_duration_option/testE2ETimeDurationOptionGroupDataSet.yml", cleanBefore = true)
     public void testGetEntities() {
         List<TimeDurationOptionGroupDto > expected = List.of(
                 TimeDurationOptionGroupDto.builder()
