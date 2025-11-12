@@ -6,11 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 public interface ICategoryProcess {
-    void createCategoryList(Map<String, String> requestParams, List<CategoryDto> categoryDtoList);
-    void updateSingleCategory(Map<String, String> requestParams, CategoryDto categoryDto);
-    void updateCategory(Map<String, String> requestParams, List<CategoryDto> categoryDtoList);
+    void createCategory(Map<String, String> requestParams, CategoryDto categoryDto);
+    void updateCategory(Map<String, String> requestParams, CategoryDto categoryDto);
     void deleteCategory(Map<String, String> requestParams);
 
-    CategoryDto getCategoryByCategoryName(Map<String, String> requestParams);
-    List<CategoryDto> getAllFirstLineCategories(Map<String, String> requestParams);
+    CategoryDto getCategory(Map<String, String> requestParams);
+    List<CategoryDto> getCategories(Map<String, String> requestParams);
 }

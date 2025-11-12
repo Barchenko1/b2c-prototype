@@ -5,16 +5,15 @@ import com.b2c.prototype.manager.option.IOptionItemCostGroupManager;
 import com.b2c.prototype.modal.dto.payload.option.group.OptionItemCostGroupDto;
 import com.b2c.prototype.modal.dto.payload.option.item.OptionItemCostDto;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
-import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.modal.entity.option.OptionItemCost;
 import com.b2c.prototype.modal.entity.price.Price;
+import com.b2c.prototype.transform.constant.IGeneralEntityTransformService;
 import com.b2c.prototype.transform.item.IItemTransformService;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -32,10 +31,14 @@ public class OptionItemCostGroupManager implements IOptionItemCostGroupManager {
 
     private final IGeneralEntityDao generalEntityDao;
     private final IItemTransformService itemTransformService;
+    private final IGeneralEntityTransformService generalEntityTransformService;
 
-    public OptionItemCostGroupManager(IGeneralEntityDao generalEntityDao, IItemTransformService itemTransformService) {
+    public OptionItemCostGroupManager(IGeneralEntityDao generalEntityDao,
+                                      IItemTransformService itemTransformService,
+                                      IGeneralEntityTransformService generalEntityTransformService) {
         this.generalEntityDao = generalEntityDao;
         this.itemTransformService = itemTransformService;
+        this.generalEntityTransformService = generalEntityTransformService;
     }
 
     @Transactional
@@ -129,9 +132,7 @@ public class OptionItemCostGroupManager implements IOptionItemCostGroupManager {
                         p.setAmount(itemDto.getPrice().getAmount());
                     }
                     if (itemDto.getPrice().getCurrency() != null && itemDto.getPrice().getCurrency().getKey() != null) {
-                        p.setCurrency(
-                                generalEntityDao.findEntity("Currency.findByKey",
-                                        Pair.of(KEY, itemDto.getPrice().getCurrency().getKey()))
+                        p.setCurrency(generalEntityTransformService.mapCurrencyDtoToCurrency(itemDto.getPrice().getCurrency())
                         );
                     }
                 }

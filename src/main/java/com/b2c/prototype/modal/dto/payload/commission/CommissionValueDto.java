@@ -1,5 +1,6 @@
 package com.b2c.prototype.modal.dto.payload.commission;
 
+import com.b2c.prototype.modal.dto.payload.constant.CurrencyDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CommissionValueDto {
-    private double amount;
+    private Double amount;
     private String feeType;
-    private String currency;
+    private CurrencyDto currency;
 }

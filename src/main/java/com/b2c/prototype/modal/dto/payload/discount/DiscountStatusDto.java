@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DiscountStatusDto {
+    private String region;
+    private String groupCode;
     private String charSequenceCode;
     private boolean isActive;
 }

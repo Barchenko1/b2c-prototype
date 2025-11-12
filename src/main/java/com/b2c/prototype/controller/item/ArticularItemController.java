@@ -1,7 +1,6 @@
 package com.b2c.prototype.controller.item;
 
 import com.b2c.prototype.modal.dto.payload.item.ArticularItemDto;
-import com.b2c.prototype.modal.dto.payload.item.ResponseArticularItemDto;
 import com.b2c.prototype.processor.item.IArticularItemProcessor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -56,13 +55,13 @@ public class ArticularItemController {
     }
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ResponseArticularItemDto> getArticularItemList(@RequestParam final Map<String, String> requestParams) {
-        return articularItemProcessor.getResponseArticularItemDtoList(requestParams);
+    public List<ArticularItemDto> getArticularItemList(@RequestParam final Map<String, String> requestParams) {
+        return articularItemProcessor.getArticularItemDtoList(requestParams);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseArticularItemDto> getArticularItem(@RequestParam final Map<String, String> requestParams) {
-        return new ResponseEntity<>(articularItemProcessor.getResponseArticularItemDto(requestParams), HttpStatus.OK);
+    public ResponseEntity<ArticularItemDto> getArticularItem(@RequestParam final Map<String, String> requestParams) {
+        return new ResponseEntity<>(articularItemProcessor.getArticularItemDto(requestParams), HttpStatus.OK);
     }
 
 

@@ -139,7 +139,10 @@ public class MessageTemplateControllerE2ETest extends BasicE2ETest {
                 .returnResult()
                 .getResponseBody();
 
-        assertThat(actual).isEqualTo(expected);
+        assertThat(actual)
+                .usingRecursiveComparison()
+                .ignoringCollectionOrder()
+                .isEqualTo(expected);
     }
 
     private MessageTemplateDto getMessageTemplateDto() {

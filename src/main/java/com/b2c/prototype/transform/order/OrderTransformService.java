@@ -17,6 +17,7 @@ import com.b2c.prototype.modal.entity.option.ZoneOptionGroup;
 import com.b2c.prototype.modal.entity.order.CustomerSingleDeliveryOrder;
 import com.b2c.prototype.modal.entity.payment.CurrencyCoefficient;
 import com.b2c.prototype.modal.entity.price.Price;
+import com.b2c.prototype.transform.constant.IGeneralEntityTransformService;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
@@ -30,9 +31,12 @@ import static com.b2c.prototype.util.Constant.KEY;
 public class OrderTransformService implements IOrderTransformService {
 
     private final IGeneralEntityDao generalEntityDao;
+    private final IGeneralEntityTransformService generalEntityTransformService;
 
-    public OrderTransformService(IGeneralEntityDao generalEntityDao) {
+    public OrderTransformService(IGeneralEntityDao generalEntityDao,
+                                 IGeneralEntityTransformService generalEntityTransformService) {
         this.generalEntityDao = generalEntityDao;
+        this.generalEntityTransformService = generalEntityTransformService;
     }
 
     @Override
@@ -53,8 +57,8 @@ public class OrderTransformService implements IOrderTransformService {
                                         .toMinutes())
                                 .price(Price.builder()
                                         .amount(timeDurationOptionDto.getPrice().getAmount())
-                                        .currency(generalEntityDao.findEntity("Currency.findByKey",
-                                                Pair.of(KEY, timeDurationOptionDto.getPrice().getCurrency().getKey())))
+                                        .currency(
+                                                generalEntityTransformService.mapCurrencyDtoToCurrency(timeDurationOptionDto.getPrice().getCurrency()))
                                         .build())
                                 .build())
                         .collect(Collectors.toSet())
@@ -97,16 +101,15 @@ public class OrderTransformService implements IOrderTransformService {
                 .value(zoneOptionGroupDto.getValue())
                 .key(zoneOptionGroupDto.getKey())
                 .city(zoneOptionGroupDto.getCity())
-                .country(generalEntityDao.findEntity("Country.findByKey",
-                        Pair.of(KEY, zoneOptionGroupDto.getCountry().getKey())))
+                .country(generalEntityTransformService.mapCountryDtoToCountry(zoneOptionGroupDto.getCountry()))
                 .zoneOptions(zoneOptionGroupDto.getZoneOptions().stream()
                         .map(zoneOptionDto -> ZoneOption.builder()
                                 .value(zoneOptionDto.getValue())
                                 .key(zoneOptionDto.getKey())
                                 .price(Price.builder()
                                         .amount(zoneOptionDto.getPrice().getAmount())
-                                        .currency(generalEntityDao.findEntity("Currency.findByKey",
-                                                Pair.of(KEY, zoneOptionDto.getPrice().getCurrency().getKey())))
+                                        .currency(
+                                                generalEntityTransformService.mapCurrencyDtoToCurrency(zoneOptionDto.getPrice().getCurrency()))
                                         .build())
                                 .build())
                         .collect(Collectors.toSet())
@@ -148,10 +151,8 @@ public class OrderTransformService implements IOrderTransformService {
     @Override
     public CurrencyCoefficient mapCurrencyConvertDateDtoToCurrencyCoefficient(CurrencyConvertDateDto currencyConvertDateDto) {
         return CurrencyCoefficient.builder()
-                .currencyFrom(generalEntityDao.findEntity("Currency.findByKey",
-                        Pair.of(KEY, currencyConvertDateDto.getCurrencyFrom().getKey())))
-                .currencyTo(generalEntityDao.findEntity("Currency.findByKey",
-                        Pair.of(KEY, currencyConvertDateDto.getCurrencyTo().getKey())))
+                .currencyFrom(generalEntityTransformService.mapCurrencyDtoToCurrency(currencyConvertDateDto.getCurrencyFrom()))
+                .currencyTo(generalEntityTransformService.mapCurrencyDtoToCurrency(currencyConvertDateDto.getCurrencyTo()))
                 .coefficient(currencyConvertDateDto.getCoefficient())
                 .dateOfCreate(LocalDate.now())
                 .build();

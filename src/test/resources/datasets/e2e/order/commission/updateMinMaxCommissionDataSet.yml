@@ -1,0 +1,59 @@
+currency:
+  - id: 1
+    value: "USD"
+    key: "USD"
+  - id: 2
+    value: "EUR"
+    key: "EUR"
+region:
+  - id: 1
+    code: "DE"
+    value: "Germany"
+    language: "German"
+    default_locale: "de-DE"
+    primary_currency_id: 2
+    timezone: "Europe/Berlin"
+  - id: 2
+    code: "Global"
+    value: "Global"
+    language: "English"
+    default_locale: "en-US"
+    primary_currency_id: 1
+    timezone: "UTC"
+price:
+  - id: 1
+    amount: 200
+    currency_id: 1
+  - id: 2
+    amount: 16.0
+    currency_id: 1
+commission_value:
+  - id: 1
+    amount: 100
+    fee_type: "FIXED"
+    currency_id: 1
+  - id: 2
+    amount: 10
+    fee_type: "PERCENTAGE"
+  - id: 3
+    amount: 10.0
+    fee_type: "PERCENTAGE"
+  - id: 4
+    amount: 20.0
+    fee_type: "FIXED"
+    currency_id: 1
+min_max_commission:
+  - id: 1
+    min_commission_id: 1
+    max_commission_id: 2
+    last_update_timestamp: "2024-03-03"
+    change_commission_price_id: 1
+    key: "key1"
+    region_id: 2
+  - id: 2
+    min_commission_id: 4
+    max_commission_id: 3
+    last_update_timestamp: "2024-03-03"
+    change_commission_price_id: 2
+    key: "key2"
+    region_id: 1

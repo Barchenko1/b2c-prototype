@@ -8,11 +8,11 @@ import java.util.List;
 public interface IDiscountGroupManager {
     void saveDiscountGroup(DiscountGroupDto discountGroupDto);
     void updateArticularDiscount(String articularId, DiscountGroupDto discountGroupDto);
-    void updateDiscountGroup(String key, DiscountGroupDto discountGroupDto);
+    void updateDiscountGroup(String region, String key, DiscountGroupDto discountGroupDto);
     void changeDiscountStatus(DiscountStatusDto discountStatusDto);
-    void removeDiscountGroup(String key);
+    void removeDiscountGroup(String region, String key);
 
 
-    DiscountGroupDto getDiscountGroup(String key);
-    List<DiscountGroupDto> getDiscountGroups();
+    DiscountGroupDto getDiscountGroup(String region, String key);
+    List<DiscountGroupDto> getDiscountGroups(String region);
 }

@@ -18,37 +18,35 @@ public class CategoryProcess implements ICategoryProcess {
     }
 
     @Override
-    public void createCategoryList(Map<String, String> requestParams, List<CategoryDto> categoryDtoList) {
-        categoryManager.saveCategoryList(categoryDtoList);
+    public void createCategory(Map<String, String> requestParams, CategoryDto categoryDto) {
+        categoryManager.saveCategory(categoryDto);
     }
 
     @Override
-    public void updateSingleCategory(Map<String, String> requestParams, CategoryDto categoryDto) {
-        String categoryName = requestParams.get("category");
-        categoryManager.updateSingleCategory(categoryDto);
-    }
-
-    @Override
-    public void updateCategory(Map<String, String> requestParams, List<CategoryDto> categoryDtoList) {
-        String categoryName = requestParams.get("category");
-        categoryManager.updateCategory(categoryDtoList);
+    public void updateCategory(Map<String, String> requestParams, CategoryDto categoryDto) {
+        String regionCode = requestParams.get("region");
+        String categoryKey = requestParams.get("category");
+        categoryManager.updateCategory(regionCode, categoryKey, categoryDto);
     }
 
     @Override
     public void deleteCategory(Map<String, String> requestParams) {
-        String categoryName = requestParams.get("category");
-        categoryManager.deleteCategory(categoryName);
+        String regionCode = requestParams.get("region");
+        String categoryKey = requestParams.get("category");
+        categoryManager.deleteCategory(regionCode, categoryKey);
     }
 
     @Override
-    public CategoryDto getCategoryByCategoryName(Map<String, String> requestParams) {
+    public CategoryDto getCategory(Map<String, String> requestParams) {
+        String regionCode = requestParams.get("region");
         String categoryName = requestParams.get("category");
-        return categoryManager.getCategoryByCategoryName(categoryName);
+        return categoryManager.getCategory(regionCode, categoryName);
     }
 
     @Override
-    public List<CategoryDto> getAllFirstLineCategories(Map<String, String> requestParams) {
-        return categoryManager.getAllFirstLineCategories();
+    public List<CategoryDto> getCategories(Map<String, String> requestParams) {
+        String regionCode = requestParams.get("region");
+        return categoryManager.getCategories(regionCode);
     }
 
 }

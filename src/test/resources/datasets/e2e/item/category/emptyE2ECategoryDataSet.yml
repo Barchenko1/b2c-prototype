@@ -1,8 +1,47 @@
+currency:
+  - id: 1
+    value: "EUR"
+    key: "EUR"
+  - id: 2
+    value: "USD"
+    key: "USD"
+region:
+  - id: 1
+    code: "DE"
+    value: "Germany"
+    language: "German"
+    default_locale: "de-DE"
+    primary_currency_id: 1
+    timezone: "Europe/Berlin"
+  - id: 2
+    code: "Global"
+    value: "Global"
+    language: "English"
+    default_locale: "en-US"
+    primary_currency_id: 2
+    timezone: "UTC"
 category:
   - id: 1
-    key: "Electronic"
-    value: "Electronic"
+    key: "Laptops and Computers"
+    value: "Laptops and Computers"
+    region_id: 1
   - id: 2
+    key: "Gaming Laptops & Accessories"
+    value: "Gaming Laptops & Accessories"
     category_id: 1
-    key: "Laptop"
-    value: "Laptop"
+    region_id: 1
+  - id: 3
+    key: "Gaming Laptops"
+    value: "Gaming Laptops"
+    category_id: 2
+    region_id: 1
+  - id: 4
+    key: "Gaming Keyboards & Mice"
+    value: "Gaming Keyboards & Mice"
+    category_id: 2
+    region_id: 1
+  - id: 5
+    key: "Cooling Pads & Stands"
+    value: "Cooling Pads & Stands"
+    category_id: 2
+    region_id: 1

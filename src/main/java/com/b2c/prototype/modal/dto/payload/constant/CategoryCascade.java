@@ -5,11 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryDto {
-    private String region;
-    private CategoryCascade category;
+public class CategoryCascade {
+    private String value;
+    private String key;
+    private List<CategoryCascade> childList;
 }

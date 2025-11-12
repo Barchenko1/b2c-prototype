@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/category")
+@RequestMapping("/api/v1/item/category")
 public class CategoryController {
 
     private final ICategoryProcess categoryProcess;
@@ -29,22 +29,15 @@ public class CategoryController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createCategory(@RequestParam final Map<String, String> requestParams,
-                                               @RequestBody final List<CategoryDto> categoryDtoList) {
-        categoryProcess.updateCategory(requestParams, categoryDtoList);
+                                               @RequestBody final CategoryDto categoryDto) {
+        categoryProcess.createCategory(requestParams, categoryDto);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> updateSingleCategory(@RequestParam final Map<String, String> requestParams,
-                                                     @RequestBody final CategoryDto categoryDto) {
-        categoryProcess.updateSingleCategory(requestParams, categoryDto);
-        return ResponseEntity.ok().build();
-    }
-
-    @PutMapping(value = "/inner", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> updateCategory(@RequestParam final Map<String, String> requestParams,
-                                               @RequestBody final List<CategoryDto> categoryDtoList) {
-        categoryProcess.updateCategory(requestParams, categoryDtoList);
+                                               @RequestBody final CategoryDto categoryDto) {
+        categoryProcess.updateCategory(requestParams, categoryDto);
         return ResponseEntity.ok().build();
     }
 
@@ -55,13 +48,13 @@ public class CategoryController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CategoryDto> getCategoryByCategoryName(@RequestParam final Map<String, String> requestParams) {
-        return new ResponseEntity<>(categoryProcess.getCategoryByCategoryName(requestParams), HttpStatus.OK);
+    public ResponseEntity<CategoryDto> getCategory(@RequestParam final Map<String, String> requestParams) {
+        return new ResponseEntity<>(categoryProcess.getCategory(requestParams), HttpStatus.OK);
     }
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<CategoryDto> getAllFirstLineCategories(@RequestParam final Map<String, String> requestParams) {
-        return categoryProcess.getAllFirstLineCategories(requestParams);
+    public List<CategoryDto> getCategories(@RequestParam final Map<String, String> requestParams) {
+        return categoryProcess.getCategories(requestParams);
     }
 
 }

@@ -28,30 +28,33 @@ public class CurrencyManager implements ICurrencyManager {
     @Transactional
     @Override
     public void mergeEntity(String searchValue, Currency entity) {
-        Currency fetchedEntity =
-                generalEntityDao.findEntity("Currency.findByKey", Pair.of(KEY, searchValue));
-        entity.setId(fetchedEntity.getId());
-        generalEntityDao.mergeEntity(entity);
+        Currency fetchedEntity = getCurrency(searchValue);
+        fetchedEntity.setKey(entity.getKey());
+        fetchedEntity.setValue(entity.getValue());
+        generalEntityDao.mergeEntity(fetchedEntity);
     }
 
     @Transactional
     @Override
-    public void removeEntity(String value) {
-        Currency fetchedEntity = generalEntityDao.findEntity("Currency.findByKey", Pair.of(KEY, value));
+    public void removeEntity(String key) {
+        Currency fetchedEntity = getCurrency(key);
         generalEntityDao.removeEntity(fetchedEntity);
     }
 
-    public Currency getEntity(String value) {
-        return generalEntityDao.findEntity("Currency.findByKey", Pair.of(KEY, value));
+    public Currency getEntity(String key) {
+        return getCurrency(key);
     }
 
-    public Optional<Currency> getEntityOptional(String value) {
-        Currency entity = generalEntityDao.findEntity("Currency.findByKey", Pair.of(KEY, value));
+    public Optional<Currency> getEntityOptional(String key) {
+        Currency entity = getCurrency(key);
         return Optional.of(entity);
     }
 
-
     public List<Currency> getEntities() {
         return generalEntityDao.findEntityList("Currency.all", (Pair<String, ?>) null);
+    }
+
+    private Currency getCurrency(String key) {
+        return generalEntityDao.findEntity("Currency.findByKey", Pair.of(KEY, key));
     }
 }

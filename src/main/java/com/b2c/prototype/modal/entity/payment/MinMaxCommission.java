@@ -1,7 +1,9 @@
 package com.b2c.prototype.modal.entity.payment;
 
 import com.b2c.prototype.modal.entity.price.Price;
+import com.b2c.prototype.modal.entity.region.Region;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -13,13 +15,10 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -31,20 +30,36 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NamedQueries({
         @NamedQuery(
-                name = "MinMaxCommission.getCommissionList",
+                name = "MinMaxCommission.findByRegionAndKey",
                 query = "SELECT m FROM MinMaxCommission m " +
                         "LEFT JOIN FETCH m.minCommission min " +
                         "LEFT JOIN FETCH min.currency minc " +
                         "LEFT JOIN FETCH m.maxCommission max " +
                         "LEFT JOIN FETCH max.currency maxc " +
                         "LEFT JOIN FETCH m.changeCommissionPrice ccp " +
-                        "LEFT JOIN FETCH ccp.currency ccpc "
+                        "LEFT JOIN FETCH ccp.currency ccpc " +
+                        "LEFT JOIN FETCH m.region r " +
+                        "WHERE m.key = :key and r.code = :code"
+        ),
+        @NamedQuery(
+                name = "MinMaxCommission.findAllByRegion",
+                query = "SELECT m FROM MinMaxCommission m " +
+                        "LEFT JOIN FETCH m.minCommission min " +
+                        "LEFT JOIN FETCH min.currency minc " +
+                        "LEFT JOIN FETCH m.maxCommission max " +
+                        "LEFT JOIN FETCH max.currency maxc " +
+                        "LEFT JOIN FETCH m.changeCommissionPrice ccp " +
+                        "LEFT JOIN FETCH ccp.currency ccpc " +
+                        "LEFT JOIN FETCH m.region mr " +
+                        "WHERE mr.code = :code"
         ),
 })
 public class MinMaxCommission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(unique = true, nullable = false)
+    private String key;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private CommissionValue minCommission;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -53,4 +68,6 @@ public class MinMaxCommission {
     @JoinColumn(nullable = false)
     private Price changeCommissionPrice;
     private LocalDateTime lastUpdateTimestamp;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Region region;
 }

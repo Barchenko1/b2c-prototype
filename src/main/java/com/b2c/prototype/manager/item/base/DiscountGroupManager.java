@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,9 +53,6 @@ public class DiscountGroupManager implements IDiscountGroupManager {
     @Override
     @Transactional
     public void updateArticularDiscount(String articularId, DiscountGroupDto discountGroupDto) {
-//        if (discountGroupDto.getCharSequenceCode() == null) {
-//            throw new RuntimeException("Discount code is null");
-//        }
         ArticularItem articularItem = generalEntityDao.findEntity(
                 "ArticularItem.discount.currency",
                 Pair.of(ARTICULAR_ID, articularId));
@@ -75,9 +73,10 @@ public class DiscountGroupManager implements IDiscountGroupManager {
 
     @Override
     @Transactional
-    public void updateDiscountGroup(String key, DiscountGroupDto discountGroupDto) {
+    public void updateDiscountGroup(String region, String key, DiscountGroupDto discountGroupDto) {
         DiscountGroup discountGroup = generalEntityDao.findEntity(
-                "DiscountGroup.findByKey", Pair.of(KEY, key));
+                "DiscountGroup.findByRegionAndKey",
+                List.of(Pair.of(CODE, region), Pair.of(KEY, key)));
         DiscountGroup entity = syncItemsAllowingKeyChange(key, discountGroup, discountGroupDto);
         generalEntityDao.mergeEntity(entity);
     }
@@ -85,24 +84,32 @@ public class DiscountGroupManager implements IDiscountGroupManager {
     @Override
     @Transactional
     public void changeDiscountStatus(DiscountStatusDto discountStatusDto) {
-        Discount currencyDiscount = generalEntityDao.findEntity(
-                "Discount.currency",
-                Pair.of(KEY, discountStatusDto.getCharSequenceCode()));
-        currencyDiscount.setActive(discountStatusDto.isActive());
-        generalEntityDao.mergeEntity(currencyDiscount);
+        DiscountGroup discountGroup = generalEntityDao.findEntity(
+                "DiscountGroup.findByRegionAndKey",
+                List.of(Pair.of(KEY, discountStatusDto.getGroupCode()),
+                        Pair.of(CODE, discountStatusDto.getRegion())));
+
+        discountGroup.getDiscounts().stream()
+                .filter(d -> d.getCharSequenceCode().equals(discountStatusDto.getCharSequenceCode()))
+                .findFirst()
+                .ifPresent(d -> d.setActive(discountStatusDto.isActive()));
+
+        generalEntityDao.mergeEntity(discountGroup);
     }
 
     @Override
     @Transactional
-    public void removeDiscountGroup(String key) {
-        generalEntityDao.findAndRemoveEntity("DiscountGroup.findByKey", Pair.of(KEY, key));
+    public void removeDiscountGroup(String region, String key) {
+        generalEntityDao.findAndRemoveEntity("DiscountGroup.findByRegionAndKey",
+                List.of(Pair.of(CODE, region), Pair.of(KEY, key)));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public DiscountGroupDto getDiscountGroup(String key) {
+    public DiscountGroupDto getDiscountGroup(String region, String key) {
         DiscountGroup discountGroup = generalEntityDao.findEntity(
-                "DiscountGroup.findByKey", Pair.of(KEY, key));
+                "DiscountGroup.findByRegionAndKey",
+                List.of(Pair.of(CODE, region), Pair.of(KEY, key)));
         return Optional.of(discountGroup)
                 .map(itemTransformService::mapDiscountGroupToDiscountGroupDto)
                 .orElseThrow(() -> new RuntimeException(""));
@@ -110,9 +117,9 @@ public class DiscountGroupManager implements IDiscountGroupManager {
 
     @Override
     @Transactional(readOnly = true)
-    public List<DiscountGroupDto> getDiscountGroups() {
-        List<DiscountGroup> discountGroupList = generalEntityDao.findEntityList("DiscountGroup.findAll",
-                (Pair<String, ?>) null);
+    public List<DiscountGroupDto> getDiscountGroups(String region) {
+        List<DiscountGroup> discountGroupList = generalEntityDao.findEntityList(
+                "DiscountGroup.findAllByRegion", Pair.of(CODE, region));
 
         return discountGroupList.stream()
                 .map(itemTransformService::mapDiscountGroupToDiscountGroupDto)
@@ -139,7 +146,7 @@ public class DiscountGroupManager implements IDiscountGroupManager {
                         LinkedHashMap::new
                 ));
 
-        final Set<Discount> matched = new HashSet<>();
+        final Set<Discount> matched = Collections.newSetFromMap(new IdentityHashMap<>());
         final List<DiscountDto> incoming = Optional.ofNullable(dto.getDiscounts())
                 .orElseGet(Collections::emptyList);
 

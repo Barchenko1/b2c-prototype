@@ -1,238 +1,582 @@
-//package com.b2c.prototype.e2e.controller.constant;
-//
-//import com.b2c.prototype.e2e.BasicE2ETest;
-//import com.b2c.prototype.e2e.util.TestUtil;
-//import com.b2c.prototype.modal.dto.payload.constant.CategoryDto;
-//import com.fasterxml.jackson.core.JsonProcessingException;
-//import com.fasterxml.jackson.core.type.TypeReference;
-//import org.junit.jupiter.api.Test;
-//import org.springframework.http.MediaType;
-//import org.springframework.test.web.servlet.MvcResult;
-//
-//import java.io.IOException;
-//import java.io.UnsupportedEncodingException;
-//import java.util.List;
-//import java.util.Map;
-//
-//import static org.junit.jupiter.api.Assertions.assertEquals;
-//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-//
-//public class CategoryControllerE2ETest extends BasicE2ETest {
-//
-//    private static final String URL_TEMPLATE = "/api/v1/category";
-//
-////    @BeforeEach
-////    public void cleanUpDatabase() {
-////        cleanUpDb(8);
-////    }
-//
-////    private void cleanUpDb(int count) {
-////        try (Connection connection = connectionHolder.getConnection()) {
-////            connection.setAutoCommit(false);
-////            Statement statement = connection.createStatement();
-////            statement.execute("DELETE FROM category");
-////
-////            statement.execute("ALTER SEQUENCE category_id_seq RESTART WITH " + count);
-////            connection.commit();
-////        } catch (Exception e) {
-////            throw new RuntimeException("Failed to clean table: category", e);
-////        }
-////    }
-//
-//    @Test
-//    void testPostCategory() {
-////        cleanUpDb(3);
-//        // loadDataSet("/datasets/e2e/item/category/emptyE2ECategoryDataSet.yml");
-//
-//        try {
-//            mockMvc.perform(post(URL_TEMPLATE)
-//                            .contentType(MediaType.APPLICATION_JSON)
-//                            .content(TestUtil.readFile("json/category/input/CategoryDto.json")))
-//                    .andExpect(status().isOk());
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        // verifyExpectedData("/datasets/e2e/item/category/testE2ECategoryDataSet.yml",
-//                // new String[] {"id"},
-//                // new String[] {"label", "value",
-////        );
-//    }
-//
-//    @Test
-//    void testPutSingleCategory() {
-//        // loadDataSet("/datasets/e2e/item/category/testE2ECategoryDataSet.yml");
-//
-//        try {
-//            mockMvc.perform(put(URL_TEMPLATE)
-//                            .params(getMultiValueMap(getRequestParams()))
-//                            .contentType(MediaType.APPLICATION_JSON)
-//                            .content(TestUtil.readFile("json/category/input/UpdateSingleCategoryDto.json")))
-//                    .andExpect(status().isOk());
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        // verifyExpectedData("/datasets/e2e/item/category/updateE2ESingleCategoryDataSet.yml",
-//                // new String[] {"id"},
-//                // new String[] {"label", "value",
-////        );
-//    }
-//
-//    @Test
-//    void testPutCategory1() {
-//        // loadDataSet("/datasets/e2e/item/category/testE2ECategoryDataSet.yml");
-//
-//        try {
-//            mockMvc.perform(put(URL_TEMPLATE + "/inner")
-//                            .params(getMultiValueMap(getRequestParams()))
-//                            .contentType(MediaType.APPLICATION_JSON)
-//                            .content(TestUtil.readFile("json/category/input/UpdateCategory1Dto.json")))
-//                    .andExpect(status().isOk());
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        // verifyExpectedData("/datasets/e2e/item/category/updateE2ECategory1DataSet.yml",
-//                // new String[] {"id"},
-//                // new String[] {"label", "value",
-////        );
-//    }
-//
-//    @Test
-//    void testPutCategory2() {
-//        // loadDataSet("/datasets/e2e/item/category/testE2ECategoryDataSet.yml");
-//
-//        try {
-//            mockMvc.perform(put(URL_TEMPLATE + "/inner")
-//                            .params(getMultiValueMap(getRequestParams()))
-//                            .contentType(MediaType.APPLICATION_JSON)
-//                            .content(TestUtil.readFile("json/category/input/UpdateCategory2Dto.json")))
-//                    .andExpect(status().isOk());
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        // verifyExpectedData("/datasets/e2e/item/category/updateE2ECategory2DataSet.yml",
-//                // new String[] {"id"},
-//                // new String[] {"label", "value",
-////        );
-//    }
-//
-//    @Test
-//    void testPutCategory3() {
-//        // loadDataSet("/datasets/e2e/item/category/testE2ECategoryDataSet.yml");
-//
-//        try {
-//            mockMvc.perform(put(URL_TEMPLATE + "/inner")
-//                            .params(getMultiValueMap(getRequestParams()))
-//                            .contentType(MediaType.APPLICATION_JSON)
-//                            .content(TestUtil.readFile("json/category/input/UpdateCategory3Dto.json")))
-//                    .andExpect(status().isOk());
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        // verifyExpectedData("/datasets/e2e/item/category/updateE2ECategory3DataSet.yml",
-//                // new String[] {"id"},
-//                // new String[] {"label", "value",
-////        );
-//    }
-//
-//    @Test
-//    void testPutCategoryException() {
-//        // loadDataSet("/datasets/e2e/item/category/testE2ECategoryDataSet.yml");
-//
-//        try {
-//            mockMvc.perform(put(URL_TEMPLATE + "/inner")
-//                            .params(getMultiValueMap(getRequestParams()))
-//                            .contentType(MediaType.APPLICATION_JSON)
-//                            .content(TestUtil.readFile("json/category/input/IncorrectCategoryDto.json")))
-//                    .andExpect(status().is5xxServerError());
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        // verifyExpectedData("/datasets/e2e/item/category/testE2ECategoryDataSet.yml",
-//                // new String[] {"id"},
-//                // new String[] {"label", "value",
-////        );
-//    }
-//
-//    @Test
-//    void testDeleteCategory() {
-//        // loadDataSet("/datasets/e2e/item/category/testE2ECategoryDataSet.yml");
-//
-//        try {
-//            mockMvc.perform(delete(URL_TEMPLATE)
-//                            .params(getMultiValueMap(getRequestParams())))
-//                    .andExpect(status().isOk());
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        // verifyExpectedData("/datasets/e2e/item/category/deleteE2ECategoryDataSet.yml");
-//    }
-//
-//    @Test
-//    void testGetCategory() {
-//        // loadDataSet("/datasets/e2e/item/category/testE2ECategoryDataSet.yml");
-//        MvcResult mvcResult;
-//        try {
-//            mvcResult = mockMvc.perform(get(URL_TEMPLATE)
-//                            .params(getMultiValueMap(getRequestParams()))
-//                            .contentType(MediaType.APPLICATION_JSON))
-//                    .andExpect(status().isOk())
-//                    .andReturn();
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        try {
-//            String jsonResponse = mvcResult.getResponse().getContentAsString();
-//            CategoryDto actual = objectMapper.readValue(jsonResponse, CategoryDto.class);
-//            String expectedResultStr = TestUtil.readFile("json/category/output/ResponseCategoryDto.json");
-//            CategoryDto expected = objectMapper.readValue(expectedResultStr, CategoryDto.class);
-//            assertEquals(expected, actual);
-//        } catch (JsonProcessingException | UnsupportedEncodingException e) {
-//            throw new RuntimeException("Error processing the JSON response", e);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-//    @Test
-//    void testGetAllFirstLineCategories() {
-//        // loadDataSet("/datasets/e2e/item/category/testE2ECategoryDataSet.yml");
-//        MvcResult mvcResult;
-//        try {
-//            mvcResult = mockMvc.perform(get(URL_TEMPLATE + "/all")
-//                            .params(getMultiValueMap(getRequestParams()))
-//                            .contentType(MediaType.APPLICATION_JSON))
-//                    .andExpect(status().isOk())
-//                    .andReturn();
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        try {
-//            String jsonResponse = mvcResult.getResponse().getContentAsString();
-//            List<CategoryDto> actual = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
-//            String expectedResultStr = TestUtil.readFile("json/category/output/ResponseAllCategoryDto.json");
-//            List<CategoryDto> expected = objectMapper.readValue(expectedResultStr, new TypeReference<>() {});
-//            assertEquals(expected, actual);
-//        } catch (JsonProcessingException | UnsupportedEncodingException e) {
-//            throw new RuntimeException("Error processing the JSON response", e);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-//    private Map<String, String> getRequestParams() {
-//        return Map.of("category", "Gaming Laptops & Accessories");
-//    }
-//}
+package com.b2c.prototype.e2e.controller.constant;
+
+import com.b2c.prototype.e2e.BasicE2ETest;
+import com.b2c.prototype.modal.dto.payload.constant.CategoryCascade;
+import com.b2c.prototype.modal.dto.payload.constant.CategoryDto;
+import com.github.database.rider.core.api.dataset.DataSet;
+import com.github.database.rider.core.api.dataset.ExpectedDataSet;
+import org.junit.jupiter.api.Test;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.jdbc.Sql;
+
+import java.util.List;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
+public class CategoryControllerE2ETest extends BasicE2ETest {
+
+    private static final String URL_TEMPLATE = "/api/v1/item/category";
+
+    @Test
+    @DataSet(value = "datasets/e2e/item/category/emptyE2ECategoryDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/item/category/testE2ECategoryDataSet.yml",
+            orderBy = "id",
+            ignoreCols = {"key"})
+    @Sql(statements = {
+            "ALTER SEQUENCE category_id_seq RESTART WITH 6",
+    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    public void testCreateEntity() {
+        CategoryDto dto = getCategoryDto();
+        String jsonPayload = writeValueAsString(dto);
+
+        webTestClient.post()
+                .uri(URL_TEMPLATE)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .bodyValue(jsonPayload)
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    @DataSet(value = "datasets/e2e/item/category/testE2ECategoryDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/item/category/updateE2ECategoryDataSetMore.yml", orderBy = "id")
+    @Sql(statements = {
+            "ALTER SEQUENCE category_id_seq RESTART WITH 22",
+    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    public void testUpdateEntityMore() {
+        CategoryDto dto = getUpdateCategoryDtoMore();
+        String jsonPayload = writeValueAsString(dto);
+
+        webTestClient.put()
+                .uri(uriBuilder -> uriBuilder
+                        .path(URL_TEMPLATE)
+                        .queryParam("region", "Global")
+                        .queryParam("category", "Apple")
+                        .build())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .bodyValue(jsonPayload)
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    @DataSet(value = "datasets/e2e/item/category/testE2ECategoryDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/item/category/updateE2ECategoryDataSetLess.yml", orderBy = "id")
+    public void testUpdateEntityLess() {
+        CategoryDto dto = getUpdateCategoryDtoLess();
+        String jsonPayload = writeValueAsString(dto);
+
+        webTestClient.put()
+                .uri(uriBuilder -> uriBuilder
+                        .path(URL_TEMPLATE)
+                        .queryParam("region", "Global")
+                        .queryParam("category", "Apple")
+                        .build())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .bodyValue(jsonPayload)
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    @DataSet(value = "datasets/e2e/item/category/testE2ECategoryDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/item/category/updateE2ECategoryDataSetReplace.yml",
+            orderBy = "id",
+            ignoreCols = {"key"})
+    @Sql(statements = {
+            "ALTER SEQUENCE category_id_seq RESTART WITH 22",
+    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    public void testUpdateEntityReplace() {
+        CategoryDto dto = getUpdateCategoryDtoReplace();
+        String jsonPayload = writeValueAsString(dto);
+
+        webTestClient.put()
+                .uri(uriBuilder -> uriBuilder
+                        .path(URL_TEMPLATE)
+                        .queryParam("region", "Global")
+                        .queryParam("category", "Apple")
+                        .build())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .bodyValue(jsonPayload)
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    @DataSet(value = "datasets/e2e/item/category/testE2ECategoryDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/item/category/emptyE2ECategoryDataSet.yml", orderBy = "id")
+    public void testDeleteEntity() {
+        webTestClient.delete()
+                .uri(uriBuilder -> uriBuilder
+                        .path(URL_TEMPLATE)
+                        .queryParam("region", "Global")
+                        .queryParam("category", "Apple")
+                        .build())
+                .accept(MediaType.TEXT_PLAIN)
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    @DataSet(value = "datasets/e2e/item/category/testE2ECategoryDataSet.yml", cleanBefore = true)
+    public void testGetEntities() {
+        List<CategoryDto> constantPayloadDtoList = List.of(
+                getCategoryDto2()
+        );
+
+        List<CategoryDto> actual =
+                webTestClient.get()
+                        .uri(uriBuilder -> uriBuilder
+                                .path(URL_TEMPLATE + "/all")
+                                .queryParam("region", "Global")
+                                .build())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .exchange()
+                        .expectStatus().isOk()
+                        .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                        .expectBody(new ParameterizedTypeReference<List<CategoryDto>>() {})
+                        .returnResult()
+                        .getResponseBody();
+
+        assertThat(actual).isEqualTo(constantPayloadDtoList);
+    }
+
+    @Test
+    @DataSet(value = "datasets/e2e/item/category/testE2ECategoryDataSet.yml", cleanBefore = true)
+    public void testGetEntity() {
+        CategoryDto expected = getCategoryDto2();
+
+        CategoryDto actual = webTestClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path(URL_TEMPLATE)
+                        .queryParam("region", "Global")
+                        .queryParam("category", "Apple")
+                        .build())
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                .expectBody(CategoryDto.class)
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(actual)
+                .usingRecursiveComparison()
+                .ignoringCollectionOrder()
+                .isEqualTo(expected);
+    }
+
+    private CategoryDto getCategoryDto() {
+        return CategoryDto.builder()
+                .region("Global")
+                .category(
+                        CategoryCascade.builder()
+                                .value("Apple")
+                                .childList(List.of(
+                                                CategoryCascade.builder()
+                                                        .value("Mac")
+                                                        .childList(List.of(
+                                                                CategoryCascade.builder()
+                                                                        .value("Macbook air")
+                                                                        .build(),
+                                                                CategoryCascade.builder()
+                                                                        .value("Macbook pro")
+                                                                        .build()
+                                                        ))
+                                                        .build(),
+                                                CategoryCascade.builder()
+                                                        .value("IPhone")
+                                                        .childList(List.of(
+                                                                CategoryCascade.builder()
+                                                                        .value("IPhone air")
+                                                                        .build(),
+                                                                CategoryCascade.builder()
+                                                                        .value("IPhone pro")
+                                                                        .build(),
+                                                                CategoryCascade.builder()
+                                                                        .value("IPhone 17")
+                                                                        .build(),
+                                                                CategoryCascade.builder()
+                                                                        .value("IPhone 16")
+                                                                        .build()
+                                                        ))
+                                                        .build(),
+                                                CategoryCascade.builder()
+                                                        .value("IPad")
+                                                        .childList(List.of(
+                                                                CategoryCascade.builder()
+                                                                        .value("IPad air")
+                                                                        .build(),
+                                                                CategoryCascade.builder()
+                                                                        .value("IPad pro")
+                                                                        .build()
+                                                        ))
+                                                        .build(),
+                                                CategoryCascade.builder()
+                                                        .value("Watch")
+                                                        .childList(List.of(
+                                                                CategoryCascade.builder()
+                                                                        .value("Apple Watch Series 11")
+                                                                        .build(),
+                                                                CategoryCascade.builder()
+                                                                        .value("Apple Watch SE 3")
+                                                                        .build(),
+                                                                CategoryCascade.builder()
+                                                                        .value("Apple Watch Ultra 3")
+                                                                        .build()
+                                                        ))
+                                                        .build()
+                                ))
+                                .build())
+                .build();
+    }
+
+    private CategoryDto getCategoryDto2() {
+        return CategoryDto.builder()
+                .region("Global")
+                .category(
+                        CategoryCascade.builder()
+                                .value("Apple")
+                                .key("Apple")
+                                .childList(List.of(
+                                        CategoryCascade.builder()
+                                                .key("Mac")
+                                                .value("Mac")
+                                                .childList(List.of(
+                                                        CategoryCascade.builder()
+                                                                .key("Macbook air")
+                                                                .value("Macbook air")
+                                                                .childList(List.of())
+                                                                .build(),
+                                                        CategoryCascade.builder()
+                                                                .key("Macbook pro")
+                                                                .value("Macbook pro")
+                                                                .childList(List.of())
+                                                                .build()
+                                                ))
+                                                .build(),
+                                        CategoryCascade.builder()
+                                                .key("IPhone")
+                                                .value("IPhone")
+                                                .childList(List.of(
+                                                        CategoryCascade.builder()
+                                                                .key("IPhone air")
+                                                                .value("IPhone air")
+                                                                .childList(List.of())
+                                                                .build(),
+                                                        CategoryCascade.builder()
+                                                                .key("IPhone pro")
+                                                                .value("IPhone pro")
+                                                                .childList(List.of())
+                                                                .build(),
+                                                        CategoryCascade.builder()
+                                                                .key("IPhone 17")
+                                                                .value("IPhone 17")
+                                                                .childList(List.of())
+                                                                .build(),
+                                                        CategoryCascade.builder()
+                                                                .key("IPhone 16")
+                                                                .value("IPhone 16")
+                                                                .childList(List.of())
+                                                                .build()
+                                                ))
+                                                .build(),
+                                        CategoryCascade.builder()
+                                                .key("IPad")
+                                                .value("IPad")
+                                                .childList(List.of(
+                                                        CategoryCascade.builder()
+                                                                .key("IPad air")
+                                                                .value("IPad air")
+                                                                .childList(List.of())
+                                                                .build(),
+                                                        CategoryCascade.builder()
+                                                                .key("IPad pro")
+                                                                .value("IPad pro")
+                                                                .childList(List.of())
+                                                                .build()
+                                                ))
+                                                .build(),
+                                        CategoryCascade.builder()
+                                                .key("Watch")
+                                                .value("Watch")
+                                                .childList(List.of(
+                                                        CategoryCascade.builder()
+                                                                .key("Apple Watch Series 11")
+                                                                .value("Apple Watch Series 11")
+                                                                .childList(List.of())
+                                                                .build(),
+                                                        CategoryCascade.builder()
+                                                                .key("Apple Watch SE 3")
+                                                                .value("Apple Watch SE 3")
+                                                                .childList(List.of())
+                                                                .build(),
+                                                        CategoryCascade.builder()
+                                                                .key("Apple Watch Ultra 3")
+                                                                .value("Apple Watch Ultra 3")
+                                                                .childList(List.of())
+                                                                .build()
+                                                ))
+                                                .build()
+                                ))
+                                .build())
+                .build();
+    }
+
+    private CategoryDto getUpdateCategoryDtoMore() {
+        return CategoryDto.builder()
+                .region("DE")
+                .category(
+                        CategoryCascade.builder()
+                                .value("Update Apple")
+                                .key("Apple")
+                                .childList(List.of(
+                                        CategoryCascade.builder()
+                                                .key("Mac")
+                                                .value("Update Mac")
+                                                .childList(List.of(
+                                                        CategoryCascade.builder()
+                                                                .key("Macbook air")
+                                                                .value("Update Macbook air")
+                                                                .childList(List.of())
+                                                                .build(),
+                                                        CategoryCascade.builder()
+                                                                .key("Macbook pro")
+                                                                .value("Update Macbook pro")
+                                                                .childList(List.of())
+                                                                .build(),
+                                                        CategoryCascade.builder()
+                                                                .key("Macbook M4")
+                                                                .value("New Macbook M4")
+                                                                .childList(List.of())
+                                                                .build()
+                                                ))
+                                                .build(),
+                                        CategoryCascade.builder()
+                                                .key("IPhone")
+                                                .value("Update IPhone")
+                                                .childList(List.of(
+                                                        CategoryCascade.builder()
+                                                                .key("IPhone air")
+                                                                .value("Update IPhone air")
+                                                                .childList(List.of())
+                                                                .build(),
+                                                        CategoryCascade.builder()
+                                                                .key("IPhone pro")
+                                                                .value("Update IPhone pro")
+                                                                .childList(List.of())
+                                                                .build(),
+                                                        CategoryCascade.builder()
+                                                                .key("IPhone 17")
+                                                                .value("Update IPhone 17")
+                                                                .childList(List.of())
+                                                                .build(),
+                                                        CategoryCascade.builder()
+                                                                .key("IPhone 16")
+                                                                .value("Update IPhone 16")
+                                                                .childList(List.of())
+                                                                .build(),
+                                                        CategoryCascade.builder()
+                                                                .key("IPhone 15")
+                                                                .value("New IPhone 15")
+                                                                .childList(List.of())
+                                                                .build()
+                                                ))
+                                                .build(),
+                                        CategoryCascade.builder()
+                                                .key("IPad")
+                                                .value("Update IPad")
+                                                .childList(List.of(
+                                                        CategoryCascade.builder()
+                                                                .key("IPad air")
+                                                                .value("Update IPad air")
+                                                                .childList(List.of())
+                                                                .build(),
+                                                        CategoryCascade.builder()
+                                                                .key("IPad pro")
+                                                                .value("Update IPad pro")
+                                                                .childList(List.of())
+                                                                .build()
+                                                ))
+                                                .build(),
+                                        CategoryCascade.builder()
+                                                .key("Watch")
+                                                .value("Update Watch")
+                                                .childList(List.of(
+                                                        CategoryCascade.builder()
+                                                                .key("Apple Watch Series 10")
+                                                                .value("New Apple Watch Series 10")
+                                                                .childList(List.of())
+                                                                .build(),
+                                                        CategoryCascade.builder()
+                                                                .key("Apple Watch Series 11")
+                                                                .value("Update Apple Watch Series 11")
+                                                                .childList(List.of())
+                                                                .build(),
+                                                        CategoryCascade.builder()
+                                                                .key("Apple Watch SE 3")
+                                                                .value("Update Apple Watch SE 3")
+                                                                .childList(List.of())
+                                                                .build(),
+                                                        CategoryCascade.builder()
+                                                                .key("Apple Watch Ultra 3")
+                                                                .value("Update Apple Watch Ultra 3")
+                                                                .childList(List.of())
+                                                                .build()
+                                                ))
+                                                .build()
+                                ))
+                                .build())
+                .build();
+    }
+
+    private CategoryDto getUpdateCategoryDtoLess() {
+        return CategoryDto.builder()
+                .region("DE")
+                .category(
+                        CategoryCascade.builder()
+                                .value("Update Apple")
+                                .key("Apple")
+                                .childList(List.of(
+                                        CategoryCascade.builder()
+                                                .key("Mac")
+                                                .value("Update Mac")
+                                                .childList(List.of(
+                                                        CategoryCascade.builder()
+                                                                .key("Macbook pro")
+                                                                .value("Update Macbook pro")
+                                                                .childList(List.of())
+                                                                .build()
+                                                ))
+                                                .build(),
+                                        CategoryCascade.builder()
+                                                .key("IPhone")
+                                                .value("Update IPhone")
+                                                .childList(List.of(
+                                                        CategoryCascade.builder()
+                                                                .key("IPhone air")
+                                                                .value("Update IPhone air")
+                                                                .childList(List.of())
+                                                                .build(),
+                                                        CategoryCascade.builder()
+                                                                .key("IPhone pro")
+                                                                .value("Update IPhone pro")
+                                                                .childList(List.of())
+                                                                .build(),
+                                                        CategoryCascade.builder()
+                                                                .key("IPhone 17")
+                                                                .value("Update IPhone 17")
+                                                                .childList(List.of())
+                                                                .build()
+                                                ))
+                                                .build(),
+                                        CategoryCascade.builder()
+                                                .key("Watch")
+                                                .value("Update Watch")
+                                                .childList(List.of(
+                                                        CategoryCascade.builder()
+                                                                .key("Apple Watch SE 3")
+                                                                .value("Update Apple Watch SE 3")
+                                                                .childList(List.of())
+                                                                .build(),
+                                                        CategoryCascade.builder()
+                                                                .key("Apple Watch Ultra 3")
+                                                                .value("Update Apple Watch Ultra 3")
+                                                                .childList(List.of())
+                                                                .build()
+                                                ))
+                                                .build()
+                                ))
+                                .build())
+                .build();
+    }
+
+    private CategoryDto getUpdateCategoryDtoReplace() {
+        return CategoryDto.builder()
+                .region("DE")
+                .category(
+                        CategoryCascade.builder()
+                                .value("Update Apple")
+                                .key("Apple")
+                                .childList(List.of(
+                                        CategoryCascade.builder()
+                                                .key(null)
+                                                .value("New Mac")
+                                                .childList(List.of(
+                                                        CategoryCascade.builder()
+                                                                .value("New Macbook air")
+                                                                .childList(List.of())
+                                                                .build(),
+                                                        CategoryCascade.builder()
+                                                                .value("New Macbook pro")
+                                                                .childList(List.of())
+                                                                .build()
+                                                ))
+                                                .build(),
+                                        CategoryCascade.builder()
+                                                .key("IPad")
+                                                .value("Update IPad")
+                                                .childList(List.of(
+                                                        CategoryCascade.builder()
+                                                                .key("IPad air")
+                                                                .value("Update IPad air")
+                                                                .childList(List.of())
+                                                                .build(),
+                                                        CategoryCascade.builder()
+                                                                .key("IPad pro")
+                                                                .value("Update IPad pro")
+                                                                .childList(List.of())
+                                                                .build(),
+                                                        CategoryCascade.builder()
+                                                                .key("IPhone air")
+                                                                .value("Update IPhone air")
+                                                                .childList(List.of())
+                                                                .build(),
+                                                        CategoryCascade.builder()
+                                                                .key("IPhone pro")
+                                                                .value("Update IPhone pro")
+                                                                .childList(List.of())
+                                                                .build(),
+                                                        CategoryCascade.builder()
+                                                                .key("IPhone 17")
+                                                                .value("Update IPhone 17")
+                                                                .childList(List.of())
+                                                                .build(),
+                                                        CategoryCascade.builder()
+                                                                .key("IPhone 16")
+                                                                .value("Update IPhone 16")
+                                                                .childList(List.of())
+                                                                .build(),
+                                                        CategoryCascade.builder()
+                                                                .key("Watch")
+                                                                .value("Update Watch")
+                                                                .childList(List.of(
+                                                                        CategoryCascade.builder()
+                                                                                .key("Apple Watch Series 11")
+                                                                                .value("Update Apple Watch Series 11")
+                                                                                .childList(List.of())
+                                                                                .build(),
+                                                                        CategoryCascade.builder()
+                                                                                .key("Apple Watch SE 3")
+                                                                                .value("Update Apple Watch SE 3")
+                                                                                .childList(List.of())
+                                                                                .build(),
+                                                                        CategoryCascade.builder()
+                                                                                .key("Apple Watch Ultra 3")
+                                                                                .value("Update Apple Watch Ultra 3")
+                                                                                .childList(List.of())
+                                                                                .build()
+                                                                ))
+                                                                .build()
+                                                ))
+                                                .build()
+                                ))
+                                .build())
+                .build();
+    }
+}

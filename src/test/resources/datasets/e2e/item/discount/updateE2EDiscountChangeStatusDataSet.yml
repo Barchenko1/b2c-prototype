@@ -1,54 +1,53 @@
 currency:
   - id: 1
+    value: "EUR"
+    key: "EUR"
+  - id: 2
     value: "USD"
     key: "USD"
-price:
+region:
   - id: 1
-    amount: 100
-    currency_id: 1
+    code: "DE"
+    value: "Germany"
+    language: "German"
+    default_locale: "de-DE"
+    primary_currency_id: 1
+    timezone: "Europe/Berlin"
   - id: 2
-    amount: 100
-    currency_id: 1
-  - id: 3
-    amount: 100
-    currency_id: 1
-  - id: 4
-    amount: 100
-    currency_id: 1
+    code: "Global"
+    value: "Global"
+    language: "English"
+    default_locale: "en-US"
+    primary_currency_id: 2
+    timezone: "UTC"
+discount_group:
+  - id: 1
+    key: "Germany_group"
+    value: "Germany_group"
+    region_id: 1
+  - id: 2
+    key: "Global_group"
+    value: "Global_group"
+    region_id: 2
 discount:
   - id: 1
     amount: 10
-    char_sequence_code: "abc"
+    char_sequence_code: "abc1"
     is_active: true
     is_percent: false
     currency_id: 1
+    discount_group_id: 1
   - id: 2
-    amount: 10
-    char_sequence_code: "abc1"
+    amount: 20
+    char_sequence_code: "abc2"
     is_active: false
     is_percent: false
-    currency_id: 1
-articular_item:
-  - id: 1
-    articular_uniq_id: 123
-    date_of_create: "2024-03-03 12:00:00"
-    discount_id: 1
-    fullprice_id: 1
-    totalprice_id: 1
-  - id: 2
-    articular_uniq_id: 111
-    date_of_create: "2024-03-03 12:00:00"
-    discount_id: 2
-    fullprice_id: 2
-    totalprice_id: 2
+    currency_id: 2
+    discount_group_id: 2
   - id: 3
-    articular_uniq_id: 122
-    date_of_create: "2024-03-03 12:00:00"
-    discount_id: 2
-    fullprice_id: 3
-    totalprice_id: 3
-  - id: 4
-    articular_uniq_id: noDiscount
-    date_of_create: "2024-03-03 12:00:00"
-    fullprice_id: 4
-    totalprice_id: 4
+    amount: 10
+    char_sequence_code: "abc3"
+    is_active: true
+    is_percent: true
+    discount_group_id: 2
+articular_item: []

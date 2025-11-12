@@ -65,7 +65,7 @@ public class MinMaxCommissionDaoTest extends AbstractDaoTest {
         MinMaxCommission expected = getMinMaxCommission();
 
         Pair<String, Long> pair = Pair.of("id", 1L);
-        MinMaxCommission entity = generalEntityDao.findEntity("MinMaxCommission.findById", List.of(pair));
+        MinMaxCommission entity = generalEntityDao.findEntity("CommissionControllerE2ETest.findById", List.of(pair));
 
         assertEquals(expected, entity);
     }
@@ -76,7 +76,7 @@ public class MinMaxCommissionDaoTest extends AbstractDaoTest {
         MinMaxCommission expected = getMinMaxCommission();
 
         Pair<String, Long> pair = Pair.of("id", 1L);
-        Optional<MinMaxCommission> optionEntity = generalEntityDao.findOptionEntity("MinMaxCommission.findById", List.of(pair));
+        Optional<MinMaxCommission> optionEntity = generalEntityDao.findOptionEntity("CommissionControllerE2ETest.findById", List.of(pair));
 
         assertTrue(optionEntity.isPresent());
 
@@ -90,7 +90,7 @@ public class MinMaxCommissionDaoTest extends AbstractDaoTest {
         MinMaxCommission entity = getMinMaxCommission();
 
         Pair<String, Long> pair = Pair.of("id", 1L);
-        List<MinMaxCommission> entityList = generalEntityDao.findEntityList("MinMaxCommission.findById", List.of(pair));
+        List<MinMaxCommission> entityList = generalEntityDao.findEntityList("CommissionControllerE2ETest.findById", List.of(pair));
 
         assertEquals(List.of(entity), entityList);
     }

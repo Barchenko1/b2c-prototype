@@ -1,156 +1,215 @@
 package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.dao.IGeneralEntityDao;
+import com.b2c.prototype.modal.dto.payload.constant.CategoryCascade;
 import com.b2c.prototype.modal.dto.payload.constant.CategoryDto;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.manager.item.ICategoryManager;
-import com.b2c.prototype.util.CategoryUtil;
+import com.b2c.prototype.modal.entity.region.Region;
+import com.b2c.prototype.transform.item.IItemTransformService;
 import com.nimbusds.jose.util.Pair;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.IdentityHashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.b2c.prototype.util.CategoryUtil.flattenCategories;
-import static com.b2c.prototype.util.CategoryUtil.flattenCategory;
-import static com.b2c.prototype.util.CategoryUtil.getAllValues;
-import static com.b2c.prototype.util.CategoryUtil.getValues;
-import static com.b2c.prototype.util.CategoryUtil.validateNoDuplicates;
+import static com.b2c.prototype.util.Constant.CODE;
 import static com.b2c.prototype.util.Constant.KEY;
+import static com.b2c.prototype.util.Util.getUUID;
 
 @Slf4j
 @Service
 public class CategoryManager implements ICategoryManager {
 
     private final IGeneralEntityDao generalEntityDao;
+    private final IItemTransformService itemTransformService;
 
-    public CategoryManager(IGeneralEntityDao generalEntityDao) {
+    public CategoryManager(IGeneralEntityDao generalEntityDao,
+                           IItemTransformService itemTransformService) {
         this.generalEntityDao = generalEntityDao;
+        this.itemTransformService = itemTransformService;
     }
 
     @Override
-    public void saveCategoryList(List<CategoryDto> categoryDtoList) {
-        createCategory(categoryDtoList);
+    @Transactional
+    public void saveCategory(CategoryDto categoryDto) {
+        Category category = itemTransformService.mapCategoryDtoToCategory(categoryDto);
+        generalEntityDao.persistEntity(category);
     }
 
     @Override
-    public void updateSingleCategory(CategoryDto categoryDto) {
+    @Transactional
+    public void updateCategory(String regionCode, String categoryKey, CategoryDto categoryDto) {
+        Region region = generalEntityDao.findEntity(
+                "Region.findByCode", Pair.of(CODE, categoryDto.getRegion()));
+
+        Optional<Category> existingCategoryOpt = generalEntityDao.findOptionEntity(
+                "Category.findByKeyAndRegion",
+                Arrays.asList(Pair.of(KEY, categoryKey), Pair.of(CODE, regionCode))
+        );
+
+        Category existingCategory = existingCategoryOpt
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        existingCategory.setRegion(region);
+        CategoryCascade categoryCascade = categoryDto.getCategory();
+
+        Map<String, Category> registry = flattenByKey(existingCategory);
+
+//        String incomingRootKey = ensureKey(categoryCascade.getKey(), categoryCascade.getValue());
+        String incomingRootKey = ensureKey(categoryCascade.getKey());
+
+        registry.putIfAbsent(existingCategory.getKey(), existingCategory);
+        registry.putIfAbsent(incomingRootKey, existingCategory);
+
+        applyCategoryUpdate(existingCategory, categoryCascade, region, registry);
+
+        generalEntityDao.mergeEntity(existingCategory);
+    }
+
+    @Override
+    @Transactional
+    public void deleteCategory(String regionCode, String categoryKey) {
         Optional<Category> optionalCategory = generalEntityDao.findOptionEntity(
-                "Category.findByKey",
-                Pair.of(KEY, categoryDto.getOldKey()));
-        if (optionalCategory.isPresent()) {
-            Category category = optionalCategory.get();
-            List<String> values = getValues(category);
-            List<CategoryDto> allNestedCategories = flattenCategory(categoryDto);
-            List<String> duplicates = validateNoDuplicates(values, allNestedCategories);
-            if (!duplicates.isEmpty()) {
-                throw new RuntimeException("Duplicate values found: " + duplicates);
-            }
-            category.setValue(categoryDto.getValue());
-            category.setKey(categoryDto.getKey());
-            generalEntityDao.mergeEntity(category);
-        }
+                "Category.findByKeyAndRegion",
+                List.of(Pair.of(CODE, regionCode), Pair.of(KEY, categoryKey)));
+
+        Category category = optionalCategory
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+        generalEntityDao.removeEntity(category);
     }
 
     @Override
-    public void updateCategory(List<CategoryDto> categoryDtoList) {
-        try {
-            createCategory(categoryDtoList);
-        } catch (Exception e) {
-            throw new RuntimeException("Duplicate key value", e);
-        }
-    }
-
-    @Override
-    public void deleteCategory(String categoryValue) {
+    @Transactional(readOnly = true)
+    public CategoryDto getCategory(String regionCode, String categoryKey) {
         Optional<Category> optionalCategory = generalEntityDao.findOptionEntity(
-                "Category.findByKey",
-                Pair.of(KEY, categoryValue));
-        if (optionalCategory.isPresent()) {
-            Category category = optionalCategory.get();
-            generalEntityDao.removeEntity(category);
-        }
+                "Category.findByKeyAndRegion",
+                List.of(Pair.of(CODE, regionCode), Pair.of(KEY, categoryKey)));
+
+        return optionalCategory
+                .map(itemTransformService::mapCategoryToCategoryDto)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
     }
 
     @Override
-    public CategoryDto getCategoryByCategoryName(String categoryName) {
-        AtomicReference<CategoryDto> categoryDto = new AtomicReference<>();
-        Optional<Category> optionalCategory = generalEntityDao.findOptionEntity(
-                "Category.findByKey",
-                Pair.of(KEY, categoryName));
-        categoryDto.set(optionalCategory
-                .map(CategoryUtil::toDto)
-                .orElseThrow(() -> new RuntimeException("Category not found")));
-        return categoryDto.get();
-    }
-
-    @Override
-    public List<CategoryDto> getAllFirstLineCategories() {
-        AtomicReference<List<CategoryDto>> categoryDtoList = new AtomicReference<>();
+    @Transactional(readOnly = true)
+    public List<CategoryDto> getCategories(String region) {
         List<Category> categories = generalEntityDao.findEntityList(
-                "Category.allParent", (Pair<String, ?>) null);
-        categoryDtoList.set(categories.stream()
-                .map(CategoryUtil::toDto)
-                .toList());
-        return categoryDtoList.get();
+                "Category.findRootByRegion", Pair.of(CODE, region));
+
+        return categories.stream()
+                .map(itemTransformService::mapCategoryToCategoryDto)
+                .toList();
     }
 
-    private Category updateEntity(CategoryDto categoryDto, Map<String, Category> existingCategoryMap) {
-        if (categoryDto == null) {
-            return null;
-        }
+    private static String ensureKey(String key) {
+        if (key != null && !key.trim().isEmpty()) return key.trim();
+//        String base = value == null ? "cat" : value.toLowerCase().replaceAll("[^a-z0-9]+","-").replaceAll("^-|-$","");
+//        return base + "-" + Integer.toHexString((value == null ? "cat" : value).hashCode()).substring(0,4);
+        return getUUID();
+    }
 
-        Category category = (categoryDto.getOldKey() != null)
-                ? existingCategoryMap.get(categoryDto.getOldKey())
-                : null;
-
-        if (category == null) {
-            category = new Category();
-        }
-
-        category.setValue(categoryDto.getValue());
-        category.setKey(categoryDto.getKey());
-
-        Map<String, Category> existingChildrenMap = category.getChildList().stream()
-                .collect(Collectors.toMap(Category::getKey, child -> child));
-
-        List<Category> updatedChildren = new ArrayList<>();
-
-        if (categoryDto.getChildList() != null) {
-            for (CategoryDto childDto : categoryDto.getChildList()) {
-                Category updatedChild = updateEntity(childDto, existingChildrenMap);
-                updatedChild.setParent(category);
-                updatedChildren.add(updatedChild);
+    private Map<String, Category> flattenByKey(Category root) {
+        Map<String, Category> map = new LinkedHashMap<>();
+        Deque<Category> stack = new ArrayDeque<>();
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            Category c = stack.pop();
+            if (c.getKey() != null) map.putIfAbsent(c.getKey(), c);
+            if (c.getChildList() != null) {
+                for (Category ch : c.getChildList()) stack.push(ch);
             }
         }
-
-        category.getChildList().clear();
-        category.getChildList().addAll(updatedChildren);
-
-        return category;
+        return map;
     }
 
-    private void createCategory(List<CategoryDto> categoryDtoList) {
-        List<Category> existingCategoryList = generalEntityDao.findEntityList(
-                "Category.all", (Pair<String, ?>) null);
-        List<String> values = getAllValues(existingCategoryList);
-        List<CategoryDto> allNestedCategories = flattenCategories(categoryDtoList);
-        List<String> duplicates = validateNoDuplicates(values, allNestedCategories);
-        if (!duplicates.isEmpty()) {
-            throw new RuntimeException("Duplicate values found: " + duplicates);
-        }
-        Map<String, Category> existingCategoryMap = existingCategoryList.stream()
-                .collect(Collectors.toMap(Category::getKey, category -> category));
+    private void applyCategoryUpdate(Category target, CategoryCascade source, Region region, Map<String, Category> registry) {
+        if (source.getValue() != null) target.setValue(source.getValue());
+        target.setRegion(region);
 
-        categoryDtoList.forEach(categoryDto -> {
-            Category updatedCategory = updateEntity(categoryDto, existingCategoryMap);
-            generalEntityDao.mergeEntity(updatedCategory);
-        });
+        List<CategoryCascade> incoming = Optional.ofNullable(source.getChildList()).orElseGet(Collections::emptyList);
+        // local fast lookup for existing children under THIS parent
+        Map<String, Category> currentChildrenByKey = target.getChildList().stream()
+                .filter(Objects::nonNull)
+                .filter(c -> c.getKey() != null)
+                .collect(Collectors.toMap(Category::getKey, Function.identity(), (a,b)->a, LinkedHashMap::new));
+
+        Set<Category> matched = Collections.newSetFromMap(new IdentityHashMap<>());
+
+        for (CategoryCascade childDto : incoming) {
+            if (childDto == null) continue;
+
+//            String key = ensureKey(childDto.getKey(), childDto.getValue());
+            String key = ensureKey(childDto.getKey());
+
+            // prefer global registry (move / reuse)
+            Category child = registry.get(key);
+
+            if (child == null) {
+                // Create new
+                child = buildTree(childDto, region, registry);
+                target.addChildEntity(child);
+                matched.add(child);
+                continue;
+            }
+
+            // Child exists: ensure it belongs to same region
+            child.setRegion(region);
+
+            // If it has a different parent, move (re-parent) it
+            if (child.getParent() != target) {
+                Category oldParent = child.getParent();
+                if (oldParent != null) {
+                    oldParent.removeChildEntity(child);
+                }
+                target.addChildEntity(child);
+            }
+
+            // Update value & recurse
+            if (childDto.getValue() != null) child.setValue(childDto.getValue());
+            applyCategoryUpdate(child, childDto, region, registry);
+            matched.add(child);
+        }
+
+        // remove orphans under THIS parent (not in matched)
+        target.getChildList().stream()
+                .filter(c -> !matched.contains(c))
+                .toList()
+                .forEach(target::removeChildEntity);
+    }
+
+    private Category buildTree(CategoryCascade dto, Region region, Map<String, Category> registry) {
+//        String key = ensureKey(dto.getKey(), dto.getValue());
+        String key = ensureKey(dto.getKey());
+
+        Category cat = Category.builder()
+                .key(key)
+                .value(dto.getValue())
+                .region(region)
+                .build();
+
+        registry.putIfAbsent(key, cat);
+
+        List<CategoryCascade> children = Optional.ofNullable(dto.getChildList()).orElseGet(Collections::emptyList);
+        for (CategoryCascade childDto : children) {
+            Category child = buildTree(childDto, region, registry);
+            cat.addChildEntity(child); // <-- you missed this earlier
+        }
+        return cat;
     }
 
 }

@@ -25,28 +25,31 @@ public class CountryManager implements ICountryManager {
     }
 
     public void mergeEntity(String searchValue, Country entity) {
-        Country fetchedEntity =
-                generalEntityDao.findEntity("Country.findByKey", Pair.of(KEY, searchValue));
+        Country fetchedEntity = getCountry(searchValue);
         entity.setId(fetchedEntity.getId());
         generalEntityDao.mergeEntity(entity);
     }
 
-    public void removeEntity(String value) {
-        Country fetchedEntity = generalEntityDao.findEntity("Country.findByKey", Pair.of(KEY, value));
+    public void removeEntity(String key) {
+        Country fetchedEntity = getCountry(key);
         generalEntityDao.removeEntity(fetchedEntity);
     }
 
-    public Country getEntity(String value) {
-        return generalEntityDao.findEntity("Country.findByKey", Pair.of(KEY, value));
+    public Country getEntity(String key) {
+        return getCountry(key);
     }
 
-    public Optional<Country> getEntityOptional(String value) {
-        Country entity = generalEntityDao.findEntity("Country.findByKey", Pair.of(KEY, value));
+    public Optional<Country> getEntityOptional(String key) {
+        Country entity = getCountry(key);
         return Optional.of(entity);
     }
 
 
     public List<Country> getEntities() {
         return generalEntityDao.findEntityList("Country.all", (Pair<String, ?>) null);
+    }
+
+    private Country getCountry(String key) {
+        return generalEntityDao.findEntity("Country.findByKey", Pair.of(KEY, key));
     }
 }

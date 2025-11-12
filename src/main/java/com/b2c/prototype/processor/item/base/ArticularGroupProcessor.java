@@ -1,7 +1,6 @@
 package com.b2c.prototype.processor.item.base;
 
-import com.b2c.prototype.modal.dto.payload.item.MetaDataDto;
-import com.b2c.prototype.modal.dto.payload.item.ResponseMetaDataDto;
+import com.b2c.prototype.modal.dto.payload.item.ArticularGroupDto;
 import com.b2c.prototype.manager.item.IArticularGroupManager;
 import com.b2c.prototype.processor.item.IArticularGroupProcessor;
 import org.springframework.stereotype.Service;
@@ -19,15 +18,15 @@ public class ArticularGroupProcessor implements IArticularGroupProcessor {
     }
 
     @Override
-    public void saveArticularGroup(Map<String, String> requestParams, MetaDataDto metaDataDto) {
-        itemDataManager.saveArticularGroup(metaDataDto);
+    public void saveArticularGroup(Map<String, String> requestParams, ArticularGroupDto articularGroupDto) {
+        itemDataManager.saveArticularGroup(articularGroupDto);
     }
 
     @Override
-    public void updateArticularGroup(Map<String, String> requestParams, MetaDataDto metaDataDto) {
+    public void updateArticularGroup(Map<String, String> requestParams, ArticularGroupDto articularGroupDto) {
         String itemId = requestParams.get("itemId");
         if (itemId != null) {
-            itemDataManager.updateArticularGroup(itemId, metaDataDto);
+            itemDataManager.updateArticularGroup(itemId, articularGroupDto);
         }
     }
 
@@ -38,13 +37,13 @@ public class ArticularGroupProcessor implements IArticularGroupProcessor {
     }
 
     @Override
-    public ResponseMetaDataDto getArticularGroup(Map<String, String> requestParams) {
+    public ArticularGroupDto getArticularGroup(Map<String, String> requestParams) {
         String itemId = requestParams.get("itemId");
         return itemDataManager.getArticularGroup(itemId);
     }
 
     @Override
-    public List<ResponseMetaDataDto> getArticularGroupList(Map<String, String> requestParams) {
+    public List<ArticularGroupDto> getArticularGroupList(Map<String, String> requestParams) {
         return itemDataManager.getArticularGroupList();
     }
 }

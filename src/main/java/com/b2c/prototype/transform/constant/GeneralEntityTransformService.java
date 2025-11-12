@@ -1,28 +1,35 @@
 package com.b2c.prototype.transform.constant;
 
 import com.b2c.prototype.dao.IGeneralEntityDao;
+import com.b2c.prototype.modal.constant.FeeType;
+import com.b2c.prototype.modal.dto.payload.commission.CommissionValueDto;
 import com.b2c.prototype.modal.dto.payload.commission.MinMaxCommissionDto;
-import com.b2c.prototype.modal.dto.payload.commission.ResponseMinMaxCommissionDto;
 import com.b2c.prototype.modal.dto.payload.constant.CountryDto;
 import com.b2c.prototype.modal.dto.payload.constant.CountryPhoneCodeDto;
 import com.b2c.prototype.modal.dto.payload.constant.CurrencyDto;
+import com.b2c.prototype.modal.dto.payload.item.PriceDto;
 import com.b2c.prototype.modal.dto.payload.order.AddressDto;
 import com.b2c.prototype.modal.dto.payload.order.ContactInfoDto;
 import com.b2c.prototype.modal.dto.payload.order.ContactPhoneDto;
 import com.b2c.prototype.modal.dto.payload.region.RegionDto;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
+import com.b2c.prototype.modal.entity.payment.CommissionValue;
 import com.b2c.prototype.modal.entity.payment.MinMaxCommission;
 import com.b2c.prototype.modal.entity.price.Currency;
+import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.modal.entity.region.Region;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 
+import static com.b2c.prototype.util.Constant.CODE;
 import static com.b2c.prototype.util.Constant.KEY;
+import static com.b2c.prototype.util.Util.getUUID;
 
 @Service
 public class GeneralEntityTransformService implements IGeneralEntityTransformService {
@@ -34,10 +41,86 @@ public class GeneralEntityTransformService implements IGeneralEntityTransformSer
     }
 
     @Override
+    public Currency mapCurrencyDtoToCurrency(CurrencyDto currencyDto) {
+        return generalEntityDao.findEntity("Currency.findByKey",
+                Pair.of(KEY, currencyDto.getKey()));
+    }
+
+    @Override
+    public CurrencyDto mapCurrencyToCurrencyDto(Currency currency) {
+        return CurrencyDto.builder()
+                .key(currency.getKey())
+                .value(currency.getValue())
+                .build();
+    }
+
+    @Override
+    public RegionDto mapRegionToRegionDto(Region region) {
+        return RegionDto.builder()
+                .code(region.getCode())
+                .value(region.getValue())
+                .language(region.getLanguage())
+                .defaultLocale(region.getDefaultLocale())
+                .primaryCurrency(CurrencyDto.builder()
+                        .key(region.getPrimaryCurrency().getKey())
+                        .value(region.getPrimaryCurrency().getValue())
+                        .build())
+                .timezone(region.getTimezone().toString())
+                .build();
+    }
+
+    @Override
+    public Region mapRegionDtoToRegion(RegionDto regionDto) {
+        return Region.builder()
+                .code(regionDto.getCode())
+                .value(regionDto.getValue())
+                .language(regionDto.getLanguage())
+                .primaryCurrency(generalEntityDao.<Currency>findOptionEntity(
+                                "Currency.findByKey",
+                                Pair.of(KEY, regionDto.getPrimaryCurrency().getKey()))
+                        .orElseGet(() -> Currency.builder()
+                                .key(regionDto.getPrimaryCurrency().getKey())
+                                .value(regionDto.getPrimaryCurrency().getValue())
+                                .build()))
+                .defaultLocale(regionDto.getDefaultLocale())
+                .timezone(ZoneId.of(regionDto.getTimezone()))
+                .build();
+    }
+
+    @Override
+    public Price mapPriceDtoToPrice(PriceDto priceDto) {
+        return Price.builder()
+                .amount(priceDto.getAmount())
+                .currency(mapCurrencyDtoToCurrency(priceDto.getCurrency()))
+                .build();
+    }
+
+    @Override
+    public PriceDto mapPriceToPriceDto(Price price) {
+        return PriceDto.builder()
+                .amount(price.getAmount())
+                .currency(mapCurrencyToCurrencyDto(price.getCurrency()))
+                .build();
+    }
+
+    @Override
+    public Country mapCountryDtoToCountry(CountryDto countryDto) {
+        return generalEntityDao.findEntity("Country.findByKey", Pair.of(KEY, countryDto.getKey()));
+    }
+
+    @Override
+    public CountryDto mapCountryToCountryDto(Country country) {
+        return CountryDto.builder()
+                .key(country.getKey())
+                .value(country.getValue())
+                .flagImagePath(country.getFlagImagePath())
+                .build();
+    }
+
+    @Override
     public Address mapAddressDtoToAddress(AddressDto addressDto) {
         return Address.builder()
-                .country(generalEntityDao.findEntity("Country.findByKey",
-                        Pair.of(KEY, addressDto.getCountry().getKey())))
+                .country(mapCountryDtoToCountry(addressDto.getCountry()))
                 .city(addressDto.getCity())
                 .street(addressDto.getStreet())
                 .buildingNumber(addressDto.getBuildingNumber())
@@ -101,54 +184,46 @@ public class GeneralEntityTransformService implements IGeneralEntityTransformSer
 
     @Override
     public MinMaxCommission mapMinMaxCommissionDtoToMinMaxCommission(MinMaxCommissionDto minMaxCommissionDto) {
-        return null;
-    }
-
-    @Override
-    public ResponseMinMaxCommissionDto mapMinMaxCommissionToResponseMinMaxCommissionDto(MinMaxCommission minMaxCommission) {
-        return null;
-    }
-
-    @Override
-    public Country mapConstantPayloadDtoToCountry(CountryDto countryDto) {
-        return null;
-    }
-
-    @Override
-    public CountryDto mapCountryToConstantPayloadDto(Country country) {
-        return null;
-    }
-
-    @Override
-    public RegionDto mapRegionToRegionDto(Region region) {
-        return RegionDto.builder()
-                .code(region.getCode())
-                .value(region.getValue())
-                .language(region.getLanguage())
-                .defaultLocale(region.getDefaultLocale())
-                .primaryCurrency(CurrencyDto.builder()
-                        .key(region.getPrimaryCurrency().getKey())
-                        .value(region.getPrimaryCurrency().getValue())
-                        .build())
-                .timezone(region.getTimezone().toString())
+        return MinMaxCommission.builder()
+                .minCommission(mapCommissionValueDtoToCommissionValue(minMaxCommissionDto.getMinCommissionValue()))
+                .maxCommission(mapCommissionValueDtoToCommissionValue(minMaxCommissionDto.getMaxCommissionValue()))
+                .changeCommissionPrice(mapPriceDtoToPrice(minMaxCommissionDto.getChangeCommissionPrice()))
+                .lastUpdateTimestamp(LocalDateTime.now())
+                .key(getUUID())
+                .region(generalEntityDao.findEntity("Region.findByCode",
+                                Pair.of(CODE, minMaxCommissionDto.getRegion())))
                 .build();
     }
 
     @Override
-    public Region mapRegionDtoToRegion(RegionDto regionDto) {
-        return Region.builder()
-                .code(regionDto.getCode())
-                .value(regionDto.getValue())
-                .language(regionDto.getLanguage())
-                .primaryCurrency(generalEntityDao.<Currency>findOptionEntity(
-                        "Currency.findByKey",
-                        Pair.of(KEY, regionDto.getPrimaryCurrency().getKey()))
-                        .orElseGet(() -> Currency.builder()
-                                .key(regionDto.getPrimaryCurrency().getKey())
-                                .value(regionDto.getPrimaryCurrency().getValue())
-                                .build()))
-                .defaultLocale(regionDto.getDefaultLocale())
-                .timezone(ZoneId.of(regionDto.getTimezone()))
+    public MinMaxCommissionDto mapMinMaxCommissionToResponseMinMaxCommissionDto(MinMaxCommission minMaxCommission) {
+        return MinMaxCommissionDto.builder()
+                .minCommissionValue(mapCommissionValueToCommissionValueDto(minMaxCommission.getMinCommission()))
+                .maxCommissionValue(mapCommissionValueToCommissionValueDto(minMaxCommission.getMaxCommission()))
+                .changeCommissionPrice(mapPriceToPriceDto(minMaxCommission.getChangeCommissionPrice()))
+                .lastUpdateTimestamp(minMaxCommission.getLastUpdateTimestamp())
+                .key(minMaxCommission.getKey())
+                .region(minMaxCommission.getRegion().getCode())
+                .build();
+    }
+
+    private CommissionValue mapCommissionValueDtoToCommissionValue(CommissionValueDto commissionValueDto) {
+        return CommissionValue.builder()
+                .amount(commissionValueDto.getAmount())
+                .currency(commissionValueDto.getCurrency() != null
+                        ? mapCurrencyDtoToCurrency(commissionValueDto.getCurrency())
+                        : null)
+                .feeType(FeeType.valueOf(commissionValueDto.getFeeType()))
+                .build();
+    }
+
+    private CommissionValueDto mapCommissionValueToCommissionValueDto(CommissionValue commissionValue) {
+        return CommissionValueDto.builder()
+                .amount(commissionValue.getAmount())
+                .currency(commissionValue.getCurrency() != null
+                        ? mapCurrencyToCurrencyDto(commissionValue.getCurrency())
+                        : null)
+                .feeType(commissionValue.getFeeType().name())
                 .build();
     }
 }

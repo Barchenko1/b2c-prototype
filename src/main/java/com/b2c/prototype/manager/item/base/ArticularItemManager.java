@@ -2,7 +2,6 @@ package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.dto.payload.item.ArticularItemDto;
-import com.b2c.prototype.modal.dto.payload.item.ResponseArticularItemDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.manager.item.IArticularItemManager;
 import com.b2c.prototype.transform.item.IItemTransformService;
@@ -57,7 +56,7 @@ public class ArticularItemManager implements IArticularItemManager {
     }
 
     @Override
-    public ResponseArticularItemDto getResponseArticularItemDto(String articularId) {
+    public ArticularItemDto getArticularItemDto(String articularId) {
         ArticularItem articularItem = generalEntityDao.findEntity(
                 "",
                 Pair.of(ARTICULAR_ID, articularId));
@@ -68,7 +67,7 @@ public class ArticularItemManager implements IArticularItemManager {
     }
 
     @Override
-    public List<ResponseArticularItemDto> getResponseArticularItemDtoList() {
+    public List<ArticularItemDto> getArticularItemDtoList() {
         List<ArticularItem> articularItemList = generalEntityDao.findEntityList(
                 "ArticularItem.full", (Pair<String, ?>) null);
 
@@ -78,7 +77,7 @@ public class ArticularItemManager implements IArticularItemManager {
     }
 
     @Override
-    public List<ResponseArticularItemDto> getResponseArticularItemDtoFiltered() {
+    public List<ArticularItemDto> getArticularItemDtoFiltered() {
         List<ArticularItem> articularItemList= generalEntityDao.findEntityList(
                 "ArticularItem.full", (Pair<String, ?>) null);
 
@@ -88,7 +87,7 @@ public class ArticularItemManager implements IArticularItemManager {
     }
 
     @Override
-    public List<ResponseArticularItemDto> getResponseArticularItemDtoSorted(String sortType) {
+    public List<ArticularItemDto> getArticularItemDtoSorted(String sortType) {
         List<ArticularItem> articularItemList = generalEntityDao.findEntityList(
                 "ArticularItem.full", (Pair<String, ?>) null);
 

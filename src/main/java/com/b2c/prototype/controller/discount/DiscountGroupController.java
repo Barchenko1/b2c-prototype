@@ -41,14 +41,8 @@ public class DiscountGroupController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping(value = "/status", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/status", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> changeDiscountStatus(@RequestBody DiscountStatusDto payload) {
-        discountGroupProcess.changeDiscountStatus(payload);
-        return ResponseEntity.ok().build();
-    }
-
-    @PatchMapping(value = "/status", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> changePatchDiscountStatus(@RequestBody DiscountStatusDto payload) {
         discountGroupProcess.changeDiscountStatus(payload);
         return ResponseEntity.ok().build();
     }

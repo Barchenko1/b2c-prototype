@@ -1,9 +1,6 @@
 package com.b2c.prototype.controller.order;
 
 import com.b2c.prototype.modal.dto.payload.commission.MinMaxCommissionDto;
-import com.b2c.prototype.modal.dto.payload.commission.ResponseBuyerCommissionInfoDto;
-import com.b2c.prototype.modal.dto.payload.commission.ResponseMinMaxCommissionDto;
-import com.b2c.prototype.modal.dto.payload.order.ArticularItemQuantityDto;
 import com.b2c.prototype.processor.commission.ICommissionProcess;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,17 +26,17 @@ public class CommissionController {
         this.commissionProcess = commissionProcess;
     }
 
-    @PostMapping(produces = MediaType.TEXT_PLAIN_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> saveCommission(@RequestParam final Map<String, String> requestParams,
-                                                   @RequestBody final MinMaxCommissionDto minMaxCommissionDto) {
+                                               @RequestBody final MinMaxCommissionDto minMaxCommissionDto) {
         commissionProcess.saveCommission(requestParams, minMaxCommissionDto);
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping(produces = MediaType.TEXT_PLAIN_VALUE)
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> updateCommission(@RequestParam final Map<String, String> requestParams,
                                                  @RequestBody final MinMaxCommissionDto minMaxCommissionDto) {
-        commissionProcess.updateCommission(minMaxCommissionDto);
+        commissionProcess.updateCommission(requestParams, minMaxCommissionDto);
         return ResponseEntity.ok().build();
     }
 
@@ -50,19 +47,12 @@ public class CommissionController {
     }
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ResponseMinMaxCommissionDto> getCommissions(@RequestParam final Map<String, String> requestParams) {
+    public List<MinMaxCommissionDto> getCommissions(@RequestParam final Map<String, String> requestParams) {
         return commissionProcess.getCommissions(requestParams);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseMinMaxCommissionDto> getCommission(@RequestParam final Map<String, String> requestParams) {
+    public ResponseEntity<MinMaxCommissionDto> getCommission(@RequestParam final Map<String, String> requestParams) {
         return new ResponseEntity<>(commissionProcess.getCommission(requestParams), HttpStatus.OK);
-    }
-
-    // client
-    @PostMapping(value = "/items", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseBuyerCommissionInfoDto> getBuyerCommission(@RequestParam final Map<String, String> requestParams,
-                                                                             @RequestBody final List<ArticularItemQuantityDto> articularItemQuantityList) {
-        return new ResponseEntity<>(commissionProcess.getBuyerCommission(requestParams, articularItemQuantityList), HttpStatus.OK);
     }
 }

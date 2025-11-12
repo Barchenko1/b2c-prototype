@@ -14,10 +14,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.AssertTrue;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Check;
 
 @Entity
 @Table(
@@ -36,6 +38,10 @@ import lombok.NoArgsConstructor;
                         "AND c.currency = :currency"
         )
 })
+@Check(constraints =
+        "(fee_type = 'PERCENTAGE' AND currency_id IS NULL) " +
+                "OR (fee_type = 'FIXED' AND currency_id IS NOT NULL)"
+)
 public class CommissionValue {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,4 +52,11 @@ public class CommissionValue {
     @Enumerated(EnumType.STRING)
     @Column(name = "fee_type", nullable = false)
     private FeeType feeType;
+
+    @AssertTrue(message = "currency must be NULL for PERCENTAGE and NOT NULL for FIXED")
+    public boolean isValidCombo() {
+        if (feeType == null) return false;
+        return (feeType == FeeType.PERCENTAGE && currency == null)
+                || (feeType == FeeType.FIXED && currency != null);
+    }
 }

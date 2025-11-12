@@ -42,12 +42,22 @@ import java.util.Set;
                         "WHERE dg.key = :key"
         ),
         @NamedQuery(
-                name = "DiscountGroup.findByDiscountCharSequenceCode",
-                query = "SELECT ai FROM ArticularItem ai " +
-                        "LEFT JOIN FETCH ai.discount d " +
-                        "LEFT JOIN FETCH d.articularItemList " +
-                        "LEFT JOIN FETCH d.currency " +
-                        "WHERE d.charSequenceCode = :charSequenceCode"
+                name = "DiscountGroup.findByRegionAndKey",
+                query = "SELECT dg FROM DiscountGroup dg " +
+                        "LEFT JOIN FETCH dg.region r " +
+                        "LEFT JOIN FETCH dg.discounts d " +
+                        "LEFT JOIN FETCH d.currency dc " +
+                        "LEFT JOIN FETCH d.articularItemList da " +
+                        "WHERE dg.key = :key and r.code = :code"
+        ),
+        @NamedQuery(
+                name = "DiscountGroup.findAllByRegion",
+                query = "SELECT dg FROM DiscountGroup dg " +
+                        "LEFT JOIN FETCH dg.region r " +
+                        "LEFT JOIN FETCH dg.discounts d " +
+                        "LEFT JOIN FETCH d.currency dc " +
+                        "LEFT JOIN FETCH d.articularItemList da " +
+                        "WHERE r.code = :code"
         ),
         @NamedQuery(
                 name = "DiscountGroup.findByDiscountNotNull",

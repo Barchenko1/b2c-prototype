@@ -2,7 +2,7 @@
 //
 //import com.b2c.prototype.e2e.BasicE2ETest;
 //import com.b2c.prototype.e2e.util.TestUtil;
-//import com.b2c.prototype.modal.dto.payload.item.ResponseArticularItemDto;
+//import com.b2c.prototype.modal.dto.payload.item.ArticularItemDto;
 //import com.fasterxml.jackson.core.JsonProcessingException;
 //import com.fasterxml.jackson.core.type.TypeReference;
 //import org.junit.jupiter.api.BeforeEach;
@@ -95,9 +95,9 @@
 //
 //        try {
 //            String jsonResponse = mvcResult.getResponse().getContentAsString();
-//            ResponseArticularItemDto actual = objectMapper.readValue(jsonResponse, ResponseArticularItemDto.class);
-//            String expectedResultStr = TestUtil.readFile("json/articularitem/output/ResponseArticularItemDto.json");
-//            ResponseArticularItemDto expected = objectMapper.readValue(expectedResultStr, ResponseArticularItemDto.class);
+//            ArticularItemDto actual = objectMapper.readValue(jsonResponse, ArticularItemDto.class);
+//            String expectedResultStr = TestUtil.readFile("json/articularitem/output/ArticularItemDto.json");
+//            ArticularItemDto expected = objectMapper.readValue(expectedResultStr, ArticularItemDto.class);
 //            assertEquals(expected, actual);
 //        } catch (JsonProcessingException | UnsupportedEncodingException e) {
 //            throw new RuntimeException("Error processing the JSON response", e);
@@ -120,9 +120,9 @@
 //
 //        try {
 //            String jsonResponse = mvcResult.getResponse().getContentAsString();
-//            List<ResponseArticularItemDto> actualList = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
-//            String expectedResultStr = TestUtil.readFile("json/articularitem/output/ResponseArticularItemDtoList.json");
-//            List<ResponseArticularItemDto> expectedList = objectMapper.readValue(expectedResultStr, new TypeReference<>() {});
+//            List<ArticularItemDto> actualList = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
+//            String expectedResultStr = TestUtil.readFile("json/articularitem/output/ArticularItemDtoList.json");
+//            List<ArticularItemDto> expectedList = objectMapper.readValue(expectedResultStr, new TypeReference<>() {});
 //            assertEquals(expectedList, actualList);
 //        } catch (JsonProcessingException | UnsupportedEncodingException e) {
 //            throw new RuntimeException("Error processing the JSON response", e);

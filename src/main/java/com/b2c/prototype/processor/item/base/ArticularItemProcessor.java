@@ -1,7 +1,6 @@
 package com.b2c.prototype.processor.item.base;
 
 import com.b2c.prototype.modal.dto.payload.item.ArticularItemDto;
-import com.b2c.prototype.modal.dto.payload.item.ResponseArticularItemDto;
 import com.b2c.prototype.manager.item.IArticularItemManager;
 import com.b2c.prototype.processor.item.IArticularItemProcessor;
 import org.springframework.stereotype.Service;
@@ -31,24 +30,24 @@ public class ArticularItemProcessor implements IArticularItemProcessor {
     }
 
     @Override
-    public ResponseArticularItemDto getResponseArticularItemDto(Map<String, String> requestParams) {
+    public ArticularItemDto getArticularItemDto(Map<String, String> requestParams) {
         String articularId = requestParams.get("articularId");
-        return articularItemManager.getResponseArticularItemDto(articularId);
+        return articularItemManager.getArticularItemDto(articularId);
     }
 
     @Override
-    public List<ResponseArticularItemDto> getResponseArticularItemDtoList(Map<String, String> requestParams) {
-        return articularItemManager.getResponseArticularItemDtoList();
+    public List<ArticularItemDto> getArticularItemDtoList(Map<String, String> requestParams) {
+        return articularItemManager.getArticularItemDtoList();
     }
 
     @Override
-    public List<ResponseArticularItemDto> getResponseArticularItemDtoFiltered(Map<String, String> requestParams) {
-        return articularItemManager.getResponseArticularItemDtoFiltered();
+    public List<ArticularItemDto> getArticularItemDtoFiltered(Map<String, String> requestParams) {
+        return articularItemManager.getArticularItemDtoFiltered();
     }
 
     @Override
-    public List<ResponseArticularItemDto> getResponseArticularItemDtoSorted(Map<String, String> requestParams) {
+    public List<ArticularItemDto> getArticularItemDtoSorted(Map<String, String> requestParams) {
         String sortType = requestParams.get("sortType");
-        return articularItemManager.getResponseArticularItemDtoSorted(sortType);
+        return articularItemManager.getArticularItemDtoSorted(sortType);
     }
 }

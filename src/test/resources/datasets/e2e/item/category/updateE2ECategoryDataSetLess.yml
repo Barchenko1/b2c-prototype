@@ -48,83 +48,52 @@ category:
 
   - id: 6
     key: "Apple"
-    value: "Apple"
-    region_id: 2
+    value: "Update Apple"
+    region_id: 1
   - id: 7
     key: "Mac"
-    value: "Mac"
+    value: "Update Mac"
     category_id: 6
-    region_id: 2
-  - id: 8
-    key: "Macbook air"
-    value: "Macbook air"
-    category_id: 7
-    region_id: 2
+    region_id: 1
   - id: 9
     key: "Macbook pro"
-    value: "Macbook pro"
+    value: "Update Macbook pro"
     category_id: 7
-    region_id: 2
+    region_id: 1
 
   - id: 10
     key: "IPhone"
-    value: "IPhone"
+    value: "Update IPhone"
     category_id: 6
-    region_id: 2
+    region_id: 1
   - id: 11
     key: "IPhone air"
-    value: "IPhone air"
+    value: "Update IPhone air"
     category_id: 10
-    region_id: 2
+    region_id: 1
   - id: 12
     key: "IPhone pro"
-    value: "IPhone pro"
+    value: "Update IPhone pro"
     category_id: 10
-    region_id: 2
+    region_id: 1
   - id: 13
     key: "IPhone 17"
-    value: "IPhone 17"
+    value: "Update IPhone 17"
     category_id: 10
-    region_id: 2
-  - id: 14
-    key: "IPhone 16"
-    value: "IPhone 16"
-    category_id: 10
-    region_id: 2
-
-  - id: 15
-    key: "IPad"
-    value: "IPad"
-    category_id: 6
-    region_id: 2
-  - id: 16
-    key: "IPad air"
-    value: "IPad air"
-    category_id: 15
-    region_id: 2
-  - id: 17
-    key: "IPad pro"
-    value: "IPad pro"
-    category_id: 15
-    region_id: 2
+    region_id: 1
 
   - id: 18
     key: "Watch"
-    value: "Watch"
+    value: "Update Watch"
     category_id: 6
-    region_id: 2
-  - id: 19
-    key: "Apple Watch Series 11"
-    value: "Apple Watch Series 11"
-    category_id: 18
-    region_id: 2
+    region_id: 1
   - id: 20
     key: "Apple Watch SE 3"
-    value: "Apple Watch SE 3"
+    value: "Update Apple Watch SE 3"
     category_id: 18
-    region_id: 2
+    region_id: 1
   - id: 21
     key: "Apple Watch Ultra 3"
-    value: "Apple Watch Ultra 3"
+    value: "Update Apple Watch Ultra 3"
     category_id: 18
-    region_id: 2
+    region_id: 1

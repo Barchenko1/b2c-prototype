@@ -1,10 +1,9 @@
 package com.b2c.prototype.manager.item.base;
 
-import com.b2c.prototype.modal.dto.payload.item.MetaDataDto;
+import com.b2c.prototype.modal.dto.payload.item.ArticularGroupDto;
 import com.b2c.prototype.modal.dto.payload.constant.BrandDto;
 import com.b2c.prototype.modal.dto.payload.constant.CategoryValueDto;
 import com.b2c.prototype.modal.dto.payload.constant.ItemTypeDto;
-import com.b2c.prototype.modal.dto.payload.item.ResponseMetaDataDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.MetaData;
 
@@ -38,7 +37,7 @@ class MetaDataManagerTest {
 
     @Test
     void testSaveMetaData() {
-        MetaDataDto metaDataDto = getMetaDataDto();
+        ArticularGroupDto articularGroupDto = getMetaDataDto();
         MetaData metaData = getMetaData();
 
         doAnswer(invocation -> {
@@ -49,14 +48,14 @@ class MetaDataManagerTest {
             return null;
         });
 
-        itemDataManager.saveArticularGroup(metaDataDto);
+        itemDataManager.saveArticularGroup(articularGroupDto);
 
     }
 
     @Test
     void testUpdateMetaData() {
         String itemId = "itemId";
-        MetaDataDto metaDataDto = getMetaDataDto();
+        ArticularGroupDto articularGroupDto = getMetaDataDto();
         MetaData metaData = getMetaData();
 
         doAnswer(invocation -> {
@@ -67,7 +66,7 @@ class MetaDataManagerTest {
             return null;
         });
 
-        itemDataManager.updateArticularGroup(itemId, metaDataDto);
+        itemDataManager.updateArticularGroup(itemId, articularGroupDto);
 
     }
 
@@ -75,36 +74,36 @@ class MetaDataManagerTest {
     void testGetMetaData() {
         String itemId = "itemId";
         MetaData metaData = getMetaData();
-        ResponseMetaDataDto responseDto = getResponseItemDataDto();
+        ArticularGroupDto responseDto = getResponseItemDataDto();
 
 
-        Function<MetaData, ResponseMetaDataDto> function = mock(Function.class);
+        Function<MetaData, ArticularGroupDto> function = mock(Function.class);
 
         when(function.apply(metaData)).thenReturn(responseDto);
-        ResponseMetaDataDto result = itemDataManager.getArticularGroup(itemId);
+        ArticularGroupDto result = itemDataManager.getArticularGroup(itemId);
 
         assertEquals(responseDto, result);
     }
 
     @Test
     void testGetMetaDataList() {
-        ResponseMetaDataDto responseMetaDataDto = getResponseItemDataDto();
-        List<ResponseMetaDataDto> responseDtoList = List.of(responseMetaDataDto);
+        ArticularGroupDto ArticularGroupDto = getResponseItemDataDto();
+        List<ArticularGroupDto> responseDtoList = List.of(ArticularGroupDto);
         MetaData metaData = getMetaData();
-        ResponseMetaDataDto responseDto = getResponseItemDataDto();
+        ArticularGroupDto responseDto = getResponseItemDataDto();
 
-        Function<MetaData, ResponseMetaDataDto> function = mock(Function.class);
+        Function<MetaData, ArticularGroupDto> function = mock(Function.class);
 
 //        when(itemDataDao.getEntityList()).thenReturn(List.of(metaData));
         when(function.apply(metaData)).thenReturn(responseDto);
 
-        List<ResponseMetaDataDto> result = itemDataManager.getArticularGroupList();
+        List<ArticularGroupDto> result = itemDataManager.getArticularGroupList();
 
         assertEquals(responseDtoList, result);
     }
 
-    private ResponseMetaDataDto getResponseItemDataDto() {
-        return ResponseMetaDataDto.builder()
+    private ArticularGroupDto getResponseItemDataDto() {
+        return ArticularGroupDto.builder()
                 .category(CategoryValueDto.builder()
                         .value("categoryLabel")
                         .key("categoryValue")
@@ -138,8 +137,8 @@ class MetaDataManagerTest {
                 .build();
     }
 
-    private MetaDataDto getMetaDataDto() {
-        return MetaDataDto.builder()
+    private ArticularGroupDto getMetaDataDto() {
+        return ArticularGroupDto.builder()
                 .category(CategoryValueDto.builder()
                         .value("categoryLabel")
                         .key("categoryValue")

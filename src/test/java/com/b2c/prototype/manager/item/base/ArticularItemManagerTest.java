@@ -3,7 +3,6 @@ package com.b2c.prototype.manager.item.base;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.item.ArticularItemDto;
 import com.b2c.prototype.modal.dto.payload.item.PriceDto;
-import com.b2c.prototype.modal.dto.payload.item.ResponseArticularItemDto;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.item.MetaData;
@@ -88,13 +87,13 @@ class ArticularItemManagerTest {
     void getResponseItemDataOptionDto_ShouldReturnDto() {
         String value = "testValue";
         ArticularItem articularItem = getItemDataOption();
-        ResponseArticularItemDto responseDto = responseItemDataOptionDto();
+        ArticularItemDto responseDto = responseItemDataOptionDto();
 
-        Function<ArticularItem, ResponseArticularItemDto> function = mock(Function.class);
+        Function<ArticularItem, ArticularItemDto> function = mock(Function.class);
 
         when(function.apply(articularItem)).thenReturn(responseDto);
 
-        ResponseArticularItemDto result = articularItemManager.getResponseArticularItemDto(value);
+        ArticularItemDto result = articularItemManager.getArticularItemDto(value);
 
         assertEquals(responseDto, result);
     }
@@ -102,14 +101,14 @@ class ArticularItemManagerTest {
     @Test
     void getResponseItemDataOptionDtoList_ShouldReturnDtoList() {
         ArticularItem articularItem = getItemDataOption();
-        ResponseArticularItemDto responseDto = responseItemDataOptionDto();
-        List<ResponseArticularItemDto> responseDtoList = List.of(responseDto);
-        Function<ArticularItem, ResponseArticularItemDto> function = mock(Function.class);
+        ArticularItemDto responseDto = responseItemDataOptionDto();
+        List<ArticularItemDto> responseDtoList = List.of(responseDto);
+        Function<ArticularItem, ArticularItemDto> function = mock(Function.class);
 
 //        when(itemDataOptionDao.getEntityList()).thenReturn(List.of(getItemDataOption()));
         when(function.apply(articularItem)).thenReturn(responseDto);
 
-        List<ResponseArticularItemDto> result = articularItemManager.getResponseArticularItemDtoList();
+        List<ArticularItemDto> result = articularItemManager.getArticularItemDtoList();
 
         assertEquals(responseDtoList, result);
     }
@@ -117,14 +116,14 @@ class ArticularItemManagerTest {
     @Test
     void getResponseItemDataOptionDtoFiltered_ShouldReturnDtoList() {
         ArticularItem articularItem = getItemDataOption();
-        ResponseArticularItemDto responseDto = responseItemDataOptionDto();
-        List<ResponseArticularItemDto> responseDtoList = List.of(responseDto);
-        Function<ArticularItem, ResponseArticularItemDto> function = mock(Function.class);
+        ArticularItemDto responseDto = responseItemDataOptionDto();
+        List<ArticularItemDto> responseDtoList = List.of(responseDto);
+        Function<ArticularItem, ArticularItemDto> function = mock(Function.class);
 
 //        when(itemDataOptionDao.getEntityList()).thenReturn(List.of(getItemDataOption()));
         when(function.apply(articularItem)).thenReturn(responseDto);
 
-        List<ResponseArticularItemDto> result = articularItemManager.getResponseArticularItemDtoFiltered();
+        List<ArticularItemDto> result = articularItemManager.getArticularItemDtoFiltered();
 
         assertEquals(responseDtoList, result);
     }
@@ -133,14 +132,14 @@ class ArticularItemManagerTest {
     void getResponseItemDataOptionDtoSorted_ShouldReturnSortedList() {
         String sortType = "asc";
         ArticularItem articularItem = getItemDataOption();
-        ResponseArticularItemDto responseDto = responseItemDataOptionDto();
-        List<ResponseArticularItemDto> responseDtoList = List.of(responseDto);
-        Function<ArticularItem, ResponseArticularItemDto> function = mock(Function.class);
+        ArticularItemDto responseDto = responseItemDataOptionDto();
+        List<ArticularItemDto> responseDtoList = List.of(responseDto);
+        Function<ArticularItem, ArticularItemDto> function = mock(Function.class);
 
 //        when(itemDataOptionDao.getEntityList()).thenReturn(List.of(articularItem));
         when(function.apply(articularItem)).thenReturn(responseDto);
 
-        List<ResponseArticularItemDto> result = articularItemManager.getResponseArticularItemDtoSorted(sortType);
+        List<ArticularItemDto> result = articularItemManager.getArticularItemDtoSorted(sortType);
 
         assertEquals(responseDtoList, result);
     }
@@ -159,10 +158,10 @@ class ArticularItemManagerTest {
                 .build();
     }
 
-    private ResponseArticularItemDto responseItemDataOptionDto() {
-        return ResponseArticularItemDto.builder()
+    private ArticularItemDto responseItemDataOptionDto() {
+        return ArticularItemDto.builder()
                 .articularId("articularId")
-                .dateOfCreate(100)
+//                .dateOfCreate(100)
                 .fullPrice(getPriceDto(10))
                 .totalPrice(getPriceDto(8))
 //                .optionGroupOptionItemMap(map)

@@ -26,6 +26,7 @@ public class DiscountGroupProcess implements IDiscountGroupProcess {
     @Override
     public void updateDiscountGroup(Map<String, String> requestParams, DiscountGroupDto discountGroupDto) {
         String articularId = requestParams.get("articularId");
+        String regionCode = requestParams.get("region");
         String key = requestParams.get("key");
         if (articularId != null && key != null) {
             throw new RuntimeException("Only one of 'articularId' or 'charSequenceCode' can be provided");
@@ -34,7 +35,7 @@ public class DiscountGroupProcess implements IDiscountGroupProcess {
             discountManager.updateArticularDiscount(articularId, discountGroupDto);
         }
         if (key != null) {
-            discountManager.updateDiscountGroup(key, discountGroupDto);
+            discountManager.updateDiscountGroup(regionCode, key, discountGroupDto);
         }
     }
 
@@ -45,18 +46,21 @@ public class DiscountGroupProcess implements IDiscountGroupProcess {
 
     @Override
     public void removeDiscountGroup(Map<String, String> requestParams) {
+        String regionCode = requestParams.get("region");
         String key = requestParams.get("key");
-        discountManager.removeDiscountGroup(key);
+        discountManager.removeDiscountGroup(regionCode, key);
     }
 
     @Override
     public DiscountGroupDto getDiscountGroup(Map<String, String> requestParams) {
+        String regionCode = requestParams.get("region");
         String key = requestParams.get("key");
-        return discountManager.getDiscountGroup(key);
+        return discountManager.getDiscountGroup(regionCode, key);
     }
 
     @Override
-    public List<DiscountGroupDto> getDiscountGroups(Map<String, String> requestParam) {
-        return discountManager.getDiscountGroups();
+    public List<DiscountGroupDto> getDiscountGroups(Map<String, String> requestParams) {
+        String regionCode = requestParams.get("region");
+        return discountManager.getDiscountGroups(regionCode);
     }
 }

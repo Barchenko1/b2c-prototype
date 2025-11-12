@@ -50,6 +50,15 @@ public abstract class AbstractEntityDao implements IGeneralEntityDao{
     @Override
     @Transactional
     @SuppressWarnings("unchecked")
+    public <E> void findAndRemoveEntity(String namedQuery, List<Pair<String, ?>> pairs) {
+        Query query = getQuery(namedQuery, pairs);
+        E result = (E) query.getSingleResult();
+        entityManager.remove(result);
+    }
+
+    @Override
+    @Transactional
+    @SuppressWarnings("unchecked")
     public <E> void findAndRemoveEntityList(String namedQuery, Pair<String, ?> pair) {
         Query query = getQuery(namedQuery, pair);
         List<E> resultList = query.getResultList();

@@ -1,8 +1,10 @@
 package com.b2c.prototype.modal.entity.item;
 
+import com.b2c.prototype.modal.entity.region.Region;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,16 +32,20 @@ import java.util.List;
 @AllArgsConstructor
 @NamedQueries({
         @NamedQuery(
-                name = "Category.findByKey",
+                name = "Category.findByKeyAndRegion",
                 query = "SELECT c FROM Category c " +
+                        "LEFT JOIN FETCH c.region r " +
+                        "LEFT JOIN FETCH r.primaryCurrency rc " +
                         "LEFT JOIN FETCH c.childList cl1 " +
-                        "WHERE c.key = :key"
+                        "WHERE c.key = :key AND r.code = :code"
         ),
         @NamedQuery(
-                name = "Category.allParent",
+                name = "Category.findRootByRegion",
                 query = "SELECT c FROM Category c " +
+                        "LEFT JOIN FETCH c.region r " +
+                        "LEFT JOIN FETCH r.primaryCurrency rc " +
                         "LEFT JOIN FETCH c.childList cl1 " +
-                        "WHERE c.parent IS NULL"
+                        "WHERE r.code = :code AND c.parent IS NULL"
         ),
         @NamedQuery(
                 name = "Category.all",
@@ -56,6 +62,8 @@ public class Category {
     private String value;
     @Column(name = "key", unique = true, nullable = false)
     private String key;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Region region;
     @ManyToOne
     @JoinColumn(name = "category_id")
     @ToString.Exclude

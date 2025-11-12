@@ -1,15 +1,14 @@
 package com.b2c.prototype.manager.item;
 
-import com.b2c.prototype.modal.dto.payload.item.MetaDataDto;
-import com.b2c.prototype.modal.dto.payload.item.ResponseMetaDataDto;
+import com.b2c.prototype.modal.dto.payload.item.ArticularGroupDto;
 
 import java.util.List;
 
 public interface IArticularGroupManager {
-    void saveArticularGroup(MetaDataDto metaDataDto);
-    void updateArticularGroup(String itemId, MetaDataDto metaDataDto);
+    void saveArticularGroup(ArticularGroupDto articularGroupDto);
+    void updateArticularGroup(String itemId, ArticularGroupDto articularGroupDto);
     void deleteArticularGroup(String itemId);
 
-    ResponseMetaDataDto getArticularGroup(String itemId);
-    List<ResponseMetaDataDto> getArticularGroupList();
+    ArticularGroupDto getArticularGroup(String itemId);
+    List<ArticularGroupDto> getArticularGroupList();
 }

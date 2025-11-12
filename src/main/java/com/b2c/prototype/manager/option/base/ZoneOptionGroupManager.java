@@ -7,13 +7,13 @@ import com.b2c.prototype.modal.dto.payload.option.item.ZoneOptionDto;
 import com.b2c.prototype.modal.entity.option.ZoneOption;
 import com.b2c.prototype.modal.entity.option.ZoneOptionGroup;
 import com.b2c.prototype.modal.entity.price.Price;
+import com.b2c.prototype.transform.constant.IGeneralEntityTransformService;
 import com.b2c.prototype.transform.order.IOrderTransformService;
 import com.nimbusds.jose.util.Pair;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -22,7 +22,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static com.b2c.prototype.util.Constant.KEY;
 import static java.util.stream.Collectors.toMap;
@@ -32,11 +31,14 @@ public class ZoneOptionGroupManager implements IZoneOptionGroupManager {
 
     private final IGeneralEntityDao generalEntityDao;
     private final IOrderTransformService orderTransformService;
+    private final IGeneralEntityTransformService generalEntityTransformService;
 
     public ZoneOptionGroupManager(IGeneralEntityDao generalEntityDao,
-                                  IOrderTransformService orderTransformService) {
+                                  IOrderTransformService orderTransformService,
+                                  IGeneralEntityTransformService generalEntityTransformService) {
         this.generalEntityDao = generalEntityDao;
         this.orderTransformService = orderTransformService;
+        this.generalEntityTransformService = generalEntityTransformService;
     }
 
     @Transactional
@@ -124,10 +126,7 @@ public class ZoneOptionGroupManager implements IZoneOptionGroupManager {
                         p.setAmount(itemDto.getPrice().getAmount());
                     }
                     if (itemDto.getPrice().getCurrency() != null && itemDto.getPrice().getCurrency().getKey() != null) {
-                        p.setCurrency(
-                                generalEntityDao.findEntity("Currency.findByKey",
-                                        Pair.of(KEY, itemDto.getPrice().getCurrency().getKey()))
-                        );
+                        p.setCurrency(generalEntityTransformService.mapCurrencyDtoToCurrency(itemDto.getPrice().getCurrency()));
                     }
                 }
 
@@ -150,10 +149,9 @@ public class ZoneOptionGroupManager implements IZoneOptionGroupManager {
                                 .key(newKey)
                                 .price(d.getPrice() != null
                                         ? Price.builder()
-                                        .amount(d.getPrice().getAmount())
-                                        .currency(generalEntityDao.findEntity("Currency.findByKey",
-                                                Pair.of(KEY, d.getPrice().getCurrency().getKey())))
-                                        .build()
+                                            .amount(d.getPrice().getAmount())
+                                            .currency(generalEntityTransformService.mapCurrencyDtoToCurrency(d.getPrice().getCurrency()))
+                                            .build()
                                         : null)
                                 .build();
                         group.addZoneOption(created);
@@ -183,7 +181,7 @@ public class ZoneOptionGroupManager implements IZoneOptionGroupManager {
             target.setCity(source.getCity());
         }
         if (source.getCountry() != null) {
-            target.setCountry(generalEntityDao.findEntity("Country.findByKey", Pair.of(KEY, source.getCountry().getKey())));
+            target.setCountry(generalEntityTransformService.mapCountryDtoToCountry(source.getCountry()));
         }
     }
 }

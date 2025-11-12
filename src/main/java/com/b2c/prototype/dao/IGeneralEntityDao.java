@@ -11,6 +11,7 @@ public interface IGeneralEntityDao {
     <E> void removeEntity(E entity);
 
     <E> void findAndRemoveEntity(String namedQuery, Pair<String, ?> pair);
+    <E> void findAndRemoveEntity(String namedQuery, List<Pair<String, ?>> pairs);
     <E> void findAndRemoveEntityList(String namedQuery, Pair<String, ?> pair);
 
     <E> E findEntity(String namedQuery, Pair<String, ?> pair);

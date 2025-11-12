@@ -7,6 +7,7 @@ import com.b2c.prototype.modal.dto.payload.option.item.TimeDurationOptionDto;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.TimeDurationOption;
 import com.b2c.prototype.modal.entity.price.Price;
+import com.b2c.prototype.transform.constant.IGeneralEntityTransformService;
 import com.b2c.prototype.transform.order.IOrderTransformService;
 import com.nimbusds.jose.util.Pair;
 import jakarta.transaction.Transactional;
@@ -32,11 +33,14 @@ public class TimeDurationGroupOptionManager implements ITimeDurationGroupOptionM
 
     private final IGeneralEntityDao generalEntityDao;
     private final IOrderTransformService orderTransformService;
+    private final IGeneralEntityTransformService generalEntityTransformService;
 
     public TimeDurationGroupOptionManager(IGeneralEntityDao generalEntityDao,
-                                          IOrderTransformService orderTransformService) {
+                                          IOrderTransformService orderTransformService,
+                                          IGeneralEntityTransformService generalEntityTransformService) {
         this.generalEntityDao = generalEntityDao;
         this.orderTransformService = orderTransformService;
+        this.generalEntityTransformService = generalEntityTransformService;
     }
 
     @Transactional
@@ -131,8 +135,7 @@ public class TimeDurationGroupOptionManager implements ITimeDurationGroupOptionM
                     }
                     if (itemDto.getPrice().getCurrency() != null && itemDto.getPrice().getCurrency().getKey() != null) {
                         p.setCurrency(
-                                generalEntityDao.findEntity("Currency.findByKey",
-                                        Pair.of(KEY, itemDto.getPrice().getCurrency().getKey()))
+                                generalEntityTransformService.mapCurrencyDtoToCurrency(itemDto.getPrice().getCurrency())
                         );
                     }
                 }
@@ -164,8 +167,7 @@ public class TimeDurationGroupOptionManager implements ITimeDurationGroupOptionM
                                 .price(d.getPrice() != null
                                         ? Price.builder()
                                         .amount(d.getPrice().getAmount())
-                                        .currency(generalEntityDao.findEntity("Currency.findByKey",
-                                                Pair.of(KEY, d.getPrice().getCurrency().getKey())))
+                                        .currency(generalEntityTransformService.mapCurrencyDtoToCurrency(d.getPrice().getCurrency()))
                                         .build()
                                         : null)
                                 .build();

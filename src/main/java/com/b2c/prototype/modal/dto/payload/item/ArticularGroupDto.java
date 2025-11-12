@@ -15,10 +15,11 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MetaDataDto {
+public class ArticularGroupDto {
+    private String itemId;
     private Map<String, String> description;
     private CategoryValueDto category;
     private ItemTypeDto itemType;
     private BrandDto brand;
-    private Set<ArticularItemDto> articularItemSet;
+    private Set<ArticularItemDto> articularItems;
 }

@@ -552,5 +552,6 @@
     <entity class="com.b2c.prototype.modal.entity.store.AvailabilityStatus" />
     <entity class="com.b2c.prototype.modal.entity.store.ArticularStock" />
     <entity class="com.b2c.prototype.modal.entity.store.Store" />
+    <entity class="com.b2c.prototype.modal.entity.store.StoreGeneralBoard" />
 
 </entity-mappings>

@@ -4,6 +4,7 @@ import com.b2c.prototype.e2e.BasicE2ETest;
 import com.b2c.prototype.modal.dto.payload.constant.CurrencyDto;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountGroupDto;
+import com.b2c.prototype.modal.dto.payload.discount.DiscountStatusDto;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import org.junit.jupiter.api.Test;
@@ -53,6 +54,7 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
         webTestClient.put()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
+                        .queryParam("region", "Global")
                         .queryParam("key", "Global_group")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -72,8 +74,25 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
         webTestClient.put()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
+                        .queryParam("region", "Global")
                         .queryParam("key", "Global_group")
                         .build())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .bodyValue(jsonPayload)
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    @DataSet(value = "datasets/e2e/item/discount/testE2EDiscountGroupDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/item/discount/updateE2EDiscountChangeStatusDataSet.yml", orderBy = "id")
+    public void testUpdateEntityStatus() {
+        DiscountStatusDto discountGroupDto = getDiscountStatusDto();
+        String jsonPayload = writeValueAsString(discountGroupDto);
+
+        webTestClient.post()
+                .uri(URL_TEMPLATE + "/status")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .bodyValue(jsonPayload)
@@ -88,6 +107,7 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
         webTestClient.delete()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
+                        .queryParam("region", "Global")
                         .queryParam("key", "Global_group")
                         .build())
                 .accept(MediaType.TEXT_PLAIN)
@@ -99,22 +119,6 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
     @DataSet(value = "datasets/e2e/item/discount/testE2EDiscountGroupDataSet.yml", cleanBefore = true)
     public void testGetEntities() {
         List<DiscountGroupDto> expected = List.of(
-                DiscountGroupDto.builder()
-                        .key("Germany_group")
-                        .value("Germany_group")
-                        .regionCode("DE")
-                        .discounts(List.of(
-                                DiscountDto.builder()
-                                        .charSequenceCode("abc1")
-                                        .amount(10)
-                                        .currency(CurrencyDto.builder()
-                                                .key("EUR")
-                                                .value("EUR")
-                                                .build())
-                                        .isActive(true)
-                                        .articularIdSet(Set.of())
-                                        .build()))
-                        .build(),
                 DiscountGroupDto.builder()
                         .key("Global_group")
                         .value("Global_group")
@@ -142,7 +146,10 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
 
         List<DiscountGroupDto> actual =
                 webTestClient.get()
-                        .uri(URL_TEMPLATE + "/all")
+                        .uri(uriBuilder -> uriBuilder
+                                .path(URL_TEMPLATE + "/all")
+                                .queryParam("region", "Global")
+                                .build())
                         .accept(MediaType.APPLICATION_JSON)
                         .exchange()
                         .expectStatus().isOk()
@@ -188,6 +195,7 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
         DiscountGroupDto actual = webTestClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
+                        .queryParam("region", "Global")
                         .queryParam("key", "Global_group")
                         .build())
                 .accept(MediaType.APPLICATION_JSON)
@@ -288,6 +296,15 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
                                 .isPercent(true)
                                 .articularIdSet(Set.of("123"))
                                 .build()))
+                .build();
+    }
+
+    private DiscountStatusDto getDiscountStatusDto() {
+        return DiscountStatusDto.builder()
+                .region("Global")
+                .groupCode("Global_group")
+                .charSequenceCode("abc3")
+                .isActive(true)
                 .build();
     }
 }

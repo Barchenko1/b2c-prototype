@@ -2,9 +2,6 @@ package com.b2c.prototype.processor.commission;
 
 import com.b2c.prototype.manager.payment.ICommissionManager;
 import com.b2c.prototype.modal.dto.payload.commission.MinMaxCommissionDto;
-import com.b2c.prototype.modal.dto.payload.commission.ResponseBuyerCommissionInfoDto;
-import com.b2c.prototype.modal.dto.payload.commission.ResponseMinMaxCommissionDto;
-import com.b2c.prototype.modal.dto.payload.order.ArticularItemQuantityDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,29 +21,29 @@ public class CommissionProcess implements ICommissionProcess {
     }
 
     @Override
-    public void updateCommission(MinMaxCommissionDto minMaxCommissionDto) {
-        commissionManager.updateCommission(minMaxCommissionDto);
+    public void updateCommission(Map<String, String> requestParams, MinMaxCommissionDto minMaxCommissionDto) {
+        String regionCode = requestParams.get("region");
+        String key = requestParams.get("key");
+        commissionManager.updateCommission(regionCode, key, minMaxCommissionDto);
     }
 
     @Override
     public void deleteCommission(Map<String, String> requestParams) {
-        String commissionType = requestParams.get("commissionType");
-        commissionManager.deleteCommissionByTime(commissionType);
+        String regionCode = requestParams.get("region");
+        String key = requestParams.get("key");
+        commissionManager.deleteCommission(regionCode, key);
     }
 
     @Override
-    public List<ResponseMinMaxCommissionDto> getCommissions(Map<String, String> requestParams) {
-        return commissionManager.getCommissionList();
+    public List<MinMaxCommissionDto> getCommissions(Map<String, String> requestParams) {
+        String regionCode = requestParams.get("region");
+        return commissionManager.getCommissionList(regionCode);
     }
 
     @Override
-    public ResponseMinMaxCommissionDto getCommission(Map<String, String> requestParams) {
-        String commissionType = requestParams.get("commissionType");
-        return commissionManager.getCommissionByCommissionType(commissionType);
-    }
-
-    @Override
-    public ResponseBuyerCommissionInfoDto getBuyerCommission(Map<String, String> requestParams, List<ArticularItemQuantityDto> articularItemQuantityDtoList) {
-        return commissionManager.getBuyerCommission(articularItemQuantityDtoList);
+    public MinMaxCommissionDto getCommission(Map<String, String> requestParams) {
+        String regionCode = requestParams.get("region");
+        String key = requestParams.get("key");
+        return commissionManager.getCommission(regionCode, key);
     }
 }
