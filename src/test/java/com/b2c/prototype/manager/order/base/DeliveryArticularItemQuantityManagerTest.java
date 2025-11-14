@@ -240,7 +240,7 @@ class DeliveryArticularItemQuantityManagerTest {
                 .value("L")
 //                .optionGroup(optionGroup)
                 .build();
-//        MetaData itemData = prepareTestItemData();
+//        ArticularGroup itemData = prepareTestItemData();
         ArticularItem articularItem = ArticularItem.builder()
                 .optionItems(Set.of(optionItem))
                 .articularUniqId("1")

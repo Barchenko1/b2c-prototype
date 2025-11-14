@@ -86,10 +86,8 @@ public class ArticularGroup {
     private Category category;
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
     private ItemType itemType;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
-    private Brand brand;
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
-    @JoinColumn(name = "meta_data_id")
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
+    @JoinColumn(name = "articular_item_id")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @Builder.Default

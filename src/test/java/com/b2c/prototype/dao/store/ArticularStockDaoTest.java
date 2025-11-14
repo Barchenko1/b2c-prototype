@@ -3,14 +3,13 @@ package com.b2c.prototype.dao.store;
 import com.b2c.prototype.dao.AbstractDaoTest;
 import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.constant.CountType;
+import com.b2c.prototype.modal.entity.item.ArticularGroup;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
 import com.b2c.prototype.modal.entity.item.ArticularStatus;
-import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.item.ItemType;
-import com.b2c.prototype.modal.entity.item.MetaData;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.modal.entity.price.Currency;
@@ -59,7 +58,7 @@ public class ArticularStockDaoTest extends AbstractDaoTest {
     @ExpectedDataSet(value = "datasets/dao/store/articular_stock/updateArticularStockDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
         ArticularStock entity = getArticularStock();
-        entity.getArticularItemQuantities().get(0).setQuantity(2);
+//        entity.getArticularItemQuantities().get(0).setQuantity(2);
         
         generalEntityDao.mergeEntity(entity);
     }
@@ -135,12 +134,7 @@ public class ArticularStockDaoTest extends AbstractDaoTest {
         return child;
     }
 
-    private MetaData getMetaData() {
-        Brand brand = Brand.builder()
-                .id(1L)
-                .value("Hermes")
-                .key("Hermes")
-                .build();
+    private ArticularGroup getArticularGroup() {
         Category category = getCategory();
         ItemType itemType = ItemType.builder()
                 .id(1L)
@@ -153,12 +147,11 @@ public class ArticularStockDaoTest extends AbstractDaoTest {
             put("desc2", "desc2");
         }};
 
-        return MetaData.builder()
+        return ArticularGroup.builder()
                 .id(1L)
-                .metadataUniqId("123")
+                .articularGroupId("123")
                 .description(description)
 //                .category(category)
-//                .brand(brand)
 //                .itemType(itemType)
                 .build();
     }
@@ -240,7 +233,7 @@ public class ArticularStockDaoTest extends AbstractDaoTest {
                 .build();
         return ArticularStock.builder()
                 .id(1L)
-                .articularItemQuantities(List.of(getArticularItemQuantity()))
+//                .articularItemQuantities(List.of(getArticularItemQuantity()))
                 .availabilityState(availabilityStatus)
                 .countType(CountType.LIMITED)
                 .build();

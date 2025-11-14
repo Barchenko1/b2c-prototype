@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ArticularItemQuantityDto {
+    private String articularGroupId;
     private String articularId;
     private int quantity;
 }

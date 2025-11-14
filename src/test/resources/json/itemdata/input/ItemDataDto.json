@@ -12,10 +12,6 @@
     "label": "Electronic",
     "value": "Electronic"
   },
-  "brand": {
-    "label": "TechBrand",
-    "value": "TechBrand"
-  },
   "articularItemSet": [
     {
       "productName": "Laptop 1",

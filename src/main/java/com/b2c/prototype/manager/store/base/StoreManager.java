@@ -4,16 +4,19 @@ import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.entity.address.Address;
 
 import com.b2c.prototype.modal.dto.payload.store.StoreDto;
-import com.b2c.prototype.modal.dto.payload.store.ResponseStoreDto;
+import com.b2c.prototype.modal.entity.store.ArticularStock;
 import com.b2c.prototype.modal.entity.store.Store;
 import com.b2c.prototype.manager.store.IStoreManager;
 import com.b2c.prototype.transform.item.IItemTransformService;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
+import static com.b2c.prototype.util.Constant.CODE;
 import static com.b2c.prototype.util.Constant.STORE_ID;
 import static com.b2c.prototype.util.Constant.KEY;
 
@@ -30,79 +33,105 @@ public class StoreManager implements IStoreManager {
     }
 
     @Override
+    @Transactional
     public void saveStore(StoreDto storeDto) {
         Store store = itemTransformService.mapStoreDtoToStore(storeDto);
         generalEntityDao.mergeEntity(store);
     }
 
     @Override
-    public void updateStore(String storeId, StoreDto storeDto) {
+    @Transactional
+    public void updateStore(String region, String storeId, StoreDto storeDto) {
         Store existingStore = generalEntityDao.findEntity(
-                "Store.findStoreWithAddressByStoreId",
-                Pair.of(STORE_ID, storeId));
+                "Store.findStoreByRegionStoreIdDetails",
+                List.of(Pair.of(CODE, region), Pair.of(STORE_ID, storeId)));
 
         Store store = itemTransformService.mapStoreDtoToStore(storeDto);
         existingStore.setStoreName(store.getStoreName());
         existingStore.setActive(store.isActive());
+
+        existingStore.setRegion(store.getRegion());
+
         Address existingAddress = existingStore.getAddress();
         Address address = store.getAddress();
-        existingAddress.setCountry(address.getCountry());
-        existingAddress.setCity(address.getCity());
-        existingAddress.setStreet(address.getStreet());
-        existingAddress.setBuildingNumber(address.getBuildingNumber());
-        existingAddress.setFlorNumber(address.getFlorNumber());
-        existingAddress.setApartmentNumber(address.getApartmentNumber());
-        existingAddress.setZipCode(address.getZipCode());
+        updateAddress(existingAddress, address);
+
+        if (store.getArticularStocks() != null) {
+            Set<ArticularStock> articularStocks = store.getArticularStocks();
+
+            existingStore.setArticularStocks(articularStocks);
+        }
         generalEntityDao.mergeEntity(existingStore);
     }
 
     @Override
-    public void deleteStore(String storeId) {
-        Store existingStore = generalEntityDao.findEntity(
-                "Store.findStoreByStoreId",
-                Pair.of(STORE_ID, storeId));
-
-        generalEntityDao.removeEntity(existingStore);
+    @Transactional
+    public void deleteStore(String region, String storeId) {
+        generalEntityDao.findAndRemoveEntity("Store.findStoreByRegionStoreId",
+                List.of(Pair.of(STORE_ID, storeId), Pair.of(CODE, region)));
     }
 
     @Override
-    public ResponseStoreDto getResponseStoreByStoreId(String storeId) {
+    @Transactional(readOnly = true)
+    public StoreDto getStoreByStoreId(String region, String storeId) {
         Store store = generalEntityDao.findEntity(
-                "Store.findStoreWithAddressArticularItemQuantityByStoreId",
-                Pair.of(STORE_ID, storeId));
-        return itemTransformService.mapStoreToResponseStoreDto(store);
+                "Store.findStoreByRegionStoreIdDetails",
+                List.of(Pair.of(STORE_ID, storeId), Pair.of(CODE, region)));
+        return itemTransformService.mapStoreToStoreDto(store);
     }
 
     @Override
-    public List<ResponseStoreDto> getAllResponseStoresByArticularId(String articularId) {
+    public List<StoreDto> getAllStoresByRegion(String region) {
         List<Store> stores = generalEntityDao.findEntityList(
-                "Store.findStoreWithAddressArticularItemQuantityByArticularId",
+                "Store.findAllStoreByRegion",
+                Pair.of(CODE, region));
+        return stores.stream()
+                .map(itemTransformService::mapStoreToStoreDto)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<StoreDto> getAllStoresByArticularId(String region, String articularId) {
+        List<Store> stores = generalEntityDao.findEntityList(
+                "Store.findStoreByRegionStoreIdDetails",
                 Pair.of(ARTICULAR_ID, articularId));
         return stores.stream()
-                .map(itemTransformService::mapStoreToResponseStoreDto)
+                .map(itemTransformService::mapStoreToStoreDto)
                 .toList();
     }
 
     @Override
-    public List<ResponseStoreDto> getAllResponseStoreByCountry(String countryName) {
+    @Transactional(readOnly = true)
+    public List<StoreDto> getAllStoreByRegionAndCountry(String region, String countryKey) {
         List<Store> stores = generalEntityDao.findEntityList(
-                "Store.findStoreWithAddressArticularItemQuantityByCountry",
-                Pair.of(KEY, countryName));
+                "Store.findAllStoreByRegionAndCountry",
+                List.of(Pair.of(CODE, region), Pair.of(KEY, countryKey)));
 
         return stores.stream()
-                .map(itemTransformService::mapStoreToResponseStoreDto)
+                .map(itemTransformService::mapStoreToStoreDto)
                 .toList();
     }
 
-    // fix next
     @Override
-    public List<ResponseStoreDto> getAllResponseStoreByCountryAndCity(String countryName, String cityName) {
+    @Transactional(readOnly = true)
+    public List<StoreDto> getAllStoreByRegionAndCountryAndCity(String region, String countryKey, String city) {
         List<Store> stores = generalEntityDao.findEntityList(
-                "Store.findStoreWithAddressArticularItemQuantityByCountryCity",
-                Pair.of(KEY, countryName));
+                "Store.findAllStoreByRegionAndCountryAndCity",
+                List.of(Pair.of(CODE, region), Pair.of(KEY, countryKey), Pair.of("city", city)));
 
         return stores.stream()
-                .map(itemTransformService::mapStoreToResponseStoreDto)
+                .map(itemTransformService::mapStoreToStoreDto)
                 .toList();
+    }
+
+    private void updateAddress(Address target, Address source) {
+        target.setCountry(source.getCountry());
+        target.setCity(source.getCity());
+        target.setStreet(source.getStreet());
+        target.setBuildingNumber(source.getBuildingNumber());
+        target.setFlorNumber(source.getFlorNumber());
+        target.setApartmentNumber(source.getApartmentNumber());
+        target.setZipCode(source.getZipCode());
     }
 }

@@ -62,7 +62,7 @@ public class ArticularItemManager implements IArticularItemManager {
                 Pair.of(ARTICULAR_ID, articularId));
 
         return Optional.of(articularItem)
-                .map(itemTransformService::mapArticularItemToResponseArticularItem)
+                .map(itemTransformService::mapArticularItemToArticularItemDto)
                 .orElseThrow(() -> new RuntimeException(""));
     }
 
@@ -72,7 +72,7 @@ public class ArticularItemManager implements IArticularItemManager {
                 "ArticularItem.full", (Pair<String, ?>) null);
 
         return articularItemList.stream()
-                .map(itemTransformService::mapArticularItemToResponseArticularItem)
+                .map(itemTransformService::mapArticularItemToArticularItemDto)
                 .toList();
     }
 
@@ -82,7 +82,7 @@ public class ArticularItemManager implements IArticularItemManager {
                 "ArticularItem.full", (Pair<String, ?>) null);
 
         return articularItemList.stream()
-                .map(itemTransformService::mapArticularItemToResponseArticularItem)
+                .map(itemTransformService::mapArticularItemToArticularItemDto)
                 .toList();
     }
 
@@ -92,7 +92,7 @@ public class ArticularItemManager implements IArticularItemManager {
                 "ArticularItem.full", (Pair<String, ?>) null);
 
         return articularItemList.stream()
-                .map(itemTransformService::mapArticularItemToResponseArticularItem)
+                .map(itemTransformService::mapArticularItemToArticularItemDto)
                 .toList();
     }
 

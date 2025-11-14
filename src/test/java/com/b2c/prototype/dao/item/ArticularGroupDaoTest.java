@@ -2,9 +2,8 @@ package com.b2c.prototype.dao.item;
 
 import com.b2c.prototype.dao.AbstractDaoTest;
 import com.b2c.prototype.dao.IGeneralEntityDao;
-import com.b2c.prototype.modal.entity.item.Brand;
+import com.b2c.prototype.modal.entity.item.ArticularGroup;
 import com.b2c.prototype.modal.entity.item.Category;
-import com.b2c.prototype.modal.entity.item.MetaData;
 import com.b2c.prototype.modal.entity.item.ItemType;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
@@ -20,23 +19,21 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class MetaDataDaoTest extends AbstractDaoTest {
+class ArticularGroupDaoTest extends AbstractDaoTest {
 
     @Autowired
     private IGeneralEntityDao generalEntityDao;
 
     @Test
-    @DataSet(value = "datasets/dao/item/metadata/emptyMetaDataSet.yml", cleanBefore = true,
+    @DataSet(value = "datasets/dao/item/articular_group/emptyArticularGroupDataSet.yml", cleanBefore = true,
     executeStatementsBefore = {
-            "TRUNCATE TABLE brand RESTART IDENTITY CASCADE",
             "TRUNCATE TABLE item_type RESTART IDENTITY CASCADE",
             "TRUNCATE TABLE category RESTART IDENTITY CASCADE",
     })
-    @ExpectedDataSet(value = "datasets/dao/item/metadata/saveMetaDataSet.yml", orderBy = "id")
+    @ExpectedDataSet(value = "datasets/dao/item/articular_group/saveArticularGroupDataSet.yml", orderBy = "id")
     public void persistEntity_success() {
-        MetaData entity = getMetaData();
+        ArticularGroup entity = getArticularGroup();
         entity.setId(0);
-//        entity.getBrand().setId(0);
 //        entity.getItemType().setId(0);
         Category category = Category.builder()
                 .id(0L)
@@ -49,10 +46,10 @@ class MetaDataDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/dao/item/metadata/testMetaDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/dao/item/metadata/updateMetaDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/item/articular_group/testArticularGroupDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/item/articular_group/updateArticularGroupDataSet.yml", orderBy = "id")
     public void mergeEntity_success() {
-        MetaData entity = getMetaData();
+        ArticularGroup entity = getArticularGroup();
         entity.setDescription(new HashMap<>() {{
             put("desc1", "desc1");
             put("desc2", "desc2");
@@ -63,46 +60,46 @@ class MetaDataDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    @DataSet(value = "datasets/dao/item/metadata/testMetaDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/dao/item/metadata/removeMetaDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/dao/item/articular_group/testArticularGroupDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/dao/item/articular_group/removeArticularGroupDataSet.yml", orderBy = "id")
     public void removeEntity_success() {
-        MetaData entity = getMetaData();
+        ArticularGroup entity = getArticularGroup();
 
         generalEntityDao.removeEntity(entity);
     }
 
     @Test
-    @DataSet(value = "datasets/dao/item/metadata/testMetaDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/articular_group/testArticularGroupDataSet.yml", cleanBefore = true)
     public void findEntity_success() {
-        MetaData expected = getMetaData();
+        ArticularGroup expected = getArticularGroup();
 
         Pair<String, Long> pair = Pair.of("id", 1L);
-        MetaData entity = generalEntityDao.findEntity("MetaData.findById", List.of(pair));
+        ArticularGroup entity = generalEntityDao.findEntity("ArticularGroup.findById", List.of(pair));
 
         assertEquals(expected, entity);
     }
 
     @Test
-    @DataSet(value = "datasets/dao/item/metadata/testMetaDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/articular_group/testArticularGroupDataSet.yml", cleanBefore = true)
     public void findOptionEntity_success() {
-        MetaData expected = getMetaData();
+        ArticularGroup expected = getArticularGroup();
 
         Pair<String, Long> pair = Pair.of("id", 1L);
-        Optional<MetaData> optionEntity = generalEntityDao.findOptionEntity("MetaData.findById", List.of(pair));
+        Optional<ArticularGroup> optionEntity = generalEntityDao.findOptionEntity("ArticularGroup.findById", List.of(pair));
 
         assertTrue(optionEntity.isPresent());
 
-        MetaData entity = optionEntity.get();
+        ArticularGroup entity = optionEntity.get();
         assertEquals(expected, entity);
     }
 
     @Test
-    @DataSet(value = "datasets/dao/item/metadata/testMetaDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/dao/item/articular_group/testArticularGroupDataSet.yml", cleanBefore = true)
     public void findEntityList_success() {
-        MetaData entity = getMetaData();
+        ArticularGroup entity = getArticularGroup();
 
         Pair<String, Long> pair = Pair.of("id", 1L);
-        List<MetaData> entityList = generalEntityDao.findEntityList("MetaData.findById", List.of(pair));
+        List<ArticularGroup> entityList = generalEntityDao.findEntityList("ArticularGroup.findById", List.of(pair));
 
         assertEquals(List.of(entity), entityList);
     }
@@ -133,12 +130,8 @@ class MetaDataDaoTest extends AbstractDaoTest {
         return child;
     }
 
-    private MetaData getMetaData() {
-        Brand brand = Brand.builder()
-                .id(1L)
-                .value("Hermes")
-                .key("Hermes")
-                .build();
+    private ArticularGroup getArticularGroup() {
+
         Category category = getCategory();
         ItemType itemType = ItemType.builder()
                 .id(1L)
@@ -151,12 +144,11 @@ class MetaDataDaoTest extends AbstractDaoTest {
             put("desc2", "desc2");
         }};
 
-        return MetaData.builder()
+        return ArticularGroup.builder()
                 .id(1L)
-                .metadataUniqId("123")
+                .articularGroupId("123")
                 .description(description)
 //                .category(category)
-//                .brand(brand)
 //                .itemType(itemType)
                 .build();
     }

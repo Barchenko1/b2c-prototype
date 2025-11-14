@@ -1,7 +1,4 @@
-brand:
-  - id: 1
-    value: "Hermes"
-    key: "Hermes"
+
 item_type:
   - id: 1
     value: "Clothes"

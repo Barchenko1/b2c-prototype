@@ -41,13 +41,6 @@ public class ArticularItemController {
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> patchArticularItem(@RequestParam final Map<String, String> requestParams,
-                                                   @RequestBody final List<ArticularItemDto> articularItemDtoList) {
-        articularItemProcessor.saveUpdateArticularItemList(requestParams, articularItemDtoList);
-        return ResponseEntity.ok().build();
-    }
-
     @DeleteMapping(produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<Void> deleteArticularItem(@RequestParam final Map<String, String> requestParams) {
         articularItemProcessor.deleteArticularItem(requestParams);

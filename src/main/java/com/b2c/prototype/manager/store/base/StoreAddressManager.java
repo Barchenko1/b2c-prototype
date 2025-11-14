@@ -37,13 +37,7 @@ public class StoreAddressManager implements IStoreAddressManager {
 
         Address address = generalEntityTransformService.mapAddressDtoToAddress(addressDto);
         Address existingAddress = existingStore.getAddress();
-        existingAddress.setCountry(address.getCountry());
-        existingAddress.setCity(address.getCity());
-        existingAddress.setStreet(address.getStreet());
-        existingAddress.setBuildingNumber(address.getBuildingNumber());
-        existingAddress.setFlorNumber(address.getFlorNumber());
-        existingAddress.setApartmentNumber(address.getApartmentNumber());
-        existingAddress.setZipCode(address.getZipCode());
+        updateAddress(existingAddress, address);
         generalEntityDao.mergeEntity(existingStore);
     }
 
@@ -56,5 +50,15 @@ public class StoreAddressManager implements IStoreAddressManager {
         return Optional.ofNullable(store)
                 .map(s -> generalEntityTransformService.mapAddressToAddressDto(s.getAddress()))
                 .orElse(null);
+    }
+
+    private void updateAddress(Address target, Address source) {
+        target.setCountry(source.getCountry());
+        target.setCity(source.getCity());
+        target.setStreet(source.getStreet());
+        target.setBuildingNumber(source.getBuildingNumber());
+        target.setFlorNumber(source.getFlorNumber());
+        target.setApartmentNumber(source.getApartmentNumber());
+        target.setZipCode(source.getZipCode());
     }
 }

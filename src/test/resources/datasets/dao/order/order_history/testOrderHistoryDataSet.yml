@@ -188,10 +188,7 @@ delivery:
     address_id: 2
     delivery_type_id: 1
 
-brand:
-  - id: 1
-    value: "Hermes"
-    key: "Hermes"
+
 item_type:
   - id: 1
     value: "Clothes"
@@ -230,9 +227,8 @@ articular_status:
     key: "COMMON"
 articular_group:
   - id: 1
-    metadata_uniq_id: "123"
+    articular_group_uniq_id: "123"
     description: "{\"desc1\":\"desc1\",\"desc2\":\"desc2\"}"
-    brand_id: 1
     category_id: 3
     item_type_id: 1
 articular_item:

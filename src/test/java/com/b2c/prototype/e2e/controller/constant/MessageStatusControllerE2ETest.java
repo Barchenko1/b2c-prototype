@@ -57,28 +57,6 @@ public class MessageStatusControllerE2ETest extends BasicE2ETest {
 
     @Test
     @DataSet(value = "datasets/e2e/user/message_status/testE2EMessageStatusDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/user/message_status/updateE2EMessageStatusDataSet.yml", orderBy = "id")
-    public void testPatchEntity() {
-        ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .value("Update New")
-                .key("Update New")
-                .build();
-
-        String jsonPayload = writeValueAsString(constantPayloadDto);
-        webTestClient.patch()
-                .uri(uriBuilder -> uriBuilder
-                        .path(URL_TEMPLATE)
-                        .queryParam("key", "New")
-                        .build())
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .bodyValue(jsonPayload)
-                .exchange()
-                .expectStatus().isOk();
-    }
-
-    @Test
-    @DataSet(value = "datasets/e2e/user/message_status/testE2EMessageStatusDataSet.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/e2e/user/message_status/emptyE2EMessageStatusDataSet.yml", orderBy = "id")
     public void testDeleteEntity() {
         webTestClient.delete()

@@ -57,28 +57,6 @@ public class MessageTypeControllerE2ETest extends BasicE2ETest {
 
     @Test
     @DataSet(value = "datasets/e2e/user/message_type/testE2EMessageTypeDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/user/message_type/updateE2EMessageTypeDataSet.yml", orderBy = "id")
-    public void testPatchEntity() {
-        ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .value("Update InMail")
-                .key("Update InMail")
-                .build();
-
-        String jsonPayload = writeValueAsString(constantPayloadDto);
-        webTestClient.patch()
-                .uri(uriBuilder -> uriBuilder
-                        .path(URL_TEMPLATE)
-                        .queryParam("key", "InMail")
-                        .build())
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .bodyValue(jsonPayload)
-                .exchange()
-                .expectStatus().isOk();
-    }
-
-    @Test
-    @DataSet(value = "datasets/e2e/user/message_type/testE2EMessageTypeDataSet.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/e2e/user/message_type/emptyE2EMessageTypeDataSet.yml", orderBy = "id")
     public void testDeleteEntity() {
         webTestClient.delete()

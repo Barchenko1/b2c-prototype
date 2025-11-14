@@ -57,28 +57,6 @@ public class CurrencyControllerE2ETest extends BasicE2ETest {
 
     @Test
     @DataSet(value = "datasets/e2e/item/currency/testE2ECurrencyDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/item/currency/updateE2ECurrencyDataSet.yml", orderBy = "id")
-    public void testPatchEntity() {
-        ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .value("Update USD")
-                .key("Update USD")
-                .build();
-
-        String jsonPayload = writeValueAsString(constantPayloadDto);
-        webTestClient.patch()
-                .uri(uriBuilder -> uriBuilder
-                        .path(URL_TEMPLATE)
-                        .queryParam("key", "USD")
-                        .build())
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .bodyValue(jsonPayload)
-                .exchange()
-                .expectStatus().isOk();
-    }
-
-    @Test
-    @DataSet(value = "datasets/e2e/item/currency/testE2ECurrencyDataSet.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/e2e/item/currency/emptyE2ECurrencyDataSet.yml", orderBy = "id")
     public void testDeleteEntity() {
         webTestClient.delete()

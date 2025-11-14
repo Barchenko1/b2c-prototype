@@ -1,7 +1,4 @@
-brand:
-  - id: 1
-    value: "Hermes"
-    key: "Hermes"
+
 item_type:
   - id: 1
     value: "Clothes"
@@ -54,8 +51,7 @@ category:
     value: "child"
 articular_group:
   - id: 1
-    metadata_uniq_id: 123
-    brand_id: 1
+    articular_group_uniq_id: 123
     category_id: 3
     item_type_id: 1
 articular_item:
@@ -110,8 +106,8 @@ payment:
   - id: 1
     upayment_id: "1"
     payment_method_id: 1
-    fullprice_id: 1
-    totalprice_id: 1
+    full_price_id: 1
+    total_price_id: 1
     credit_card_id: 1
 country_phone_code:
   - id: 1

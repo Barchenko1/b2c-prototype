@@ -11,7 +11,6 @@ public class LocalizationHelper {
 //    private final Map<String, DeliveryType> deliveryTypeMap;
 //    private final Map<String, PaymentMethod> paymenMethodMap;
 //    private final Map<String, OrderStatus> orderStatusMap;
-//    private final Map<String, Brand> brandMap;
 //    private final Map<String, ArticularStatus> itemStatusMap;
 //    private final Map<String, ItemType> itemTypeMap;
 //    private final Map<String, Category> categoryMap;
@@ -29,7 +28,6 @@ public class LocalizationHelper {
 //                              Map<String, DeliveryType> deliveryTypeMap,
 //                              Map<String, PaymentMethod> paymenMethodMap,
 //                              Map<String, OrderStatus> orderStatusMap,
-//                              Map<String, Brand> brandMap,
 //                              Map<String, ArticularStatus> itemStatusMap,
 //                              Map<String, ItemType> itemTypeMap,
 //                              Map<String, Category> categoryMap,
@@ -40,7 +38,6 @@ public class LocalizationHelper {
 //        this.deliveryTypeMap = deliveryTypeMap;
 //        this.paymenMethodMap = paymenMethodMap;
 //        this.orderStatusMap = orderStatusMap;
-//        this.brandMap = brandMap;
 //        this.itemStatusMap = itemStatusMap;
 //        this.itemTypeMap = itemTypeMap;
 //        this.categoryMap = categoryMap;
@@ -55,12 +52,6 @@ public class LocalizationHelper {
 //        Map<Object, Object> deliveryTypeMap = singleValueMap.getEntityMap(DeliveryType.class);
 //        DeliveryType deliveryType = (DeliveryType) deliveryTypeMap.get(deliveryTypeConfigName);
 //        return localizationInterpreter.interpret("delivery.type", deliveryType.getValue(), locale);
-//    }
-
-//    public List<String> getLocalizeDeliveryTypeNameList(Locale locale) {
-//        return deliveryTypeMap.values().stream()
-//                .map(brand -> localizationInterpreter.interpret("delivery.type", brand.getValue(), locale))
-//                .collect(Collectors.toList());
 //    }
 //
 //    public String getLocalizePaymentMethodName(String paymentMethodConfigName, Locale locale) {
@@ -77,23 +68,6 @@ public class LocalizationHelper {
 //    public String getLocalizeOrderStatusName(String orderStatusConfigName, Locale locale) {
 //        OrderStatus orderStatus = orderStatusMap.get(orderStatusConfigName);
 //        return localizationInterpreter.interpret("order.status", orderStatus.getValue(), locale);
-//    }
-//
-//    public List<String> getLocalizeOrderStatusNameList(Locale locale) {
-//        return orderStatusMap.values().stream()
-//                .map(brand -> localizationInterpreter.interpret("order.status", brand.getValue(), locale))
-//                .collect(Collectors.toList());
-//    }
-
-//    public String getLocalizeBrandName(String brandConfigName, Locale locale) {
-//        Brand brand = singleValueMap.getEntity(Brand.class, "value",brandConfigName);
-//        return localizationInterpreter.interpret("brand", brand.getValue(), locale);
-//    }
-
-//    public List<String> getLocalizeBrandNameList(Locale locale) {
-//        return brandMap.values().stream()
-//                .map(brand -> localizationInterpreter.interpret("brand", brand.getValue(), locale))
-//                .collect(Collectors.toList());
 //    }
 //
 //    public String getLocalizeItemStatusName(String itemStatusConfigName, Locale locale) {

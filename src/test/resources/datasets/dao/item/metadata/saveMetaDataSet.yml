@@ -1,7 +1,4 @@
-brand:
-  - id: 1
-    value: "Hermes"
-    key: "Hermes"
+
 item_type:
   - id: 1
     value: "Clothes"
@@ -12,7 +9,6 @@ category:
     value: "parent"
 articular_group:
   - id: 1
-    metadata_uniq_id: "123"
-    brand_id: 1
+    articular_group_uniq_id: "123"
     category_id: 1
     item_type_id: 1

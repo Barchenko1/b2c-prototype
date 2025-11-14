@@ -28,9 +28,6 @@
             WHERE e.id = :id</query>
     </named-query>
 
-    <named-query name="Brand.findById">
-        <query>select e from Brand e where e.id = :id</query>
-    </named-query>
     <named-query name="ItemType.findById">
         <query>select e from ItemType e where e.id = :id</query>
     </named-query>
@@ -509,7 +506,6 @@
     <entity class="com.b2c.prototype.modal.entity.payment.CommissionValue" />
     <entity class="com.b2c.prototype.modal.entity.payment.MinMaxCommission" />
 
-    <entity class="com.b2c.prototype.modal.entity.item.Brand" />
     <entity class="com.b2c.prototype.modal.entity.item.Category" />
     <entity class="com.b2c.prototype.modal.entity.item.ItemType" />
     <entity class="com.b2c.prototype.modal.entity.item.ArticularStatus" />

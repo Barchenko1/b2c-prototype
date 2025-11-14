@@ -167,9 +167,7 @@ alter table if exists user_details_post
 drop constraint if exists FKfs87np3bixtnk9tggfenkfpjw
 
 drop table if exists address cascade
-    
-drop table if exists brand cascade
-    
+
 drop table if exists category cascade
     
 drop table if exists contact_info cascade
@@ -268,14 +266,7 @@ create table address (
                          zipCode varchar(255),
                          primary key (id)
 )
-    14:40:06.499 [Test worker] INFO org.hibernate.orm.connections.access -- HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@19d13d04] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.
 
-create table brand (
-                       id bigserial not null,
-                       value varchar(255) not null,
-                       primary key (id)
-)
-    
 create table category (
                           category_id bigint,
                           id bigserial not null,
@@ -363,7 +354,6 @@ create table item (
 )
     
 create table item_data (
-                           brand_id bigint,
                            category_id bigint,
                            currencyDiscount_id bigint,
                            dateOfCreate bigint not null,
@@ -634,11 +624,6 @@ alter table if exists item
     add constraint FK5pc91oc43bq6tqaugwvc8f4or
     foreign key (itemData_id)
     references item_data
-    
-alter table if exists item_data
-    add constraint FK7yqp32kg84bewf1nnq1lhirqa
-    foreign key (brand_id)
-    references brand
     
 alter table if exists item_data
     add constraint FKnp91gprwy000sgedoo83oymji

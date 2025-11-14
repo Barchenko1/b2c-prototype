@@ -12,7 +12,7 @@ public interface Constant {
     String KEY = "key";
     String DATE_OF_CREATE = "dateOfCreate";
     String CODE = "code";
-    String STORE_ID = "store_uniq_id";
+    String STORE_ID = "storeUniqId";
     String MESSAGE_ID = "message_uniq_id";
     String MESSAGE_TEMPLATE_UNIQ_ID = "message_template_uniq_id";
     String POST_ID = "post_uniq_id";

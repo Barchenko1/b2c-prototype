@@ -19,11 +19,11 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/articular/group")
-public class IArticularGroupController {
+@RequestMapping("/api/v1/item/articular/group")
+public class ArticularGroupController {
     private final IArticularGroupProcessor articularGroupProcessor;
 
-    public IArticularGroupController(IArticularGroupProcessor articularGroupProcessor) {
+    public ArticularGroupController(IArticularGroupProcessor articularGroupProcessor) {
         this.articularGroupProcessor = articularGroupProcessor;
     }
 
@@ -37,13 +37,6 @@ public class IArticularGroupController {
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> putItemData(@RequestParam final Map<String, String> requestParams,
                                             @RequestBody final ArticularGroupDto articularGroupDto) {
-        articularGroupProcessor.updateArticularGroup(requestParams, articularGroupDto);
-        return ResponseEntity.ok().build();
-    }
-
-    @PatchMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> patchItemData(@RequestParam final Map<String, String> requestParams,
-                                              @RequestBody final ArticularGroupDto articularGroupDto) {
         articularGroupProcessor.updateArticularGroup(requestParams, articularGroupDto);
         return ResponseEntity.ok().build();
     }

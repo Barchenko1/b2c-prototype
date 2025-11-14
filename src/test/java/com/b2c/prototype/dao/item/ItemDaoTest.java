@@ -2,13 +2,12 @@ package com.b2c.prototype.dao.item;
 
 import com.b2c.prototype.dao.AbstractDaoTest;
 import com.b2c.prototype.dao.IGeneralEntityDao;
+import com.b2c.prototype.modal.entity.item.ArticularGroup;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.ArticularStatus;
-import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.item.Item;
-import com.b2c.prototype.modal.entity.item.MetaData;
 import com.b2c.prototype.modal.entity.item.ItemType;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
@@ -43,14 +42,13 @@ class ItemDaoTest extends AbstractDaoTest {
     executeStatementsBefore = {
             "TRUNCATE TABLE option_item RESTART IDENTITY CASCADE",
     })
-    @ExpectedDataSet(value = "datasets/dao/item/item/saveItemDataSet.yml", orderBy = "id", ignoreCols = {"label", "value", "id", "message", "title", "post_id", "post_uniq_id", "category_id", "option_group_id", "brand_id", "discount_id", "full_price_id", "total_price_id", "status_id"})
+    @ExpectedDataSet(value = "datasets/dao/item/item/saveItemDataSet.yml", orderBy = "id", ignoreCols = {"label", "value", "id", "message", "title", "post_id", "post_uniq_id", "category_id", "option_group_id", "discount_id", "full_price_id", "total_price_id", "status_id"})
     public void persistEntity_success() {
         Item entity = getItem();
         entity.setId(0);
-//        entity.getMetaData().setId(0);
-//        entity.getMetaData().getBrand().setId(0);
-//        entity.getMetaData().getItemType().setId(0);
-//        entity.getMetaData().getCategory().setId(0);
+//        entity.getArticularGroup().setId(0);
+//        entity.getArticularGroup().getItemType().setId(0);
+//        entity.getArticularGroup().getCategory().setId(0);
         entity.getArticularItems().forEach(articularItem -> {
             articularItem.setId(0);
 
@@ -140,12 +138,7 @@ class ItemDaoTest extends AbstractDaoTest {
                 .build();
     }
 
-    private MetaData getMetaData() {
-        Brand brand = Brand.builder()
-                .id(1L)
-                .value("Hermes")
-                .key("Hermes")
-                .build();
+    private ArticularGroup getArticularGroup() {
         Category category = getCategory();
         ItemType itemType = ItemType.builder()
                 .id(1L)
@@ -158,12 +151,11 @@ class ItemDaoTest extends AbstractDaoTest {
             put("desc2", "desc2");
         }};
 
-        return MetaData.builder()
+        return ArticularGroup.builder()
                 .id(1L)
-                .metadataUniqId("123")
+                .articularGroupId("123")
                 .description(description)
 //                .category(category)
-//                .brand(brand)
 //                .itemType(itemType)
                 .build();
     }
@@ -279,7 +271,7 @@ class ItemDaoTest extends AbstractDaoTest {
     }
 
     private Item getItem() {
-        MetaData metaData = getMetaData();
+        ArticularGroup articularGroup = getArticularGroup();
         ArticularItem articularItem = getArticularItem();
 
         Item item = Item.builder()

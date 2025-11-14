@@ -3,7 +3,6 @@ package com.b2c.prototype.manager.store.base;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 
 import com.b2c.prototype.modal.dto.payload.store.StoreDto;
-import com.b2c.prototype.modal.dto.payload.store.ResponseStoreDto;
 import com.b2c.prototype.modal.entity.store.Store;
 
 import org.hibernate.Session;
@@ -11,20 +10,15 @@ import org.hibernate.query.NativeQuery;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -86,7 +80,7 @@ class StoreManagerTest {
             return null;
         });
 
-        storeManager.updateStore("", storeDto);
+        storeManager.updateStore("", "", storeDto);
 
     }
 
@@ -101,7 +95,7 @@ class StoreManagerTest {
 //                function
 //        )).thenReturn(storeSupplier);
 
-        storeManager.deleteStore(articularId);
+        storeManager.deleteStore("", articularId);
 
     }
 
@@ -109,31 +103,31 @@ class StoreManagerTest {
     void testGetAllResponseStoresByArticularId() {
         String articularId = "articularId";
         Store store = getStore();
-        ResponseStoreDto responseStoreDto = mock(ResponseStoreDto.class);
+        StoreDto storeDto = mock(StoreDto.class);
 
 
         
-        Function<Store, ResponseStoreDto> function = mock(Function.class);
-        when(function.apply(store)).thenReturn(responseStoreDto);
+        Function<Store, StoreDto> function = mock(Function.class);
+        when(function.apply(store)).thenReturn(storeDto);
 
-        List<ResponseStoreDto> result = storeManager.getAllResponseStoresByArticularId(articularId);
+        List<StoreDto> result = storeManager.getAllStoresByArticularId("", articularId);
 
-        assertEquals(responseStoreDto, result);
+        assertEquals(storeDto, result);
     }
 
     @Test
     void testGetAllStoreResponse() {
-        ResponseStoreDto responseStoreDto = mock(ResponseStoreDto.class);
-        List<ResponseStoreDto> responseStoreDtoList = Collections.singletonList(responseStoreDto);
+        StoreDto storeDto = mock(StoreDto.class);
+        List<StoreDto> singletonList = Collections.singletonList(storeDto);
 
         Store store = getStore();
 
-        Function<Store, ResponseStoreDto> function = mock(Function.class);
-        when(function.apply(store)).thenReturn(responseStoreDto);
+        Function<Store, StoreDto> function = mock(Function.class);
+        when(function.apply(store)).thenReturn(storeDto);
 
-//        List<ResponseStoreDto> result = storeManager.getAllResponseStore();
+//        List<StoreDto> result = storeManager.getAllResponseStore();
 
-//        assertEquals(responseStoreDtoList, result);
+//        assertEquals(singletonList, result);
     }
 
     private Store getStore() {

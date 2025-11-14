@@ -14,10 +14,6 @@
       "label": "Electronic",
       "value": "Electronic"
     },
-    "brand": {
-      "label": "TechBrand",
-      "value": "TechBrand"
-    },
     "articularItems": [
       {
         "articularId": "1",
@@ -84,10 +80,6 @@
     "itemType": {
       "label": "Electronic",
       "value": "Electronic"
-    },
-    "brand": {
-      "label": "TechBrand",
-      "value": "TechBrand"
     },
     "articularItems": [
       {

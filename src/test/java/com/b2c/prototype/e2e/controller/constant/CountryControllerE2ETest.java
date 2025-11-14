@@ -56,28 +56,6 @@ public class CountryControllerE2ETest extends BasicE2ETest {
 
     @Test
     @DataSet(value = "datasets/e2e/order/country/testE2ECountryDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/order/country/updateE2ECountryDataSet.yml", orderBy = "id")
-    public void testPatchEntity() {
-        CountryDto countryDto = CountryDto.builder()
-                .value("Update USA")
-                .key("Update USA")
-                .flagImagePath("/images/usa.jpg")
-                .build();
-        String jsonPayload = writeValueAsString(countryDto);
-        webTestClient.patch()
-                .uri(uriBuilder -> uriBuilder
-                        .path(URL_TEMPLATE)
-                        .queryParam("key", "USA")
-                        .build())
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .bodyValue(jsonPayload)
-                .exchange()
-                .expectStatus().isOk();
-    }
-
-    @Test
-    @DataSet(value = "datasets/e2e/order/country/testE2ECountryDataSet.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/e2e/order/country/emptyE2ECountryDataSet.yml", orderBy = "id")
     public void testDeleteEntity() {
         webTestClient.delete()

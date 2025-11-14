@@ -23,7 +23,9 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "articular_stock")
@@ -40,7 +42,7 @@ public class ArticularStock {
     @Builder.Default
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private List<ArticularItemQuantity> articularItemQuantities = new ArrayList<>();
+    private Set<ArticularItemQuantity> articularItemQuantities = new HashSet<>();
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "availability_status_id")
     private AvailabilityStatus availabilityState;

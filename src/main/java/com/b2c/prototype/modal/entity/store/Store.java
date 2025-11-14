@@ -1,6 +1,7 @@
 package com.b2c.prototype.modal.entity.store;
 
 import com.b2c.prototype.modal.entity.address.Address;
+import com.b2c.prototype.modal.entity.region.Region;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
@@ -21,8 +23,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "store")
@@ -32,10 +34,54 @@ import java.util.List;
 @AllArgsConstructor
 @NamedQueries({
         @NamedQuery(
-                name = "Store.findStoreByStoreId",
+                name = "Store.findStoreByRegionStoreId",
                 query = "SELECT s FROM Store s " +
-                        "WHERE s.storeUniqId = :storeUniqId"
+                        "LEFT JOIN FETCH s.region r " +
+                        "WHERE r.code = : code and s.storeUniqId = :storeUniqId"
         ),
+        @NamedQuery(
+                name = "Store.findStoreByRegionStoreIdDetails",
+                query = "SELECT s FROM Store s " +
+                        "LEFT JOIN FETCH s.address a " +
+                        "LEFT JOIN FETCH a.country c " +
+                        "LEFT JOIN FETCH s.region r " +
+                        "LEFT JOIN FETCH s.articularStocks sa " +
+
+                        "LEFT JOIN FETCH sa.articularItemQuantities sasq " +
+                        "LEFT JOIN FETCH sasq.articularItem sasqa " +
+                        "LEFT JOIN FETCH sasqa.articularGroup sasqaa " +
+                        "LEFT JOIN FETCH sa.availabilityState sas " +
+                        "WHERE r.code = : code and s.storeUniqId = :storeUniqId"
+        ),
+        @NamedQuery(
+                name = "Store.findAllStoreByRegion",
+                query = "SELECT s FROM Store s " +
+                        "LEFT JOIN FETCH s.address a " +
+                        "LEFT JOIN FETCH a.country c " +
+                        "LEFT JOIN FETCH s.region r " +
+                        "LEFT JOIN FETCH s.articularStocks sa " +
+                        "WHERE r.code = : code"
+        ),
+        @NamedQuery(
+                name = "Store.findAllStoreByRegionAndCountry",
+                query = "SELECT s FROM Store s " +
+                        "LEFT JOIN FETCH s.address a " +
+                        "LEFT JOIN FETCH a.country c " +
+                        "LEFT JOIN FETCH s.region r " +
+                        "LEFT JOIN FETCH s.articularStocks sa " +
+                        "WHERE r.code = : code and c.key = : key"
+        ),
+        @NamedQuery(
+                name = "Store.findAllStoreByRegionAndCountryAndCity",
+                query = "SELECT s FROM Store s " +
+                        "LEFT JOIN FETCH s.address a " +
+                        "LEFT JOIN FETCH a.country c " +
+                        "LEFT JOIN FETCH s.region r " +
+                        "LEFT JOIN FETCH s.articularStocks sa " +
+                        "WHERE r.code = : code and c.key = : key and a.city = : city "
+        ),
+
+        /// ///
         @NamedQuery(
                 name = "Store.findStoreWithAddressByStoreId",
                 query = "SELECT s FROM Store s " +
@@ -62,27 +108,6 @@ import java.util.List;
                         "LEFT JOIN FETCH sas.articularItemQuantities aiq " +
                         "LEFT JOIN FETCH aiq.articularItem ai " +
                         "WHERE c.key = :key"
-        ),
-        @NamedQuery(
-                name = "Store.findStoreWithAddressArticularItemQuantityByCountryCity",
-                query = "SELECT s FROM Store s " +
-                        "LEFT JOIN FETCH s.address a " +
-                        "LEFT JOIN FETCH a.country c " +
-                        "LEFT JOIN FETCH s.articularStocks sas " +
-                        "LEFT JOIN FETCH sas.articularItemQuantities aiq " +
-                        "LEFT JOIN FETCH aiq.articularItem ai " +
-                        "WHERE c.key = :key " +
-                        "AND a.city =:key"
-        ),
-        @NamedQuery(
-                name = "Store.findStoreWithAddressArticularItemQuantityByArticularId",
-                query = "SELECT s FROM Store s " +
-                        "LEFT JOIN FETCH s.address a " +
-                        "LEFT JOIN FETCH a.country c " +
-                        "LEFT JOIN FETCH s.articularStocks sas " +
-                        "LEFT JOIN FETCH sas.articularItemQuantities aiq " +
-                        "LEFT JOIN FETCH aiq.articularItem ai " +
-                        "WHERE ai.articularUniqId = : articularUniqId"
         )
 })
 public class Store {
@@ -94,12 +119,14 @@ public class Store {
     private String storeUniqId;
     private String storeName;
     private boolean isActive;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Region region;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "store_id")
     @Builder.Default
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private List<ArticularStock> articularStocks = new ArrayList<>();
+    private Set<ArticularStock> articularStocks = new HashSet<>();
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "address_id", nullable = false)
     private Address address;

@@ -2,13 +2,12 @@ package com.b2c.prototype.dao.item;
 
 import com.b2c.prototype.dao.AbstractDaoTest;
 import com.b2c.prototype.dao.IGeneralEntityDao;
+import com.b2c.prototype.modal.entity.item.ArticularGroup;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.ArticularStatus;
-import com.b2c.prototype.modal.entity.item.Brand;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.item.ItemType;
-import com.b2c.prototype.modal.entity.item.MetaData;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.modal.entity.price.Currency;
@@ -38,7 +37,6 @@ class ArticularItemDaoTest extends AbstractDaoTest {
     @DataSet(value = "datasets/dao/item/articular_item/emptyArticularItemDataSet.yml", cleanBefore = true,
             executeStatementsBefore = {
                     "TRUNCATE TABLE price RESTART IDENTITY CASCADE",
-                    "TRUNCATE TABLE brand RESTART IDENTITY CASCADE",
                     "TRUNCATE TABLE item_type RESTART IDENTITY CASCADE",
                     "TRUNCATE TABLE category RESTART IDENTITY CASCADE",
                     "TRUNCATE TABLE discount RESTART IDENTITY CASCADE",
@@ -146,12 +144,7 @@ class ArticularItemDaoTest extends AbstractDaoTest {
         return child;
     }
 
-    private MetaData getMetaData() {
-        Brand brand = Brand.builder()
-                .id(1L)
-                .value("Hermes")
-                .key("Hermes")
-                .build();
+    private ArticularGroup getArticularGroup() {
         Category category = getCategory();
         ItemType itemType = ItemType.builder()
                 .id(1L)
@@ -164,12 +157,11 @@ class ArticularItemDaoTest extends AbstractDaoTest {
             put("desc2", "desc2");
         }};
 
-        return MetaData.builder()
+        return ArticularGroup.builder()
                 .id(1L)
-                .metadataUniqId("123")
+                .articularGroupId("123")
                 .description(description)
 //                .category(category)
-//                .brand(brand)
 //                .itemType(itemType)
                 .build();
     }

@@ -12,10 +12,6 @@
     "label": "Update Electronic",
     "value": "Update Electronic"
   },
-  "brand": {
-    "label": "Update TechBrand",
-    "value": "Update TechBrand"
-  },
   "articularItemSet": [
     {
       "articularId": "2",

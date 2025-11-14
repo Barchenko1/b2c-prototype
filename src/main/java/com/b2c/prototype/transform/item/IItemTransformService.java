@@ -6,18 +6,22 @@ import com.b2c.prototype.modal.dto.payload.item.ArticularItemDto;
 import com.b2c.prototype.modal.dto.payload.item.ArticularGroupDto;
 import com.b2c.prototype.modal.dto.payload.option.group.OptionItemCostGroupDto;
 import com.b2c.prototype.modal.dto.payload.option.group.OptionItemGroupDto;
+import com.b2c.prototype.modal.dto.payload.order.ArticularItemQuantityDto;
 import com.b2c.prototype.modal.dto.payload.post.PostDto;
 import com.b2c.prototype.modal.dto.payload.review.ResponseReviewDto;
 import com.b2c.prototype.modal.dto.payload.review.ReviewDto;
-import com.b2c.prototype.modal.dto.payload.store.ResponseStoreDto;
+import com.b2c.prototype.modal.dto.payload.store.ArticularStockDto;
+import com.b2c.prototype.modal.dto.payload.store.AvailabilityStatusDto;
 import com.b2c.prototype.modal.dto.payload.store.StoreDto;
+import com.b2c.prototype.modal.entity.item.ArticularGroup;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
+import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.DiscountGroup;
-import com.b2c.prototype.modal.entity.item.MetaData;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.post.Post;
 import com.b2c.prototype.modal.entity.review.Review;
+import com.b2c.prototype.modal.entity.store.ArticularStock;
 import com.b2c.prototype.modal.entity.store.Store;
 
 
@@ -30,13 +34,19 @@ public interface IItemTransformService {
     CategoryDto mapCategoryToCategoryDto(Category category);
 
     Store mapStoreDtoToStore(StoreDto storeDto);
-    ResponseStoreDto mapStoreToResponseStoreDto(Store store);
+    StoreDto mapStoreToStoreDto(Store store);
 
-    MetaData mapArticularGroupDtoToMetaDataDto(ArticularGroupDto articularGroupDto);
-    ArticularGroupDto mapArticularGroupToArticularGroupDto(MetaData metaData);
+    ArticularStockDto mapArticularStockToArticularStockDto(ArticularStock articularStock);
+    ArticularStock mapArticularStockDtoToArticularStock(ArticularStockDto articularStockDto);
+
+    ArticularGroup mapArticularGroupDtoToArticularGroupDto(ArticularGroupDto articularGroupDto);
+    ArticularGroupDto mapArticularGroupToArticularGroupDto(ArticularGroup articularGroup);
 
     ArticularItem mapArticularItemDtoToArticularItem(ArticularItemDto articularItemDto);
-    ArticularItemDto mapArticularItemToResponseArticularItem(ArticularItem articularItem);
+    ArticularItemDto mapArticularItemToArticularItemDto(ArticularItem articularItem);
+
+    ArticularItemQuantity mapArticularItemQuantityDtoToArticularItemQuantity(ArticularItemQuantityDto articularItemQuantityDto);
+    ArticularItemQuantityDto mapArticularItemQuantityToArticularItemQuantityDto(ArticularItemQuantity articularItemQuantity);
 
     Review mapReviewDtoToReview(ReviewDto reviewDto);
     ResponseReviewDto mapReviewToResponseReviewDto(Review review);
@@ -49,4 +59,6 @@ public interface IItemTransformService {
 
     DiscountGroup mapDiscountGroupDtoToDiscountGroup(DiscountGroupDto discountGroupDto);
     DiscountGroupDto mapDiscountGroupToDiscountGroupDto(DiscountGroup discountGroup);
+
+
 }

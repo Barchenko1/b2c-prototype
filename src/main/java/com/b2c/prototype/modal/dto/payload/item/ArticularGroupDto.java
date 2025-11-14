@@ -1,6 +1,5 @@
 package com.b2c.prototype.modal.dto.payload.item;
 
-import com.b2c.prototype.modal.dto.payload.constant.BrandDto;
 import com.b2c.prototype.modal.dto.payload.constant.CategoryValueDto;
 import com.b2c.prototype.modal.dto.payload.constant.ItemTypeDto;
 import lombok.AllArgsConstructor;
@@ -20,6 +19,5 @@ public class ArticularGroupDto {
     private Map<String, String> description;
     private CategoryValueDto category;
     private ItemTypeDto itemType;
-    private BrandDto brand;
     private Set<ArticularItemDto> articularItems;
 }

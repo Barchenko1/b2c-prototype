@@ -1,19 +1,30 @@
-count_type:
+currency:
   - id: 1
-    value: "LIMITED"
-    key: "limited"
-brand:
+    value: "EUR"
+    key: "EUR"
+  - id: 2
+    value: "USD"
+    key: "USD"
+region:
   - id: 1
-    value: "Hermes"
-    key: "Hermes"
+    code: "DE"
+    value: "Germany"
+    language: "German"
+    default_locale: "de-DE"
+    primary_currency_id: 1
+    timezone: "Europe/Berlin"
+  - id: 2
+    code: "Global"
+    value: "Global"
+    language: "English"
+    default_locale: "en-US"
+    primary_currency_id: 2
+    timezone: "UTC"
+
 item_type:
   - id: 1
     value: "Clothes"
     key: "Clothes"
-currency:
-  - id: 1
-    value: "USD"
-    key: "USD"
 price:
   - id: 1
     amount: 100
@@ -27,13 +38,19 @@ price:
   - id: 4
     amount: 300
     currency_id: 1
+discount_group:
+  - id: 1
+    key: "Germany_group"
+    value: "Germany_group"
+    region_id: 1
 discount:
   - id: 1
     amount: 5
-    char_sequence_code: "abc"
+    char_sequence_code: "abc1"
     is_active: true
     is_percent: false
     currency_id: 1
+    discount_group_id: 1
 option_group:
   - id: 1
     key: "Size"
@@ -57,49 +74,73 @@ category:
     value: "child"
 articular_group:
   - id: 1
-    metadata_uniq_id: 123
-    brand_id: 1
+    articular_group_uniq_id: 123
     category_id: 3
     item_type_id: 1
+    description: "{\"par1\":\"desc1\",\"par2\":\"desc2\",\"par3\":\"desc3\"}"
 country:
   - id: 1
+    key: "GERMANY"
+    value: "GERMANY"
+    flag_image_path: "/images/germany.jpg"
+  - id: 2
     key: "USA"
     value: "USA"
     flag_image_path: "/images/usa.jpg"
 address:
   - id: 1
+    city: "city"
     street: "street"
     building_number: 1
     flor_number: 9
     apartment_number: 101
     zip_code: 90000
     country_id: 1
+  - id: 2
+    city: "Update city"
+    street: "Update street"
+    building_number: 1010
+    flor_number: 99
+    apartment_number: 201201
+    zip_code: 900009
+    country_id: 1
 store:
   - id: 1
-    store_id: "123"
-    storeName: "abc"
+    store_uniq_id: "store1"
+    store_name: "store1"
     is_active: true
     address_id: 1
+    region_id: 1
+  - id: 2
+    store_uniq_id: "store2"
+    store_name: "Update store2"
+    is_active: true
+    address_id: 2
+    region_id: 1
 articular_item:
   - id: 1
     articular_uniq_id: "123"
     date_of_create: "2024-03-03 12:00:00"
-    fullprice_id: 1
-    totalprice_id: 1
+    full_price_id: 1
+    total_price_id: 1
   - id: 2
     articular_uniq_id: "125"
     date_of_create: "2024-03-03 12:00:00"
-    fullprice_id: 2
-    totalprice_id: 2
+    full_price_id: 2
+    total_price_id: 2
 articular_item_option_item:
   - articular_item_id: 1
     option_item_id: 1
+articular_stock:
+  - id: 1
+    store_id: 1
+    count_type: "LIMITED"
 articular_item_quantity:
   - id: 1
     articular_item_id: 1
-    store_id: 1
+    articular_stock_id: 1
     quantity: 2
   - id: 2
     articular_item_id: 2
-    store_id: 1
+    articular_stock_id: 1
     quantity: 3

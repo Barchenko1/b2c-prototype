@@ -40,13 +40,6 @@ public class MessageTypeController {
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> patchConstantEntity(@RequestBody Map<String, Object> payload,
-                                                      @RequestParam(value = "key") final String key) {
-        messageTypeProcess.mergeEntity(payload, key);
-        return ResponseEntity.ok().build();
-    }
-
     @DeleteMapping(produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> deleteConstantEntity(@RequestParam(value = "key") final String key) {
         messageTypeProcess.removeEntity(key);

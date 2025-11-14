@@ -58,28 +58,6 @@ public class ArticularStatusControllerE2ETest extends BasicE2ETest {
 
     @Test
     @DataSet(value = "datasets/e2e/item/articular_status/testE2EArticularStatusDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/item/articular_status/updateE2EArticularStatusDataSet.yml", orderBy = "id")
-    public void testPatchEntity() {
-        ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .value("Update Test1")
-                .key("Update Test1")
-                .build();
-
-        String jsonPayload = writeValueAsString(constantPayloadDto);
-        webTestClient.patch()
-                .uri(uriBuilder -> uriBuilder
-                        .path(URL_TEMPLATE)
-                        .queryParam("key", "Test1")
-                        .build())
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .bodyValue(jsonPayload)
-                .exchange()
-                .expectStatus().isOk();
-    }
-
-    @Test
-    @DataSet(value = "datasets/e2e/item/articular_status/testE2EArticularStatusDataSet.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/e2e/item/articular_status/emptyE2EArticularStatusDataSet.yml", orderBy = "id")
     public void testDeleteEntity() {
         webTestClient.delete()

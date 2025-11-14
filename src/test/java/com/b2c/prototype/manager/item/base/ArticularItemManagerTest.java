@@ -3,9 +3,9 @@ package com.b2c.prototype.manager.item.base;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.item.ArticularItemDto;
 import com.b2c.prototype.modal.dto.payload.item.PriceDto;
+import com.b2c.prototype.modal.entity.item.ArticularGroup;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.Discount;
-import com.b2c.prototype.modal.entity.item.MetaData;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.modal.entity.price.Currency;
@@ -45,7 +45,7 @@ class ArticularItemManagerTest {
         String itemId = "itemId";
         ArticularItemDto articularItemDto = getItemDataOptionDto();
         List<ArticularItemDto> articularItemDtoList = List.of(articularItemDto);
-        MetaData metaData = getItemData();
+        ArticularGroup articularGroup = getItemData();
         ArticularItem newArticularItem = updateItemDataOption();
 
         doAnswer(invocation -> {
@@ -66,7 +66,7 @@ class ArticularItemManagerTest {
         String itemId = "itemId";
         ArticularItemDto articularItemDto = getItemDataOptionDto();
         List<ArticularItemDto> articularItemDtoList = List.of(articularItemDto);
-        MetaData metaData = getItemData();
+        ArticularGroup articularGroup = getItemData();
 //        metaData.setArticularItemSet(new HashSet<>());
         ArticularItem newArticularItem = updateItemDataOption();
 
@@ -194,18 +194,14 @@ class ArticularItemManagerTest {
                 .build();
     }
 
-    private MetaData getItemData() {
-        return MetaData.builder()
+    private ArticularGroup getItemData() {
+        return ArticularGroup.builder()
 //                .category(Category.builder()
 //                        .label("categoryLabel")
 //                        .value("categoryValue").build())
 //                .itemType(ItemType.builder()
 //                        .label("itemTypeLabel")
 //                        .value("itemTypeValue")
-//                        .build())
-//                .brand(Brand.builder()
-//                        .label("brandLabel")
-//                        .value("brandValue")
 //                        .build())
 //                .articularItemSet(Set.of(getItemDataOption()))
                 .build();

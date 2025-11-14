@@ -33,50 +33,6 @@ public class MessageTemplateControllerE2ETest extends BasicE2ETest {
 
     @Test
     @DataSet(value = "datasets/e2e/user/message_template/testE2EMessageTemplateDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/user/message_template/updateE2EMessageTemplateDataSet.yml", orderBy = "id", ignoreCols = {"id", "message_template_uniq_id"})
-    public void testUpdateEntity() {
-        MessageTemplateDto dto = MessageTemplateDto.builder()
-                .title("title3")
-                .message("message3")
-                .build();
-
-        String jsonPayload = writeValueAsString(dto);
-        webTestClient.patch()
-                .uri(uriBuilder -> uriBuilder
-                        .path(URL_TEMPLATE)
-                        .queryParam("messageTemplateId", "123")
-                        .build())
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .bodyValue(jsonPayload)
-                .exchange()
-                .expectStatus().isOk();
-    }
-
-    @Test
-    @DataSet(value = "datasets/e2e/user/message_template/testE2EMessageTemplateDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/user/message_template/updateE2EMessageTemplateDataSet.yml", orderBy = "id", ignoreCols = {"message_template_uniq_id"})
-    public void testPatchEntity() {
-        MessageTemplateDto dto = MessageTemplateDto.builder()
-                .title("title3")
-                .message("message3")
-                .build();
-
-        String jsonPayload = writeValueAsString(dto);
-        webTestClient.patch()
-                .uri(uriBuilder -> uriBuilder
-                        .path(URL_TEMPLATE)
-                        .queryParam("messageTemplateId", "123")
-                        .build())
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .bodyValue(jsonPayload)
-                .exchange()
-                .expectStatus().isOk();
-    }
-
-    @Test
-    @DataSet(value = "datasets/e2e/user/message_template/testE2EMessageTemplateDataSet.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/e2e/user/message_template/emptyE2EMessageTemplateDataSet.yml", orderBy = "id")
     public void testDeleteEntity() {
         webTestClient.delete()

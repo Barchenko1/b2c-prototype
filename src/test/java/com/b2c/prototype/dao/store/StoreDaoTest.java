@@ -189,7 +189,7 @@ class StoreDaoTest extends AbstractDaoTest {
                 .build();
         return ArticularStock.builder()
                 .id(1L)
-                .articularItemQuantities(List.of(getArticularItemQuantity()))
+                .articularItemQuantities(Set.of(getArticularItemQuantity()))
                 .availabilityState(availabilityStatus)
                 .countType(CountType.LIMITED)
                 .build();
@@ -213,7 +213,7 @@ class StoreDaoTest extends AbstractDaoTest {
                 .build();
         return Store.builder()
                 .id(1L)
-                .articularStocks(List.of(getArticularStock()))
+                .articularStocks(Set.of(getArticularStock()))
                 .address(address)
                 .storeUniqId("123")
                 .storeName("Store")

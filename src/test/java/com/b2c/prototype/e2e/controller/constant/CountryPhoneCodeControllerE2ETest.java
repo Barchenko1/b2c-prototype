@@ -59,28 +59,6 @@ public class CountryPhoneCodeControllerE2ETest extends BasicE2ETest {
 
     @Test
     @DataSet(value = "datasets/e2e/user/country_phone_code/testE2ECountryPhoneCodeDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/user/country_phone_code/updateE2ECountryPhoneCodeDataSet.yml", orderBy = "id")
-    public void testPatchEntity() {
-        ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .value("Update +11")
-                .key("Update +11")
-                .build();
-
-        String jsonPayload = writeValueAsString(constantPayloadDto);
-        webTestClient.patch()
-                .uri(uriBuilder -> uriBuilder
-                        .path(URL_TEMPLATE)
-                        .queryParam("key", UriUtils.encode("+11", StandardCharsets.UTF_8))
-                        .build())
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .bodyValue(jsonPayload)
-                .exchange()
-                .expectStatus().isOk();
-    }
-
-    @Test
-    @DataSet(value = "datasets/e2e/user/country_phone_code/testE2ECountryPhoneCodeDataSet.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/e2e/user/country_phone_code/emptyE2ECountryPhoneCodeDataSet.yml", orderBy = "id")
     public void testDeleteEntity() {
         webTestClient.delete()

@@ -1,7 +1,6 @@
 package com.b2c.prototype.controller.store;
 
 import com.b2c.prototype.modal.dto.payload.store.StoreDto;
-import com.b2c.prototype.modal.dto.payload.store.ResponseStoreDto;
 import com.b2c.prototype.processor.store.IStoreProcess;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/store")
+@RequestMapping("/api/v1/item/store")
 public class StoreController {
 
     private final IStoreProcess storeProcess;
@@ -42,25 +41,25 @@ public class StoreController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<Void> deleteStore(@RequestParam final Map<String, String> requestParams) {
         storeProcess.deleteStore(requestParams);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ResponseStoreDto> getAllResponseStores(@RequestParam final Map<String, String> requestParams) {
-        return storeProcess.getAllResponseStores(requestParams);
+    public List<StoreDto> getAllResponseStores(@RequestParam final Map<String, String> requestParams) {
+        return storeProcess.getAllStores(requestParams);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ResponseStoreDto> getAllResponseStoresByArticularId(@RequestParam final Map<String, String> requestParams) {
-        return storeProcess.getAllResponseStoresByArticularId(requestParams);
+    public List<StoreDto> getAllResponseStoresByArticularId(@RequestParam final Map<String, String> requestParams) {
+        return storeProcess.getAllStoresByArticularId(requestParams);
     }
 
     @GetMapping(value = "/{storeId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseStoreDto> getStore(@RequestParam final Map<String, String> requestParams,
-                                                     @PathVariable final String storeId) {
+    public ResponseEntity<StoreDto> getStore(@RequestParam final Map<String, String> requestParams,
+                                             @PathVariable final String storeId) {
         return new ResponseEntity<>(storeProcess.getStore(requestParams, storeId), HttpStatus.OK);
     }
 

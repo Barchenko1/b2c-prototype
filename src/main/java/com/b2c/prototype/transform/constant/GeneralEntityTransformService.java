@@ -12,6 +12,7 @@ import com.b2c.prototype.modal.dto.payload.order.AddressDto;
 import com.b2c.prototype.modal.dto.payload.order.ContactInfoDto;
 import com.b2c.prototype.modal.dto.payload.order.ContactPhoneDto;
 import com.b2c.prototype.modal.dto.payload.region.RegionDto;
+import com.b2c.prototype.modal.dto.payload.store.AvailabilityStatusDto;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
 import com.b2c.prototype.modal.entity.payment.CommissionValue;
@@ -19,6 +20,7 @@ import com.b2c.prototype.modal.entity.payment.MinMaxCommission;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
 import com.b2c.prototype.modal.entity.region.Region;
+import com.b2c.prototype.modal.entity.store.AvailabilityStatus;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
 import com.nimbusds.jose.util.Pair;
@@ -224,6 +226,22 @@ public class GeneralEntityTransformService implements IGeneralEntityTransformSer
                         ? mapCurrencyToCurrencyDto(commissionValue.getCurrency())
                         : null)
                 .feeType(commissionValue.getFeeType().name())
+                .build();
+    }
+
+    @Override
+    public AvailabilityStatus mapAvailabilityStatusDtoToAvailabilityStatus(AvailabilityStatusDto availabilityStatusDto) {
+        return AvailabilityStatus.builder()
+                .key(availabilityStatusDto.getKey())
+                .value(availabilityStatusDto.getValue())
+                .build();
+    }
+
+    @Override
+    public AvailabilityStatusDto mapAvailabilityStatusToAvailabilityStatusDto(AvailabilityStatus availabilityStatus) {
+        return AvailabilityStatusDto.builder()
+                .key(availabilityStatus.getKey())
+                .value(availabilityStatus.getValue())
                 .build();
     }
 }

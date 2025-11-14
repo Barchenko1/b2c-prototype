@@ -38,13 +38,6 @@ public class ZoneOptionGroupController {
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> patchConstantEntity(@RequestBody ZoneOptionGroupDto payload,
-                                                      @RequestParam(value = "key") final String key) {
-        zoneOptionProcess.mergeEntity(payload, key);
-        return ResponseEntity.ok().build();
-    }
-
     @DeleteMapping(produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> deleteConstantEntity(@RequestParam(value = "key") final String key) {
         zoneOptionProcess.removeEntity(key);

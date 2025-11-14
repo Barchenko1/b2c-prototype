@@ -1,219 +1,258 @@
-//package com.b2c.prototype.e2e.controller.basic;
-//
-//import com.b2c.prototype.e2e.BasicE2ETest;
-//import com.b2c.prototype.e2e.util.TestUtil;
-//import com.b2c.prototype.modal.dto.payload.store.ResponseStoreDto;
-//import com.fasterxml.jackson.core.JsonProcessingException;
-//import com.fasterxml.jackson.core.type.TypeReference;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//import org.springframework.http.MediaType;
-//import org.springframework.test.web.servlet.MvcResult;
-//
-//import java.io.IOException;
-//import java.io.UnsupportedEncodingException;
-//import java.sql.Connection;
-//import java.sql.Statement;
-//import java.util.List;
-//import java.util.Map;
-//
-//import static org.junit.jupiter.api.Assertions.assertEquals;
-//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-//
-//class StoreControllerE2ETest extends BasicE2ETest {
-//
-//    private static final String URL_TEMPLATE = "/api/v1/store";
-//
-////    @BeforeEach
-////    public void cleanUpDatabase() {
-////        try (Connection connection = connectionHolder.getConnection()) {
-////            connection.setAutoCommit(false);
-////            Statement statement = connection.createStatement();
-////            statement.execute("DELETE FROM articular_item_quantity");
-////            statement.execute("DELETE FROM store");
-////            statement.execute("DELETE FROM address");;
-////
-////            statement.execute("ALTER SEQUENCE store_id_seq RESTART WITH 2");
-////            statement.execute("ALTER SEQUENCE address_id_seq RESTART WITH 2");
-////            connection.commit();
-////        } catch (Exception e) {
-////            throw new RuntimeException("Failed to clean table: store", e);
-////        }
-////    }
-//
-//    @Test
-//    void testSaveStore() {
-//        // loadDataSet("/datasets/e2e/store/store/emptyE2EStore.yml");
-//        try {
-//            mockMvc.perform(post(URL_TEMPLATE)
-//                            .contentType(MediaType.APPLICATION_JSON)
-//                            .content(TestUtil.readFile("json/store/input/StoreDto.json")))
-//                    .andExpect(status().isOk());
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        // verifyExpectedData("/datasets/e2e/store/store/testE2EStore.yml",
-//                // new String[] {"id", "dateOfCreate", "STORE_ID"},
-//                // new String[] {"label", "value",
-////        );
-//    }
-//
-//    @Test
-//    void testUpdateStore() {
-//        // loadDataSet("/datasets/e2e/store/store/testE2EStore.yml");
-//
-//        try {
-//            mockMvc.perform(put(URL_TEMPLATE)
-//                            .params(getMultiValueMap(getRequestParams()))
-//                            .contentType(MediaType.APPLICATION_JSON)
-//                            .content(TestUtil.readFile("json/store/input/UpdateStoreDto.json")))
-//                    .andExpect(status().isOk());
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        // verifyExpectedData("/datasets/e2e/store/store/updateE2EStore.yml",
-//                // new String[] {"id", "dateOfCreate"},
-//                // new String[] {"label", "value",
-////        );
-//    }
-//
-//    @Test
-//    void testDeleteStore() {
-//        // loadDataSet("/datasets/e2e/store/store/testE2EStore.yml");
-//
-//        try {
-//            mockMvc.perform(delete(URL_TEMPLATE)
-//                    .params(getMultiValueMap(getRequestParams())))
-//                    .andExpect(status().isOk());
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        // verifyExpectedData("/datasets/e2e/store/store/emptyE2EStore.yml");
-//    }
-//
-//    @Test
-//    void testGetStoreByUser() {
-//        // loadDataSet("/datasets/e2e/store/store/testE2EStore.yml");
-//        MvcResult mvcResult;
-//        try {
-//            mvcResult = mockMvc.perform(get(URL_TEMPLATE + "/123")
-//                            .params(getMultiValueMap(getRequestParams()))
-//                            .contentType(MediaType.APPLICATION_JSON))
-//                    .andExpect(status().isOk())
-//                    .andReturn();
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        try {
-//            String jsonResponse = mvcResult.getResponse().getContentAsString();
-//            ResponseStoreDto actual = objectMapper.readValue(jsonResponse, ResponseStoreDto.class);
-//            String expectedResultStr = TestUtil.readFile("json/store/output/ResponseStoreDto.json");
-//            ResponseStoreDto expected = objectMapper.readValue(expectedResultStr, ResponseStoreDto.class);
-//            assertEquals(expected, actual);
-//        } catch (JsonProcessingException | UnsupportedEncodingException e) {
-//            throw new RuntimeException("Error processing the JSON response", e);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-//    @Test
-//    void testGetAllStoresByArticularId() {
-//        // loadDataSet("/datasets/e2e/store/store/testE2EStore.yml");
-//        Map<String, String> requestParams = Map.of("articularId", "123");
-//
-//        MvcResult mvcResult;
-//        try {
-//            mvcResult = mockMvc.perform(get(URL_TEMPLATE)
-//                            .params(getMultiValueMap(requestParams))
-//                            .contentType(MediaType.APPLICATION_JSON))
-//                    .andExpect(status().isOk())
-//                    .andReturn();
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        try {
-//            String jsonResponse = mvcResult.getResponse().getContentAsString();
-//            List<ResponseStoreDto> actualList = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
-//            String expectedResultStr = TestUtil.readFile("json/store/output/ResponseStoreArticularDtoList.json");
-//            List<ResponseStoreDto> expectedList = objectMapper.readValue(expectedResultStr, new TypeReference<>() {});
-//            assertEquals(expectedList, actualList);
-//        } catch (JsonProcessingException | UnsupportedEncodingException e) {
-//            throw new RuntimeException("Error processing the JSON response", e);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-//    @Test
-//    void testGetAllStoresByCountry() {
-//        // loadDataSet("/datasets/e2e/store/store/testE2EStore.yml");
-//        Map<String, String> requestParams = Map.of("country", "USA");
-//
-//        MvcResult mvcResult;
-//        try {
-//            mvcResult = mockMvc.perform(get(URL_TEMPLATE + "/all")
-//                            .params(getMultiValueMap(requestParams))
-//                            .contentType(MediaType.APPLICATION_JSON))
-//                    .andExpect(status().isOk())
-//                    .andReturn();
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        try {
-//            String jsonResponse = mvcResult.getResponse().getContentAsString();
-//            List<ResponseStoreDto> actualList = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
-//            String expectedResultStr = TestUtil.readFile("json/store/output/ResponseCountryStoreDtoList.json");
-//            List<ResponseStoreDto> expectedList = objectMapper.readValue(expectedResultStr, new TypeReference<>() {});
-//            assertEquals(expectedList, actualList);
-//        } catch (JsonProcessingException | UnsupportedEncodingException e) {
-//            throw new RuntimeException("Error processing the JSON response", e);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-//    // fix next
-////    @Test
-////    void testGetAllStoresByCountryAndCity() {
-////        // loadDataSet("/datasets/store/store/testE2EStore.yml");
-////        Map<String, String> requestParams = Map.of("country", "USA", "city", "New York");
-////        MvcResult mvcResult;
-////        try {
-////            mvcResult = mockMvc.perform(get(URL_TEMPLATE + "/all")
-////                            .params(getMultiValueMap(requestParams))
-////                            .contentType(MediaType.APPLICATION_JSON))
-////                    .andExpect(status().isOk())
-////                    .andReturn();
-////        } catch (Exception e) {
-////            throw new RuntimeException(e);
-////        }
-////
-////        try {
-////            String jsonResponse = mvcResult.getResponse().getContentAsString();
-////            List<ResponseStoreDto> actualList = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
-////            String expectedResultStr = TestUtil.readFile("json/store/output/ResponseCountryCityStoreDtoList.json");
-////            List<ResponseStoreDto> expectedList = objectMapper.readValue(expectedResultStr, new TypeReference<>() {});
-////            assertEquals(expectedList, actualList);
-////        } catch (JsonProcessingException | UnsupportedEncodingException e) {
-////            throw new RuntimeException("Error processing the JSON response", e);
-////        } catch (IOException e) {
-////            throw new RuntimeException(e);
-////        }
-////    }
-//
-//    private Map<String, String> getRequestParams() {
-//        return Map.of("storeId", "123");
-//    }
-//
-//}
+package com.b2c.prototype.e2e.controller.basic;
+
+import com.b2c.prototype.e2e.BasicE2ETest;
+import com.b2c.prototype.modal.dto.payload.constant.CountryDto;
+import com.b2c.prototype.modal.dto.payload.order.AddressDto;
+import com.b2c.prototype.modal.dto.payload.store.StoreDto;
+import com.github.database.rider.core.api.dataset.DataSet;
+import com.github.database.rider.core.api.dataset.ExpectedDataSet;
+import org.junit.jupiter.api.Test;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.jdbc.Sql;
+
+import java.util.List;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
+class StoreControllerE2ETest extends BasicE2ETest {
+
+    private static final String URL_TEMPLATE = "/api/v1/item/store";
+
+    @Test
+    @DataSet(value = "datasets/e2e/store/store/emptyE2EStoreDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/store/store/testE2EStoreDataSet.yml", orderBy = "id",
+            ignoreCols = {"store_uniq_id"})
+    @Sql(statements = {
+            "ALTER SEQUENCE store_id_seq RESTART WITH 2",
+            "ALTER SEQUENCE articular_stock_id_seq RESTART WITH 2",
+            "ALTER SEQUENCE articular_item_quantity_id_seq RESTART WITH 3",
+            "ALTER SEQUENCE address_id_seq RESTART WITH 2",
+    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    public void testCreateEntity() {
+        StoreDto dto = getStoreDto2();
+        String jsonPayload = writeValueAsString(dto);
+
+        webTestClient.post()
+                .uri(URL_TEMPLATE)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .bodyValue(jsonPayload)
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    @DataSet(value = "datasets/e2e/store/store/testE2EStoreDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/store/store/updateE2EStoreDataSet.yml", orderBy = "id")
+    public void testUpdateEntity() {
+        StoreDto dto = getUpdateStoreDto2();
+        String jsonPayload = writeValueAsString(dto);
+
+        webTestClient.put()
+                .uri(uriBuilder -> uriBuilder
+                        .path(URL_TEMPLATE)
+                        .queryParam("region", "Global")
+                        .queryParam("store", "store2")
+                        .build())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .bodyValue(jsonPayload)
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    @DataSet(value = "datasets/e2e/store/store/testE2EStoreDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/store/store/emptyE2EStoreDataSet.yml", orderBy = "id")
+    public void testDeleteEntity() {
+        webTestClient.delete()
+                .uri(uriBuilder -> uriBuilder
+                        .path(URL_TEMPLATE)
+                        .queryParam("region", "Global")
+                        .queryParam("store", "store2")
+                        .build())
+                .accept(MediaType.TEXT_PLAIN)
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    @DataSet(value = "datasets/e2e/store/store/testE2EStoreDataSet.yml", cleanBefore = true)
+    public void testGetEntitiesByRegion() {
+        StoreDto dto2 = getStoreDto2();
+        dto2.setStoreId("store2");
+        List<StoreDto> expected = List.of(
+                dto2
+        );
+
+        List<StoreDto> actual =
+                webTestClient.get()
+                        .uri(uriBuilder -> uriBuilder
+                                .path(URL_TEMPLATE + "/all")
+                                .queryParam("region", "Global")
+                                .build())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .exchange()
+                        .expectStatus().isOk()
+                        .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                        .expectBody(new ParameterizedTypeReference<List<StoreDto>>() {})
+                        .returnResult()
+                        .getResponseBody();
+
+        assertThat(actual)
+                .usingRecursiveComparison()
+                .ignoringCollectionOrder()
+                .isEqualTo(expected);
+    }
+
+    @Test
+    @DataSet(value = "datasets/e2e/store/store/testE2EStoreDataSet.yml", cleanBefore = true)
+    public void testGetEntitiesByRegionAndCountry() {
+        StoreDto dto2 = getStoreDto2();
+        dto2.setStoreId("store2");
+        List<StoreDto> expected = List.of(
+                dto2
+        );
+
+        List<StoreDto> actual =
+                webTestClient.get()
+                        .uri(uriBuilder -> uriBuilder
+                                .path(URL_TEMPLATE + "/all")
+                                .queryParam("region", "Global")
+                                .queryParam("country", "USA")
+                                .build())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .exchange()
+                        .expectStatus().isOk()
+                        .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                        .expectBody(new ParameterizedTypeReference<List<StoreDto>>() {})
+                        .returnResult()
+                        .getResponseBody();
+
+        assertThat(actual)
+                .usingRecursiveComparison()
+                .ignoringCollectionOrder()
+                .isEqualTo(expected);
+    }
+
+    @Test
+    @DataSet(value = "datasets/e2e/store/store/testE2EStoreDataSet.yml", cleanBefore = true)
+    public void testGetEntitiesByRegionAndCountryAndStore() {
+        StoreDto dto2 = getStoreDto2();
+        dto2.setStoreId("store2");
+        List<StoreDto> expected = List.of(
+                dto2
+        );
+
+        List<StoreDto> actual =
+                webTestClient.get()
+                        .uri(uriBuilder -> uriBuilder
+                                .path(URL_TEMPLATE + "/all")
+                                .queryParam("region", "Global")
+                                .queryParam("country", "USA")
+                                .queryParam("city", "city")
+                                .build())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .exchange()
+                        .expectStatus().isOk()
+                        .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                        .expectBody(new ParameterizedTypeReference<List<StoreDto>>() {})
+                        .returnResult()
+                        .getResponseBody();
+
+        assertThat(actual)
+                .usingRecursiveComparison()
+                .ignoringCollectionOrder()
+                .isEqualTo(expected);
+    }
+
+    @Test
+    @DataSet(value = "datasets/e2e/store/store/testE2EStoreDataSet.yml", cleanBefore = true)
+    public void testGetEntity() {
+        StoreDto expected = getStoreDto2();
+        expected.setStoreId("store2");
+
+        StoreDto actual = webTestClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path(URL_TEMPLATE)
+                        .pathSegment("store2")
+                        .queryParam("region", "Global")
+                        .build())
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                .expectBody(StoreDto.class)
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(actual)
+                .usingRecursiveComparison()
+                .ignoringCollectionOrder()
+                .isEqualTo(expected);
+    }
+
+    private StoreDto getStoreDto2() {
+        return StoreDto.builder()
+                .storeName("store2")
+                .isActive(false)
+                .address(AddressDto.builder()
+                        .country(CountryDto.builder()
+                                .value("USA")
+                                .key("USA")
+                                .build())
+                        .city("city")
+                        .street("street")
+                        .buildingNumber("10")
+                        .florNumber(9)
+                        .apartmentNumber(201)
+                        .zipCode("90000")
+                        .build())
+                .region("Global")
+                .articularStocks(List.of())
+                .build();
+    }
+
+    private StoreDto getUpdateStoreDto2() {
+        return StoreDto.builder()
+                .storeName("Update store2")
+                .isActive(true)
+                .address(AddressDto.builder()
+                        .country(CountryDto.builder()
+                                .value("GERMANY")
+                                .key("GERMANY")
+                                .build())
+                        .city("Update city")
+                        .street("Update street")
+                        .buildingNumber("1010")
+                        .florNumber(99)
+                        .apartmentNumber(201201)
+                        .zipCode("900009")
+                        .build())
+                .region("DE")
+                .articularStocks(null)
+                .build();
+    }
+
+    private StoreDto getStoreWithItemsDto() {
+        return StoreDto.builder()
+                .storeName("store2")
+                .address(AddressDto.builder()
+                        .country(CountryDto.builder()
+                                .value("USA")
+                                .key("USA")
+                                .build())
+                        .city("city")
+                        .street("street")
+                        .buildingNumber("10")
+                        .florNumber(9)
+                        .apartmentNumber(201)
+                        .zipCode("90000")
+                        .build())
+                .region("Global")
+                .articularStocks(List.of())
+                .build();
+    }
+
+}

@@ -32,7 +32,6 @@
     <entity class="com.b2c.prototype.modal.entity.payment.CommissionValue" />
     <entity class="com.b2c.prototype.modal.entity.payment.MinMaxCommission" />
 
-    <entity class="com.b2c.prototype.modal.entity.item.Brand" />
     <entity class="com.b2c.prototype.modal.entity.item.Category" />
     <entity class="com.b2c.prototype.modal.entity.item.ItemType" />
     <entity class="com.b2c.prototype.modal.entity.item.ArticularStatus" />

@@ -2,8 +2,8 @@ package com.b2c.prototype.manager.review.base;
 
 import com.b2c.prototype.modal.dto.payload.review.ReviewDto;
 import com.b2c.prototype.modal.dto.payload.review.ResponseReviewDto;
+import com.b2c.prototype.modal.entity.item.ArticularGroup;
 import com.b2c.prototype.modal.entity.item.Item;
-import com.b2c.prototype.modal.entity.item.MetaData;
 import com.b2c.prototype.modal.entity.review.Rating;
 import com.b2c.prototype.modal.entity.review.Review;
 
@@ -13,7 +13,6 @@ import org.hibernate.query.NativeQuery;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.Collection;
@@ -102,9 +101,9 @@ class ReviewManagerTest {
         Supplier<Review> reviewSupplier = () -> review;
 
         
-        Function<MetaData, Review> function = mock(Function.class);
+        Function<ArticularGroup, Review> function = mock(Function.class);
 //        when(supplierService.entityFieldSupplier(
-//                MetaData.class,
+//                ArticularGroup.class,
 //                parameterSupplier,
 //                function
 //        )).thenReturn(reviewSupplier);

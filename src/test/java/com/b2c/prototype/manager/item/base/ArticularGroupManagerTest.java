@@ -1,11 +1,10 @@
 package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.modal.dto.payload.item.ArticularGroupDto;
-import com.b2c.prototype.modal.dto.payload.constant.BrandDto;
 import com.b2c.prototype.modal.dto.payload.constant.CategoryValueDto;
 import com.b2c.prototype.modal.dto.payload.constant.ItemTypeDto;
+import com.b2c.prototype.modal.entity.item.ArticularGroup;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
-import com.b2c.prototype.modal.entity.item.MetaData;
 
 
 import org.hibernate.Session;
@@ -26,7 +25,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class MetaDataManagerTest {
+class ArticularGroupManagerTest {
     @InjectMocks
     private ArticularGroupManager itemDataManager;
 
@@ -36,15 +35,15 @@ class MetaDataManagerTest {
     }
 
     @Test
-    void testSaveMetaData() {
-        ArticularGroupDto articularGroupDto = getMetaDataDto();
-        MetaData metaData = getMetaData();
+    void testSaveArticularGroup() {
+        ArticularGroupDto articularGroupDto = getArticularGroupDto();
+        ArticularGroup articularGroup = getArticularGroup();
 
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
             Session session = mock(Session.class);
             consumer.accept(session);
-            verify(session).merge(metaData);
+            verify(session).merge(articularGroup);
             return null;
         });
 
@@ -53,16 +52,16 @@ class MetaDataManagerTest {
     }
 
     @Test
-    void testUpdateMetaData() {
+    void testUpdateArticularGroup() {
         String itemId = "itemId";
-        ArticularGroupDto articularGroupDto = getMetaDataDto();
-        MetaData metaData = getMetaData();
+        ArticularGroupDto articularGroupDto = getArticularGroupDto();
+        ArticularGroup articularGroup = getArticularGroup();
 
         doAnswer(invocation -> {
             Consumer<Session> consumer = invocation.getArgument(0);
             Session session = mock(Session.class);
             consumer.accept(session);
-            verify(session).merge(metaData);
+            verify(session).merge(articularGroup);
             return null;
         });
 
@@ -71,31 +70,31 @@ class MetaDataManagerTest {
     }
 
     @Test
-    void testGetMetaData() {
+    void testgetArticularGroup() {
         String itemId = "itemId";
-        MetaData metaData = getMetaData();
+        ArticularGroup articularGroup = getArticularGroup();
         ArticularGroupDto responseDto = getResponseItemDataDto();
 
 
-        Function<MetaData, ArticularGroupDto> function = mock(Function.class);
+        Function<ArticularGroup, ArticularGroupDto> function = mock(Function.class);
 
-        when(function.apply(metaData)).thenReturn(responseDto);
+        when(function.apply(articularGroup)).thenReturn(responseDto);
         ArticularGroupDto result = itemDataManager.getArticularGroup(itemId);
 
         assertEquals(responseDto, result);
     }
 
     @Test
-    void testGetMetaDataList() {
+    void testgetArticularGroupList() {
         ArticularGroupDto ArticularGroupDto = getResponseItemDataDto();
         List<ArticularGroupDto> responseDtoList = List.of(ArticularGroupDto);
-        MetaData metaData = getMetaData();
+        ArticularGroup articularGroup = getArticularGroup();
         ArticularGroupDto responseDto = getResponseItemDataDto();
 
-        Function<MetaData, ArticularGroupDto> function = mock(Function.class);
+        Function<ArticularGroup, ArticularGroupDto> function = mock(Function.class);
 
 //        when(itemDataDao.getEntityList()).thenReturn(List.of(metaData));
-        when(function.apply(metaData)).thenReturn(responseDto);
+        when(function.apply(articularGroup)).thenReturn(responseDto);
 
         List<ArticularGroupDto> result = itemDataManager.getArticularGroupList();
 
@@ -112,16 +111,12 @@ class MetaDataManagerTest {
                         .value("itemTypeLabel")
                         .key("itemTypeValue")
                         .build())
-                .brand(BrandDto.builder()
-                        .value("brandLabel")
-                        .key("brandValue")
-                        .build())
 //                .description()
                 .build();
     }
 
-    private MetaData getMetaData() {
-        return MetaData.builder()
+    private ArticularGroup getArticularGroup() {
+        return ArticularGroup.builder()
 //                .category(Category.builder()
 //                        .label("categoryLabel")
 //                        .value("categoryValue")
@@ -130,14 +125,10 @@ class MetaDataManagerTest {
 //                        .label("itemTypeLabel")
 //                        .value("itemTypeValue")
 //                        .build())
-//                .brand(Brand.builder()
-//                        .label("brandLabel")
-//                        .value("brandValue")
-//                        .build())
                 .build();
     }
 
-    private ArticularGroupDto getMetaDataDto() {
+    private ArticularGroupDto getArticularGroupDto() {
         return ArticularGroupDto.builder()
                 .category(CategoryValueDto.builder()
                         .value("categoryLabel")
@@ -147,14 +138,10 @@ class MetaDataManagerTest {
                         .value("itemTypeLabel")
                         .key("itemTypeValue")
                         .build())
-                .brand(BrandDto.builder()
-                        .value("brandLabel")
-                        .key("brandValue")
-                        .build())
                 .build();
     }
 
-    private ArticularItem getMetaDataOption() {
+    private ArticularItem getArticularGroupOption() {
         return ArticularItem.builder()
                 .articularUniqId("articularIdValue")
                 .build();

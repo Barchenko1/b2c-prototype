@@ -2,7 +2,6 @@ package com.b2c.prototype.processor.store.base;
 
 import com.b2c.prototype.manager.store.IStoreManager;
 import com.b2c.prototype.modal.dto.payload.store.StoreDto;
-import com.b2c.prototype.modal.dto.payload.store.ResponseStoreDto;
 import com.b2c.prototype.processor.store.IStoreProcess;
 import org.springframework.stereotype.Service;
 
@@ -25,36 +24,44 @@ public class StoreProcess implements IStoreProcess {
 
     @Override
     public void updateStore(Map<String, String> requestParams, StoreDto storeDto) {
-        String storeId = requestParams.get("storeId");
-        storeManager.updateStore(storeId, storeDto);
+        String region = requestParams.get("region");
+        String storeId = requestParams.get("store");
+        storeManager.updateStore(region, storeId, storeDto);
     }
 
     @Override
     public void deleteStore(Map<String, String> requestParams) {
-        String storeId = requestParams.get("storeId");
-        storeManager.deleteStore(storeId);
+        String region = requestParams.get("region");
+        String storeId = requestParams.get("store");
+        storeManager.deleteStore(region, storeId);
     }
 
     @Override
-    public ResponseStoreDto getStore(Map<String, String> requestParams, String storeId) {
-        return storeManager.getResponseStoreByStoreId(storeId);
+    public StoreDto getStore(Map<String, String> requestParams, String storeId) {
+        String region = requestParams.get("region");
+        return storeManager.getStoreByStoreId(region, storeId);
     }
 
     @Override
-    public List<ResponseStoreDto> getAllResponseStoresByArticularId(Map<String, String> requestParams) {
+    public List<StoreDto> getAllStoresByArticularId(Map<String, String> requestParams) {
+        String region = requestParams.get("region");
         String articularId = requestParams.get("articularId");
-        return storeManager.getAllResponseStoresByArticularId(articularId);
+        return storeManager.getAllStoresByArticularId(region, articularId);
     }
 
     @Override
-    public List<ResponseStoreDto> getAllResponseStores(Map<String, String> requestParams) {
-        String countryName = requestParams.get("country");
-        String cityName = requestParams.get("city");
-        if (countryName != null && cityName != null) {
-            return storeManager.getAllResponseStoreByCountryAndCity(countryName, cityName);
+    public List<StoreDto> getAllStores(Map<String, String> requestParams) {
+        String region = requestParams.get("region");
+        String countryKey = requestParams.get("country");
+        String city = requestParams.get("city");
+        if (region != null && countryKey != null && city != null) {
+            return storeManager.getAllStoreByRegionAndCountryAndCity(region, countryKey, city);
         }
-        if (countryName != null) {
-            return storeManager.getAllResponseStoreByCountry(countryName);
+        if (region != null && countryKey != null) {
+            return storeManager.getAllStoreByRegionAndCountry(region, countryKey);
+        }
+        if (region != null) {
+            return storeManager.getAllStoresByRegion(region);
         }
         return List.of();
     }

@@ -58,28 +58,6 @@ public class PaymentMethodControllerE2ETest extends BasicE2ETest {
 
     @Test
     @DataSet(value = "datasets/e2e/order/payment_method/testE2EPaymentMethodDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/order/payment_method/updateE2EPaymentMethodDataSet.yml", orderBy = "id")
-    public void testPatchEntity() {
-        ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .value("Update Cash")
-                .key("Update Cash")
-                .build();
-
-        String jsonPayload = writeValueAsString(constantPayloadDto);
-        webTestClient.patch()
-                .uri(uriBuilder -> uriBuilder
-                        .path(URL_TEMPLATE)
-                        .queryParam("key", "Cash")
-                        .build())
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .bodyValue(jsonPayload)
-                .exchange()
-                .expectStatus().isOk();
-    }
-
-    @Test
-    @DataSet(value = "datasets/e2e/order/payment_method/testE2EPaymentMethodDataSet.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/e2e/order/payment_method/emptyE2EPaymentMethodDataSet.yml", orderBy = "id")
     public void testDeleteEntity() {
         webTestClient.delete()

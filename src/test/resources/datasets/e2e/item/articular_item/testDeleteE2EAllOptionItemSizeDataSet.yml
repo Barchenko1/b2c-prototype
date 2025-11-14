@@ -10,8 +10,8 @@ articular_item:
   - id: 1
     articular_uniq_id: 1234
     date_of_create: "2024-03-03 12:00:00"
-    fullprice_id: 1
-    totalprice_id: 1
+    full_price_id: 1
+    total_price_id: 1
 option_group:
   - id: 1
     key: "Color"

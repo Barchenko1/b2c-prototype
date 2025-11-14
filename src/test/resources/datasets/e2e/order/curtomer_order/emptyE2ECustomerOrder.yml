@@ -1,7 +1,4 @@
-brand:
-  - id: 1
-    value: "Hermes"
-    key: "Hermes"
+
 item_type:
   - id: 1
     value: "Clothes"
@@ -64,8 +61,7 @@ articular_status:
     key: "COMMON"
 articular_group:
   - id: 1
-    metadata_uniq_id: 123
-    brand_id: 1
+    articular_group_uniq_id: 123
     category_id: 3
     item_type_id: 1
 articular_item:
@@ -73,16 +69,16 @@ articular_item:
     articular_uniq_id: "A123"
     date_of_create: "2024-03-03 12:00:00"
     discount_id: 1
-    fullprice_id: 2
-    totalprice_id: 3
+    full_price_id: 2
+    total_price_id: 3
     item_data_id: 1
     status_id: 1
     productname: "Mob 1"
   - id: 2
     articular_uniq_id: "A111"
     date_of_create: "2024-03-03 12:00:00"
-    fullprice_id: 4
-    totalprice_id: 4
+    full_price_id: 4
+    total_price_id: 4
     item_data_id: 1
     status_id: 1
     productname: "Mob 1"

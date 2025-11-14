@@ -1,10 +1,4 @@
-brand:
-  - id: 1
-    value: "TechBrand"
-    key: "TechBrand"
-  - id: 2
-    value: "Update TechBrand"
-    key: "Update TechBrand"
+
 item_type:
   - id: 1
     value: "Electronic"
@@ -91,9 +85,8 @@ articular_status:
     key: "COMMON"
 articular_group:
   - id: 1
-    metadata_uniq_id: 123
+    articular_group_uniq_id: 123
     description: "{\"par1\":\"desc1\",\"par2\":\"desc2\",\"par3\":\"desc3\"}"
-    brand_id: 1
     category_id: 2
     item_type_id: 1
 articular_item:
@@ -101,8 +94,8 @@ articular_item:
     articular_uniq_id: 1
     date_of_create: "2024-03-03 12:00:00"
     discount_id: 1
-    fullprice_id: 1
-    totalprice_id: 1
+    full_price_id: 1
+    total_price_id: 1
     item_data_id: 1
     status_id: 1
     productname: "Mob 1"
@@ -110,8 +103,8 @@ articular_item:
     articular_uniq_id: 2
     date_of_create: "2024-03-03 12:00:00"
     discount_id: 2
-    fullprice_id: 2
-    totalprice_id: 3
+    full_price_id: 2
+    total_price_id: 3
     item_data_id: 1
     status_id: 1
     productname: "Laptop 1"
