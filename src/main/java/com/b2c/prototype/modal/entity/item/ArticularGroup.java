@@ -1,5 +1,6 @@
 package com.b2c.prototype.modal.entity.item;
 
+import com.b2c.prototype.modal.entity.region.Region;
 import com.b2c.prototype.transform.converter.ArticularGroupDescriptionConverter;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -84,8 +85,10 @@ public class ArticularGroup {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Category category;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
-    private ItemType itemType;
+//    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+//    private ItemType itemType;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Region region;
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
     @JoinColumn(name = "articular_item_id")
     @EqualsAndHashCode.Exclude

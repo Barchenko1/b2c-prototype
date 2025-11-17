@@ -1,12 +1,6 @@
 package com.b2c.prototype.modal.dto.payload.item;
 
 import com.b2c.prototype.modal.dto.payload.constant.ArticularStatusDto;
-import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
-import com.b2c.prototype.modal.dto.payload.discount.DiscountGroupDto;
-import com.b2c.prototype.modal.dto.payload.option.group.OptionItemCostGroupDto;
-import com.b2c.prototype.modal.dto.payload.option.group.OptionItemGroupDto;
-import com.b2c.prototype.modal.dto.payload.option.item.OptionItemCostDto;
-import com.b2c.prototype.modal.dto.payload.option.item.OptionItemDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -21,16 +15,16 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties
+@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ArticularItemDto {
+public class ArticularItemAssignmentDto {
     private String articularId;
-    private LocalDateTime dateOfCreate;
     private String productName;
-    private List<OptionItemDto> options;
-    private List<OptionItemCostDto> costOptions;
+    private LocalDateTime dateOfCreate;
     private PriceDto fullPrice;
     private PriceDto totalPrice;
     private ArticularStatusDto status;
-    private DiscountDto discount;
+    private List<GroupOptionKeys> optionKeys;
+    private List<GroupOptionKeys> optionCostKeys;
+    private GroupOptionKeys discountKey;
 }

@@ -41,7 +41,7 @@ class PaymentMethodManagerTest extends AbstractConstantEntityManagerTest<Payment
         when(mapDtoToEntityFunction.apply(dto)).thenReturn(testValue);
 //        when(dao.getEntityClass()).thenAnswer(invocation -> PaymentMethod.class);
 
-//        paymentMethodManager.persistEntity(dto);
+//        paymentMethodManager.persistEntity(modal);
 
         verifySaveEntity(testValue);
     }

@@ -1,7 +1,6 @@
 package com.b2c.prototype.modal.dto.payload.item;
 
-import com.b2c.prototype.modal.dto.payload.constant.ArticularStatusDto;
-import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
+import com.b2c.prototype.modal.dto.payload.constant.CategoryCascade;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountGroupDto;
 import com.b2c.prototype.modal.dto.payload.option.group.OptionItemCostGroupDto;
 import com.b2c.prototype.modal.dto.payload.option.group.OptionItemGroupDto;
@@ -14,8 +13,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
@@ -23,14 +22,12 @@ import java.util.List;
 @AllArgsConstructor
 @JsonIgnoreProperties
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ArticularItemDto {
-    private String articularId;
-    private LocalDateTime dateOfCreate;
-    private String productName;
-    private List<OptionItemDto> options;
-    private List<OptionItemCostDto> costOptions;
-    private PriceDto fullPrice;
-    private PriceDto totalPrice;
-    private ArticularStatusDto status;
-    private DiscountDto discount;
+public class StoreArticularGroupRequestDto {
+    private String region;
+    private List<DiscountGroupDto> discountGroupList;
+    private List<OptionItemGroupDto> optionItemGroupList;
+    private List<OptionItemCostGroupDto> optionItemCostGroupList;
+    private ArticularGroupDto articularGroup;
+    private Map<String, ArticularItemAssignmentDto> articularItems;
+    private Map<String, List<StoreRequestDto>> stores;
 }

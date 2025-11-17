@@ -1,19 +1,17 @@
-package com.b2c.prototype.modal.dto.payload.store;
+package com.b2c.prototype.modal.dto.payload.item;
 
-import com.b2c.prototype.modal.dto.payload.order.ArticularItemQuantityDto;
+import com.b2c.prototype.modal.dto.payload.store.AvailabilityStatusDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ArticularStockDto {
+public class ArticularStockQuantityDto {
     private AvailabilityStatusDto availabilityStatus;
     private String countType;
-    private ArticularItemQuantityDto articularItemQuantity;
+    private int quantity;
 }

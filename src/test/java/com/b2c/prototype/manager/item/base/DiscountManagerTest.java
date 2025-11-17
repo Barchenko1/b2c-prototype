@@ -1,7 +1,7 @@
 //package com.b2c.prototype.manager.item.base;
 //
-//import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
-//import com.b2c.prototype.modal.dto.payload.discount.DiscountStatusDto;
+//import com.b2c.prototype.modal.modal.payload.discount.DiscountDto;
+//import com.b2c.prototype.modal.modal.payload.discount.DiscountStatusDto;
 //import com.b2c.prototype.modal.entity.item.ArticularItem;
 //import com.b2c.prototype.modal.entity.item.Discount;
 //import com.b2c.prototype.modal.entity.price.Currency;
@@ -37,23 +37,23 @@
 //
 //    @Test
 //    void savePercentDiscount_shouldSaveDiscount() {
-//        DiscountDto dto = createTestDto();
+//        DiscountDto modal = createTestDto();
 //        Currency currency = creatTestCurrency();
 //
-////        discountManager.saveDiscountGroup(dto);
+////        discountManager.saveDiscountGroup(modal);
 //
 //        ArgumentCaptor<Supplier<Discount>> captor = ArgumentCaptor.forClass(Supplier.class);
 ////        verify(gen).persistEntity(captor.capture());
 //        Discount capturedEntity = captor.getValue().get();
-//        assertEquals(dto.getCharSequenceCode(), capturedEntity.getCharSequenceCode());
-//        assertEquals(dto.getAmount(), capturedEntity.getAmount());
+//        assertEquals(modal.getCharSequenceCode(), capturedEntity.getCharSequenceCode());
+//        assertEquals(modal.getAmount(), capturedEntity.getAmount());
 //        assertEquals(currency, capturedEntity.getCurrency());
 //    }
 //
 //    @Test
 //    void updateItemDataDiscount_shouldUpdateDiscount() {
 //        String articularId = "CODE123";
-//        DiscountDto dto = createTestDto();
+//        DiscountDto modal = createTestDto();
 //        ArticularItem mockArticularItem = mock(ArticularItem.class);
 //        Discount discount = createTestDiscount();
 //
@@ -67,14 +67,14 @@
 //            return null;
 //        });
 //
-////        discountManager.updateArticularDiscount(articularId, dto);
+////        discountManager.updateArticularDiscount(articularId, modal);
 //
 //    }
 //
 //    @Test
 //    void updateDiscount_shouldUpdateDiscount() {
 //        String charSequenceCode = "CODE123";
-//        DiscountDto dto = createTestDto();
+//        DiscountDto modal = createTestDto();
 //        ArticularItem mockArticularItem = mock(ArticularItem.class);
 //        Discount discount = createTestDiscount();
 //
@@ -88,7 +88,7 @@
 //            return null;
 //        });
 //
-////        discountManager.updateDiscount(charSequenceCode, dto);
+////        discountManager.updateDiscount(charSequenceCode, modal);
 //
 //    }
 //
@@ -115,7 +115,7 @@
 //
 //    @Test
 //    void deleteDiscount_shouldDeleteDiscount() {
-//        DiscountDto dto = createTestDto();
+//        DiscountDto modal = createTestDto();
 //        ArticularItem mockArticularItem = mock(ArticularItem.class);
 //        Discount discount = createTestDiscount();
 //
@@ -134,7 +134,7 @@
 //            return null;
 //        });
 //
-//        discountManager.deleteDiscount(dto.getCharSequenceCode());
+//        discountManager.deleteDiscount(modal.getCharSequenceCode());
 //
 //    }
 //

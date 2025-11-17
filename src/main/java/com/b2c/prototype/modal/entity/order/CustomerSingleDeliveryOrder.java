@@ -28,7 +28,9 @@ import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "customer_single_delivery_order")
@@ -75,7 +77,7 @@ public class CustomerSingleDeliveryOrder {
     @JoinColumn(name = "customer_single_delivery_order_id")
     @Builder.Default
     @EqualsAndHashCode.Exclude
-    private List<ArticularItemQuantity> articularItemQuantities = new ArrayList<>();
+    private Set<ArticularItemQuantity> articularItemQuantities = new HashSet<>();
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "payment_id", nullable = false)
     private Payment payment;

@@ -73,7 +73,7 @@ articular_item:
     total_price_id: 3
     item_data_id: 1
     status_id: 1
-    productname: "Mob 1"
+    product_name: "Mob 1"
   - id: 2
     articular_uniq_id: "A111"
     date_of_create: "2024-03-03 12:00:00"
@@ -81,7 +81,7 @@ articular_item:
     total_price_id: 4
     item_data_id: 1
     status_id: 1
-    productname: "Mob 1"
+    product_name: "Mob 1"
 delivery_type:
   - id: 1
     value: "Post"

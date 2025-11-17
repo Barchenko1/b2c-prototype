@@ -6,9 +6,12 @@ import com.b2c.prototype.modal.dto.payload.constant.CategoryCascade;
 import com.b2c.prototype.modal.dto.payload.constant.CategoryDto;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountGroupDto;
+import com.b2c.prototype.modal.dto.payload.item.ArticularItemAssignmentDto;
 import com.b2c.prototype.modal.dto.payload.item.ArticularItemDto;
 import com.b2c.prototype.modal.dto.payload.item.ArticularGroupDto;
+import com.b2c.prototype.modal.dto.payload.item.GroupOptionKeys;
 import com.b2c.prototype.modal.dto.payload.item.PriceDto;
+import com.b2c.prototype.modal.dto.payload.item.StoreArticularGroupRequestDto;
 import com.b2c.prototype.modal.dto.payload.option.group.OptionItemCostGroupDto;
 import com.b2c.prototype.modal.dto.payload.option.group.OptionItemGroupDto;
 import com.b2c.prototype.modal.dto.payload.option.item.OptionItemCostDto;
@@ -18,7 +21,6 @@ import com.b2c.prototype.modal.dto.payload.post.PostDto;
 import com.b2c.prototype.modal.dto.payload.review.ResponseReviewDto;
 import com.b2c.prototype.modal.dto.payload.review.ReviewDto;
 import com.b2c.prototype.modal.dto.payload.store.ArticularStockDto;
-import com.b2c.prototype.modal.dto.payload.store.AvailabilityStatusDto;
 import com.b2c.prototype.modal.dto.payload.store.StoreDto;
 import com.b2c.prototype.modal.entity.item.ArticularGroup;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
@@ -36,20 +38,33 @@ import com.b2c.prototype.modal.entity.review.Review;
 import com.b2c.prototype.modal.entity.store.ArticularStock;
 import com.b2c.prototype.modal.entity.store.AvailabilityStatus;
 import com.b2c.prototype.modal.entity.store.Store;
+import com.b2c.prototype.modal.entity.store.StoreGeneralBoard;
 import com.b2c.prototype.transform.constant.IGeneralEntityTransformService;
+import com.b2c.prototype.transform.modal.StoreArticularGroupTransform;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static com.b2c.prototype.util.Constant.ARTICULAR_GROUP_ID;
 import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 import static com.b2c.prototype.util.Constant.CODE;
+import static com.b2c.prototype.util.Constant.KEY;
 import static com.b2c.prototype.util.Util.getUUID;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @Service
 public class ItemTransformService implements IItemTransformService {
@@ -145,9 +160,8 @@ public class ItemTransformService implements IItemTransformService {
                 .availabilityStatus(generalEntityTransformService.mapAvailabilityStatusToAvailabilityStatusDto(
                         articularStock.getAvailabilityState()))
                 .countType(articularStock.getCountType().name())
-                .articularItemQuantities(articularStock.getArticularItemQuantities().stream()
-                        .map(this::mapArticularItemQuantityToArticularItemQuantityDto)
-                        .toList())
+                .articularItemQuantity(mapArticularItemQuantityToArticularItemQuantityDto(
+                        articularStock.getArticularItemQuantity()))
                 .build();
     }
 
@@ -160,20 +174,272 @@ public class ItemTransformService implements IItemTransformService {
                 .availabilityState(generalEntityTransformService.mapAvailabilityStatusDtoToAvailabilityStatus(
                         articularStockDto.getAvailabilityStatus()))
                 .countType(CountType.valueOf(articularStockDto.getCountType()))
-                .articularItemQuantities(articularStockDto.getArticularItemQuantities().stream()
-                        .map(this::mapArticularItemQuantityDtoToArticularItemQuantity)
-                        .collect(Collectors.toSet()))
+                .articularItemQuantity(mapArticularItemQuantityDtoToArticularItemQuantity(
+                        articularStockDto.getArticularItemQuantity()))
                 .build();
     }
 
     @Override
-    public ArticularGroup mapArticularGroupDtoToArticularGroupDto(ArticularGroupDto articularGroupDto) {
-        return null;
+    public StoreArticularGroupTransform mapStoreArticularGroupRequestDtoToStoreArticularGroupTransform(StoreArticularGroupRequestDto storeArticularGroupRequestDto) {
+        ArticularGroupDto articularGroupDto = storeArticularGroupRequestDto.getArticularGroup();
+        Map<String, ArticularItemAssignmentDto> articularItemAssignmentDtoMap = storeArticularGroupRequestDto.getArticularItems();
+        Region region = generalEntityDao.findEntity("Region.findByCode",
+                Pair.of(CODE, storeArticularGroupRequestDto.getRegion()));
+        Map<String, DiscountGroup> discountGroupMap = Optional.ofNullable(storeArticularGroupRequestDto.getDiscountGroupList())
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .map(this::mapDiscountGroupDtoToDiscountGroup)
+                .collect(Collectors.toMap(
+                        DiscountGroup::getKey,
+                        a -> a
+                ));
+        Map<String, OptionGroup> optionGroupMap = Optional.ofNullable(storeArticularGroupRequestDto.getOptionItemGroupList())
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .map(this::mapOptionItemGroupDtoToOptionGroup)
+                .collect(Collectors.toMap(
+                        OptionGroup::getKey,
+                        a -> a
+                ));
+        Map<String, OptionGroup> optionCostGroupMap = Optional.ofNullable(storeArticularGroupRequestDto.getOptionItemCostGroupList())
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .map(this::mapOptionItemCostGroupDtoToOptionGroup)
+                .collect(Collectors.toMap(
+                        OptionGroup::getKey,
+                        a -> a
+                ));
+        Map<String, ArticularItem> articularItemMap = new HashMap<>();
+        ArticularGroup articularGroup = ArticularGroup.builder()
+                .region(region)
+                .articularGroupId(getUUID())
+                .description(articularGroupDto.getDescription())
+                .category((Category) generalEntityDao.findOptionEntity("Category.findByKeyAndRegion",
+                        List.of(Pair.of(CODE, storeArticularGroupRequestDto.getRegion()), Pair.of(KEY, articularGroupDto.getCategory().getKey())))
+                        .orElse(Category.builder()
+                                .key(articularGroupDto.getCategory().getKey())
+                                .value(articularGroupDto.getCategory().getValue())
+                                .build()))
+                .articularItemSet(
+                        articularItemAssignmentDtoMap.entrySet().stream()
+                                .map(entry -> {
+                                    ArticularItem articular = ArticularItem.builder()
+                                            .articularUniqId(getUUID())
+                                            .productName(entry.getValue().getProductName())
+                                            .dateOfCreate(LocalDateTime.now())
+                                            .status(generalEntityDao.findEntity("ArticularStatus.findByKey",
+                                                    Pair.of(KEY, entry.getValue().getStatus().getKey())))
+                                            .fullPrice(generalEntityTransformService.mapPriceDtoToPrice(entry.getValue().getFullPrice()))
+                                            .totalPrice(generalEntityTransformService.mapPriceDtoToPrice(entry.getValue().getTotalPrice()))
+
+                                            .optionItems(getOptionItemList(entry.getValue().getOptionKeys(), region.getCode(), optionGroupMap))
+                                            .optionItemCosts(getOptionItemCostList(entry.getValue().getOptionCostKeys(), region.getCode(), optionCostGroupMap))
+                                            .discount(getDiscount(entry.getValue().getDiscountKey(), region.getCode(), discountGroupMap))
+                                            .build();
+
+                                    articularItemMap.put(entry.getKey(), articular);
+                                    return articular;
+                                })
+                                .collect(Collectors.toSet()))
+                .build();
+
+        Set<Store> stores = storeArticularGroupRequestDto.getStores().values()
+                .stream()
+                .flatMap(List::stream)
+                .map(storeRequestDto ->
+                        Store.builder()
+                                .region(region)
+                                .isActive(storeRequestDto.isActive())
+                                .storeName(storeRequestDto.getStoreName())
+                                .address(generalEntityTransformService
+                                        .mapAddressDtoToAddress(storeRequestDto.getAddress()))
+                                .articularStocks(storeRequestDto.getStock().entrySet().stream()
+                                        .map(articularStockQuantityDtoEntry -> ArticularStock.builder()
+                                                .articularItemQuantity(ArticularItemQuantity.builder()
+                                                        .articularItem(articularItemMap.get(articularStockQuantityDtoEntry.getKey()))
+                                                        .quantity(articularStockQuantityDtoEntry.getValue().getQuantity())
+                                                        .build())
+                                                .availabilityState(
+                                                        generalEntityDao.findEntity("AvailabilityStatus.findByKey",
+                                                                Pair.of(KEY, articularStockQuantityDtoEntry.getValue().getAvailabilityStatus().getKey())))
+                                                .countType(CountType.valueOf(articularStockQuantityDtoEntry.getValue().getCountType()))
+                                                .build()
+                                        ).collect(Collectors.toSet()))
+                                .build()
+                )
+                .collect(Collectors.toSet());
+
+        Map<ArticularItem, Integer> qtyByItem = stores.stream()
+                .filter(s -> s.getArticularStocks() != null)
+                .flatMap(s -> s.getArticularStocks().stream())
+                .map(ArticularStock::getArticularItemQuantity)
+                .filter(Objects::nonNull)
+                .collect(Collectors.groupingBy(
+                        ArticularItemQuantity::getArticularItem,
+                        Collectors.summingInt(ArticularItemQuantity::getQuantity)
+                ));
+
+        AvailabilityStatus defaultStatus = stores.stream()
+                .filter(s -> s.getArticularStocks() != null)
+                .flatMap(s -> s.getArticularStocks().stream())
+                .map(ArticularStock::getAvailabilityState)
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null);
+
+        CountType defaultCountType = stores.stream()
+                .filter(s -> s.getArticularStocks() != null)
+                .flatMap(s -> s.getArticularStocks().stream())
+                .map(ArticularStock::getCountType)
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(CountType.LIMITED);
+
+        Set<ArticularStock> stocks = qtyByItem.entrySet().stream()
+                .map(entry -> {
+                    ArticularItem item = entry.getKey();
+                    Integer quantity = entry.getValue();
+
+                    ArticularItemQuantity aggregatedQty = ArticularItemQuantity.builder()
+                            .articularItem(item)
+                            .quantity(quantity)
+                            .build();
+
+                    return ArticularStock.builder()
+                            .articularItemQuantity(aggregatedQty)
+                            .availabilityState(defaultStatus)
+                            .countType(defaultCountType)
+                            .build();
+                })
+                .collect(Collectors.toSet());
+
+        StoreGeneralBoard storeGeneralBoard = StoreGeneralBoard.builder()
+                .region(region)
+                .articularStocks(stocks)
+                .build();
+
+        Set<OptionGroup> optionGroups = new HashSet<>();
+        optionGroups.addAll(optionGroupMap.values());
+        optionGroups.addAll(optionCostGroupMap.values());
+        return StoreArticularGroupTransform.builder()
+                .optionGroup(optionGroups)
+                .discountGroup(new HashSet<>(discountGroupMap.values()))
+                .articularGroup(articularGroup)
+                .storeGeneralBoard(storeGeneralBoard)
+                .stores(stores)
+                .build();
     }
+
+    private Discount getDiscount(GroupOptionKeys groupOptionKeys,
+                                 String region,
+                                 Map<String, DiscountGroup> discountGroupMap) {
+        // nothing selected → nothing to resolve
+        if (groupOptionKeys == null) {
+            return null;
+        }
+
+        // 1) Resolve DiscountGroup: first from cache, then from DB
+        DiscountGroup discountGroup = Optional
+                .ofNullable(discountGroupMap.get(groupOptionKeys.getGroupKey()))
+                .orElseGet(() -> generalEntityDao.findEntity(
+                        "DiscountGroup.findByRegionAndKey",
+                        List.of(
+                                Pair.of(CODE, region),
+                                Pair.of(KEY, groupOptionKeys.getGroupKey())
+                        )
+                ));
+
+        // 2) Pick the first matching discount by charSequenceCode
+        return discountGroup.getDiscounts().stream()
+                .filter(d -> groupOptionKeys.getOptionKeys().contains(d.getCharSequenceCode()))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException(
+                        "Discount not found for group=" + groupOptionKeys.getGroupKey()
+                                + " and codes=" + groupOptionKeys.getOptionKeys()
+                ));
+    }
+
+    private Set<OptionItem> getOptionItemList(List<GroupOptionKeys> groupOptionKeysList,
+                                              String region,
+                                              Map<String, OptionGroup> optionGroupMap) {
+
+        return groupOptionKeysList.stream()
+                .filter(Objects::nonNull)
+                .flatMap(groupOptionKeys ->
+                        getFromOptionGroup(
+                                groupOptionKeys,
+                                region,
+                                optionGroupMap,
+                                OptionGroup::getOptionItems,
+                                OptionItem::getKey
+                        ).stream()
+                )
+                .collect(Collectors.toSet());
+    }
+
+    private Set<OptionItemCost> getOptionItemCostList(List<GroupOptionKeys> groupOptionKeysList,
+                                                      String region,
+                                                      Map<String, OptionGroup> optionGroupMap) {
+
+        return groupOptionKeysList.stream()
+                .filter(Objects::nonNull)
+                .flatMap(groupOptionKeys ->
+                        getFromOptionGroup(
+                                groupOptionKeys,
+                                region,
+                                optionGroupMap,
+                                OptionGroup::getOptionItemCosts,
+                                OptionItemCost::getKey
+                        ).stream()
+                )
+                .collect(Collectors.toSet());
+    }
+
+    private <T> Set<T> getFromOptionGroup(GroupOptionKeys groupOptionKeys,
+                                          String region,
+                                          Map<String, OptionGroup> optionGroupMap,
+                                          Function<OptionGroup, Set<T>> collectionExtractor,
+                                          Function<T, String> keyExtractor) {
+        // No group / no keys -> nothing to do
+        if (groupOptionKeys == null
+                || groupOptionKeys.getGroupKey() == null
+                || groupOptionKeys.getOptionKeys() == null
+                || groupOptionKeys.getOptionKeys().isEmpty()) {
+            return Collections.emptySet();
+        }
+
+        String groupKey = groupOptionKeys.getGroupKey();
+        Set<String> wantedCodes = new HashSet<>(groupOptionKeys.getOptionKeys());
+
+        // Get from cache or load once from DB
+        OptionGroup optionGroup = optionGroupMap.computeIfAbsent(
+                groupKey,
+                key -> generalEntityDao.findEntity(
+                        "OptionGroup.findByKey",
+                        Pair.of(KEY, key)
+                )
+        );
+
+        if (optionGroup == null) {
+            return Collections.emptySet();
+        }
+
+        Set<T> candidates = collectionExtractor.apply(optionGroup);
+        if (candidates == null || candidates.isEmpty()) {
+            return Collections.emptySet();
+        }
+
+        return candidates.stream()
+                .filter(o -> wantedCodes.contains(keyExtractor.apply(o)))
+                .collect(java.util.stream.Collectors.toSet());
+    }
+
 
     @Override
     public ArticularGroupDto mapArticularGroupToArticularGroupDto(ArticularGroup articularGroup) {
-        return null;
+        return ArticularGroupDto.builder()
+                .articularGroupId(articularGroup.getArticularGroupId())
+                .build();
     }
 
     @Override
@@ -219,7 +485,7 @@ public class ItemTransformService implements IItemTransformService {
     }
 
     @Override
-    public OptionGroup mapOptionItemGroupDtoToOptionGroupDto(OptionItemGroupDto optionItemGroupDto) {
+    public OptionGroup mapOptionItemGroupDtoToOptionGroup(OptionItemGroupDto optionItemGroupDto) {
         OptionGroup optionGroup = OptionGroup.builder()
                 .value(optionItemGroupDto.getValue())
                 .key(optionItemGroupDto.getKey())
@@ -248,13 +514,13 @@ public class ItemTransformService implements IItemTransformService {
                                 .value(optionItem.getValue())
                                 .key(optionItem.getKey())
                                 .build())
-                        .collect(Collectors.toList())
+                        .collect(toList())
                 )
                 .build();
     }
 
     @Override
-    public OptionGroup mapOptionItemCostGroupDtoToOptionGroupDto(OptionItemCostGroupDto optionItemCostGroupDto) {
+    public OptionGroup mapOptionItemCostGroupDtoToOptionGroup(OptionItemCostGroupDto optionItemCostGroupDto) {
         OptionGroup optionGroup = OptionGroup.builder()
                 .value(optionItemCostGroupDto.getValue())
                 .key(optionItemCostGroupDto.getKey())
@@ -300,8 +566,8 @@ public class ItemTransformService implements IItemTransformService {
         DiscountGroup discountGroup = DiscountGroup.builder()
                 .key(discountGroupDto.getKey())
                 .value(discountGroupDto.getValue())
-                .region(generalEntityDao.findEntity("Region.findByCode",
-                        Pair.of(CODE, discountGroupDto.getRegionCode())))
+//                .region(generalEntityDao.findEntity("Region.findByCode",
+//                        Pair.of(CODE, discountGroupDto.getRegionCode())))
                 .discounts(discountGroupDto.getDiscounts().stream()
                         .map(discountDto -> Discount.builder()
                                 .charSequenceCode(discountDto.getCharSequenceCode())
@@ -327,7 +593,7 @@ public class ItemTransformService implements IItemTransformService {
         return DiscountGroupDto.builder()
                 .key(discountGroup.getKey())
                 .value(discountGroup.getValue())
-                .regionCode(discountGroup.getRegion().getCode())
+//                .regionCode(discountGroup.getRegion().getCode())
                 .discounts(discountGroup.getDiscounts().stream()
                         .map(discount -> DiscountDto.builder()
                                 .charSequenceCode(discount.getCharSequenceCode())
@@ -382,5 +648,16 @@ public class ItemTransformService implements IItemTransformService {
         }
 
         return category;
+    }
+
+    private Map<String, ArticularStock> toIndexedMap(Set<ArticularStock> articularStocks) {
+        List<ArticularStock> list = new ArrayList<>(articularStocks);
+
+        return IntStream.range(0, list.size())
+                .boxed()
+                .collect(toMap(
+                        i -> "item" + (i + 1),
+                        list::get
+                ));
     }
 }

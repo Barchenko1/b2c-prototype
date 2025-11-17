@@ -252,11 +252,11 @@ public class DiscountGroupManager implements IDiscountGroupManager {
             target.setKey(source.getKey());
         }
         // If region is editable:
-        if (source.getRegionCode() != null) {
-            Region region = generalEntityDao.findEntity("Region.findByCode",
-                    Pair.of(CODE, source.getRegionCode()));
-            target.setRegion(region);
-        }
+//        if (source.getRegionCode() != null) {
+//            Region region = generalEntityDao.findEntity("Region.findByCode",
+//                    Pair.of(CODE, source.getRegionCode()));
+//            target.setRegion(region);
+//        }
     }
 
 

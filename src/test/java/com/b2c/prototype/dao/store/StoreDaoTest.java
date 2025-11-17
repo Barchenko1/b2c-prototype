@@ -48,9 +48,9 @@ class StoreDaoTest extends AbstractDaoTest {
         entity.getAddress().setId(0);
         entity.getArticularStocks().forEach(stock -> {
             stock.setId(0);
-            stock.getArticularItemQuantities().forEach(itemQuantities -> {
-                itemQuantities.setId(0);
-            });
+//            stock.getArticularItemQuantities().forEach(itemQuantities -> {
+//                itemQuantities.setId(0);
+//            });
         });
 
         generalEntityDao.persistEntity(entity);
@@ -189,7 +189,7 @@ class StoreDaoTest extends AbstractDaoTest {
                 .build();
         return ArticularStock.builder()
                 .id(1L)
-                .articularItemQuantities(Set.of(getArticularItemQuantity()))
+//                .articularItemQuantities(Set.of(getArticularItemQuantity()))
                 .availabilityState(availabilityStatus)
                 .countType(CountType.LIMITED)
                 .build();

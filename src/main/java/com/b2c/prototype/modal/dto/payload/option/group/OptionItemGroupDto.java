@@ -1,7 +1,6 @@
 package com.b2c.prototype.modal.dto.payload.option.group;
 
 import com.b2c.prototype.modal.dto.common.AbstractConstantDto;
-import com.b2c.prototype.modal.dto.payload.option.item.OptionItemCostDto;
 import com.b2c.prototype.modal.dto.payload.option.item.OptionItemDto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

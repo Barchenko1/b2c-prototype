@@ -26,13 +26,19 @@ price:
   - id: 5
     amount: 1200
     currency_id: 1
+discount_group:
+  - id: 1
+    key: "Germany_group"
+    value: "Germany_group"
+    region_id: 1
 discount:
   - id: 1
-    amount: 100
-    char_sequence_code: "xxx"
+    amount: 5
+    char_sequence_code: "abc1"
     is_active: true
     is_percent: false
     currency_id: 1
+    discount_group_id: 1
   - id: 2
     amount: 100
     char_sequence_code: "Update abc1"
@@ -119,7 +125,7 @@ articular_item:
     total_price_id: 2
     item_data_id: 1
     status_id: 1
-    productname: "Mob 1"
+    product_name: "Mob 1"
   - id: 2
     articular_uniq_id: 2
     date_of_create: "2024-03-03 12:00:00"
@@ -128,7 +134,7 @@ articular_item:
     total_price_id: 3
     item_data_id: 2
     status_id: 2
-    productname: "Update Laptop 1"
+    product_name: "Update Laptop 1"
   - id: 3
     articular_uniq_id: 3
     date_of_create: "2024-03-03 12:00:00"
@@ -137,7 +143,7 @@ articular_item:
     total_price_id: 5
     item_data_id: 2
     status_id: 2
-    productname: "Update Laptop 2"
+    product_name: "Update Laptop 2"
 articular_item_option_item:
   - articular_item_id: 1
     option_item_id: 4

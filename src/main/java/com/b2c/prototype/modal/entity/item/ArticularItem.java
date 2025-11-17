@@ -160,4 +160,14 @@ public class ArticularItem {
         optionItem.getArticularItems().remove(this);
     }
 
+    public void addOptionItemCost(OptionItemCost optionItemCost) {
+        this.optionItemCosts.add(optionItemCost);
+        optionItemCost.getArticularItems().add(this);
+    }
+
+    public void removeOptionItemCost(OptionItemCost optionItemCost) {
+        this.optionItemCosts.remove(optionItemCost);
+        optionItemCost.getArticularItems().remove(this);
+    }
+
 }

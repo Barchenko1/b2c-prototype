@@ -437,7 +437,7 @@ class CustomerSingleDeliveryOrderDaoTest extends AbstractDaoTest {
                 .beneficiary(getBeneficiaryInfo())
                 .status(getOrderStatus())
                 .delivery(getDelivery())
-                .articularItemQuantities(List.of(getArticularItemQuantity()))
+//                .articularItemQuantities(List.of(getArticularItemQuantity()))
                 .payment(getPayment())
                 .note("note")
 

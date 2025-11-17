@@ -1,6 +1,7 @@
 package com.b2c.prototype.modal.entity.store;
 
 import com.b2c.prototype.modal.constant.CountType;
+import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -37,12 +38,8 @@ public class ArticularStock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "articular_stock_id")
-    @Builder.Default
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private Set<ArticularItemQuantity> articularItemQuantities = new HashSet<>();
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private ArticularItemQuantity articularItemQuantity;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "availability_status_id")
     private AvailabilityStatus availabilityState;

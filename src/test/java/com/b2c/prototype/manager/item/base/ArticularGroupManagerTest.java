@@ -1,7 +1,6 @@
 package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.modal.dto.payload.item.ArticularGroupDto;
-import com.b2c.prototype.modal.dto.payload.constant.CategoryValueDto;
 import com.b2c.prototype.modal.dto.payload.constant.ItemTypeDto;
 import com.b2c.prototype.modal.entity.item.ArticularGroup;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
@@ -103,14 +102,11 @@ class ArticularGroupManagerTest {
 
     private ArticularGroupDto getResponseItemDataDto() {
         return ArticularGroupDto.builder()
-                .category(CategoryValueDto.builder()
-                        .value("categoryLabel")
-                        .key("categoryValue")
-                        .build())
-                .itemType(ItemTypeDto.builder()
-                        .value("itemTypeLabel")
-                        .key("itemTypeValue")
-                        .build())
+                .category(null)
+//                .itemType(ItemTypeDto.builder()
+//                        .value("itemTypeLabel")
+//                        .key("itemTypeValue")
+//                        .build())
 //                .description()
                 .build();
     }
@@ -130,14 +126,11 @@ class ArticularGroupManagerTest {
 
     private ArticularGroupDto getArticularGroupDto() {
         return ArticularGroupDto.builder()
-                .category(CategoryValueDto.builder()
-                        .value("categoryLabel")
-                        .key("categoryValue")
-                        .build())
-                .itemType(ItemTypeDto.builder()
-                        .value("itemTypeLabel")
-                        .key("itemTypeValue")
-                        .build())
+                .category(null)
+//                .itemType(ItemTypeDto.builder()
+//                        .value("itemTypeLabel")
+//                        .key("itemTypeValue")
+//                        .build())
                 .build();
     }
 

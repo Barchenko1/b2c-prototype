@@ -41,7 +41,7 @@ class ItemTypeManagerTest extends AbstractConstantEntityManagerTest<ItemType> {
         when(mapDtoToEntityFunction.apply(dto)).thenReturn(testValue);
 //        when(dao.getEntityClass()).thenAnswer(invocation -> ItemType.class);
 
-//        itemTypeManager.persistEntity(dto);
+//        itemTypeManager.persistEntity(modal);
 
         verifySaveEntity(testValue);
     }

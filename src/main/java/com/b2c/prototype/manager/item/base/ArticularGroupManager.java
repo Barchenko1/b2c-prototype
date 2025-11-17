@@ -27,18 +27,18 @@ public class ArticularGroupManager implements IArticularGroupManager {
 
     @Override
     public void saveArticularGroup(ArticularGroupDto articularGroupDto) {
-        ArticularGroup articularGroup = itemTransformService.mapArticularGroupDtoToArticularGroupDto(articularGroupDto);
+//        ArticularGroup articularGroup = itemTransformService.mapArticularGroupDtoToArticularGroup(articularGroupDto);
 //            metaData.setItemId(getUUID());
 //        metaData.getArticularItemSet().forEach(articularItem ->
 //                articularItem.setArticularUniqId(getUUID()));
-        generalEntityDao.mergeEntity(articularGroup);
+//        generalEntityDao.mergeEntity(articularGroup);
     }
 
     @Override
     public void updateArticularGroup(String itemId, ArticularGroupDto articularGroupDto) {
-        ArticularGroup articularGroup = itemTransformService.mapArticularGroupDtoToArticularGroupDto(articularGroupDto);
+//        ArticularGroup articularGroup = itemTransformService.mapArticularGroupDtoToArticularGroup(articularGroupDto);
 
-        generalEntityDao.mergeEntity(articularGroup);
+//        generalEntityDao.mergeEntity(articularGroup);
     }
 
     @Override

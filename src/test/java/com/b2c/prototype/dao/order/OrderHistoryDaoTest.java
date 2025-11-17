@@ -484,7 +484,7 @@ class OrderHistoryDaoTest extends AbstractDaoTest {
                 .beneficiary(beneficiary)
                 .status(getOrderStatus())
                 .delivery(getDelivery())
-                .articularItemQuantities(List.of(getArticularItemQuantity()))
+//                .articularItemQuantities(List.of(getArticularItemQuantity()))
                 .payment(getPayment())
                 .note("note")
 

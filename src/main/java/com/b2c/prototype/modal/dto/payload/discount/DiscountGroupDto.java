@@ -18,6 +18,5 @@ import java.util.List;
 public class DiscountGroupDto {
     private String key;
     private String value;
-    private String regionCode;
     private List<DiscountDto> discounts;
 }

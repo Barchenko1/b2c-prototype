@@ -44,7 +44,7 @@ public class OptionItemCostGroupManager implements IOptionItemCostGroupManager {
     @Transactional
     @Override
     public void persistEntity(OptionItemCostGroupDto optionItemCostGroupDto) {
-        OptionGroup entity = itemTransformService.mapOptionItemCostGroupDtoToOptionGroupDto(optionItemCostGroupDto);
+        OptionGroup entity = itemTransformService.mapOptionItemCostGroupDtoToOptionGroup(optionItemCostGroupDto);
         generalEntityDao.persistEntity(entity);
     }
 

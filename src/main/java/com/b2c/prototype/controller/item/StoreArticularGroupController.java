@@ -1,6 +1,6 @@
 package com.b2c.prototype.controller.item;
 
-import com.b2c.prototype.modal.dto.payload.general.StoreArticularGroupDto;
+import com.b2c.prototype.modal.dto.payload.item.StoreArticularGroupRequestDto;
 import com.b2c.prototype.processor.item.IStoreArticularGroupProcessor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,15 +28,15 @@ public class StoreArticularGroupController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> saveItemData(@RequestParam final Map<String, String> requestParams,
-                                             @RequestBody final StoreArticularGroupDto articularGroupDto) {
-        storeArticularGroupProcessor.saveStoreArticularGroup(requestParams, articularGroupDto);
+                                             @RequestBody final StoreArticularGroupRequestDto storeArticularGroupRequestDto) {
+        storeArticularGroupProcessor.saveStoreArticularGroup(requestParams, storeArticularGroupRequestDto);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> putItemData(@RequestParam final Map<String, String> requestParams,
-                                            @RequestBody final StoreArticularGroupDto articularGroupDto) {
-        storeArticularGroupProcessor.updateStoreArticularGroup(requestParams, articularGroupDto);
+                                            @RequestBody final StoreArticularGroupRequestDto storeArticularGroupRequestDto) {
+        storeArticularGroupProcessor.updateStoreArticularGroup(requestParams, storeArticularGroupRequestDto);
         return ResponseEntity.ok().build();
     }
 
@@ -47,13 +47,13 @@ public class StoreArticularGroupController {
     }
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<StoreArticularGroupDto> getItemDataList(@RequestParam final Map<String, String> requestParams) {
+    public List<StoreArticularGroupRequestDto> getItemDataList(@RequestParam final Map<String, String> requestParams) {
 
         return storeArticularGroupProcessor.getStoreArticularGroupList(requestParams);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<StoreArticularGroupDto> getItemData(@RequestParam final Map<String, String> requestParams) {
+    public ResponseEntity<StoreArticularGroupRequestDto> getItemData(@RequestParam final Map<String, String> requestParams) {
         return new ResponseEntity<>(storeArticularGroupProcessor.getStoreArticularGroup(requestParams), HttpStatus.OK);
     }
 }

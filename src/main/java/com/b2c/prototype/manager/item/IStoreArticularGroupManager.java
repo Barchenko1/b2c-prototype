@@ -1,14 +1,14 @@
 package com.b2c.prototype.manager.item;
 
-import com.b2c.prototype.modal.dto.payload.general.StoreArticularGroupDto;
+import com.b2c.prototype.modal.dto.payload.item.StoreArticularGroupRequestDto;
 
 import java.util.List;
 
 public interface IStoreArticularGroupManager {
-    void saveStoreArticularGroup(StoreArticularGroupDto articularGroupDto);
-    void updateStoreArticularGroup(String region, String articularGroupId, StoreArticularGroupDto articularGroupDto);
+    void saveStoreArticularGroup(StoreArticularGroupRequestDto storeArticularGroupRequestDto);
+    void updateStoreArticularGroup(String region, String articularGroupId, StoreArticularGroupRequestDto storeArticularGroupRequestDto);
     void deleteStoreArticularGroup(String region, String articularGroupId);
 
-    StoreArticularGroupDto getStoreArticularGroup(String itemId);
-    List<StoreArticularGroupDto> getAStorerticularGroupList();
+    StoreArticularGroupRequestDto getStoreArticularGroup(String articularGroupId);
+    List<StoreArticularGroupRequestDto> getAStorerticularGroupList();
 }

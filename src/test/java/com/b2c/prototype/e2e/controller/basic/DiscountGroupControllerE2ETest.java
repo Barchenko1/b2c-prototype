@@ -122,7 +122,7 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
                 DiscountGroupDto.builder()
                         .key("Global_group")
                         .value("Global_group")
-                        .regionCode("Global")
+//                        .regionCode("Global")
                         .discounts(List.of(
                                 DiscountDto.builder()
                                         .charSequenceCode("abc2")
@@ -170,7 +170,7 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
         DiscountGroupDto expected = DiscountGroupDto.builder()
                 .key("Global_group")
                 .value("Global_group")
-                .regionCode("Global")
+//                .regionCode("Global")
                 .discounts(List.of(
                         DiscountDto.builder()
                                 .charSequenceCode("abc2")
@@ -216,7 +216,7 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
         return DiscountGroupDto.builder()
                 .key("Global_group")
                 .value("Global_group")
-                .regionCode("Global")
+//                .regionCode("Global")
                 .discounts(List.of(
                         DiscountDto.builder()
                                 .charSequenceCode("abc2")
@@ -243,7 +243,7 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
         return DiscountGroupDto.builder()
                 .key("Update Global_group")
                 .value("Update Global_group")
-                .regionCode("DE")
+//                .regionCode("DE")
                 .discounts(List.of(
                         DiscountDto.builder()
                                 .searchKey("abc2")
@@ -285,7 +285,7 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
         return DiscountGroupDto.builder()
                 .key("Update Global_group")
                 .value("Update Global_group")
-                .regionCode("DE")
+//                .regionCode("DE")
                 .discounts(List.of(
                         DiscountDto.builder()
                                 .searchKey("abc2")

@@ -99,13 +99,9 @@
     </named-query>
     <named-query name="ArticularStock.findById">
         <query>SELECT e FROM ArticularStock e
-
-            LEFT JOIN FETCH e.articularItemQuantities aiq
-
+            LEFT JOIN FETCH e.articularItemQuantity aiq
             LEFT JOIN FETCH e.availabilityState st
-
             LEFT JOIN FETCH aiq.articularItem ai
-
             LEFT JOIN FETCH ai.optionItems oi
             LEFT JOIN FETCH oi.optionGroup
 

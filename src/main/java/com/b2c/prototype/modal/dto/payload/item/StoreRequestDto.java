@@ -1,4 +1,4 @@
-package com.b2c.prototype.modal.dto.payload.store;
+package com.b2c.prototype.modal.dto.payload.item;
 
 import com.b2c.prototype.modal.dto.payload.order.AddressDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
@@ -16,11 +16,10 @@ import java.util.List;
 @AllArgsConstructor
 @JsonIgnoreProperties
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class StoreDto {
+public class StoreRequestDto {
     private String storeId;
     private String storeName;
     private boolean isActive;
-    private String region;
     private AddressDto address;
-    private List<ArticularStockDto> articularStocks;
+    private Map<String, ArticularStockQuantityDto> stock;
 }

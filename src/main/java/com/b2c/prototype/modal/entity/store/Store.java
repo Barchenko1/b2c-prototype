@@ -47,7 +47,7 @@ import java.util.Set;
                         "LEFT JOIN FETCH s.region r " +
                         "LEFT JOIN FETCH s.articularStocks sa " +
 
-                        "LEFT JOIN FETCH sa.articularItemQuantities sasq " +
+                        "LEFT JOIN FETCH sa.articularItemQuantity sasq " +
                         "LEFT JOIN FETCH sasq.articularItem sasqa " +
                         "LEFT JOIN FETCH sasqa.articularGroup sasqaa " +
                         "LEFT JOIN FETCH sa.availabilityState sas " +
@@ -95,7 +95,7 @@ import java.util.Set;
                         "LEFT JOIN FETCH s.address a " +
                         "LEFT JOIN FETCH a.country c " +
                         "LEFT JOIN FETCH s.articularStocks sas " +
-                        "LEFT JOIN FETCH sas.articularItemQuantities aiq " +
+                        "LEFT JOIN FETCH sas.articularItemQuantity aiq " +
                         "LEFT JOIN FETCH aiq.articularItem ai " +
                         "WHERE s.storeUniqId = :storeUniqId"
         ),
@@ -105,7 +105,7 @@ import java.util.Set;
                         "LEFT JOIN FETCH s.address a " +
                         "LEFT JOIN FETCH a.country c " +
                         "LEFT JOIN FETCH s.articularStocks sas " +
-                        "LEFT JOIN FETCH sas.articularItemQuantities aiq " +
+                        "LEFT JOIN FETCH sas.articularItemQuantity aiq " +
                         "LEFT JOIN FETCH aiq.articularItem ai " +
                         "WHERE c.key = :key"
         )

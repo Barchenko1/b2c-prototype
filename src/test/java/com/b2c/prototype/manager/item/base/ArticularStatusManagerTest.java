@@ -41,7 +41,7 @@ class ArticularStatusManagerTest extends AbstractConstantEntityManagerTest<Artic
         when(mapDtoToEntityFunction.apply(dto)).thenReturn(testValue);
 //        when(dao.getEntityClass()).thenAnswer(invocation -> ArticularStatus.class);
 
-//        articularStatusManager.persistEntity(dto);
+//        articularStatusManager.persistEntity(modal);
 
         verifySaveEntity(testValue);
     }

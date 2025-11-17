@@ -1,15 +1,37 @@
-
+currency:
+  - id: 1
+    value: "EUR"
+    key: "EUR"
+  - id: 2
+    value: "USD"
+    key: "USD"
+region:
+  - id: 1
+    code: "DE"
+    value: "Germany"
+    language: "German"
+    default_locale: "de-DE"
+    primary_currency_id: 1
+    timezone: "Europe/Berlin"
+  - id: 2
+    code: "Global"
+    value: "Global"
+    language: "English"
+    default_locale: "en-US"
+    primary_currency_id: 2
+    timezone: "UTC"
+country:
+  - id: 1
+    key: "USA"
+    value: "USA"
+availability_status:
+  - id: 1
+    value: "Available"
+    key: "Available"
 item_type:
   - id: 1
     value: "Electronic"
     key: "Electronic"
-  - id: 2
-    value: "Update Electronic"
-    key: "Update Electronic"
-currency:
-  - id: 1
-    value: "USD"
-    key: "USD"
 price:
   - id: 1
     amount: 1000
@@ -31,9 +53,6 @@ option_group:
   - id: 1
     key: "Size"
     value: "Size"
-  - id: 2
-    key: "Color"
-    value: "Color"
 option_item:
   - id: 1
     value: "L"
@@ -43,46 +62,28 @@ option_item:
     value: "M"
     key: "M"
     option_group_id: 1
-  - id: 3
-    value: "16"
-    key: "16"
-    option_group_id: 1
-  - id: 4
-    value: "Red"
-    key: "Red"
-    option_group_id: 2
-  - id: 5
-    value: "Blue"
-    key: "Blue"
-    option_group_id: 2
 category:
   - id: 1
     key: "Electronic"
     value: "Electronic"
+    region_id: 2
   - id: 2
     category_id: 1
     key: "Laptop"
     value: "Laptop"
-  - id: 3
-    key: "Update Electronic"
-    value: "Update Electronic"
-  - id: 4
-    category_id: 3
-    key: "Update Laptop"
-    value: "Update Laptop"
+    region_id: 2
 articular_status:
   - id: 1
-    value: "NEW"
-    key: "NEW"
+    value: "New"
+    key: "New"
   - id: 2
-    value: "COMMON"
-    key: "COMMON"
+    value: "Common"
+    key: "Common"
 articular_group:
   - id: 1
-    articular_group_uniq_id: 122
+    articular_group_uniq_id: 123
     description: "{\"par1\":\"desc1\",\"par2\":\"desc2\",\"par3\":\"desc3\"}"
     category_id: 2
-    item_type_id: 1
 articular_item:
   - id: 1
     articular_uniq_id: 1
@@ -90,11 +91,6 @@ articular_item:
     discount_id: 1
     full_price_id: 1
     total_price_id: 1
-    item_data_id: 1
     status_id: 1
     product_name: "Mob 1"
-articular_item_option_item:
-  - articular_item_id: 1
-    option_item_id: 4
-  - articular_item_id: 1
-    option_item_id: 3
+articular_item_option_item: []

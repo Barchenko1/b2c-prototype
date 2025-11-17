@@ -39,7 +39,7 @@ class CountryPhoneCodeManagerTest extends AbstractConstantEntityManagerTest<Coun
         when(mapDtoToEntityFunction.apply(dto)).thenReturn(testValue);
 //        when(dao.getEntityClass()).thenAnswer(invocation -> CountryPhoneCode.class);
 
-//        countryPhoneCodeManager.persistEntity(dto);
+//        countryPhoneCodeManager.persistEntity(modal);
 
 //        verifySaveEntity(testValue);
     }

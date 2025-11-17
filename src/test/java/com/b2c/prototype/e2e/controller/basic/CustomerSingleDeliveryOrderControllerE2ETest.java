@@ -2,7 +2,7 @@
 //
 //import com.b2c.prototype.e2e.BasicE2ETest;
 //import com.b2c.prototype.e2e.util.TestUtil;
-//import com.b2c.prototype.modal.dto.payload.order.single.ResponseCustomerOrderDetails;
+//import com.b2c.prototype.modal.modal.payload.order.single.ResponseCustomerOrderDetails;
 //import com.fasterxml.jackson.core.JsonProcessingException;
 //import com.fasterxml.jackson.core.type.TypeReference;
 //import org.junit.jupiter.api.BeforeEach;

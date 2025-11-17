@@ -30,7 +30,7 @@ import java.util.Set;
 @SuperBuilder
 @NoArgsConstructor
 public class OptionItem extends AbstractConstantEntity {
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "option_group_id", nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

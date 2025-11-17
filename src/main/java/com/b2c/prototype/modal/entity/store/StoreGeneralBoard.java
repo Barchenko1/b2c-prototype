@@ -20,7 +20,9 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "store_general_board")
@@ -40,5 +42,5 @@ public class StoreGeneralBoard {
     @Builder.Default
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private List<ArticularStock> articularStocks = new ArrayList<>();
+    private Set<ArticularStock> articularStocks = new HashSet<>();
 }

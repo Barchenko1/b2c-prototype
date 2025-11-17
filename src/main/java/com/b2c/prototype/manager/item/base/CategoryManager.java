@@ -156,7 +156,6 @@ public class CategoryManager implements ICategoryManager {
 //            String key = ensureKey(childDto.getKey(), childDto.getValue());
             String key = ensureKey(childDto.getKey());
 
-            // prefer global registry (move / reuse)
             Category child = registry.get(key);
 
             if (child == null) {
@@ -193,7 +192,7 @@ public class CategoryManager implements ICategoryManager {
     }
 
     private Category buildTree(CategoryCascade dto, Region region, Map<String, Category> registry) {
-//        String key = ensureKey(dto.getKey(), dto.getValue());
+//        String key = ensureKey(modal.getKey(), modal.getValue());
         String key = ensureKey(dto.getKey());
 
         Category cat = Category.builder()
@@ -207,7 +206,7 @@ public class CategoryManager implements ICategoryManager {
         List<CategoryCascade> children = Optional.ofNullable(dto.getChildList()).orElseGet(Collections::emptyList);
         for (CategoryCascade childDto : children) {
             Category child = buildTree(childDto, region, registry);
-            cat.addChildEntity(child); // <-- you missed this earlier
+            cat.addChildEntity(child);
         }
         return cat;
     }

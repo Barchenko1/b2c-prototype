@@ -34,7 +34,7 @@ public class OptionItemCost extends AbstractConstantEntity {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(nullable = false)
     private Price price;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "option_group_id", nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

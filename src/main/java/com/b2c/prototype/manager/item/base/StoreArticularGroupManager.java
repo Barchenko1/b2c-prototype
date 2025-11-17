@@ -1,19 +1,16 @@
 package com.b2c.prototype.manager.item.base;
 
 import com.b2c.prototype.dao.IGeneralEntityDao;
-import com.b2c.prototype.manager.item.IArticularGroupManager;
 import com.b2c.prototype.manager.item.IStoreArticularGroupManager;
-import com.b2c.prototype.modal.dto.payload.general.StoreArticularGroupDto;
 import com.b2c.prototype.modal.dto.payload.item.ArticularGroupDto;
+import com.b2c.prototype.modal.dto.payload.item.StoreArticularGroupRequestDto;
 import com.b2c.prototype.modal.entity.item.ArticularGroup;
 import com.b2c.prototype.transform.item.IItemTransformService;
-import com.nimbusds.jose.util.Pair;
+import com.b2c.prototype.transform.modal.StoreArticularGroupTransform;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
-
-import static com.b2c.prototype.util.Constant.ITEM_ID;
 
 @Service
 public class StoreArticularGroupManager implements IStoreArticularGroupManager {
@@ -28,12 +25,20 @@ public class StoreArticularGroupManager implements IStoreArticularGroupManager {
     }
 
     @Override
-    public void saveStoreArticularGroup(StoreArticularGroupDto articularGroupDto) {
+    @Transactional
+    public void saveStoreArticularGroup(StoreArticularGroupRequestDto storeArticularGroupRequestDto) {
+        StoreArticularGroupTransform storeArticularGroupTransform = itemTransformService
+                .mapStoreArticularGroupRequestDtoToStoreArticularGroupTransform(storeArticularGroupRequestDto);
 
+        storeArticularGroupTransform.getOptionGroup().forEach(generalEntityDao::mergeEntity);
+        storeArticularGroupTransform.getDiscountGroup().forEach(generalEntityDao::mergeEntity);
+        generalEntityDao.persistEntity(storeArticularGroupTransform.getArticularGroup());
     }
 
     @Override
-    public void updateStoreArticularGroup(String region, String articularGroupId, StoreArticularGroupDto articularGroupDto) {
+    public void updateStoreArticularGroup(String region, String articularGroupId, StoreArticularGroupRequestDto storeArticularGroupRequestDto) {
+        StoreArticularGroupTransform storeArticularGroupTransform = itemTransformService
+                .mapStoreArticularGroupRequestDtoToStoreArticularGroupTransform(storeArticularGroupRequestDto);
 
     }
 
@@ -43,12 +48,12 @@ public class StoreArticularGroupManager implements IStoreArticularGroupManager {
     }
 
     @Override
-    public StoreArticularGroupDto getStoreArticularGroup(String itemId) {
+    public StoreArticularGroupRequestDto getStoreArticularGroup(String articularGroupId) {
         return null;
     }
 
     @Override
-    public List<StoreArticularGroupDto> getAStorerticularGroupList() {
+    public List<StoreArticularGroupRequestDto> getAStorerticularGroupList() {
         return List.of();
     }
 }

@@ -46,9 +46,9 @@ public class ArticularStockDaoTest extends AbstractDaoTest {
     public void persistEntity_success() {
         ArticularStock entity = getArticularStock();
         entity.setId(0L);
-        entity.getArticularItemQuantities().forEach(articularItemQuantity -> {
-            articularItemQuantity.setId(0);
-        });
+//        entity.getArticularItemQuantities().forEach(articularItemQuantity -> {
+//            articularItemQuantity.setId(0);
+//        });
 
         generalEntityDao.persistEntity(entity);
     }

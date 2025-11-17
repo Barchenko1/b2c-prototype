@@ -12,7 +12,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -37,7 +36,7 @@ public class OptionItemGroupManager implements IOptionItemGroupManager {
     }
 
     public void persistEntity(OptionItemGroupDto optionItemGroupDto) {
-        OptionGroup entity = itemTransformService.mapOptionItemGroupDtoToOptionGroupDto(optionItemGroupDto);
+        OptionGroup entity = itemTransformService.mapOptionItemGroupDtoToOptionGroup(optionItemGroupDto);
         generalEntityDao.persistEntity(entity);
     }
 
