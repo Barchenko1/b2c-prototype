@@ -6,7 +6,7 @@ import com.b2c.prototype.modal.dto.payload.discount.DiscountStatusDto;
 import java.util.List;
 
 public interface IDiscountGroupManager {
-    void saveDiscountGroup(DiscountGroupDto discountGroupDto);
+    void saveDiscountGroup(String region, DiscountGroupDto discountGroupDto);
     void updateArticularDiscount(String articularId, DiscountGroupDto discountGroupDto);
     void updateDiscountGroup(String region, String key, DiscountGroupDto discountGroupDto);
     void changeDiscountStatus(DiscountStatusDto discountStatusDto);

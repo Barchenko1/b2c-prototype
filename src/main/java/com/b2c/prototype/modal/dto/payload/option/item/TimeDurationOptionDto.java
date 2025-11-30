@@ -21,7 +21,6 @@ import java.time.ZoneId;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TimeDurationOptionDto extends AbstractConstantDto {
-    private String searchKey;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime startTime;

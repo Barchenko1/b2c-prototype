@@ -23,7 +23,8 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
 
     @Test
     @DataSet(value = "datasets/e2e/item/discount/emptyE2EDiscountGroupDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/item/discount/testE2EDiscountGroupDataSet.yml", orderBy = "id")
+    @ExpectedDataSet(value = "datasets/e2e/item/discount/testE2EDiscountGroupDataSet.yml", orderBy = "id",
+    ignoreCols = {"key"})
     @Sql(statements = {
             "ALTER SEQUENCE discount_group_id_seq RESTART WITH 2",
             "ALTER SEQUENCE discount_id_seq RESTART WITH 2",
@@ -33,7 +34,10 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
         String jsonPayload = writeValueAsString(dto);
 
         webTestClient.post()
-                .uri(URL_TEMPLATE)
+                .uri(uriBuilder -> uriBuilder
+                        .path(URL_TEMPLATE)
+                        .queryParam("region", "Global")
+                        .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .bodyValue(jsonPayload)
@@ -216,7 +220,7 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
         return DiscountGroupDto.builder()
                 .key("Global_group")
                 .value("Global_group")
-//                .regionCode("Global")
+                .regionCode("Global")
                 .discounts(List.of(
                         DiscountDto.builder()
                                 .charSequenceCode("abc2")
@@ -243,10 +247,10 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
         return DiscountGroupDto.builder()
                 .key("Update Global_group")
                 .value("Update Global_group")
-//                .regionCode("DE")
+                .regionCode("DE")
                 .discounts(List.of(
                         DiscountDto.builder()
-                                .searchKey("abc2")
+                                .key("abc2")
                                 .charSequenceCode("Update abc2")
                                 .amount(2)
                                 .currency(null)
@@ -255,7 +259,7 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
                                 .articularIdSet(Set.of("123"))
                                 .build(),
                         DiscountDto.builder()
-                                .searchKey("abc3")
+                                .key("abc3")
                                 .charSequenceCode("Update abc3")
                                 .amount(8)
                                 .currency(CurrencyDto.builder()
@@ -267,7 +271,7 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
                                 .articularIdSet(Set.of("123"))
                                 .build(),
                         DiscountDto.builder()
-                                .searchKey(null)
+                                .key(null)
                                 .charSequenceCode("New abc4")
                                 .amount(5)
                                 .currency(CurrencyDto.builder()
@@ -285,10 +289,10 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
         return DiscountGroupDto.builder()
                 .key("Update Global_group")
                 .value("Update Global_group")
-//                .regionCode("DE")
+                .regionCode("DE")
                 .discounts(List.of(
                         DiscountDto.builder()
-                                .searchKey("abc2")
+                                .key("abc2")
                                 .charSequenceCode("Update abc2")
                                 .amount(2)
                                 .currency(null)

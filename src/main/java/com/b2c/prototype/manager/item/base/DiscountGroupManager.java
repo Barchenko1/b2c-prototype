@@ -10,13 +10,13 @@ import com.b2c.prototype.manager.item.IDiscountGroupManager;
 import com.b2c.prototype.modal.entity.item.DiscountGroup;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.region.Region;
+import com.b2c.prototype.service.generator.IKeyGeneratorService;
 import com.b2c.prototype.transform.item.IItemTransformService;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -36,17 +36,23 @@ public class DiscountGroupManager implements IDiscountGroupManager {
 
     private final IGeneralEntityDao generalEntityDao;
     private final IItemTransformService itemTransformService;
+    private final IKeyGeneratorService keyGeneratorService;
 
     public DiscountGroupManager(IGeneralEntityDao generalEntityDao,
-                                IItemTransformService itemTransformService) {
+                                IItemTransformService itemTransformService,
+                                IKeyGeneratorService keyGeneratorService) {
         this.generalEntityDao = generalEntityDao;
         this.itemTransformService = itemTransformService;
+        this.keyGeneratorService = keyGeneratorService;
     }
 
     @Override
     @Transactional
-    public void saveDiscountGroup(DiscountGroupDto discountGroupDto) {
-        DiscountGroup discountGroup = itemTransformService.mapDiscountGroupDtoToDiscountGroup(discountGroupDto);
+    public void saveDiscountGroup(String region, DiscountGroupDto discountGroupDto) {
+        DiscountGroup discountGroup = itemTransformService.mapDiscountGroupDtoToDiscountGroup(
+                region, discountGroupDto);
+
+        discountGroup.setKey(keyGeneratorService.generateKey("discount_group"));
         generalEntityDao.persistEntity(discountGroup);
     }
 
@@ -73,10 +79,11 @@ public class DiscountGroupManager implements IDiscountGroupManager {
 
     @Override
     @Transactional
-    public void updateDiscountGroup(String region, String key, DiscountGroupDto discountGroupDto) {
+    public void updateDiscountGroup(String regionCode, String key, DiscountGroupDto discountGroupDto) {
         DiscountGroup discountGroup = generalEntityDao.findEntity(
                 "DiscountGroup.findByRegionAndKey",
-                List.of(Pair.of(CODE, region), Pair.of(KEY, key)));
+                List.of(Pair.of(CODE, regionCode), Pair.of(KEY, key)));
+
         DiscountGroup entity = syncItemsAllowingKeyChange(key, discountGroup, discountGroupDto);
         generalEntityDao.mergeEntity(entity);
     }
@@ -153,7 +160,7 @@ public class DiscountGroupManager implements IDiscountGroupManager {
         // UPDATE EXISTING (with optional rename) + fields
         incoming.forEach(itemDto -> {
             if (itemDto == null) return;
-            final String lookup = itemDto.getSearchKey() != null ? itemDto.getSearchKey() : itemDto.getCharSequenceCode();
+            final String lookup = itemDto.getKey() != null ? itemDto.getKey() : itemDto.getCharSequenceCode();
             Discount existing = (lookup == null) ? null : currentByCode.get(lookup);
 
             if (existing != null) {
@@ -200,7 +207,7 @@ public class DiscountGroupManager implements IDiscountGroupManager {
         // CREATE NEW (when there is no searchCharSequenceCode)
         incoming.stream()
                 .filter(Objects::nonNull)
-                .filter(d -> d.getSearchKey() == null)  // new entities
+                .filter(d -> d.getKey() == null)  // new entities
                 .forEach(d -> {
                     final String code = d.getCharSequenceCode();
                     if (code == null || code.trim().isEmpty()) {
@@ -252,11 +259,11 @@ public class DiscountGroupManager implements IDiscountGroupManager {
             target.setKey(source.getKey());
         }
         // If region is editable:
-//        if (source.getRegionCode() != null) {
-//            Region region = generalEntityDao.findEntity("Region.findByCode",
-//                    Pair.of(CODE, source.getRegionCode()));
-//            target.setRegion(region);
-//        }
+        if (source.getRegionCode() != null) {
+            Region region = generalEntityDao.findEntity("Region.findByCode",
+                    Pair.of(CODE, source.getRegionCode()));
+            target.setRegion(region);
+        }
     }
 
 

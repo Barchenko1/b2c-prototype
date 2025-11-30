@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface IDiscountGroupProcess {
-    void saveDiscountGroup(final DiscountGroupDto discountGroupDto);
+    void saveDiscountGroup(final Map<String, String> requestParams, final DiscountGroupDto discountGroupDto);
     void updateDiscountGroup(final Map<String, String> requestParams, final DiscountGroupDto discountGroupDto);
     void changeDiscountStatus(final DiscountStatusDto discountStatusDto);
     void removeDiscountGroup(final Map<String, String> requestParams);

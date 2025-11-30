@@ -62,6 +62,12 @@ option_item:
     value: "M"
     key: "M"
     option_group_id: 1
+option_item_cost:
+  - id: 1
+    value: "XL"
+    key: "XL"
+    price_id: 1
+    option_group_id: 1
 category:
   - id: 1
     key: "Electronic"

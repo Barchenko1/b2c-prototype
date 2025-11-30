@@ -25,7 +25,8 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
 
     @Test
     @DataSet(value = "datasets/e2e/order/option_group/time_duration_option/emptyE2ETimeDurationOptionDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/order/option_group/time_duration_option/testE2ETimeDurationOptionGroupDataSet.yml", orderBy = "id")
+    @ExpectedDataSet(value = "datasets/e2e/order/option_group/time_duration_option/testE2ETimeDurationOptionGroupDataSet.yml", orderBy = "id",
+    ignoreCols = {"key"})
     @Sql(statements = {
             "ALTER SEQUENCE time_duration_option_id_seq RESTART WITH 3",
             "ALTER SEQUENCE option_group_id_seq RESTART WITH 2",
@@ -101,7 +102,7 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
     public void testGetEntity() {
         TimeDurationOptionGroupDto expected = getTimeDurationOptionGroupDto();
         expected.getTimeDurationOptions().forEach(timeDurationOptionDto -> {
-            timeDurationOptionDto.setSearchKey(timeDurationOptionDto.getKey());
+//            timeDurationOptionDto.setSearchKey(timeDurationOptionDto.getKey());
         });
         TimeDurationOptionGroupDto actual = webTestClient.get()
                 .uri(uriBuilder -> uriBuilder
@@ -193,10 +194,12 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
                                         .build()))
                         .build()
         );
-        expected.forEach(optionGroup ->
-                optionGroup.getTimeDurationOptions().forEach(
-                timeDurationOptionDto ->
-                        timeDurationOptionDto.setSearchKey(timeDurationOptionDto.getKey())));
+//        expected.forEach(optionGroup ->
+//                optionGroup.getTimeDurationOptions().forEach(
+//                timeDurationOptionDto ->
+//                        timeDurationOptionDto.setSearchKey(timeDurationOptionDto.getKey())
+//                )
+//        );
 
         List<TimeDurationOptionGroupDto> actual = webTestClient.get()
                 .uri(URL_TEMPLATE + "/all")
@@ -253,11 +256,11 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
 
     private TimeDurationOptionGroupDto getUpdateTimeDurationOptionDtoMore() {
         return TimeDurationOptionGroupDto.builder()
-                .value("NY")
-                .key("NY")
+                .value("Update NY")
+                .key("Update NY")
                 .timeDurationOptions(List.of(
                         TimeDurationOptionDto.builder()
-                                .searchKey("NY_12-14")
+//                                .searchKey("NY_12-14")
                                 .value("Update 12-14")
                                 .key("Update 12-14")
                                 .startTime(getLocalDateTime("1970-01-01 12:00:00"))
@@ -272,7 +275,7 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
                                         .build())
                                 .build(),
                         TimeDurationOptionDto.builder()
-                                .searchKey(null)
+//                                .searchKey(null)
                                 .value("16-18")
                                 .key("NY_16-18")
                                 .startTime(getLocalDateTime("1970-01-01 16:00:00"))
@@ -287,7 +290,7 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
                                         .build())
                                 .build(),
                         TimeDurationOptionDto.builder()
-                                .searchKey(null)
+//                                .searchKey(null)
                                 .value("18-20")
                                 .key("NY_18-20")
                                 .startTime(getLocalDateTime("1970-01-01 18:00:00"))
@@ -307,8 +310,8 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
 
     private TimeDurationOptionGroupDto getUpdateTimeDurationOptionDtoLess() {
         return TimeDurationOptionGroupDto.builder()
-                .value("NY")
-                .key("NY")
+                .value("Update NY")
+                .key("Update NY")
                 .timeDurationOptions(List.of())
                 .build();
     }

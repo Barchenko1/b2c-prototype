@@ -36,11 +36,33 @@ price:
   - id: 1
     amount: 1000
     currency_id: 1
+  - id: 2
+    amount: 50.0
+    currency_id: 2
+  - id: 3
+    amount: 30.0
+    currency_id: 2
+  - id: 4
+    amount: 30.0
+    currency_id: 2
+  - id: 5
+    amount: 30.0
+    currency_id: 2
+  - id: 6
+    amount: 50.0
+    currency_id: 2
+  - id: 7
+    amount: 30.0
+    currency_id: 2
 discount_group:
   - id: 1
     key: "Germany_group"
     value: "Germany_group"
     region_id: 1
+  - id: 2
+    key: "Global_group"
+    value: "Global_group"
+    region_id: 2
 discount:
   - id: 1
     amount: 5
@@ -49,10 +71,29 @@ discount:
     is_percent: false
     currency_id: 1
     discount_group_id: 1
+  - id: 2
+    char_sequence_code: "abc2"
+    amount: 10.0
+    is_active: false
+    is_percent: false
+    currency_id: 2
+    discount_group_id: 2
+  - id: 3
+    char_sequence_code: "abc3"
+    amount: 10.0
+    is_active: false
+    is_percent: true
+    discount_group_id: 2
 option_group:
   - id: 1
     key: "Size"
     value: "Size"
+  - id: 2
+    key: "Color"
+    value: "Color"
+  - id: 3
+    key: "Color"
+    value: "Color"
 option_item:
   - id: 1
     value: "L"
@@ -62,6 +103,30 @@ option_item:
     value: "M"
     key: "M"
     option_group_id: 1
+  - id: 3
+    value: "Blue"
+    key: "Blue"
+    option_group_id: 3
+  - id: 4
+    value: "Red"
+    key: "Red"
+    option_group_id: 3
+option_item_cost:
+  - id: 1
+    value: "XL"
+    key: "XL"
+    price_id: 1
+    option_group_id: 1
+  - id: 2
+    value: "Blue"
+    key: "Blue"
+    price_id: 4
+    option_group_id: 2
+  - id: 2
+    value: "Red"
+    key: "Red"
+    price_id: 5
+    option_group_id: 3
 category:
   - id: 1
     key: "Electronic"

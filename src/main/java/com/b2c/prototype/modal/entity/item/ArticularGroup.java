@@ -99,4 +99,9 @@ public class ArticularGroup {
     @Convert(converter = ArticularGroupDescriptionConverter.class)
     @Builder.Default
     private Map<String, String> description = new LinkedHashMap<>();
+
+    public void addArticularItem(ArticularItem item) {
+        articularItemSet.add(item);
+        item.setArticularGroup(this);
+    }
 }

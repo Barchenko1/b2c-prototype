@@ -7,6 +7,7 @@ import com.b2c.prototype.modal.dto.payload.option.item.OptionItemCostDto;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItemCost;
 import com.b2c.prototype.modal.entity.price.Price;
+import com.b2c.prototype.service.generator.IKeyGeneratorService;
 import com.b2c.prototype.transform.constant.IGeneralEntityTransformService;
 import com.b2c.prototype.transform.item.IItemTransformService;
 import com.nimbusds.jose.util.Pair;
@@ -32,19 +33,22 @@ public class OptionItemCostGroupManager implements IOptionItemCostGroupManager {
     private final IGeneralEntityDao generalEntityDao;
     private final IItemTransformService itemTransformService;
     private final IGeneralEntityTransformService generalEntityTransformService;
+    private final IKeyGeneratorService keyGeneratorService;
 
     public OptionItemCostGroupManager(IGeneralEntityDao generalEntityDao,
                                       IItemTransformService itemTransformService,
-                                      IGeneralEntityTransformService generalEntityTransformService) {
+                                      IGeneralEntityTransformService generalEntityTransformService, IKeyGeneratorService keyGeneratorService) {
         this.generalEntityDao = generalEntityDao;
         this.itemTransformService = itemTransformService;
         this.generalEntityTransformService = generalEntityTransformService;
+        this.keyGeneratorService = keyGeneratorService;
     }
 
     @Transactional
     @Override
     public void persistEntity(OptionItemCostGroupDto optionItemCostGroupDto) {
         OptionGroup entity = itemTransformService.mapOptionItemCostGroupDtoToOptionGroup(optionItemCostGroupDto);
+        entity.setKey(keyGeneratorService.generateKey("option_cost_group"));
         generalEntityDao.persistEntity(entity);
     }
 
@@ -101,14 +105,14 @@ public class OptionItemCostGroupManager implements IOptionItemCostGroupManager {
         // UPDATE EXISTING
         incoming.forEach(itemDto -> {
             if (itemDto == null) return;
-            final String lookupKey = itemDto.getSearchKey() != null
-                    ? itemDto.getSearchKey()
-                    : itemDto.getKey();
+//            final String lookupKey = itemDto.getSearchKey() != null
+//                    ? itemDto.getSearchKey()
+//                    : itemDto.getKey();
 
-            OptionItemCost existing = null;
-            if (lookupKey != null) {
-                existing = currentByValue.get(lookupKey);
-            }
+            OptionItemCost existing = currentByValue.get(itemDto.getKey());
+//            if (lookupKey != null) {
+//                existing = currentByValue.get(lookupKey);
+//            }
 
             if (existing != null) {
                 if (itemDto.getKey() != null && !itemDto.getKey().equals(existing.getKey())) {
@@ -144,12 +148,12 @@ public class OptionItemCostGroupManager implements IOptionItemCostGroupManager {
         // CREATE NEW (unchanged from your code)
         incoming.stream()
                 .filter(Objects::nonNull)
-                .filter(d -> d.getSearchKey() == null)
+//                .filter(d -> d.getKey() == null)
                 .forEach(d -> {
                     final String newKey = d.getKey();
-                    if (newKey == null || newKey.trim().isEmpty()) {
-                        throw new IllegalArgumentException("New Option item cost must have non-null 'key'.");
-                    }
+//                    if (newKey == null || newKey.trim().isEmpty()) {
+//                        throw new IllegalArgumentException("New Option item cost must have non-null 'key'.");
+//                    }
                     if (!currentByValue.containsKey(newKey)) {
                         Price price = null;
                         if (d.getPrice() != null) {
@@ -187,9 +191,6 @@ public class OptionItemCostGroupManager implements IOptionItemCostGroupManager {
     private void copyUpdatableFields(OptionGroup target, OptionItemCostGroupDto source) {
         if (source.getValue() != null) {
             target.setValue(source.getValue());
-        }
-        if (source.getKey() != null) {
-            target.setKey(source.getKey());
         }
     }
 }

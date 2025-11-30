@@ -6,17 +6,17 @@ import com.b2c.prototype.modal.dto.payload.constant.ArticularStatusDto;
 import com.b2c.prototype.modal.dto.payload.constant.CategoryCascade;
 import com.b2c.prototype.modal.dto.payload.constant.CountryDto;
 import com.b2c.prototype.modal.dto.payload.constant.CurrencyDto;
-import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
-import com.b2c.prototype.modal.dto.payload.discount.DiscountGroupDto;
 import com.b2c.prototype.modal.dto.payload.item.ArticularGroupDto;
 import com.b2c.prototype.modal.dto.payload.item.ArticularItemAssignmentDto;
 import com.b2c.prototype.modal.dto.payload.item.ArticularStockQuantityDto;
 import com.b2c.prototype.modal.dto.payload.item.GroupOptionKeys;
 import com.b2c.prototype.modal.dto.payload.item.PriceDto;
 import com.b2c.prototype.modal.dto.payload.item.StoreArticularGroupRequestDto;
+import com.b2c.prototype.modal.dto.payload.item.StoreDiscount;
+import com.b2c.prototype.modal.dto.payload.item.StoreDiscountGroup;
+import com.b2c.prototype.modal.dto.payload.item.StoreOptionItemCostGroup;
+import com.b2c.prototype.modal.dto.payload.item.StoreOptionItemGroup;
 import com.b2c.prototype.modal.dto.payload.item.StoreRequestDto;
-import com.b2c.prototype.modal.dto.payload.option.group.OptionItemCostGroupDto;
-import com.b2c.prototype.modal.dto.payload.option.group.OptionItemGroupDto;
 import com.b2c.prototype.modal.dto.payload.option.item.OptionItemCostDto;
 import com.b2c.prototype.modal.dto.payload.option.item.OptionItemDto;
 import com.b2c.prototype.modal.dto.payload.order.AddressDto;
@@ -28,9 +28,9 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static com.b2c.prototype.util.Converter.getLocalDateTime;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -41,7 +41,9 @@ class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
 
     @Test
     @DataSet(value = "datasets/e2e/item/articular_group/emptyE2EStoreArticularGroupDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/item/articular_group/testE2EStoreArticularGroupDataSet.yml", orderBy = "id")
+    @ExpectedDataSet(value = "datasets/e2e/item/articular_group/testE2EStoreArticularGroupDataSet.yml",
+            orderBy = {"char_sequence_code", "value", "product_name"},
+            ignoreCols = {"id", "key", "articular_group_uniq_id", "articular_uniq_id", "date_of_create"})
     @Sql(statements = {
             "ALTER SEQUENCE articular_group_id_seq RESTART WITH 2",
             "ALTER SEQUENCE articular_item_id_seq RESTART WITH 2",
@@ -56,6 +58,13 @@ class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
             "ALTER SEQUENCE option_item_id_seq RESTART WITH 3",
             "ALTER SEQUENCE option_item_cost_id_seq RESTART WITH 2",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(statements = {
+            "SELECT * FROM discount ORDER BY id, char_sequence_code",
+            "SELECT * FROM price ORDER BY id",
+            "SELECT * FROM option_group ORDER BY id",
+            "SELECT * FROM option_item ORDER BY id",
+            "SELECT * FROM option_item_cost ORDER BY id",
+    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void testCreateEntity() {
         StoreArticularGroupRequestDto dto = getStoreArticularGroupRequestDto();
         String jsonPayload = writeValueAsString(dto);
@@ -152,55 +161,61 @@ class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
     private StoreArticularGroupRequestDto getStoreArticularGroupRequestDto() {
         return StoreArticularGroupRequestDto.builder()
                 .region("Global")
-                .discountGroupList(List.of(
-                        DiscountGroupDto.builder()
-                                .key("Global_group")
+                .discountGroups(Map.of(
+                        "discountGroup1",
+                        StoreDiscountGroup.builder()
+                                .key(null)
                                 .value("Global_group")
-                                .discounts(List.of(
-                                        DiscountDto.builder()
+                                .discounts(Map.of(
+                                        "discount1",
+                                        StoreDiscount.builder()
                                                 .charSequenceCode("abc2")
-                                                .amount(20)
+                                                .amount(10)
                                                 .currency(CurrencyDto.builder()
                                                         .key("USD")
                                                         .value("USD")
                                                         .build())
                                                 .isActive(false)
-                                                .articularIdSet(Set.of())
                                                 .build(),
-                                        DiscountDto.builder()
+                                        "discount2",
+                                        StoreDiscount.builder()
                                                 .charSequenceCode("abc3")
                                                 .amount(10)
                                                 .currency(null)
                                                 .isActive(false)
                                                 .isPercent(true)
-                                                .articularIdSet(Set.of())
                                                 .build()))
                                 .build()
                 ))
-                .optionItemGroupList(List.of(
-                        OptionItemGroupDto.builder()
+                .optionItemGroups(Map.of(
+                        "optionGroup1",
+                        StoreOptionItemGroup.builder()
                                 .value("Color")
-                                .key("Color")
-                                .optionItems(List.of(
+                                .key(null)
+                                .optionItems(Map.of(
+                                        "option1",
                                         OptionItemDto.builder()
                                                 .value("Red")
-                                                .key("Red")
+                                                .key(null)
                                                 .build(),
+                                        "option2",
                                         OptionItemDto.builder()
                                                 .value("Blue")
-                                                .key("Blue")
+                                                .key(null)
                                                 .build()))
                                 .build()
                 ))
-                .optionItemCostGroupList(List.of(
-                        OptionItemCostGroupDto.builder()
+                .optionItemCostGroups(Map.of(
+                        "optionCostGroup1",
+                        StoreOptionItemCostGroup.builder()
                                 .value("Color")
-                                .key("Color")
-                                .optionItemCosts(List.of(
+                                .key(null)
+                                .costOptions(Map.of(
+                                        "optionCost1",
                                         OptionItemCostDto.builder()
                                                 .value("Red")
                                                 .price(PriceDto.builder()
-                                                        .amount(20.0)
+                                                        .amount(30.0)
                                                         .currency(CurrencyDto.builder()
                                                                 .key("USD")
                                                                 .value("USD")
@@ -208,6 +223,7 @@ class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
                                                         .build())
                                                 .key("Red")
                                                 .build(),
+                                        "optionCost2",
                                         OptionItemCostDto.builder()
                                                 .value("Blue")
                                                 .price(PriceDto.builder()
@@ -240,7 +256,10 @@ class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
                         .key("Laptop")
                         .value("Laptop")
                         .build())
-                .description(Map.of("desc1","desc1","desc2","desc2"))
+                .description(new LinkedHashMap(){{
+                    put("desc1", "desc1");
+                    put("desc2", "desc2");
+                }})
                 .build();
 
     }
@@ -258,20 +277,20 @@ class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
                         .build())
                 .optionKeys(List.of(
                         GroupOptionKeys.builder()
-                                .groupKey("Color")
-                                .optionKeys(List.of("Red", "Blue"))
+                                .groupKey("optionGroup1")
+                                .optionKeys(List.of("option1", "option2"))
                                 .build()
                 ))
                 .optionCostKeys(List.of(
                         GroupOptionKeys.builder()
-                                .groupKey("Color")
-                                .optionKeys(List.of("Red", "Blue"))
+                                .groupKey("optionCostGroup1")
+                                .optionKeys(List.of("optionCost1", "optionCost2"))
                                 .build()
                 ))
                 .discountKey(
                         GroupOptionKeys.builder()
-                                .groupKey("Global_group")
-                                .optionKeys(List.of("abc2"))
+                                .groupKey("discountGroup1")
+                                .optionKeys(List.of("discount1"))
                                 .build()
                 )
                 .build();
@@ -290,20 +309,20 @@ class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
                         .build())
                 .optionKeys(List.of(
                         GroupOptionKeys.builder()
-                                .groupKey("Color")
-                                .optionKeys(List.of("Red", "Blue"))
+                                .groupKey("optionGroup1")
+                                .optionKeys(List.of("option1", "option2"))
                                 .build()
                 ))
                 .optionCostKeys(List.of(
                         GroupOptionKeys.builder()
-                                .groupKey("Color")
-                                .optionKeys(List.of("Red", "Blue"))
+                                .groupKey("optionCostGroup1")
+                                .optionKeys(List.of("optionCost1", "optionCost2"))
                                 .build()
                 ))
                 .discountKey(
                         GroupOptionKeys.builder()
-                                .groupKey("Global_group")
-                                .optionKeys(List.of("abc3"))
+                                .groupKey("discountGroup1")
+                                .optionKeys(List.of("discount2"))
                                 .build()
                 )
                 .build();

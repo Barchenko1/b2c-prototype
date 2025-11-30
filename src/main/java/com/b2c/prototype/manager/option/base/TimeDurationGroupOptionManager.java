@@ -7,6 +7,7 @@ import com.b2c.prototype.modal.dto.payload.option.item.TimeDurationOptionDto;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.TimeDurationOption;
 import com.b2c.prototype.modal.entity.price.Price;
+import com.b2c.prototype.service.generator.IKeyGeneratorService;
 import com.b2c.prototype.transform.constant.IGeneralEntityTransformService;
 import com.b2c.prototype.transform.order.IOrderTransformService;
 import com.nimbusds.jose.util.Pair;
@@ -34,19 +35,23 @@ public class TimeDurationGroupOptionManager implements ITimeDurationGroupOptionM
     private final IGeneralEntityDao generalEntityDao;
     private final IOrderTransformService orderTransformService;
     private final IGeneralEntityTransformService generalEntityTransformService;
+    private final IKeyGeneratorService keyGeneratorService;
 
     public TimeDurationGroupOptionManager(IGeneralEntityDao generalEntityDao,
                                           IOrderTransformService orderTransformService,
-                                          IGeneralEntityTransformService generalEntityTransformService) {
+                                          IGeneralEntityTransformService generalEntityTransformService,
+                                          IKeyGeneratorService keyGeneratorService) {
         this.generalEntityDao = generalEntityDao;
         this.orderTransformService = orderTransformService;
         this.generalEntityTransformService = generalEntityTransformService;
+        this.keyGeneratorService = keyGeneratorService;
     }
 
     @Transactional
     @Override
     public void persistEntity(TimeDurationOptionGroupDto dto) {
         OptionGroup entity = orderTransformService.mapTimeDurationOptionGroupDtoToOptionGroup(dto);
+        entity.setKey(keyGeneratorService.generateKey("time_duration_option_group"));
         generalEntityDao.persistEntity(entity);
     }
 
@@ -99,8 +104,9 @@ public class TimeDurationGroupOptionManager implements ITimeDurationGroupOptionM
 
         incoming.forEach(itemDto -> {
             if (itemDto == null) return;
-            final String lookupKey = itemDto.getSearchKey() != null ? itemDto.getSearchKey() : itemDto.getKey();
-            TimeDurationOption existing = lookupKey == null ? null : currentByValue.get(lookupKey);
+//            final String lookupKey = itemDto.getSearchKey() != null ? itemDto.getSearchKey() : itemDto.getKey();
+//            TimeDurationOption existing = lookupKey == null ? null : currentByValue.get(lookupKey);
+            TimeDurationOption existing = currentByValue.get(itemDto.getKey());
 
             if (existing != null) {
                 if (itemDto.getKey() != null && !itemDto.getKey().equals(existing.getKey())) {
@@ -146,7 +152,7 @@ public class TimeDurationGroupOptionManager implements ITimeDurationGroupOptionM
 
         incoming.stream()
                 .filter(Objects::nonNull)
-                .filter(d -> d.getSearchKey() == null)
+//                .filter(d -> d.getSearchKey() == null)
                 .forEach(d -> {
                     final String newKey = d.getKey();
                     if (newKey == null || newKey.trim().isEmpty()) {
@@ -190,9 +196,6 @@ public class TimeDurationGroupOptionManager implements ITimeDurationGroupOptionM
     private void copyUpdatableFields(OptionGroup target, TimeDurationOptionGroupDto source) {
         if (source.getValue() != null) {
             target.setValue(source.getValue());
-        }
-        if (source.getKey() != null) {
-            target.setKey(source.getKey());
         }
     }
 }

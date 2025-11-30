@@ -118,8 +118,6 @@ public class CategoryManager implements ICategoryManager {
 
     private static String ensureKey(String key) {
         if (key != null && !key.trim().isEmpty()) return key.trim();
-//        String base = value == null ? "cat" : value.toLowerCase().replaceAll("[^a-z0-9]+","-").replaceAll("^-|-$","");
-//        return base + "-" + Integer.toHexString((value == null ? "cat" : value).hashCode()).substring(0,4);
         return getUUID();
     }
 

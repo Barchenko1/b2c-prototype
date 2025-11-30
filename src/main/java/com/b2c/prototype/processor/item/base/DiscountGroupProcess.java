@@ -19,8 +19,9 @@ public class DiscountGroupProcess implements IDiscountGroupProcess {
     }
 
     @Override
-    public void saveDiscountGroup(DiscountGroupDto discountGroupDto) {
-        discountManager.saveDiscountGroup(discountGroupDto);
+    public void saveDiscountGroup(final Map<String, String> requestParams, DiscountGroupDto discountGroupDto) {
+        String regionCode = requestParams.get("region");
+        discountManager.saveDiscountGroup(regionCode, discountGroupDto);
     }
 
     @Override

@@ -17,7 +17,6 @@ public class StoreArticularGroupProcessor implements IStoreArticularGroupProcess
         this.storeArticularGroupManager = storeArticularGroupManager;
     }
 
-
     @Override
     public void saveStoreArticularGroup(Map<String, String> requestParams, StoreArticularGroupRequestDto articularGroupDto) {
         storeArticularGroupManager.saveStoreArticularGroup(articularGroupDto);

@@ -1,4 +1,4 @@
-package com.b2c.prototype.modal.dto.payload.discount;
+package com.b2c.prototype.modal.dto.payload.item;
 
 import com.b2c.prototype.modal.dto.payload.constant.CurrencyDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -14,14 +14,10 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIgnoreProperties
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class DiscountDto {
-    private String key;
+public class StoreDiscount {
     private String charSequenceCode;
     private double amount;
     private boolean isActive;
     private CurrencyDto currency;
     private boolean isPercent;
-    private Set<String> articularIdSet;
 }

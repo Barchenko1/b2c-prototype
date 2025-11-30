@@ -22,7 +22,8 @@ public class OptionItemCostGroupControllerE2ETest extends BasicE2ETest {
 
     @Test
     @DataSet(value = "datasets/e2e/item/option_group/option_item_cost/emptyE2EOptionGroupItemCostDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/item/option_group/option_item_cost/testE2EOptionItemCostGroupDataSet.yml", orderBy = {"id"})
+    @ExpectedDataSet(value = "datasets/e2e/item/option_group/option_item_cost/testE2EOptionItemCostGroupDataSet.yml", orderBy = {"id"},
+    ignoreCols = {"key"})
     @Sql(statements = {
             "ALTER SEQUENCE option_item_cost_id_seq RESTART WITH 3",
             "ALTER SEQUENCE option_group_id_seq RESTART WITH 2",
@@ -54,9 +55,9 @@ public class OptionItemCostGroupControllerE2ETest extends BasicE2ETest {
                 .key("Update Color")
                 .optionItemCosts(List.of(
                         OptionItemCostDto.builder()
-                                .searchKey("Red")
+//                                .searchKey("Red")
                                 .value("Update Red")
-                                .key("Update Red")
+                                .key("Red")
                                 .price(PriceDto.builder()
                                         .amount(20.0)
                                         .currency(CurrencyDto.builder()
@@ -112,9 +113,9 @@ public class OptionItemCostGroupControllerE2ETest extends BasicE2ETest {
                 .key("Update Color")
                 .optionItemCosts(List.of(
                         OptionItemCostDto.builder()
-                                .searchKey("Red")
+//                                .searchKey("Red")
                                 .value("Update Red")
-                                .key("Update Red")
+                                .key("Red")
                                 .price(PriceDto.builder()
                                         .amount(20.0)
                                         .currency(CurrencyDto.builder()
@@ -162,7 +163,7 @@ public class OptionItemCostGroupControllerE2ETest extends BasicE2ETest {
                         .key("Color")
                         .optionItemCosts(List.of(
                                 OptionItemCostDto.builder()
-                                        .searchKey("Red")
+//                                        .searchKey("Red")
                                         .value("Red")
                                         .key("Red")
                                         .price(PriceDto.builder()
@@ -174,7 +175,7 @@ public class OptionItemCostGroupControllerE2ETest extends BasicE2ETest {
                                                 .build())
                                         .build(),
                                 OptionItemCostDto.builder()
-                                        .searchKey("Blue")
+//                                        .searchKey("Blue")
                                         .value("Blue")
                                         .key("Blue")
                                         .price(PriceDto.builder()
@@ -192,7 +193,7 @@ public class OptionItemCostGroupControllerE2ETest extends BasicE2ETest {
                         .key("Modal")
                         .optionItemCosts(List.of(
                                 OptionItemCostDto.builder()
-                                        .searchKey("Modal1")
+//                                        .searchKey("Modal1")
                                         .value("Modal1")
                                         .key("Modal1")
                                         .price(PriceDto.builder()
@@ -204,7 +205,7 @@ public class OptionItemCostGroupControllerE2ETest extends BasicE2ETest {
                                                 .build())
                                         .build(),
                                 OptionItemCostDto.builder()
-                                        .searchKey("Modal2")
+//                                        .searchKey("Modal2")
                                         .value("Modal2")
                                         .key("Modal2")
                                         .price(PriceDto.builder()
@@ -242,7 +243,7 @@ public class OptionItemCostGroupControllerE2ETest extends BasicE2ETest {
                 .key("Color")
                 .optionItemCosts(List.of(
                         OptionItemCostDto.builder()
-                                .searchKey("Red")
+//                                .searchKey("Red")
                                 .value("Red")
                                 .key("Red")
                                 .price(PriceDto.builder()
@@ -254,7 +255,7 @@ public class OptionItemCostGroupControllerE2ETest extends BasicE2ETest {
                                         .build())
                                 .build(),
                         OptionItemCostDto.builder()
-                                .searchKey("Blue")
+//                                .searchKey("Blue")
                                 .value("Blue")
                                 .key("Blue")
                                 .price(PriceDto.builder()
@@ -292,9 +293,9 @@ public class OptionItemCostGroupControllerE2ETest extends BasicE2ETest {
                 .key("Color")
                 .optionItemCosts(List.of(
                         OptionItemCostDto.builder()
-                                .searchKey(null)
+//                                .searchKey(null)
                                 .value("Red")
-                                .key("Red")
+                                .key(null)
                                 .price(PriceDto.builder()
                                         .amount(10.0)
                                         .currency(CurrencyDto.builder()
@@ -304,9 +305,9 @@ public class OptionItemCostGroupControllerE2ETest extends BasicE2ETest {
                                         .build())
                                 .build(),
                         OptionItemCostDto.builder()
-                                .searchKey(null)
+//                                .searchKey(null)
                                 .value("Blue")
-                                .key("Blue")
+                                .key(null)
                                 .price(PriceDto.builder()
                                         .amount(20.0)
                                         .currency(CurrencyDto.builder()

@@ -6,6 +6,7 @@ import com.b2c.prototype.modal.dto.payload.option.item.OptionItemDto;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.manager.option.IOptionItemGroupManager;
 import com.b2c.prototype.modal.entity.option.OptionItem;
+import com.b2c.prototype.service.generator.IKeyGeneratorService;
 import com.b2c.prototype.transform.item.IItemTransformService;
 import com.nimbusds.jose.util.Pair;
 import jakarta.transaction.Transactional;
@@ -29,14 +30,19 @@ public class OptionItemGroupManager implements IOptionItemGroupManager {
 
     private final IGeneralEntityDao generalEntityDao;
     private final IItemTransformService itemTransformService;
+    private final IKeyGeneratorService keyGeneratorService;
 
-    public OptionItemGroupManager(IGeneralEntityDao generalEntityDao, IItemTransformService itemTransformService) {
+    public OptionItemGroupManager(IGeneralEntityDao generalEntityDao,
+                                  IItemTransformService itemTransformService,
+                                  IKeyGeneratorService keyGeneratorService) {
         this.generalEntityDao = generalEntityDao;
         this.itemTransformService = itemTransformService;
+        this.keyGeneratorService = keyGeneratorService;
     }
 
     public void persistEntity(OptionItemGroupDto optionItemGroupDto) {
         OptionGroup entity = itemTransformService.mapOptionItemGroupDtoToOptionGroup(optionItemGroupDto);
+        entity.setKey(keyGeneratorService.generateKey("option_group"));
         generalEntityDao.persistEntity(entity);
     }
 
@@ -91,14 +97,14 @@ public class OptionItemGroupManager implements IOptionItemGroupManager {
         incoming.forEach(itemDto -> {
             if (itemDto == null) return;
 
-            final String lookupKey = itemDto.getSearchKey() != null
-                    ? itemDto.getSearchKey()
-                    : itemDto.getKey();
+//            final String lookupKey = itemDto.getSearchKey() != null
+//                    ? itemDto.getSearchKey()
+//                    : itemDto.getKey();
 
-            OptionItem existing = null;
-            if (lookupKey != null) {
-                existing = currentByValue.get(lookupKey);
-            }
+            OptionItem existing = currentByValue.get(itemDto.getKey());
+//            if (lookupKey != null) {
+//                existing = currentByValue.get(lookupKey);
+//            }
 
             if (existing != null) {
                 if (itemDto.getKey() != null && !itemDto.getKey().equals(existing.getKey())) {
@@ -118,7 +124,7 @@ public class OptionItemGroupManager implements IOptionItemGroupManager {
 
         incoming.stream()
                 .filter(Objects::nonNull)
-                .filter(d -> d.getSearchKey() == null)
+//                .filter(d -> d.getSearchKey() == null)
                 .forEach(d -> {
                     final String newKey = d.getKey();
                     if (newKey == null || newKey.trim().isEmpty()) {
@@ -147,9 +153,6 @@ public class OptionItemGroupManager implements IOptionItemGroupManager {
     private void copyUpdatableFields(OptionGroup target, OptionItemGroupDto source) {
         if (source.getValue() != null) {
             target.setValue(source.getValue());
-        }
-        if (source.getKey() != null) {
-            target.setKey(source.getKey());
         }
     }
 }

@@ -210,7 +210,6 @@ class StoreControllerE2ETest extends BasicE2ETest {
                         .zipCode("90000")
                         .build())
                 .region("Global")
-                .articularStocks(List.of())
                 .build();
     }
 
@@ -231,27 +230,6 @@ class StoreControllerE2ETest extends BasicE2ETest {
                         .zipCode("900009")
                         .build())
                 .region("DE")
-                .articularStocks(null)
-                .build();
-    }
-
-    private StoreDto getStoreWithItemsDto() {
-        return StoreDto.builder()
-                .storeName("store2")
-                .address(AddressDto.builder()
-                        .country(CountryDto.builder()
-                                .value("USA")
-                                .key("USA")
-                                .build())
-                        .city("city")
-                        .street("street")
-                        .buildingNumber("10")
-                        .florNumber(9)
-                        .apartmentNumber(201)
-                        .zipCode("90000")
-                        .build())
-                .region("Global")
-                .articularStocks(List.of())
                 .build();
     }
 

@@ -29,9 +29,9 @@ zone_option_group:
     city: "California"
     country_id: 1
   - id: 2
-    key: "NY-Zone2"
-    value: "NY-Zone2"
-    city: "New York2"
+    key: "NY-Zone"
+    value: "Update NY-Zone"
+    city: "Update New York"
     country_id: 1
 zone_option:
   - id: 1

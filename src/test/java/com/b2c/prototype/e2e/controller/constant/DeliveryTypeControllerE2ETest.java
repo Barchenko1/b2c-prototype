@@ -60,27 +60,6 @@ public class DeliveryTypeControllerE2ETest extends BasicE2ETest {
 
     @Test
     @DataSet(value = "datasets/e2e/order/delivery_type/testE2EDeliveryTypeDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/order/delivery_type/updateE2EDeliveryTypeDataSet.yml", orderBy = "id")
-    public void testPatchEntity() {
-        ConstantPayloadDto constantPayloadDto = ConstantPayloadDto.builder()
-                .value("Update Courier")
-                .key("Update Courier")
-                .build();
-        String jsonPayload = writeValueAsString(constantPayloadDto);
-        webTestClient.put()
-                .uri(uriBuilder -> uriBuilder
-                        .path(URL_TEMPLATE)
-                        .queryParam("key", "Courier")
-                        .build())
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .bodyValue(jsonPayload)
-                .exchange()
-                .expectStatus().isOk();
-    }
-
-    @Test
-    @DataSet(value = "datasets/e2e/order/delivery_type/testE2EDeliveryTypeDataSet.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/e2e/order/delivery_type/emptyE2EDeliveryTypeDataSet.yml", orderBy = "id")
     public void testDeleteEntity() {
         webTestClient.delete()

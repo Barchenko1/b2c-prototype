@@ -7,6 +7,7 @@ import com.b2c.prototype.modal.dto.payload.commission.MinMaxCommissionDto;
 import com.b2c.prototype.modal.dto.payload.constant.CountryDto;
 import com.b2c.prototype.modal.dto.payload.constant.CountryPhoneCodeDto;
 import com.b2c.prototype.modal.dto.payload.constant.CurrencyDto;
+import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.item.PriceDto;
 import com.b2c.prototype.modal.dto.payload.order.AddressDto;
 import com.b2c.prototype.modal.dto.payload.order.ContactInfoDto;
@@ -15,6 +16,7 @@ import com.b2c.prototype.modal.dto.payload.region.RegionDto;
 import com.b2c.prototype.modal.dto.payload.store.AvailabilityStatusDto;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
+import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.payment.CommissionValue;
 import com.b2c.prototype.modal.entity.payment.MinMaxCommission;
 import com.b2c.prototype.modal.entity.price.Currency;
@@ -243,5 +245,25 @@ public class GeneralEntityTransformService implements IGeneralEntityTransformSer
                 .key(availabilityStatus.getKey())
                 .value(availabilityStatus.getValue())
                 .build();
+    }
+
+    @Override
+    public Discount mapDiscountDtoToDiscount(DiscountDto discountDto) {
+        return Discount.builder()
+                .charSequenceCode(discountDto.getCharSequenceCode())
+                .amount(discountDto.getAmount())
+                .isPercent(discountDto.isPercent())
+                .isActive(discountDto.isActive())
+                .currency(discountDto.getCurrency() != null
+                        ? this.mapCurrencyDtoToCurrency(discountDto.getCurrency())
+                        : null)
+                .articularItemList(generalEntityDao.findEntityList("ArticularItem.findByArticularIds",
+                        Pair.of("articularId", discountDto.getArticularIdSet())))
+                .build();
+    }
+
+    @Override
+    public DiscountDto mapDiscountToDiscountDto(Discount discount) {
+        return null;
     }
 }

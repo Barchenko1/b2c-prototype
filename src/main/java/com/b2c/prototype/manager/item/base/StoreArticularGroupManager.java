@@ -5,8 +5,10 @@ import com.b2c.prototype.manager.item.IStoreArticularGroupManager;
 import com.b2c.prototype.modal.dto.payload.item.ArticularGroupDto;
 import com.b2c.prototype.modal.dto.payload.item.StoreArticularGroupRequestDto;
 import com.b2c.prototype.modal.entity.item.ArticularGroup;
+import com.b2c.prototype.service.generator.IKeyGeneratorService;
 import com.b2c.prototype.transform.item.IItemTransformService;
 import com.b2c.prototype.transform.modal.StoreArticularGroupTransform;
+import com.b2c.prototype.transform.store.IStoreArticularGroupTransformService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,28 +18,31 @@ import java.util.List;
 public class StoreArticularGroupManager implements IStoreArticularGroupManager {
 
     private final IGeneralEntityDao generalEntityDao;
-    private final IItemTransformService itemTransformService;
+    private final IStoreArticularGroupTransformService storeArticularGroupTransformService;
+    private final IKeyGeneratorService keyGeneratorService;
 
     public StoreArticularGroupManager(IGeneralEntityDao generalEntityDao,
-                                      IItemTransformService itemTransformService) {
+                                      IStoreArticularGroupTransformService storeArticularGroupTransformService,
+                                      IKeyGeneratorService keyGeneratorService) {
         this.generalEntityDao = generalEntityDao;
-        this.itemTransformService = itemTransformService;
+        this.storeArticularGroupTransformService = storeArticularGroupTransformService;
+        this.keyGeneratorService = keyGeneratorService;
     }
 
     @Override
     @Transactional
     public void saveStoreArticularGroup(StoreArticularGroupRequestDto storeArticularGroupRequestDto) {
-        StoreArticularGroupTransform storeArticularGroupTransform = itemTransformService
+        StoreArticularGroupTransform storeArticularGroupTransform = storeArticularGroupTransformService
                 .mapStoreArticularGroupRequestDtoToStoreArticularGroupTransform(storeArticularGroupRequestDto);
 
-        storeArticularGroupTransform.getOptionGroup().forEach(generalEntityDao::mergeEntity);
-        storeArticularGroupTransform.getDiscountGroup().forEach(generalEntityDao::mergeEntity);
         generalEntityDao.persistEntity(storeArticularGroupTransform.getArticularGroup());
+        storeArticularGroupTransform.getStores().forEach(generalEntityDao::persistEntity);
+        generalEntityDao.persistEntity(storeArticularGroupTransform.getStoreGeneralBoard());
     }
 
     @Override
     public void updateStoreArticularGroup(String region, String articularGroupId, StoreArticularGroupRequestDto storeArticularGroupRequestDto) {
-        StoreArticularGroupTransform storeArticularGroupTransform = itemTransformService
+        StoreArticularGroupTransform storeArticularGroupTransform = storeArticularGroupTransformService
                 .mapStoreArticularGroupRequestDtoToStoreArticularGroupTransform(storeArticularGroupRequestDto);
 
     }

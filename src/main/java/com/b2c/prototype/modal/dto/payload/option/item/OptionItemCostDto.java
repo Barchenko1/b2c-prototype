@@ -14,6 +14,5 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OptionItemCostDto extends AbstractConstantDto {
-    private String searchKey;
     private PriceDto price;
 }

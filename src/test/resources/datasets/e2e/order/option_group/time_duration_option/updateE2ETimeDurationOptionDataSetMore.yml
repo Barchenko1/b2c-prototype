@@ -24,7 +24,7 @@ option_group:
     value: "CA"
   - id: 2
     key: "NY"
-    value: "NY"
+    value: "Update NY"
 time_duration_option:
   - id: 1
     key: "CA_9-11"

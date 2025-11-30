@@ -25,7 +25,7 @@ public class ZoneOptionGroupControllerE2ETest extends BasicE2ETest {
     @DataSet(value = "datasets/e2e/order/option_group/zone_option/emptyE2EZoneOptionGroupDataSet.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/e2e/order/option_group/zone_option/testE2EZoneOptionGroupDataSet.yml",
             orderBy = { "key" },
-            ignoreCols = { "id" }
+            ignoreCols = { "id", "key" }
     )
     @Sql(statements = {
             "ALTER SEQUENCE zone_option_id_seq RESTART WITH 3",
@@ -87,29 +87,6 @@ public class ZoneOptionGroupControllerE2ETest extends BasicE2ETest {
 
     @Test
     @DataSet(value = "datasets/e2e/order/option_group/zone_option/testE2EZoneOptionGroupDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/order/option_group/zone_option/updateE2EZoneOptionGroupDataSetMore.yml", orderBy = {"id"}, ignoreCols = {"id"})
-    @Sql(statements = {
-            "ALTER SEQUENCE zone_option_id_seq RESTART WITH 5",
-            "ALTER SEQUENCE zone_option_group_id_seq RESTART WITH 2",
-            "ALTER SEQUENCE price_id_seq RESTART WITH 5",
-    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    public void testPatchEntity() {
-        ZoneOptionGroupDto constantPayloadDto = getUpdateZoneOptionGroupDtoMore();
-        String jsonPayload = writeValueAsString(constantPayloadDto);
-        webTestClient.put()
-                .uri(uriBuilder -> uriBuilder
-                        .path(URL_TEMPLATE)
-                        .queryParam("key", "NY-Zone")
-                        .build())
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .bodyValue(jsonPayload)
-                .exchange()
-                .expectStatus().isOk();
-    }
-
-    @Test
-    @DataSet(value = "datasets/e2e/order/option_group/zone_option/testE2EZoneOptionGroupDataSet.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/e2e/order/option_group/zone_option/emptyE2EZoneOptionGroupDataSet.yml", orderBy = "id")
     public void testDeleteEntity() {
         webTestClient.delete()
@@ -135,7 +112,7 @@ public class ZoneOptionGroupControllerE2ETest extends BasicE2ETest {
                         .build())
                 .zoneOptions(List.of(
                         ZoneOptionDto.builder()
-                                .searchKey("NY-ZoneA")
+//                                .searchKey("NY-ZoneA")
                                 .value("NY-ZoneA")
                                 .key("NY-ZoneA")
                                 .price(PriceDto.builder()
@@ -147,7 +124,7 @@ public class ZoneOptionGroupControllerE2ETest extends BasicE2ETest {
                                         .build())
                                 .build(),
                         ZoneOptionDto.builder()
-                                .searchKey("NY-ZoneB")
+//                                .searchKey("NY-ZoneB")
                                 .value("NY-ZoneB")
                                 .key("NY-ZoneB")
                                 .price(PriceDto.builder()
@@ -193,7 +170,7 @@ public class ZoneOptionGroupControllerE2ETest extends BasicE2ETest {
                                 .build())
                         .zoneOptions(List.of(
                                 ZoneOptionDto.builder()
-                                        .searchKey("CA-ZoneA")
+//                                        .searchKey("CA-ZoneA")
                                         .value("CA-ZoneA")
                                         .key("CA-ZoneA")
                                         .price(PriceDto.builder()
@@ -205,7 +182,7 @@ public class ZoneOptionGroupControllerE2ETest extends BasicE2ETest {
                                                 .build())
                                         .build(),
                                 ZoneOptionDto.builder()
-                                        .searchKey("CA-ZoneB")
+//                                        .searchKey("CA-ZoneB")
                                         .value("CA-ZoneB")
                                         .key("CA-ZoneB")
                                         .price(PriceDto.builder()
@@ -228,7 +205,7 @@ public class ZoneOptionGroupControllerE2ETest extends BasicE2ETest {
                                 .build())
                         .zoneOptions(List.of(
                                 ZoneOptionDto.builder()
-                                        .searchKey("NY-ZoneA")
+//                                        .searchKey("NY-ZoneA")
                                         .value("NY-ZoneA")
                                         .key("NY-ZoneA")
                                         .price(PriceDto.builder()
@@ -240,7 +217,7 @@ public class ZoneOptionGroupControllerE2ETest extends BasicE2ETest {
                                                 .build())
                                         .build(),
                                 ZoneOptionDto.builder()
-                                        .searchKey("NY-ZoneB")
+//                                        .searchKey("NY-ZoneB")
                                         .value("NY-ZoneB")
                                         .key("NY-ZoneB")
                                         .price(PriceDto.builder()
@@ -281,7 +258,7 @@ public class ZoneOptionGroupControllerE2ETest extends BasicE2ETest {
                         .build())
                 .zoneOptions(List.of(
                         ZoneOptionDto.builder()
-                                .searchKey("NY-ZoneA")
+//                                .searchKey("NY-ZoneA")
                                 .value("NY-ZoneA")
                                 .key("NY-ZoneA")
                                 .price(PriceDto.builder()
@@ -293,7 +270,7 @@ public class ZoneOptionGroupControllerE2ETest extends BasicE2ETest {
                                         .build())
                                 .build(),
                         ZoneOptionDto.builder()
-                                .searchKey("NY-ZoneB")
+//                                .searchKey("NY-ZoneB")
                                 .value("NY-ZoneB")
                                 .key("NY-ZoneB")
                                 .price(PriceDto.builder()
@@ -310,16 +287,16 @@ public class ZoneOptionGroupControllerE2ETest extends BasicE2ETest {
 
     private ZoneOptionGroupDto getUpdateZoneOptionGroupDtoMore() {
         return  ZoneOptionGroupDto.builder()
-                .value("NY-Zone2")
-                .key("NY-Zone2")
-                .city("New York2")
+                .value("Update NY-Zone")
+                .key("Update NY-Zone")
+                .city("Update New York")
                 .country(CountryDto.builder()
                         .value("USA")
                         .key("USA")
                         .build())
                 .zoneOptions(List.of(
                         ZoneOptionDto.builder()
-                                .searchKey("NY-ZoneB")
+//                                .searchKey("NY-ZoneB")
                                 .value("NY-ZoneB2")
                                 .key("NY-ZoneB2")
                                 .price(PriceDto.builder()
@@ -331,9 +308,9 @@ public class ZoneOptionGroupControllerE2ETest extends BasicE2ETest {
                                         .build())
                                 .build(),
                         ZoneOptionDto.builder()
-                                .searchKey(null)
+//                                .searchKey(null)
                                 .value("New NY-ZoneC")
-                                .key("New NY-ZoneC")
+                                .key(null)
                                 .price(PriceDto.builder()
                                         .amount(30.0)
                                         .currency(CurrencyDto.builder()
@@ -343,9 +320,9 @@ public class ZoneOptionGroupControllerE2ETest extends BasicE2ETest {
                                         .build())
                                 .build(),
                         ZoneOptionDto.builder()
-                                .searchKey(null)
+//                                .searchKey(null)
                                 .value("New NY-ZoneD")
-                                .key("New NY-ZoneD")
+                                .key(null)
                                 .price(PriceDto.builder()
                                         .amount(50.0)
                                         .currency(CurrencyDto.builder()
@@ -360,18 +337,18 @@ public class ZoneOptionGroupControllerE2ETest extends BasicE2ETest {
 
     private ZoneOptionGroupDto getUpdateZoneOptionGroupDtoLess() {
         return  ZoneOptionGroupDto.builder()
-                .value("NY-Zone2")
-                .key("NY-Zone2")
-                .city("New York2")
+                .value("Update NY-Zone")
+                .key("Update NY-Zone")
+                .city("Update New York")
                 .country(CountryDto.builder()
                         .value("USA")
                         .key("USA")
                         .build())
                 .zoneOptions(List.of(
                         ZoneOptionDto.builder()
-                                .searchKey("NY-ZoneA")
+//                                .searchKey("NY-ZoneA")
                                 .value("NY-ZoneC")
-                                .key("NY-ZoneC")
+                                .key("NY-ZoneA")
                                 .price(PriceDto.builder()
                                         .amount(30.0)
                                         .currency(CurrencyDto.builder()

@@ -7,6 +7,7 @@ import com.b2c.prototype.modal.dto.payload.option.item.ZoneOptionDto;
 import com.b2c.prototype.modal.entity.option.ZoneOption;
 import com.b2c.prototype.modal.entity.option.ZoneOptionGroup;
 import com.b2c.prototype.modal.entity.price.Price;
+import com.b2c.prototype.service.generator.IKeyGeneratorService;
 import com.b2c.prototype.transform.constant.IGeneralEntityTransformService;
 import com.b2c.prototype.transform.order.IOrderTransformService;
 import com.nimbusds.jose.util.Pair;
@@ -32,19 +33,23 @@ public class ZoneOptionGroupManager implements IZoneOptionGroupManager {
     private final IGeneralEntityDao generalEntityDao;
     private final IOrderTransformService orderTransformService;
     private final IGeneralEntityTransformService generalEntityTransformService;
+    private final IKeyGeneratorService keyGeneratorService;
 
     public ZoneOptionGroupManager(IGeneralEntityDao generalEntityDao,
                                   IOrderTransformService orderTransformService,
-                                  IGeneralEntityTransformService generalEntityTransformService) {
+                                  IGeneralEntityTransformService generalEntityTransformService,
+                                  IKeyGeneratorService keyGeneratorService) {
         this.generalEntityDao = generalEntityDao;
         this.orderTransformService = orderTransformService;
         this.generalEntityTransformService = generalEntityTransformService;
+        this.keyGeneratorService = keyGeneratorService;
     }
 
     @Transactional
     @Override
     public void persistEntity(ZoneOptionGroupDto zoneOptionGroupDto) {
         ZoneOptionGroup zoneOptionGroup = orderTransformService.mapZoneOptionGroupDtoToZoneOptionGroup(zoneOptionGroupDto);
+        zoneOptionGroup.setKey(keyGeneratorService.generateKey("zone_group"));
         generalEntityDao.persistEntity(zoneOptionGroup);
     }
 
@@ -100,9 +105,9 @@ public class ZoneOptionGroupManager implements IZoneOptionGroupManager {
 
         incoming.forEach(itemDto -> {
             if (itemDto == null) return;
-            final String lookupKey = itemDto.getSearchKey() != null ? itemDto.getSearchKey() : itemDto.getKey();
-            ZoneOption existing = lookupKey == null ? null : currentByValue.get(lookupKey);
-
+//            final String lookupKey = itemDto.getSearchKey() != null ? itemDto.getSearchKey() : itemDto.getKey();
+//            ZoneOption existing = lookupKey == null ? null : currentByValue.get(lookupKey);
+            ZoneOption existing = currentByValue.get(itemDto.getKey());
             if (existing != null) {
                 if (itemDto.getKey() != null && !itemDto.getKey().equals(existing.getKey())) {
                     if (currentByValue.containsKey(itemDto.getKey()) && currentByValue.get(itemDto.getKey()) != existing) {
@@ -137,7 +142,7 @@ public class ZoneOptionGroupManager implements IZoneOptionGroupManager {
         // CREATE NEW (unchanged from your code)
         incoming.stream()
                 .filter(Objects::nonNull)
-                .filter(d -> d.getSearchKey() == null)
+//                .filter(d -> d.getSearchKey() == null)
                 .forEach(d -> {
                     final String newKey = d.getKey();
                     if (newKey == null || newKey.trim().isEmpty()) {
@@ -173,9 +178,6 @@ public class ZoneOptionGroupManager implements IZoneOptionGroupManager {
     private void copyUpdatableFields(ZoneOptionGroup target, ZoneOptionGroupDto source) {
         if (source.getValue() != null) {
             target.setValue(source.getValue());
-        }
-        if (source.getKey() != null) {
-            target.setKey(source.getKey());
         }
         if (source.getCity() != null) {
             target.setCity(source.getCity());

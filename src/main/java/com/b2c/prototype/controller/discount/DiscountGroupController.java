@@ -29,14 +29,15 @@ public class DiscountGroupController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> saveDiscountGroup(@RequestBody DiscountGroupDto payload) {
-        discountGroupProcess.saveDiscountGroup(payload);
+    public ResponseEntity<Void> saveDiscountGroup(@RequestParam final Map<String, String> requestParams,
+                                                  @RequestBody DiscountGroupDto payload) {
+        discountGroupProcess.saveDiscountGroup(requestParams, payload);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> putDiscountGroup(@RequestParam final Map<String, String> requestParams,
-                                            @RequestBody final DiscountGroupDto discountGroupDto) {
+                                                 @RequestBody final DiscountGroupDto discountGroupDto) {
         discountGroupProcess.updateDiscountGroup(requestParams, discountGroupDto);
         return ResponseEntity.ok().build();
     }

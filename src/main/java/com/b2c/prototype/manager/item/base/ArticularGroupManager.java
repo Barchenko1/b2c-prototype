@@ -27,11 +27,6 @@ public class ArticularGroupManager implements IArticularGroupManager {
 
     @Override
     public void saveArticularGroup(ArticularGroupDto articularGroupDto) {
-//        ArticularGroup articularGroup = itemTransformService.mapArticularGroupDtoToArticularGroup(articularGroupDto);
-//            metaData.setItemId(getUUID());
-//        metaData.getArticularItemSet().forEach(articularItem ->
-//                articularItem.setArticularUniqId(getUUID()));
-//        generalEntityDao.mergeEntity(articularGroup);
     }
 
     @Override

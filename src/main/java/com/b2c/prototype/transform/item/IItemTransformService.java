@@ -20,6 +20,7 @@ import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.DiscountGroup;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.post.Post;
+import com.b2c.prototype.modal.entity.region.Region;
 import com.b2c.prototype.modal.entity.review.Review;
 import com.b2c.prototype.modal.entity.store.ArticularStock;
 import com.b2c.prototype.modal.entity.store.Store;
@@ -40,7 +41,7 @@ public interface IItemTransformService {
     ArticularStockDto mapArticularStockToArticularStockDto(ArticularStock articularStock);
     ArticularStock mapArticularStockDtoToArticularStock(ArticularStockDto articularStockDto);
 
-    StoreArticularGroupTransform mapStoreArticularGroupRequestDtoToStoreArticularGroupTransform(StoreArticularGroupRequestDto storeArticularGroupRequestDto);
+//    StoreArticularGroupTransform mapStoreArticularGroupRequestDtoToStoreArticularGroupTransform(StoreArticularGroupRequestDto storeArticularGroupRequestDto);
     ArticularGroupDto mapArticularGroupToArticularGroupDto(ArticularGroup articularGroup);
 
     ArticularItem mapArticularItemDtoToArticularItem(ArticularItemDto articularItemDto);
@@ -58,7 +59,7 @@ public interface IItemTransformService {
     OptionGroup mapOptionItemCostGroupDtoToOptionGroup(OptionItemCostGroupDto optionItemCostGroupDto);
     OptionItemCostGroupDto mapOptionGroupToOptionItemCostGroupDto(OptionGroup optionGroup);
 
-    DiscountGroup mapDiscountGroupDtoToDiscountGroup(DiscountGroupDto discountGroupDto);
+    DiscountGroup mapDiscountGroupDtoToDiscountGroup(String region, DiscountGroupDto discountGroupDto);
     DiscountGroupDto mapDiscountGroupToDiscountGroupDto(DiscountGroup discountGroup);
 
 

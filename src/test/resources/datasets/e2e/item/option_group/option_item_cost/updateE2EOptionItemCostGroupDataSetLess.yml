@@ -17,7 +17,7 @@ option_group:
     key: "Modal"
     value: "Modal"
   - id: 2
-    key: "Update Color"
+    key: "Color"
     value: "Update Color"
 option_item_cost:
   - id: 1

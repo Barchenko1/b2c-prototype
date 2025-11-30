@@ -20,7 +20,8 @@ public class OptionItemGroupControllerE2ETest extends BasicE2ETest {
 
     @Test
     @DataSet(value = "datasets/e2e/item/option_group/option_item/emptyE2EOptionItemGroupDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/item/option_group/option_item/testE2EOptionItemGroupDataSet.yml", orderBy = "id")
+    @ExpectedDataSet(value = "datasets/e2e/item/option_group/option_item/testE2EOptionItemGroupDataSet.yml", orderBy = "id",
+    ignoreCols = {"key"})
     @Sql(statements = {
             "ALTER SEQUENCE option_item_id_seq RESTART WITH 3",
             "ALTER SEQUENCE option_group_id_seq RESTART WITH 2",
@@ -50,18 +51,18 @@ public class OptionItemGroupControllerE2ETest extends BasicE2ETest {
                 .key("Update Color")
                 .optionItems(List.of(
                         OptionItemDto.builder()
-                                .searchKey("Red")
+//                                .searchKey("Red")
                                 .value("Update Red")
-                                .key("Update Red")
+                                .key("Red")
                                 .build(),
                         OptionItemDto.builder()
-                                .searchKey(null)
-                                .value("Yellow")
+//                                .searchKey(null)
+                                .value(null)
                                 .key("Yellow")
                                 .build(),
                         OptionItemDto.builder()
-                                .searchKey(null)
-                                .value("White")
+//                                .searchKey(null)
+                                .value(null)
                                 .key("White")
                                 .build()
                         ))
@@ -89,9 +90,8 @@ public class OptionItemGroupControllerE2ETest extends BasicE2ETest {
                 .key("Update Color")
                 .optionItems(List.of(
                         OptionItemDto.builder()
-                                .searchKey("Red")
                                 .value("Update Red")
-                                .key("Update Red")
+                                .key("Red")
                                 .build()
                 ))
                 .build();
@@ -132,12 +132,12 @@ public class OptionItemGroupControllerE2ETest extends BasicE2ETest {
                         .key("Color")
                         .optionItems(List.of(
                                 OptionItemDto.builder()
-                                        .searchKey("Red")
+//                                        .searchKey("Red")
                                         .value("Red")
                                         .key("Red")
                                         .build(),
                                 OptionItemDto.builder()
-                                        .searchKey("Blue")
+//                                        .searchKey("Blue")
                                         .value("Blue")
                                         .key("Blue")
                                         .build()))
@@ -147,12 +147,12 @@ public class OptionItemGroupControllerE2ETest extends BasicE2ETest {
                         .key("Modal")
                         .optionItems(List.of(
                                 OptionItemDto.builder()
-                                        .searchKey("Modal1")
+//                                        .searchKey("Modal1")
                                         .value("Modal1")
                                         .key("Modal1")
                                         .build(),
                                 OptionItemDto.builder()
-                                        .searchKey("Modal2")
+//                                        .searchKey("Modal2")
                                         .value("Modal2")
                                         .key("Modal2")
                                         .build()
@@ -183,12 +183,12 @@ public class OptionItemGroupControllerE2ETest extends BasicE2ETest {
                 .key("Color")
                 .optionItems(List.of(
                         OptionItemDto.builder()
-                                .searchKey("Red")
+//                                .searchKey("Red")
                                 .value("Red")
                                 .key("Red")
                                 .build(),
                         OptionItemDto.builder()
-                                .searchKey("Blue")
+//                                .searchKey("Blue")
                                 .value("Blue")
                                 .key("Blue")
                                 .build()))

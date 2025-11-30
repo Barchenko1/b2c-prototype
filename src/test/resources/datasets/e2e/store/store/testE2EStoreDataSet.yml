@@ -76,7 +76,6 @@ articular_group:
   - id: 1
     articular_group_uniq_id: 123
     category_id: 3
-    item_type_id: 1
     description: "{\"par1\":\"desc1\",\"par2\":\"desc2\",\"par3\":\"desc3\"}"
 country:
   - id: 1
@@ -142,9 +141,7 @@ articular_stock:
 articular_item_quantity:
   - id: 1
     articular_item_id: 1
-    articular_stock_id: 1
     quantity: 2
   - id: 2
     articular_item_id: 2
-    articular_stock_id: 1
     quantity: 3
