@@ -5,7 +5,7 @@ currency:
   - id: 2
     value: "USD"
     key: "USD"
-region:
+tenant:
   - id: 1
     code: "DE"
     value: "Germany"
@@ -24,107 +24,107 @@ category:
   - id: 1
     key: "Laptops and Computers"
     value: "Laptops and Computers"
-    region_id: 1
+    tenant_id: 1
   - id: 2
     key: "Gaming Laptops & Accessories"
     value: "Gaming Laptops & Accessories"
     category_id: 1
-    region_id: 1
+    tenant_id: 1
   - id: 3
     key: "Gaming Laptops"
     value: "Gaming Laptops"
     category_id: 2
-    region_id: 1
+    tenant_id: 1
   - id: 4
     key: "Gaming Keyboards & Mice"
     value: "Gaming Keyboards & Mice"
     category_id: 2
-    region_id: 1
+    tenant_id: 1
   - id: 5
     key: "Cooling Pads & Stands"
     value: "Cooling Pads & Stands"
     category_id: 2
-    region_id: 1
+    tenant_id: 1
 
   - id: 6
     key: "Apple"
     value: "Apple"
-    region_id: 2
+    tenant_id: 2
   - id: 7
     key: "Mac"
     value: "Mac"
     category_id: 6
-    region_id: 2
+    tenant_id: 2
   - id: 8
     key: "Macbook air"
     value: "Macbook air"
     category_id: 7
-    region_id: 2
+    tenant_id: 2
   - id: 9
     key: "Macbook pro"
     value: "Macbook pro"
     category_id: 7
-    region_id: 2
+    tenant_id: 2
 
   - id: 10
     key: "IPhone"
     value: "IPhone"
     category_id: 6
-    region_id: 2
+    tenant_id: 2
   - id: 11
     key: "IPhone air"
     value: "IPhone air"
     category_id: 10
-    region_id: 2
+    tenant_id: 2
   - id: 12
     key: "IPhone pro"
     value: "IPhone pro"
     category_id: 10
-    region_id: 2
+    tenant_id: 2
   - id: 13
     key: "IPhone 17"
     value: "IPhone 17"
     category_id: 10
-    region_id: 2
+    tenant_id: 2
   - id: 14
     key: "IPhone 16"
     value: "IPhone 16"
     category_id: 10
-    region_id: 2
+    tenant_id: 2
 
   - id: 15
     key: "IPad"
     value: "IPad"
     category_id: 6
-    region_id: 2
+    tenant_id: 2
   - id: 16
     key: "IPad air"
     value: "IPad air"
     category_id: 15
-    region_id: 2
+    tenant_id: 2
   - id: 17
     key: "IPad pro"
     value: "IPad pro"
     category_id: 15
-    region_id: 2
+    tenant_id: 2
 
   - id: 18
     key: "Watch"
     value: "Watch"
     category_id: 6
-    region_id: 2
+    tenant_id: 2
   - id: 19
     key: "Apple Watch Series 11"
     value: "Apple Watch Series 11"
     category_id: 18
-    region_id: 2
+    tenant_id: 2
   - id: 20
     key: "Apple Watch SE 3"
     value: "Apple Watch SE 3"
     category_id: 18
-    region_id: 2
+    tenant_id: 2
   - id: 21
     key: "Apple Watch Ultra 3"
     value: "Apple Watch Ultra 3"
     category_id: 18
-    region_id: 2
+    tenant_id: 2

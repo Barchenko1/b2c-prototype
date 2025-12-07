@@ -2,7 +2,7 @@ package com.b2c.prototype.e2e.controller.constant;
 
 import com.b2c.prototype.e2e.BasicE2ETest;
 import com.b2c.prototype.modal.dto.payload.constant.CurrencyDto;
-import com.b2c.prototype.modal.dto.payload.region.RegionDto;
+import com.b2c.prototype.modal.dto.payload.tenant.TenantDto;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import org.junit.jupiter.api.Test;
@@ -14,9 +14,9 @@ import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class RegionControllerE2ETest extends BasicE2ETest {
+public class TenantControllerE2ETest extends BasicE2ETest {
 
-    private final String URL_TEMPLATE = "/api/v1/region";
+    private final String URL_TEMPLATE = "/api/v1/tenant";
 
     @Test
     @DataSet(value = "datasets/e2e/region/emptyE2ERegionDataSet.yml", cleanBefore = true)
@@ -26,7 +26,7 @@ public class RegionControllerE2ETest extends BasicE2ETest {
             "ALTER SEQUENCE region_id_seq RESTART WITH 2"
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void testCreateEntity() {
-        RegionDto dto = getRegionDto();
+        TenantDto dto = getRegionDto();
         String jsonPayload = writeValueAsString(dto);
 
         webTestClient.post()
@@ -42,7 +42,7 @@ public class RegionControllerE2ETest extends BasicE2ETest {
     @DataSet(value = "datasets/e2e/region/testE2ERegionDataSet.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/e2e/region/updateE2ERegionDataSet.yml", orderBy = "id")
     public void testUpdateEntity() {
-        RegionDto constantPayloadDto = RegionDto.builder()
+        TenantDto constantPayloadDto = TenantDto.builder()
                 .code("Update Global")
                 .value("Update Global")
                 .language("Update English")
@@ -84,8 +84,8 @@ public class RegionControllerE2ETest extends BasicE2ETest {
     @Test
     @DataSet(value = "datasets/e2e/region/testE2ERegionDataSet.yml", cleanBefore = true)
     public void testGetEntities() {
-        List<RegionDto> constantPayloadDtoList = List.of(
-                RegionDto.builder()
+        List<TenantDto> constantPayloadDtoList = List.of(
+                TenantDto.builder()
                         .code("DE")
                         .value("Germany")
                         .language("German")
@@ -96,7 +96,7 @@ public class RegionControllerE2ETest extends BasicE2ETest {
                                 .build())
                         .timezone("Europe/Berlin")
                         .build(),
-                RegionDto.builder()
+                TenantDto.builder()
                         .code("Global")
                         .value("Global")
                         .language("English")
@@ -108,14 +108,14 @@ public class RegionControllerE2ETest extends BasicE2ETest {
                         .timezone("UTC")
                         .build());
 
-        List<RegionDto> actual =
+        List<TenantDto> actual =
                 webTestClient.get()
                         .uri(URL_TEMPLATE + "/all")
                         .accept(MediaType.APPLICATION_JSON)
                         .exchange()
                         .expectStatus().isOk()
                         .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
-                        .expectBody(new ParameterizedTypeReference<List<RegionDto>>() {})
+                        .expectBody(new ParameterizedTypeReference<List<TenantDto>>() {})
                         .returnResult()
                         .getResponseBody();
 
@@ -125,7 +125,7 @@ public class RegionControllerE2ETest extends BasicE2ETest {
     @Test
     @DataSet(value = "datasets/e2e/region/testE2ERegionDataSet.yml", cleanBefore = true)
     public void testGetEntity() {
-        RegionDto expected = RegionDto.builder()
+        TenantDto expected = TenantDto.builder()
                 .code("Global")
                 .value("Global")
                 .language("English")
@@ -137,7 +137,7 @@ public class RegionControllerE2ETest extends BasicE2ETest {
                 .timezone("UTC")
                 .build();;
 
-        RegionDto actual = webTestClient.get()
+        TenantDto actual = webTestClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
                         .queryParam("code", "Global")
@@ -146,7 +146,7 @@ public class RegionControllerE2ETest extends BasicE2ETest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
-                .expectBody(RegionDto.class)
+                .expectBody(TenantDto.class)
                 .returnResult()
                 .getResponseBody();
 
@@ -156,8 +156,8 @@ public class RegionControllerE2ETest extends BasicE2ETest {
                 .isEqualTo(expected);
     }
 
-    private RegionDto getRegionDto() {
-        return RegionDto.builder()
+    private TenantDto getRegionDto() {
+        return TenantDto.builder()
                 .code("Global")
                 .value("Global")
                 .language("English")

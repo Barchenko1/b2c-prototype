@@ -36,7 +36,7 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
         webTestClient.post()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("region", "Global")
+                        .queryParam("tenant", "Global")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -58,7 +58,7 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
         webTestClient.put()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("region", "Global")
+                        .queryParam("tenant", "Global")
                         .queryParam("key", "Global_group")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -78,7 +78,7 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
         webTestClient.put()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("region", "Global")
+                        .queryParam("tenant", "Global")
                         .queryParam("key", "Global_group")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -111,7 +111,7 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
         webTestClient.delete()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("region", "Global")
+                        .queryParam("tenant", "Global")
                         .queryParam("key", "Global_group")
                         .build())
                 .accept(MediaType.TEXT_PLAIN)
@@ -152,7 +152,7 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
                 webTestClient.get()
                         .uri(uriBuilder -> uriBuilder
                                 .path(URL_TEMPLATE + "/all")
-                                .queryParam("region", "Global")
+                                .queryParam("tenant", "Global")
                                 .build())
                         .accept(MediaType.APPLICATION_JSON)
                         .exchange()
@@ -199,7 +199,7 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
         DiscountGroupDto actual = webTestClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("region", "Global")
+                        .queryParam("tenant", "Global")
                         .queryParam("key", "Global_group")
                         .build())
                 .accept(MediaType.APPLICATION_JSON)

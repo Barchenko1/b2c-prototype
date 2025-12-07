@@ -24,34 +24,34 @@ public class StoreProcess implements IStoreProcess {
 
     @Override
     public void updateStore(Map<String, String> requestParams, StoreDto storeDto) {
-        String region = requestParams.get("region");
+        String region = requestParams.get("tenant");
         String storeId = requestParams.get("store");
         storeManager.updateStore(region, storeId, storeDto);
     }
 
     @Override
     public void deleteStore(Map<String, String> requestParams) {
-        String region = requestParams.get("region");
+        String region = requestParams.get("tenant");
         String storeId = requestParams.get("store");
         storeManager.deleteStore(region, storeId);
     }
 
     @Override
     public StoreDto getStore(Map<String, String> requestParams, String storeId) {
-        String region = requestParams.get("region");
+        String region = requestParams.get("tenant");
         return storeManager.getStoreByStoreId(region, storeId);
     }
 
     @Override
     public List<StoreDto> getAllStoresByArticularId(Map<String, String> requestParams) {
-        String region = requestParams.get("region");
+        String region = requestParams.get("tenant");
         String articularId = requestParams.get("articularId");
         return storeManager.getAllStoresByArticularId(region, articularId);
     }
 
     @Override
     public List<StoreDto> getAllStores(Map<String, String> requestParams) {
-        String region = requestParams.get("region");
+        String region = requestParams.get("tenant");
         String countryKey = requestParams.get("country");
         String city = requestParams.get("city");
         if (region != null && countryKey != null && city != null) {

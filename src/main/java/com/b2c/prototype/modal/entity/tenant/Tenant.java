@@ -1,4 +1,4 @@
-package com.b2c.prototype.modal.entity.region;
+package com.b2c.prototype.modal.entity.tenant;
 
 import com.b2c.prototype.modal.entity.price.Currency;
 import jakarta.persistence.CascadeType;
@@ -20,31 +20,31 @@ import lombok.NoArgsConstructor;
 import java.time.ZoneId;
 
 @Entity
-@Table(name = "region")
+@Table(name = "tenant")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @NamedQueries({
         @NamedQuery(
-                name = "Region.findByCode",
-                query = "SELECT e FROM Region e " +
+                name = "Tenant.findByCode",
+                query = "SELECT e FROM Tenant e " +
                         "LEFT JOIN FETCH e.primaryCurrency ec " +
                         "WHERE e.code = : code"
         ),
         @NamedQuery(
-                name = "Region.findAll",
-                query = "SELECT e FROM Region e " +
+                name = "Tenant.findAll",
+                query = "SELECT e FROM Tenant e " +
                         "LEFT JOIN FETCH e.primaryCurrency ec "
         ),
         @NamedQuery(
-                name = "Region.countByCurrency",
-                query = "SELECT COUNT(e) FROM Region e " +
+                name = "Tenant.countByCurrency",
+                query = "SELECT COUNT(e) FROM Tenant e " +
                         "JOIN e.primaryCurrency ec " +
                         "WHERE ec.key = :key"
         ),
 })
-public class Region {
+public class Tenant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

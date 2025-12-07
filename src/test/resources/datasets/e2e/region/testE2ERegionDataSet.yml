@@ -5,7 +5,7 @@ currency:
   - id: 2
     value: "USD"
     key: "USD"
-region:
+tenant:
   - id: 1
     code: "DE"
     value: "Germany"

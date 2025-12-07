@@ -48,20 +48,17 @@ public class OptionItemGroupControllerE2ETest extends BasicE2ETest {
     public void testUpdateEntityMore() {
         OptionItemGroupDto constantPayloadDto = OptionItemGroupDto.builder()
                 .value("Update Color")
-                .key("Update Color")
+                .key("Color")
                 .optionItems(List.of(
                         OptionItemDto.builder()
-//                                .searchKey("Red")
                                 .value("Update Red")
                                 .key("Red")
                                 .build(),
                         OptionItemDto.builder()
-//                                .searchKey(null)
                                 .value(null)
                                 .key("Yellow")
                                 .build(),
                         OptionItemDto.builder()
-//                                .searchKey(null)
                                 .value(null)
                                 .key("White")
                                 .build()
@@ -87,7 +84,7 @@ public class OptionItemGroupControllerE2ETest extends BasicE2ETest {
     public void testUpdateEntityLess() {
         OptionItemGroupDto constantPayloadDto = OptionItemGroupDto.builder()
                 .value("Update Color")
-                .key("Update Color")
+                .key("Color")
                 .optionItems(List.of(
                         OptionItemDto.builder()
                                 .value("Update Red")
@@ -183,12 +180,10 @@ public class OptionItemGroupControllerE2ETest extends BasicE2ETest {
                 .key("Color")
                 .optionItems(List.of(
                         OptionItemDto.builder()
-//                                .searchKey("Red")
                                 .value("Red")
                                 .key("Red")
                                 .build(),
                         OptionItemDto.builder()
-//                                .searchKey("Blue")
                                 .value("Blue")
                                 .key("Blue")
                                 .build()))

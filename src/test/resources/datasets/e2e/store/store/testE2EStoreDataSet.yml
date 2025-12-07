@@ -5,7 +5,7 @@ currency:
   - id: 2
     value: "USD"
     key: "USD"
-region:
+tenant:
   - id: 1
     code: "DE"
     value: "Germany"
@@ -42,7 +42,7 @@ discount_group:
   - id: 1
     key: "Germany_group"
     value: "Germany_group"
-    region_id: 1
+    tenant_id: 1
 discount:
   - id: 1
     amount: 5
@@ -105,20 +105,20 @@ address:
     country_id: 2
 store_general_board:
   - id: 1
-    region_id: 1
+    tenant_id: 1
 store:
   - id: 1
     store_uniq_id: "store1"
     store_name: "store1"
     is_active: true
     address_id: 1
-    region_id: 1
+    tenant_id: 1
   - id: 2
     store_uniq_id: "store2"
     store_name: "store2"
     is_active: false
     address_id: 2
-    region_id: 2
+    tenant_id: 2
 articular_item:
   - id: 1
     articular_uniq_id: "123"

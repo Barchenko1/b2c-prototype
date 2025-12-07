@@ -121,8 +121,6 @@ public class ArticularItem {
             inverseJoinColumns = {@JoinColumn(name = "option_item_id")}
     )
     @Builder.Default
-//    @ToString.Exclude
-//    @EqualsAndHashCode.Exclude
     private Set<OptionItem> optionItems = new HashSet<>();
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
@@ -131,8 +129,6 @@ public class ArticularItem {
             inverseJoinColumns = {@JoinColumn(name = "option_item_cost_id")}
     )
     @Builder.Default
-//    @ToString.Exclude
-//    @EqualsAndHashCode.Exclude
     private Set<OptionItemCost> optionItemCosts = new HashSet<>();
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(nullable = false)
@@ -148,6 +144,8 @@ public class ArticularItem {
     private Discount discount;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "articular_group_id")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private ArticularGroup articularGroup;
 
     public void addOptionItem(OptionItem optionItem) {

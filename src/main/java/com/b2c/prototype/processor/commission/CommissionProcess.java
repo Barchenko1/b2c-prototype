@@ -22,27 +22,27 @@ public class CommissionProcess implements ICommissionProcess {
 
     @Override
     public void updateCommission(Map<String, String> requestParams, MinMaxCommissionDto minMaxCommissionDto) {
-        String regionCode = requestParams.get("region");
+        String regionCode = requestParams.get("tenant");
         String key = requestParams.get("key");
         commissionManager.updateCommission(regionCode, key, minMaxCommissionDto);
     }
 
     @Override
     public void deleteCommission(Map<String, String> requestParams) {
-        String regionCode = requestParams.get("region");
+        String regionCode = requestParams.get("tenant");
         String key = requestParams.get("key");
         commissionManager.deleteCommission(regionCode, key);
     }
 
     @Override
     public List<MinMaxCommissionDto> getCommissions(Map<String, String> requestParams) {
-        String regionCode = requestParams.get("region");
+        String regionCode = requestParams.get("tenant");
         return commissionManager.getCommissionList(regionCode);
     }
 
     @Override
     public MinMaxCommissionDto getCommission(Map<String, String> requestParams) {
-        String regionCode = requestParams.get("region");
+        String regionCode = requestParams.get("tenant");
         String key = requestParams.get("key");
         return commissionManager.getCommission(regionCode, key);
     }

@@ -1,6 +1,6 @@
 package com.b2c.prototype.modal.entity.item;
 
-import com.b2c.prototype.modal.entity.region.Region;
+import com.b2c.prototype.modal.entity.tenant.Tenant;
 import com.b2c.prototype.transform.converter.ArticularGroupDescriptionConverter;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -40,9 +40,31 @@ import java.util.Set;
                 query = "SELECT d FROM ArticularGroup d WHERE d.articularGroupId = :articularGroupId"
         ),
         @NamedQuery(
+                name = "ArticularGroup.findByRegionAndKey",
+                query = "SELECT ag FROM ArticularGroup ag " +
+                        "LEFT JOIN FETCH ag.tenant agr " +
+                        "LEFT JOIN FETCH agr.primaryCurrency agrc " +
+
+                        "LEFT JOIN FETCH ag.articularItems ai " +
+
+                        "LEFT JOIN FETCH ai.optionItems oi " +
+                        "LEFT JOIN FETCH oi.optionGroup og " +
+                        "LEFT JOIN FETCH ai.fullPrice fp " +
+                        "LEFT JOIN FETCH fp.currency fpc " +
+                        "LEFT JOIN FETCH ai.totalPrice tp " +
+                        "LEFT JOIN FETCH tp.currency tpc " +
+                        "LEFT JOIN FETCH ai.discount d " +
+                        "LEFT JOIN FETCH d.currency dc " +
+
+                        "LEFT JOIN FETCH ag.category agc " +
+                        "LEFT JOIN FETCH agc.childList agccl " +
+
+                        "WHERE agr.code = :code and ag.articularGroupId = :articularGroupId"
+        ),
+        @NamedQuery(
                 name = "ArticularGroup.findAllWithFullRelations",
                 query = "SELECT DISTINCT ag FROM ArticularGroup ag " +
-                        "LEFT JOIN FETCH ag.articularItemSet ai " +
+                        "LEFT JOIN FETCH ag.articularItems ai " +
                         "LEFT JOIN FETCH ai.optionItems oi " +
                         "LEFT JOIN FETCH oi.optionGroup og " +
                         "LEFT JOIN FETCH ai.fullPrice fp " +
@@ -56,7 +78,7 @@ import java.util.Set;
         @NamedQuery(
                 name = "ArticularGroup.findItemDataWithFullRelations",
                 query = "SELECT DISTINCT ag FROM ArticularGroup ag " +
-                        "LEFT JOIN FETCH ag.articularItemSet ai " +
+                        "LEFT JOIN FETCH ag.articularItems ai " +
                         "LEFT JOIN FETCH ai.optionItems oi " +
                         "LEFT JOIN FETCH oi.optionGroup og " +
                         "LEFT JOIN FETCH ai.fullPrice fp " +
@@ -85,23 +107,24 @@ public class ArticularGroup {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Category category;
-//    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
-//    private ItemType itemType;
     @ManyToOne(fetch = FetchType.LAZY)
-    private Region region;
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
-    @JoinColumn(name = "articular_item_id")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
+    private Tenant tenant;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "articularGroup", cascade = {CascadeType.ALL}, orphanRemoval = true)
     @Builder.Default
-    private Set<ArticularItem> articularItemSet = new HashSet<>();
+    @EqualsAndHashCode.Exclude
+    private Set<ArticularItem> articularItems = new HashSet<>();
     @Column(name = "description", columnDefinition = "TEXT")
     @Convert(converter = ArticularGroupDescriptionConverter.class)
     @Builder.Default
     private Map<String, String> description = new LinkedHashMap<>();
 
     public void addArticularItem(ArticularItem item) {
-        articularItemSet.add(item);
+        articularItems.add(item);
         item.setArticularGroup(this);
+    }
+
+    public void removeArticularItem(ArticularItem item) {
+        articularItems.remove(item);
+        item.setArticularGroup(null);
     }
 }

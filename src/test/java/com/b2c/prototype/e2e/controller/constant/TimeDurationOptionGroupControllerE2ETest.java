@@ -260,7 +260,6 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
                 .key("Update NY")
                 .timeDurationOptions(List.of(
                         TimeDurationOptionDto.builder()
-//                                .searchKey("NY_12-14")
                                 .value("Update 12-14")
                                 .key("Update 12-14")
                                 .startTime(getLocalDateTime("1970-01-01 12:00:00"))
@@ -275,7 +274,6 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
                                         .build())
                                 .build(),
                         TimeDurationOptionDto.builder()
-//                                .searchKey(null)
                                 .value("16-18")
                                 .key("NY_16-18")
                                 .startTime(getLocalDateTime("1970-01-01 16:00:00"))
@@ -290,7 +288,6 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
                                         .build())
                                 .build(),
                         TimeDurationOptionDto.builder()
-//                                .searchKey(null)
                                 .value("18-20")
                                 .key("NY_18-20")
                                 .startTime(getLocalDateTime("1970-01-01 18:00:00"))

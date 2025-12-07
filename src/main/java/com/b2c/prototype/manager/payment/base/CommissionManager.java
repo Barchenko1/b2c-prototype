@@ -42,11 +42,11 @@ public class CommissionManager implements ICommissionManager {
 
     @Override
     @Transactional
-    public void updateCommission(String region, String key, MinMaxCommissionDto minMaxCommissionDto) {
+    public void updateCommission(String tenantId, String key, MinMaxCommissionDto minMaxCommissionDto) {
         MinMaxCommission newMinMaxCommission = generalEntityTransformService.mapMinMaxCommissionDtoToMinMaxCommission(minMaxCommissionDto);
         MinMaxCommission fetchedMinMaxCommission = (MinMaxCommission) generalEntityDao.findOptionEntity(
                 "MinMaxCommission.findByRegionAndKey",
-                        List.of(Pair.of(KEY, key), Pair.of(CODE, region)))
+                        List.of(Pair.of(KEY, key), Pair.of(CODE, tenantId)))
                 .orElseThrow(() -> new RuntimeException("MinMaxCommission not found"));
 
         updateCommissionValue(fetchedMinMaxCommission.getMinCommission(), newMinMaxCommission.getMinCommission());
@@ -57,17 +57,17 @@ public class CommissionManager implements ICommissionManager {
         changeCommissionPrice.setCurrency(newMinMaxCommission.getChangeCommissionPrice().getCurrency());
 
         fetchedMinMaxCommission.setLastUpdateTimestamp(newMinMaxCommission.getLastUpdateTimestamp());
-        fetchedMinMaxCommission.setRegion(newMinMaxCommission.getRegion());
+        fetchedMinMaxCommission.setTenant(newMinMaxCommission.getTenant());
 
         generalEntityDao.mergeEntity(fetchedMinMaxCommission);
     }
 
     @Override
     @Transactional
-    public void deleteCommission(String region, String key) {
+    public void deleteCommission(String tenantId, String key) {
         generalEntityDao.findAndRemoveEntity("MinMaxCommission.findByRegionAndKey",
                 List.of(
-                        Pair.of(CODE, region),
+                        Pair.of(CODE, tenantId),
                         Pair.of(KEY, key)
                 ));
     }
@@ -85,11 +85,11 @@ public class CommissionManager implements ICommissionManager {
 
     @Override
     @Transactional(readOnly = true)
-    public MinMaxCommissionDto getCommission(String region, String key) {
+    public MinMaxCommissionDto getCommission(String tenantId, String key) {
         Optional<MinMaxCommission> optionalMinMaxCommission = generalEntityDao.findOptionEntity(
                 "MinMaxCommission.findByRegionAndKey",
                 List.of(
-                        Pair.of(CODE, region),
+                        Pair.of(CODE, tenantId),
                         Pair.of(KEY, key))
         );
 

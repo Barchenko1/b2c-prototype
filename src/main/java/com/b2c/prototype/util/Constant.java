@@ -4,7 +4,7 @@ public interface Constant {
     String USER_ID = "userId";
     String EMAIL = "email";
     String ORDER_ID = "order_uniq_id";
-    String ARTICULAR_GROUP_ID = "article_group_uniq_id";
+    String ARTICULAR_GROUP_ID = "articularGroupId";
     String ARTICULAR_ID = "articular_uniq_id";
     String PAYMENT_ID = "payment_uniq_id";
     String ITEM_ID = "itemId";

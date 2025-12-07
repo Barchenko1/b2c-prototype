@@ -2,15 +2,14 @@ package com.b2c.prototype.manager.region;
 
 
 import com.b2c.prototype.dao.IGeneralEntityDao;
-import com.b2c.prototype.modal.dto.payload.region.RegionDto;
+import com.b2c.prototype.modal.dto.payload.tenant.TenantDto;
 import com.b2c.prototype.modal.entity.price.Currency;
-import com.b2c.prototype.modal.entity.region.Region;
+import com.b2c.prototype.modal.entity.tenant.Tenant;
 import com.b2c.prototype.transform.constant.IGeneralEntityTransformService;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,47 +30,47 @@ public class RegionManager implements IRegionManager {
 
     @Override
     @Transactional
-    public void persistEntity(RegionDto regionDto) {
-        Region region = generalEntityTransformService.mapRegionDtoToRegion(regionDto);
+    public void persistEntity(TenantDto tenantDto) {
+        Tenant tenant = generalEntityTransformService.mapRegionDtoToRegion(tenantDto);
         Optional<Currency> currencyOptional = generalEntityDao.findOptionEntity("Currency.findByKey",
-                Pair.of(KEY, regionDto.getPrimaryCurrency().getKey()));
+                Pair.of(KEY, tenantDto.getPrimaryCurrency().getKey()));
         if (currencyOptional.isEmpty()) {
-            region.setPrimaryCurrency(
+            tenant.setPrimaryCurrency(
                     Currency.builder()
-                            .key(regionDto.getPrimaryCurrency().getKey())
-                            .value(regionDto.getPrimaryCurrency().getValue())
+                            .key(tenantDto.getPrimaryCurrency().getKey())
+                            .value(tenantDto.getPrimaryCurrency().getValue())
                     .build()
             );
         } else {
-            region.setPrimaryCurrency(currencyOptional.get());
+            tenant.setPrimaryCurrency(currencyOptional.get());
         }
-        generalEntityDao.persistEntity(region);
+        generalEntityDao.persistEntity(tenant);
     }
 
     @Override
     @Transactional
-    public void mergeEntity(String code, RegionDto regionDto) {
-        Region region = generalEntityTransformService.mapRegionDtoToRegion(regionDto);
-        Region existingRegion = generalEntityDao.findEntity("Region.findByCode", Pair.of(CODE, code));
-        existingRegion.setCode(region.getCode());
-        existingRegion.setValue(region.getValue());
-        existingRegion.setLanguage(region.getLanguage());
-        existingRegion.setDefaultLocale(region.getDefaultLocale());
-        existingRegion.setPrimaryCurrency(region.getPrimaryCurrency());
-        existingRegion.setTimezone(region.getTimezone());
-        generalEntityDao.mergeEntity(existingRegion);
+    public void mergeEntity(String code, TenantDto tenantDto) {
+        Tenant tenant = generalEntityTransformService.mapRegionDtoToRegion(tenantDto);
+        Tenant existingTenant = generalEntityDao.findEntity("Tenant.findByCode", Pair.of(CODE, code));
+        existingTenant.setCode(tenant.getCode());
+        existingTenant.setValue(tenant.getValue());
+        existingTenant.setLanguage(tenant.getLanguage());
+        existingTenant.setDefaultLocale(tenant.getDefaultLocale());
+        existingTenant.setPrimaryCurrency(tenant.getPrimaryCurrency());
+        existingTenant.setTimezone(tenant.getTimezone());
+        generalEntityDao.mergeEntity(existingTenant);
     }
 
     @Override
     @Transactional
     public void removeEntity(String code) {
-        Region region = generalEntityDao.findEntity("Region.findByCode", Pair.of(CODE, code));
-        Currency currency = region.getPrimaryCurrency();
+        Tenant tenant = generalEntityDao.findEntity("Tenant.findByCode", Pair.of(CODE, code));
+        Currency currency = tenant.getPrimaryCurrency();
 
-        generalEntityDao.removeEntity(region);
+        generalEntityDao.removeEntity(tenant);
         if (currency != null) {
             Long refs = generalEntityDao.findEntity(
-                    "Region.countByCurrency",
+                    "Tenant.countByCurrency",
                     Pair.of(KEY, currency.getKey())
             );
             if (refs != null && refs == 0L) {
@@ -82,13 +81,13 @@ public class RegionManager implements IRegionManager {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Region> getEntityList() {
-        return generalEntityDao.findEntityList("Region.findAll", (Pair<String, ?>) null);
+    public List<Tenant> getEntityList() {
+        return generalEntityDao.findEntityList("Tenant.findAll", (Pair<String, ?>) null);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Region getEntity(String code) {
-        return generalEntityDao.findEntity("Region.findByCode", Pair.of(CODE, code));
+    public Tenant getEntity(String code) {
+        return generalEntityDao.findEntity("Tenant.findByCode", Pair.of(CODE, code));
     }
 }

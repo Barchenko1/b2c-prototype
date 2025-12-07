@@ -5,7 +5,7 @@ currency:
   - id: 2
     value: "EUR"
     key: "EUR"
-region:
+tenant:
   - id: 1
     code: "DE"
     value: "Germany"
@@ -39,4 +39,4 @@ min_max_commission:
     last_update_timestamp: "2024-03-03"
     change_commission_price_id: 1
     key: "key1"
-    region_id: 2
+    tenant_id: 2

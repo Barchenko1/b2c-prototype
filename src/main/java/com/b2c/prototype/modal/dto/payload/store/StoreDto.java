@@ -22,5 +22,4 @@ public class StoreDto {
     private boolean isActive;
     private String region;
     private AddressDto address;
-    private List<ArticularStockDto> articularStocks;
 }

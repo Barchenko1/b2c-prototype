@@ -52,7 +52,7 @@ public class CategoryControllerE2ETest extends BasicE2ETest {
         webTestClient.put()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("region", "Global")
+                        .queryParam("tenant", "Global")
                         .queryParam("category", "Apple")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -72,7 +72,7 @@ public class CategoryControllerE2ETest extends BasicE2ETest {
         webTestClient.put()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("region", "Global")
+                        .queryParam("tenant", "Global")
                         .queryParam("category", "Apple")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -97,7 +97,7 @@ public class CategoryControllerE2ETest extends BasicE2ETest {
         webTestClient.put()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("region", "Global")
+                        .queryParam("tenant", "Global")
                         .queryParam("category", "Apple")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -114,7 +114,7 @@ public class CategoryControllerE2ETest extends BasicE2ETest {
         webTestClient.delete()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("region", "Global")
+                        .queryParam("tenant", "Global")
                         .queryParam("category", "Apple")
                         .build())
                 .accept(MediaType.TEXT_PLAIN)
@@ -133,7 +133,7 @@ public class CategoryControllerE2ETest extends BasicE2ETest {
                 webTestClient.get()
                         .uri(uriBuilder -> uriBuilder
                                 .path(URL_TEMPLATE + "/all")
-                                .queryParam("region", "Global")
+                                .queryParam("tenant", "Global")
                                 .build())
                         .accept(MediaType.APPLICATION_JSON)
                         .exchange()
@@ -154,7 +154,7 @@ public class CategoryControllerE2ETest extends BasicE2ETest {
         CategoryDto actual = webTestClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("region", "Global")
+                        .queryParam("tenant", "Global")
                         .queryParam("category", "Apple")
                         .build())
                 .accept(MediaType.APPLICATION_JSON)

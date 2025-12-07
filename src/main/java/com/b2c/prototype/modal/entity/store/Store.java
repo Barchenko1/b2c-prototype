@@ -1,7 +1,7 @@
 package com.b2c.prototype.modal.entity.store;
 
 import com.b2c.prototype.modal.entity.address.Address;
-import com.b2c.prototype.modal.entity.region.Region;
+import com.b2c.prototype.modal.entity.tenant.Tenant;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,7 +36,7 @@ import java.util.Set;
         @NamedQuery(
                 name = "Store.findStoreByRegionStoreId",
                 query = "SELECT s FROM Store s " +
-                        "LEFT JOIN FETCH s.region r " +
+                        "LEFT JOIN FETCH s.tenant r " +
                         "WHERE r.code = : code and s.storeUniqId = :storeUniqId"
         ),
         @NamedQuery(
@@ -44,7 +44,7 @@ import java.util.Set;
                 query = "SELECT s FROM Store s " +
                         "LEFT JOIN FETCH s.address a " +
                         "LEFT JOIN FETCH a.country c " +
-                        "LEFT JOIN FETCH s.region r " +
+                        "LEFT JOIN FETCH s.tenant r " +
                         "LEFT JOIN FETCH s.articularStocks sa " +
 
                         "LEFT JOIN FETCH sa.articularItemQuantity sasq " +
@@ -58,7 +58,7 @@ import java.util.Set;
                 query = "SELECT s FROM Store s " +
                         "LEFT JOIN FETCH s.address a " +
                         "LEFT JOIN FETCH a.country c " +
-                        "LEFT JOIN FETCH s.region r " +
+                        "LEFT JOIN FETCH s.tenant r " +
                         "LEFT JOIN FETCH s.articularStocks sa " +
                         "WHERE r.code = : code"
         ),
@@ -67,7 +67,7 @@ import java.util.Set;
                 query = "SELECT s FROM Store s " +
                         "LEFT JOIN FETCH s.address a " +
                         "LEFT JOIN FETCH a.country c " +
-                        "LEFT JOIN FETCH s.region r " +
+                        "LEFT JOIN FETCH s.tenant r " +
                         "LEFT JOIN FETCH s.articularStocks sa " +
                         "WHERE r.code = : code and c.key = : key"
         ),
@@ -76,7 +76,7 @@ import java.util.Set;
                 query = "SELECT s FROM Store s " +
                         "LEFT JOIN FETCH s.address a " +
                         "LEFT JOIN FETCH a.country c " +
-                        "LEFT JOIN FETCH s.region r " +
+                        "LEFT JOIN FETCH s.tenant r " +
                         "LEFT JOIN FETCH s.articularStocks sa " +
                         "WHERE r.code = : code and c.key = : key and a.city = : city "
         ),
@@ -120,7 +120,7 @@ public class Store {
     private String storeName;
     private boolean isActive;
     @ManyToOne(fetch = FetchType.LAZY)
-    private Region region;
+    private Tenant tenant;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "store_id")
     @Builder.Default

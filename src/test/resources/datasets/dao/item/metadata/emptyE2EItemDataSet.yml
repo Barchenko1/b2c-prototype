@@ -14,7 +14,7 @@ discount_group:
   - id: 1
     key: "Germany_group"
     value: "Germany_group"
-    region_id: 1
+    tenant_id: 1
 discount:
   - id: 1
     amount: 5

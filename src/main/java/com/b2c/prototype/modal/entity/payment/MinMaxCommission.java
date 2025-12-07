@@ -1,7 +1,7 @@
 package com.b2c.prototype.modal.entity.payment;
 
 import com.b2c.prototype.modal.entity.price.Price;
-import com.b2c.prototype.modal.entity.region.Region;
+import com.b2c.prototype.modal.entity.tenant.Tenant;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,7 +38,7 @@ import java.time.LocalDateTime;
                         "LEFT JOIN FETCH max.currency maxc " +
                         "LEFT JOIN FETCH m.changeCommissionPrice ccp " +
                         "LEFT JOIN FETCH ccp.currency ccpc " +
-                        "LEFT JOIN FETCH m.region r " +
+                        "LEFT JOIN FETCH m.tenant r " +
                         "WHERE m.key = :key and r.code = :code"
         ),
         @NamedQuery(
@@ -50,7 +50,7 @@ import java.time.LocalDateTime;
                         "LEFT JOIN FETCH max.currency maxc " +
                         "LEFT JOIN FETCH m.changeCommissionPrice ccp " +
                         "LEFT JOIN FETCH ccp.currency ccpc " +
-                        "LEFT JOIN FETCH m.region mr " +
+                        "LEFT JOIN FETCH m.tenant mr " +
                         "WHERE mr.code = :code"
         ),
 })
@@ -69,5 +69,5 @@ public class MinMaxCommission {
     private Price changeCommissionPrice;
     private LocalDateTime lastUpdateTimestamp;
     @ManyToOne(fetch = FetchType.LAZY)
-    private Region region;
+    private Tenant tenant;
 }

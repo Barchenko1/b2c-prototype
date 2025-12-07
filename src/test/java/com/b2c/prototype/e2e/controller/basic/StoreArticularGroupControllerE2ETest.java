@@ -11,7 +11,7 @@ import com.b2c.prototype.modal.dto.payload.item.ArticularItemAssignmentDto;
 import com.b2c.prototype.modal.dto.payload.item.ArticularStockQuantityDto;
 import com.b2c.prototype.modal.dto.payload.item.GroupOptionKeys;
 import com.b2c.prototype.modal.dto.payload.item.PriceDto;
-import com.b2c.prototype.modal.dto.payload.item.StoreArticularGroupRequestDto;
+import com.b2c.prototype.modal.dto.payload.item.request.StoreArticularGroupRequestDto;
 import com.b2c.prototype.modal.dto.payload.item.StoreDiscount;
 import com.b2c.prototype.modal.dto.payload.item.StoreDiscountGroup;
 import com.b2c.prototype.modal.dto.payload.item.StoreOptionItemCostGroup;
@@ -58,13 +58,13 @@ class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
             "ALTER SEQUENCE option_item_id_seq RESTART WITH 3",
             "ALTER SEQUENCE option_item_cost_id_seq RESTART WITH 2",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(statements = {
-            "SELECT * FROM discount ORDER BY id, char_sequence_code",
-            "SELECT * FROM price ORDER BY id",
-            "SELECT * FROM option_group ORDER BY id",
-            "SELECT * FROM option_item ORDER BY id",
-            "SELECT * FROM option_item_cost ORDER BY id",
-    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+//    @Sql(statements = {
+//            "SELECT * FROM discount ORDER BY id, char_sequence_code",
+//            "SELECT * FROM price ORDER BY id",
+//            "SELECT * FROM option_group ORDER BY id",
+//            "SELECT * FROM option_item ORDER BY id",
+//            "SELECT * FROM option_item_cost ORDER BY id",
+//    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void testCreateEntity() {
         StoreArticularGroupRequestDto dto = getStoreArticularGroupRequestDto();
         String jsonPayload = writeValueAsString(dto);
@@ -88,7 +88,8 @@ class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
         webTestClient.put()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("key", "Apple")
+                        .queryParam("tenant", "Global")
+                        .queryParam("articularGroupId", "111")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -104,7 +105,8 @@ class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
         webTestClient.delete()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("key", "Apple")
+                        .queryParam("tenant", "Global")
+                        .queryParam("articularGroupId", "111")
                         .build())
                 .accept(MediaType.TEXT_PLAIN)
                 .exchange()
@@ -142,6 +144,7 @@ class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
         StoreArticularGroupRequestDto actual = webTestClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
+                        .queryParam("tenant", "Global")
                         .queryParam("key", "Apple")
                         .build())
                 .accept(MediaType.APPLICATION_JSON)
@@ -160,7 +163,7 @@ class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
 
     private StoreArticularGroupRequestDto getStoreArticularGroupRequestDto() {
         return StoreArticularGroupRequestDto.builder()
-                .region("Global")
+                .tenantId("Global")
                 .discountGroups(Map.of(
                         "discountGroup1",
                         StoreDiscountGroup.builder()

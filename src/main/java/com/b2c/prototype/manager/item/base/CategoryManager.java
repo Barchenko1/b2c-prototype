@@ -5,7 +5,7 @@ import com.b2c.prototype.modal.dto.payload.constant.CategoryCascade;
 import com.b2c.prototype.modal.dto.payload.constant.CategoryDto;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.manager.item.ICategoryManager;
-import com.b2c.prototype.modal.entity.region.Region;
+import com.b2c.prototype.modal.entity.tenant.Tenant;
 import com.b2c.prototype.transform.item.IItemTransformService;
 import com.nimbusds.jose.util.Pair;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,6 @@ import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Deque;
-import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -54,8 +53,8 @@ public class CategoryManager implements ICategoryManager {
     @Override
     @Transactional
     public void updateCategory(String regionCode, String categoryKey, CategoryDto categoryDto) {
-        Region region = generalEntityDao.findEntity(
-                "Region.findByCode", Pair.of(CODE, categoryDto.getRegion()));
+        Tenant tenant = generalEntityDao.findEntity(
+                "Tenant.findByCode", Pair.of(CODE, categoryDto.getRegion()));
 
         Optional<Category> existingCategoryOpt = generalEntityDao.findOptionEntity(
                 "Category.findByKeyAndRegion",
@@ -65,7 +64,7 @@ public class CategoryManager implements ICategoryManager {
         Category existingCategory = existingCategoryOpt
                 .orElseThrow(() -> new RuntimeException("Category not found"));
 
-        existingCategory.setRegion(region);
+        existingCategory.setTenant(tenant);
         CategoryCascade categoryCascade = categoryDto.getCategory();
 
         Map<String, Category> registry = flattenByKey(existingCategory);
@@ -76,7 +75,7 @@ public class CategoryManager implements ICategoryManager {
         registry.putIfAbsent(existingCategory.getKey(), existingCategory);
         registry.putIfAbsent(incomingRootKey, existingCategory);
 
-        applyCategoryUpdate(existingCategory, categoryCascade, region, registry);
+        applyCategoryUpdate(existingCategory, categoryCascade, tenant, registry);
 
         generalEntityDao.mergeEntity(existingCategory);
     }
@@ -135,9 +134,9 @@ public class CategoryManager implements ICategoryManager {
         return map;
     }
 
-    private void applyCategoryUpdate(Category target, CategoryCascade source, Region region, Map<String, Category> registry) {
+    private void applyCategoryUpdate(Category target, CategoryCascade source, Tenant tenant, Map<String, Category> registry) {
         if (source.getValue() != null) target.setValue(source.getValue());
-        target.setRegion(region);
+        target.setTenant(tenant);
 
         List<CategoryCascade> incoming = Optional.ofNullable(source.getChildList()).orElseGet(Collections::emptyList);
         // local fast lookup for existing children under THIS parent
@@ -158,14 +157,14 @@ public class CategoryManager implements ICategoryManager {
 
             if (child == null) {
                 // Create new
-                child = buildTree(childDto, region, registry);
+                child = buildTree(childDto, tenant, registry);
                 target.addChildEntity(child);
                 matched.add(child);
                 continue;
             }
 
-            // Child exists: ensure it belongs to same region
-            child.setRegion(region);
+            // Child exists: ensure it belongs to same tenant
+            child.setTenant(tenant);
 
             // If it has a different parent, move (re-parent) it
             if (child.getParent() != target) {
@@ -178,7 +177,7 @@ public class CategoryManager implements ICategoryManager {
 
             // Update value & recurse
             if (childDto.getValue() != null) child.setValue(childDto.getValue());
-            applyCategoryUpdate(child, childDto, region, registry);
+            applyCategoryUpdate(child, childDto, tenant, registry);
             matched.add(child);
         }
 
@@ -189,21 +188,21 @@ public class CategoryManager implements ICategoryManager {
                 .forEach(target::removeChildEntity);
     }
 
-    private Category buildTree(CategoryCascade dto, Region region, Map<String, Category> registry) {
+    private Category buildTree(CategoryCascade dto, Tenant tenant, Map<String, Category> registry) {
 //        String key = ensureKey(modal.getKey(), modal.getValue());
         String key = ensureKey(dto.getKey());
 
         Category cat = Category.builder()
                 .key(key)
                 .value(dto.getValue())
-                .region(region)
+                .tenant(tenant)
                 .build();
 
         registry.putIfAbsent(key, cat);
 
         List<CategoryCascade> children = Optional.ofNullable(dto.getChildList()).orElseGet(Collections::emptyList);
         for (CategoryCascade childDto : children) {
-            Category child = buildTree(childDto, region, registry);
+            Category child = buildTree(childDto, tenant, registry);
             cat.addChildEntity(child);
         }
         return cat;

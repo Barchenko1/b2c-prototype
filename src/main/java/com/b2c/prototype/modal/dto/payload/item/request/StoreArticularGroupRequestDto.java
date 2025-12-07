@@ -1,5 +1,11 @@
-package com.b2c.prototype.modal.dto.payload.item;
+package com.b2c.prototype.modal.dto.payload.item.request;
 
+import com.b2c.prototype.modal.dto.payload.item.ArticularGroupDto;
+import com.b2c.prototype.modal.dto.payload.item.ArticularItemAssignmentDto;
+import com.b2c.prototype.modal.dto.payload.item.StoreDiscountGroup;
+import com.b2c.prototype.modal.dto.payload.item.StoreOptionItemCostGroup;
+import com.b2c.prototype.modal.dto.payload.item.StoreOptionItemGroup;
+import com.b2c.prototype.modal.dto.payload.item.StoreRequestDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -17,7 +23,7 @@ import java.util.Map;
 @JsonIgnoreProperties
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class StoreArticularGroupRequestDto {
-    private String region;
+    private String tenantId;
     private Map<String, StoreDiscountGroup> discountGroups;
     private Map<String, StoreOptionItemGroup> optionItemGroups;
     private Map<String, StoreOptionItemCostGroup> optionItemCostGroups;

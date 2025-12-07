@@ -1,7 +1,7 @@
 package com.b2c.prototype.modal.entity.option;
 
 import com.b2c.prototype.modal.base.constant.AbstractConstantEntity;
-import com.b2c.prototype.modal.entity.region.Region;
+import com.b2c.prototype.modal.entity.tenant.Tenant;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -71,7 +71,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class OptionGroup extends AbstractConstantEntity {
     @ManyToOne(fetch = FetchType.LAZY)
-    private Region region;
+    private Tenant tenant;
     @OneToMany(mappedBy = "optionGroup", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private Set<OptionItem> optionItems = new HashSet<>();

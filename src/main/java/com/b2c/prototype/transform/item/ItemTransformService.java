@@ -6,12 +6,9 @@ import com.b2c.prototype.modal.dto.payload.constant.CategoryCascade;
 import com.b2c.prototype.modal.dto.payload.constant.CategoryDto;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountGroupDto;
-import com.b2c.prototype.modal.dto.payload.item.ArticularItemAssignmentDto;
 import com.b2c.prototype.modal.dto.payload.item.ArticularItemDto;
 import com.b2c.prototype.modal.dto.payload.item.ArticularGroupDto;
-import com.b2c.prototype.modal.dto.payload.item.GroupOptionKeys;
 import com.b2c.prototype.modal.dto.payload.item.PriceDto;
-import com.b2c.prototype.modal.dto.payload.item.StoreArticularGroupRequestDto;
 import com.b2c.prototype.modal.dto.payload.option.group.OptionItemCostGroupDto;
 import com.b2c.prototype.modal.dto.payload.option.group.OptionItemGroupDto;
 import com.b2c.prototype.modal.dto.payload.option.item.OptionItemCostDto;
@@ -26,42 +23,30 @@ import com.b2c.prototype.modal.entity.item.ArticularGroup;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
 import com.b2c.prototype.modal.entity.item.Category;
-import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.item.DiscountGroup;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.modal.entity.option.OptionItemCost;
 import com.b2c.prototype.modal.entity.post.Post;
 import com.b2c.prototype.modal.entity.price.Price;
-import com.b2c.prototype.modal.entity.region.Region;
+import com.b2c.prototype.modal.entity.tenant.Tenant;
 import com.b2c.prototype.modal.entity.review.Review;
 import com.b2c.prototype.modal.entity.store.ArticularStock;
-import com.b2c.prototype.modal.entity.store.AvailabilityStatus;
 import com.b2c.prototype.modal.entity.store.Store;
-import com.b2c.prototype.modal.entity.store.StoreGeneralBoard;
 import com.b2c.prototype.transform.constant.IGeneralEntityTransformService;
-import com.b2c.prototype.transform.modal.StoreArticularGroupTransform;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static com.b2c.prototype.util.Constant.ARTICULAR_GROUP_ID;
 import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 import static com.b2c.prototype.util.Constant.CODE;
-import static com.b2c.prototype.util.Constant.KEY;
 import static com.b2c.prototype.util.Util.getUUID;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -94,19 +79,19 @@ public class ItemTransformService implements IItemTransformService {
             return null;
         }
 
-        Region region = generalEntityDao.findEntity("Region.findByCode",
+        Tenant tenant = generalEntityDao.findEntity("Tenant.findByCode",
                 Pair.of(CODE, dto.getRegion()));
         CategoryCascade categoryCascade = dto.getCategory();
         Category category = Category.builder()
                 .value(categoryCascade.getValue())
                 .key(getUUID())
-                .region(region)
+                .tenant(tenant)
                 .childList(new ArrayList<>())
                 .build();
 
         if (categoryCascade.getChildList() != null) {
             for (CategoryCascade childDto : categoryCascade.getChildList()) {
-                Category childEntity = mapCategoryCascadeToCategory(childDto, region);
+                Category childEntity = mapCategoryCascadeToCategory(childDto, tenant);
                 category.addChildEntity(childEntity);
             }
         }
@@ -117,7 +102,7 @@ public class ItemTransformService implements IItemTransformService {
     @Override
     public CategoryDto mapCategoryToCategoryDto(Category category) {
         return CategoryDto.builder()
-                .region(category.getRegion().getCode())
+                .region(category.getTenant().getCode())
                 .category(mapCategoryToCategoryCascadeDto(category))
                 .build();
     }
@@ -129,14 +114,14 @@ public class ItemTransformService implements IItemTransformService {
                 .isActive(storeDto.isActive())
                 .storeName(storeDto.getStoreName())
                 .address(generalEntityTransformService.mapAddressDtoToAddress(storeDto.getAddress()))
-                .region(generalEntityDao.findEntity("Region.findByCode",
+                .tenant(generalEntityDao.findEntity("Tenant.findByCode",
                         Pair.of(CODE, storeDto.getRegion())))
-                .articularStocks(
-                        storeDto.getArticularStocks() != null
-                                ? storeDto.getArticularStocks().stream()
-                                    .map(this::mapArticularStockDtoToArticularStock)
-                                    .collect(Collectors.toSet())
-                                : null)
+//                .articularStocks(
+//                        storeDto.getArticularStocks() != null
+//                                ? storeDto.getArticularStocks().stream()
+//                                    .map(this::mapArticularStockDtoToArticularStock)
+//                                    .collect(Collectors.toSet())
+//                                : null)
                 .build();
     }
 
@@ -146,11 +131,11 @@ public class ItemTransformService implements IItemTransformService {
                 .storeId(store.getStoreUniqId())
                 .storeName(store.getStoreName())
                 .address(generalEntityTransformService.mapAddressToAddressDto(store.getAddress()))
-                .region(store.getRegion().getCode())
-                .articularStocks(
-                        store.getArticularStocks().stream()
-                                .map(this::mapArticularStockToArticularStockDto)
-                                .toList())
+                .region(store.getTenant().getCode())
+//                .articularStocks(
+//                        store.getArticularStocks().stream()
+//                                .map(this::mapArticularStockToArticularStockDto)
+//                                .toList())
                 .build();
     }
 
@@ -254,7 +239,6 @@ public class ItemTransformService implements IItemTransformService {
                 .key(optionGroup.getKey())
                 .optionItems(optionGroup.getOptionItems().stream()
                         .map(optionItem -> OptionItemDto.builder()
-//                                .searchKey(optionItem.getKey())
                                 .value(optionItem.getValue())
                                 .key(optionItem.getKey())
                                 .build())
@@ -291,7 +275,6 @@ public class ItemTransformService implements IItemTransformService {
                 .key(optionGroup.getKey())
                 .optionItemCosts(optionGroup.getOptionItemCosts().stream()
                         .map(optionItemCost -> OptionItemCostDto.builder()
-//                                .searchKey(optionItemCost.getKey())
                                 .value(optionItemCost.getValue())
                                 .key(optionItemCost.getKey())
                                 .price(PriceDto.builder()
@@ -309,7 +292,7 @@ public class ItemTransformService implements IItemTransformService {
         DiscountGroup discountGroup = DiscountGroup.builder()
                 .key(discountGroupDto.getKey())
                 .value(discountGroupDto.getValue())
-                .region(generalEntityDao.findEntity("Region.findByCode",
+                .tenant(generalEntityDao.findEntity("Tenant.findByCode",
                         Pair.of(CODE, regionCode)))
                 .discounts(discountGroupDto.getDiscounts().stream()
                         .map(generalEntityTransformService::mapDiscountDtoToDiscount)
@@ -360,7 +343,7 @@ public class ItemTransformService implements IItemTransformService {
                 .build();
     }
 
-    public Category mapCategoryCascadeToCategory(CategoryCascade categoryCascade, Region region) {
+    public Category mapCategoryCascadeToCategory(CategoryCascade categoryCascade, Tenant tenant) {
         if (categoryCascade == null) {
             return null;
         }
@@ -368,13 +351,13 @@ public class ItemTransformService implements IItemTransformService {
         Category category = Category.builder()
                 .value(categoryCascade.getValue())
                 .key(getUUID())
-                .region(region)
+                .tenant(tenant)
                 .childList(new ArrayList<>())
                 .build();
 
         if (categoryCascade.getChildList() != null) {
             categoryCascade.getChildList().forEach(childDto -> {
-                Category child = mapCategoryCascadeToCategory(childDto, region);
+                Category child = mapCategoryCascadeToCategory(childDto, tenant);
                 category.addChildEntity(child);
             });
         }

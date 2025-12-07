@@ -1,7 +1,8 @@
 package com.b2c.prototype.processor.item.base;
 
 import com.b2c.prototype.manager.item.IStoreArticularGroupManager;
-import com.b2c.prototype.modal.dto.payload.item.StoreArticularGroupRequestDto;
+import com.b2c.prototype.modal.dto.payload.item.request.StoreArticularGroupRequestDto;
+import com.b2c.prototype.modal.dto.payload.item.response.StoreArticularGroupResponseDto;
 import com.b2c.prototype.processor.item.IStoreArticularGroupProcessor;
 import org.springframework.stereotype.Service;
 
@@ -24,25 +25,30 @@ public class StoreArticularGroupProcessor implements IStoreArticularGroupProcess
 
     @Override
     public void updateStoreArticularGroup(Map<String, String> requestParams, StoreArticularGroupRequestDto articularGroupDto) {
-        String region = requestParams.get("region");
+        String tenant = requestParams.get("tenant");
         String articularGroupId = requestParams.get("articularGroupId");
-        storeArticularGroupManager.updateStoreArticularGroup(region, articularGroupId, articularGroupDto);
+        storeArticularGroupManager.updateStoreArticularGroup(tenant, articularGroupId, articularGroupDto);
     }
 
     @Override
     public void deleteStoreArticularGroup(Map<String, String> requestParams) {
-        String region = requestParams.get("region");
+        String tenant = requestParams.get("tenant");
         String articularGroupId = requestParams.get("articularGroupId");
-        storeArticularGroupManager.deleteStoreArticularGroup(region, articularGroupId);
+        boolean isForced = Boolean.parseBoolean(requestParams.get("isForced"));
+        storeArticularGroupManager.deleteStoreArticularGroup(tenant, articularGroupId, isForced);
     }
 
     @Override
-    public StoreArticularGroupRequestDto getStoreArticularGroup(Map<String, String> requestParams) {
-        return null;
+    public StoreArticularGroupResponseDto getStoreArticularGroup(Map<String, String> requestParams) {
+        String tenant = requestParams.get("tenant");
+        String articularGroupId = requestParams.get("articularGroupId");
+        return storeArticularGroupManager.getStoreArticularGroup(tenant, articularGroupId);
     }
 
     @Override
-    public List<StoreArticularGroupRequestDto> getStoreArticularGroupList(Map<String, String> requestParams) {
+    public List<StoreArticularGroupResponseDto> getStoreArticularGroupList(Map<String, String> requestParams) {
+        String tenant = requestParams.get("tenant");
+        String articularGroupId = requestParams.get("articularGroupId");
         return List.of();
     }
 }

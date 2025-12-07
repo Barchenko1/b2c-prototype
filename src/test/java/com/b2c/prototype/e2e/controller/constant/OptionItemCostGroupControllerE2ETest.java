@@ -55,7 +55,6 @@ public class OptionItemCostGroupControllerE2ETest extends BasicE2ETest {
                 .key("Update Color")
                 .optionItemCosts(List.of(
                         OptionItemCostDto.builder()
-//                                .searchKey("Red")
                                 .value("Update Red")
                                 .key("Red")
                                 .price(PriceDto.builder()
@@ -113,7 +112,6 @@ public class OptionItemCostGroupControllerE2ETest extends BasicE2ETest {
                 .key("Update Color")
                 .optionItemCosts(List.of(
                         OptionItemCostDto.builder()
-//                                .searchKey("Red")
                                 .value("Update Red")
                                 .key("Red")
                                 .price(PriceDto.builder()
@@ -243,7 +241,6 @@ public class OptionItemCostGroupControllerE2ETest extends BasicE2ETest {
                 .key("Color")
                 .optionItemCosts(List.of(
                         OptionItemCostDto.builder()
-//                                .searchKey("Red")
                                 .value("Red")
                                 .key("Red")
                                 .price(PriceDto.builder()
@@ -255,7 +252,6 @@ public class OptionItemCostGroupControllerE2ETest extends BasicE2ETest {
                                         .build())
                                 .build(),
                         OptionItemCostDto.builder()
-//                                .searchKey("Blue")
                                 .value("Blue")
                                 .key("Blue")
                                 .price(PriceDto.builder()
@@ -293,7 +289,6 @@ public class OptionItemCostGroupControllerE2ETest extends BasicE2ETest {
                 .key("Color")
                 .optionItemCosts(List.of(
                         OptionItemCostDto.builder()
-//                                .searchKey(null)
                                 .value("Red")
                                 .key(null)
                                 .price(PriceDto.builder()
@@ -305,7 +300,6 @@ public class OptionItemCostGroupControllerE2ETest extends BasicE2ETest {
                                         .build())
                                 .build(),
                         OptionItemCostDto.builder()
-//                                .searchKey(null)
                                 .value("Blue")
                                 .key(null)
                                 .price(PriceDto.builder()

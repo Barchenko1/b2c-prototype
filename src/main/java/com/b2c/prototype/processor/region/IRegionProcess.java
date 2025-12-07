@@ -1,14 +1,14 @@
 package com.b2c.prototype.processor.region;
 
-import com.b2c.prototype.modal.dto.payload.region.RegionDto;
+import com.b2c.prototype.modal.dto.payload.tenant.TenantDto;
 
 import java.util.List;
 
 public interface IRegionProcess {
-    void persistEntity(final RegionDto regionDto);
-    void mergeEntity(final String code, final RegionDto regionDto);
+    void persistEntity(final TenantDto tenantDto);
+    void mergeEntity(final String code, final TenantDto tenantDto);
     void removeEntity(final String code);
 
-    List<RegionDto> getEntityList();
-    RegionDto getEntity(final String code);
+    List<TenantDto> getEntityList();
+    TenantDto getEntity(final String code);
 }

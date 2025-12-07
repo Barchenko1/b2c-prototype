@@ -1,6 +1,6 @@
 package com.b2c.prototype.modal.entity.item;
 
-import com.b2c.prototype.modal.entity.region.Region;
+import com.b2c.prototype.modal.entity.tenant.Tenant;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,7 +34,7 @@ import java.util.List;
         @NamedQuery(
                 name = "Category.findByKeyAndRegion",
                 query = "SELECT c FROM Category c " +
-                        "LEFT JOIN FETCH c.region r " +
+                        "LEFT JOIN FETCH c.tenant r " +
                         "LEFT JOIN FETCH r.primaryCurrency rc " +
                         "LEFT JOIN FETCH c.childList cl1 " +
                         "WHERE c.key = :key AND r.code = :code"
@@ -42,7 +42,7 @@ import java.util.List;
         @NamedQuery(
                 name = "Category.findRootByRegion",
                 query = "SELECT c FROM Category c " +
-                        "LEFT JOIN FETCH c.region r " +
+                        "LEFT JOIN FETCH c.tenant r " +
                         "LEFT JOIN FETCH r.primaryCurrency rc " +
                         "LEFT JOIN FETCH c.childList cl1 " +
                         "WHERE r.code = :code AND c.parent IS NULL"
@@ -63,7 +63,7 @@ public class Category {
     @Column(name = "key", unique = true, nullable = false)
     private String key;
     @ManyToOne(fetch = FetchType.LAZY)
-    private Region region;
+    private Tenant tenant;
     @ManyToOne
     @JoinColumn(name = "category_id")
     @ToString.Exclude

@@ -2,7 +2,7 @@ currency:
   - id: 1
     value: "EUR"
     key: "EUR"
-region:
+tenant:
   - id: 1
     code: "DE"
     value: "Germany"

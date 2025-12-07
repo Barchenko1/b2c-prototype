@@ -1,7 +1,7 @@
 package com.b2c.prototype.controller.region;
 
 
-import com.b2c.prototype.modal.dto.payload.region.RegionDto;
+import com.b2c.prototype.modal.dto.payload.tenant.TenantDto;
 import com.b2c.prototype.processor.region.IRegionProcess;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,14 +24,14 @@ public class RegionController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> saveEntity(@RequestBody RegionDto regionDto) {
-        regionProcess.persistEntity(regionDto);
+    public ResponseEntity<String> saveEntity(@RequestBody TenantDto tenantDto) {
+        regionProcess.persistEntity(tenantDto);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> putEntity(@RequestParam(value = "code") final String code, @RequestBody RegionDto regionDto) {
-        regionProcess.mergeEntity(code, regionDto);
+    public ResponseEntity<String> putEntity(@RequestParam(value = "code") final String code, @RequestBody TenantDto tenantDto) {
+        regionProcess.mergeEntity(code, tenantDto);
         return ResponseEntity.ok().build();
     }
 

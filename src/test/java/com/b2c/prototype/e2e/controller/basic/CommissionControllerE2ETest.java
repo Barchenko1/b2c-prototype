@@ -54,7 +54,7 @@ public class CommissionControllerE2ETest extends BasicE2ETest {
         webTestClient.put()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("region", "Global")
+                        .queryParam("tenant", "Global")
                         .queryParam("key", "key2")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -71,7 +71,7 @@ public class CommissionControllerE2ETest extends BasicE2ETest {
         webTestClient.delete()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("region", "Global")
+                        .queryParam("tenant", "Global")
                         .queryParam("key", "key2")
                         .build())
                 .accept(MediaType.TEXT_PLAIN)
@@ -88,7 +88,7 @@ public class CommissionControllerE2ETest extends BasicE2ETest {
         MinMaxCommissionDto actual = webTestClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("region", "Global")
+                        .queryParam("tenant", "Global")
                         .queryParam("key", "key2")
                         .build())
                 .accept(MediaType.APPLICATION_JSON)
@@ -162,7 +162,7 @@ public class CommissionControllerE2ETest extends BasicE2ETest {
         List<MinMaxCommissionDto> actual = webTestClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE + "/all")
-                        .queryParam("region", "Global")
+                        .queryParam("tenant", "Global")
                         .build())
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()

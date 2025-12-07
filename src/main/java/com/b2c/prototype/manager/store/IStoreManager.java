@@ -6,12 +6,12 @@ import java.util.List;
 
 public interface IStoreManager {
     void saveStore(StoreDto storeDto);
-    void updateStore(String region, String storeId, StoreDto storeDto);
-    void deleteStore(String region, String storeId);
+    void updateStore(String tenantId, String storeId, StoreDto storeDto);
+    void deleteStore(String tenantId, String storeId);
 
-    StoreDto getStoreByStoreId(String region, String storeId);
+    StoreDto getStoreByStoreId(String tenantId, String storeId);
     List<StoreDto> getAllStoresByRegion(String region);
-    List<StoreDto> getAllStoresByArticularId(String region, String articularId);
-    List<StoreDto> getAllStoreByRegionAndCountry(String region, String countryName);
-    List<StoreDto> getAllStoreByRegionAndCountryAndCity(String region, String countryName, String cityName);
+    List<StoreDto> getAllStoresByArticularId(String tenantId, String articularId);
+    List<StoreDto> getAllStoreByRegionAndCountry(String tenantId, String countryName);
+    List<StoreDto> getAllStoreByRegionAndCountryAndCity(String tenantId, String countryName, String cityName);
 }

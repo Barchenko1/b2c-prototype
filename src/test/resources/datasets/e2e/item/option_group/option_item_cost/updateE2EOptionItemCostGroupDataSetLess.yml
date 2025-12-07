@@ -32,6 +32,6 @@ option_item_cost:
     option_group_id: 1
   - id: 3
     value: "Update Red"
-    key: "Update Red"
+    key: "Red"
     price_id: 4
     option_group_id: 2

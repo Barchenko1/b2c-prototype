@@ -9,7 +9,7 @@ import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.manager.item.IDiscountGroupManager;
 import com.b2c.prototype.modal.entity.item.DiscountGroup;
 import com.b2c.prototype.modal.entity.price.Currency;
-import com.b2c.prototype.modal.entity.region.Region;
+import com.b2c.prototype.modal.entity.tenant.Tenant;
 import com.b2c.prototype.service.generator.IKeyGeneratorService;
 import com.b2c.prototype.transform.item.IItemTransformService;
 import com.nimbusds.jose.util.Pair;
@@ -48,9 +48,9 @@ public class DiscountGroupManager implements IDiscountGroupManager {
 
     @Override
     @Transactional
-    public void saveDiscountGroup(String region, DiscountGroupDto discountGroupDto) {
+    public void saveDiscountGroup(String tenantId, DiscountGroupDto discountGroupDto) {
         DiscountGroup discountGroup = itemTransformService.mapDiscountGroupDtoToDiscountGroup(
-                region, discountGroupDto);
+                tenantId, discountGroupDto);
 
         discountGroup.setKey(keyGeneratorService.generateKey("discount_group"));
         generalEntityDao.persistEntity(discountGroup);
@@ -106,17 +106,17 @@ public class DiscountGroupManager implements IDiscountGroupManager {
 
     @Override
     @Transactional
-    public void removeDiscountGroup(String region, String key) {
+    public void removeDiscountGroup(String tenantId, String key) {
         generalEntityDao.findAndRemoveEntity("DiscountGroup.findByRegionAndKey",
-                List.of(Pair.of(CODE, region), Pair.of(KEY, key)));
+                List.of(Pair.of(CODE, tenantId), Pair.of(KEY, key)));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public DiscountGroupDto getDiscountGroup(String region, String key) {
+    public DiscountGroupDto getDiscountGroup(String tenantId, String key) {
         DiscountGroup discountGroup = generalEntityDao.findEntity(
                 "DiscountGroup.findByRegionAndKey",
-                List.of(Pair.of(CODE, region), Pair.of(KEY, key)));
+                List.of(Pair.of(CODE, tenantId), Pair.of(KEY, key)));
         return Optional.of(discountGroup)
                 .map(itemTransformService::mapDiscountGroupToDiscountGroupDto)
                 .orElseThrow(() -> new RuntimeException(""));
@@ -258,11 +258,11 @@ public class DiscountGroupManager implements IDiscountGroupManager {
         if (source.getKey() != null) {
             target.setKey(source.getKey());
         }
-        // If region is editable:
+        // If tenant is editable:
         if (source.getRegionCode() != null) {
-            Region region = generalEntityDao.findEntity("Region.findByCode",
+            Tenant tenant = generalEntityDao.findEntity("Tenant.findByCode",
                     Pair.of(CODE, source.getRegionCode()));
-            target.setRegion(region);
+            target.setTenant(tenant);
         }
     }
 

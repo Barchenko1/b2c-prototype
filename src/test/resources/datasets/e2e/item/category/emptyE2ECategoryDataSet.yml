@@ -5,7 +5,7 @@ currency:
   - id: 2
     value: "USD"
     key: "USD"
-region:
+tenant:
   - id: 1
     code: "DE"
     value: "Germany"
@@ -24,24 +24,24 @@ category:
   - id: 1
     key: "Laptops and Computers"
     value: "Laptops and Computers"
-    region_id: 1
+    tenant_id: 1
   - id: 2
     key: "Gaming Laptops & Accessories"
     value: "Gaming Laptops & Accessories"
     category_id: 1
-    region_id: 1
+    tenant_id: 1
   - id: 3
     key: "Gaming Laptops"
     value: "Gaming Laptops"
     category_id: 2
-    region_id: 1
+    tenant_id: 1
   - id: 4
     key: "Gaming Keyboards & Mice"
     value: "Gaming Keyboards & Mice"
     category_id: 2
-    region_id: 1
+    tenant_id: 1
   - id: 5
     key: "Cooling Pads & Stands"
     value: "Cooling Pads & Stands"
     category_id: 2
-    region_id: 1
+    tenant_id: 1

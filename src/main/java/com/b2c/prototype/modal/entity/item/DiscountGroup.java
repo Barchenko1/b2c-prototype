@@ -1,6 +1,6 @@
 package com.b2c.prototype.modal.entity.item;
 
-import com.b2c.prototype.modal.entity.region.Region;
+import com.b2c.prototype.modal.entity.tenant.Tenant;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,7 +27,7 @@ import java.util.Set;
         @NamedQuery(
                 name = "DiscountGroup.findAll",
                 query = "SELECT dg FROM DiscountGroup dg " +
-                        "LEFT JOIN FETCH dg.region r " +
+                        "LEFT JOIN FETCH dg.tenant r " +
                         "LEFT JOIN FETCH dg.discounts d " +
                         "LEFT JOIN FETCH d.currency dc " +
                         "LEFT JOIN FETCH d.articularItemList da "
@@ -35,7 +35,7 @@ import java.util.Set;
         @NamedQuery(
                 name = "DiscountGroup.findByKey",
                 query = "SELECT dg FROM DiscountGroup dg " +
-                        "LEFT JOIN FETCH dg.region r " +
+                        "LEFT JOIN FETCH dg.tenant r " +
                         "LEFT JOIN FETCH dg.discounts d " +
                         "LEFT JOIN FETCH d.currency dc " +
                         "LEFT JOIN FETCH d.articularItemList da " +
@@ -44,7 +44,7 @@ import java.util.Set;
         @NamedQuery(
                 name = "DiscountGroup.findByRegionAndKey",
                 query = "SELECT dg FROM DiscountGroup dg " +
-                        "LEFT JOIN FETCH dg.region r " +
+                        "LEFT JOIN FETCH dg.tenant r " +
                         "LEFT JOIN FETCH dg.discounts d " +
                         "LEFT JOIN FETCH d.currency dc " +
                         "LEFT JOIN FETCH d.articularItemList da " +
@@ -53,7 +53,7 @@ import java.util.Set;
         @NamedQuery(
                 name = "DiscountGroup.findAllByRegion",
                 query = "SELECT dg FROM DiscountGroup dg " +
-                        "LEFT JOIN FETCH dg.region r " +
+                        "LEFT JOIN FETCH dg.tenant r " +
                         "LEFT JOIN FETCH dg.discounts d " +
                         "LEFT JOIN FETCH d.currency dc " +
                         "LEFT JOIN FETCH d.articularItemList da " +
@@ -81,7 +81,7 @@ public class DiscountGroup {
     private String key;
     private String value;
     @ManyToOne(fetch = FetchType.LAZY)
-    private Region region;
+    private Tenant tenant;
     @OneToMany(mappedBy = "discountGroup", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private Set<Discount> discounts = new HashSet<>();

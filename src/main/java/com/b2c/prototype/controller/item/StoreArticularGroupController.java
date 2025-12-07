@@ -1,6 +1,7 @@
 package com.b2c.prototype.controller.item;
 
-import com.b2c.prototype.modal.dto.payload.item.StoreArticularGroupRequestDto;
+import com.b2c.prototype.modal.dto.payload.item.request.StoreArticularGroupRequestDto;
+import com.b2c.prototype.modal.dto.payload.item.response.StoreArticularGroupResponseDto;
 import com.b2c.prototype.processor.item.IStoreArticularGroupProcessor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -47,13 +48,13 @@ public class StoreArticularGroupController {
     }
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<StoreArticularGroupRequestDto> getItemDataList(@RequestParam final Map<String, String> requestParams) {
+    public List<StoreArticularGroupResponseDto> getItemDataList(@RequestParam final Map<String, String> requestParams) {
 
         return storeArticularGroupProcessor.getStoreArticularGroupList(requestParams);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<StoreArticularGroupRequestDto> getItemData(@RequestParam final Map<String, String> requestParams) {
+    public ResponseEntity<StoreArticularGroupResponseDto> getItemData(@RequestParam final Map<String, String> requestParams) {
         return new ResponseEntity<>(storeArticularGroupProcessor.getStoreArticularGroup(requestParams), HttpStatus.OK);
     }
 }

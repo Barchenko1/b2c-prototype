@@ -5,13 +5,12 @@ import com.b2c.prototype.modal.constant.CountType;
 import com.b2c.prototype.modal.dto.payload.item.ArticularGroupDto;
 import com.b2c.prototype.modal.dto.payload.item.ArticularItemAssignmentDto;
 import com.b2c.prototype.modal.dto.payload.item.GroupOptionKeys;
-import com.b2c.prototype.modal.dto.payload.item.StoreArticularGroupRequestDto;
+import com.b2c.prototype.modal.dto.payload.item.request.StoreArticularGroupRequestDto;
 import com.b2c.prototype.modal.dto.payload.item.StoreDiscount;
 import com.b2c.prototype.modal.dto.payload.item.StoreDiscountGroup;
 import com.b2c.prototype.modal.dto.payload.item.StoreOptionItemCostGroup;
 import com.b2c.prototype.modal.dto.payload.item.StoreOptionItemGroup;
 import com.b2c.prototype.modal.dto.payload.item.StoreOptionItemGroupTransfer;
-import com.b2c.prototype.modal.dto.payload.option.item.OptionItemDto;
 import com.b2c.prototype.modal.entity.item.ArticularGroup;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
@@ -22,7 +21,7 @@ import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.modal.entity.option.OptionItemCost;
 import com.b2c.prototype.modal.entity.price.Price;
-import com.b2c.prototype.modal.entity.region.Region;
+import com.b2c.prototype.modal.entity.tenant.Tenant;
 import com.b2c.prototype.modal.entity.store.ArticularStock;
 import com.b2c.prototype.modal.entity.store.AvailabilityStatus;
 import com.b2c.prototype.modal.entity.store.Store;
@@ -42,9 +41,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.b2c.prototype.util.Constant.CODE;
 import static com.b2c.prototype.util.Constant.KEY;
@@ -79,11 +76,11 @@ public class StoreArticularGroupTransformService implements IStoreArticularGroup
     }
 
     @Override
-    public DiscountGroup mapStoreDiscountGroupDtoToDiscountGroup(Region region, StoreDiscountGroup discountGroupDto) {
+    public DiscountGroup mapStoreDiscountGroupDtoToDiscountGroup(Tenant tenant, StoreDiscountGroup discountGroupDto) {
         DiscountGroup discountGroup = DiscountGroup.builder()
                 .key(keyGeneratorService.generateKey("discount_group"))
                 .value(discountGroupDto.getValue())
-                .region(region)
+                .tenant(tenant)
                 .discounts(discountGroupDto.getDiscounts().values().stream()
                         .map(this::mapStoreDiscountToDiscount)
                         .collect(Collectors.toSet())
@@ -95,11 +92,11 @@ public class StoreArticularGroupTransformService implements IStoreArticularGroup
     }
 
     @Override
-    public OptionGroup mapStoreOptionItemGroupDtoToOptionGroup(Region region, StoreOptionItemGroup optionItemGroupDto) {
+    public OptionGroup mapStoreOptionItemGroupDtoToOptionGroup(Tenant tenant, StoreOptionItemGroup optionItemGroupDto) {
         OptionGroup optionGroup = OptionGroup.builder()
                 .value(optionItemGroupDto.getValue())
                 .key(keyGeneratorService.generateKey("option_group"))
-                .region(region)
+                .tenant(tenant)
                 .optionItems(optionItemGroupDto.getOptionItems().values().stream()
                         .map(optionItemDto -> OptionItem.builder()
                                 .value(optionItemDto.getValue())
@@ -115,7 +112,7 @@ public class StoreArticularGroupTransformService implements IStoreArticularGroup
     }
 
     @Override
-    public StoreOptionItemGroupTransfer mapStoreOptionItemGroupDtoToOptionItemSet(Region region, Map.Entry<String, StoreOptionItemGroup> storeOptionItemGroup) {
+    public StoreOptionItemGroupTransfer mapStoreOptionItemGroupDtoToOptionItemSet(Tenant tenant, Map.Entry<String, StoreOptionItemGroup> storeOptionItemGroup) {
         Map<String, OptionItem> optionItems =
                 Optional.ofNullable(storeOptionItemGroup.getValue().getOptionItems())
                         .map(items -> items.entrySet()
@@ -134,7 +131,7 @@ public class StoreArticularGroupTransformService implements IStoreArticularGroup
                 OptionGroup.builder()
                         .value(storeOptionItemGroup.getValue().getValue())
                         .key(keyGeneratorService.generateKey("option_group"))
-                        .region(region)
+                        .tenant(tenant)
                         .build());
 
         optionGroup.values().forEach((og) -> {
@@ -144,7 +141,7 @@ public class StoreArticularGroupTransformService implements IStoreArticularGroup
         StoreOptionItemGroupTransfer storeOptionItemGroupTransfer = StoreOptionItemGroupTransfer.builder()
 //                .value(storeOptionItemGroup.getValue().getValue())
 //                .key(keyGeneratorService.generateKey("option_group"))
-//                .region(region)
+//                .tenant(tenant)
                 .optionGroup(optionGroup)
                 .optionItems(optionItems)
 //                .optionItemCosts(optionItemCosts)
@@ -154,7 +151,7 @@ public class StoreArticularGroupTransformService implements IStoreArticularGroup
     }
 
     @Override
-    public StoreOptionItemGroupTransfer mapStoreOptionItemCostGroupDtoToOptionItemSet(Region region, Map.Entry<String, StoreOptionItemCostGroup> storeOptionItemCostGroup) {
+    public StoreOptionItemGroupTransfer mapStoreOptionItemCostGroupDtoToOptionItemSet(Tenant tenant, Map.Entry<String, StoreOptionItemCostGroup> storeOptionItemCostGroup) {
         Map<String, OptionItemCost> optionItemCosts =
                 Optional.ofNullable(storeOptionItemCostGroup.getValue().getCostOptions())
                         .map(items -> items.entrySet()
@@ -174,7 +171,7 @@ public class StoreArticularGroupTransformService implements IStoreArticularGroup
                 OptionGroup.builder()
                         .value(storeOptionItemCostGroup.getValue().getValue())
                         .key(keyGeneratorService.generateKey("option_group"))
-                        .region(region)
+                        .tenant(tenant)
                         .build());
 
         optionGroup.values().forEach((og) -> {
@@ -184,7 +181,7 @@ public class StoreArticularGroupTransformService implements IStoreArticularGroup
         StoreOptionItemGroupTransfer storeOptionItemGroupTransfer = StoreOptionItemGroupTransfer.builder()
 //                .value(storeOptionItemGroup.getValue().getValue())
 //                .key(keyGeneratorService.generateKey("option_group"))
-//                .region(region)
+//                .tenant(tenant)
                 .optionGroup(optionGroup)
 //                .optionItems(optionItems)
                 .optionItemCosts(optionItemCosts)
@@ -194,11 +191,11 @@ public class StoreArticularGroupTransformService implements IStoreArticularGroup
     }
 
     @Override
-    public OptionGroup mapStoreOptionItemCostGroupDtoToOptionGroup(Region region, StoreOptionItemCostGroup storeOptionItemCostGroup) {
+    public OptionGroup mapStoreOptionItemCostGroupDtoToOptionGroup(Tenant tenant, StoreOptionItemCostGroup storeOptionItemCostGroup) {
         OptionGroup optionGroup = OptionGroup.builder()
                 .value(storeOptionItemCostGroup.getValue())
                 .key(keyGeneratorService.generateKey("option_group"))
-                .region(region)
+                .tenant(tenant)
                 .optionItemCosts(storeOptionItemCostGroup.getCostOptions().values().stream()
                         .map(optionItemCostDto -> OptionItemCost.builder()
                                 .value(optionItemCostDto.getValue())
@@ -221,35 +218,35 @@ public class StoreArticularGroupTransformService implements IStoreArticularGroup
     public StoreArticularGroupTransform mapStoreArticularGroupRequestDtoToStoreArticularGroupTransform(StoreArticularGroupRequestDto storeArticularGroupRequestDto) {
         ArticularGroupDto articularGroupDto = storeArticularGroupRequestDto.getArticularGroup();
         Map<String, ArticularItemAssignmentDto> articularItemAssignmentDtoMap = storeArticularGroupRequestDto.getArticularItems();
-        Region region = generalEntityDao.findEntity("Region.findByCode",
-                Pair.of(CODE, storeArticularGroupRequestDto.getRegion()));
+        Tenant tenant = generalEntityDao.findEntity("Tenant.findByCode",
+                Pair.of(CODE, storeArticularGroupRequestDto.getTenantId()));
         Map<String, DiscountGroup> discountGroupMap = Optional.ofNullable(storeArticularGroupRequestDto.getDiscountGroups())
                 .orElseGet(Collections::emptyMap)
                 .entrySet()
                 .stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
-                        e -> mapStoreDiscountGroupDtoToDiscountGroup(region, e.getValue())
+                        e -> mapStoreDiscountGroupDtoToDiscountGroup(tenant, e.getValue())
                 ));
         Set<StoreOptionItemGroupTransfer> storeOptionItemGroupTransferSet =
                 storeArticularGroupRequestDto.getOptionItemGroups()
                         .entrySet()
                         .stream()
-                        .map(group -> mapStoreOptionItemGroupDtoToOptionItemSet(region, group))
+                        .map(group -> mapStoreOptionItemGroupDtoToOptionItemSet(tenant, group))
                         .collect(Collectors.toSet());
         Set<StoreOptionItemGroupTransfer> storeOptionItemCostGroupTransferSet =
                 storeArticularGroupRequestDto.getOptionItemCostGroups()
                         .entrySet()
                         .stream()
-                        .map(group -> mapStoreOptionItemCostGroupDtoToOptionItemSet(region, group))
+                        .map(group -> mapStoreOptionItemCostGroupDtoToOptionItemSet(tenant, group))
                         .collect(Collectors.toSet());
         Map<String, ArticularItem> articularItemMap = new HashMap<>();
         ArticularGroup articularGroup = ArticularGroup.builder()
-                .region(region)
+                .tenant(tenant)
                 .articularGroupId(keyGeneratorService.generateKey("articular_group"))
                 .description(articularGroupDto.getDescription())
                 .category((Category) generalEntityDao.findOptionEntity("Category.findByKeyAndRegion",
-                                List.of(Pair.of(CODE, storeArticularGroupRequestDto.getRegion()), Pair.of(KEY, articularGroupDto.getCategory().getKey())))
+                                List.of(Pair.of(CODE, storeArticularGroupRequestDto.getTenantId()), Pair.of(KEY, articularGroupDto.getCategory().getKey())))
                         .orElse(Category.builder()
                                 .key(articularGroupDto.getCategory().getKey())
                                 .value(articularGroupDto.getCategory().getValue())
@@ -265,7 +262,7 @@ public class StoreArticularGroupTransformService implements IStoreArticularGroup
                             Pair.of(KEY, entry.getValue().getStatus().getKey())))
                     .fullPrice(generalEntityTransformService.mapPriceDtoToPrice(entry.getValue().getFullPrice()))
                     .totalPrice(generalEntityTransformService.mapPriceDtoToPrice(entry.getValue().getTotalPrice()))
-                    .discount(getDiscount(storeArticularGroupRequestDto.getDiscountGroups(), entry.getValue().getDiscountKey(), region, discountGroupMap))
+                    .discount(getDiscount(storeArticularGroupRequestDto.getDiscountGroups(), entry.getValue().getDiscountKey(), tenant, discountGroupMap))
                     .build();
 
             Set<OptionItem> optionItems = getOptionItemList(storeOptionItemGroupTransferSet, entry.getValue().getOptionKeys());
@@ -282,7 +279,7 @@ public class StoreArticularGroupTransformService implements IStoreArticularGroup
                 .flatMap(List::stream)
                 .map(storeRequestDto ->
                         Store.builder()
-                                .region(region)
+                                .tenant(tenant)
                                 .isActive(storeRequestDto.isActive())
                                 .storeName(storeRequestDto.getStoreName())
                                 .storeUniqId(keyGeneratorService.generateKey("store"))
@@ -349,7 +346,7 @@ public class StoreArticularGroupTransformService implements IStoreArticularGroup
                 .collect(Collectors.toSet());
 
         StoreGeneralBoard storeGeneralBoard = StoreGeneralBoard.builder()
-                .region(region)
+                .tenant(tenant)
                 .articularStocks(stocks)
                 .build();
 
@@ -367,7 +364,7 @@ public class StoreArticularGroupTransformService implements IStoreArticularGroup
 
     private Discount getDiscount(Map<String, StoreDiscountGroup> discountGroups,
                                  GroupOptionKeys groupOptionKeys,
-                                 Region region,
+                                 Tenant tenant,
                                  Map<String, DiscountGroup> discountGroupMap) {
 
         if (groupOptionKeys == null

@@ -1,7 +1,6 @@
 package com.b2c.prototype.modal.dto.payload.commission;
 
 import com.b2c.prototype.modal.dto.payload.item.PriceDto;
-import com.b2c.prototype.modal.dto.payload.region.RegionDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

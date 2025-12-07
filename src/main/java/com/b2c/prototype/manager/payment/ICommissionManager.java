@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface ICommissionManager {
     void saveCommission(MinMaxCommissionDto minMaxCommissionDto);
-    void updateCommission(String region, String key, MinMaxCommissionDto minMaxCommissionDto);
-    void deleteCommission(String region, String key);
+    void updateCommission(String tenantId, String key, MinMaxCommissionDto minMaxCommissionDto);
+    void deleteCommission(String tenantId, String key);
 
     List<MinMaxCommissionDto> getCommissionList(String regionCode);
-    MinMaxCommissionDto getCommission(String region, String key);
+    MinMaxCommissionDto getCommission(String tenantId, String key);
 }

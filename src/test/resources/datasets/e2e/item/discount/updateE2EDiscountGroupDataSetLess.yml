@@ -5,7 +5,7 @@ currency:
   - id: 2
     value: "USD"
     key: "USD"
-region:
+tenant:
   - id: 1
     code: "DE"
     value: "Germany"
@@ -24,11 +24,11 @@ discount_group:
   - id: 1
     key: "Germany_group"
     value: "Germany_group"
-    region_id: 1
+    tenant_id: 1
   - id: 2
     key: "Update Global_group"
     value: "Update Global_group"
-    region_id: 1
+    tenant_id: 1
 discount:
   - id: 1
     amount: 10

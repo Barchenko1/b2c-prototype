@@ -24,28 +24,28 @@ public class CategoryProcess implements ICategoryProcess {
 
     @Override
     public void updateCategory(Map<String, String> requestParams, CategoryDto categoryDto) {
-        String regionCode = requestParams.get("region");
+        String regionCode = requestParams.get("tenant");
         String categoryKey = requestParams.get("category");
         categoryManager.updateCategory(regionCode, categoryKey, categoryDto);
     }
 
     @Override
     public void deleteCategory(Map<String, String> requestParams) {
-        String regionCode = requestParams.get("region");
+        String regionCode = requestParams.get("tenant");
         String categoryKey = requestParams.get("category");
         categoryManager.deleteCategory(regionCode, categoryKey);
     }
 
     @Override
     public CategoryDto getCategory(Map<String, String> requestParams) {
-        String regionCode = requestParams.get("region");
+        String regionCode = requestParams.get("tenant");
         String categoryName = requestParams.get("category");
         return categoryManager.getCategory(regionCode, categoryName);
     }
 
     @Override
     public List<CategoryDto> getCategories(Map<String, String> requestParams) {
-        String regionCode = requestParams.get("region");
+        String regionCode = requestParams.get("tenant");
         return categoryManager.getCategories(regionCode);
     }
 

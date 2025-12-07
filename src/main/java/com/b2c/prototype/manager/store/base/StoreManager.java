@@ -4,7 +4,6 @@ import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.entity.address.Address;
 
 import com.b2c.prototype.modal.dto.payload.store.StoreDto;
-import com.b2c.prototype.modal.entity.store.ArticularStock;
 import com.b2c.prototype.modal.entity.store.Store;
 import com.b2c.prototype.manager.store.IStoreManager;
 import com.b2c.prototype.transform.item.IItemTransformService;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 
 import static com.b2c.prototype.util.Constant.ARTICULAR_ID;
 import static com.b2c.prototype.util.Constant.CODE;
@@ -41,42 +39,37 @@ public class StoreManager implements IStoreManager {
 
     @Override
     @Transactional
-    public void updateStore(String region, String storeId, StoreDto storeDto) {
+    public void updateStore(String tenantId, String storeId, StoreDto storeDto) {
         Store existingStore = generalEntityDao.findEntity(
                 "Store.findStoreByRegionStoreIdDetails",
-                List.of(Pair.of(CODE, region), Pair.of(STORE_ID, storeId)));
+                List.of(Pair.of(CODE, tenantId), Pair.of(STORE_ID, storeId)));
 
         Store store = itemTransformService.mapStoreDtoToStore(storeDto);
         existingStore.setStoreName(store.getStoreName());
         existingStore.setActive(store.isActive());
 
-        existingStore.setRegion(store.getRegion());
+        existingStore.setTenant(store.getTenant());
 
         Address existingAddress = existingStore.getAddress();
         Address address = store.getAddress();
         updateAddress(existingAddress, address);
 
-        if (store.getArticularStocks() != null) {
-            Set<ArticularStock> articularStocks = store.getArticularStocks();
-
-            existingStore.setArticularStocks(articularStocks);
-        }
         generalEntityDao.mergeEntity(existingStore);
     }
 
     @Override
     @Transactional
-    public void deleteStore(String region, String storeId) {
+    public void deleteStore(String tenantId, String storeId) {
         generalEntityDao.findAndRemoveEntity("Store.findStoreByRegionStoreId",
-                List.of(Pair.of(STORE_ID, storeId), Pair.of(CODE, region)));
+                List.of(Pair.of(STORE_ID, storeId), Pair.of(CODE, tenantId)));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public StoreDto getStoreByStoreId(String region, String storeId) {
+    public StoreDto getStoreByStoreId(String tenantId, String storeId) {
         Store store = generalEntityDao.findEntity(
                 "Store.findStoreByRegionStoreIdDetails",
-                List.of(Pair.of(STORE_ID, storeId), Pair.of(CODE, region)));
+                List.of(Pair.of(STORE_ID, storeId), Pair.of(CODE, tenantId)));
         return itemTransformService.mapStoreToStoreDto(store);
     }
 
@@ -92,7 +85,7 @@ public class StoreManager implements IStoreManager {
 
     @Override
     @Transactional(readOnly = true)
-    public List<StoreDto> getAllStoresByArticularId(String region, String articularId) {
+    public List<StoreDto> getAllStoresByArticularId(String tenantId, String articularId) {
         List<Store> stores = generalEntityDao.findEntityList(
                 "Store.findStoreByRegionStoreIdDetails",
                 Pair.of(ARTICULAR_ID, articularId));
@@ -103,10 +96,10 @@ public class StoreManager implements IStoreManager {
 
     @Override
     @Transactional(readOnly = true)
-    public List<StoreDto> getAllStoreByRegionAndCountry(String region, String countryKey) {
+    public List<StoreDto> getAllStoreByRegionAndCountry(String tenantId, String countryKey) {
         List<Store> stores = generalEntityDao.findEntityList(
                 "Store.findAllStoreByRegionAndCountry",
-                List.of(Pair.of(CODE, region), Pair.of(KEY, countryKey)));
+                List.of(Pair.of(CODE, tenantId), Pair.of(KEY, countryKey)));
 
         return stores.stream()
                 .map(itemTransformService::mapStoreToStoreDto)
@@ -115,10 +108,10 @@ public class StoreManager implements IStoreManager {
 
     @Override
     @Transactional(readOnly = true)
-    public List<StoreDto> getAllStoreByRegionAndCountryAndCity(String region, String countryKey, String city) {
+    public List<StoreDto> getAllStoreByRegionAndCountryAndCity(String tenantId, String countryKey, String city) {
         List<Store> stores = generalEntityDao.findEntityList(
                 "Store.findAllStoreByRegionAndCountryAndCity",
-                List.of(Pair.of(CODE, region), Pair.of(KEY, countryKey), Pair.of("city", city)));
+                List.of(Pair.of(CODE, tenantId), Pair.of(KEY, countryKey), Pair.of("city", city)));
 
         return stores.stream()
                 .map(itemTransformService::mapStoreToStoreDto)

@@ -4,7 +4,6 @@ import com.b2c.prototype.modal.dto.payload.constant.CategoryDto;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountGroupDto;
 import com.b2c.prototype.modal.dto.payload.item.ArticularItemDto;
 import com.b2c.prototype.modal.dto.payload.item.ArticularGroupDto;
-import com.b2c.prototype.modal.dto.payload.item.StoreArticularGroupRequestDto;
 import com.b2c.prototype.modal.dto.payload.option.group.OptionItemCostGroupDto;
 import com.b2c.prototype.modal.dto.payload.option.group.OptionItemGroupDto;
 import com.b2c.prototype.modal.dto.payload.order.ArticularItemQuantityDto;
@@ -20,11 +19,9 @@ import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.DiscountGroup;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.post.Post;
-import com.b2c.prototype.modal.entity.region.Region;
 import com.b2c.prototype.modal.entity.review.Review;
 import com.b2c.prototype.modal.entity.store.ArticularStock;
 import com.b2c.prototype.modal.entity.store.Store;
-import com.b2c.prototype.transform.modal.StoreArticularGroupTransform;
 
 
 public interface IItemTransformService {
@@ -59,7 +56,7 @@ public interface IItemTransformService {
     OptionGroup mapOptionItemCostGroupDtoToOptionGroup(OptionItemCostGroupDto optionItemCostGroupDto);
     OptionItemCostGroupDto mapOptionGroupToOptionItemCostGroupDto(OptionGroup optionGroup);
 
-    DiscountGroup mapDiscountGroupDtoToDiscountGroup(String region, DiscountGroupDto discountGroupDto);
+    DiscountGroup mapDiscountGroupDtoToDiscountGroup(String tenantId, DiscountGroupDto discountGroupDto);
     DiscountGroupDto mapDiscountGroupToDiscountGroupDto(DiscountGroup discountGroup);
 
 

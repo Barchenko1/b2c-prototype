@@ -52,7 +52,7 @@ class StoreControllerE2ETest extends BasicE2ETest {
         webTestClient.put()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("region", "Global")
+                        .queryParam("tenant", "Global")
                         .queryParam("store", "store2")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -69,7 +69,7 @@ class StoreControllerE2ETest extends BasicE2ETest {
         webTestClient.delete()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
-                        .queryParam("region", "Global")
+                        .queryParam("tenant", "Global")
                         .queryParam("store", "store2")
                         .build())
                 .accept(MediaType.TEXT_PLAIN)
@@ -90,7 +90,7 @@ class StoreControllerE2ETest extends BasicE2ETest {
                 webTestClient.get()
                         .uri(uriBuilder -> uriBuilder
                                 .path(URL_TEMPLATE + "/all")
-                                .queryParam("region", "Global")
+                                .queryParam("tenant", "Global")
                                 .build())
                         .accept(MediaType.APPLICATION_JSON)
                         .exchange()
@@ -119,7 +119,7 @@ class StoreControllerE2ETest extends BasicE2ETest {
                 webTestClient.get()
                         .uri(uriBuilder -> uriBuilder
                                 .path(URL_TEMPLATE + "/all")
-                                .queryParam("region", "Global")
+                                .queryParam("tenant", "Global")
                                 .queryParam("country", "USA")
                                 .build())
                         .accept(MediaType.APPLICATION_JSON)
@@ -149,7 +149,7 @@ class StoreControllerE2ETest extends BasicE2ETest {
                 webTestClient.get()
                         .uri(uriBuilder -> uriBuilder
                                 .path(URL_TEMPLATE + "/all")
-                                .queryParam("region", "Global")
+                                .queryParam("tenant", "Global")
                                 .queryParam("country", "USA")
                                 .queryParam("city", "city")
                                 .build())
@@ -177,7 +177,7 @@ class StoreControllerE2ETest extends BasicE2ETest {
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
                         .pathSegment("store2")
-                        .queryParam("region", "Global")
+                        .queryParam("tenant", "Global")
                         .build())
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()

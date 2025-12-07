@@ -12,7 +12,7 @@ import com.b2c.prototype.modal.dto.payload.item.PriceDto;
 import com.b2c.prototype.modal.dto.payload.order.AddressDto;
 import com.b2c.prototype.modal.dto.payload.order.ContactInfoDto;
 import com.b2c.prototype.modal.dto.payload.order.ContactPhoneDto;
-import com.b2c.prototype.modal.dto.payload.region.RegionDto;
+import com.b2c.prototype.modal.dto.payload.tenant.TenantDto;
 import com.b2c.prototype.modal.dto.payload.store.AvailabilityStatusDto;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
@@ -21,7 +21,7 @@ import com.b2c.prototype.modal.entity.payment.CommissionValue;
 import com.b2c.prototype.modal.entity.payment.MinMaxCommission;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
-import com.b2c.prototype.modal.entity.region.Region;
+import com.b2c.prototype.modal.entity.tenant.Tenant;
 import com.b2c.prototype.modal.entity.store.AvailabilityStatus;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
 import com.b2c.prototype.modal.entity.user.ContactPhone;
@@ -59,35 +59,35 @@ public class GeneralEntityTransformService implements IGeneralEntityTransformSer
     }
 
     @Override
-    public RegionDto mapRegionToRegionDto(Region region) {
-        return RegionDto.builder()
-                .code(region.getCode())
-                .value(region.getValue())
-                .language(region.getLanguage())
-                .defaultLocale(region.getDefaultLocale())
+    public TenantDto mapRegionToRegionDto(Tenant tenant) {
+        return TenantDto.builder()
+                .code(tenant.getCode())
+                .value(tenant.getValue())
+                .language(tenant.getLanguage())
+                .defaultLocale(tenant.getDefaultLocale())
                 .primaryCurrency(CurrencyDto.builder()
-                        .key(region.getPrimaryCurrency().getKey())
-                        .value(region.getPrimaryCurrency().getValue())
+                        .key(tenant.getPrimaryCurrency().getKey())
+                        .value(tenant.getPrimaryCurrency().getValue())
                         .build())
-                .timezone(region.getTimezone().toString())
+                .timezone(tenant.getTimezone().toString())
                 .build();
     }
 
     @Override
-    public Region mapRegionDtoToRegion(RegionDto regionDto) {
-        return Region.builder()
-                .code(regionDto.getCode())
-                .value(regionDto.getValue())
-                .language(regionDto.getLanguage())
+    public Tenant mapRegionDtoToRegion(TenantDto tenantDto) {
+        return Tenant.builder()
+                .code(tenantDto.getCode())
+                .value(tenantDto.getValue())
+                .language(tenantDto.getLanguage())
                 .primaryCurrency(generalEntityDao.<Currency>findOptionEntity(
                                 "Currency.findByKey",
-                                Pair.of(KEY, regionDto.getPrimaryCurrency().getKey()))
+                                Pair.of(KEY, tenantDto.getPrimaryCurrency().getKey()))
                         .orElseGet(() -> Currency.builder()
-                                .key(regionDto.getPrimaryCurrency().getKey())
-                                .value(regionDto.getPrimaryCurrency().getValue())
+                                .key(tenantDto.getPrimaryCurrency().getKey())
+                                .value(tenantDto.getPrimaryCurrency().getValue())
                                 .build()))
-                .defaultLocale(regionDto.getDefaultLocale())
-                .timezone(ZoneId.of(regionDto.getTimezone()))
+                .defaultLocale(tenantDto.getDefaultLocale())
+                .timezone(ZoneId.of(tenantDto.getTimezone()))
                 .build();
     }
 
@@ -194,7 +194,7 @@ public class GeneralEntityTransformService implements IGeneralEntityTransformSer
                 .changeCommissionPrice(mapPriceDtoToPrice(minMaxCommissionDto.getChangeCommissionPrice()))
                 .lastUpdateTimestamp(LocalDateTime.now())
                 .key(getUUID())
-                .region(generalEntityDao.findEntity("Region.findByCode",
+                .tenant(generalEntityDao.findEntity("Tenant.findByCode",
                                 Pair.of(CODE, minMaxCommissionDto.getRegion())))
                 .build();
     }
@@ -207,7 +207,7 @@ public class GeneralEntityTransformService implements IGeneralEntityTransformSer
                 .changeCommissionPrice(mapPriceToPriceDto(minMaxCommission.getChangeCommissionPrice()))
                 .lastUpdateTimestamp(minMaxCommission.getLastUpdateTimestamp())
                 .key(minMaxCommission.getKey())
-                .region(minMaxCommission.getRegion().getCode())
+                .region(minMaxCommission.getTenant().getCode())
                 .build();
     }
 

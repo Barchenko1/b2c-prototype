@@ -1,7 +1,7 @@
 package com.b2c.prototype.processor.region;
 
 import com.b2c.prototype.manager.region.IRegionManager;
-import com.b2c.prototype.modal.dto.payload.region.RegionDto;
+import com.b2c.prototype.modal.dto.payload.tenant.TenantDto;
 import com.b2c.prototype.transform.constant.IGeneralEntityTransformService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
@@ -25,13 +25,13 @@ public class RegionProcess implements IRegionProcess {
     }
 
     @Override
-    public void persistEntity(RegionDto regionDto) {
-        regionManager.persistEntity(regionDto);
+    public void persistEntity(TenantDto tenantDto) {
+        regionManager.persistEntity(tenantDto);
     }
 
     @Override
-    public void mergeEntity(final String code, final RegionDto regionDto) {
-        regionManager.mergeEntity(code, regionDto);
+    public void mergeEntity(final String code, final TenantDto tenantDto) {
+        regionManager.mergeEntity(code, tenantDto);
     }
 
     @Override
@@ -40,16 +40,16 @@ public class RegionProcess implements IRegionProcess {
     }
 
     @Override
-    public List<RegionDto> getEntityList() {
+    public List<TenantDto> getEntityList() {
         return regionManager.getEntityList().stream()
                 .map(generalEntityTransformService::mapRegionToRegionDto)
                 .toList();
     }
 
     @Override
-    public RegionDto getEntity(final String code) {
+    public TenantDto getEntity(final String code) {
         return Optional.ofNullable(regionManager.getEntity(code))
                 .map(generalEntityTransformService::mapRegionToRegionDto)
-                .orElseThrow(() -> new RuntimeException("Region not found"));
+                .orElseThrow(() -> new RuntimeException("Tenant not found"));
     }
 }
