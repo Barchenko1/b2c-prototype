@@ -1,4 +1,4 @@
-package com.b2c.prototype.modal.dto.payload.item;
+package com.b2c.prototype.modal.dto.payload.item.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

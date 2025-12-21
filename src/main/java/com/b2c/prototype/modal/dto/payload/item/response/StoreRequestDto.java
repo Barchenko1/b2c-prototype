@@ -1,4 +1,4 @@
-package com.b2c.prototype.modal.dto.payload.item;
+package com.b2c.prototype.modal.dto.payload.item.response;
 
 import com.b2c.prototype.modal.dto.payload.order.AddressDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

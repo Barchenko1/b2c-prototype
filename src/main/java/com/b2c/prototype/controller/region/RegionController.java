@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/api/v1/region")
+@RequestMapping(value = "/api/v1/tenant")
 public class RegionController {
     private final IRegionProcess regionProcess;
 

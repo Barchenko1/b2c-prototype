@@ -19,14 +19,14 @@ public class TenantControllerE2ETest extends BasicE2ETest {
     private final String URL_TEMPLATE = "/api/v1/tenant";
 
     @Test
-    @DataSet(value = "datasets/e2e/region/emptyE2ERegionDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/region/testE2ERegionDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/e2e/tenant/emptyE2ETenantDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/tenant/testE2ETenantDataSet.yml", orderBy = "id")
     @Sql(statements = {
             "ALTER SEQUENCE currency_id_seq RESTART WITH 2",
-            "ALTER SEQUENCE region_id_seq RESTART WITH 2"
+            "ALTER SEQUENCE tenant_id_seq RESTART WITH 2"
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void testCreateEntity() {
-        TenantDto dto = getRegionDto();
+        TenantDto dto = getTenantDto();
         String jsonPayload = writeValueAsString(dto);
 
         webTestClient.post()
@@ -39,8 +39,8 @@ public class TenantControllerE2ETest extends BasicE2ETest {
     }
 
     @Test
-    @DataSet(value = "datasets/e2e/region/testE2ERegionDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/region/updateE2ERegionDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/e2e/tenant/testE2ETenantDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/tenant/updateE2ETenantDataSet.yml", orderBy = "id")
     public void testUpdateEntity() {
         TenantDto constantPayloadDto = TenantDto.builder()
                 .code("Update Global")
@@ -68,8 +68,8 @@ public class TenantControllerE2ETest extends BasicE2ETest {
     }
 
     @Test
-    @DataSet(value = "datasets/e2e/region/testE2ERegionDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/region/emptyE2ERegionDataSet.yml", orderBy = "id")
+    @DataSet(value = "datasets/e2e/tenant/testE2ETenantDataSet.yml", cleanBefore = true)
+    @ExpectedDataSet(value = "datasets/e2e/tenant/emptyE2ETenantDataSet.yml", orderBy = "id")
     public void testDeleteEntity() {
         webTestClient.delete()
                 .uri(uriBuilder -> uriBuilder
@@ -82,7 +82,7 @@ public class TenantControllerE2ETest extends BasicE2ETest {
     }
 
     @Test
-    @DataSet(value = "datasets/e2e/region/testE2ERegionDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/e2e/tenant/testE2ETenantDataSet.yml", cleanBefore = true)
     public void testGetEntities() {
         List<TenantDto> constantPayloadDtoList = List.of(
                 TenantDto.builder()
@@ -123,7 +123,7 @@ public class TenantControllerE2ETest extends BasicE2ETest {
     }
 
     @Test
-    @DataSet(value = "datasets/e2e/region/testE2ERegionDataSet.yml", cleanBefore = true)
+    @DataSet(value = "datasets/e2e/tenant/testE2ETenantDataSet.yml", cleanBefore = true)
     public void testGetEntity() {
         TenantDto expected = TenantDto.builder()
                 .code("Global")
@@ -156,7 +156,7 @@ public class TenantControllerE2ETest extends BasicE2ETest {
                 .isEqualTo(expected);
     }
 
-    private TenantDto getRegionDto() {
+    private TenantDto getTenantDto() {
         return TenantDto.builder()
                 .code("Global")
                 .value("Global")

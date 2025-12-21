@@ -34,9 +34,10 @@ import java.util.Set;
         @NamedQuery(
                 name = "StoreGeneralBoard.findByArticularUniqIds",
                 query = "SELECT DISTINCT sgb FROM StoreGeneralBoard sgb " +
-                        "JOIN sgb.articularStocks st " +
-                        "JOIN st.articularItemQuantity aiq " +
-                        "JOIN aiq.articularItem ai " +
+                        "LEFT JOIN sgb.articularStocks st " +
+                        "LEFT JOIN st.availabilityState sts " +
+                        "LEFT JOIN st.articularItemQuantity saiq " +
+                        "LEFT JOIN saiq.articularItem ai " +
                         "WHERE ai.articularUniqId IN :articularIds"
         )
 })

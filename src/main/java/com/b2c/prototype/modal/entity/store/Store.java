@@ -81,6 +81,18 @@ import java.util.Set;
                         "WHERE r.code = : code and c.key = : key and a.city = : city "
         ),
 
+        @NamedQuery(
+                name = "Store.findAllStoresByRegionAndArticularIds",
+                query = "SELECT s FROM Store s " +
+                        "LEFT JOIN FETCH s.tenant t " +
+                        "LEFT JOIN FETCH s.address a " +
+                        "LEFT JOIN FETCH a.country c " +
+                        "LEFT JOIN FETCH s.articularStocks sas " +
+                        "LEFT JOIN FETCH sas.articularItemQuantity aiq " +
+                        "LEFT JOIN FETCH aiq.articularItem ai " +
+                        "WHERE t.code = :code and ai.articularUniqId IN :articularIds"
+        ),
+
         /// ///
         @NamedQuery(
                 name = "Store.findStoreWithAddressByStoreId",

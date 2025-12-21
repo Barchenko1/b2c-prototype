@@ -1,6 +1,8 @@
-package com.b2c.prototype.modal.dto.payload.item;
+package com.b2c.prototype.modal.dto.payload.item.request;
 
 import com.b2c.prototype.modal.dto.payload.constant.ArticularStatusDto;
+import com.b2c.prototype.modal.dto.payload.item.response.GroupOptionKeys;
+import com.b2c.prototype.modal.dto.payload.item.PriceDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -27,4 +29,5 @@ public class ArticularItemAssignmentDto {
     private List<GroupOptionKeys> optionKeys;
     private List<GroupOptionKeys> optionCostKeys;
     private GroupOptionKeys discountKey;
+    private List<String> storeKey;
 }

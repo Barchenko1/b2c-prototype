@@ -1,0 +1,425 @@
+{
+  "tenantId": "Global",
+  "articularGroup": {
+    "articularGroupId": 111,
+    "description": {
+      "desc1": "desc1",
+      "desc2": "desc2"
+    },
+    "category": {
+      "value": "Laptop",
+      "key": "Laptop",
+      "childList": []
+    },
+    "items": [
+      {
+        "articularItem": {
+          "articularId": "articularId3",
+          "dateOfCreate": "2024-03-03T12:00",
+          "productName": "productName2",
+          "options": [{}, {}],
+          "costOptions": [
+            {
+              "price": {
+                "amount": 30.0,
+                "currency": {}
+              }
+            },
+            {
+              "price": {
+                "amount": 30.0,
+                "currency": {}
+              }
+            }
+          ],
+          "fullPrice": {
+            "amount": 30.0,
+            "currency": {}
+          },
+          "totalPrice": {
+            "amount": 50.0,
+            "currency": {}
+          },
+          "status": {},
+          "discount": {
+            "key": null,
+            "charSequenceCode": "abc3",
+            "amount": 10.0,
+            "isActive": false,
+            "currency": null,
+            "isPercent": true,
+            "articularIdSet": null
+          }
+        },
+        "reviews": [],
+        "posts": []
+      },
+      {
+        "articularItem": {
+          "articularId": "articularId2",
+          "dateOfCreate": "2024-03-03T12:00",
+          "productName": "productName1",
+          "options": [{}, {}],
+          "costOptions": [
+            {
+              "price": {
+                "amount": 30.0,
+                "currency": {}
+              }
+            },
+            {
+              "price": {
+                "amount": 30.0,
+                "currency": {}
+              }
+            }
+          ],
+          "fullPrice": {
+            "amount": 50.0,
+            "currency": {}
+          },
+          "totalPrice": {
+            "amount": 30.0,
+            "currency": {}
+          },
+          "status": {},
+          "discount": {
+            "key": null,
+            "charSequenceCode": "abc2",
+            "amount": 10.0,
+            "isActive": false,
+            "currency": {},
+            "isPercent": false,
+            "articularIdSet": null
+          }
+        },
+        "reviews": [],
+        "posts": []
+      }
+    ]
+  },
+  "storeGeneralBoard": {
+    "tenantId": "Global",
+    "articularStocks": [
+      {
+        "articularFullDescription": {
+          "articularGroupId": 111,
+          "description": {
+            "desc1": "desc1",
+            "desc2": "desc2"
+          },
+          "category": {
+            "value": "Laptop",
+            "key": "Laptop",
+            "childList": []
+          },
+          "articularItem": {
+            "articularId": "articularId2",
+            "dateOfCreate": "2024-03-03T12:00",
+            "productName": "productName1",
+            "options": [{}, {}],
+            "costOptions": [
+              {
+                "price": {
+                  "amount": 30.0,
+                  "currency": {}
+                }
+              },
+              {
+                "price": {
+                  "amount": 30.0,
+                  "currency": {}
+                }
+              }
+            ],
+            "fullPrice": {
+              "amount": 50.0,
+              "currency": {}
+            },
+            "totalPrice": {
+              "amount": 30.0,
+              "currency": {}
+            },
+            "status": {},
+            "discount": {
+              "key": null,
+              "charSequenceCode": "abc2",
+              "amount": 10.0,
+              "isActive": false,
+              "currency": {},
+              "isPercent": false,
+              "articularIdSet": null
+            }
+          }
+        },
+        "availabilityStatus": {},
+        "countType": "LIMITED",
+        "quantity": 2
+      },
+      {
+        "articularFullDescription": {
+          "articularGroupId": 111,
+          "description": {
+            "desc1": "desc1",
+            "desc2": "desc2"
+          },
+          "category": {
+            "value": "Laptop",
+            "key": "Laptop",
+            "childList": []
+          },
+          "articularItem": {
+            "articularId": "articularId2",
+            "dateOfCreate": "2024-03-03T12:00",
+            "productName": "productName1",
+            "options": [{}, {}],
+            "costOptions": [
+              {
+                "price": {
+                  "amount": 30.0,
+                  "currency": {}
+                }
+              },
+              {
+                "price": {
+                  "amount": 30.0,
+                  "currency": {}
+                }
+              }
+            ],
+            "fullPrice": {
+              "amount": 50.0,
+              "currency": {}
+            },
+            "totalPrice": {
+              "amount": 30.0,
+              "currency": {}
+            },
+            "status": {},
+            "discount": {
+              "key": null,
+              "charSequenceCode": "abc2",
+              "amount": 10.0,
+              "isActive": false,
+              "currency": {},
+              "isPercent": false,
+              "articularIdSet": null
+            }
+          }
+        },
+        "availabilityStatus": {},
+        "countType": "LIMITED",
+        "quantity": 2
+      }
+    ]
+  },
+  "stores": [
+    {
+      "store": {
+        "storeId": "storeId1",
+        "storeName": "Store1",
+        "isActive": false,
+        "region": "Global",
+        "address": {
+          "country": {
+            "flagImagePath": null
+          },
+          "city": "city",
+          "street": "street",
+          "buildingNumber": 10,
+          "florNumber": 9,
+          "apartmentNumber": 101,
+          "zipCode": "90000"
+        }
+      },
+      "articularStock": [
+        {
+          "articularFullDescription": {
+            "articularGroupId": 111,
+            "description": {
+              "desc1": "desc1",
+              "desc2": "desc2"
+            },
+            "category": {
+              "value": "Laptop",
+              "key": "Laptop",
+              "childList": []
+            },
+            "articularItem": {
+              "articularId": "articularId2",
+              "dateOfCreate": "2024-03-03T12:00",
+              "productName": "productName1",
+              "options": [{}, {}],
+              "costOptions": [
+                {
+                  "price": {
+                    "amount": 30.0,
+                    "currency": {}
+                  }
+                },
+                {
+                  "price": {
+                    "amount": 30.0,
+                    "currency": {}
+                  }
+                }
+              ],
+              "fullPrice": {
+                "amount": 50.0,
+                "currency": {}
+              },
+              "totalPrice": {
+                "amount": 30.0,
+                "currency": {}
+              },
+              "status": {},
+              "discount": {
+                "key": null,
+                "charSequenceCode": "abc2",
+                "amount": 10.0,
+                "isActive": false,
+                "currency": {},
+                "isPercent": false,
+                "articularIdSet": null
+              }
+            }
+          },
+          "availabilityStatus": {},
+          "countType": "LIMITED",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "store": {
+        "storeId": "storeId2",
+        "storeName": "Store2",
+        "isActive": false,
+        "region": "Global",
+        "address": {
+          "country": {
+            "flagImagePath": null
+          },
+          "city": "city",
+          "street": "street",
+          "buildingNumber": 10,
+          "florNumber": 9,
+          "apartmentNumber": 101,
+          "zipCode": "90000"
+        }
+      },
+      "articularStock": [
+        {
+          "articularFullDescription": {
+            "articularGroupId": 111,
+            "description": {
+              "desc1": "desc1",
+              "desc2": "desc2"
+            },
+            "category": {
+              "value": "Laptop",
+              "key": "Laptop",
+              "childList": []
+            },
+            "articularItem": {
+              "articularId": "articularId2",
+              "dateOfCreate": "2024-03-03T12:00",
+              "productName": "productName1",
+              "options": [{}, {}],
+              "costOptions": [
+                {
+                  "price": {
+                    "amount": 30.0,
+                    "currency": {}
+                  }
+                },
+                {
+                  "price": {
+                    "amount": 30.0,
+                    "currency": {}
+                  }
+                }
+              ],
+              "fullPrice": {
+                "amount": 50.0,
+                "currency": {}
+              },
+              "totalPrice": {
+                "amount": 30.0,
+                "currency": {}
+              },
+              "status": {},
+              "discount": {
+                "key": null,
+                "charSequenceCode": "abc2",
+                "amount": 10.0,
+                "isActive": false,
+                "currency": {},
+                "isPercent": false,
+                "articularIdSet": null
+              }
+            }
+          },
+          "availabilityStatus": {},
+          "countType": "LIMITED",
+          "quantity": 2
+        },
+        {
+          "articularFullDescription": {
+            "articularGroupId": 111,
+            "description": {
+              "desc1": "desc1",
+              "desc2": "desc2"
+            },
+            "category": {
+              "value": "Laptop",
+              "key": "Laptop",
+              "childList": []
+            },
+            "articularItem": {
+              "articularId": "articularId2",
+              "dateOfCreate": "2024-03-03T12:00",
+              "productName": "productName1",
+              "options": [{}, {}],
+              "costOptions": [
+                {
+                  "price": {
+                    "amount": 30.0,
+                    "currency": {}
+                  }
+                },
+                {
+                  "price": {
+                    "amount": 30.0,
+                    "currency": {}
+                  }
+                }
+              ],
+              "fullPrice": {
+                "amount": 50.0,
+                "currency": {}
+              },
+              "totalPrice": {
+                "amount": 30.0,
+                "currency": {}
+              },
+              "status": {},
+              "discount": {
+                "key": null,
+                "charSequenceCode": "abc2",
+                "amount": 10.0,
+                "isActive": false,
+                "currency": {},
+                "isPercent": false,
+                "articularIdSet": null
+              }
+            }
+          },
+          "availabilityStatus": {},
+          "countType": "LIMITED",
+          "quantity": 2
+        }
+      ]
+    }
+  ]
+}

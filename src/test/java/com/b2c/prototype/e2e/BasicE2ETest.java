@@ -14,12 +14,21 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.reactive.context.ReactiveWebApplicationContext;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StreamUtils;
 
 import javax.sql.DataSource;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -71,6 +80,18 @@ public class BasicE2ETest {
         try {
             return objectMapper.writeValueAsString(value);
         } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected String getExpectedJson(String path) {
+        try {
+            String expectedJson = StreamUtils.copyToString(
+                    new ClassPathResource(path).getInputStream(),
+                    StandardCharsets.UTF_8
+            );
+            return expectedJson;
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

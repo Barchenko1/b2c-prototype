@@ -1,8 +1,7 @@
 package com.b2c.prototype.modal.dto.payload.item.response;
 
-import com.b2c.prototype.modal.dto.payload.item.ArticularGroupDto;
-import com.b2c.prototype.modal.dto.payload.item.ArticularItemDto;
-import com.b2c.prototype.modal.dto.payload.store.StoreDto;
+import com.b2c.prototype.modal.dto.payload.store.StoreArticularStockDto;
+import com.b2c.prototype.modal.dto.payload.store.StoreGeneralBoardDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -20,8 +19,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class StoreArticularGroupResponseDto {
     private String tenantId;
-    private ArticularGroupDto articularGroup;
-    private List<ArticularItemDto> articularItems;
-    private List<StoreDto> stores;
-
+    private ArticularGroupResponseDto articularGroup;
+    private StoreGeneralBoardDto storeGeneralBoard;
+    private List<StoreArticularStockDto> stores;
 }

@@ -4,11 +4,16 @@ import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.constant.FeeType;
 import com.b2c.prototype.modal.dto.payload.commission.CommissionValueDto;
 import com.b2c.prototype.modal.dto.payload.commission.MinMaxCommissionDto;
+import com.b2c.prototype.modal.dto.payload.constant.ArticularStatusDto;
 import com.b2c.prototype.modal.dto.payload.constant.CountryDto;
 import com.b2c.prototype.modal.dto.payload.constant.CountryPhoneCodeDto;
 import com.b2c.prototype.modal.dto.payload.constant.CurrencyDto;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
+import com.b2c.prototype.modal.dto.payload.discount.DiscountResponseDto;
+import com.b2c.prototype.modal.dto.payload.item.ArticularItemDto;
 import com.b2c.prototype.modal.dto.payload.item.PriceDto;
+import com.b2c.prototype.modal.dto.payload.option.item.OptionItemCostDto;
+import com.b2c.prototype.modal.dto.payload.option.item.OptionItemDto;
 import com.b2c.prototype.modal.dto.payload.order.AddressDto;
 import com.b2c.prototype.modal.dto.payload.order.ContactInfoDto;
 import com.b2c.prototype.modal.dto.payload.order.ContactPhoneDto;
@@ -16,7 +21,11 @@ import com.b2c.prototype.modal.dto.payload.tenant.TenantDto;
 import com.b2c.prototype.modal.dto.payload.store.AvailabilityStatusDto;
 import com.b2c.prototype.modal.entity.address.Address;
 import com.b2c.prototype.modal.entity.address.Country;
+import com.b2c.prototype.modal.entity.item.ArticularItem;
+import com.b2c.prototype.modal.entity.item.ArticularStatus;
 import com.b2c.prototype.modal.entity.item.Discount;
+import com.b2c.prototype.modal.entity.option.OptionItem;
+import com.b2c.prototype.modal.entity.option.OptionItemCost;
 import com.b2c.prototype.modal.entity.payment.CommissionValue;
 import com.b2c.prototype.modal.entity.payment.MinMaxCommission;
 import com.b2c.prototype.modal.entity.price.Currency;
@@ -30,6 +39,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.b2c.prototype.util.Constant.CODE;
 import static com.b2c.prototype.util.Constant.KEY;
@@ -137,10 +149,7 @@ public class GeneralEntityTransformService implements IGeneralEntityTransformSer
     @Override
     public AddressDto mapAddressToAddressDto(Address address) {
         return AddressDto.builder()
-                .country(CountryDto.builder()
-                        .value(address.getCountry().getValue())
-                        .key(address.getCountry().getKey())
-                        .build())
+                .country(this.mapCountryToCountryDto(address.getCountry()))
                 .city(address.getCity())
                 .street(address.getStreet())
                 .buildingNumber(address.getBuildingNumber())
@@ -264,6 +273,87 @@ public class GeneralEntityTransformService implements IGeneralEntityTransformSer
 
     @Override
     public DiscountDto mapDiscountToDiscountDto(Discount discount) {
+        Set<String> articularIds = discount.getArticularItemList().stream()
+                .map(ArticularItem::getArticularUniqId)
+                .collect(Collectors.toSet());
+        return DiscountDto.builder()
+                .charSequenceCode(discount.getCharSequenceCode())
+                .amount(discount.getAmount())
+                .isPercent(discount.isPercent())
+                .isActive(discount.isActive())
+                .currency(discount.getCurrency() != null
+                        ? this.mapCurrencyToCurrencyDto(discount.getCurrency())
+                        : null)
+//                .articularIdSet(articularIds)
+//                .articularItemList(generalEntityDao.findEntityList("ArticularItem.findByArticularIds",
+//                        Pair.of("articularId", discount.getArticularIdSet())))
+                .build();
+    }
+
+    @Override
+    public DiscountResponseDto mapDiscountToDiscountResponseDto(Discount discount) {
+        return DiscountResponseDto.builder()
+                .charSequenceCode(discount.getCharSequenceCode())
+                .amount(discount.getAmount())
+                .isPercent(discount.isPercent())
+                .isActive(discount.isActive())
+                .currency(discount.getCurrency() != null
+                        ? this.mapCurrencyToCurrencyDto(discount.getCurrency())
+                        : null)
+                .articularItems(discount.getArticularItemList().stream()
+                        .map(this::mapArticularItemToArticularItemDto)
+                        .toList())
+                .build();
+    }
+
+    @Override
+    public OptionItemDto mapOptionItemToOptionItemDto(OptionItem optionItem) {
+        return OptionItemDto.builder()
+                .key(optionItem.getKey())
+                .value(optionItem.getValue())
+                .build();
+    }
+
+    @Override
+    public OptionItemCostDto mapOptionItemCostToOptionItemCostDto(OptionItemCost optionItemCost) {
+        return OptionItemCostDto.builder()
+                .key(optionItemCost.getKey())
+                .value(optionItemCost.getValue())
+                .price(this.mapPriceToPriceDto(optionItemCost.getPrice()))
+                .build();
+    }
+
+    @Override
+    public ArticularStatusDto mapArticularStatusToArticularStatusDto(ArticularStatus articularStatus) {
+        return ArticularStatusDto.builder()
+                .key(articularStatus.getKey())
+                .value(articularStatus.getValue())
+                .build();
+    }
+
+    @Override
+    public ArticularItem mapArticularItemDtoToArticularItem(ArticularItemDto articularItemDto) {
         return null;
+    }
+
+    @Override
+    public ArticularItemDto mapArticularItemToArticularItemDto(ArticularItem articularItem) {
+        return ArticularItemDto.builder()
+                .articularId(articularItem.getArticularUniqId())
+                .productName(articularItem.getProductName())
+                .dateOfCreate(articularItem.getDateOfCreate())
+                .options(articularItem.getOptionItems().stream()
+                        .map(this::mapOptionItemToOptionItemDto)
+                        .toList())
+                .costOptions(articularItem.getOptionItemCosts().stream()
+                        .map(this::mapOptionItemCostToOptionItemCostDto)
+                        .toList())
+                .fullPrice(this.mapPriceToPriceDto(articularItem.getFullPrice()))
+                .totalPrice(this.mapPriceToPriceDto(articularItem.getTotalPrice()))
+                .status(this.mapArticularStatusToArticularStatusDto(articularItem.getStatus()))
+                .discount(articularItem.getDiscount() != null
+                        ? this.mapDiscountToDiscountDto(articularItem.getDiscount())
+                        : null)
+                .build();
     }
 }

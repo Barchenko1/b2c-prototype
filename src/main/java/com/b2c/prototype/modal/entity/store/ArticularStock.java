@@ -1,7 +1,6 @@
 package com.b2c.prototype.modal.entity.store;
 
 import com.b2c.prototype.modal.constant.CountType;
-import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -14,19 +13,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "articular_stock")

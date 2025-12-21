@@ -2,13 +2,14 @@ package com.b2c.prototype.modal.dto.payload.item;
 
 import com.b2c.prototype.modal.dto.payload.constant.ArticularStatusDto;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
-import com.b2c.prototype.modal.dto.payload.discount.DiscountGroupDto;
-import com.b2c.prototype.modal.dto.payload.option.group.OptionItemCostGroupDto;
-import com.b2c.prototype.modal.dto.payload.option.group.OptionItemGroupDto;
 import com.b2c.prototype.modal.dto.payload.option.item.OptionItemCostDto;
 import com.b2c.prototype.modal.dto.payload.option.item.OptionItemDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,6 +26,8 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ArticularItemDto {
     private String articularId;
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime dateOfCreate;
     private String productName;
     private List<OptionItemDto> options;

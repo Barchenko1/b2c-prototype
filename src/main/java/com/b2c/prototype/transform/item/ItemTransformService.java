@@ -2,13 +2,16 @@ package com.b2c.prototype.transform.item;
 
 import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.constant.CountType;
+import com.b2c.prototype.modal.dto.payload.constant.ArticularStatusDto;
 import com.b2c.prototype.modal.dto.payload.constant.CategoryCascade;
 import com.b2c.prototype.modal.dto.payload.constant.CategoryDto;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
 import com.b2c.prototype.modal.dto.payload.discount.DiscountGroupDto;
+import com.b2c.prototype.modal.dto.payload.item.ArticularFullDescription;
 import com.b2c.prototype.modal.dto.payload.item.ArticularItemDto;
-import com.b2c.prototype.modal.dto.payload.item.ArticularGroupDto;
+import com.b2c.prototype.modal.dto.payload.item.ItemDto;
 import com.b2c.prototype.modal.dto.payload.item.PriceDto;
+import com.b2c.prototype.modal.dto.payload.item.response.ArticularGroupResponseDto;
 import com.b2c.prototype.modal.dto.payload.option.group.OptionItemCostGroupDto;
 import com.b2c.prototype.modal.dto.payload.option.group.OptionItemGroupDto;
 import com.b2c.prototype.modal.dto.payload.option.item.OptionItemCostDto;
@@ -18,17 +21,23 @@ import com.b2c.prototype.modal.dto.payload.post.PostDto;
 import com.b2c.prototype.modal.dto.payload.review.ResponseReviewDto;
 import com.b2c.prototype.modal.dto.payload.review.ReviewDto;
 import com.b2c.prototype.modal.dto.payload.store.ArticularStockDto;
+import com.b2c.prototype.modal.dto.payload.store.ArticularStockItemDto;
+import com.b2c.prototype.modal.dto.payload.store.StoreArticularStockDto;
 import com.b2c.prototype.modal.dto.payload.store.StoreDto;
+import com.b2c.prototype.modal.dto.payload.store.StoreGeneralBoardDto;
 import com.b2c.prototype.modal.entity.item.ArticularGroup;
 import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
+import com.b2c.prototype.modal.entity.item.ArticularStatus;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.DiscountGroup;
+import com.b2c.prototype.modal.entity.item.Item;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.modal.entity.option.OptionItemCost;
 import com.b2c.prototype.modal.entity.post.Post;
 import com.b2c.prototype.modal.entity.price.Price;
+import com.b2c.prototype.modal.entity.store.StoreGeneralBoard;
 import com.b2c.prototype.modal.entity.tenant.Tenant;
 import com.b2c.prototype.modal.entity.review.Review;
 import com.b2c.prototype.modal.entity.store.ArticularStock;
@@ -116,12 +125,6 @@ public class ItemTransformService implements IItemTransformService {
                 .address(generalEntityTransformService.mapAddressDtoToAddress(storeDto.getAddress()))
                 .tenant(generalEntityDao.findEntity("Tenant.findByCode",
                         Pair.of(CODE, storeDto.getRegion())))
-//                .articularStocks(
-//                        storeDto.getArticularStocks() != null
-//                                ? storeDto.getArticularStocks().stream()
-//                                    .map(this::mapArticularStockDtoToArticularStock)
-//                                    .collect(Collectors.toSet())
-//                                : null)
                 .build();
     }
 
@@ -132,26 +135,44 @@ public class ItemTransformService implements IItemTransformService {
                 .storeName(store.getStoreName())
                 .address(generalEntityTransformService.mapAddressToAddressDto(store.getAddress()))
                 .region(store.getTenant().getCode())
-//                .articularStocks(
-//                        store.getArticularStocks().stream()
-//                                .map(this::mapArticularStockToArticularStockDto)
-//                                .toList())
                 .build();
     }
 
     @Override
-    public ArticularStockDto mapArticularStockToArticularStockDto(ArticularStock articularStock) {
-        return ArticularStockDto.builder()
+    public StoreGeneralBoardDto mapStoreGeneralBoardToStoreGeneralBoardDto(StoreGeneralBoard storeGeneralBoard) {
+        return StoreGeneralBoardDto.builder()
+                .tenantId(storeGeneralBoard.getTenant().getCode())
+                .articularStocks(storeGeneralBoard.getArticularStocks().stream()
+                        .map(this::mapArticularStockToArticularStockDto)
+                        .toList())
+                .build();
+    }
+
+    @Override
+    public StoreArticularStockDto mapStoreToStoreArticularStockDto(Store store) {
+        return StoreArticularStockDto.builder()
+                .store(mapStoreToStoreDto(store))
+                .articularStock(store.getArticularStocks().stream()
+                        .map(this::mapArticularStockToArticularStockDto)
+                        .toList())
+
+                .build();
+    }
+
+    @Override
+    public ArticularStockItemDto mapArticularStockToArticularStockDto(ArticularStock articularStock) {
+        return ArticularStockItemDto.builder()
+                .articularFullDescription(
+                        this.mapArticularItemToArticularFullDescription(articularStock.getArticularItemQuantity().getArticularItem()))
                 .availabilityStatus(generalEntityTransformService.mapAvailabilityStatusToAvailabilityStatusDto(
                         articularStock.getAvailabilityState()))
                 .countType(articularStock.getCountType().name())
-                .articularItemQuantity(mapArticularItemQuantityToArticularItemQuantityDto(
-                        articularStock.getArticularItemQuantity()))
+                .quantity(articularStock.getArticularItemQuantity().getQuantity())
                 .build();
     }
 
     @Override
-    public ArticularStock mapArticularStockDtoToArticularStock(ArticularStockDto articularStockDto) {
+    public ArticularStock mapArticularStockDtoToArticularStock(ArticularStockDto articularStockDto, ArticularItem articularItem) {
         if (articularStockDto == null) {
             return null;
         }
@@ -159,27 +180,37 @@ public class ItemTransformService implements IItemTransformService {
                 .availabilityState(generalEntityTransformService.mapAvailabilityStatusDtoToAvailabilityStatus(
                         articularStockDto.getAvailabilityStatus()))
                 .countType(CountType.valueOf(articularStockDto.getCountType()))
-                .articularItemQuantity(mapArticularItemQuantityDtoToArticularItemQuantity(
-                        articularStockDto.getArticularItemQuantity()))
+                .articularItemQuantity(ArticularItemQuantity.builder()
+                        .articularItem(articularItem)
+                        .quantity(articularStockDto.getQuantity())
+                        .build())
                 .build();
     }
 
 
     @Override
-    public ArticularGroupDto mapArticularGroupToArticularGroupDto(ArticularGroup articularGroup) {
-        return ArticularGroupDto.builder()
+    public ArticularGroupResponseDto mapArticularGroupDtoToArticularGroupDto(ArticularGroup articularGroup) {
+        return ArticularGroupResponseDto.builder()
                 .articularGroupId(articularGroup.getArticularGroupId())
+                .description(articularGroup.getDescription())
+                .category(mapCategoryToCategoryCascadeDto(articularGroup.getCategory()))
+                .items(articularGroup.getItems().stream()
+                        .map(this::mapItemToItemDto)
+                        .toList())
                 .build();
     }
 
     @Override
-    public ArticularItem mapArticularItemDtoToArticularItem(ArticularItemDto articularItemDto) {
-        return null;
-    }
-
-    @Override
-    public ArticularItemDto mapArticularItemToArticularItemDto(ArticularItem articularItem) {
-        return null;
+    public ItemDto mapItemToItemDto(Item item) {
+        return ItemDto.builder()
+                .articularItem(generalEntityTransformService.mapArticularItemToArticularItemDto(item.getArticularItem()))
+                .reviews(item.getReviews().stream()
+                        .map(this::mapReviewToResponseReviewDto)
+                        .toList())
+                .posts(item.getPosts().stream()
+                        .map(this::mapPostToPostDto)
+                        .toList())
+                .build();
     }
 
     @Override
@@ -201,6 +232,17 @@ public class ItemTransformService implements IItemTransformService {
                 .quantity(articularItemQuantity.getQuantity())
                 .articularGroupId(articularItemQuantity.getArticularItem().getArticularGroup().getArticularGroupId())
                 .articularId(articularItemQuantity.getArticularItem().getArticularUniqId())
+                .build();
+    }
+
+    @Override
+    public ArticularFullDescription mapArticularItemToArticularFullDescription(ArticularItem articularItem) {
+        ArticularGroup articularGroup = articularItem.getArticularGroup();
+        return ArticularFullDescription.builder()
+                .articularGroupId(articularGroup.getArticularGroupId())
+                .description(articularGroup.getDescription())
+                .category(this.mapCategoryToCategoryCascadeDto(articularGroup.getCategory()))
+                .articularItem(generalEntityTransformService.mapArticularItemToArticularItemDto(articularItem))
                 .build();
     }
 

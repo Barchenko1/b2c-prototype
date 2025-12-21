@@ -55,7 +55,7 @@
     <named-query name="Item.findById">
         <query>SELECT e FROM Item e
 
-            LEFT JOIN FETCH e.articularItems ai
+            LEFT JOIN FETCH e.articularItem ai
 
             LEFT JOIN FETCH e.posts p
             LEFT JOIN FETCH e.reviews re

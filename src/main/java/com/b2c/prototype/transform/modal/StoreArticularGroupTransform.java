@@ -10,7 +10,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.Set;
 
 @Builder
@@ -18,8 +17,6 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StoreArticularGroupTransform {
-    private Set<OptionGroup> optionGroup;
-    private Set<DiscountGroup> discountGroup;
     private ArticularGroup articularGroup;
     private StoreGeneralBoard storeGeneralBoard;
     private Set<Store> stores;

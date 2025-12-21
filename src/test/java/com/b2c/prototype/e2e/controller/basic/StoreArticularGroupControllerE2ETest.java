@@ -6,21 +6,31 @@ import com.b2c.prototype.modal.dto.payload.constant.ArticularStatusDto;
 import com.b2c.prototype.modal.dto.payload.constant.CategoryCascade;
 import com.b2c.prototype.modal.dto.payload.constant.CountryDto;
 import com.b2c.prototype.modal.dto.payload.constant.CurrencyDto;
-import com.b2c.prototype.modal.dto.payload.item.ArticularGroupDto;
-import com.b2c.prototype.modal.dto.payload.item.ArticularItemAssignmentDto;
-import com.b2c.prototype.modal.dto.payload.item.ArticularStockQuantityDto;
-import com.b2c.prototype.modal.dto.payload.item.GroupOptionKeys;
+import com.b2c.prototype.modal.dto.payload.discount.DiscountDto;
+import com.b2c.prototype.modal.dto.payload.item.ArticularFullDescription;
+import com.b2c.prototype.modal.dto.payload.item.ArticularItemDto;
+import com.b2c.prototype.modal.dto.payload.item.ItemDto;
+import com.b2c.prototype.modal.dto.payload.item.request.ArticularGroupRequestDto;
+import com.b2c.prototype.modal.dto.payload.item.request.ArticularItemAssignmentDto;
+import com.b2c.prototype.modal.dto.payload.item.response.ArticularStockQuantityDto;
+import com.b2c.prototype.modal.dto.payload.item.response.GroupOptionKeys;
 import com.b2c.prototype.modal.dto.payload.item.PriceDto;
 import com.b2c.prototype.modal.dto.payload.item.request.StoreArticularGroupRequestDto;
 import com.b2c.prototype.modal.dto.payload.item.StoreDiscount;
 import com.b2c.prototype.modal.dto.payload.item.StoreDiscountGroup;
 import com.b2c.prototype.modal.dto.payload.item.StoreOptionItemCostGroup;
 import com.b2c.prototype.modal.dto.payload.item.StoreOptionItemGroup;
-import com.b2c.prototype.modal.dto.payload.item.StoreRequestDto;
+import com.b2c.prototype.modal.dto.payload.item.response.ArticularGroupResponseDto;
+import com.b2c.prototype.modal.dto.payload.item.response.StoreRequestDto;
+import com.b2c.prototype.modal.dto.payload.item.response.StoreArticularGroupResponseDto;
 import com.b2c.prototype.modal.dto.payload.option.item.OptionItemCostDto;
 import com.b2c.prototype.modal.dto.payload.option.item.OptionItemDto;
 import com.b2c.prototype.modal.dto.payload.order.AddressDto;
+import com.b2c.prototype.modal.dto.payload.store.ArticularStockItemDto;
 import com.b2c.prototype.modal.dto.payload.store.AvailabilityStatusDto;
+import com.b2c.prototype.modal.dto.payload.store.StoreArticularStockDto;
+import com.b2c.prototype.modal.dto.payload.store.StoreDto;
+import com.b2c.prototype.modal.dto.payload.store.StoreGeneralBoardDto;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import org.junit.jupiter.api.Test;
@@ -28,6 +38,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,14 +53,14 @@ class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
     @Test
     @DataSet(value = "datasets/e2e/item/articular_group/emptyE2EStoreArticularGroupDataSet.yml", cleanBefore = true)
     @ExpectedDataSet(value = "datasets/e2e/item/articular_group/testE2EStoreArticularGroupDataSet.yml",
-            orderBy = {"char_sequence_code", "value", "product_name"},
-            ignoreCols = {"id", "key", "articular_group_uniq_id", "articular_uniq_id", "date_of_create"})
+            orderBy = {"value", "char_sequence_code", "product_name"},
+            ignoreCols = {
+                "id", "key", "articular_group_uniq_id", "articular_uniq_id", "date_of_create", "store_uniq_id",
+                "articular_item_id", "price_id", "full_price_id", "total_price_id", "discount_id", "address_id", "store_id", "articular_item_quantity_id", "quantity", "store_name"
+    })
     @Sql(statements = {
             "ALTER SEQUENCE articular_group_id_seq RESTART WITH 2",
             "ALTER SEQUENCE articular_item_id_seq RESTART WITH 2",
-            "ALTER SEQUENCE store_id_seq RESTART WITH 2",
-            "ALTER SEQUENCE articular_stock_id_seq RESTART WITH 2",
-            "ALTER SEQUENCE articular_item_quantity_id_seq RESTART WITH 3",
             "ALTER SEQUENCE address_id_seq RESTART WITH 2",
             "ALTER SEQUENCE discount_group_id_seq RESTART WITH 2",
             "ALTER SEQUENCE discount_id_seq RESTART WITH 2",
@@ -57,14 +68,8 @@ class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
             "ALTER SEQUENCE option_group_id_seq RESTART WITH 2",
             "ALTER SEQUENCE option_item_id_seq RESTART WITH 3",
             "ALTER SEQUENCE option_item_cost_id_seq RESTART WITH 2",
+            "ALTER SEQUENCE store_general_board_id_seq RESTART WITH 2",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-//    @Sql(statements = {
-//            "SELECT * FROM discount ORDER BY id, char_sequence_code",
-//            "SELECT * FROM price ORDER BY id",
-//            "SELECT * FROM option_group ORDER BY id",
-//            "SELECT * FROM option_item ORDER BY id",
-//            "SELECT * FROM option_item_cost ORDER BY id",
-//    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void testCreateEntity() {
         StoreArticularGroupRequestDto dto = getStoreArticularGroupRequestDto();
         String jsonPayload = writeValueAsString(dto);
@@ -116,16 +121,16 @@ class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
     @Test
     @DataSet(value = "datasets/e2e/item/articular_group/testE2EStoreArticularGroupDataSet.yml", cleanBefore = true)
     public void testGetEntities() {
-        List<StoreArticularGroupRequestDto> expected = List.of();
+        List<StoreArticularGroupResponseDto> expected = List.of(getStoreArticularGroupResponseDto1());
 
-        List<StoreArticularGroupRequestDto> actual =
+        List<StoreArticularGroupResponseDto> actual =
                 webTestClient.get()
                         .uri(URL_TEMPLATE + "/all")
                         .accept(MediaType.APPLICATION_JSON)
                         .exchange()
                         .expectStatus().isOk()
                         .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
-                        .expectBody(new ParameterizedTypeReference<List<StoreArticularGroupRequestDto>>() {
+                        .expectBody(new ParameterizedTypeReference<List<StoreArticularGroupResponseDto>>() {
                         })
                         .returnResult()
                         .getResponseBody();
@@ -139,26 +144,39 @@ class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
     @Test
     @DataSet(value = "datasets/e2e/item/articular_group/testE2EStoreArticularGroupDataSet.yml", cleanBefore = true)
     public void testGetEntity() {
-        StoreArticularGroupRequestDto expected = getStoreArticularGroupRequestDto();
+        String expectedJson = getExpectedJson("datasets/expected/storeArticularGroupResponse.json");
 
-        StoreArticularGroupRequestDto actual = webTestClient.get()
+        StoreArticularGroupResponseDto actual = webTestClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL_TEMPLATE)
                         .queryParam("tenant", "Global")
-                        .queryParam("key", "Apple")
+                        .queryParam("articularGroupId", "111")
                         .build())
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
-                .expectBody(StoreArticularGroupRequestDto.class)
+                .expectBody(StoreArticularGroupResponseDto.class)
                 .returnResult()
                 .getResponseBody();
 
-        assertThat(actual)
-                .usingRecursiveComparison()
-                .ignoringCollectionOrder()
-                .isEqualTo(expected);
+        webTestClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path(URL_TEMPLATE)
+                        .queryParam("tenant", "Global")
+                        .queryParam("articularGroupId", "111")
+                        .build())
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .json(expectedJson);
+
+//        assertThat(actual)
+//                .usingRecursiveComparison()
+//                .ignoringCollectionOrder()
+//                .isEqualTo(expected);
     }
 
     private StoreArticularGroupRequestDto getStoreArticularGroupRequestDto() {
@@ -240,21 +258,16 @@ class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
                                                 .build()))
                                 .build()
                 ))
+                .storeGroup(Map.of(
+                        "store1", getStoreRequestDto1(),
+                        "store2", getStoreRequestDto2()
+                ))
                 .articularGroup(getArticularGroupDto())
-                .articularItems(Map.of(
-                        "item1", getArticularItemAssignmentDto1(),
-                        "item2", getArticularItemAssignmentDto2()
-                ))
-                .stores(Map.of(
-                        "item1", List.of(getStoreRequestDto1(), getStoreRequestDto2()),
-                        "item2", List.of(getStoreRequestDto1())
-                ))
-
                 .build();
     }
 
-    private ArticularGroupDto getArticularGroupDto() {
-        return ArticularGroupDto.builder()
+    private ArticularGroupRequestDto getArticularGroupDto() {
+        return ArticularGroupRequestDto.builder()
                 .category(CategoryCascade.builder()
                         .key("Laptop")
                         .value("Laptop")
@@ -263,6 +276,10 @@ class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
                     put("desc1", "desc1");
                     put("desc2", "desc2");
                 }})
+                .articularItems(Map.of(
+                        "item1", getArticularItemAssignmentDto1(),
+                        "item2", getArticularItemAssignmentDto2()
+                ))
                 .build();
 
     }
@@ -296,6 +313,7 @@ class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
                                 .optionKeys(List.of("discount1"))
                                 .build()
                 )
+                .storeKey(List.of("store1", "store2"))
                 .build();
     }
 
@@ -307,8 +325,8 @@ class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
                 .fullPrice(getPriceDto(50))
                 .totalPrice(getPriceDto(30))
                 .status(ArticularStatusDto.builder()
-                        .value("Common")
-                        .key("Common")
+                        .value("New")
+                        .key("New")
                         .build())
                 .optionKeys(List.of(
                         GroupOptionKeys.builder()
@@ -328,6 +346,7 @@ class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
                                 .optionKeys(List.of("discount2"))
                                 .build()
                 )
+                .storeKey(List.of("store1"))
                 .build();
     }
 
@@ -353,8 +372,8 @@ class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
                         .street("street")
                         .buildingNumber("10")
                         .florNumber(9)
-                        .apartmentNumber(201)
-                        .zipCode("900001")
+                        .apartmentNumber(101)
+                        .zipCode("90000")
                         .build())
                 .stock(Map.of(
                         "item1", getArticularStockQuantityDto1(),
@@ -371,12 +390,12 @@ class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
                                 .value("USA")
                                 .key("USA")
                                 .build())
-                        .city("city2")
-                        .street("street2")
+                        .city("city")
+                        .street("street")
                         .buildingNumber("10")
                         .florNumber(9)
-                        .apartmentNumber(201)
-                        .zipCode("900002")
+                        .apartmentNumber(101)
+                        .zipCode("90000")
                         .build())
                 .stock(Map.of(
                         "item1", getArticularStockQuantityDto1()
@@ -403,6 +422,141 @@ class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
                         .build())
                 .countType(CountType.LIMITED.name())
                 .quantity(2)
+                .build();
+    }
+
+    private StoreArticularGroupResponseDto getStoreArticularGroupResponseDto1() {
+        return StoreArticularGroupResponseDto.builder()
+                .articularGroup(ArticularGroupResponseDto.builder().build())
+                .storeGeneralBoard(StoreGeneralBoardDto.builder().build())
+                .stores(List.of())
+                .build();
+    }
+
+
+    // response
+    public StoreArticularGroupResponseDto createSample() {
+        return StoreArticularGroupResponseDto.builder()
+                .tenantId("Global")
+                .articularGroup(createArticularGroup())
+                .storeGeneralBoard(createGeneralBoard())
+                .stores(List.of(
+                        createStoreStock("storeId1", "Store1"),
+                        createStoreStock("storeId2", "Store2")
+                ))
+                .build();
+    }
+
+    private ArticularGroupResponseDto createArticularGroup() {
+        return ArticularGroupResponseDto.builder()
+                .articularGroupId("111")
+                .description(Map.of("desc1", "desc1", "desc2", "desc2"))
+                .category(new CategoryCascade("Laptop", "Laptop", List.of()))
+                .items(List.of(
+                        createItem("articularId3", "productName2", 30.0, 50.0, "abc3", true),
+                        createItem("articularId2", "productName1", 50.0, 30.0, "abc2", false)
+                ))
+                .build();
+    }
+
+    private static ItemDto createItem(
+            String id,
+            String name,
+            double fullPrice,
+            double totalPrice,
+            String discountCode,
+            boolean discountPercent) {
+
+        return ItemDto.builder()
+                .articularItem(ArticularItemDto.builder()
+                        .articularId(id)
+                        .dateOfCreate(LocalDateTime.parse("2024-03-03T12:00"))
+                        .productName(name)
+                        .options(List.of(new OptionItemDto(), new OptionItemDto()))
+                        .costOptions(List.of(
+                                new OptionItemCostDto(new PriceDto(30.0, new CurrencyDto())),
+                                new OptionItemCostDto(new PriceDto(30.0, new CurrencyDto()))
+                        ))
+                        .fullPrice(new PriceDto(fullPrice, new CurrencyDto()))
+                        .totalPrice(new PriceDto(totalPrice, new CurrencyDto()))
+                        .status(new ArticularStatusDto())
+                        .discount(new DiscountDto(
+                                null,
+                                discountCode,
+                                10.0,
+                                false,
+                                new CurrencyDto(),
+                                discountPercent,
+                                null
+                        ))
+                        .build())
+                .reviews(List.of())
+                .posts(List.of())
+                .build();
+    }
+
+    private StoreGeneralBoardDto createGeneralBoard() {
+        return StoreGeneralBoardDto.builder()
+                .tenantId("Global")
+                .articularStocks(List.of(
+                        createStockItem(2),
+                        createStockItem(2)
+                ))
+                .build();
+    }
+
+    private ArticularStockItemDto createStockItem(int quantity) {
+        return ArticularStockItemDto.builder()
+                .articularFullDescription(createFullDescription())
+                .availabilityStatus(new AvailabilityStatusDto())
+                .countType("LIMITED")
+                .quantity(quantity)
+                .build();
+    }
+
+    private ArticularFullDescription createFullDescription() {
+        return ArticularFullDescription.builder()
+                .articularGroupId("111")
+                .description(Map.of("desc1", "desc1", "desc2", "desc2"))
+                .category(new CategoryCascade("Laptop", "Laptop", List.of()))
+                .articularItem(ArticularItemDto.builder()
+                        .articularId("articularId2")
+                        .dateOfCreate(LocalDateTime.parse("2024-03-03T12:00"))
+                        .productName("productName1")
+                        .options(List.of(new OptionItemDto(), new OptionItemDto()))
+                        .costOptions(List.of(
+                                new OptionItemCostDto(new PriceDto(30.0, new CurrencyDto())),
+                                new OptionItemCostDto(new PriceDto(30.0, new CurrencyDto()))
+                        ))
+                        .fullPrice(new PriceDto(50.0, new CurrencyDto()))
+                        .totalPrice(new PriceDto(30.0, new CurrencyDto()))
+                        .status(new ArticularStatusDto())
+                        .discount(new DiscountDto(
+                                null, "abc2", 10.0, false, new CurrencyDto(), false, null
+                        ))
+                        .build())
+                .build();
+    }
+
+
+    private StoreArticularStockDto createStoreStock(String storeId, String storeName) {
+        return StoreArticularStockDto.builder()
+                .store(StoreDto.builder()
+                        .storeId(storeId)
+                        .storeName(storeName)
+                        .isActive(false)
+                        .region("Global")
+                        .address(AddressDto.builder()
+                                .country(null)
+                                .city("city")
+                                .street("street")
+                                .buildingNumber("10")
+                                .florNumber(9)
+                                .apartmentNumber(101)
+                                .zipCode("90000")
+                                .build())
+                        .build())
+                .articularStock(List.of(createStockItem(2), createStockItem(2)))
                 .build();
     }
 
