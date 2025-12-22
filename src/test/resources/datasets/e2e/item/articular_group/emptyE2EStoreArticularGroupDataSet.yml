@@ -93,7 +93,7 @@ articular_group:
     tenant_id: 1
 articular_item:
   - id: 1
-    articular_uniq_id: 1
+    articular_uniq_id: "articularId1"
     date_of_create: "2024-03-03 12:00:00"
     discount_id: 1
     full_price_id: 1

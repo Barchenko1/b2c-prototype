@@ -114,7 +114,7 @@ public class ArticularItem {
     private String articularUniqId;
     private LocalDateTime dateOfCreate;
     private String productName;
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
             name = "articular_item_option_item",
             joinColumns = {@JoinColumn(name = "articular_item_id")},
@@ -122,7 +122,7 @@ public class ArticularItem {
     )
     @Builder.Default
     private Set<OptionItem> optionItems = new HashSet<>();
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
             name = "articular_item_option_item_cost",
             joinColumns = {@JoinColumn(name = "articular_item_id")},

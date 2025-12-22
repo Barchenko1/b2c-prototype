@@ -8,6 +8,13 @@ import com.b2c.prototype.modal.dto.payload.item.response.StoreArticularGroupResp
 import com.b2c.prototype.modal.dto.payload.store.StoreArticularStockDto;
 import com.b2c.prototype.modal.dto.payload.store.StoreGeneralBoardDto;
 import com.b2c.prototype.modal.entity.item.ArticularGroup;
+import com.b2c.prototype.modal.entity.item.ArticularItem;
+import com.b2c.prototype.modal.entity.item.ArticularItemQuantity;
+import com.b2c.prototype.modal.entity.item.DiscountGroup;
+import com.b2c.prototype.modal.entity.option.OptionGroup;
+import com.b2c.prototype.modal.entity.option.OptionItem;
+import com.b2c.prototype.modal.entity.option.OptionItemCost;
+import com.b2c.prototype.modal.entity.store.ArticularStock;
 import com.b2c.prototype.modal.entity.store.Store;
 import com.b2c.prototype.modal.entity.store.StoreGeneralBoard;
 import com.b2c.prototype.service.generator.IKeyGeneratorService;
@@ -19,8 +26,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.b2c.prototype.util.Constant.ARTICULAR_GROUP_ID;
@@ -90,11 +99,47 @@ public class StoreArticularGroupManager implements IStoreArticularGroupManager {
         stores.forEach(generalEntityDao::removeEntity);
         generalEntityDao.removeEntity(storeGeneralBoard);
 
-        // Remove items from articularGroup (if cascading is not set)
-        articularGroup.getItems().forEach(generalEntityDao::removeEntity);
+        Set<OptionItemCost> allOptionItemCosts = new HashSet<>();
+        Set<OptionItem> allOptionItems = new HashSet<>();
+        Set<OptionGroup> allOptionGroups = new HashSet<>();
+        Set<DiscountGroup> allDiscountGroups = new HashSet<>();
 
-        // Finally remove the group
+        articularGroup.getItems().forEach(groupItem -> {
+            ArticularItem articularItem = groupItem.getArticularItem();
+
+            articularItem.getOptionItemCosts().forEach(cost -> {
+                if (cost.getOptionGroup() != null) {
+                    allOptionGroups.add(cost.getOptionGroup());
+                }
+                allOptionItemCosts.add(cost);
+            });
+
+            articularItem.getOptionItems().forEach(item -> {
+                if (item.getOptionGroup() != null) {
+                    allOptionGroups.add(item.getOptionGroup());
+                }
+                allOptionItems.add(item);
+            });
+
+            if (articularItem.getDiscount() != null && articularItem.getDiscount().getDiscountGroup() != null) {
+                allDiscountGroups.add(articularItem.getDiscount().getDiscountGroup());
+            }
+
+            articularItem.getOptionItemCosts().clear();
+            articularItem.getOptionItems().clear();
+        });
+
+        allOptionItemCosts.forEach(generalEntityDao::removeEntity);
+        allOptionItems.forEach(generalEntityDao::removeEntity);
+        allOptionGroups.forEach(generalEntityDao::removeEntity);
+
         generalEntityDao.removeEntity(articularGroup);
+
+        allDiscountGroups.forEach(discountGroup -> {
+            if (discountGroup.getDiscounts() == null || !discountGroup.getDiscounts().isEmpty()) {
+                generalEntityDao.removeEntity(discountGroup);
+            }
+        });
     }
 
     @Override

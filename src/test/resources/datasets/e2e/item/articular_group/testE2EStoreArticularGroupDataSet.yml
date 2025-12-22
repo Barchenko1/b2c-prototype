@@ -170,7 +170,7 @@ articular_item:
     date_of_create: "2024-03-03 12:00:00"
     discount_id: 2
     full_price_id: 2
-    total_price_id: 4
+    total_price_id: 3
     status_id: 1
     articular_group_id: 2
     product_name: "productName2"
@@ -178,8 +178,8 @@ articular_item:
     articular_uniq_id: "articularId3"
     date_of_create: "2024-03-03 12:00:00"
     discount_id: 3
-    full_price_id: 3
-    total_price_id: 6
+    full_price_id: 6
+    total_price_id: 7
     status_id: 1
     articular_group_id: 2
     product_name: "productName3"
@@ -266,22 +266,22 @@ articular_stock:
     store_id: 1
     count_type: "LIMITED"
   - id: 2
-    articular_item_quantity_id: 1
+    articular_item_quantity_id: 2
     availability_status_id: 1
     store_id: 2
     count_type: "LIMITED"
   - id: 3
-    articular_item_quantity_id: 1
+    articular_item_quantity_id: 3
     availability_status_id: 1
     store_id: 2
     count_type: "LIMITED"
   - id: 4
     store_general_board_id: 2
-    articular_item_quantity_id: 1
+    articular_item_quantity_id: 4
     availability_status_id: 1
     count_type: "LIMITED"
   - id: 5
     store_general_board_id: 2
-    articular_item_quantity_id: 1
+    articular_item_quantity_id: 5
     availability_status_id: 1
     count_type: "LIMITED"

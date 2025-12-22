@@ -49,11 +49,14 @@ import java.util.Set;
                         "LEFT JOIN FETCH it.articularItem ai " +
                         "LEFT JOIN FETCH ai.optionItems oi " +
                         "LEFT JOIN FETCH oi.optionGroup og " +
+                        "LEFT JOIN FETCH ai.optionItemCosts oic " +
+                        "LEFT JOIN FETCH oic.optionGroup ogc " +
                         "LEFT JOIN FETCH ai.fullPrice fp " +
                         "LEFT JOIN FETCH fp.currency fpc " +
                         "LEFT JOIN FETCH ai.totalPrice tp " +
                         "LEFT JOIN FETCH tp.currency tpc " +
                         "LEFT JOIN FETCH ai.discount d " +
+                        "LEFT JOIN FETCH d.discountGroup dg " +
                         "LEFT JOIN FETCH d.currency dc " +
                         "LEFT JOIN FETCH ag.category agc " +
                         "LEFT JOIN FETCH agc.childList agccl " +
@@ -93,10 +96,6 @@ import java.util.Set;
                         "LEFT JOIN FETCH d.currency dc " +
                         "LEFT JOIN FETCH d.articularItemList dai " +
                         "WHERE ag.articularGroupId = :articularGroupId"
-        ),
-        @NamedQuery(
-                name = "ArticularGroup.deleteByArticularIds",
-                query = "DELETE FROM ArticularGroup agi WHERE agi.articularItem.articularUniqId IN :articularIds"
         )
 })
 @Data
