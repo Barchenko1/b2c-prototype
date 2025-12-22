@@ -31,6 +31,7 @@ public class ArticularStock {
     private long id;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private ArticularItemQuantity articularItemQuantity;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "availability_status_id")
     private AvailabilityStatus availabilityState;

@@ -36,6 +36,7 @@ public class StoreArticularGroupProcessor implements IStoreArticularGroupProcess
         String articularGroupId = requestParams.get("articularGroupId");
         boolean isForced = Boolean.parseBoolean(requestParams.get("isForced"));
         storeArticularGroupManager.deleteStoreArticularGroup(tenant, articularGroupId, isForced);
+        String test = "";
     }
 
     @Override
@@ -48,7 +49,6 @@ public class StoreArticularGroupProcessor implements IStoreArticularGroupProcess
     @Override
     public List<StoreArticularGroupResponseDto> getStoreArticularGroupList(Map<String, String> requestParams) {
         String tenant = requestParams.get("tenant");
-        String articularGroupId = requestParams.get("articularGroupId");
-        return List.of();
+        return storeArticularGroupManager.getStoreArticularGroups(tenant);
     }
 }

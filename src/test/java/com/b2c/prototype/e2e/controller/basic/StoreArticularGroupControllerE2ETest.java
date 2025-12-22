@@ -34,17 +34,16 @@ import com.b2c.prototype.modal.dto.payload.store.StoreGeneralBoardDto;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import org.junit.jupiter.api.Test;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import static com.b2c.prototype.util.Converter.getLocalDateTime;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
 
@@ -121,44 +120,30 @@ class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
     @Test
     @DataSet(value = "datasets/e2e/item/articular_group/testE2EStoreArticularGroupDataSet.yml", cleanBefore = true)
     public void testGetEntities() {
-        List<StoreArticularGroupResponseDto> expected = List.of(getStoreArticularGroupResponseDto1());
+        String expectedJson = getExpectedJson("datasets/expected/storeArticularGroupResponseList.json");
 
-        List<StoreArticularGroupResponseDto> actual =
-                webTestClient.get()
-                        .uri(URL_TEMPLATE + "/all")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .exchange()
-                        .expectStatus().isOk()
-                        .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
-                        .expectBody(new ParameterizedTypeReference<List<StoreArticularGroupResponseDto>>() {
-                        })
-                        .returnResult()
-                        .getResponseBody();
-
-        assertThat(actual)
-                .usingRecursiveComparison()
-                .ignoringCollectionOrder()
-                .isEqualTo(expected);
+        webTestClient.get()
+                .uri(URL_TEMPLATE + "/all")
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(result -> {
+                    byte[] body = result.getResponseBody();
+                    if (body != null) {
+                        System.out.println("=== RESPONSE BODY ===");
+                        System.out.println(new String(body, StandardCharsets.UTF_8));
+                        System.out.println("=====================");
+                    }
+                })
+                .json(expectedJson);
     }
 
     @Test
     @DataSet(value = "datasets/e2e/item/articular_group/testE2EStoreArticularGroupDataSet.yml", cleanBefore = true)
     public void testGetEntity() {
         String expectedJson = getExpectedJson("datasets/expected/storeArticularGroupResponse.json");
-
-        StoreArticularGroupResponseDto actual = webTestClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path(URL_TEMPLATE)
-                        .queryParam("tenant", "Global")
-                        .queryParam("articularGroupId", "111")
-                        .build())
-                .accept(MediaType.APPLICATION_JSON)
-                .exchange()
-                .expectStatus().isOk()
-                .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
-                .expectBody(StoreArticularGroupResponseDto.class)
-                .returnResult()
-                .getResponseBody();
 
         webTestClient.get()
                 .uri(uriBuilder -> uriBuilder
@@ -171,12 +156,15 @@ class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
                 .expectStatus().isOk()
                 .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
                 .expectBody()
+                .consumeWith(result -> {
+                    byte[] body = result.getResponseBody();
+                    if (body != null) {
+                        System.out.println("=== RESPONSE BODY ===");
+                        System.out.println(new String(body, StandardCharsets.UTF_8));
+                        System.out.println("=====================");
+                    }
+                })
                 .json(expectedJson);
-
-//        assertThat(actual)
-//                .usingRecursiveComparison()
-//                .ignoringCollectionOrder()
-//                .isEqualTo(expected);
     }
 
     private StoreArticularGroupRequestDto getStoreArticularGroupRequestDto() {
@@ -286,8 +274,8 @@ class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
 
     private ArticularItemAssignmentDto getArticularItemAssignmentDto1() {
         return ArticularItemAssignmentDto.builder()
-                .articularId("articularId1")
-                .productName("productName1")
+                .articularId("articularId2")
+                .productName("productName2")
                 .dateOfCreate(getLocalDateTime("2024-03-03 12:00:00"))
                 .fullPrice(getPriceDto(50))
                 .totalPrice(getPriceDto(30))
@@ -319,8 +307,8 @@ class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
 
     private ArticularItemAssignmentDto getArticularItemAssignmentDto2() {
         return ArticularItemAssignmentDto.builder()
-                .articularId("articularId2")
-                .productName("productName2")
+                .articularId("articularId3")
+                .productName("productName3")
                 .dateOfCreate(getLocalDateTime("2024-03-03 12:00:00"))
                 .fullPrice(getPriceDto(50))
                 .totalPrice(getPriceDto(30))
@@ -453,8 +441,8 @@ class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
                 .description(Map.of("desc1", "desc1", "desc2", "desc2"))
                 .category(new CategoryCascade("Laptop", "Laptop", List.of()))
                 .items(List.of(
-                        createItem("articularId3", "productName2", 30.0, 50.0, "abc3", true),
-                        createItem("articularId2", "productName1", 50.0, 30.0, "abc2", false)
+                        createItem("articularId3", "productName3", 30.0, 50.0, "abc3", true),
+                        createItem("articularId2", "productName2", 50.0, 30.0, "abc2", false)
                 ))
                 .build();
     }
@@ -522,7 +510,7 @@ class StoreArticularGroupControllerE2ETest extends BasicE2ETest {
                 .articularItem(ArticularItemDto.builder()
                         .articularId("articularId2")
                         .dateOfCreate(LocalDateTime.parse("2024-03-03T12:00"))
-                        .productName("productName1")
+                        .productName("productName2")
                         .options(List.of(new OptionItemDto(), new OptionItemDto()))
                         .costOptions(List.of(
                                 new OptionItemCostDto(new PriceDto(30.0, new CurrencyDto())),

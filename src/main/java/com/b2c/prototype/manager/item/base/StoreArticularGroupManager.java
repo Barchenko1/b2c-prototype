@@ -18,7 +18,10 @@ import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.b2c.prototype.util.Constant.ARTICULAR_GROUP_ID;
 import static com.b2c.prototype.util.Constant.CODE;
@@ -83,6 +86,14 @@ public class StoreArticularGroupManager implements IStoreArticularGroupManager {
                         Pair.of("articularIds", articularIds)
                 )
         );
+
+        stores.forEach(generalEntityDao::removeEntity);
+        generalEntityDao.removeEntity(storeGeneralBoard);
+
+        // Remove items from articularGroup (if cascading is not set)
+        articularGroup.getItems().forEach(generalEntityDao::removeEntity);
+
+        // Finally remove the group
         generalEntityDao.removeEntity(articularGroup);
     }
 
@@ -109,7 +120,7 @@ public class StoreArticularGroupManager implements IStoreArticularGroupManager {
                 )
         );
 
-        ArticularGroupResponseDto articularGroupDto = itemTransformService.mapArticularGroupDtoToArticularGroupDto(articularGroup);
+        ArticularGroupResponseDto articularGroupResponseDto = itemTransformService.mapArticularGroupDtoToArticularGroupDto(articularGroup);
         StoreGeneralBoardDto storeGeneralBoardDto = itemTransformService.mapStoreGeneralBoardToStoreGeneralBoardDto(storeGeneralBoard);
         List<StoreArticularStockDto> storeDtoList = stores.stream()
                 .map(itemTransformService::mapStoreToStoreArticularStockDto)
@@ -117,7 +128,7 @@ public class StoreArticularGroupManager implements IStoreArticularGroupManager {
 
         return StoreArticularGroupResponseDto.builder()
                 .tenantId(tenantId)
-                .articularGroup(articularGroupDto)
+                .articularGroup(articularGroupResponseDto)
                 .storeGeneralBoard(storeGeneralBoardDto)
                 .stores(storeDtoList)
                 .build();
@@ -126,6 +137,108 @@ public class StoreArticularGroupManager implements IStoreArticularGroupManager {
     @Override
     @Transactional(readOnly = true)
     public List<StoreArticularGroupResponseDto> getStoreArticularGroups(String tenantId) {
-        return List.of();
+        // 1) groups
+        List<ArticularGroup> groups = generalEntityDao.findEntityList(
+                "ArticularGroup.findAllByRegion",
+                List.of(Pair.of(CODE, tenantId))
+        );
+
+        // groupId -> articularIds
+        Map<String, List<String>> groupToArticularIds = groups.stream()
+                .collect(Collectors.toMap(
+                        g -> String.valueOf(g.getArticularGroupId()),
+                        g -> g.getItems().stream()
+                                .map(it -> it.getArticularItem().getArticularUniqId())
+                                .toList()
+                ));
+
+        List<String> allArticularIds = groupToArticularIds.values().stream()
+                .flatMap(Collection::stream)
+                .distinct()
+                .toList();
+
+        if (allArticularIds.isEmpty()) {
+            return groups.stream()
+                    .map(g -> StoreArticularGroupResponseDto.builder()
+                            .tenantId(tenantId)
+                            .articularGroup(itemTransformService.mapArticularGroupDtoToArticularGroupDto(g))
+                            .storeGeneralBoard(null)
+                            .stores(List.of())
+                            .build()
+                    )
+                    .toList();
+        }
+
+        // 2) One call for boards/stocks for all articularIds
+        // You likely need a "findByArticularUniqIds" that returns ALL matching boards/stocks (not single entity)
+        List<StoreGeneralBoard> boards = generalEntityDao.findEntityList(
+                "StoreGeneralBoard.findAllByArticularUniqIds",
+                List.of(Pair.of("articularIds", allArticularIds))
+        );
+
+        // 3) One call for stores for all articularIds
+        List<Store> stores = generalEntityDao.findEntityList(
+                "Store.findAllStoresByRegionAndArticularIds",
+                List.of(Pair.of(CODE, tenantId), Pair.of("articularIds", allArticularIds))
+        );
+
+        // ---- Build lookup maps ----
+        // IMPORTANT: you need a way to know which articularIds each board/store relates to.
+        // If entity graph contains stocks -> articularItem -> articularUniqId, you can extract it.
+        Map<String, List<StoreGeneralBoard>> articularIdToBoards = boards.stream()
+                .flatMap(b -> b.getArticularStocks().stream()
+                        .map(stock -> Map.entry(stock.getArticularItemQuantity()
+                                .getArticularItem()
+                                .getArticularUniqId(), b)))
+                .collect(Collectors.groupingBy(
+                        Map.Entry::getKey,
+                        Collectors.mapping(Map.Entry::getValue, Collectors.toList())
+                ));
+
+        Map<String, List<Store>> articularIdToStores = stores.stream()
+                .flatMap(store -> store.getArticularStocks().stream()
+                        .map(stock -> Map.entry(stock.getArticularItemQuantity()
+                                .getArticularItem()
+                                .getArticularUniqId(), store)))
+                .collect(Collectors.groupingBy(
+                        Map.Entry::getKey,
+                        Collectors.mapping(Map.Entry::getValue, Collectors.toList())
+                ));
+
+        // ---- Response per group ----
+        return groups.stream()
+                .map(g -> {
+                    List<String> ids = groupToArticularIds.getOrDefault(
+                            String.valueOf(g.getArticularGroupId()), List.of()
+                    );
+
+                    // boards/stores for this group = union by articularId
+                    List<StoreGeneralBoard> groupBoards = ids.stream()
+                            .flatMap(id -> articularIdToBoards.getOrDefault(id, List.of()).stream())
+                            .distinct()
+                            .toList();
+
+                    List<Store> groupStores = ids.stream()
+                            .flatMap(id -> articularIdToStores.getOrDefault(id, List.of()).stream())
+                            .distinct()
+                            .toList();
+
+                    // If you expect exactly ONE board per tenant, you can pick first; otherwise you may need a merge DTO.
+                    StoreGeneralBoardDto boardDto = groupBoards.isEmpty()
+                            ? null
+                            : itemTransformService.mapStoreGeneralBoardToStoreGeneralBoardDto(groupBoards.get(0));
+
+                    List<StoreArticularStockDto> storeDtos = groupStores.stream()
+                            .map(itemTransformService::mapStoreToStoreArticularStockDto)
+                            .toList();
+
+                    return StoreArticularGroupResponseDto.builder()
+                            .tenantId(tenantId)
+                            .articularGroup(itemTransformService.mapArticularGroupDtoToArticularGroupDto(g))
+                            .storeGeneralBoard(boardDto)
+                            .stores(storeDtos)
+                            .build();
+                })
+                .toList();
     }
 }

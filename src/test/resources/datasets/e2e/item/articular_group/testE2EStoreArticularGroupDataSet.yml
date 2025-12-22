@@ -173,7 +173,7 @@ articular_item:
     total_price_id: 4
     status_id: 1
     articular_group_id: 2
-    product_name: "productName1"
+    product_name: "productName2"
   - id: 3
     articular_uniq_id: "articularId3"
     date_of_create: "2024-03-03 12:00:00"
@@ -182,7 +182,7 @@ articular_item:
     total_price_id: 6
     status_id: 1
     articular_group_id: 2
-    product_name: "productName2"
+    product_name: "productName3"
 item:
   - id: 1
     articular_group_id: 2

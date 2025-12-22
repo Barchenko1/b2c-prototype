@@ -1,7 +1,7 @@
 {
   "tenantId": "Global",
   "articularGroup": {
-    "articularGroupId": 111,
+    "articularGroupId": "111",
     "description": {
       "desc1": "desc1",
       "desc2": "desc2"
@@ -15,40 +15,65 @@
       {
         "articularItem": {
           "articularId": "articularId3",
-          "dateOfCreate": "2024-03-03T12:00",
-          "productName": "productName2",
-          "options": [{}, {}],
+          "dateOfCreate": "2024-03-03T12:00:00",
+          "productName": "productName3",
+          "options": [
+            {
+              "key": "Blue",
+              "value": "Blue"
+            },
+            {
+              "key": "Red",
+              "value": "Red"
+            }
+          ],
           "costOptions": [
             {
+              "value":"Red",
+              "key":"Red",
               "price": {
                 "amount": 30.0,
-                "currency": {}
+                "currency": {
+                  "key": "USD",
+                  "value": "USD"
+                }
               }
             },
             {
+              "value":"Blue",
+              "key":"Blue",
               "price": {
                 "amount": 30.0,
-                "currency": {}
+                "currency": {
+                  "key": "USD",
+                  "value": "USD"
+                }
               }
             }
           ],
           "fullPrice": {
             "amount": 30.0,
-            "currency": {}
+            "currency": {
+              "key": "USD",
+              "value": "USD"
+            }
           },
           "totalPrice": {
             "amount": 50.0,
-            "currency": {}
+            "currency": {
+              "key": "USD",
+              "value": "USD"
+            }
           },
-          "status": {},
+          "status": {
+              "key" : "New",
+              "value" : "New"
+            },
           "discount": {
-            "key": null,
             "charSequenceCode": "abc3",
             "amount": 10.0,
             "isActive": false,
-            "currency": null,
-            "isPercent": true,
-            "articularIdSet": null
+            "isPercent": true
           }
         },
         "reviews": [],
@@ -57,40 +82,69 @@
       {
         "articularItem": {
           "articularId": "articularId2",
-          "dateOfCreate": "2024-03-03T12:00",
-          "productName": "productName1",
-          "options": [{}, {}],
+          "dateOfCreate": "2024-03-03T12:00:00",
+          "productName": "productName2",
+          "options": [
+            {
+              "key": "Blue",
+              "value": "Blue"
+            },
+            {
+              "key": "Red",
+              "value": "Red"
+            }
+          ],
           "costOptions": [
             {
+              "value":"Red",
+              "key":"Red",
               "price": {
                 "amount": 30.0,
-                "currency": {}
+                "currency": {
+                  "key": "USD",
+                  "value": "USD"
+                }
               }
             },
             {
+              "value":"Blue",
+              "key":"Blue",
               "price": {
                 "amount": 30.0,
-                "currency": {}
+                "currency": {
+                  "key": "USD",
+                  "value": "USD"
+                }
               }
             }
           ],
           "fullPrice": {
             "amount": 50.0,
-            "currency": {}
+            "currency": {
+              "key": "USD",
+              "value": "USD"
+            }
           },
           "totalPrice": {
             "amount": 30.0,
-            "currency": {}
+            "currency": {
+              "key": "USD",
+              "value": "USD"
+            }
           },
-          "status": {},
+          "status": {
+              "key" : "New",
+              "value" : "New"
+            },
           "discount": {
-            "key": null,
             "charSequenceCode": "abc2",
             "amount": 10.0,
             "isActive": false,
-            "currency": {},
-            "isPercent": false,
-            "articularIdSet": null
+            "currency": {
+              "key": "USD",
+              "value": "USD"
+            },
+            "isPercent": false
           }
         },
         "reviews": [],
@@ -103,7 +157,7 @@
     "articularStocks": [
       {
         "articularFullDescription": {
-          "articularGroupId": 111,
+          "articularGroupId": "111",
           "description": {
             "desc1": "desc1",
             "desc2": "desc2"
@@ -115,50 +169,82 @@
           },
           "articularItem": {
             "articularId": "articularId2",
-            "dateOfCreate": "2024-03-03T12:00",
-            "productName": "productName1",
-            "options": [{}, {}],
+            "dateOfCreate": "2024-03-03T12:00:00",
+            "productName": "productName2",
+            "options": [
+              {
+                "key": "Blue",
+                "value": "Blue"
+              },
+              {
+                "key": "Red",
+                "value": "Red"
+              }
+            ],
             "costOptions": [
               {
+                "key":"Red",
+                "value":"Red",
                 "price": {
                   "amount": 30.0,
-                  "currency": {}
+                  "currency": {
+                      "key": "USD",
+                      "value": "USD"
+                    }
                 }
               },
               {
+                "value":"Blue",
+                "key":"Blue",
                 "price": {
                   "amount": 30.0,
-                  "currency": {}
+                  "currency": {
+                    "key": "USD",
+                    "value": "USD"
+                  }
                 }
               }
             ],
             "fullPrice": {
               "amount": 50.0,
-              "currency": {}
+              "currency": {
+                      "key": "USD",
+                      "value": "USD"
+                    }
             },
             "totalPrice": {
               "amount": 30.0,
-              "currency": {}
+              "currency": {
+                      "key": "USD",
+                      "value": "USD"
+                    }
             },
-            "status": {},
+            "status": {
+              "key" : "New",
+              "value" : "New"
+            },
             "discount": {
-              "key": null,
               "charSequenceCode": "abc2",
               "amount": 10.0,
               "isActive": false,
-              "currency": {},
-              "isPercent": false,
-              "articularIdSet": null
+              "currency": {
+                "key": "USD",
+                "value": "USD"
+              },
+              "isPercent": false
             }
           }
         },
-        "availabilityStatus": {},
+        "availabilityStatus": {
+          "value": "Available",
+          "key": "Available"
+        },
         "countType": "LIMITED",
         "quantity": 2
       },
       {
         "articularFullDescription": {
-          "articularGroupId": 111,
+          "articularGroupId": "111",
           "description": {
             "desc1": "desc1",
             "desc2": "desc2"
@@ -170,44 +256,76 @@
           },
           "articularItem": {
             "articularId": "articularId2",
-            "dateOfCreate": "2024-03-03T12:00",
-            "productName": "productName1",
-            "options": [{}, {}],
+            "dateOfCreate": "2024-03-03T12:00:00",
+            "productName": "productName2",
+            "options": [
+              {
+                "key": "Blue",
+                "value": "Blue"
+              },
+              {
+                "key": "Red",
+                "value": "Red"
+              }
+            ],
             "costOptions": [
               {
+                "value":"Red",
+                "key":"Red",
                 "price": {
                   "amount": 30.0,
-                  "currency": {}
+                  "currency": {
+                      "key": "USD",
+                      "value": "USD"
+                    }
                 }
               },
               {
+                "value":"Blue",
+                "key":"Blue",
                 "price": {
                   "amount": 30.0,
-                  "currency": {}
+                  "currency": {
+                      "key": "USD",
+                      "value": "USD"
+                    }
                 }
               }
             ],
             "fullPrice": {
               "amount": 50.0,
-              "currency": {}
+              "currency": {
+                "key": "USD",
+                "value": "USD"
+              }
             },
             "totalPrice": {
               "amount": 30.0,
-              "currency": {}
+              "currency": {
+                "key": "USD",
+                "value": "USD"
+              }
             },
-            "status": {},
+            "status": {
+              "key" : "New",
+              "value" : "New"
+            },
             "discount": {
-              "key": null,
               "charSequenceCode": "abc2",
               "amount": 10.0,
               "isActive": false,
-              "currency": {},
-              "isPercent": false,
-              "articularIdSet": null
+              "currency": {
+                "key": "USD",
+                "value": "USD"
+              },
+              "isPercent": false
             }
           }
         },
-        "availabilityStatus": {},
+        "availabilityStatus": {
+          "value": "Available",
+          "key": "Available"
+        },
         "countType": "LIMITED",
         "quantity": 2
       }
@@ -222,11 +340,12 @@
         "region": "Global",
         "address": {
           "country": {
-            "flagImagePath": null
+            "value": "USA",
+            "key": "USA"
           },
           "city": "city",
           "street": "street",
-          "buildingNumber": 10,
+          "buildingNumber": "10",
           "florNumber": 9,
           "apartmentNumber": 101,
           "zipCode": "90000"
@@ -235,7 +354,7 @@
       "articularStock": [
         {
           "articularFullDescription": {
-            "articularGroupId": 111,
+            "articularGroupId": "111",
             "description": {
               "desc1": "desc1",
               "desc2": "desc2"
@@ -247,44 +366,76 @@
             },
             "articularItem": {
               "articularId": "articularId2",
-              "dateOfCreate": "2024-03-03T12:00",
-              "productName": "productName1",
-              "options": [{}, {}],
+              "dateOfCreate": "2024-03-03T12:00:00",
+              "productName": "productName2",
+              "options": [
+                {
+                  "key": "Blue",
+                  "value": "Blue"
+                },
+                {
+                  "key": "Red",
+                  "value": "Red"
+                }
+              ],
               "costOptions": [
                 {
+                  "value":"Red",
+                  "key":"Red",
                   "price": {
                     "amount": 30.0,
-                    "currency": {}
+                    "currency": {
+                      "key": "USD",
+                      "value": "USD"
+                    }
                   }
                 },
                 {
+                  "value":"Blue",
+                  "key":"Blue",
                   "price": {
                     "amount": 30.0,
-                    "currency": {}
+                    "currency": {
+                      "key": "USD",
+                      "value": "USD"
+                    }
                   }
                 }
               ],
               "fullPrice": {
                 "amount": 50.0,
-                "currency": {}
+                "currency": {
+                  "key": "USD",
+                  "value": "USD"
+                }
               },
               "totalPrice": {
                 "amount": 30.0,
-                "currency": {}
+                "currency": {
+                  "key": "USD",
+                  "value": "USD"
+                }
               },
-              "status": {},
+              "status": {
+              "key" : "New",
+              "value" : "New"
+            },
               "discount": {
-                "key": null,
                 "charSequenceCode": "abc2",
                 "amount": 10.0,
                 "isActive": false,
-                "currency": {},
-                "isPercent": false,
-                "articularIdSet": null
+                "currency": {
+                  "key": "USD",
+                  "value": "USD"
+                },
+                "isPercent": false
               }
             }
           },
-          "availabilityStatus": {},
+          "availabilityStatus": {
+            "value": "Available",
+            "key": "Available"
+          },
           "countType": "LIMITED",
           "quantity": 2
         }
@@ -298,11 +449,12 @@
         "region": "Global",
         "address": {
           "country": {
-            "flagImagePath": null
+            "value": "USA",
+            "key": "USA"
           },
           "city": "city",
           "street": "street",
-          "buildingNumber": 10,
+          "buildingNumber": "10",
           "florNumber": 9,
           "apartmentNumber": 101,
           "zipCode": "90000"
@@ -311,7 +463,7 @@
       "articularStock": [
         {
           "articularFullDescription": {
-            "articularGroupId": 111,
+            "articularGroupId": "111",
             "description": {
               "desc1": "desc1",
               "desc2": "desc2"
@@ -323,50 +475,82 @@
             },
             "articularItem": {
               "articularId": "articularId2",
-              "dateOfCreate": "2024-03-03T12:00",
-              "productName": "productName1",
-              "options": [{}, {}],
+              "dateOfCreate": "2024-03-03T12:00:00",
+              "productName": "productName2",
+              "options": [
+                {
+                  "key": "Blue",
+                  "value": "Blue"
+                },
+                {
+                  "key": "Red",
+                  "value": "Red"
+                }
+              ],
               "costOptions": [
                 {
+                  "value":"Red",
+                  "key":"Red",
                   "price": {
                     "amount": 30.0,
-                    "currency": {}
+                    "currency": {
+                      "key": "USD",
+                      "value": "USD"
+                    }
                   }
                 },
                 {
+                  "value":"Blue",
+                  "key":"Blue",
                   "price": {
                     "amount": 30.0,
-                    "currency": {}
+                    "currency": {
+                      "key": "USD",
+                      "value": "USD"
+                    }
                   }
                 }
               ],
               "fullPrice": {
                 "amount": 50.0,
-                "currency": {}
+                "currency": {
+                  "key": "USD",
+                  "value": "USD"
+                }
               },
               "totalPrice": {
                 "amount": 30.0,
-                "currency": {}
+                "currency": {
+                  "key": "USD",
+                  "value": "USD"
+                }
               },
-              "status": {},
+              "status": {
+              "key" : "New",
+              "value" : "New"
+            },
               "discount": {
-                "key": null,
                 "charSequenceCode": "abc2",
                 "amount": 10.0,
                 "isActive": false,
-                "currency": {},
-                "isPercent": false,
-                "articularIdSet": null
+                "currency": {
+                  "key": "USD",
+                  "value": "USD"
+                },
+                "isPercent": false
               }
             }
           },
-          "availabilityStatus": {},
+          "availabilityStatus": {
+            "value": "Available",
+            "key": "Available"
+          },
           "countType": "LIMITED",
           "quantity": 2
         },
         {
           "articularFullDescription": {
-            "articularGroupId": 111,
+            "articularGroupId": "111",
             "description": {
               "desc1": "desc1",
               "desc2": "desc2"
@@ -378,44 +562,76 @@
             },
             "articularItem": {
               "articularId": "articularId2",
-              "dateOfCreate": "2024-03-03T12:00",
-              "productName": "productName1",
-              "options": [{}, {}],
+              "dateOfCreate": "2024-03-03T12:00:00",
+              "productName": "productName2",
+              "options": [
+                {
+                  "key": "Blue",
+                  "value": "Blue"
+                },
+                {
+                  "key": "Red",
+                  "value": "Red"
+                }
+              ],
               "costOptions": [
                 {
+                  "value":"Red",
+                  "key":"Red",
                   "price": {
                     "amount": 30.0,
-                    "currency": {}
+                    "currency": {
+                      "key": "USD",
+                      "value": "USD"
+                    }
                   }
                 },
                 {
+                  "value":"Blue",
+                  "key":"Blue",
                   "price": {
                     "amount": 30.0,
-                    "currency": {}
+                    "currency": {
+                      "key": "USD",
+                      "value": "USD"
+                    }
                   }
                 }
               ],
               "fullPrice": {
                 "amount": 50.0,
-                "currency": {}
+                "currency": {
+                  "key": "USD",
+                  "value": "USD"
+                }
               },
               "totalPrice": {
                 "amount": 30.0,
-                "currency": {}
+                "currency": {
+                  "key": "USD",
+                  "value": "USD"
+                }
               },
-              "status": {},
+              "status": {
+              "key" : "New",
+              "value" : "New"
+            },
               "discount": {
-                "key": null,
                 "charSequenceCode": "abc2",
                 "amount": 10.0,
                 "isActive": false,
-                "currency": {},
-                "isPercent": false,
-                "articularIdSet": null
+                "currency": {
+                  "key": "USD",
+                  "value": "USD"
+                },
+                "isPercent": false
               }
             }
           },
-          "availabilityStatus": {},
+          "availabilityStatus": {
+            "value": "Available",
+            "key": "Available"
+          },
           "countType": "LIMITED",
           "quantity": 2
         }

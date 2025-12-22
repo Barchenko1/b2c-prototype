@@ -93,6 +93,10 @@ import java.util.Set;
                         "LEFT JOIN FETCH d.currency dc " +
                         "LEFT JOIN FETCH d.articularItemList dai " +
                         "WHERE ag.articularGroupId = :articularGroupId"
+        ),
+        @NamedQuery(
+                name = "ArticularGroup.deleteByArticularIds",
+                query = "DELETE FROM ArticularGroup agi WHERE agi.articularItem.articularUniqId IN :articularIds"
         )
 })
 @Data

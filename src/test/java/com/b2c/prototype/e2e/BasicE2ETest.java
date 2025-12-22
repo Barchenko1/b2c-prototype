@@ -86,11 +86,10 @@ public class BasicE2ETest {
 
     protected String getExpectedJson(String path) {
         try {
-            String expectedJson = StreamUtils.copyToString(
+            return StreamUtils.copyToString(
                     new ClassPathResource(path).getInputStream(),
                     StandardCharsets.UTF_8
             );
-            return expectedJson;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
