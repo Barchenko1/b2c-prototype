@@ -59,7 +59,7 @@ public class TimeDurationGroupOptionManager implements ITimeDurationGroupOptionM
     @Override
     public void mergeEntity(String searchValue, TimeDurationOptionGroupDto timeDurationOptionGroupDto) {
         OptionGroup group = generalEntityDao.findEntity(
-                "OptionGroup.findByValueWithOptionItems",
+                "OptionGroup.findByKeyWithOptionItems",
                 Pair.of(KEY, searchValue)
         );
         OptionGroup entity = syncItemsAllowingKeyChange(searchValue, group, timeDurationOptionGroupDto);
@@ -76,7 +76,7 @@ public class TimeDurationGroupOptionManager implements ITimeDurationGroupOptionM
     @Override
     public OptionGroup getEntity(String value) {
         return generalEntityDao.findEntity(
-                "OptionGroup.findByValueWithOptionItems",
+                "OptionGroup.findByKeyWithOptionItems",
                 List.of(Pair.of(KEY, value)));
     }
 

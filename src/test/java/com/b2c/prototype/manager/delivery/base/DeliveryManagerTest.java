@@ -1,13 +1,13 @@
 //package com.b2c.prototype.manager.delivery.base;
 //
 //import com.b2c.prototype.dao.delivery.IDeliveryDao;
-//import com.b2c.prototype.modal.modal.payload.order.AddressDto;
-//import com.b2c.prototype.modal.modal.payload.order.single.DeliveryDto;
-//import com.b2c.prototype.modal.entity.address.Address;
-//import com.b2c.prototype.modal.entity.address.Country;
-//import com.b2c.prototype.modal.entity.delivery.Delivery;
-//import com.b2c.prototype.modal.entity.delivery.DeliveryType;
-//import com.b2c.prototype.modal.entity.order.DeliveryArticularItemQuantity;
+//import com.b2c.prototype.transform.transform.payload.order.AddressDto;
+//import com.b2c.prototype.transform.transform.payload.order.single.DeliveryDto;
+//import com.b2c.prototype.transform.entity.address.Address;
+//import com.b2c.prototype.transform.entity.address.Country;
+//import com.b2c.prototype.transform.entity.delivery.Delivery;
+//import com.b2c.prototype.transform.entity.delivery.DeliveryType;
+//import com.b2c.prototype.transform.entity.order.DeliveryArticularItemQuantity;
 //import com.b2c.prototype.function.transform.ITransformationFunctionService;
 //import com.tm.core.finder.parameter.Parameter;
 //import org.hibernate.Session;

@@ -1,8 +1,6 @@
-package com.b2c.prototype.transform.modal;
+package com.b2c.prototype.transform.transform;
 
-import com.b2c.prototype.modal.entity.item.ArticularGroup;
-import com.b2c.prototype.modal.entity.item.DiscountGroup;
-import com.b2c.prototype.modal.entity.option.OptionGroup;
+import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.store.Store;
 import com.b2c.prototype.modal.entity.store.StoreGeneralBoard;
 import lombok.AllArgsConstructor;
@@ -16,8 +14,9 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class StoreArticularGroupTransform {
-    private ArticularGroup articularGroup;
+public class StoreArticularItemTransform {
+    private String articularGroupId;
+    private ArticularItem articularItem;
     private StoreGeneralBoard storeGeneralBoard;
     private Set<Store> stores;
 }

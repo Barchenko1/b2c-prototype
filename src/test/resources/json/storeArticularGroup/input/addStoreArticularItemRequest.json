@@ -1,0 +1,210 @@
+{
+  "tenantId" : "Global",
+  "articularGroupId" : "111",
+  "discountGroups" : {
+    "discountGroup1" : {
+      "key" : "Global_group",
+      "value" : "Global_group",
+      "discounts" : {
+        "discount2" : {
+          "charSequenceCode" : "abc4",
+          "amount" : 10.0,
+          "currency" : null,
+          "percent" : true,
+          "isActive" : false
+        },
+        "discount1" : {
+          "charSequenceCode" : "abc3",
+          "amount" : 10.0,
+          "currency" : {
+            "value" : "USD",
+            "key" : "USD"
+          },
+          "percent" : false,
+          "isActive" : false
+        }
+      }
+    }
+  },
+  "optionItemGroups" : {
+    "optionGroup1" : {
+      "key": "Color",
+      "value" : "Color",
+      "optionItems" : {
+        "option2" : {
+          "key" : "Blue",
+          "value" : "Blue"
+        },
+        "option1" : {
+          "key" : "Red",
+          "value" : "Red"
+        }
+      }
+    }
+  },
+  "optionItemCostGroups" : {
+    "optionCostGroup1" : {
+      "key": "ColorCost",
+      "value" : "ColorCost",
+      "costOptions" : {
+        "optionCost1" : {
+          "value" : "Red",
+          "key" : "Red",
+          "price" : {
+            "amount" : 30.0,
+            "currency" : {
+              "value" : "USD",
+              "key" : "USD"
+            }
+          }
+        },
+        "optionCost2" : {
+          "value" : "Blue",
+          "key" : "Blue",
+          "price" : {
+            "amount" : 30.0,
+            "currency" : {
+              "value" : "USD",
+              "key" : "USD"
+            }
+          }
+        }
+      }
+    }
+  },
+  "storeGroup" : {
+    "store2" : {
+      "storeName" : "Store2",
+      "address" : {
+        "country" : {
+          "value" : "USA",
+          "key" : "USA"
+        },
+        "city" : "city",
+        "street" : "street",
+        "buildingNumber" : "10",
+        "florNumber" : 9,
+        "apartmentNumber" : 101,
+        "zipCode" : "90000"
+      },
+      "stock" : {
+        "item1" : {
+          "availabilityStatus" : {
+            "value" : "Available",
+            "key" : "Available"
+          },
+          "countType" : "LIMITED",
+          "quantity" : 5
+        }
+      },
+      "isActive" : false
+    },
+    "store1" : {
+      "storeName" : "Store1",
+      "storeId": "store1",
+      "address" : {
+        "country" : {
+          "value" : "USA",
+          "key" : "USA"
+        },
+        "city" : "city",
+        "street" : "street",
+        "buildingNumber" : "10",
+        "florNumber" : 9,
+        "apartmentNumber" : 101,
+        "zipCode" : "90000"
+      },
+      "stock" : {
+        "item1" : {
+          "availabilityStatus" : {
+            "value" : "Available",
+            "key" : "Available"
+          },
+          "countType" : "LIMITED",
+          "quantity" : 5
+        },
+        "item2" : {
+          "availabilityStatus" : {
+            "value" : "Available",
+            "key" : "Available"
+          },
+          "countType" : "LIMITED",
+          "quantity" : 2
+        }
+      },
+      "isActive" : false
+    }
+  },
+  "articularItems" : {
+    "item1" : {
+      "articularId" : "articularId4",
+      "productName" : "productName4",
+      "fullPrice" : {
+        "amount" : 50.0,
+        "currency" : {
+          "value" : "USD",
+          "key" : "USD"
+        }
+      },
+      "totalPrice" : {
+        "amount" : 30.0,
+        "currency" : {
+          "value" : "USD",
+          "key" : "USD"
+        }
+      },
+      "status" : {
+        "value" : "New",
+        "key" : "New"
+      },
+      "optionKeys" : [ {
+        "groupKey" : "optionGroup1",
+        "optionKeys" : [ "option1", "option2" ]
+      } ],
+      "optionCostKeys" : [ {
+        "groupKey" : "optionCostGroup1",
+        "optionKeys" : [ "optionCost1", "optionCost2" ]
+      } ],
+      "discountKey" : {
+        "groupKey" : "discountGroup1",
+        "optionKeys" : [ "discount1" ]
+      },
+      "storeKey" : [ "store1", "store2" ]
+    },
+    "item2" : {
+      "articularId" : "articularId5",
+      "productName" : "productName5",
+      "fullPrice" : {
+        "amount" : 50.0,
+        "currency" : {
+          "value" : "USD",
+          "key" : "USD"
+        }
+      },
+      "totalPrice" : {
+        "amount" : 30.0,
+        "currency" : {
+          "value" : "USD",
+          "key" : "USD"
+        }
+      },
+      "status" : {
+        "value" : "New",
+        "key" : "New"
+      },
+      "optionKeys" : [ {
+        "groupKey" : "optionGroup1",
+        "optionKeys" : [ "option1", "option2" ]
+      } ],
+      "optionCostKeys" : [ {
+        "groupKey" : "optionCostGroup1",
+        "optionKeys" : [ "optionCost1", "optionCost2" ]
+      } ],
+      "discountKey" : {
+        "groupKey" : "discountGroup1",
+        "optionKeys" : [ "discount2" ]
+      },
+      "storeKey" : [ "store1" ]
+    }
+  }
+}

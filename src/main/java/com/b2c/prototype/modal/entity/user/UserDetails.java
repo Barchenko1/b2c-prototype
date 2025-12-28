@@ -1,6 +1,7 @@
 package com.b2c.prototype.modal.entity.user;
 
 import com.b2c.prototype.modal.entity.address.UserAddress;
+import com.b2c.prototype.modal.entity.item.Bucket;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,7 +18,9 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -108,4 +111,9 @@ public class UserDetails {
     @JoinColumn(name = "user_details_id")
     @Builder.Default
     private Set<UserCreditCard> userCreditCards = new HashSet<>();
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "bucket_id", unique = true)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Bucket bucket;
 }

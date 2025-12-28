@@ -40,7 +40,7 @@ class MessageTypeManagerTest extends AbstractConstantEntityManagerTest<MessageTy
         when(mapDtoToEntityFunction.apply(dto)).thenReturn(testValue);
 //        when(dao.getEntityClass()).thenAnswer(invocation -> MessageType.class);
 
-//        messageTypeManager.persistEntity(modal);
+//        messageTypeManager.persistEntity(transform);
 
         verifySaveEntity(testValue);
     }

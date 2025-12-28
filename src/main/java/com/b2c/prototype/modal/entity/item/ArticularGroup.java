@@ -67,35 +67,30 @@ import java.util.Set;
                         "WHERE agr.code = :code and ag.articularGroupId = :articularGroupId"
         ),
         @NamedQuery(
-                name = "ArticularGroup.findAllWithFullRelations",
-                query = "SELECT DISTINCT ag FROM ArticularGroup ag " +
+                name = "ArticularGroup.findAllByRegion",
+                query = "SELECT ag FROM ArticularGroup ag " +
+                        "LEFT JOIN FETCH ag.tenant agr " +
+                        "LEFT JOIN FETCH agr.primaryCurrency agrc " +
                         "LEFT JOIN FETCH ag.items it " +
                         "LEFT JOIN FETCH it.articularItem ai " +
                         "LEFT JOIN FETCH ai.optionItems oi " +
                         "LEFT JOIN FETCH oi.optionGroup og " +
+                        "LEFT JOIN FETCH ai.optionItemCosts oic " +
+                        "LEFT JOIN FETCH oic.optionGroup ogc " +
                         "LEFT JOIN FETCH ai.fullPrice fp " +
                         "LEFT JOIN FETCH fp.currency fpc " +
                         "LEFT JOIN FETCH ai.totalPrice tp " +
                         "LEFT JOIN FETCH tp.currency tpc " +
                         "LEFT JOIN FETCH ai.discount d " +
+                        "LEFT JOIN FETCH d.discountGroup dg " +
                         "LEFT JOIN FETCH d.currency dc " +
-                        "LEFT JOIN FETCH d.articularItemList dai"
-        ),
-        @NamedQuery(
-                name = "ArticularGroup.findItemDataWithFullRelations",
-                query = "SELECT DISTINCT ag FROM ArticularGroup ag " +
-                        "LEFT JOIN FETCH ag.items it " +
-                        "LEFT JOIN FETCH it.articularItem ai " +
-                        "LEFT JOIN FETCH ai.optionItems oi " +
-                        "LEFT JOIN FETCH oi.optionGroup og " +
-                        "LEFT JOIN FETCH ai.fullPrice fp " +
-                        "LEFT JOIN FETCH fp.currency fpc " +
-                        "LEFT JOIN FETCH ai.totalPrice tp " +
-                        "LEFT JOIN FETCH tp.currency tpc " +
-                        "LEFT JOIN FETCH ai.discount d " +
-                        "LEFT JOIN FETCH d.currency dc " +
-                        "LEFT JOIN FETCH d.articularItemList dai " +
-                        "WHERE ag.articularGroupId = :articularGroupId"
+                        "LEFT JOIN FETCH ag.category agc " +
+                        "LEFT JOIN FETCH agc.childList agccl " +
+
+                        "LEFT JOIN FETCH it.reviews itr " +
+                        "LEFT JOIN FETCH it.posts itp " +
+
+                        "WHERE agr.code = :code"
         )
 })
 @Data
@@ -116,11 +111,7 @@ public class ArticularGroup {
     private Category category;
     @ManyToOne(fetch = FetchType.LAZY)
     private Tenant tenant;
-    @OneToMany(
-            fetch = FetchType.LAZY,
-            cascade = {CascadeType.ALL},
-            orphanRemoval = true
-    )
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
     @JoinColumn(name = "articular_group_id")
     @Builder.Default
     @EqualsAndHashCode.Exclude

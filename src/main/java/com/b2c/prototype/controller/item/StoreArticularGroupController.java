@@ -1,6 +1,7 @@
 package com.b2c.prototype.controller.item;
 
 import com.b2c.prototype.modal.dto.payload.item.request.StoreArticularGroupRequestDto;
+import com.b2c.prototype.modal.dto.payload.item.request.StoreArticularItemRequestDto;
 import com.b2c.prototype.modal.dto.payload.item.response.StoreArticularGroupResponseDto;
 import com.b2c.prototype.processor.item.IStoreArticularGroupProcessor;
 import org.springframework.http.HttpStatus;
@@ -28,22 +29,35 @@ public class StoreArticularGroupController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> saveItemData(@RequestParam final Map<String, String> requestParams,
+    public ResponseEntity<Void> saveAricularGroupData(@RequestParam final Map<String, String> requestParams,
                                              @RequestBody final StoreArticularGroupRequestDto storeArticularGroupRequestDto) {
         storeArticularGroupProcessor.saveStoreArticularGroup(requestParams, storeArticularGroupRequestDto);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> putItemData(@RequestParam final Map<String, String> requestParams,
+    public ResponseEntity<Void> putArticularGroupData(@RequestParam final Map<String, String> requestParams,
                                             @RequestBody final StoreArticularGroupRequestDto storeArticularGroupRequestDto) {
         storeArticularGroupProcessor.updateStoreArticularGroup(requestParams, storeArticularGroupRequestDto);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<Void> deleteItemData(@RequestParam final Map<String, String> requestParams) {
+    public ResponseEntity<Void> deleteArticularGroupData(@RequestParam final Map<String, String> requestParams) {
         storeArticularGroupProcessor.deleteStoreArticularGroup(requestParams);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, value = "/item")
+    public ResponseEntity<Void> saveArticularItemData(@RequestParam final Map<String, String> requestParams,
+                                                      @RequestBody final StoreArticularItemRequestDto storeArticularItemRequestDto) {
+        storeArticularGroupProcessor.addStoreArticularItem(requestParams, storeArticularItemRequestDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping(produces = MediaType.TEXT_PLAIN_VALUE, value = "/item")
+    public ResponseEntity<Void> deleteArticularItemData(@RequestParam final Map<String, String> requestParams) {
+        storeArticularGroupProcessor.deleteStoreArticularItem(requestParams);
         return ResponseEntity.ok().build();
     }
 

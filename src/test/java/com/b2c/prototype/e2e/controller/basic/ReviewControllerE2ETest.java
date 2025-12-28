@@ -3,8 +3,8 @@
 //import com.b2c.prototype.e2e.BasicE2ETest;
 //import com.b2c.prototype.e2e.util.TestUtil;
 //
-//import com.b2c.prototype.modal.modal.payload.review.ResponseReviewCommentDto;
-//import com.b2c.prototype.modal.modal.payload.review.ResponseReviewDto;
+//import com.b2c.prototype.transform.transform.payload.review.ResponseReviewCommentDto;
+//import com.b2c.prototype.transform.transform.payload.review.ResponseReviewDto;
 //import com.fasterxml.jackson.core.JsonProcessingException;
 //import com.fasterxml.jackson.core.type.TypeReference;
 //import org.junit.jupiter.api.BeforeEach;

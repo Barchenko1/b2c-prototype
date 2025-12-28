@@ -1,0 +1,210 @@
+{
+  "tenantId" : "Global",
+  "discountGroups" : {
+    "discountGroup1" : {
+      "key" : null,
+      "value" : "Updated_Global_group",
+      "discounts" : {
+        "discount1" : {
+          "charSequenceCode" : "updated_abc2",
+          "amount" : 15.0,
+          "currency" : {
+            "value" : "EUR",
+            "key" : "EUR"
+          },
+          "percent" : false,
+          "isActive" : true
+        },
+        "discount2" : {
+          "charSequenceCode" : "updated_abc3",
+          "amount" : 20.0,
+          "currency" : null,
+          "percent" : true,
+          "isActive" : true
+        }
+      }
+    }
+  },
+  "optionItemGroups" : {
+    "optionGroup1" : {
+      "value" : "Size",
+      "optionItems" : {
+        "option1" : {
+          "value" : "Small"
+        },
+        "option2" : {
+          "value" : "Large"
+        }
+      }
+    }
+  },
+  "optionItemCostGroups" : {
+    "optionCostGroup1" : {
+      "value" : "Size",
+      "costOptions" : {
+        "optionCost2" : {
+          "value" : "Large",
+          "key" : "Large",
+          "price" : {
+            "amount" : 50.0,
+            "currency" : {
+              "value" : "EUR",
+              "key" : "EUR"
+            }
+          }
+        },
+        "optionCost1" : {
+          "value" : "Small",
+          "key" : "Small",
+          "price" : {
+            "amount" : 40.0,
+            "currency" : {
+              "value" : "EUR",
+              "key" : "EUR"
+            }
+          }
+        }
+      }
+    }
+  },
+  "storeGroup" : {
+    "store1" : {
+      "storeName" : "Updated_Store1",
+      "address" : {
+        "country" : {
+          "value" : "Canada",
+          "key" : "Canada"
+        },
+        "city" : "updated_city",
+        "street" : "updated_street",
+        "buildingNumber" : "20",
+        "florNumber" : 12,
+        "apartmentNumber" : 202,
+        "zipCode" : "80000"
+      },
+      "stock" : {
+        "item1" : {
+          "availabilityStatus" : {
+            "value" : "OutOfStock",
+            "key" : "OutOfStock"
+          },
+          "countType" : "LIMITED",
+          "quantity" : 10
+        }
+      },
+      "isActive" : false
+    },
+    "store2" : {
+      "storeName" : "Updated_Store2",
+      "address" : {
+        "country" : {
+          "value" : "Canada",
+          "key" : "Canada"
+        },
+        "city" : "updated_city",
+        "street" : "updated_street",
+        "buildingNumber" : "20",
+        "florNumber" : 12,
+        "apartmentNumber" : 202,
+        "zipCode" : "80000"
+      },
+      "stock" : {
+        "item2" : {
+          "availabilityStatus" : {
+            "value" : "Available",
+            "key" : "Available"
+          },
+          "countType" : "UNLIMITED",
+          "quantity" : 15
+        }
+      },
+      "isActive" : false
+    }
+  },
+  "articularGroup" : {
+    "articularGroupId" : null,
+    "description" : {
+      "desc1" : "updated_desc1",
+      "desc2" : "updated_desc2"
+    },
+    "category" : {
+      "value" : "Desktop",
+      "key" : "Desktop",
+      "childList" : null
+    },
+    "articularItems" : {
+      "item2" : {
+        "articularId" : "articularId3",
+        "productName" : "updated_productName3",
+        "dateOfCreate" : "2024-06-06 15:00:00",
+        "fullPrice" : {
+          "amount" : 80.0,
+          "currency" : {
+            "value" : "EUR",
+            "key" : "EUR"
+          }
+        },
+        "totalPrice" : {
+          "amount" : 60.0,
+          "currency" : {
+            "value" : "EUR",
+            "key" : "EUR"
+          }
+        },
+        "status" : {
+          "value" : "InStock",
+          "key" : "InStock"
+        },
+        "optionKeys" : [ {
+          "groupKey" : "optionGroup1",
+          "optionKeys" : [ "option1", "option2" ]
+        } ],
+        "optionCostKeys" : [ {
+          "groupKey" : "optionCostGroup1",
+          "optionKeys" : [ "optionCost1", "optionCost2" ]
+        } ],
+        "discountKey" : {
+          "groupKey" : "discountGroup1",
+          "optionKeys" : [ "discount2" ]
+        },
+        "storeKey" : [ "store2" ]
+      },
+      "item1" : {
+        "articularId" : "articularId2",
+        "productName" : "updated_productName2",
+        "dateOfCreate" : "2024-06-06 15:00:00",
+        "fullPrice" : {
+          "amount" : 70.0,
+          "currency" : {
+            "value" : "EUR",
+            "key" : "EUR"
+          }
+        },
+        "totalPrice" : {
+          "amount" : 55.0,
+          "currency" : {
+            "value" : "EUR",
+            "key" : "EUR"
+          }
+        },
+        "status" : {
+          "value" : "InStock",
+          "key" : "InStock"
+        },
+        "optionKeys" : [ {
+          "groupKey" : "optionGroup1",
+          "optionKeys" : [ "option1", "option2" ]
+        } ],
+        "optionCostKeys" : [ {
+          "groupKey" : "optionCostGroup1",
+          "optionKeys" : [ "optionCost1", "optionCost2" ]
+        } ],
+        "discountKey" : {
+          "groupKey" : "discountGroup1",
+          "optionKeys" : [ "discount1" ]
+        },
+        "storeKey" : [ "store1" ]
+      }
+    }
+  }
+}

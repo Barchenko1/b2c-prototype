@@ -24,10 +24,16 @@ country:
   - id: 1
     key: "USA"
     value: "USA"
+  - id: 2
+    key: "Canada"
+    value: "Canada"
 availability_status:
   - id: 1
     value: "Available"
     key: "Available"
+  - id: 2
+    value: "OutOfStock"
+    key: "OutOfStock"
 item_type:
   - id: 1
     value: "Electronic"
@@ -53,6 +59,7 @@ option_group:
   - id: 1
     key: "Size"
     value: "Size"
+    tenant_id: 1
 option_item:
   - id: 1
     value: "L"
@@ -83,8 +90,8 @@ articular_status:
     value: "New"
     key: "New"
   - id: 2
-    value: "Common"
-    key: "Common"
+    value: "InStock"
+    key: "InStock"
 articular_group:
   - id: 1
     articular_group_uniq_id: 123

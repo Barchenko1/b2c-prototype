@@ -6,11 +6,12 @@ import com.b2c.prototype.modal.dto.payload.item.StoreDiscountGroup;
 import com.b2c.prototype.modal.dto.payload.item.StoreOptionItemCostGroup;
 import com.b2c.prototype.modal.dto.payload.item.StoreOptionItemGroup;
 import com.b2c.prototype.modal.dto.payload.item.StoreOptionItemGroupTransfer;
+import com.b2c.prototype.modal.dto.payload.item.request.StoreArticularItemRequestDto;
 import com.b2c.prototype.modal.entity.item.Discount;
 import com.b2c.prototype.modal.entity.item.DiscountGroup;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.tenant.Tenant;
-import com.b2c.prototype.transform.modal.StoreArticularGroupTransform;
+import com.b2c.prototype.transform.transform.StoreArticularGroupTransform;
 
 import java.util.Map;
 
@@ -25,4 +26,6 @@ public interface IStoreArticularGroupTransformService {
     OptionGroup mapStoreOptionItemCostGroupDtoToOptionGroup(Tenant tenant, StoreOptionItemCostGroup storeOptionItemCostGroup);
 
     StoreArticularGroupTransform mapStoreArticularGroupRequestDtoToStoreArticularGroupTransform(StoreArticularGroupRequestDto storeArticularGroupRequestDto);
+    StoreArticularGroupTransform mapStoreArticularItemRequestDtoToStoreArticularGroupTransform(StoreArticularItemRequestDto storeArticularItemRequestDto);
+
 }

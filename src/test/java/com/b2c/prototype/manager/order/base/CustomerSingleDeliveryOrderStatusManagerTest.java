@@ -41,7 +41,7 @@ class CustomerSingleDeliveryOrderStatusManagerTest extends AbstractConstantEntit
         when(mapDtoToEntityFunction.apply(dto)).thenReturn(testValue);
 //        when(dao.getEntityClass()).thenAnswer(invocation -> OrderStatus.class);
 
-//        orderStatusManager.persistEntity(modal);
+//        orderStatusManager.persistEntity(transform);
 
 //        verifySaveEntity(testValue);
     }

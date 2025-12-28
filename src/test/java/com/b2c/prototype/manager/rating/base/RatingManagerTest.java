@@ -42,7 +42,7 @@ class RatingManagerTest extends AbstractConstantEntityManagerTest<Rating> {
         when(mapDtoToEntityFunction.apply(dto)).thenReturn(testValue);
 //        when(dao.getEntityClass()).thenAnswer(invocation -> Rating.class);
 
-//        ratingManager.saveEntity(modal);
+//        ratingManager.saveEntity(transform);
 
         verify(dao).persistEntity(testValue);
     }

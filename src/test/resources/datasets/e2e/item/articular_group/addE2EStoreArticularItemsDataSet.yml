@@ -60,6 +60,18 @@ price:
   - id: 7
     amount: 30.0
     currency_id: 2
+  - id: 8
+    amount: 50.0
+    currency_id: 2
+  - id: 9
+    amount: 30.0
+    currency_id: 2
+  - id: 10
+    amount: 50.0
+    currency_id: 2
+  - id: 11
+    amount: 30.0
+    currency_id: 2
 discount_group:
   - id: 1
     key: "Germany_group"
@@ -90,19 +102,22 @@ discount:
     is_active: false
     is_percent: true
     discount_group_id: 2
+  - id: 4
+    char_sequence_code: "abc4"
+    amount: 10.0
+    is_active: false
+    is_percent: true
+    discount_group_id: 2
 option_group:
   - id: 1
     key: "Size"
     value: "Size"
-    tenant_id: 1
   - id: 2
     key: "Color"
     value: "Color"
-    tenant_id: 2
   - id: 3
     key: "ColorCost"
     value: "ColorCost"
-    tenant_id: 2
 option_item:
   - id: 1
     value: "L"
@@ -192,6 +207,24 @@ articular_item:
     status_id: 1
     articular_group_id: 2
     product_name: "productName3"
+  - id: 4
+    articular_uniq_id: "articularId4"
+    date_of_create: "2024-03-03 12:00:00"
+    discount_id: 2
+    full_price_id: 8
+    total_price_id: 9
+    status_id: 1
+    articular_group_id: 2
+    product_name: "productName4"
+  - id: 5
+    articular_uniq_id: "articularId5"
+    date_of_create: "2024-03-03 12:00:00"
+    discount_id: 3
+    full_price_id: 10
+    total_price_id: 11
+    status_id: 1
+    articular_group_id: 2
+    product_name: "productName5"
 item:
   - id: 1
     articular_group_id: 2
@@ -199,6 +232,12 @@ item:
   - id: 2
     articular_group_id: 2
     articular_item_id: 3
+  - id: 3
+    articular_group_id: 2
+    articular_item_id: 3
+  - id: 4
+    articular_group_id: 2
+    articular_item_id: 4
 articular_item_option_item:
   - articular_item_id: 2
     option_item_id: 3

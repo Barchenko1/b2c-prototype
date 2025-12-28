@@ -32,13 +32,24 @@ import java.util.Set;
 @AllArgsConstructor
 @NamedQueries({
         @NamedQuery(
-                name = "StoreGeneralBoard.findByArticularUniqIds",
+                name = "StoreGeneralBoard.findByRegion",
                 query = "SELECT DISTINCT sgb FROM StoreGeneralBoard sgb " +
-                        "LEFT JOIN sgb.articularStocks st " +
-                        "LEFT JOIN st.availabilityState sts " +
-                        "LEFT JOIN st.articularItemQuantity saiq " +
-                        "LEFT JOIN saiq.articularItem ai " +
-                        "WHERE ai.articularUniqId IN :articularIds"
+                        "JOIN FETCH sgb.tenant sgbt " +
+                        "JOIN FETCH sgb.articularStocks st " +
+                        "JOIN FETCH st.articularItemQuantity saiq " +
+                        "JOIN FETCH st.availabilityState sts " +
+                        "JOIN FETCH saiq.articularItem ai " +
+                        "WHERE sgbt.code = :code"
+        ),
+        @NamedQuery(
+                name = "StoreGeneralBoard.findByRegionAndArticularUniqIds",
+                query = "SELECT DISTINCT sgb FROM StoreGeneralBoard sgb " +
+                        "JOIN FETCH sgb.tenant sgbt " +
+                        "JOIN FETCH sgb.articularStocks st " +
+                        "JOIN FETCH st.articularItemQuantity saiq " +
+                        "JOIN FETCH st.availabilityState sts " +
+                        "JOIN FETCH saiq.articularItem ai " +
+                        "WHERE sgbt.code = :code AND ai.articularUniqId IN :articularIds"
         )
 })
 public class StoreGeneralBoard {
@@ -54,4 +65,12 @@ public class StoreGeneralBoard {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Set<ArticularStock> articularStocks = new HashSet<>();
+
+    public void addArticularStock(ArticularStock articularStock) {
+        this.articularStocks.add(articularStock);
+    }
+
+    public void removeArticularStock(ArticularStock articularStock) {
+        this.articularStocks.remove(articularStock);
+    }
 }

@@ -23,7 +23,8 @@ public class TenantControllerE2ETest extends BasicE2ETest {
     @ExpectedDataSet(value = "datasets/e2e/tenant/testE2ETenantDataSet.yml", orderBy = "id")
     @Sql(statements = {
             "ALTER SEQUENCE currency_id_seq RESTART WITH 2",
-            "ALTER SEQUENCE tenant_id_seq RESTART WITH 2"
+            "ALTER SEQUENCE tenant_id_seq RESTART WITH 2",
+            "ALTER SEQUENCE store_general_board_id_seq RESTART WITH 2"
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void testCreateEntity() {
         TenantDto dto = getTenantDto();

@@ -30,7 +30,7 @@ import java.util.Set;
                         "WHERE og.key = :key"
         ),
         @NamedQuery(
-                name = "OptionGroup.findByValueWithOptionItems",
+                name = "OptionGroup.findByKeyWithOptionItems",
                 query = "SELECT og FROM OptionGroup og " +
                         "LEFT JOIN FETCH og.optionItems oi " +
                         "LEFT JOIN FETCH og.timeDurationOptions tdo " +
@@ -42,6 +42,19 @@ import java.util.Set;
                         "WHERE og.key = :key"
         ),
         @NamedQuery(
+                name = "OptionGroup.findByRegionAndKey",
+                query = "SELECT og FROM OptionGroup og " +
+                        "LEFT JOIN FETCH og.tenant ogt " +
+                        "LEFT JOIN FETCH og.optionItems oi " +
+                        "LEFT JOIN FETCH og.timeDurationOptions tdo " +
+                        "LEFT JOIN FETCH og.optionItemCosts oic " +
+                        "LEFT JOIN FETCH oic.price oicp " +
+                        "LEFT JOIN FETCH oicp.currency oicpc " +
+                        "LEFT JOIN FETCH tdo.price tdop " +
+                        "LEFT JOIN FETCH tdop.currency tdopc " +
+                        "WHERE ogt.code = : code and og.key = :key"
+        ),
+        @NamedQuery(
                 name = "OptionGroup.withOptionItems",
                 query = "SELECT og FROM OptionGroup og " +
                         "LEFT JOIN FETCH og.optionItems oi " +
@@ -51,18 +64,6 @@ import java.util.Set;
                         "LEFT JOIN FETCH oicp.currency oicpc " +
                         "LEFT JOIN FETCH tdo.price tdop " +
                         "LEFT JOIN FETCH tdop.currency tdopc"
-        ),
-        @NamedQuery(
-                name = "OptionGroup.withOptionItemsAndArticularItems",
-                query = "SELECT DISTINCT og FROM OptionGroup og " +
-                        "LEFT JOIN FETCH og.optionItems oi " +
-                        "LEFT JOIN FETCH oi.articularItems ai " +
-                        "LEFT JOIN FETCH ai.optionItems ao " +
-                        "LEFT JOIN FETCH ai.totalPrice t " +
-                        "LEFT JOIN FETCH ai.fullPrice f " +
-                        "LEFT JOIN FETCH t.currency c1 " +
-                        "LEFT JOIN FETCH f.currency c2 " +
-                        "WHERE og.key = :key"
         )
 })
 @Data

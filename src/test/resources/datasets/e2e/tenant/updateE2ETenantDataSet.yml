@@ -20,3 +20,8 @@ tenant:
     default_locale: "Update en-US"
     primary_currency_id: 1
     timezone: "America/New_York"
+store_general_board:
+  - id: 1
+    tenant_id: 1
+  - id: 2
+    tenant_id: 2

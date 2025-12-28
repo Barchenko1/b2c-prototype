@@ -69,7 +69,6 @@ public class CategoryManager implements ICategoryManager {
 
         Map<String, Category> registry = flattenByKey(existingCategory);
 
-//        String incomingRootKey = ensureKey(categoryCascade.getKey(), categoryCascade.getValue());
         String incomingRootKey = ensureKey(categoryCascade.getKey());
 
         registry.putIfAbsent(existingCategory.getKey(), existingCategory);
@@ -139,7 +138,6 @@ public class CategoryManager implements ICategoryManager {
         target.setTenant(tenant);
 
         List<CategoryCascade> incoming = Optional.ofNullable(source.getChildList()).orElseGet(Collections::emptyList);
-        // local fast lookup for existing children under THIS parent
         Map<String, Category> currentChildrenByKey = target.getChildList().stream()
                 .filter(Objects::nonNull)
                 .filter(c -> c.getKey() != null)
@@ -150,7 +148,6 @@ public class CategoryManager implements ICategoryManager {
         for (CategoryCascade childDto : incoming) {
             if (childDto == null) continue;
 
-//            String key = ensureKey(childDto.getKey(), childDto.getValue());
             String key = ensureKey(childDto.getKey());
 
             Category child = registry.get(key);
@@ -189,7 +186,7 @@ public class CategoryManager implements ICategoryManager {
     }
 
     private Category buildTree(CategoryCascade dto, Tenant tenant, Map<String, Category> registry) {
-//        String key = ensureKey(modal.getKey(), modal.getValue());
+//        String key = ensureKey(transform.getKey(), transform.getValue());
         String key = ensureKey(dto.getKey());
 
         Category cat = Category.builder()

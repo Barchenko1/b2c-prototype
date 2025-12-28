@@ -56,7 +56,7 @@ public class OptionItemCostGroupManager implements IOptionItemCostGroupManager {
     @Override
     public void mergeEntity(String searchValue, OptionItemCostGroupDto optionItemCostGroupDto) {
         OptionGroup group = generalEntityDao.findEntity(
-                "OptionGroup.findByValueWithOptionItems",
+                "OptionGroup.findByKeyWithOptionItems",
                 Pair.of(KEY, searchValue)
         );
         OptionGroup entity = syncItemsAllowingKeyChange(searchValue, group, optionItemCostGroupDto);
@@ -72,12 +72,12 @@ public class OptionItemCostGroupManager implements IOptionItemCostGroupManager {
 
     @Override
     public OptionGroup getEntity(String value) {
-        return generalEntityDao.findEntity("OptionGroup.findByValueWithOptionItems", Pair.of(KEY, value));
+        return generalEntityDao.findEntity("OptionGroup.findByKeyWithOptionItems", Pair.of(KEY, value));
     }
 
     @Override
     public Optional<OptionGroup> getEntityOptional(String value) {
-        OptionGroup entity = generalEntityDao.findEntity("OptionGroup.findByValueWithOptionItems", Pair.of(KEY, value));
+        OptionGroup entity = generalEntityDao.findEntity("OptionGroup.findByKeyWithOptionItems", Pair.of(KEY, value));
         return Optional.of(entity);
     }
 
