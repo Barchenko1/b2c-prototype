@@ -32,17 +32,17 @@ import java.util.Set;
 @AllArgsConstructor
 @NamedQueries({
         @NamedQuery(
-                name = "StoreGeneralBoard.findByRegion",
+                name = "StoreGeneralBoard.findByTenant",
                 query = "SELECT DISTINCT sgb FROM StoreGeneralBoard sgb " +
-                        "JOIN FETCH sgb.tenant sgbt " +
-                        "JOIN FETCH sgb.articularStocks st " +
-                        "JOIN FETCH st.articularItemQuantity saiq " +
-                        "JOIN FETCH st.availabilityState sts " +
-                        "JOIN FETCH saiq.articularItem ai " +
+                        "LEFT JOIN FETCH sgb.tenant sgbt " +
+                        "LEFT JOIN FETCH sgb.articularStocks st " +
+                        "LEFT JOIN FETCH st.articularItemQuantity saiq " +
+                        "LEFT JOIN FETCH st.availabilityState sts " +
+                        "LEFT JOIN FETCH saiq.articularItem ai " +
                         "WHERE sgbt.code = :code"
         ),
         @NamedQuery(
-                name = "StoreGeneralBoard.findByRegionAndArticularUniqIds",
+                name = "StoreGeneralBoard.findByTenantAndArticularUniqIds",
                 query = "SELECT DISTINCT sgb FROM StoreGeneralBoard sgb " +
                         "JOIN FETCH sgb.tenant sgbt " +
                         "JOIN FETCH sgb.articularStocks st " +

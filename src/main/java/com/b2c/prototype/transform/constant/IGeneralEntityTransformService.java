@@ -12,6 +12,7 @@ import com.b2c.prototype.modal.dto.payload.option.item.OptionItemCostDto;
 import com.b2c.prototype.modal.dto.payload.option.item.OptionItemDto;
 import com.b2c.prototype.modal.dto.payload.order.AddressDto;
 import com.b2c.prototype.modal.dto.payload.order.ContactInfoDto;
+import com.b2c.prototype.modal.dto.payload.tenant.LanguageDto;
 import com.b2c.prototype.modal.dto.payload.tenant.TenantDto;
 import com.b2c.prototype.modal.dto.payload.store.AvailabilityStatusDto;
 import com.b2c.prototype.modal.entity.address.Address;
@@ -24,6 +25,7 @@ import com.b2c.prototype.modal.entity.option.OptionItemCost;
 import com.b2c.prototype.modal.entity.payment.MinMaxCommission;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
+import com.b2c.prototype.modal.entity.tenant.Language;
 import com.b2c.prototype.modal.entity.tenant.Tenant;
 import com.b2c.prototype.modal.entity.store.AvailabilityStatus;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
@@ -33,8 +35,11 @@ public interface IGeneralEntityTransformService {
     Currency mapCurrencyDtoToCurrency(CurrencyDto currencyDto);
     CurrencyDto mapCurrencyToCurrencyDto(Currency currency);
 
-    TenantDto mapRegionToRegionDto(Tenant tenant);
-    Tenant mapRegionDtoToRegion(TenantDto tenantDto);
+    LanguageDto mapLanguageToLanguageDto(Language language);
+    Language mapLanguageDtoToLanguage(LanguageDto languageDto);
+
+    TenantDto mapTenantToTenantDto(Tenant tenant);
+    Tenant mapTenantDtoToTenant(TenantDto tenantDto);
 
     Price mapPriceDtoToPrice(PriceDto priceDto);
     PriceDto mapPriceToPriceDto(Price price);

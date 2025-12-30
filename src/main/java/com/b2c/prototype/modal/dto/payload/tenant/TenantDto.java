@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -13,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class TenantDto {
     private String code;
     private String value;
-    private String language;
+    private List<LanguageDto> languages;
     private String defaultLocale;
     private CurrencyDto primaryCurrency;
     private String timezone;

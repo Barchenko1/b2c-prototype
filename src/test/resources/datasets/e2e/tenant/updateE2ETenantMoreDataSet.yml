@@ -14,22 +14,26 @@ tenant:
     timezone: "Europe/Berlin"
   - id: 2
     code: "Global"
-    value: "Global"
-    default_locale: "en-US"
-    primary_currency_id: 2
-    timezone: "UTC"
+    value: "Update Global"
+    default_locale: "Update en-US"
+    primary_currency_id: 1
+    timezone: "America/New_York"
 language:
   - id: 1
     language_code: "de"
     name: "Germany"
     is_active: true
   - id: 2
-    language_code: "en"
-    name: "English"
+    language_code: "upen"
+    name: "update English"
     is_active: true
   - id: 3
     language_code: "ru"
     name: "Russian"
+    is_active: true
+  - id: 4
+    language_code: "newuk"
+    name: "new English"
     is_active: true
 tenant_language:
   - tenant_id: 1
@@ -37,7 +41,7 @@ tenant_language:
   - tenant_id: 2
     language_id: 2
   - tenant_id: 2
-    language_id: 3
+    language_id: 4
 store_general_board:
   - id: 1
     tenant_id: 1

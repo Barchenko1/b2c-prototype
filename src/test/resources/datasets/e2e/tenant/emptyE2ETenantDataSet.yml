@@ -6,10 +6,17 @@ tenant:
   - id: 1
     code: "DE"
     value: "Germany"
-    language: "German"
     default_locale: "de-DE"
     primary_currency_id: 1
     timezone: "Europe/Berlin"
+language:
+  - id: 1
+    language_code: "de"
+    name: "Germany"
+    is_active: true
+tenant_language:
+  - tenant_id: 1
+    language_id: 1
 store_general_board:
   - id: 1
     tenant_id: 1

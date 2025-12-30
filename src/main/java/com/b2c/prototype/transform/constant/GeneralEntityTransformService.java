@@ -17,6 +17,7 @@ import com.b2c.prototype.modal.dto.payload.option.item.OptionItemDto;
 import com.b2c.prototype.modal.dto.payload.order.AddressDto;
 import com.b2c.prototype.modal.dto.payload.order.ContactInfoDto;
 import com.b2c.prototype.modal.dto.payload.order.ContactPhoneDto;
+import com.b2c.prototype.modal.dto.payload.tenant.LanguageDto;
 import com.b2c.prototype.modal.dto.payload.tenant.TenantDto;
 import com.b2c.prototype.modal.dto.payload.store.AvailabilityStatusDto;
 import com.b2c.prototype.modal.entity.address.Address;
@@ -30,6 +31,7 @@ import com.b2c.prototype.modal.entity.payment.CommissionValue;
 import com.b2c.prototype.modal.entity.payment.MinMaxCommission;
 import com.b2c.prototype.modal.entity.price.Currency;
 import com.b2c.prototype.modal.entity.price.Price;
+import com.b2c.prototype.modal.entity.tenant.Language;
 import com.b2c.prototype.modal.entity.tenant.Tenant;
 import com.b2c.prototype.modal.entity.store.AvailabilityStatus;
 import com.b2c.prototype.modal.entity.user.ContactInfo;
@@ -39,7 +41,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -71,26 +72,46 @@ public class GeneralEntityTransformService implements IGeneralEntityTransformSer
     }
 
     @Override
-    public TenantDto mapRegionToRegionDto(Tenant tenant) {
+    public LanguageDto mapLanguageToLanguageDto(Language language) {
+        return LanguageDto.builder()
+                .languageCode(language.getLanguageCode())
+                .name(language.getName())
+                .isActive(language.isActive())
+                .build();
+    }
+
+    @Override
+    public Language mapLanguageDtoToLanguage(LanguageDto languageDto) {
+        return Language.builder()
+                .languageCode(languageDto.getLanguageCode())
+                .name(languageDto.getName())
+                .isActive(languageDto.isActive())
+                .build();
+    }
+
+
+    @Override
+    public TenantDto mapTenantToTenantDto(Tenant tenant) {
         return TenantDto.builder()
                 .code(tenant.getCode())
                 .value(tenant.getValue())
-                .language(tenant.getLanguage())
+                .languages(tenant.getLanguages().stream()
+                        .map(this::mapLanguageToLanguageDto)
+                        .toList())
                 .defaultLocale(tenant.getDefaultLocale())
-                .primaryCurrency(CurrencyDto.builder()
-                        .key(tenant.getPrimaryCurrency().getKey())
-                        .value(tenant.getPrimaryCurrency().getValue())
-                        .build())
+                .primaryCurrency(this.mapCurrencyToCurrencyDto(tenant.getPrimaryCurrency()))
                 .timezone(tenant.getTimezone().toString())
                 .build();
     }
 
     @Override
-    public Tenant mapRegionDtoToRegion(TenantDto tenantDto) {
-        return Tenant.builder()
+    public Tenant mapTenantDtoToTenant(TenantDto tenantDto) {
+        Tenant tenant = Tenant.builder()
                 .code(tenantDto.getCode())
                 .value(tenantDto.getValue())
-                .language(tenantDto.getLanguage())
+                .languages(tenantDto.getLanguages().stream()
+                        .map(this::mapLanguageDtoToLanguage)
+                        .collect(Collectors.toSet()))
                 .primaryCurrency(generalEntityDao.<Currency>findOptionEntity(
                                 "Currency.findByKey",
                                 Pair.of(KEY, tenantDto.getPrimaryCurrency().getKey()))
@@ -101,6 +122,10 @@ public class GeneralEntityTransformService implements IGeneralEntityTransformSer
                 .defaultLocale(tenantDto.getDefaultLocale())
                 .timezone(ZoneId.of(tenantDto.getTimezone()))
                 .build();
+
+        tenant.getLanguages().forEach(tenant::addLanguage);
+
+        return tenant;
     }
 
     @Override

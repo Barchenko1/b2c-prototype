@@ -1,0 +1,41 @@
+[
+  {
+    "code": "DE",
+    "value": "Germany",
+    "languages": [
+      {
+        "languageCode": "de",
+        "name": "Germany",
+        "isActive": true
+      }
+    ],
+    "defaultLocale": "de-DE",
+    "primaryCurrency": {
+      "key": "EUR",
+      "value": "EUR"
+    },
+    "timezone": "Europe/Berlin"
+  },
+  {
+    "code": "Global",
+    "value": "Global",
+    "languages": [
+      {
+        "languageCode": "en",
+        "name": "English",
+        "isActive": true
+      },
+      {
+        "languageCode": "ru",
+        "name": "Russian",
+        "isActive": true
+      }
+    ],
+    "defaultLocale": "en-US",
+    "primaryCurrency": {
+      "key": "USD",
+      "value": "USD"
+    },
+    "timezone": "UTC"
+  }
+]

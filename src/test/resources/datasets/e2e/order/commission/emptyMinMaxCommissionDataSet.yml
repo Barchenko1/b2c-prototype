@@ -9,7 +9,7 @@ tenant:
   - id: 1
     code: "DE"
     value: "Germany"
-    language: "German"
+    language: "Germany"
     default_locale: "de-DE"
     primary_currency_id: 2
     timezone: "Europe/Berlin"

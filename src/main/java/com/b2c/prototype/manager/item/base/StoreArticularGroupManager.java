@@ -438,7 +438,7 @@ public class StoreArticularGroupManager implements IStoreArticularGroupManager {
         }
 
         StoreGeneralBoard storeGeneralBoard = generalEntityDao.findEntity(
-                "StoreGeneralBoard.findByRegionAndArticularUniqIds",
+                "StoreGeneralBoard.findByTenantAndArticularUniqIds",
                 List.of(Pair.of(CODE, tenantId),
                         Pair.of("articularIds", articularIds)));
 
@@ -503,7 +503,7 @@ public class StoreArticularGroupManager implements IStoreArticularGroupManager {
 
     private StoreGeneralBoard fetchStoreGeneralBoard(String tenantId, List<String> articularIds) {
         return generalEntityDao.findEntity(
-                "StoreGeneralBoard.findByRegion",
+                "StoreGeneralBoard.findByTenant",
                 Pair.of(CODE, tenantId));
     }
 

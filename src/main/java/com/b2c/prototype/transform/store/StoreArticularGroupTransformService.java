@@ -627,7 +627,7 @@ public class StoreArticularGroupTransformService implements IStoreArticularGroup
                 .collect(Collectors.toSet());
 
         StoreGeneralBoard storeGeneralBoard = generalEntityDao.findEntity(
-                "StoreGeneralBoard.findByRegion",
+                "StoreGeneralBoard.findByTenant",
                 Pair.of(CODE, tenant.getCode()));
         stocks.forEach(storeGeneralBoard::addArticularStock);
 

@@ -5,7 +5,7 @@ import com.b2c.prototype.modal.entity.tenant.Tenant;
 
 import java.util.List;
 
-public interface IRegionManager {
+public interface ITenantManager {
     void persistEntity(final TenantDto tenantDto);
     void mergeEntity(final String code, TenantDto tenantDto);
     void removeEntity(final String code);

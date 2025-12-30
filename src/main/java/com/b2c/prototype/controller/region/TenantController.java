@@ -2,7 +2,7 @@ package com.b2c.prototype.controller.region;
 
 
 import com.b2c.prototype.modal.dto.payload.tenant.TenantDto;
-import com.b2c.prototype.processor.region.IRegionProcess;
+import com.b2c.prototype.processor.region.ITenantProcess;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/v1/tenant")
-public class RegionController {
-    private final IRegionProcess regionProcess;
+public class TenantController {
+    private final ITenantProcess regionProcess;
 
-    public RegionController(IRegionProcess regionProcess) {
+    public TenantController(ITenantProcess regionProcess) {
         this.regionProcess = regionProcess;
     }
 

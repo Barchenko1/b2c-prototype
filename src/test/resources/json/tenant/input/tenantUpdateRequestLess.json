@@ -1,0 +1,18 @@
+{
+  "code": "Update Global",
+  "value": "Update Global",
+  "languages": [
+    {
+      "key": "en",
+      "languageCode": "upen",
+      "name": "update English",
+      "isActive": true
+    }
+  ],
+  "defaultLocale": "Update en-US",
+  "primaryCurrency": {
+    "key": "EUR",
+    "value": "EUR"
+  },
+  "timezone": "America/New_York"
+}

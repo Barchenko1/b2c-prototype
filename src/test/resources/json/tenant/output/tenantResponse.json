@@ -1,0 +1,22 @@
+{
+  "code": "Global",
+  "value": "Global",
+  "languages": [
+    {
+      "languageCode": "en",
+      "name": "English",
+      "isActive": true
+    },
+    {
+      "languageCode": "ru",
+      "name": "Russian",
+      "isActive": true
+    }
+  ],
+  "defaultLocale": "en-US",
+  "primaryCurrency": {
+    "key": "USD",
+    "value": "USD"
+  },
+  "timezone": "UTC"
+}
