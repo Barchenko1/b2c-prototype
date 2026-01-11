@@ -1,11 +1,3 @@
-
-item_type:
-  - id: 1
-    value: "Electronic"
-    key: "Electronic"
-  - id: 2
-    value: "Update Electronic"
-    key: "Update Electronic"
 currency:
   - id: 1
     value: "USD"

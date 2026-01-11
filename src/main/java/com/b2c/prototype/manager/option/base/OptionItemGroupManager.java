@@ -97,14 +97,7 @@ public class OptionItemGroupManager implements IOptionItemGroupManager {
         incoming.forEach(itemDto -> {
             if (itemDto == null) return;
 
-//            final String lookupKey = itemDto.getSearchKey() != null
-//                    ? itemDto.getSearchKey()
-//                    : itemDto.getKey();
-
             OptionItem existing = currentByValue.get(itemDto.getKey());
-//            if (lookupKey != null) {
-//                existing = currentByValue.get(lookupKey);
-//            }
 
             if (existing != null) {
                 if (itemDto.getKey() != null && !itemDto.getKey().equals(existing.getKey())) {
@@ -124,11 +117,10 @@ public class OptionItemGroupManager implements IOptionItemGroupManager {
 
         incoming.stream()
                 .filter(Objects::nonNull)
-//                .filter(d -> d.getSearchKey() == null)
                 .forEach(d -> {
-                    final String newKey = d.getKey();
+                    String newKey = d.getKey();
                     if (newKey == null || newKey.trim().isEmpty()) {
-                        throw new IllegalArgumentException("New OptionItem must have non-null 'value'.");
+                        newKey = keyGeneratorService.generateKey("option_item");
                     }
                     if (!currentByValue.containsKey(newKey)) {
                         OptionItem created = OptionItem.builder()

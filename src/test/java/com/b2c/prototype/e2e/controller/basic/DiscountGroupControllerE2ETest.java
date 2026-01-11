@@ -23,8 +23,9 @@ class DiscountGroupControllerE2ETest extends BasicE2ETest {
 
     @Test
     @DataSet(value = "datasets/e2e/item/discount/emptyE2EDiscountGroupDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/item/discount/testE2EDiscountGroupDataSet.yml", orderBy = "id",
-    ignoreCols = {"key"})
+    @ExpectedDataSet(value = "datasets/e2e/item/discount/testE2EDiscountGroupDataSet.yml",
+            orderBy = {"char_sequence_code"},
+            ignoreCols = {"key", "id", "price_id", "amount"})
     @Sql(statements = {
             "ALTER SEQUENCE discount_group_id_seq RESTART WITH 2",
             "ALTER SEQUENCE discount_id_seq RESTART WITH 2",

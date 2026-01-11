@@ -1,8 +1,0 @@
-[ {
-  "cardNumber" : "4444-1111-2222-3333",
-  "monthOfExpire" : 6,
-  "yearOfExpire" : 2028,
-  "ownerName" : "John",
-  "ownerSecondName" : "Doe",
-  "active" : true
-} ]

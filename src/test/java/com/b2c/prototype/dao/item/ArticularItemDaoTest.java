@@ -7,7 +7,6 @@ import com.b2c.prototype.modal.entity.item.ArticularItem;
 import com.b2c.prototype.modal.entity.item.ArticularStatus;
 import com.b2c.prototype.modal.entity.item.Category;
 import com.b2c.prototype.modal.entity.item.Discount;
-import com.b2c.prototype.modal.entity.item.ItemType;
 import com.b2c.prototype.modal.entity.option.OptionGroup;
 import com.b2c.prototype.modal.entity.option.OptionItem;
 import com.b2c.prototype.modal.entity.price.Currency;
@@ -146,11 +145,6 @@ class ArticularItemDaoTest extends AbstractDaoTest {
 
     private ArticularGroup getArticularGroup() {
         Category category = getCategory();
-        ItemType itemType = ItemType.builder()
-                .id(1L)
-                .value("Clothes")
-                .key("Clothes")
-                .build();
 
         Map<String, String> description = new HashMap<>(){{
             put("desc1", "desc1");
@@ -162,7 +156,6 @@ class ArticularItemDaoTest extends AbstractDaoTest {
                 .articularGroupId("123")
                 .description(description)
 //                .category(category)
-//                .itemType(itemType)
                 .build();
     }
 

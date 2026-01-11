@@ -104,8 +104,6 @@ public class TimeDurationGroupOptionManager implements ITimeDurationGroupOptionM
 
         incoming.forEach(itemDto -> {
             if (itemDto == null) return;
-//            final String lookupKey = itemDto.getSearchKey() != null ? itemDto.getSearchKey() : itemDto.getKey();
-//            TimeDurationOption existing = lookupKey == null ? null : currentByValue.get(lookupKey);
             TimeDurationOption existing = currentByValue.get(itemDto.getKey());
 
             if (existing != null) {
@@ -152,11 +150,10 @@ public class TimeDurationGroupOptionManager implements ITimeDurationGroupOptionM
 
         incoming.stream()
                 .filter(Objects::nonNull)
-//                .filter(d -> d.getSearchKey() == null)
                 .forEach(d -> {
-                    final String newKey = d.getKey();
+                    String newKey = d.getKey();
                     if (newKey == null || newKey.trim().isEmpty()) {
-                        throw new IllegalArgumentException("New TimeDurationOption must have non-null 'value'.");
+                        newKey = keyGeneratorService.generateKey("time_duration_option");
                     }
                     if (!currentByValue.containsKey(newKey)) {
                         TimeDurationOption created = TimeDurationOption.builder()

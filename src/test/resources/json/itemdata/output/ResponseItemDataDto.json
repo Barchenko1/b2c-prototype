@@ -9,10 +9,6 @@
     "label": "Laptop",
     "value": "Laptop"
   },
-  "itemType": {
-    "label": "Electronic",
-    "value": "Electronic"
-  },
   "articularItems": [
     {
       "articularId": "2",

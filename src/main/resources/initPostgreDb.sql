@@ -359,7 +359,6 @@ create table item_data (
                            dateOfCreate bigint not null,
                            fullPrice_id bigint,
                            id bigserial not null,
-                           itemType_id bigint,
                            percentDiscount_id bigint,
                            status_id bigint,
                            totalPrice_id bigint,
@@ -639,11 +638,6 @@ alter table if exists item_data
     add constraint FKcipiyxs05i6ek9hiwhscny7c0
     foreign key (fullPrice_id)
     references price
-    
-alter table if exists item_data
-    add constraint FKdiwrprwyudwa44upjvl8k87h9
-    foreign key (itemType_id)
-    references item_type
     
 alter table if exists item_data
     add constraint FK810alvugy52y6s9no5oppb26j

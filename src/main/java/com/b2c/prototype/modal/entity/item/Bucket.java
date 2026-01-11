@@ -34,17 +34,11 @@ public class Bucket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_details_id", nullable = false)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private UserDetails userDetails;
 //    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "articular_item_quantity_id", nullable = false)
+//    @JoinColumn(name = "user_details_id", nullable = false)
 //    @ToString.Exclude
 //    @EqualsAndHashCode.Exclude
-//    private ArticularItemQuantity articularItemQuantity;
-
+//    private UserDetails userDetails;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "bucket_id")
     @Builder.Default

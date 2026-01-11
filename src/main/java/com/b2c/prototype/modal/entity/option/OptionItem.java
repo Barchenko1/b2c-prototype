@@ -13,30 +13,34 @@ import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@EqualsAndHashCode(callSuper = true)
+//@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "option_item")
-@Data
+//@Data
+@Getter
+@Setter
 @SuperBuilder
 @NoArgsConstructor
 public class OptionItem extends AbstractConstantEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "option_group_id", nullable = false)
     @ToString.Exclude
-    @EqualsAndHashCode.Exclude
+//    @EqualsAndHashCode.Exclude
     @JsonIgnore
     private OptionGroup optionGroup;
     @ManyToMany(mappedBy = "optionItems")
     @Builder.Default
     @ToString.Exclude
-    @EqualsAndHashCode.Exclude
+//    @EqualsAndHashCode.Exclude
     @JsonIgnore
     private Set<ArticularItem> articularItems = new HashSet<>();
 

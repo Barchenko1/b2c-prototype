@@ -25,8 +25,9 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
 
     @Test
     @DataSet(value = "datasets/e2e/order/option_group/time_duration_option/emptyE2ETimeDurationOptionDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/order/option_group/time_duration_option/testE2ETimeDurationOptionGroupDataSet.yml", orderBy = "id",
-    ignoreCols = {"key"})
+    @ExpectedDataSet(value = "datasets/e2e/order/option_group/time_duration_option/testE2ETimeDurationOptionGroupDataSet.yml",
+            orderBy = "value",
+            ignoreCols = {"key", "id", "price_id", "amount"})
     @Sql(statements = {
             "ALTER SEQUENCE time_duration_option_id_seq RESTART WITH 3",
             "ALTER SEQUENCE option_group_id_seq RESTART WITH 2",
@@ -47,9 +48,14 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
 
     @Test
     @DataSet(value = "datasets/e2e/order/option_group/time_duration_option/testE2ETimeDurationOptionGroupDataSet.yml", cleanBefore = true, disableConstraints = true)
-    @ExpectedDataSet(value = "datasets/e2e/order/option_group/time_duration_option/updateE2ETimeDurationOptionDataSetMore.yml", orderBy = "id", ignoreCols = {"id"})
-    @Sql(statements = "ALTER SEQUENCE price_id_seq RESTART WITH 5",
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @ExpectedDataSet(value = "datasets/e2e/order/option_group/time_duration_option/updateE2ETimeDurationOptionDataSetMore.yml",
+            orderBy = "id",
+            ignoreCols = {"id", "key", "price_id"})
+    @Sql(statements = {
+            "ALTER SEQUENCE time_duration_option_id_seq RESTART WITH 5",
+            "ALTER SEQUENCE option_group_id_seq RESTART WITH 2",
+            "ALTER SEQUENCE price_id_seq RESTART WITH 5"
+    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void testUpdateEntityMore() {
         TimeDurationOptionGroupDto constantPayloadDto = getUpdateTimeDurationOptionDtoMore();
         String jsonPayload = writeValueAsString(constantPayloadDto);
@@ -257,11 +263,11 @@ public class TimeDurationOptionGroupControllerE2ETest extends BasicE2ETest {
     private TimeDurationOptionGroupDto getUpdateTimeDurationOptionDtoMore() {
         return TimeDurationOptionGroupDto.builder()
                 .value("Update NY")
-                .key("Update NY")
+                .key("NY")
                 .timeDurationOptions(List.of(
                         TimeDurationOptionDto.builder()
                                 .value("Update 12-14")
-                                .key("Update 12-14")
+                                .key("12-14")
                                 .startTime(getLocalDateTime("1970-01-01 12:00:00"))
                                 .endTime(getLocalDateTime("1970-01-01 14:00:00"))
                                 .timeZone(ZoneId.of("UTC"))

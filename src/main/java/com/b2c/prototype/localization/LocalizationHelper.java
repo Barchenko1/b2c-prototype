@@ -12,7 +12,6 @@ public class LocalizationHelper {
 //    private final Map<String, PaymentMethod> paymenMethodMap;
 //    private final Map<String, OrderStatus> orderStatusMap;
 //    private final Map<String, ArticularStatus> itemStatusMap;
-//    private final Map<String, ItemType> itemTypeMap;
 //    private final Map<String, Category> categoryMap;
 //    private final Map<Integer, Rating> ratingMap;
 //    private final Map<String, OptionGroup> optionGroupMap;
@@ -29,7 +28,6 @@ public class LocalizationHelper {
 //                              Map<String, PaymentMethod> paymenMethodMap,
 //                              Map<String, OrderStatus> orderStatusMap,
 //                              Map<String, ArticularStatus> itemStatusMap,
-//                              Map<String, ItemType> itemTypeMap,
 //                              Map<String, Category> categoryMap,
 //                              Map<Integer, Rating> ratingMap,
 //                              Map<String, OptionGroup> optionGroupMap,
@@ -39,7 +37,6 @@ public class LocalizationHelper {
 //        this.paymenMethodMap = paymenMethodMap;
 //        this.orderStatusMap = orderStatusMap;
 //        this.itemStatusMap = itemStatusMap;
-//        this.itemTypeMap = itemTypeMap;
 //        this.categoryMap = categoryMap;
 //        this.ratingMap = ratingMap;
 //        this.optionGroupMap = optionGroupMap;
@@ -81,15 +78,5 @@ public class LocalizationHelper {
 //                .collect(Collectors.toList());
 //    }
 //
-//    public String getLocalizeItemTypeName(String itemTypeConfigName, Locale locale) {
-//        ItemType itemType = itemTypeMap.get(itemTypeConfigName);
-//        return localizationInterpreter.interpret("item.type", itemType.getValue(), locale);
-//    }
-//
-//    public List<String> getLocalizeItemTypeNameList(Locale locale) {
-//        return itemTypeMap.values().stream()
-//                .map(itemType -> localizationInterpreter.interpret("item.type", itemType.getValue(), locale))
-//                .collect(Collectors.toList());
-//    }
 
 }

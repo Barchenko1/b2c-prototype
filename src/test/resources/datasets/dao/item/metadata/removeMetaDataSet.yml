@@ -1,8 +1,3 @@
-
-item_type:
-  - id: 1
-    value: "Clothes"
-    key: "Clothes"
 category:
   - id: 1
     key: "parent"

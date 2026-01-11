@@ -8,10 +8,6 @@
     "label": "Laptop",
     "value": "Laptop"
   },
-  "itemType": {
-    "label": "Electronic",
-    "value": "Electronic"
-  },
   "articularItemSet": [
     {
       "productName": "Laptop 1",

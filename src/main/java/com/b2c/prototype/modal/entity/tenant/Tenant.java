@@ -1,6 +1,7 @@
 package com.b2c.prototype.modal.entity.tenant;
 
 import com.b2c.prototype.modal.entity.price.Currency;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,6 +22,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.ZoneId;
 import java.util.HashSet;
@@ -67,6 +69,7 @@ public class Tenant {
             joinColumns = {@JoinColumn(name = "tenant_id")},
             inverseJoinColumns = {@JoinColumn(name = "language_id")})
     @Builder.Default
+    @EqualsAndHashCode.Exclude
     private Set<Language> languages = new HashSet<>();
     @Column(nullable = false, length = 16)
     private String defaultLocale;

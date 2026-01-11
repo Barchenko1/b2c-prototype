@@ -188,11 +188,6 @@ delivery:
     address_id: 1
     delivery_type_id: 1
 
-
-item_type:
-  - id: 1
-    value: "Clothes"
-    key: "Clothes"
 category:
   - id: 1
     key: "parent"

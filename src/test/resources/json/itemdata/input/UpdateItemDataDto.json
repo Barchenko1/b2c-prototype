@@ -8,10 +8,6 @@
     "label": "Update Laptop",
     "value": "Update Laptop"
   },
-  "itemType": {
-    "label": "Update Electronic",
-    "value": "Update Electronic"
-  },
   "articularItemSet": [
     {
       "articularId": "2",

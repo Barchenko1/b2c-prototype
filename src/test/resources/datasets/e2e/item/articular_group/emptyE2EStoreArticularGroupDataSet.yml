@@ -9,17 +9,40 @@ tenant:
   - id: 1
     code: "DE"
     value: "Germany"
-    language: "Germany"
     default_locale: "de-DE"
     primary_currency_id: 1
     timezone: "Europe/Berlin"
   - id: 2
     code: "Global"
     value: "Global"
-    language: "English"
     default_locale: "en-US"
     primary_currency_id: 2
     timezone: "UTC"
+language:
+  - id: 1
+    language_code: "de"
+    name: "Germany"
+    is_active: true
+  - id: 2
+    language_code: "en"
+    name: "English"
+    is_active: true
+  - id: 3
+    language_code: "ru"
+    name: "Russian"
+    is_active: true
+tenant_language:
+  - tenant_id: 1
+    language_id: 1
+  - tenant_id: 2
+    language_id: 2
+  - tenant_id: 2
+    language_id: 3
+store_general_board:
+  - id: 1
+    tenant_id: 1
+  - id: 2
+    tenant_id: 2
 country:
   - id: 1
     key: "USA"
@@ -34,10 +57,6 @@ availability_status:
   - id: 2
     value: "OutOfStock"
     key: "OutOfStock"
-item_type:
-  - id: 1
-    value: "Electronic"
-    key: "Electronic"
 price:
   - id: 1
     amount: 1000
@@ -111,9 +130,6 @@ articular_item:
 item: []
 articular_item_option_item: []
 articular_item_option_item_cost: []
-store_general_board:
-  - id: 1
-    tenant_id: 1
 address: []
 store: []
 articular_item_quantity: []

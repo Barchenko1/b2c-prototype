@@ -127,9 +127,11 @@ public class StoreArticularGroupTransformService implements IStoreArticularGroup
     }
 
     private OptionItemCost mapOptionItemDtoToOptionItemCost(OptionItemCostDto dto) {
+        String key = keyGeneratorService.generateKey("option_item_cost");
+        System.out.println("key=" + key);
         return OptionItemCost.builder()
                 .value(dto.getValue())
-                .key(keyGeneratorService.generateKey("option_item"))
+                .key(key)
                 .price(generalEntityTransformService.mapPriceDtoToPrice(dto.getPrice()))
                 .build();
     }
@@ -218,39 +220,6 @@ public class StoreArticularGroupTransformService implements IStoreArticularGroup
                 .build();
     }
 
-//    @Override
-//    public StoreOptionItemGroupTransfer mapStoreOptionItemGroupDtoToOptionItemSet(Tenant tenant, Map.Entry<String, StoreOptionItemGroup> storeOptionItemGroup) {
-//        Map<String, OptionItem> optionItems =
-//                Optional.ofNullable(storeOptionItemGroup.getValue().getOptionItems())
-//                        .map(items -> items.entrySet()
-//                                .stream()
-//                                .collect(Collectors.toMap(
-//                                        Map.Entry::getKey,
-//                                        e -> (OptionItem) OptionItem.builder()
-//                                                .value(e.getValue().getValue())
-//                                                .key(keyGeneratorService.generateKey("option_item"))
-//                                                .build()
-//                                )))
-//                        .orElseGet(Collections::emptyMap);
-//
-//        Map<String, OptionGroup> optionGroup = Map.of(
-//                storeOptionItemGroup.getKey(),
-//                OptionGroup.builder()
-//                        .value(storeOptionItemGroup.getValue().getValue())
-//                        .key(keyGeneratorService.generateKey("option_group"))
-//                        .tenant(tenant)
-//                        .build());
-//
-//        optionGroup.values().forEach((og) -> {
-//            optionItems.values().forEach(og::addOptionItem);
-//        });
-//
-//        return StoreOptionItemGroupTransfer.builder()
-//                .optionGroup(optionGroup)
-//                .optionItems(optionItems)
-//                .build();
-//    }
-
     @Override
     public StoreOptionItemGroupTransfer mapStoreOptionItemCostGroupDtoToOptionItemSet(Tenant tenant, Map.Entry<String, StoreOptionItemCostGroup> storeOptionItemCostGroup) {
         OptionGroup optionGroup;
@@ -272,9 +241,8 @@ public class StoreArticularGroupTransformService implements IStoreArticularGroup
                     .forEach(existing::addOptionItemCost);
 
             optionGroup = existing;
-            optionItemCost = existing.getOptionItemCosts().stream().collect(Collectors.toMap(
-                    OptionItemCost::getKey,
-                    Function.identity()
+            optionItemCost = existing.getOptionItemCosts().stream()
+                    .collect(Collectors.toMap(OptionItemCost::getKey, Function.identity()
             ));
         } else {
             OptionGroup created = mapStoreOptionItemCostGroupDtoToOptionGroup(tenant, storeOptionItemCostGroup.getValue());
@@ -287,9 +255,9 @@ public class StoreArticularGroupTransformService implements IStoreArticularGroup
                             )))
                     .orElseGet(Collections::emptyMap);
 
-            newItems.values().stream()
-                    .sorted(Comparator.comparing(OptionItemCost::getKey))
-                    .forEach(created::addOptionItemCost);
+//            newItems.values().stream()
+//                    .sorted(Comparator.comparing(OptionItemCost::getKey))
+//                    .forEach(created::addOptionItemCost);
 
             optionGroup = created;
             optionItemCost = newItems;
@@ -300,42 +268,6 @@ public class StoreArticularGroupTransformService implements IStoreArticularGroup
                 .optionItemCosts(optionItemCost)
                 .build();
     }
-
-//    @Override
-//    public StoreOptionItemGroupTransfer mapStoreOptionItemCostGroupDtoToOptionItemSet(Tenant tenant, Map.Entry<String, StoreOptionItemCostGroup> storeOptionItemCostGroup) {
-//        Map<String, OptionItemCost> optionItemCosts =
-//                Optional.ofNullable(storeOptionItemCostGroup.getValue().getCostOptions())
-//                                .map(costOptions -> costOptions.entrySet()
-//                                        .stream()
-//                                        .sorted(Comparator.comparing(e -> e.getValue().getValue()))
-//                                        .collect(Collectors.toMap(
-//                                                Map.Entry::getKey,
-//                                                entry -> (OptionItemCost) OptionItemCost.builder()
-//                                                        .value(entry.getValue().getValue())
-//                                                        .key(keyGeneratorService.generateKey("option_item_cost"))
-//                                                        .price(generalEntityTransformService.mapPriceDtoToPrice(entry.getValue().getPrice()))
-//                                                        .build(),
-//                                                (v1, v2) -> v1
-//                                        )))
-//                                .orElseGet(Collections::emptyMap);
-//
-//        Map<String, OptionGroup> optionGroup = Map.of(
-//                storeOptionItemCostGroup.getKey(),
-//                OptionGroup.builder()
-//                        .value(storeOptionItemCostGroup.getValue().getValue())
-//                        .key(keyGeneratorService.generateKey("option_group"))
-//                        .tenant(tenant)
-//                        .build());
-//
-//        optionGroup.values().forEach((og) -> {
-//            optionItemCosts.values().forEach(og::addOptionItemCost);
-//        });
-//
-//        return StoreOptionItemGroupTransfer.builder()
-//                .optionGroup(optionGroup)
-//                .optionItemCosts(optionItemCosts)
-//                .build();
-//    }
 
     @Override
     public OptionGroup mapStoreOptionItemCostGroupDtoToOptionGroup(Tenant tenant, StoreOptionItemCostGroup storeOptionItemCostGroup) {
@@ -439,8 +371,8 @@ public class StoreArticularGroupTransformService implements IStoreArticularGroup
                 .orElse(null);
     }
 
-    private Set<OptionItem> getOptionItemList(Set<StoreOptionItemGroupTransfer> storeOptionItemGroupTransferSet,
-                                               List<GroupOptionKeys> groupOptionKeysList) {
+    private Set<OptionItem> getOptionItemSet(Set<StoreOptionItemGroupTransfer> storeOptionItemGroupTransferSet,
+                                             List<GroupOptionKeys> groupOptionKeysList) {
 
         if (storeOptionItemGroupTransferSet == null
                 || storeOptionItemGroupTransferSet.isEmpty()
@@ -469,8 +401,8 @@ public class StoreArticularGroupTransformService implements IStoreArticularGroup
                 .collect(Collectors.toSet());
     }
 
-    private Set<OptionItemCost> getOptionItemCostList(Set<StoreOptionItemGroupTransfer> storeOptionItemGroupTransferSet,
-                                                       List<GroupOptionKeys> groupOptionKeysList) {
+    private Set<OptionItemCost> getOptionItemCostSet(Set<StoreOptionItemGroupTransfer> storeOptionItemGroupTransferSet,
+                                                     List<GroupOptionKeys> groupOptionKeysList) {
 
         if (storeOptionItemGroupTransferSet == null
                 || storeOptionItemGroupTransferSet.isEmpty()
@@ -540,8 +472,8 @@ public class StoreArticularGroupTransformService implements IStoreArticularGroup
                     .discount(getDiscount(storeDiscountGroupMap, value.getDiscountKey(), tenant, discountGroupMap))
                     .build();
 
-            Set<OptionItem> optionItems = getOptionItemList(storeOptionItemGroupTransferSet, value.getOptionKeys());
-            Set<OptionItemCost> optionItemCosts = getOptionItemCostList(storeOptionItemCostGroupTransferSet, value.getOptionCostKeys());
+            Set<OptionItem> optionItems = getOptionItemSet(storeOptionItemGroupTransferSet, value.getOptionKeys());
+            Set<OptionItemCost> optionItemCosts = getOptionItemCostSet(storeOptionItemCostGroupTransferSet, value.getOptionCostKeys());
 
             optionItems.forEach(articular::addOptionItem);
             optionItemCosts.forEach(articular::addOptionItemCost);

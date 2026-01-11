@@ -105,8 +105,6 @@ public class ZoneOptionGroupManager implements IZoneOptionGroupManager {
 
         incoming.forEach(itemDto -> {
             if (itemDto == null) return;
-//            final String lookupKey = itemDto.getSearchKey() != null ? itemDto.getSearchKey() : itemDto.getKey();
-//            ZoneOption existing = lookupKey == null ? null : currentByValue.get(lookupKey);
             ZoneOption existing = currentByValue.get(itemDto.getKey());
             if (existing != null) {
                 if (itemDto.getKey() != null && !itemDto.getKey().equals(existing.getKey())) {
@@ -139,14 +137,12 @@ public class ZoneOptionGroupManager implements IZoneOptionGroupManager {
             }
         });
 
-        // CREATE NEW (unchanged from your code)
         incoming.stream()
                 .filter(Objects::nonNull)
-//                .filter(d -> d.getSearchKey() == null)
                 .forEach(d -> {
-                    final String newKey = d.getKey();
+                    String newKey = d.getKey();
                     if (newKey == null || newKey.trim().isEmpty()) {
-                        throw new IllegalArgumentException("New TimeDurationOption must have non-null 'value'.");
+                        newKey = keyGeneratorService.generateKey("zone_option");
                     }
                     if (!currentByValue.containsKey(newKey)) {
                         ZoneOption created = ZoneOption.builder()

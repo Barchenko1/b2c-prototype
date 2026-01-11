@@ -61,6 +61,11 @@ public class StoreArticularGroupManager implements IStoreArticularGroupManager {
         StoreArticularGroupTransform storeArticularGroupTransform = storeArticularGroupTransformService
                 .mapStoreArticularGroupRequestDtoToStoreArticularGroupTransform(storeArticularGroupRequestDto);
 
+        Set<OptionGroup> ogs = storeArticularGroupTransform.getArticularGroup().getItems().stream()
+                .flatMap(item -> item.getArticularItem().getOptionItems().stream())
+                .map(OptionItem::getOptionGroup)
+                .collect(Collectors.toSet());
+        ogs.forEach(generalEntityDao::persistEntity);
         generalEntityDao.persistEntity(storeArticularGroupTransform.getArticularGroup());
         storeArticularGroupTransform.getStores().forEach(generalEntityDao::persistEntity);
         generalEntityDao.mergeEntity(storeArticularGroupTransform.getStoreGeneralBoard());
@@ -333,7 +338,6 @@ public class StoreArticularGroupManager implements IStoreArticularGroupManager {
         List<Store> stores = fetchStores(tenantId, articularIds);
 
         stores.forEach(generalEntityDao::removeEntity);
-        generalEntityDao.removeEntity(storeGeneralBoard);
 
         Set<OptionItemCost> allOptionItemCosts = new HashSet<>();
         Set<OptionItem> allOptionItems = new HashSet<>();

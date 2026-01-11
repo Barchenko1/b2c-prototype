@@ -15,10 +15,10 @@ option_item:
     key: "Modal2"
     option_group_id: 1
   - id: 3
-    value: "Red"
-    key: "Red"
-    option_group_id: 2
-  - id: 4
     value: "Blue"
     key: "Blue"
+    option_group_id: 2
+  - id: 4
+    value: "Red"
+    key: "Red"
     option_group_id: 2

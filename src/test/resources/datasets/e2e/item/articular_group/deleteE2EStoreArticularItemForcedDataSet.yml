@@ -9,14 +9,12 @@ tenant:
   - id: 1
     code: "DE"
     value: "Germany"
-    language: "Germany"
     default_locale: "de-DE"
     primary_currency_id: 1
     timezone: "Europe/Berlin"
   - id: 2
     code: "Global"
     value: "Global"
-    language: "English"
     default_locale: "en-US"
     primary_currency_id: 2
     timezone: "UTC"
@@ -34,10 +32,6 @@ availability_status:
   - id: 2
     value: "OutOfStock"
     key: "OutOfStock"
-item_type:
-  - id: 1
-    value: "Electronic"
-    key: "Electronic"
 price:
   - id: 1
     amount: 1000

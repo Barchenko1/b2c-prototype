@@ -42,6 +42,7 @@ import com.b2c.prototype.modal.entity.tenant.Tenant;
 import com.b2c.prototype.modal.entity.review.Review;
 import com.b2c.prototype.modal.entity.store.ArticularStock;
 import com.b2c.prototype.modal.entity.store.Store;
+import com.b2c.prototype.service.generator.IKeyGeneratorService;
 import com.b2c.prototype.transform.constant.IGeneralEntityTransformService;
 import com.nimbusds.jose.util.Pair;
 import org.springframework.stereotype.Service;
@@ -65,11 +66,14 @@ public class ItemTransformService implements IItemTransformService {
 
     private final IGeneralEntityDao generalEntityDao;
     private final IGeneralEntityTransformService generalEntityTransformService;
+    private final IKeyGeneratorService keyGeneratorService;
 
     public ItemTransformService(IGeneralEntityDao generalEntityDao,
-                                IGeneralEntityTransformService generalEntityTransformService) {
+                                IGeneralEntityTransformService generalEntityTransformService,
+                                IKeyGeneratorService keyGeneratorService) {
         this.generalEntityDao = generalEntityDao;
         this.generalEntityTransformService = generalEntityTransformService;
+        this.keyGeneratorService = keyGeneratorService;
     }
 
     @Override
@@ -263,7 +267,9 @@ public class ItemTransformService implements IItemTransformService {
                 .optionItems(optionItemGroupDto.getOptionItems().stream()
                         .map(optionItemDto -> OptionItem.builder()
                                 .value(optionItemDto.getValue())
-                                .key(optionItemDto.getKey())
+                                .key(optionItemDto.getKey() != null
+                                        ? optionItemDto.getKey()
+                                        : keyGeneratorService.generateKey("option_item"))
                                 .build()
                         )
                         .collect(Collectors.toSet())
@@ -296,7 +302,9 @@ public class ItemTransformService implements IItemTransformService {
                 .optionItemCosts(optionItemCostGroupDto.getOptionItemCosts().stream()
                         .map(optionItemCostDto -> OptionItemCost.builder()
                                 .value(optionItemCostDto.getValue())
-                                .key(optionItemCostDto.getKey())
+                                .key(optionItemCostDto.getKey() != null
+                                        ? optionItemCostDto.getKey()
+                                        : keyGeneratorService.generateKey("option_item_cost"))
                                 .price(Price.builder()
                                         .amount(optionItemCostDto.getPrice().getAmount())
                                         .currency(generalEntityTransformService.mapCurrencyDtoToCurrency(optionItemCostDto.getPrice().getCurrency()))

@@ -76,7 +76,10 @@ class UserDetailsControllerE2ETest extends BasicE2ETest {
 
     @Test
     @DataSet(value = "datasets/e2e/user/user_details/testE2EUserDetailsDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/user/user_details/updateMoreE2EUserDetailsDataSet.yml", ignoreCols = {"id"})
+    @ExpectedDataSet(value = "datasets/e2e/user/user_details/updateMoreE2EUserDetailsDataSet.yml",
+            ignoreCols = {"id"},
+            orderBy = {"city", "street", "building_number", "apartment_number"}
+    )
     @Sql(statements = {
             "ALTER SEQUENCE address_id_seq RESTART WITH 3",
             "ALTER SEQUENCE user_address_id_seq RESTART WITH 3",

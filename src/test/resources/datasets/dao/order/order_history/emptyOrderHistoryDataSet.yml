@@ -90,11 +90,6 @@ address:
     country_id: 1
 delivery: []
 
-
-item_type:
-  - id: 1
-    value: "Clothes"
-    key: "Clothes"
 category:
   - id: 1
     key: "parent"

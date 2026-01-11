@@ -1,0 +1,17 @@
+{
+  "storeName": "Update store2",
+  "isActive": true,
+  "address": {
+    "country": {
+      "value": "GERMANY",
+      "key": "GERMANY"
+    },
+    "city": "Update city",
+    "street": "Update street",
+    "buildingNumber": "1010",
+    "florNumber": 99,
+    "apartmentNumber": 201201,
+    "zipCode": "900009"
+  },
+  "region": "DE"
+}

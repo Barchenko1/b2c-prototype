@@ -9,17 +9,40 @@ tenant:
   - id: 1
     code: "DE"
     value: "Germany"
-    language: "Germany"
     default_locale: "de-DE"
     primary_currency_id: 1
     timezone: "Europe/Berlin"
   - id: 2
     code: "Global"
     value: "Global"
-    language: "English"
     default_locale: "en-US"
     primary_currency_id: 2
     timezone: "UTC"
+language:
+  - id: 1
+    language_code: "de"
+    name: "Germany"
+    is_active: true
+  - id: 2
+    language_code: "en"
+    name: "English"
+    is_active: true
+  - id: 3
+    language_code: "ru"
+    name: "Russian"
+    is_active: true
+tenant_language:
+  - tenant_id: 1
+    language_id: 1
+  - tenant_id: 2
+    language_id: 2
+  - tenant_id: 2
+    language_id: 3
+store_general_board:
+  - id: 1
+    tenant_id: 1
+  - id: 2
+    tenant_id: 2
 country:
   - id: 1
     key: "USA"
@@ -34,10 +57,6 @@ availability_status:
   - id: 2
     value: "OutOfStock"
     key: "OutOfStock"
-item_type:
-  - id: 1
-    value: "Electronic"
-    key: "Electronic"
 price:
   - id: 1
     amount: 1000
@@ -58,6 +77,12 @@ price:
     amount: 50.0
     currency_id: 2
   - id: 7
+    amount: 30.0
+    currency_id: 2
+  - id: 8
+    amount: 50.0
+    currency_id: 2
+  - id: 9
     amount: 30.0
     currency_id: 2
 discount_group:
@@ -187,8 +212,8 @@ articular_item:
     articular_uniq_id: "articularId3"
     date_of_create: "2024-03-03 12:00:00"
     discount_id: 3
-    full_price_id: 6
-    total_price_id: 7
+    full_price_id: 8
+    total_price_id: 9
     status_id: 1
     articular_group_id: 2
     product_name: "productName3"
@@ -217,11 +242,6 @@ articular_item_option_item_cost:
     option_item_cost_id: 2
   - articular_item_id: 3
     option_item_cost_id: 3
-store_general_board:
-  - id: 1
-    tenant_id: 1
-  - id: 2
-    tenant_id: 2
 address:
   - id: 1
     city: "city"

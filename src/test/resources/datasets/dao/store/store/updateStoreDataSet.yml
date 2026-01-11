@@ -2,11 +2,6 @@ availability_status:
   - id: 1
     value: "Available"
     key: "Available"
-
-item_type:
-  - id: 1
-    value: "Clothes"
-    key: "Clothes"
 category:
   - id: 1
     key: "parent"

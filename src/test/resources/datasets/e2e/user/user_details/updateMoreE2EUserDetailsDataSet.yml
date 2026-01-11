@@ -46,7 +46,7 @@ country:
 address:
   - id: 1
     street: "street"
-    building_number: 10
+    building_number: "10"
     flor_number: 9
     apartment_number: 201
     zip_code: "90000"
@@ -62,7 +62,7 @@ address:
     country_id: 1
   - id: 3
     street: "New street3"
-    building_number: 33
+    building_number: "33"
     flor_number: 3
     apartment_number: 333
     zip_code: "New 90000"

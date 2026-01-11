@@ -102,17 +102,10 @@ public class OptionItemCostGroupManager implements IOptionItemCostGroupManager {
         final List<OptionItemCostDto> incoming = Optional.ofNullable(dto.getOptionItemCosts())
                 .orElseGet(Collections::emptyList);
 
-        // UPDATE EXISTING
         incoming.forEach(itemDto -> {
             if (itemDto == null) return;
-//            final String lookupKey = itemDto.getSearchKey() != null
-//                    ? itemDto.getSearchKey()
-//                    : itemDto.getKey();
 
             OptionItemCost existing = currentByValue.get(itemDto.getKey());
-//            if (lookupKey != null) {
-//                existing = currentByValue.get(lookupKey);
-//            }
 
             if (existing != null) {
                 if (itemDto.getKey() != null && !itemDto.getKey().equals(existing.getKey())) {
@@ -145,15 +138,13 @@ public class OptionItemCostGroupManager implements IOptionItemCostGroupManager {
             }
         });
 
-        // CREATE NEW (unchanged from your code)
         incoming.stream()
                 .filter(Objects::nonNull)
-//                .filter(d -> d.getKey() == null)
                 .forEach(d -> {
-                    final String newKey = d.getKey();
-//                    if (newKey == null || newKey.trim().isEmpty()) {
-//                        throw new IllegalArgumentException("New Option item cost must have non-null 'key'.");
-//                    }
+                    String newKey = d.getKey();
+                    if (newKey == null || newKey.trim().isEmpty()) {
+                        newKey = keyGeneratorService.generateKey("option_item_cost");
+                    }
                     if (!currentByValue.containsKey(newKey)) {
                         Price price = null;
                         if (d.getPrice() != null) {

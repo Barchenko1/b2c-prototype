@@ -169,11 +169,6 @@ customer_single_delivery_order:
     order_status_id: 1
     payment_id: 1
     note: "note"
-
-item_type:
-  - id: 1
-    value: "Clothes"
-    key: "Clothes"
 category:
   - id: 1
     key: "parent"

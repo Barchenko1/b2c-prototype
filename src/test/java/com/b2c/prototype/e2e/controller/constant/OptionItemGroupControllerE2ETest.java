@@ -20,8 +20,9 @@ public class OptionItemGroupControllerE2ETest extends BasicE2ETest {
 
     @Test
     @DataSet(value = "datasets/e2e/item/option_group/option_item/emptyE2EOptionItemGroupDataSet.yml", cleanBefore = true)
-    @ExpectedDataSet(value = "datasets/e2e/item/option_group/option_item/testE2EOptionItemGroupDataSet.yml", orderBy = "id",
-    ignoreCols = {"key"})
+    @ExpectedDataSet(value = "datasets/e2e/item/option_group/option_item/testE2EOptionItemGroupDataSet.yml",
+            orderBy = {"value"},
+            ignoreCols = {"key", "id", "price_id", "amount"})
     @Sql(statements = {
             "ALTER SEQUENCE option_item_id_seq RESTART WITH 3",
             "ALTER SEQUENCE option_group_id_seq RESTART WITH 2",
@@ -41,7 +42,10 @@ public class OptionItemGroupControllerE2ETest extends BasicE2ETest {
 
     @Test
     @DataSet(value = "datasets/e2e/item/option_group/option_item/testE2EOptionItemGroupDataSet.yml", cleanBefore = true, disableConstraints = true)
-    @ExpectedDataSet(value = "datasets/e2e/item/option_group/option_item/updateE2EOptionItemGroupDataSetMore.yml", orderBy = {"id"})
+    @ExpectedDataSet(value = "datasets/e2e/item/option_group/option_item/updateE2EOptionItemGroupDataSetMore.yml",
+            orderBy = {"option_group_id", "value"},
+            ignoreCols = {"key", "id"}
+    )
     @Sql(statements = {
             "ALTER SEQUENCE option_item_id_seq RESTART WITH 5",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
@@ -55,12 +59,12 @@ public class OptionItemGroupControllerE2ETest extends BasicE2ETest {
                                 .key("Red")
                                 .build(),
                         OptionItemDto.builder()
-                                .value(null)
-                                .key("Yellow")
+                                .value("Yellow")
+                                .key(null)
                                 .build(),
                         OptionItemDto.builder()
-                                .value(null)
-                                .key("White")
+                                .value("White")
+                                .key(null)
                                 .build()
                         ))
                 .build();
@@ -129,12 +133,10 @@ public class OptionItemGroupControllerE2ETest extends BasicE2ETest {
                         .key("Color")
                         .optionItems(List.of(
                                 OptionItemDto.builder()
-//                                        .searchKey("Red")
                                         .value("Red")
                                         .key("Red")
                                         .build(),
                                 OptionItemDto.builder()
-//                                        .searchKey("Blue")
                                         .value("Blue")
                                         .key("Blue")
                                         .build()))
@@ -144,12 +146,10 @@ public class OptionItemGroupControllerE2ETest extends BasicE2ETest {
                         .key("Modal")
                         .optionItems(List.of(
                                 OptionItemDto.builder()
-//                                        .searchKey("Modal1")
                                         .value("Modal1")
                                         .key("Modal1")
                                         .build(),
                                 OptionItemDto.builder()
-//                                        .searchKey("Modal2")
                                         .value("Modal2")
                                         .key("Modal2")
                                         .build()
@@ -215,11 +215,11 @@ public class OptionItemGroupControllerE2ETest extends BasicE2ETest {
                 .optionItems(List.of(
                         OptionItemDto.builder()
                                 .value("Red")
-                                .key("Red")
+                                .key(null)
                                 .build(),
                         OptionItemDto.builder()
                                 .value("Blue")
-                                .key("Blue")
+                                .key(null)
                                 .build()))
                 .build();
     }

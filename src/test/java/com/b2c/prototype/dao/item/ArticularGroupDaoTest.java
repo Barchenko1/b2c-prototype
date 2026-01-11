@@ -4,7 +4,6 @@ import com.b2c.prototype.dao.AbstractDaoTest;
 import com.b2c.prototype.dao.IGeneralEntityDao;
 import com.b2c.prototype.modal.entity.item.ArticularGroup;
 import com.b2c.prototype.modal.entity.item.Category;
-import com.b2c.prototype.modal.entity.item.ItemType;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.nimbusds.jose.util.Pair;
@@ -34,7 +33,6 @@ class ArticularGroupDaoTest extends AbstractDaoTest {
     public void persistEntity_success() {
         ArticularGroup entity = getArticularGroup();
         entity.setId(0);
-//        entity.getItemType().setId(0);
         Category category = Category.builder()
                 .id(0L)
                 .value("parent")
@@ -133,11 +131,6 @@ class ArticularGroupDaoTest extends AbstractDaoTest {
     private ArticularGroup getArticularGroup() {
 
         Category category = getCategory();
-        ItemType itemType = ItemType.builder()
-                .id(1L)
-                .value("Clothes")
-                .key("Clothes")
-                .build();
 
         Map<String, String> description = new HashMap<>(){{
             put("desc1", "desc1");
@@ -149,7 +142,6 @@ class ArticularGroupDaoTest extends AbstractDaoTest {
                 .articularGroupId("123")
                 .description(description)
 //                .category(category)
-//                .itemType(itemType)
                 .build();
     }
 
